@@ -20,6 +20,11 @@ const {launch,open,install,native,status,importFile,bridgeCode,P,C}=require('./b
     await ui.locator('#startSettings > summary').click();await ui.locator('#seed').fill('123456');
     await ui.locator('#search').click();await status(page,/matching outcome/);
     const cards=ui.locator('#results .card');assert.ok(await cards.count()>0);
+    assert.match(await cards.first().textContent(),/Comparison details/);
+    await ui.locator('#sort').selectOption('wealth');
+    const wealthValues=await cards.evaluateAll(nodes=>nodes.map(n=>Number(n.querySelectorAll('.stats b')[2].textContent)));
+    assert.deepEqual(wealthValues,[...wealthValues].sort((a,b)=>b-a),'explicit wealth sorting orders matching results');
+    await ui.locator('#sort').selectOption('recommended');
     assert.match(await cards.first().textContent(),/Wealth ≥ 90/);assert.equal(await cards.first().locator('.tag').textContent(),'Match');
     assert.equal(await native(page,'return b.runtime?.state||null;'),null,'search never starts or edits a game life');
     assert.ok(await cards.first().locator('.stats b').nth(2).textContent()>=90);

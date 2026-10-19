@@ -18,6 +18,8 @@ const {launch,open,install,native,status,completeReplay,E,C}=require('./browser-
       await ui.locator('#tabFind').click();await ui.locator('#min-wealth').fill('20');
       await ui.locator('#tabPlay').click();await ui.locator('#plan').click();await status(page,/Plan ready/,180000);
       const before=await native(page,'return b.runtime.state;');
+      const originalDownload=page.waitForEvent('download');await ui.locator('#export').click();
+      const original=JSON.parse(fs.readFileSync(await (await originalDownload).path(),'utf8'));
       await ui.locator(field==='reflect'?'#apply':'#follow').click();await status(page,/Your input is needed/);
       assert.equal(await native(page,'return b.runtime.paused;'),true,field+' must pause');
       assert.equal(await native(page,'return b.runtime.auto;'),false,'native auto must stay off');
@@ -40,7 +42,7 @@ const {launch,open,install,native,status,completeReplay,E,C}=require('./browser-
       else assert.equal(field==='star'?entered.pinky.blade:entered[{color:'colorName',ego:'egoName',relic:'relicName',child:'childName',partner:'partnerName'}[field]],text);
       assert.equal(await native(page,'return b.runtime.paused;'),true,'submission does not restart following');
       await ui.locator('#badge').click();
-      if(field==='color'||field==='reflect'){
+      if(['color','ego','relic','star','reflect','child'].includes(field)){
         // Replanning must retain this route's goals, not a newly edited draft.
         await ui.locator('#tabFind').click();await ui.locator('#min-wealth').fill('100');await ui.locator('#tabPlay').click();
         await ui.locator('#follow').click();await completeReplay(page);
@@ -48,9 +50,15 @@ const {launch,open,install,native,status,completeReplay,E,C}=require('./browser-
         const download=page.waitForEvent('download');await ui.locator('#export').click();
         const file=JSON.parse(fs.readFileSync(await (await download).path(),'utf8'));
         assert.deepEqual(file.goals,['stat:wealth:20']);
+        assert.equal(file.sort,original.sort,'continuation retains the original ranking preference');
+        if(field!=='child'){
+          assert.deepEqual(file.route.map(s=>s.i),original.route.slice(1).map(s=>s.i),'cosmetic input retains every remaining choice');
+          for(const key of ['age','stats','flags','records','alive','cause'])assert.deepEqual(file.summary[key],original.summary[key],'cosmetic input preserves '+key);
+        }
         const final=await native(page,'return b.runtime.state;');
         assert.equal(C.signature(final),file.terminalSignature);
-        if(field==='color')assert.equal(final.colorName,text);else assert.ok(final.reflections.some(r=>r.text===text));
+        if(field==='reflect')assert.ok(final.reflections.some(r=>r.text===text));
+        else assert.equal(field==='star'?final.pinky.blade:final[{color:'colorName',ego:'egoName',relic:'relicName',child:'childName'}[field]],text);
       }
       assert.deepEqual(test.errors,[]);console.log('Manual typing passed:',field);await test.ctx.close();
     }

@@ -1,5 +1,13 @@
 # Changes
 
+## 2.2.0
+
+- Add paired naming tests: 42 complete native simulations across three seeds and seven controlled typing prompts. Cosmetic titles/reflections preserve paths and outcomes; custom child/partner names change RNG and can change endings.
+- Preserve remaining choices after cosmetic entries when native replays verify the same gameplay state and achievements. Rebuild full fingerprints; fall back to a new search for gameplay changes.
+- Add goal-first result/planning order: recommended survival and wellbeing, lifespan, individual stats, native achievement tier, or Fixer-only combat rating. Apply the preference while retaining search candidates and completed plans, not just when displaying cards.
+- Show comparison details, including applicable native promotion merit. Preserve the original route's goals and order preference after personal input.
+- Update the snapshot for client `index-BujUmHjK.js`, including corporate event-age changes and the native Wing-executive inquisition exclusion.
+
 ## 2.1.0
 
 - Pause following and native time before all naming and reflection prompts. Never submit them automatically, including through Choose next step.

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Cityborn Life Advisor
 // @namespace    https://github.com/HVS13/CitybornLifeLab
-// @version      2.1.0
+// @version      2.2.0
 // @description  Find and replay lives by final stats, traits and achievements, or plan the rest of your current life.
 // @homepageURL  https://github.com/HVS13/CitybornLifeLab
 // @supportURL   https://github.com/HVS13/CitybornLifeLab/issues
@@ -70,7 +70,7 @@ function qt(e) {
   });
 }
 const pp = 6e4,
-  ln = [1, 2, 4, 8, 16, 32],
+  hn = [1, 2, 4, 8, 16, 32],
   Yw = 1e4,
   Cl = 110,
   ao = ["health", "sanity", "wealth", "network", "rep"],
@@ -763,7 +763,7 @@ function Cp(e, t, o = 0) {
     f
   );
 }
-const $a = {
+const Ha = {
     노화: [
       "긴 하루가 저물듯, 조용히 눈을 감았다.",
       "마지막까지 창가에 앉아 있었다. 도시의 소음이 멀어졌다.",
@@ -812,7 +812,7 @@ const $a = {
     ],
     약물: ["마지막 한 알이 마지막이 되었다.", "깨어나지 못한 아침이었다."],
   },
-  Ha = {
+  Da = {
     노화: [
       "Like the end of a long day, they quietly closed their eyes.",
       "They sat by the window to the very end, as the noise of the City faded away.",
@@ -1016,7 +1016,7 @@ const $a = {
     메마름: "Hollowed",
     "앰플 부패": "Ampule Decay",
   },
-  Da = {
+  qa = {
     노화: [
       "長い一日の終わりのように、静かに目を閉じた。",
       "都市の喧騒が遠ざかっていく窓辺に、最後まで座っていた。",
@@ -1107,7 +1107,7 @@ const $a = {
     메마름: "枯渇",
     "앰플 부패": "アンプル腐敗",
   };
-Object.assign($a, {
+Object.assign(Ha, {
   시듦: [
     "마지막 해, 당신은 아주 가벼워졌다.",
     "혈액바 상자는 비어 있었다. 몸도 그랬다.",
@@ -1125,7 +1125,7 @@ Object.assign($a, {
     "도시는 당신을 기억하지 않는다. 당신도 도시를 다 기억하지는 못했다.",
   ],
 });
-Object.assign(Ha, {
+Object.assign(Da, {
   시듦: [
     "In your final year, you became very light.",
     "The Hemobar box was empty. So were you.",
@@ -1145,7 +1145,7 @@ Object.assign(Ha, {
     "The City does not remember you. You could not remember all of the City either.",
   ],
 });
-Object.assign(Da, {
+Object.assign(qa, {
   시듦: [
     "最後の年、あなたはとても軽くなった。",
     "血液バーの箱は空だった。体もそうだった。",
@@ -1163,7 +1163,7 @@ Object.assign(Da, {
     "都市はあなたを覚えていない。あなたも、都市のすべてを覚えてはいられなかった。",
   ],
 });
-Object.assign($a, {
+Object.assign(Ha, {
   "작전 중 사망": [
     "보고서 한 줄로 남았다.",
     "이름표의 번호가 명부에서 지워졌다.",
@@ -1174,7 +1174,7 @@ Object.assign($a, {
   ],
   "부화장 경쟁": ["부화장에서 남지 못했다. 같은 얼굴 하나가 대신 남았다."],
 });
-Object.assign(Ha, {
+Object.assign(Da, {
   "작전 중 사망": [
     "You remained as a single line in a report.",
     "The number on your name tag was struck from the roster.",
@@ -1187,7 +1187,7 @@ Object.assign(Ha, {
     "You did not remain in the Hatchery. Another of the same face remained instead.",
   ],
 });
-Object.assign(Da, {
+Object.assign(qa, {
   "작전 중 사망": [
     "報告書の一行として残った。",
     "名札の番号が名簿から消された。",
@@ -1204,7 +1204,7 @@ const Ww = (e) => {
 };
 function Pp(e, t, o = 0) {
   const a = Pe(),
-    n = a === "en" ? Ha : a === "ja" ? Da : $a,
+    n = a === "en" ? Da : a === "ja" ? qa : Ha,
     r = a === "en" ? Op : a === "ja" ? Ep : Np,
     i = a === "en" ? Wp : a === "ja" ? Fp : Ip;
   if (o >= 3 && r[e]) return t.pick(r[e]);
@@ -1212,7 +1212,7 @@ function Pp(e, t, o = 0) {
   const l = n[e] || n.노화;
   return t.pick(l);
 }
-Object.assign($a, {
+Object.assign(Ha, {
   "흑운회와의 항쟁": [
     "골목 하나를 지키다 쓰러졌다. 그 골목은 다음 날 흑운회의 것이 되었다.",
     "칼자국이 하나 더 늘었다. 이번 것은 아물지 않았다.",
@@ -1222,7 +1222,7 @@ Object.assign($a, {
     "마지막으로 본 것은 사람의 것이 아닌 칼끝이었다.",
   ],
 });
-Object.assign(Ha, {
+Object.assign(Da, {
   "흑운회와의 항쟁": [
     "You fell holding a single alley. The next day, that alley belonged to the Kurokumo Clan.",
     "One more scar. This one did not close.",
@@ -1232,7 +1232,7 @@ Object.assign(Ha, {
     "The last thing you saw was a blade tip that was no longer a person's.",
   ],
 });
-Object.assign(Da, {
+Object.assign(qa, {
   "흑운회와의 항쟁": [
     "路地ひとつを守って倒れた。その路地は翌日、黒雲会のものになった。",
     "刀傷がひとつ増えた。今度のものは塞がらなかった。",
@@ -1242,7 +1242,7 @@ Object.assign(Da, {
     "最後に見たのは、もはや人のものではない切っ先だった。",
   ],
 });
-Object.assign($a, {
+Object.assign(Ha, {
   "검계와의 항쟁": [
     "두루마기 하나를 쫓아 골목 끝까지 갔다. 그 끝에서 숨이 긴 칼이 기다리고 있었다.",
     "검은 구름도 막지 못한 칼이었다.",
@@ -1253,7 +1253,7 @@ Object.assign($a, {
   ],
   "해결사의 토벌": ["의뢰서에는 '처리 완료'라고 적혔다."],
 });
-Object.assign(Ha, {
+Object.assign(Da, {
   "검계와의 항쟁": [
     "You chased a single overcoat to the end of the alley. A long-breathed blade was waiting there.",
     "It was a blade even the black clouds could not stop.",
@@ -1264,7 +1264,7 @@ Object.assign(Ha, {
   ],
   "해결사의 토벌": ['The request was marked "Completed."'],
 });
-Object.assign(Da, {
+Object.assign(qa, {
   "검계와의 항쟁": [
     "周衣をひとつ追って路地の奥まで行った。そこには息の長い刀が待っていた。",
     "黒い雲でも防げない刀だった。",
@@ -1275,21 +1275,21 @@ Object.assign(Da, {
   ],
   "해결사의 토벌": ["依頼書には「処理完了」と書かれた。"],
 });
-Object.assign($a, {
+Object.assign(Ha, {
   "앰플 부패": ["녹색이 탁해졌다. 배합이 조금 어긋나 있었을 뿐이다."],
   메마름: ["그 뒤의 기록은 출동 기록뿐이다."],
 });
-Object.assign(Ha, {
+Object.assign(Da, {
   "앰플 부패": [
     "The green turned murky. The formula had been off, only slightly.",
   ],
   메마름: ["After that, the only records are dispatch logs."],
 });
-Object.assign(Da, {
+Object.assign(qa, {
   "앰플 부패": ["緑が濁った。配合がほんの少しずれていただけだった。"],
   메마름: ["それからの記録は、出動記録だけだ。"],
 });
-const qn = [
+const Gn = [
     ["천괴성", "天魁星", "Tiankui Star", "てんかいせい"],
     ["천강성", "天罡星", "Tiangang Star", "てんこうせい"],
     ["천기성", "天機星", "Tianji Star", "てんきせい"],
@@ -1402,7 +1402,7 @@ const qn = [
   Ew = 36;
 function Kh(e, t) {
   if (!e.pinky) return null;
-  const o = qn[e.pinky.star];
+  const o = Gn[e.pinky.star];
   if (!o) return null;
   const a = e.pinky.blade;
   return t === "en"
@@ -3570,9 +3570,9 @@ function nb(e) {
     : aa.find((t) => e >= t.min) || aa[aa.length - 1];
 }
 const rb = { id: "miracle", ko: "기적", en: "Miracle", ja: "奇跡" },
-  Tn = aa.concat([rb]),
-  ib = Object.fromEntries(Tn.map((e) => [e.id, e])),
-  Lu = Object.fromEntries(Tn.map((e, t) => [e.id, t])),
+  _n = aa.concat([rb]),
+  ib = Object.fromEntries(_n.map((e) => [e.id, e])),
+  Lu = Object.fromEntries(_n.map((e, t) => [e.id, t])),
   Bw = {
     born_head: "uncommon",
     born_outskirts: "uncommon",
@@ -4519,7 +4519,7 @@ const yb = {
       )
       .replace(
         /\{R:([^|}]*)\|([^|}]*)\|([^}]*)\}/g,
-        (a, n, r, i) => ({ 토끼: n, 순록: r, 코뿔소: i })[Kn(o)] ?? n,
+        (a, n, r, i) => ({ 토끼: n, 순록: r, 코뿔소: i })[zn(o)] ?? n,
       )
       .replace(/\{(BF_[A-Z]+|윗사람|형님|어버이)\}/g, (a, n) => qx(n, o))
       .replace(/\{(해답|칙령\d|결정\d|평판줄|공씨줄|남은사람줄)\}/g, (a, n) =>
@@ -4657,7 +4657,7 @@ const ct = Dt({
   }),
   xb = 0.2,
   vb = 0.1,
-  hn = 78,
+  dn = 78,
   Ae = (e) => Math.min(15e3, Math.max(4e3, String(e || "").length * 55)),
   Dw = (e) =>
     !!e.heir && ((e.flags.includes("가주후보") && e.age >= 5) || !!e.rule),
@@ -4779,7 +4779,7 @@ const Il = qt({
     income: [4.5, 5.5, 7],
   },
   $i = (e) => (e && e.bl) || null,
-  qa = (e) => (e && e.job === "검계" && e.bl ? e.bl.rank || 1 : 0);
+  Ga = (e) => (e && e.job === "검계" && e.bl ? e.bl.rank || 1 : 0);
 function qw(e) {
   if (["A", "B", "C", "outskirts"].includes(e.regionId)) return !1;
   const t = e.flags;
@@ -4891,7 +4891,7 @@ const yo = {
   }),
   nr = (e) => (e && e.kk) || null,
   Gt = (e) => (e && e.job === "흑운회" && e.kk ? e.kk.rank || 1 : 0);
-function dn(e) {
+function un(e) {
   const t = Gt(e) || 1,
     o = nr(e);
   return t === 2 && o && o.seat
@@ -5424,7 +5424,7 @@ ${re("turnCommon")}`;
       Yr(e, i, "prog", "해결사의 토벌", Bt(e, "obit.prog", lt("obit.prog"))));
   }
 }
-const _n = {
+const jn = {
   uP: 0.04,
   drinkP: 0.03,
   whaleP: 0.03,
@@ -5437,7 +5437,7 @@ const _n = {
 };
 function Xb(e) {
   const t = oe({ rngState: Gh(`${e}:lake`) });
-  return t.chance(_n.drinkP) ? t.int(16, 60) : null;
+  return t.chance(jn.drinkP) ? t.int(16, 60) : null;
 }
 const Qb = () => (X && U(X, "lk_lines")) || null;
 function Uw(e) {
@@ -5490,7 +5490,7 @@ function ek(e, t) {
       !e.lakeOffered &&
       e.age >= 18 &&
       e.age <= 65 &&
-      t.chance(_n.uP) &&
+      t.chance(jn.uP) &&
       o.push({ id: Zb(e, t), lakeEnter: !0 }));
   const n = e.lakeHints || 0;
   if (n < 2 && !e.bf && e.age >= 16) {
@@ -5498,12 +5498,12 @@ function ek(e, t) {
       i = Ku(e),
       l = !!e.lakeRec && !e.lakeRec.dead;
     (i || l) &&
-      (t.chance(_n.hint[i ? "sailor" : "sailorX"][r])
+      (t.chance(jn.hint[i ? "sailor" : "sailorX"][r])
         ? o.push({
             id: i ? "lk_hint_sailor" : "lk_hint_sailor_x",
             lakeHintEv: !0,
           })
-        : t.chance(_n.hint[i ? "pirate" : "pirateX"][r]) &&
+        : t.chance(jn.hint[i ? "pirate" : "pirateX"][r]) &&
           o.push({
             id: i ? "lk_hint_pirate" : "lk_hint_pirate_x",
             lakeHintEv: !0,
@@ -5511,7 +5511,7 @@ function ek(e, t) {
   }
   return o;
 }
-function Gn(e, t) {
+function Kn(e, t) {
   const o = t.lake,
     a = o ? o.source : null,
     n =
@@ -5556,7 +5556,7 @@ function ok(e, t, o, a) {
   X = t;
   const n = oe(e);
   e.lakeOffered = !0;
-  const r = n.chance(_n.whaleP)
+  const r = n.chance(jn.whaleP)
     ? { kind: n.pick(["marlin", "pallid", "crimson"]), at: n.int(0, 4) }
     : null;
   ((e.lake = {
@@ -5584,7 +5584,7 @@ function Vw(e, t) {
     P(e, { kind: "lakesep", text: Di(e), lake: o.route[o.i] }, t),
     P(
       e,
-      { kind: "event", text: Gn(te(`lakes.${n.id}.enter`), e), tone: "event" },
+      { kind: "event", text: Kn(te(`lakes.${n.id}.enter`), e), tone: "event" },
       t,
     ),
     o.whale &&
@@ -5631,10 +5631,10 @@ function Xw(e, t) {
   if (r.wave) return Qw(e, n, r.wave, t);
   ((o.scene = r.scene),
     o.t > 1 && (e.stats.sanity = dt(M(e.stats.sanity - 1, 1, 100))));
-  const i = Gn(te(`lakes.${n.id}.scene.${r.scene}`), e);
+  const i = Kn(te(`lakes.${n.id}.scene.${r.scene}`), e);
   P(e, { kind: "event", text: i, tone: "event" }, t);
   const l = db(n, o.st).map((s, u) => ({
-    label: Gn(te(`lakes.${n.id}.c.${s}`), e),
+    label: Kn(te(`lakes.${n.id}.c.${s}`), e),
     i: u,
     key: s,
   }));
@@ -5661,7 +5661,7 @@ function rk(e, t, o, a) {
   const s = o.choices[l],
     u = cb(i, n.st, s.key, n.scene, n.t);
   if ((u.k === "haul" && (n.fished = !0), u.k)) {
-    const f = Gn(te(`lakes.${i.id}.r.${u.k}`), e);
+    const f = Kn(te(`lakes.${i.id}.r.${u.k}`), e);
     P(
       e,
       {
@@ -5686,7 +5686,7 @@ function Qw(e, t, o, a, n) {
   const r = e.lake,
     i = Di(e),
     l = te(`lakes.${t.id}.w.${o}`) || te("common.stay"),
-    s = Gn(l, e);
+    s = Kn(l, e);
   P(
     e,
     {
@@ -5767,11 +5767,11 @@ function ik(e, t) {
         te(o.source === "u_fixer" ? "common.r_fixerReq" : "common.r_fixer"),
       ))
     : e.job === "손가락"
-      ? (jn(e, 6), l.push(Tt(te("common.r_finger"), Ge(X, e), e)))
+      ? (An(e, 6), l.push(Tt(te("common.r_finger"), Ge(X, e), e)))
       : ge(e)
         ? e.work === "4무리"
           ? (i("rep", 5), l.push(te("common.r_rcorp")))
-          : (jn(e, 6), l.push(te("common.r_wing")))
+          : (An(e, 6), l.push(te("common.r_wing")))
         : no(e)
           ? (ad(e, 6), l.push(te("common.r_office")))
           : e.job === "검계" && e.bl
@@ -5779,7 +5779,7 @@ function ik(e, t) {
             : e.job === "떠돌이 검객" && e.bl
               ? ((e.bl.cut = (e.bl.cut || 0) + 3),
                 l.push(te("common.r_wanderer")))
-              : e.job === "흑운회" && (jn(e, 6), l.push(te("common.r_kuro"))),
+              : e.job === "흑운회" && (An(e, 6), l.push(te("common.r_kuro"))),
     o.fished && (i("wealth", 6), l.push(te("common.r_fish"))),
     o.source === "drink" && (i("wealth", 10), l.push(te("common.r_drink"))));
   for (const u of ao) n[u] = dt(M(n[u]));
@@ -5837,9 +5837,9 @@ function lk(e) {
   const t = e.prompt;
   return oe(e).int(0, Math.max(0, t.choices.length - 1));
 }
-const Kn = (e) => (e && (e.branch || e.cloneTeam)) || "토끼";
+const zn = (e) => (e && (e.branch || e.cloneTeam)) || "토끼";
 function hk(e) {
-  return td[Kn(e)] || Kn(e);
+  return td[zn(e)] || zn(e);
 }
 function dk(e) {
   const t = e && (e.work === "4무리" ? e.wingRank : e.cloneRank);
@@ -5854,7 +5854,7 @@ const uk = Dt({
   en: { 묘: "Mao", 오: "Wu", 사: "Si", 유: "You", 미: "Wei" },
   ja: { 묘: "卯", 오: "午", 사: "巳", 유: "酉", 미: "未" },
 });
-function un(e, t, o) {
+function cn(e, t, o) {
   if (e === "흑수") {
     const a = uk[o] || o || "";
     return t >= 2
@@ -5972,11 +5972,11 @@ const ge = (e) => e.job === "사원" && !!Gr[e.work],
   Qe = (e) => ge(e) && e.work === "적출직",
   Zw = (e) => e.kx || (e.kx = { hp: 0, fit: 0, tube: !1, ideal: !1 }),
   fk = (e) => (e.kx && e.kx.ideal ? 10 : 20);
-function Wa(e) {
+function Ea(e) {
   return !e || !e.kx ? 100 : Math.max(0, 100 - fk(e) * (e.kx.hp || 0));
 }
 function od(e) {
-  e.kx && e.stats.sanity > Wa(e) && (e.stats.sanity = Wa(e));
+  e.kx && e.stats.sanity > Ea(e) && (e.stats.sanity = Ea(e));
 }
 const wk = new Set(["x_ego_edge"]),
   gk = new Set([
@@ -6000,7 +6000,7 @@ function yk(e, t) {
   return !(
     (e.kxIdeal != null && !!(o && o.ideal) !== e.kxIdeal) ||
     (e.kxHpAt && !ee((o && o.hp) || 0, e.kxHpAt)) ||
-    (e.kxMaxAt && !ee(Wa(t), e.kxMaxAt)) ||
+    (e.kxMaxAt && !ee(Ea(t), e.kxMaxAt)) ||
     (e.kxFamily && !(t.flags.includes("가정") || t.flags.includes("아이"))) ||
     (e.kxTube && !(o && o.tube))
   );
@@ -6028,7 +6028,7 @@ function eg(e, t, o) {
     const k = Math.round(l[g] - s[g]);
     k && (u[g] = k);
   }
-  if (Wa(e) <= 0) {
+  if (Ea(e) <= 0) {
     pk(e, t, o, u);
     return;
   }
@@ -6224,8 +6224,8 @@ function _k(e, t, o) {
   return n ? oe(e).pick(Ol[n](e)) : null;
 }
 const no = (e) => e.job === "사원" && e.work === "날개 직원",
-  zn = (e) => (no(e) ? e.officeRank || 1 : 0),
-  cn = qt({
+  ja = (e) => (no(e) ? e.officeRank || 1 : 0),
+  fn = qt({
     ko: ["사원", "대리", "과장", "부장", "이사", "대표"],
     en: [
       "Staff",
@@ -6240,8 +6240,8 @@ const no = (e) => e.job === "사원" && e.work === "날개 직원",
   og = ["A", "B", "C", "H"],
   jk = [5, 15, 36, 62, 60],
   ag = 3;
-function Ea(e, t) {
-  const o = M(t || zn(e) || 1, 1, 5);
+function Fa(e, t) {
+  const o = M(t || ja(e) || 1, 1, 5);
   let a = jk[o - 1];
   return (
     e.stats.rep >= 50 && (a *= 0.85),
@@ -6256,13 +6256,13 @@ function Ea(e, t) {
 function Ak(e) {
   const t = X ? Ge(X, e) : null,
     o = t ? t.name : "",
-    a = cn[(e.officeRank || 1) - 1];
+    a = fn[(e.officeRank || 1) - 1];
   return o ? `${o} ${a}` : a;
 }
 function Yk(e) {
-  return zn(e) !== 5 || og.includes(e.regionId)
+  return ja(e) !== 5 || og.includes(e.regionId)
     ? !1
-    : (e.perf || 0) >= Ea(e, 5) &&
+    : (e.perf || 0) >= Fa(e, 5) &&
         e.age - (e.dirSince ?? e.age) >= 8 &&
         e.flags.includes("후견") &&
         e.stats.rep >= 50 &&
@@ -6298,7 +6298,7 @@ const El = {
   Ck = 2,
   Nk = 0.6,
   Ik = 0.05,
-  ng = (e) => (e && e.pinky ? qn[e.pinky.star] : null),
+  ng = (e) => (e && e.pinky ? Gn[e.pinky.star] : null),
   rg = (e) => (e && e.pinky ? (e.pinky.star < Ew ? 1 : 2) : 0),
   ro = (e, t, o) => {
     const a = rg(e);
@@ -6378,10 +6378,10 @@ const Bl = (e) =>
   ]);
 function Pk(e) {
   const t = oe({ rngState: Gh(`${e}:pinky`) });
-  return t.chance(Ik) ? t.int(0, qn.length - 1) : null;
+  return t.chance(Ik) ? t.int(0, Gn.length - 1) : null;
 }
 const Mk = 0.25;
-function Fa(e) {
+function Ba(e) {
   return e.job === "손가락" && e.finger && El[e.finger]
     ? e.finger
     : ge(e) && El[e.work]
@@ -6396,8 +6396,8 @@ const $k = (e) =>
     : e.job === "흑운회" && e.kk
       ? e.kk.rank || 1
       : e.wingRank || 1;
-function ja(e) {
-  const t = Fa(e);
+function Aa(e) {
+  const t = Ba(e);
   if (!t) return 0;
   const o = El[t.split(":")[0]][$k(e) - 1];
   if (o == null) return 0;
@@ -6413,16 +6413,16 @@ function ja(e) {
   );
 }
 function ig(e) {
-  const t = Fa(e);
+  const t = Ba(e);
   return (
     (e.rmeritKey || null) !== t && ((e.rmeritKey = t), (e.rmerit = 0)),
     t
   );
 }
-function jn(e, t) {
+function An(e, t) {
   if (!ig(e) || !t) return;
   t > 0 && (t *= tg(e, "merit"));
-  const o = ja(e);
+  const o = Aa(e);
   o &&
     (e.rmerit = Math.max(
       0,
@@ -6431,14 +6431,14 @@ function jn(e, t) {
 }
 function Gi(e) {
   if (!ig(e)) return !1;
-  const t = ja(e);
+  const t = Aa(e);
   return !!t && (e.rmerit || 0) >= t;
 }
 function Uu(e) {
-  return ((e.rmeritKey || null) === Fa(e) && e.rmerit) || 0;
+  return ((e.rmeritKey || null) === Ba(e) && e.rmerit) || 0;
 }
 function Hk(e) {
-  jn(e, 1);
+  An(e, 1);
 }
 function Dk(e, t) {
   const o = (e.pastPower || 0) - 1;
@@ -6501,7 +6501,7 @@ const Gk = Dt({
       "환상체 토벌": "幻想体討伐",
     },
   }),
-  An = (e) => Gk[e] || e,
+  Yn = (e) => Gk[e] || e,
   ae = {
     birthP: 0.006,
     thirstBase: 12,
@@ -6595,11 +6595,11 @@ function Te(e) {
               : e.job === "손가락" && e.finger
                 ? `${He[e.finger]} ${Je(e.finger, e.fingerRank, e.gender)}`.trim()
                 : ge(e)
-                  ? un(e.work, e.wingRank || 1, e.branch)
+                  ? cn(e.work, e.wingRank || 1, e.branch)
                   : e.job === "검계"
-                    ? Il[(qa(e) || 1) - 1]
+                    ? Il[(Ga(e) || 1) - 1]
                     : e.job === "흑운회"
-                      ? dn(e)
+                      ? un(e)
                       : e.job === "도장 사범"
                         ? h("도장 사범", "Dojo Master", "道場師範")
                         : e.job === "이름 없는 뒤틀림"
@@ -6755,12 +6755,12 @@ function Ju(e, t = {}) {
         : Pk(o);
   if (s != null && s !== !1) {
     ((a.pinky = {
-      star: Math.max(0, Math.min(qn.length - 1, Number(s) || 0)),
+      star: Math.max(0, Math.min(Gn.length - 1, Number(s) || 0)),
       at: 0,
       blade: null,
     }),
       ie(a, { k: "pinky", star: a.pinky.star }));
-    const u = qn[a.pinky.star];
+    const u = Gn[a.pinky.star];
     (P(
       a,
       {
@@ -6904,7 +6904,7 @@ function cg(e) {
 }
 const Qk = (e) =>
   e.flags.includes("아이") && e.childBorn != null ? e.age - e.childBorn : null;
-function Aa(e, t, o) {
+function Ya(e, t, o) {
   if (
     (e.offer && (t.job === "검계" || t.job === "흑운회")) ||
     Ek(e, t) ||
@@ -6970,7 +6970,7 @@ function Aa(e, t, o) {
       !(e.jobs && e.jobs.includes(t.work))) ||
     (t.job === "검계" && !e.bl && !e.anyone && !e.wingOk && !n) ||
     (e.blEntry && !jb(t)) ||
-    (e.blRank && !ee(qa(t), e.blRank)) ||
+    (e.blRank && !ee(Ga(t), e.blRank)) ||
     (e.blCutAt && !(t.bl && ee(t.bl.cut || 0, e.blCutAt))) ||
     (e.blWayAt && !(t.bl && ee(t.bl.way || 0, e.blWayAt))) ||
     (e.blYearsAt && !(t.bl && ee(a - (t.bl.since ?? a), e.blYearsAt))) ||
@@ -6997,17 +6997,18 @@ function Aa(e, t, o) {
     (e.bldRemAt && !(t.bld && ee(t.bld.rem || 0, e.bldRemAt))) ||
     (e.bldThreatAt && !(t.bld && ee(t.bld.threat || 0, e.bldThreatAt))) ||
     (e.notExec && Ax(t)) ||
-    (e.exec && zn(t) < 5)
+    (e.notWingExec && ja(t) >= 5) ||
+    (e.exec && ja(t) < 5)
   )
     return !1;
   if (e.officeRank) {
-    const r = zn(t);
+    const r = ja(t);
     if (!r || r < e.officeRank[0] || r > e.officeRank[1] || (r <= 4 && a > 60))
       return !1;
   }
   if (
-    (e.perfFull && !((t.perf || 0) >= Ea(t))) ||
-    (e.perfLow && !((t.perf || 0) < Ea(t) * 0.3)) ||
+    (e.perfFull && !((t.perf || 0) >= Fa(t))) ||
+    (e.perfLow && !((t.perf || 0) < Fa(t) * 0.3)) ||
     (e.warnAt && !ee(t.warn || 0, e.warnAt)) ||
     (e.warnQuiet && !(a - (t.warnLast ?? -99) >= e.warnQuiet)) ||
     (e.ceoReady && !Yk(t)) ||
@@ -7063,7 +7064,7 @@ function fg(e, t) {
     (e.bfRetired && !(o && !Dl(t))) ||
     (e.outlive && !(o && Mx(t))) ||
     (e.revealOk && !(o && $x(t))) ||
-    (e.revealAt && !(o && o.revealOrg && o.revealOrg === Ba(t)))
+    (e.revealAt && !(o && o.revealOrg && o.revealOrg === La(t)))
   );
 }
 function wg(e, t, o) {
@@ -7107,7 +7108,7 @@ function Ki(e) {
     ge(e)
       ? (t = ck(e))
       : e.job === "검계"
-        ? (t = qa(e))
+        ? (t = Ga(e))
         : e.job === "흑운회"
           ? (t = Gt(e))
           : e.job === "이름 없는 뒤틀림" && (t = 3);
@@ -7280,7 +7281,7 @@ function ld(e, t) {
       }),
     Dw(e))
   ) {
-    const j = t.events.filter((R) => R.heir && Aa(R, e, a));
+    const j = t.events.filter((R) => R.heir && Ya(R, e, a));
     j.length && j[0].forceGroup === "hh31"
       ? e.plan.push({ banner: "heir", t: 0.3 }, { id: j[0].id, t: 0.36 })
       : j.length && e.plan.push({ id: j[0].id, t: 0.3 });
@@ -7295,7 +7296,7 @@ function ld(e, t) {
     return;
   }
   (Sk(e), Hk(e));
-  const n = t.events.filter((j) => Aa(j, e, a) && ax(j, a, o, e)),
+  const n = t.events.filter((j) => Ya(j, e, a) && ax(j, a, o, e)),
     r = n.filter((j) => j.must && e.age >= j.age[1]).slice(0, 1),
     i = {};
   for (const j of n)
@@ -7353,7 +7354,7 @@ function ld(e, t) {
     c = ek(e, o);
   if (r.length === 0 && x === 0 && !v && !S.length && !c.length) {
     const j = e.recentDaily || [],
-      R = (t.daily || []).filter((O) => Aa(O, e, a) && !j.includes(O.id)),
+      R = (t.daily || []).filter((O) => Ya(O, e, a) && !j.includes(O.id)),
       C = o.weighted(R, (O) => (O.regions ? 2.2 : 1) * (O.weight ?? 1));
     C &&
       ((e.recentDaily = [...j, C.id].slice(-14)),
@@ -7407,7 +7408,7 @@ function rx(e, t, o, a) {
       e.plan.push({ id: "bl_d_hunt", chain: !0, t: 0.4 }));
     return;
   }
-  const l = t.events.filter((u) => u.bld && !u.bldEnd && Aa(u, e, o)),
+  const l = t.events.filter((u) => u.bld && !u.bldEnd && Ya(u, e, o)),
     s = a.weighted(l, (u) => u.weight ?? 1);
   s
     ? e.plan.push({ id: s.id, t: 0.4 })
@@ -7416,7 +7417,7 @@ function rx(e, t, o, a) {
       e.plan.push({ id: "bl_d_pass", chain: !0, t: 0.4 }));
 }
 const hd = 0.55,
-  Ga = [0.5, 1.5, 3, 4.5, 6.5, 8.5];
+  Ka = [0.5, 1.5, 3, 4.5, 6.5, 8.5];
 function rr(e) {
   let t = 10 - (e.grade || 9);
   return (
@@ -7432,14 +7433,14 @@ function pg(e) {
   const t = rr(e);
   let o = 0;
   return (
-    Ga.forEach((a, n) => {
+    Ka.forEach((a, n) => {
       a <= t && (o = n);
     }),
     o
   );
 }
 function Qu(e, t, o) {
-  const a = Ga[t] - rr(e);
+  const a = Ka[t] - rr(e);
   let n = 0.025 * Math.pow(1.85, a) * hd;
   return (
     (n *= o === "bold" ? 1.3 : 0.45),
@@ -7452,7 +7453,7 @@ function Qu(e, t, o) {
   );
 }
 function Ml(e, t, o) {
-  const a = Ga[t] - rr(e),
+  const a = Ka[t] - rr(e),
     n = (e.bf && e.bf.vigor ? 0.1 : 0) + (ro(e, 1.08, 1.04) - 1);
   return o === "bold"
     ? M(0.68 - 0.12 * a + n, 0.12, 0.95)
@@ -7473,7 +7474,7 @@ function Go(e) {
   );
 }
 function ix(e, t, o) {
-  const a = Ga[t] - rr(e),
+  const a = Ka[t] - rr(e),
     n = M(1 + a * 0.35, 0.4, 2.5);
   return Math.max(
     1,
@@ -7500,7 +7501,7 @@ function hx(e, t, o) {
       (v) => v[1],
     )[0],
     r = e.org && e.org.type === "assoc" && o.chance(0.35) ? 1 : 0,
-    i = M(a + n + r, 0, Ga.length - 1),
+    i = M(a + n + r, 0, Ka.length - 1),
     l = e.org ? e.org.name : null,
     s = t.requests.filter((v) => !v.org || v.org === l);
   let u = s.filter((v) => i >= v.tiers[0] && i <= v.tiers[1]);
@@ -7560,8 +7561,8 @@ function dx(e, t, o, a) {
       kind: "event",
       text: h(
         `[${l}] ${i.type} 의뢰 · ${m}`,
-        `[${l}] ${An(i.type)} request · ${m}`,
-        `[${l}] ${An(i.type)}依頼 · ${m}`,
+        `[${l}] ${Yn(i.type)} request · ${m}`,
+        `[${l}] ${Yn(i.type)}依頼 · ${m}`,
       ),
       tone: n.tier >= 4 ? "rare" : "event",
       tier: n.tier,
@@ -7581,7 +7582,7 @@ function dx(e, t, o, a) {
     kind: "major",
     eventId: "request",
     text: m,
-    badge: `${l} · ${An(i.type)}`,
+    badge: `${l} · ${Yn(i.type)}`,
     sub: h(
       `${f} · ${Te(e)} (적정 등급: ${g})${k}`,
       `${f} · ${Te(e)} (suited for: ${g})${k}`,
@@ -7646,14 +7647,14 @@ function ux(e, t, o, a, n) {
     if (k && r.chance(0.3)) return g();
     ((e.deathContext = h(
       `${t.orgs.tiers[i.tier]} 등급의 ${i.abn ? `'${i.abn}' ` : ""}${l.type} 의뢰 도중`,
-      `during a ${t.orgs.tiers[i.tier]} ${An(l.type)} request${i.abn ? ` against '${i.abn}'` : ""}`,
-      `${t.orgs.tiers[i.tier]}級の${i.abn ? `「${i.abn}」` : ""}${An(l.type)}依頼の最中に`,
+      `during a ${t.orgs.tiers[i.tier]} ${Yn(l.type)} request${i.abn ? ` against '${i.abn}'` : ""}`,
+      `${t.orgs.tiers[i.tier]}級の${i.abn ? `「${i.abn}」` : ""}${Yn(l.type)}依頼の最中に`,
     )),
       kt(e, t, { text: l.death, death: l.cause }, o.t, u));
     return;
   }
   const x = i.tier;
-  Ga[x] - rr(e);
+  Ka[x] - rr(e);
   const v =
       (f === "bold" ? 1.5 : 0.7) *
       (e.org ? (e.org.type === "assoc" ? 1.2 : 1) : 0.85),
@@ -7754,7 +7755,7 @@ function cx(e, t) {
   if (o.daily) {
     const r = $w(t, o.id);
     return r
-      ? (Aa(r, e, a) &&
+      ? (Ya(r, e, a) &&
           kt(e, t, r, o.t, { kind: "daily", tone: "daily", eventId: r.id }),
         !0)
       : !1;
@@ -7810,7 +7811,7 @@ function cx(e, t) {
   }
   const n = U(t, o.id);
   if (!n) return !1;
-  if (!Aa(n, e, a)) return !0;
+  if (!Ya(n, e, a)) return !0;
   if ((n.repeat || e.used.push(n.id), n.offer)) {
     const r = oe(e),
       i = (t.orgs[n.offer] || []).filter(
@@ -7987,9 +7988,9 @@ function bx(e, t) {
     (e.fingerUp > 0 || e.wingUp > 0 || e.kkUp || e.blUp || e.gradeUp > 0) &&
       (o *= ro(t, 1.15, 1.07)),
     e.gradeUp > 0 && t.job === "해결사" && (o *= fx(t)),
-    e.fingerUp > 0 && t.finger && !e.topRank && !Fa(t) && (o *= ec(t)),
+    e.fingerUp > 0 && t.finger && !e.topRank && !Ba(t) && (o *= ec(t)),
     e.rmerit > 0 && t.finger && (o *= ec(t)),
-    e.wingUp > 0 && ge(t) && !Fa(t) && (o *= qk(t)),
+    e.wingUp > 0 && ge(t) && !Ba(t) && (o *= qk(t)),
     !id(e.power, t))
   )
     return 0;
@@ -8107,7 +8108,7 @@ function kt(e, t, o, a, n = {}) {
         : e.flags.includes("가정") || Xk(e)),
       (i.flagsAdd || []).includes("연인") && !e.partnerName && (g = "lover"));
   }
-  if (Fa(e)) {
+  if (Ba(e)) {
     const b = n.eventId ? U(t, n.eventId) : null,
       _ = b && (b.finger || b.work || b.fingerRank || b.wingRank || b.kk);
     let Y = i.rmerit || 0;
@@ -8120,7 +8121,7 @@ function kt(e, t, o, a, n = {}) {
       (((b.kkFight && L >= 2) || (b.kkLedger && L <= -2)) && (Y += 1),
         Y >= 2 && (e.kk.inkWhy = { age: e.age, why: "merit" }));
     }
-    jn(e, Y);
+    An(e, Y);
   }
   if (i.rec) {
     e.cmRec ?? (e.cmRec = {});
@@ -8258,7 +8259,7 @@ function kt(e, t, o, a, n = {}) {
       i.sireWeak &&
         (b.favor = Math.min(ae.favorCap, (b.favor || 0) + ae.favorStep)),
       i.lastHunter && (b.lastHunter = !0),
-      i.revealOrg && (b.revealOrg = Ba(e)),
+      i.revealOrg && (b.revealOrg = La(e)),
       i.endRec && (e.bfEndRec = i.endRec));
   }
   (typeof i.rOver == "number" && (e.rOver = M((e.rOver || 0) + i.rOver, 0, 12)),
@@ -8270,7 +8271,7 @@ function kt(e, t, o, a, n = {}) {
     const b = e.heir;
     for (const [_, Y] of Object.entries(i.heir || {})) {
       const E = b[_] || 0;
-      ((b[_] = M(E + Y, 0, hn)), b[_] !== E && (s[`heir_${_}`] = b[_] - E));
+      ((b[_] = M(E + Y, 0, dn)), b[_] !== E && (s[`heir_${_}`] = b[_] - E));
     }
     (i.kong && (b.kong = Math.min(3, (b.kong || 0) + i.kong)),
       i.verse && (S = i.verse));
@@ -8380,9 +8381,9 @@ function kt(e, t, o, a, n = {}) {
       const E = b === "4무리" && !!e.cloneRank;
       (b === "4무리" && ((e.rOver = 0), (e.rMis = 0), (e.cloneRank = null)),
         e.wingRank > 1 && E
-          ? ie(e, { k: "wrank", name: un(b, e.wingRank, e.branch) })
+          ? ie(e, { k: "wrank", name: cn(b, e.wingRank, e.branch) })
           : e.wingRank > 1 &&
-            (ie(e, { k: "wrank", name: un(b, e.wingRank, e.branch) }),
+            (ie(e, { k: "wrank", name: cn(b, e.wingRank, e.branch) }),
             R.push(
               (L) =>
                 L +
@@ -8464,7 +8465,7 @@ function kt(e, t, o, a, n = {}) {
       E = e.rmerit || 0;
     ((e.fingerRank = M(b + (i.fingerUp || 1), 1, Math.max(Y, b))),
       e.fingerRank !== b &&
-        ((e.rmerit = O ? Math.min(E, Math.floor(ja(e) / 2)) : 0),
+        ((e.rmerit = O ? Math.min(E, Math.floor(Aa(e) / 2)) : 0),
         O &&
           R.push(
             (L) =>
@@ -8503,9 +8504,9 @@ function kt(e, t, o, a, n = {}) {
           R.push((L) => `${L} ${E}`);
         }
       }
-      const _ = un(e.work, e.wingRank, e.branch);
+      const _ = cn(e.work, e.wingRank, e.branch);
       (ie(e, { k: "wrank", name: _ }),
-        (T = `${un(e.work, b, e.branch)} → ${_}`),
+        (T = `${cn(e.work, b, e.branch)} → ${_}`),
         (y = "rare"));
     }
   }
@@ -8554,11 +8555,11 @@ function kt(e, t, o, a, n = {}) {
       const b = e.officeRank || 1,
         _ = M(b + 1, 1, og.includes(e.regionId) ? 5 : 6);
       _ !== b &&
-        ((T = `${cn[b - 1]} → ${cn[_ - 1]}`),
+        ((T = `${fn[b - 1]} → ${fn[_ - 1]}`),
         (e.officeRank = _),
         (e.officeBest = Math.max(e.officeBest || 1, _)),
         _ === 5 && (e.dirSince = e.age),
-        (e.perf = Math.min(e.perf || 0, Math.floor(Ea(e) / 2))),
+        (e.perf = Math.min(e.perf || 0, Math.floor(Fa(e) / 2))),
         (e.warn = 0),
         ie(e, { k: "orank", rank: _ }),
         (y = "rare"));
@@ -8567,7 +8568,7 @@ function kt(e, t, o, a, n = {}) {
       const b = e.officeRank || 1,
         _ = M(b - 1, 1, 6);
       _ !== b &&
-        ((T = `${cn[b - 1]} → ${cn[_ - 1]}`),
+        ((T = `${fn[b - 1]} → ${fn[_ - 1]}`),
         (e.officeRank = _),
         (e.perf = 0),
         (e.warn = 0),
@@ -8646,23 +8647,23 @@ function kt(e, t, o, a, n = {}) {
       i.kkCaptainChange && (b.inkWhy = { age: e.age, why: "captain" }),
       i.kkSeat && e.job === "흑운회" && (b.rank || 1) < 2)
     ) {
-      const _ = dn(e);
+      const _ = un(e);
       ((b.rank = 2),
         (b.best = Math.max(b.best || 1, 2)),
         (b.rankAt = e.age),
         (b.seat = r.int(1, yo.seatMax)),
         (e.rmerit = 0),
-        (T = `${_} → ${dn(e)}`),
+        (T = `${_} → ${un(e)}`),
         ie(e, { k: "kkrank", rank: 2, seat: b.seat }),
         (y = "rare"));
     }
     if (i.kkUp && e.job === "흑운회" && (b.rank || 1) === 2) {
-      const _ = dn(e);
+      const _ = un(e);
       ((b.rank = 3),
         (b.best = 3),
         (b.rankAt = e.age),
         (e.rmerit = 0),
-        (T = `${_} → ${dn(e)}`),
+        (T = `${_} → ${un(e)}`),
         ie(e, { k: "kkrank", rank: 3 }),
         (y = "rare"));
     }
@@ -8838,7 +8839,7 @@ function kt(e, t, o, a, n = {}) {
     const b = e.heir,
       _ = {};
     for (const L of ["ji", "yong", "in"])
-      (b[L] < hn && (_[`heir_${L}`] = hn - b[L]), (b[L] = hn));
+      (b[L] < dn && (_[`heir_${L}`] = dn - b[L]), (b[L] = dn));
     const Y = h(
         "지 · 용 · 인이 끝까지 차올랐다.",
         "Wisdom, Courage, and Benevolence filled to the brim.",
@@ -8903,7 +8904,7 @@ function kt(e, t, o, a, n = {}) {
       const _ = []
         .concat(i.next || v)
         .map((Y) => U(t, Y))
-        .find((Y) => Y && (!Y.branch || Y.branch.includes(Kn(e))));
+        .find((Y) => Y && (!Y.branch || Y.branch.includes(zn(e))));
       _ &&
         (e.last || (e.last = {}),
         (e.last[_.id] = e.age),
@@ -9116,7 +9117,7 @@ function De(e, t, o, a = "event", n = {}) {
     e.bf &&
       !n.text &&
       (i === "혈귀 사냥" || i === "시듦") &&
-      (l = fn(e, i === "시듦" ? "wither" : "hunt") || l),
+      (l = wn(e, i === "시듦" ? "wither" : "hunt") || l),
     e.bf && Px.includes(i))
   ) {
     const m = Hx(e);
@@ -9184,7 +9185,7 @@ function dd(e) {
               : e.work === "이단 심문관" && (t = [3, 6, 8][Math.min(a, 3) - 1]);
   } else
     e.job === "검계" && e.bl
-      ? (t = [3, 6, 8][Math.min(3, qa(e) || 1) - 1] + tc(e))
+      ? (t = [3, 6, 8][Math.min(3, Ga(e) || 1) - 1] + tc(e))
       : e.job === "흑운회" && e.kk
         ? (t = [3, 6, 8][Math.min(3, Gt(e) || 1) - 1] + tc(e))
         : e.job === "떠돌이 검객" && (t = 10 - Gw(e));
@@ -9284,14 +9285,14 @@ const oc = {
   "이단 심문관": 3,
 };
 function Ax(e) {
-  return zn(e) >= 5 ||
+  return ja(e) >= 5 ||
     (e.job === "해결사" &&
       (e.flags.includes("특색") || (e.grade && e.grade <= 2))) ||
     (e.job === "손가락" &&
       e.finger &&
       (e.fingerRank || 1) >= ct[e.finger].length) ||
     (ge(e) && oc[e.work] && (e.wingRank || 1) >= oc[e.work]) ||
-    qa(e) >= 3 ||
+    Ga(e) >= 3 ||
     Gt(e) >= 3
     ? !0
     : e.job === "가주" || e.job === "군주";
@@ -9333,7 +9334,7 @@ function Ag(e, t) {
   if (a === "kurokumo" || a === "kurokumo_thumb")
     return { label: o.kurokumo.label, bonus: 1.5, h: 5 };
   if (a === "wanderer") return { label: o.wanderer.label, bonus: 1.5, s: 5 };
-  const n = Kn(e);
+  const n = zn(e);
   return n === "순록"
     ? { label: o.순록.label, bonus: 1.5, s: 5 }
     : n === "코뿔소"
@@ -9748,7 +9749,7 @@ function Ko(e) {
         ? { k: "bar" }
         : { k: "base" };
 }
-function fn(e, t) {
+function wn(e, t) {
   const { k: o, sub: a } = Ko(e),
     n = [a ? `${o}_${a}` : null, o, o === "slept" ? "gone" : null].filter(
       Boolean,
@@ -9759,7 +9760,7 @@ function fn(e, t) {
   }
   return "";
 }
-function Ba(e) {
+function La(e) {
   return e.job === "손가락" && e.finger
     ? `finger:${e.finger}`
     : e.job === "사원" && e.work === "흑수"
@@ -9789,7 +9790,7 @@ function $x(e) {
     ["정체공개", "정체숨김", "정체들킴"].some((a) => e.flags.includes(a))
   )
     return !1;
-  const o = Ba(e);
+  const o = La(e);
   return !(
     !o ||
     (o.startsWith("finger:") &&
@@ -9801,7 +9802,7 @@ function Hx(e) {
   if (!t) return "";
   const o = (r) => e.flags.includes(r),
     a = o("정체들킴") ? "found" : o("정체공개") ? "open" : "hide",
-    n = Ba(e);
+    n = La(e);
   if (n && n.startsWith("finger:")) {
     const r = (e.fingerRank || 1) >= (ct[e.finger] || []).length;
     return Tt(
@@ -9893,17 +9894,17 @@ function qx(e, t) {
       : h("어버이", "your sire", "親");
   if (!o) return "";
   if (e === "BF_LEAD") {
-    const a = fn(t, "lead");
+    const a = wn(t, "lead");
     return a ? `${a} ` : "";
   }
   return e === "BF_BODY"
     ? $e(Dl(t) ? "misc.bodyActive" : "misc.bodyRetired")
     : e === "BF_SLEEP"
-      ? fn(t, "sleep") || $e("misc.sleepBase")
+      ? wn(t, "sleep") || $e("misc.sleepBase")
       : e === "BF_EPI"
-        ? fn(t, "epi") || $e("paths.base.epi")
+        ? wn(t, "epi") || $e("paths.base.epi")
         : e === "BF_LIVE"
-          ? fn(t, "live") ||
+          ? wn(t, "live") ||
             $e((o.outlives || 0) >= 2 ? "misc.live2" : "misc.live1")
           : e === "BF_HUNTER"
             ? ud("bf_hunt", `tiers.t${(o.curHunt && o.curHunt.tier) || 1}`)
@@ -10000,7 +10001,7 @@ function zx(e, t, o) {
   else if (a.heat >= 5 && e.age - (a.lastHunt ?? -99) >= 2) {
     let u = a.heat * ae.huntRate;
     (a.kind === "stray" && (u *= ae.strayHunt),
-      i("정체공개") && a.revealOrg && a.revealOrg === Ba(e) && (u *= 0.8),
+      i("정체공개") && a.revealOrg && a.revealOrg === La(e) && (u *= 0.8),
       i("정체들킴") && (u *= 1.1),
       t.chance(Math.min(ae.huntCap, u)) &&
         n.push({ id: "bf_hunt", bfEng: !0 }));
@@ -10021,7 +10022,7 @@ function zx(e, t, o) {
     !o.some((u) => u.feedGate) &&
     t.chance(1 - Math.pow(0.94, l)) &&
     n.push({ id: "bf_bag_bring", bfEng: !0 });
-  const s = Ba(e);
+  const s = La(e);
   if (
     i("정체숨김") &&
     s &&
@@ -10529,7 +10530,7 @@ function r0(e, t) {
         e.work || e.job || (e.flags.includes("가주후보") ? "가주후보" : "none"),
       g =
         ((e.job === "검계"
-          ? ma.income[(qa(e) || 1) - 1]
+          ? ma.income[(Ga(e) || 1) - 1]
           : e.job === "흑운회"
             ? Eb(e)
             : (bp[f] ?? 1)) -
@@ -17345,6 +17346,7 @@ const i0 = [
     },
     {
       id: "x_inquisition",
+      notWingExec: !0,
       age: [20, 100],
       anyone: !0,
       repeat: !0,
@@ -30413,7 +30415,7 @@ const i0 = [
     },
     {
       id: "wk_dir_ampoule",
-      age: [18, 75],
+      age: [18, 80],
       jobs: ["날개 직원"],
       repeat: !0,
       officeRank: [5, 5],
@@ -30528,7 +30530,7 @@ const i0 = [
     },
     {
       id: "wn_dir_record",
-      age: [18, 75],
+      age: [18, 80],
       jobs: ["날개 직원"],
       repeat: !0,
       officeRank: [5, 5],
@@ -30721,7 +30723,7 @@ const i0 = [
     },
     {
       id: "wo_dir_meeting",
-      age: [18, 75],
+      age: [18, 80],
       jobs: ["날개 직원"],
       repeat: !0,
       officeRank: [5, 5],
@@ -30746,7 +30748,7 @@ const i0 = [
     },
     {
       id: "wo_dir_audit",
-      age: [18, 75],
+      age: [18, 80],
       jobs: ["날개 직원"],
       repeat: !0,
       officeRank: [5, 5],
@@ -30771,7 +30773,7 @@ const i0 = [
     },
     {
       id: "wo_dir_mentor",
-      age: [18, 75],
+      age: [18, 80],
       jobs: ["날개 직원"],
       repeat: !0,
       officeRank: [5, 5],
@@ -30795,7 +30797,7 @@ const i0 = [
     },
     {
       id: "wo_dir_cut",
-      age: [18, 75],
+      age: [18, 80],
       jobs: ["날개 직원"],
       repeat: !0,
       officeRank: [5, 5],
@@ -30826,7 +30828,7 @@ const i0 = [
     },
     {
       id: "wo_dir_head",
-      age: [18, 75],
+      age: [18, 80],
       jobs: ["날개 직원"],
       repeat: !0,
       officeRank: [5, 5],
@@ -30851,7 +30853,7 @@ const i0 = [
     },
     {
       id: "wo_ceo_named",
-      age: [18, 70],
+      age: [18, 80],
       jobs: ["날개 직원"],
       officeRank: [5, 5],
       ceoReady: !0,
@@ -30874,12 +30876,12 @@ const i0 = [
         },
       ],
       office: !0,
-      chance: 0.1,
+      chance: 0.35,
       repeat: !0,
     },
     {
       id: "wk_ceo_named",
-      age: [18, 70],
+      age: [18, 80],
       jobs: ["날개 직원"],
       officeRank: [5, 5],
       ceoReady: !0,
@@ -30902,12 +30904,12 @@ const i0 = [
         },
       ],
       office: !0,
-      chance: 0.1,
+      chance: 0.35,
       repeat: !0,
     },
     {
       id: "wn_ceo_named",
-      age: [18, 70],
+      age: [18, 80],
       jobs: ["날개 직원"],
       officeRank: [5, 5],
       ceoReady: !0,
@@ -30930,12 +30932,12 @@ const i0 = [
         },
       ],
       office: !0,
-      chance: 0.1,
+      chance: 0.35,
       repeat: !0,
     },
     {
       id: "wo_ceo_head",
-      age: [18, 75],
+      age: [18, 80],
       jobs: ["날개 직원"],
       repeat: !0,
       officeRank: [6, 6],
@@ -30963,7 +30965,7 @@ const i0 = [
     },
     {
       id: "wo_ceo_singularity",
-      age: [18, 75],
+      age: [18, 80],
       jobs: ["날개 직원"],
       repeat: !0,
       officeRank: [6, 6],
@@ -30991,7 +30993,7 @@ const i0 = [
     },
     {
       id: "wo_ceo_patent",
-      age: [18, 75],
+      age: [18, 80],
       jobs: ["날개 직원"],
       repeat: !0,
       officeRank: [6, 6],
@@ -31019,7 +31021,7 @@ const i0 = [
     },
     {
       id: "wo_ceo_hire",
-      age: [18, 75],
+      age: [18, 80],
       jobs: ["날개 직원"],
       repeat: !0,
       officeRank: [6, 6],
@@ -31047,7 +31049,7 @@ const i0 = [
     },
     {
       id: "wo_ceo_tax",
-      age: [18, 75],
+      age: [18, 80],
       jobs: ["날개 직원"],
       repeat: !0,
       officeRank: [6, 6],
@@ -31075,7 +31077,7 @@ const i0 = [
     },
     {
       id: "wo_ceo_collapse",
-      age: [18, 70],
+      age: [18, 80],
       jobs: ["날개 직원"],
       repeat: !0,
       officeRank: [6, 6],
@@ -31101,7 +31103,7 @@ const i0 = [
     },
     {
       id: "wo_ceo_year",
-      age: [18, 70],
+      age: [18, 80],
       jobs: ["날개 직원"],
       repeat: !0,
       officeRank: [6, 6],
@@ -31124,7 +31126,7 @@ const i0 = [
     },
     {
       id: "wo_ceo_old",
-      age: [60, 70],
+      age: [60, 80],
       jobs: ["날개 직원"],
       repeat: !0,
       officeRank: [6, 6],
@@ -31173,7 +31175,7 @@ const i0 = [
     },
     {
       id: "wa_dir_oversee",
-      age: [18, 75],
+      age: [18, 80],
       jobs: ["날개 직원"],
       repeat: !0,
       officeRank: [5, 5],
@@ -31225,7 +31227,7 @@ const i0 = [
     },
     {
       id: "wb_dir_regulate",
-      age: [18, 75],
+      age: [18, 80],
       jobs: ["날개 직원"],
       repeat: !0,
       officeRank: [5, 5],
@@ -31277,7 +31279,7 @@ const i0 = [
     },
     {
       id: "wcc_dir_delegate",
-      age: [18, 75],
+      age: [18, 80],
       jobs: ["날개 직원"],
       repeat: !0,
       officeRank: [5, 5],
@@ -31355,7 +31357,7 @@ const i0 = [
     },
     {
       id: "ws_dir_turmoil",
-      age: [18, 75],
+      age: [18, 80],
       jobs: ["날개 직원"],
       repeat: !0,
       officeRank: [5, 5],
@@ -31413,7 +31415,7 @@ const i0 = [
     },
     {
       id: "wv_ceo_named",
-      age: [18, 70],
+      age: [18, 80],
       jobs: ["날개 직원"],
       officeRank: [5, 5],
       ceoReady: !0,
@@ -31436,7 +31438,7 @@ const i0 = [
         },
       ],
       office: !0,
-      chance: 0.1,
+      chance: 0.35,
       repeat: !0,
     },
     {
@@ -31467,7 +31469,7 @@ const i0 = [
     },
     {
       id: "wg_dir_sphere",
-      age: [18, 75],
+      age: [18, 80],
       jobs: ["날개 직원"],
       repeat: !0,
       officeRank: [5, 5],
@@ -31493,7 +31495,7 @@ const i0 = [
     },
     {
       id: "ww_dir_decline",
-      age: [18, 75],
+      age: [18, 80],
       jobs: ["날개 직원"],
       repeat: !0,
       officeRank: [5, 5],
@@ -31519,7 +31521,7 @@ const i0 = [
     },
     {
       id: "wm_dir_moonlight",
-      age: [18, 70],
+      age: [18, 80],
       jobs: ["날개 직원"],
       repeat: !0,
       officeRank: [5, 5],
@@ -73446,7 +73448,7 @@ function Ng() {
       e)
     : null;
 }
-function tn(e) {
+function on(e) {
   ea(wd, e);
 }
 function Es() {
@@ -73519,7 +73521,7 @@ function Xn(e, t) {
     ((a ^= o.charCodeAt(n)), (a = Math.imul(a, 16777619) >>> 0));
   return a.toString(36);
 }
-function Ka() {
+function za() {
   const e = Vi(gd);
   return !e || e.v !== 1 || typeof e.got != "object"
     ? { v: 1, got: {}, lives: 0 }
@@ -73528,11 +73530,11 @@ function Ka() {
       : { v: 1, got: e.got, lives: e.lives || 0 };
 }
 function W2(e) {
-  const t = Ka();
+  const t = za();
   return [...e].filter((o) => !t.got[o]);
 }
 function E2(e, t) {
-  const o = Ka();
+  const o = za();
   for (const a of e) {
     const n = o.got[a];
     n
@@ -73562,7 +73564,7 @@ function B2(e) {
   return decodeURIComponent(escape(atob(e)));
 }
 function L2() {
-  const e = Ka();
+  const e = za();
   return Object.keys(e.got).length
     ? ql +
         F2(
@@ -73587,7 +73589,7 @@ function P2(e) {
   if (!o || o.v !== 1 || typeof o.got != "object" || !o.got)
     return { ok: !1, reason: "format" };
   if (o.sig !== Xn(o.got, o.lives || 0)) return { ok: !1, reason: "sig" };
-  const a = Ka();
+  const a = za();
   let n = 0;
   for (const [r, i] of Object.entries(o.got)) {
     if (!i || typeof i.n != "number") continue;
@@ -75825,9 +75827,9 @@ function H2(e) {
   return t;
 }
 
-return {create:Ju,data:yt,choose:Ti,continue:Kb,advance:cx,year:r0,records:s=>[...H2(ab(s).map(r=>r.key))],job:Te,cause:Ww,catalog:md,flags:xp,lang:js};}
+return {create:Ju,data:yt,choose:Ti,continue:Kb,advance:cx,year:r0,records:s=>[...H2(ab(s).map(r=>r.key))],recordDetails:s=>sb(ab(s),yt().rarity),rarityOrder:Lu,fixerPower:s=>s.job==='해결사'&&(!s.dr||s.dr.end==='return')?rr(s):null,promotion:s=>s.dr&&s.dr.end!=='return'?null:s.job==='해결사'&&s.grade>1?{current:s.merit||0,required:Go(s)}:Ba(s)?{current:Uu(s),required:Aa(s)}:null,job:Te,cause:Ww,catalog:md,flags:xp,lang:js};}
 function advisorCommon() {
-  const source = 'index-BXsC1-XS.js';
+  const source = 'index-BujUmHjK.js';
   function normalized(s) {
     const state={...s,prompt:s.prompt?{...s.prompt}:null};
     delete state.savedProgress;
@@ -75853,7 +75855,27 @@ function advisorCommon() {
   const label=(s,i)=>i===-2?'Continue the post-death voice':i===-1?'Continue / leave blank / let pass':s.prompt.choices[i].label;
   const statNames={health:'Health',sanity:'Sanity',wealth:'Wealth',network:'Network',rep:'Reputation'};
   const displayStats=s=>Object.fromEntries(Object.keys(statNames).map(k=>[k,Math.round(s.stats[k])]));
-  return {source,signature,legacySignature,finished,actionable,typing,label,statNames,displayStats};
+  const sorts={recommended:'Recommended',age:'Lifespan',health:'Health',sanity:'Sanity',wealth:'Wealth',network:'Network',rep:'Reputation',rarity:'Achievement rarity',power:'Fixer combat rating'};
+  function compareLives(a,b,sort='recommended'){
+    function values(file){
+      const s=file.summary,stats=s.stats,goals=file.goals,met=file.matched.filter(Boolean).length,complete=file.complete&&file.scope==='life';
+      const progress=goals.length?goals.reduce((sum,g,i)=>{
+        if(file.matched[i])return sum+1;
+        const [kind,key,value]=g.split(':');
+        if(kind==='stat')return sum+Math.max(0,Math.min(1,stats[key]/Math.max(1,Number(value))));
+        const age=kind==='age'?Number(key):g==='record:age80'?80:g==='record:age100'?100:0;
+        return sum+(age?Math.min(1,s.age/age):0);
+      },0)/goals.length:1;
+      const base=[Number(complete&&met===goals.length),Number(complete),goals.length?met/goals.length:1,progress];
+      if(sort==='age')base.push(s.age);
+      else if(Object.hasOwn(statNames,sort))base.push(stats[sort]);
+      else if(sort==='rarity')base.push(s.comparison?.rarityRank??-1);
+      else if(sort==='power')base.push(s.comparison?.fixerPower??-1);
+      return [...base,Number(s.alive),s.age,Math.min(stats.health,stats.sanity),Object.values(stats).reduce((sum,v)=>sum+v,0)];
+    }
+    const av=values(a),bv=values(b);for(let i=0;i<av.length;i++)if(av[i]!==bv[i])return bv[i]-av[i];return 0;
+  }
+  return {source,signature,legacySignature,finished,actionable,typing,label,statNames,displayStats,sorts,compareLives};
 }
 
 function makePlanner(E) {
@@ -75867,6 +75889,11 @@ function makePlanner(E) {
     out.story=(s.story||[]).slice();out.reflections=(s.reflections||[]).slice();return out;
   }
   const efforts={quick:3,thorough:8};
+  function comparison(s){
+    const rare=E.recordDetails(s)[0];
+    return {rarity:rare?.tierLabel||null,rarityRank:rare?E.rarityOrder[rare.tier]:-1,fixerPower:E.fixerPower(s),promotion:E.promotion(s)};
+  }
+  function outcome(s,goals){return {complete:C.finished(s),scope:'life',goals,matched:targets(s,goals),summary:{age:s.age,alive:!!s.dead?.alive,stats:C.displayStats(s),comparison:comparison(s)}};}
   function choices(s){
     if(s.dead?.voice)return [-2];
     if(!s.prompt)return [];
@@ -75918,8 +75945,9 @@ function makePlanner(E) {
       throw Error('Unknown achievement, trait, or stat condition: '+g);
     }
   }
-  function plan(start,goals,effort='quick',progress=()=>{}){
+  function plan(start,goals,effort='quick',progress=()=>{},sort='recommended'){
     checkGoals(goals);if(!efforts[effort])throw Error('Unknown search effort');
+    if(!Object.hasOwn(C.sorts,sort))throw Error('Unknown result order');
     const root={state:copy(start),route:[],steps:0};
     let beam=[root],completed=[],expanded=0,incomplete=0;
     function settle(node){
@@ -75927,8 +75955,8 @@ function makePlanner(E) {
       if(C.finished(node.state)){
         const s=node.state;
         node.outcomeKey=JSON.stringify([s.age,s.dead.cause,!!s.dead.alive,C.displayStats(s),s.job,s.work,s.grade,[...s.flags].sort(),[...E.records(s)].sort()]);
-        node.value=score(s,goals);if(!completed.some(n=>n.outcomeKey===node.outcomeKey))completed.push(node);
-        completed.sort((a,b)=>b.value-a.value);completed=completed.slice(0,3);return false;
+        node.value=score(s,goals);node.order=outcome(s,goals);if(!completed.some(n=>n.outcomeKey===node.outcomeKey))completed.push(node);
+        completed.sort((a,b)=>C.compareLives(a.order,b.order,sort));completed=completed.slice(0,3);return false;
       }
       if(node.steps>=5000){incomplete++;return false;}
       return true;
@@ -75955,12 +75983,12 @@ function makePlanner(E) {
   function pack(result,goals,scope,lang,origin='seed',startState=null){
     const s=result.state;
     return {version:3,source:C.source,origin,seed:s.seed,options:result.options,goals:[...goals],scope,lang,
-      effort:result.effort||'quick',route:result.route,complete:scope==='birth'||C.finished(s),matched:targets(s,goals),
+      effort:result.effort||'quick',sort:result.sort||'recommended',route:result.route,complete:scope==='birth'||C.finished(s),matched:targets(s,goals),
       terminalSignature:scope==='life'&&C.finished(s)?C.signature(s):null,
       ...(origin==='current'?{startState:copy(startState)}:{}),
       summary:{age:s.age,cause:s.dead?(E.cause?E.cause(s.dead.cause):s.dead.cause):null,alive:!!s.dead?.alive,job:E.job?E.job(s):s.job,
         region:E.data().regions?.find(r=>r.id===s.regionId)?.name||s.regionId,
-        flags:[...s.flags],records:E.records(s),stats:C.displayStats(s)}};
+        flags:[...s.flags],records:E.records(s),stats:C.displayStats(s),comparison:comparison(s)}};
   }
   function simulate(options,goals,effort='quick',progress){
     const birth=E.create(E.data(),options),search=plan(birth,goals,effort,progress),best=search.completed[0];
@@ -75987,9 +76015,44 @@ function makePlanner(E) {
       }else advance(s);
     }
     if(cursor!==file.route.length||(file.scope==='life'&&!C.finished(s)))throw Error('Route is incomplete');
-    return pack({state:s,options,route,effort:efforts[file.effort]?file.effort:'quick'},file.goals,file.scope,file.lang,origin,file.startState);
+    return pack({state:s,options,route,effort:efforts[file.effort]?file.effort:'quick',sort:Object.hasOwn(C.sorts,file.sort)?file.sort:'recommended'},file.goals,file.scope,file.lang,origin,file.startState);
   }
-  return {copy,signature:C.signature,choices,apply,advance,targets,score,checkGoals,plan,simulate,pack,validate};
+  function gameplaySignature(state){
+    // Only for comparing rebuilt predictions, never for accepting live steps.
+    const s=copy(state);delete s.log;
+    for(const key of ['colorName','egoName','relicName','childName','partnerName'])delete s[key];
+    if(s.pinky)delete s.pinky.blade;
+    s.reflections=(s.reflections||[]).map(({text,...entry})=>entry);
+    if(s.dead)delete s.dead.text;
+    return C.signature(s);
+  }
+  function retainAfterTyping(file,index,state){
+    const checked=validate(file);
+    if(!Number.isInteger(index)||index<0||index>=checked.route.length)return null;
+    const expected=checked.origin==='current'?copy(checked.startState):E.create(E.data(),checked.options);
+    let transitions=0;
+    function settle(s){while(!C.finished(s)&&!C.actionable(s)){if(++transitions>10000)throw Error('Continuation exceeds replay limit');advance(s);}}
+    for(let n=0;n<index;n++){settle(expected);apply(expected,checked.route[n].i);}
+    settle(expected);if(!C.typing(expected))return null;
+    const prompt=expected.prompt,field=prompt.kind==='color'?'color':prompt.field;
+    if(prompt.kind!=='reflect'&&!['color','ego','relic','star'].includes(field))return null;
+    const text=prompt.kind==='reflect'?state.reflections?.at(-1)?.text:
+      field==='star'?state.pinky?.blade:state[{color:'colorName',ego:'egoName',relic:'relicName'}[field]];
+    if(typeof text!=='string')return null;
+    const entered=copy(expected);E.choose(entered,E.data(),-1,{text});
+    if(C.signature(entered)!==C.signature(state))return null; // Exactly this entry, no other game changes.
+    apply(expected,-1);const actual=copy(state),route=[];
+    for(const step of checked.route.slice(index+1)){
+      settle(expected);settle(actual);
+      if(C.finished(actual)||!choices(actual).includes(step.i)||gameplaySignature(actual)!==gameplaySignature(expected))return null;
+      const typing=C.typing(actual),next={signature:C.signature(actual),i:step.i};
+      apply(actual,step.i);apply(expected,step.i);if(typing)next.afterSignature=C.signature(actual);route.push(next);
+    }
+    settle(expected);settle(actual);
+    if(!C.finished(actual)||gameplaySignature(actual)!==gameplaySignature(expected)||JSON.stringify(E.records(actual))!==JSON.stringify(E.records(expected)))return null;
+    return pack({state:actual,options:{seed:state.seed,name:state.name,gender:state.gender},route,effort:checked.effort,sort:checked.sort},checked.goals,'life',checked.lang,'current',state);
+  }
+  return {copy,signature:C.signature,choices,apply,advance,targets,score,checkGoals,plan,simulate,pack,validate,gameplaySignature,retainAfterTyping};
 }
 
 function workerMain(){
@@ -76000,11 +76063,12 @@ function workerMain(){
       const send=result=>self.postMessage({id:m.id,result});
       if(m.type==='catalog')return send({records:E.catalog,flags:Object.entries(E.flags)});
       if(m.type==='validate')return send(P.validate(m.file));
+      if(m.type==='retainTyping')return send(P.retainAfterTyping(m.file,m.index,m.state));
       if(m.type==='check')return send({matched:P.targets(m.state,m.goals),signature:C.signature(m.state),complete:C.finished(m.state)});
       if(m.type==='plan'){
-        const result=P.plan(m.state,m.goals,m.effort,({age,expanded,completed})=>self.postMessage({id:m.id,progress:{age,expanded,completed}}));
+        const result=P.plan(m.state,m.goals,m.effort,({age,expanded,completed})=>self.postMessage({id:m.id,progress:{age,expanded,completed}}),m.sort);
         const options={seed:m.state.seed,name:m.state.name,gender:m.state.gender};
-        return send(result.completed.map(n=>P.pack({...n,options,effort:m.effort},m.goals,'life',m.lang,'current',m.state)));
+        return send(result.completed.map(n=>P.pack({...n,options,effort:m.effort,sort:m.sort},m.goals,'life',m.lang,'current',m.state)));
       }
       if(m.type==='search'){
         P.checkGoals(m.goals);
@@ -76016,15 +76080,15 @@ function workerMain(){
           let lastBest=null;
           function update(candidates){
             results=results.filter(r=>r.file.seed!==options.seed);results.push(...candidates);
-            results.sort((a,b)=>b.value-a.value);results=results.slice(0,5);
+            results.sort((a,b)=>C.compareLives(a.file,b.file,m.sort));results=results.slice(0,5);
           }
           const search=P.plan(E.create(E.data(),options),m.goals,m.effort,p=>{
             let changed=false;
-            if(p.best&&p.best!==lastBest){lastBest=p.best;update([{file:P.pack({...p.best,options,effort:m.effort},m.goals,'life',m.lang),value:p.best.value}]);changed=true;}
+            if(p.best&&p.best!==lastBest){lastBest=p.best;update([{file:P.pack({...p.best,options,effort:m.effort,sort:m.sort},m.goals,'life',m.lang),value:p.best.value}]);changed=true;}
             self.postMessage({id:m.id,progress:{age:p.age,expanded:p.expanded,completed:p.completed,tested:n,total:count,...(changed?{results:results.map(r=>r.file)}:{})}});
-          });
+          },m.sort);
           examined+=search.expanded;
-          const candidates=search.completed.map(node=>({file:P.pack({...node,options,effort:m.effort},m.goals,'life',m.lang),value:node.value}));
+          const candidates=search.completed.map(node=>({file:P.pack({...node,options,effort:m.effort,sort:m.sort},m.goals,'life',m.lang),value:node.value}));
           // Show different seeds in random search; keep alternative routes when
           // deliberately checking one seed.
           if(candidates.length)update(m.seed?candidates:candidates.slice(0,1));
@@ -76036,7 +76100,7 @@ function workerMain(){
   };
 }
 
-const ADVISOR_VERSION="2.1.0";
+const ADVISOR_VERSION="2.2.0";
 const ADVISOR_CATALOG={"records":[{"key":"born_head","group":"birth","label":{"ko":"머리(A~C사)에서 태어남","en":"Born under the Head (A–C Corp.)","ja":"頭（A〜C社）の下に生まれた"},"hint":{"ko":"A사, B사, C사 구역에서 태어났을 때","en":"Be born in the A, B or C Corp. district","ja":"A社・B社・C社の区で生まれたとき"},"implies":null,"tier":"uncommon"},{"key":"born_outskirts","group":"birth","label":{"ko":"외곽에서 태어남","en":"Born in the Outskirts","ja":"外郭で生まれた"},"hint":{"ko":"외곽에서 태어났을 때","en":"Be born in the Outskirts","ja":"外郭で生まれたとき"},"implies":null,"tier":"uncommon"},{"key":"orphan","group":"birth","label":{"ko":"부모 없이 태어남","en":"Born without parents","ja":"両親なしで生まれた"},"hint":{"ko":"부모 없이 태어났을 때","en":"Be born without parents","ja":"両親なしで生まれたとき"},"implies":null,"tier":"uncommon"},{"key":"pinky_star_heaven","group":"birth","label":{"ko":"36천강의 이름","en":"Name of the 36 Tiangang","ja":"三十六天罡の名"},"hint":{"ko":"태어날 때 별의 이름을 받았고, 그 별이 36천강에 들 때","en":"Receive a star's name at birth, and the star is one of the 36 Tiangang","ja":"生まれたときに星の名を受け、それが三十六天罡だったとき"},"implies":null,"tier":"rare"},{"key":"pinky_star_earth","group":"birth","label":{"ko":"72지살의 이름","en":"Name of the 72 Disha","ja":"七十二地煞の名"},"hint":{"ko":"태어날 때 별의 이름을 받았고, 그 별이 72지살에 들 때","en":"Receive a star's name at birth, and the star is one of the 72 Disha","ja":"生まれたときに星の名を受け、それが七十二地煞だったとき"},"implies":null,"tier":"rare"},{"key":"age80","group":"birth","label":{"ko":"80세 넘게 삶","en":"Lived past 80","ja":"80歳を超えて生きた"},"hint":{"ko":"80세를 넘겨 삶을 마쳤을 때","en":"End your life past the age of 80","ja":"80歳を超えて生涯を終えたとき"},"implies":null,"tier":"common"},{"key":"age100","group":"birth","label":{"ko":"100세를 넘겨 삶","en":"Lived past 100","ja":"100歳を超えて生きた"},"hint":{"ko":"100세를 넘겨 삶을 마쳤을 때","en":"End your life past the age of 100","ja":"100歳を超えて生涯を終えたとき"},"implies":"age80","tier":"epic"},{"key":"age200","group":"birth","label":{"ko":"200년을 넘게 삶","en":"Lived past 200","ja":"200年を超えて生きた"},"hint":{"ko":"200세를 넘겨 살았을 때 (혈귀만 닿는다)","en":"Live past 200 (only a Bloodfiend can)","ja":"200歳を超えて生きたとき（血鬼のみ）"},"implies":"age100","tier":"legend"},{"key":"die_child","group":"birth","label":{"ko":"열 살을 넘기지 못함","en":"Died before turning ten","ja":"10歳を迎えられなかった"},"hint":{"ko":"열 살이 되기 전에 삶이 끝났을 때","en":"Your life ends before you turn ten","ja":"十歳になる前に生涯が終わったとき"},"implies":null,"tier":"common"},{"key":"fixer","group":"fixer","label":{"ko":"해결사가 됨","en":"Became a Fixer","ja":"フィクサーになった"},"hint":{"ko":"해결사가 되었을 때","en":"Become a Fixer","ja":"フィクサーになったとき"},"implies":null,"tier":"common"},{"key":"fixer_g7","group":"fixer","label":{"ko":"해결사 7급 도달","en":"Reached Grade 7 Fixer","ja":"7級フィクサーに到達"},"hint":{"ko":"해결사로 7급까지 올랐을 때","en":"Rise to Grade 7 as a Fixer","ja":"フィクサーとして7級まで上がったとき"},"implies":"fixer","tier":"common"},{"key":"fixer_g6","group":"fixer","label":{"ko":"해결사 6급 도달","en":"Reached Grade 6 Fixer","ja":"6級フィクサーに到達"},"hint":{"ko":"해결사로 6급까지 올랐을 때","en":"Rise to Grade 6 as a Fixer","ja":"フィクサーとして6級まで上がったとき"},"implies":"fixer_g7","tier":"common"},{"key":"fixer_g5","group":"fixer","label":{"ko":"해결사 5급 도달","en":"Reached Grade 5 Fixer","ja":"5級フィクサーに到達"},"hint":{"ko":"해결사로 5급까지 올랐을 때","en":"Rise to Grade 5 as a Fixer","ja":"フィクサーとして5級まで上がったとき"},"implies":"fixer_g6","tier":"common"},{"key":"fixer_g4","group":"fixer","label":{"ko":"해결사 4급 도달","en":"Reached Grade 4 Fixer","ja":"4級フィクサーに到達"},"hint":{"ko":"해결사로 4급까지 올랐을 때","en":"Rise to Grade 4 as a Fixer","ja":"フィクサーとして4級まで上がったとき"},"implies":"fixer_g5","tier":"uncommon"},{"key":"fixer_g3","group":"fixer","label":{"ko":"해결사 3급 도달","en":"Reached Grade 3 Fixer","ja":"3級フィクサーに到達"},"hint":{"ko":"해결사로 3급까지 올랐을 때","en":"Rise to Grade 3 as a Fixer","ja":"フィクサーとして3級まで上がったとき"},"implies":"fixer_g4","tier":"uncommon"},{"key":"fixer_g2","group":"fixer","label":{"ko":"해결사 2급 도달","en":"Reached Grade 2 Fixer","ja":"2級フィクサーに到達"},"hint":{"ko":"해결사로 2급까지 올랐을 때","en":"Rise to Grade 2 as a Fixer","ja":"フィクサーとして2級まで上がったとき"},"implies":"fixer_g3","tier":"rare"},{"key":"fixer_g1","group":"fixer","label":{"ko":"해결사 1급 도달","en":"Reached Grade 1 Fixer","ja":"1級フィクサーに到達"},"hint":{"ko":"해결사로 1급까지 올랐을 때","en":"Rise to Grade 1 as a Fixer","ja":"フィクサーとして1級まで上がったとき"},"implies":"fixer_g2","tier":"epic"},{"key":"color","group":"fixer","label":{"ko":"특색의 이름을 얻음","en":"Became a Color","ja":"特色の名を得た"},"hint":{"ko":"해결사 1급에서 특색의 이름을 얻었을 때","en":"Earn the name of a Color as a Grade 1 Fixer","ja":"フィクサー1級で特色の名を得たとき"},"implies":null,"tier":"legend"},{"key":"office","group":"fixer","label":{"ko":"해결사 사무소 소속","en":"Joined a Fixer Office","ja":"フィクサー事務所に所属"},"hint":{"ko":"해결사 사무소에 들어갔을 때","en":"Join a Fixer Office","ja":"フィクサー事務所に入ったとき"},"implies":null,"tier":"common"},{"key":"assoc","group":"fixer","label":{"ko":"협회 소속 해결사","en":"Association Fixer","ja":"協会所属フィクサー"},"hint":{"ko":"해결사로 협회에 들어갔을 때","en":"Join an Association as a Fixer","ja":"フィクサーとして協会に入ったとき"},"implies":null,"tier":"uncommon"},{"key":"req_star","group":"fixer","label":{"ko":"도시의 별 이상 의뢰 완수","en":"Completed a Star of the City request","ja":"都市の星級の依頼を完遂"},"hint":{"ko":"도시의 별 등급 이상의 의뢰를 끝냈을 때","en":"Complete a request rated Star of the City or higher","ja":"都市の星級以上の依頼を終えたとき"},"implies":null,"tier":"uncommon"},{"key":"finger_엄지","group":"finger","label":{"ko":"엄지 입단","en":"Joined the Thumb","ja":"親指に入団"},"hint":{"ko":"엄지에 들어갔을 때","en":"Join the Thumb","ja":"親指に入ったとき"},"implies":null,"tier":"uncommon"},{"key":"frank_엄지_2","group":"finger","label":{"ko":"엄지 카포 도달","en":"Reached Thumb Capo","ja":"親指のカポに到達"},"hint":{"ko":"엄지에서 카포까지 올랐을 때","en":"Rise to Capo in the Thumb","ja":"親指でカポまで上がったとき"},"implies":"finger_엄지","tier":"rare"},{"key":"frank_엄지_3","group":"finger","label":{"ko":"엄지 언더보스 도달","en":"Reached Thumb Sottocapo","ja":"親指のアンダーボスに到達"},"hint":{"ko":"엄지에서 언더보스까지 올랐을 때","en":"Rise to Sottocapo in the Thumb","ja":"親指でアンダーボスまで上がったとき"},"implies":"frank_엄지_2","tier":"epic"},{"key":"frank_엄지_4","group":"finger","label":{"ko":"엄지 대부 도달","en":"Reached Thumb Capo dei Capi","ja":"親指のゴッドファーザーに到達"},"hint":{"ko":"엄지에서 대부까지 올랐을 때","en":"Rise to Capo dei Capi in the Thumb","ja":"親指でゴッドファーザーまで上がったとき"},"implies":"frank_엄지_3","tier":"legend"},{"key":"finger_검지","group":"finger","label":{"ko":"검지 입단","en":"Joined the Index","ja":"人差し指に入団"},"hint":{"ko":"검지에 들어갔을 때","en":"Join the Index","ja":"人差し指に入ったとき"},"implies":null,"tier":"uncommon"},{"key":"frank_검지_2","group":"finger","label":{"ko":"검지 대행자 도달","en":"Reached Index Proxy","ja":"人差し指の代行者に到達"},"hint":{"ko":"검지에서 대행자까지 올랐을 때","en":"Rise to Proxy in the Index","ja":"人差し指で代行者まで上がったとき"},"implies":"finger_검지","tier":"rare"},{"key":"frank_검지_3","group":"finger","label":{"ko":"검지 신탁 대행자 도달","en":"Reached Index Oracle's Proxy","ja":"人差し指の神託代行者に到達"},"hint":{"ko":"검지에서 신탁 대행자까지 올랐을 때","en":"Rise to Oracle's Proxy in the Index","ja":"人差し指で神託代行者まで上がったとき"},"implies":"frank_검지_2","tier":"epic"},{"key":"finger_중지","group":"finger","label":{"ko":"중지 입단","en":"Joined the Middle","ja":"中指に入団"},"hint":{"ko":"중지에 들어갔을 때","en":"Join the Middle","ja":"中指に入ったとき"},"implies":null,"tier":"uncommon"},{"key":"frank_중지_2","group":"finger","label":{"ko":"중지 큰 아우 도달","en":"Reached Middle Young Brother / Sister","ja":"中指の長弟・長妹に到達"},"hint":{"ko":"중지에서 큰 아우까지 올랐을 때","en":"Rise to Young Brother or Sister in the Middle","ja":"中指で長弟・長妹まで上がったとき"},"implies":"finger_중지","tier":"rare"},{"key":"frank_중지_3","group":"finger","label":{"ko":"중지 작은 형님·누님 도달","en":"Reached Middle Big Brother / Sister","ja":"中指の末兄・末姉に到達"},"hint":{"ko":"중지에서 작은 형님·누님까지 올랐을 때","en":"Rise to Big Brother or Sister in the Middle","ja":"中指で末兄・末姉まで上がったとき"},"implies":"frank_중지_2","tier":"rare"},{"key":"frank_중지_4","group":"finger","label":{"ko":"중지 큰 형님·누님 도달","en":"Reached Middle Great Brother / Sister","ja":"中指の長兄・長姉に到達"},"hint":{"ko":"중지에서 큰 형님·누님까지 올랐을 때","en":"Rise to Great Brother or Sister in the Middle","ja":"中指で長兄・長姉まで上がったとき"},"implies":"frank_중지_3","tier":"epic"},{"key":"finger_약지","group":"finger","label":{"ko":"약지 입단","en":"Joined the Ring","ja":"薬指に入団"},"hint":{"ko":"약지에 들어갔을 때","en":"Join the Ring","ja":"薬指に入ったとき"},"implies":null,"tier":"uncommon"},{"key":"frank_약지_2","group":"finger","label":{"ko":"약지 도슨트 도달","en":"Reached Ring Docent","ja":"薬指のドーセントに到達"},"hint":{"ko":"약지에서 도슨트까지 올랐을 때","en":"Rise to Docent in the Ring","ja":"薬指でドーセントまで上がったとき"},"implies":"finger_약지","tier":"rare"},{"key":"frank_약지_3","group":"finger","label":{"ko":"약지 마에스트로 도달","en":"Reached Ring Maestro","ja":"薬指のマエストロに到達"},"hint":{"ko":"약지에서 마에스트로까지 올랐을 때","en":"Rise to Maestro in the Ring","ja":"薬指でマエストロまで上がったとき"},"implies":"frank_약지_2","tier":"epic"},{"key":"finger_quit","group":"finger","label":{"ko":"손가락을 떠남","en":"Left the Fingers","ja":"指を離れた"},"hint":{"ko":"손가락을 떠나 살아남았을 때","en":"Leave the Fingers and live","ja":"指を離れて生き延びたとき"},"implies":null,"tier":"rare"},{"key":"corp","group":"wing","label":{"ko":"날개의 사원","en":"Wing employee","ja":"翼の社員"},"hint":{"ko":"날개의 사무직 사원이 되었을 때","en":"Become an office employee of a Wing","ja":"翼の事務職社員になったとき"},"implies":null,"tier":"common"},{"key":"office_dept","group":"wing","label":{"ko":"날개의 부장에 오름","en":"Rose to Department Head of a Wing","ja":"翼の部長に上りつめた"},"hint":{"ko":"날개 사무직으로 부장까지 올랐을 때","en":"Rise to Department Head in a Wing's offices","ja":"翼の事務職で部長まで上がったとき"},"implies":"corp","tier":"uncommon"},{"key":"office_dir","group":"wing","label":{"ko":"날개의 이사에 오름","en":"Rose to Director of a Wing","ja":"翼の理事に上りつめた"},"hint":{"ko":"날개 사무직으로 이사까지 올랐을 때","en":"Rise to Director in a Wing's offices","ja":"翼の事務職で理事まで上がったとき"},"implies":"office_dept","tier":"rare"},{"key":"office_ceo","group":"wing","label":{"ko":"날개의 대표에 오름","en":"Rose to CEO of a Wing","ja":"翼の代表に上りつめた"},"hint":{"ko":"날개 사무직으로 대표까지 올랐을 때","en":"Rise to CEO of a Wing","ja":"翼の事務職で代表まで上がったとき"},"implies":"office_dir","tier":"epic"},{"key":"assoc_staff","group":"wing","label":{"ko":"협회 직원","en":"Association staff","ja":"協会職員"},"hint":{"ko":"협회 직원이 되었을 때","en":"Become Association staff","ja":"協会職員になったとき"},"implies":null,"tier":"uncommon"},{"key":"heishou","group":"wing","label":{"ko":"흑수가 됨","en":"Joined the Heishou Pack","ja":"黒獣となった"},"hint":{"ko":"흑수에 들어갔을 때","en":"Join the Heishou Pack","ja":"黒獣に入ったとき"},"implies":null,"tier":"rare"},{"key":"heishou_adept","group":"wing","label":{"ko":"흑수의 필두가 됨","en":"Became an Adept of the Heishou Pack","ja":"黒獣の筆頭となった"},"hint":{"ko":"흑수에서 필두까지 올랐을 때","en":"Rise to Adept in the Heishou Pack","ja":"黒獣で筆頭まで上がったとき"},"implies":"heishou","tier":"epic"},{"key":"t_collector","group":"wing","label":{"ko":"T사 시간징수직이 됨","en":"Became T Corp. Collection Staff","ja":"T社の徴収職になった"},"hint":{"ko":"T사 시간징수직이 되었을 때","en":"Become T Corp. Collection Staff","ja":"T社の徴収職になったとき"},"implies":null,"tier":"rare"},{"key":"t_class5","group":"wing","label":{"ko":"T사 5등급 징수직 도달","en":"Reached T Corp. Class 5 Collection Staff","ja":"T社5級徴収職に到達"},"hint":{"ko":"T사 징수직으로 5등급까지 올랐을 때","en":"Rise to Class 5 as T Corp. Collection Staff","ja":"T社の徴収職で5級まで上がったとき"},"implies":"t_collector","tier":"epic"},{"key":"w_cleanup","group":"wing","label":{"ko":"W사 정리 요원이 됨","en":"Became a W Corp. Cleanup Agent","ja":"W社の整理要員になった"},"hint":{"ko":"W사 정리 요원이 되었을 때","en":"Become a W Corp. Cleanup Agent","ja":"W社の整理要員になったとき"},"implies":null,"tier":"rare"},{"key":"w_level5","group":"wing","label":{"ko":"W사 5등급 정리 요원 도달","en":"Reached W Corp. Level 5 Cleanup Agent","ja":"W社5級整理要員に到達"},"hint":{"ko":"W사 정리 요원으로 5등급까지 올랐을 때","en":"Rise to Level 5 as a W Corp. Cleanup Agent","ja":"W社の整理要員で5級まで上がったとき"},"implies":"w_cleanup","tier":"epic"},{"key":"k_excision","group":"wing","label":{"ko":"K사 적출직이 됨","en":"Became K Corp. Excision Staff","ja":"K社の摘出職になった"},"hint":{"ko":"K사 적출직이 되었을 때","en":"Become K Corp. Excision Staff","ja":"K社の摘出職になったとき"},"implies":null,"tier":"rare"},{"key":"k_special","group":"wing","label":{"ko":"K사 특수 적출직 도달","en":"Reached K Corp. Special Excision Staff","ja":"K社特殊摘出職に到達"},"hint":{"ko":"K사 적출직으로 특수 적출 부대까지 올랐을 때","en":"Rise to the Special Excision Unit as K Corp. Excision Staff","ja":"K社の摘出職で特殊摘出部隊まで上がったとき"},"implies":"k_excision","tier":"epic"},{"key":"k_hollow","group":"wing","label":{"ko":"메마른 적출직","en":"Hollowed Excision Staff","ja":"枯れた摘出職"},"hint":{"ko":"HP탄을 맞다 인격이 다 메말랐을 때","en":"When HP bullets have dried up every last bit of your self","ja":"HP弾を受け続け、人格が枯れ果てたとき"},"implies":"k_excision","tier":"rare"},{"key":"k_dreamer","group":"wing","label":{"ko":"꿈을 꾸는 적출직","en":"Excision Staff Who Dreamed","ja":"夢を見る摘出職"},"hint":{"ko":"시험관 안에서도 끝까지 메마르지 않았을 때","en":"When you never dried up, even in the tube","ja":"試験管の中でも最後まで枯れなかったとき"},"implies":"k_excision","tier":"legend"},{"key":"n_inquisitor","group":"wing","label":{"ko":"N사 이단 심문관이 됨","en":"Became an N Corp. Inquisitor","ja":"N社の異端審問官になった"},"hint":{"ko":"N사의 이단 심문관이 되었을 때","en":"Become an N Corp. Inquisitor","ja":"N社の異端審問官になったとき"},"implies":null,"tier":"rare"},{"key":"n_grosshammer","group":"wing","label":{"ko":"N사 큰 망치 도달","en":"Reached N Corp. Großhammer","ja":"N社大槌に到達"},"hint":{"ko":"쥐는 자의 지명으로 큰 망치를 받았을 때","en":"Be named a Großhammer by the One Who Grips","ja":"掴む者の指名で大槌を受け取ったとき"},"implies":"n_inquisitor","tier":"epic"},{"key":"n_zealot","group":"wing","label":{"ko":"신앙심이 가득 찬 망치","en":"A Hammer Full of Faith","ja":"信仰に満ちた槌"},"hint":{"ko":"이단 심문관의 신앙심이 끝까지 찼을 때","en":"Let an Inquisitor’s faith fill all the way","ja":"異端審問官の信仰心が満ちきったとき"},"implies":"n_inquisitor","tier":"rare"},{"key":"n_faithless","group":"wing","label":{"ko":"신앙을 잃은 망치","en":"A Hammer Without Faith","ja":"信仰を失った槌"},"hint":{"ko":"이단 심문관의 신앙심이 바닥까지 떨어졌을 때","en":"Let an Inquisitor’s faith fall all the way to nothing","ja":"異端審問官の信仰心が底まで落ちたとき"},"implies":"n_inquisitor","tier":"rare"},{"key":"r_pack","group":"wing","label":{"ko":"R사 4무리에 들어감","en":"Joined R Corp.'s 4th Pack","ja":"R社第4群に入った"},"hint":{"ko":"R사 4무리에 들어갔을 때","en":"Join R Corp.'s 4th Pack","ja":"R社第4群に入ったとき"},"implies":null,"tier":"rare"},{"key":"r_commander","group":"wing","label":{"ko":"R사 4무리 사령관이 됨","en":"Became Commander of R Corp.'s 4th Pack","ja":"R社第4群の司令官になった"},"hint":{"ko":"R사 4무리에서 사령관까지 올랐을 때","en":"Rise to Commander in R Corp.'s 4th Pack","ja":"R社第4群で司令官まで上がったとき"},"implies":"r_pack","tier":"epic"},{"key":"prosthetic","group":"wing","label":{"ko":"의체 시술을 받음","en":"Underwent prosthetic surgery","ja":"義体手術を受けた"},"hint":{"ko":"의체 시술을 받았을 때","en":"Undergo prosthetic surgery","ja":"義体手術を受けたとき"},"implies":null,"tier":"common"},{"key":"prosthetic_good","group":"wing","label":{"ko":"좋은 의체 시술을 받음","en":"Underwent fine prosthetic surgery","ja":"良質な義体手術を受けた"},"hint":{"ko":"좋은 의체 시술을 받았을 때","en":"Undergo fine prosthetic surgery","ja":"良質な義体手術を受けたとき"},"implies":"prosthetic","tier":"common"},{"key":"relic","group":"wing","label":{"ko":"외곽의 유물을 얻음","en":"Obtained a relic of the Outskirts","ja":"外郭の遺物を手に入れた"},"hint":{"ko":"외곽에서 유물을 손에 넣었을 때","en":"Obtain a relic in the Outskirts","ja":"外郭で遺物を手に入れたとき"},"implies":null,"tier":"epic"},{"key":"distorted","group":"distortion","label":{"ko":"뒤틀려 생을 마침","en":"Ended life as a Distortion","ja":"ねじれて生涯を終えた"},"hint":{"ko":"뒤틀려서 삶이 끝났을 때","en":"Your life ends as a Distortion","ja":"ねじれて生涯が終わったとき"},"implies":null,"tier":"rare"},{"key":"dist_grade_0","group":"distortion","label":{"ko":"뜬소문이 된 뒤틀림","en":"A Distortion rated Canard","ja":"あらぬ噂となったねじれ"},"hint":{"ko":"뒤틀린 뒤 뜬소문 등급으로 남았을 때","en":"Be rated Canard as a Distortion","ja":"ねじれた後、あらぬ噂の等級に留まったとき"},"implies":null,"tier":"rare"},{"key":"dist_grade_1","group":"distortion","label":{"ko":"도시 괴담이 된 뒤틀림","en":"A Distortion rated Urban Myth","ja":"都市怪談となったねじれ"},"hint":{"ko":"뒤틀린 뒤 도시 괴담 등급이 되었을 때","en":"Be rated Urban Myth as a Distortion","ja":"ねじれた後、都市怪談の等級になったとき"},"implies":null,"tier":"rare"},{"key":"dist_grade_2","group":"distortion","label":{"ko":"도시 전설이 된 뒤틀림","en":"A Distortion rated Urban Legend","ja":"都市伝説となったねじれ"},"hint":{"ko":"뒤틀린 뒤 도시 전설 등급이 되었을 때","en":"Be rated Urban Legend as a Distortion","ja":"ねじれた後、都市伝説の等級になったとき"},"implies":null,"tier":"rare"},{"key":"dist_grade_3","group":"distortion","label":{"ko":"도시 질병이 된 뒤틀림","en":"A Distortion rated Urban Plague","ja":"都市疾病となったねじれ"},"hint":{"ko":"뒤틀린 뒤 도시 질병 등급이 되었을 때","en":"Be rated Urban Plague as a Distortion","ja":"ねじれた後、都市疾病の等級になったとき"},"implies":null,"tier":"epic"},{"key":"dist_grade_4","group":"distortion","label":{"ko":"도시 악몽이 된 뒤틀림","en":"A Distortion rated Urban Nightmare","ja":"都市悪夢となったねじれ"},"hint":{"ko":"뒤틀림 레이드에서 도시 악몽 등급을 받았을 때","en":"Be rated Urban Nightmare in a Distortion raid","ja":"ねじれレイドで都市悪夢の等級を受けたとき"},"implies":null,"tier":"legend"},{"key":"dist_final","group":"distortion","label":{"ko":"특색이 온 토벌대","en":"The subjugation team with a Color","ja":"特色が来た討伐隊"},"hint":{"ko":"뒤틀림 레이드 다섯 번째 토벌대, 특색에게 쓰러졌을 때","en":"Fall to a Color in the fifth subjugation of a Distortion raid","ja":"ねじれレイド五度目の討伐隊、特色に倒されたとき"},"implies":null,"tier":"legend"},{"key":"dist_nm6","group":"distortion","label":{"ko":"특색을 죽인 뒤","en":"After killing a Color","ja":"特色を殺した後"},"hint":{"ko":"도시 악몽으로 특색을 죽인 뒤 여섯 번째 사람을 만났을 때","en":"As an Urban Nightmare, kill a Color and meet the sixth one","ja":"都市悪夢として特色を殺し、六人目に出会ったとき"},"implies":null,"tier":"myth"},{"key":"dist_return","group":"distortion","label":{"ko":"원래대로 돌아온 사람","en":"One who came back","ja":"元に戻った人"},"hint":{"ko":"뒤틀림 레이드에서 목소리를 세 번 거슬러 돌아왔을 때","en":"Defy the voice three times in a Distortion raid and come back","ja":"ねじれレイドで声に三度逆らい、戻ってきたとき"},"implies":null,"tier":"legend"},{"key":"ego","group":"abno","label":{"ko":"E.G.O 개화","en":"Effloresced E.G.O","ja":"E.G.O開花"},"hint":{"ko":"뒤틀리려는 순간 E.G.O가 개화했을 때","en":"Your E.G.O effloresces at the moment of Distortion","ja":"ねじれる瞬間にE.G.Oが開花したとき"},"implies":null,"tier":"rare"},{"key":"aleph_survive","group":"abno","label":{"ko":"ALEPH 재해에서 살아남음","en":"Survived an ALEPH disaster","ja":"ALEPHの災害を生き延びた"},"hint":{"ko":"ALEPH급 환상체의 재해에서 살아남았을 때","en":"Survive the disaster of an ALEPH-class Abnormality","ja":"ALEPH級アブノーマリティの災害を生き延びたとき"},"implies":null,"tier":"rare"},{"key":"apocalypse","group":"abno","label":{"ko":"종말새 아래에서 살아남음","en":"Survived beneath the Apocalypse Bird","ja":"終末鳥の下で生き延びた"},"hint":{"ko":"종말새를 만나고도 그해를 살아남았을 때","en":"Meet the Apocalypse Bird and survive the year","ja":"終末鳥に出会い、その年を生き延びたとき"},"implies":null,"tier":"legend"},{"key":"library_lost","group":"abno","label":{"ko":"도서관의 책이 됨","en":"Became a book in the Library","ja":"図書館の本になった"},"hint":{"ko":"도서관의 초대를 받고 돌아오지 못했을 때","en":"Accept the Library's invitation and never return","ja":"図書館の招待を受け、帰れなかったとき"},"implies":null,"tier":"rare"},{"key":"library_back","group":"abno","label":{"ko":"도서관에서 돌아옴","en":"Returned from the Library","ja":"図書館から帰還した"},"hint":{"ko":"도서관에서 돌아왔을 때","en":"Return from the Library","ja":"図書館から帰ってきたとき"},"implies":null,"tier":"epic"},{"key":"warp_car_0","group":"warp","label":{"ko":"워프 열차 0칸 돌파","en":"Cleared 0 Warp Train cars","ja":"ワープ列車0両突破"},"hint":{"ko":"워프 열차에 탔지만 첫 칸을 넘지 못했을 때","en":"Board the Warp Train but fail to clear the first car","ja":"ワープ列車に乗ったが最初の車両を越えられなかったとき"},"implies":null,"tier":"common"},{"key":"warp_car_1","group":"warp","label":{"ko":"워프 열차 1칸 돌파","en":"Cleared 1 Warp Train car","ja":"ワープ列車1両突破"},"hint":{"ko":"워프 열차에서 1칸을 넘었을 때","en":"Clear 1 car of the Warp Train","ja":"ワープ列車で1両を越えたとき"},"implies":"warp_car_0","tier":"common"},{"key":"warp_car_2","group":"warp","label":{"ko":"워프 열차 2칸 돌파","en":"Cleared 2 Warp Train cars","ja":"ワープ列車2両突破"},"hint":{"ko":"워프 열차에서 2칸을 넘었을 때","en":"Clear 2 cars of the Warp Train","ja":"ワープ列車で2両を越えたとき"},"implies":"warp_car_1","tier":"common"},{"key":"warp_car_3","group":"warp","label":{"ko":"워프 열차 3칸 돌파","en":"Cleared 3 Warp Train cars","ja":"ワープ列車3両突破"},"hint":{"ko":"워프 열차에서 3칸을 넘었을 때","en":"Clear 3 cars of the Warp Train","ja":"ワープ列車で3両を越えたとき"},"implies":"warp_car_2","tier":"uncommon"},{"key":"warp_car_4","group":"warp","label":{"ko":"워프 열차 4칸 돌파","en":"Cleared 4 Warp Train cars","ja":"ワープ列車4両突破"},"hint":{"ko":"워프 열차에서 4칸을 넘었을 때","en":"Clear 4 cars of the Warp Train","ja":"ワープ列車で4両を越えたとき"},"implies":"warp_car_3","tier":"uncommon"},{"key":"warp_car_5","group":"warp","label":{"ko":"워프 열차 5칸 돌파","en":"Cleared 5 Warp Train cars","ja":"ワープ列車5両突破"},"hint":{"ko":"워프 열차에서 5칸을 넘었을 때","en":"Clear 5 cars of the Warp Train","ja":"ワープ列車で5両を越えたとき"},"implies":"warp_car_4","tier":"rare"},{"key":"warp_car_6","group":"warp","label":{"ko":"워프 열차 6칸 돌파","en":"Cleared 6 Warp Train cars","ja":"ワープ列車6両突破"},"hint":{"ko":"워프 열차에서 6칸을 넘었을 때","en":"Clear 6 cars of the Warp Train","ja":"ワープ列車で6両を越えたとき"},"implies":"warp_car_5","tier":"rare"},{"key":"warp_car_7","group":"warp","label":{"ko":"워프 열차 7칸 돌파","en":"Cleared 7 Warp Train cars","ja":"ワープ列車7両突破"},"hint":{"ko":"워프 열차에서 7칸을 넘었을 때","en":"Clear 7 cars of the Warp Train","ja":"ワープ列車で7両を越えたとき"},"implies":"warp_car_6","tier":"epic"},{"key":"warp_clear","group":"warp","label":{"ko":"워프 열차 완주","en":"Ran the Warp Train to the end","ja":"ワープ列車を完走"},"hint":{"ko":"워프 열차의 모든 칸을 지나 끝까지 갔을 때","en":"Pass every car of the Warp Train to the end","ja":"ワープ列車のすべての車両を通り抜けたとき"},"implies":"warp_car_7","tier":"legend"},{"key":"lake_drink","group":"lake","label":{"ko":"따여 있던 포도맛 캔","en":"The already-opened grape soda","ja":"開けてあったぶどう味の缶"},"hint":{"ko":"따여 있던 포도맛 캔을 마시고 대호수에 들어갔을 때","en":"Drink the already-opened grape soda and enter the Great Lake","ja":"開けてあったぶどう味の缶を飲み、大湖に入ったとき"},"implies":null,"tier":"rare"},{"key":"lake_hint2","group":"lake","label":{"ko":"법 두 개를 산 삶","en":"Bought two Laws","ja":"法を二つ買った生"},"hint":{"ko":"호수의 법을 평생 두 개 이상 샀을 때","en":"Buy two or more Laws of the lake in one life","ja":"湖の法を生涯に二つ以上買ったとき"},"implies":null,"tier":"epic"},{"key":"lake_cross","group":"lake","label":{"ko":"대호수를 항해한 자","en":"One Who Sailed the Great Lake","ja":"大湖を航海した者"},"hint":{"ko":"대호수 항해를 끝까지 마쳤을 때","en":"Finish a voyage across the Great Lake","ja":"大湖の航海を最後までやり遂げたとき"},"implies":null,"tier":"miracle"},{"key":"lake_deep","group":"lake","label":{"ko":"깊은 물을 셋 지나 닿은 삶","en":"Crossed three deep waters and reached port","ja":"深い水を三つ越えて着いた生"},"hint":{"ko":"대호수에서 깊은 물을 세 번 지나 항구에 닿았을 때","en":"Cross three deep waters on the Great Lake and reach port","ja":"大湖で深い水を三度越えて港に着いたとき"},"implies":null,"tier":"myth"},{"key":"lake_whale_marlin","group":"lake","label":{"ko":"모든 것을 꿰뚫는 청새치 고래를 만난 자","en":"One Who Met the All-Impaling Marlin Whale","ja":"すべてを貫くカジキの鯨に出会った者"},"hint":{"ko":"대호수에서 청새치 고래를 만났을 때","en":"Meet the Marlin Whale on the Great Lake","ja":"大湖でカジキの鯨に出会ったとき"},"implies":null,"tier":"legend"},{"key":"lake_whale_pallid","group":"lake","label":{"ko":"모든 것을 집어삼키는 창백한 고래를 만난 자","en":"One Who Met the All-Consuming Pallid Whale","ja":"すべてを呑み込む蒼白の鯨に出会った者"},"hint":{"ko":"대호수에서 창백한 고래를 만났을 때","en":"Meet the Pallid Whale on the Great Lake","ja":"大湖で蒼白の鯨に出会ったとき"},"implies":null,"tier":"legend"},{"key":"lake_whale_crimson","group":"lake","label":{"ko":"모든 것을 마르게 하는 새빨간 고래를 만난 자","en":"One Who Met the All-Withering Crimson Whale","ja":"すべてを枯らす真紅の鯨に出会った者"},"hint":{"ko":"대호수에서 새빨간 고래를 만났을 때","en":"Meet the Crimson Whale on the Great Lake","ja":"大湖で真紅の鯨に出会ったとき"},"implies":null,"tier":"legend"},{"key":"heir_cand","group":"heir","label":{"ko":"H사의 가주 후보로 자람","en":"Raised as an H Corp. Family Hierarch Candidate","ja":"H社の家主候補として育った"},"hint":{"ko":"H사의 가주 후보로 태어나 자랐을 때","en":"Be born and raised as an H Corp. Family Hierarch Candidate","ja":"H社の家主候補として生まれ育ったとき"},"implies":null,"tier":"rare"},{"key":"heir_fail","group":"heir","label":{"ko":"가주 심사에서 떨어짐","en":"Failed the Family Hierarch Evaluation","ja":"家主審査に落ちた"},"hint":{"ko":"가주 심사에서 떨어졌을 때","en":"Fail the Family Hierarch Evaluation","ja":"家主審査に落ちたとき"},"implies":null,"tier":"rare"},{"key":"heir_head","group":"heir","label":{"ko":"가주","en":"Family Hierarch","ja":"家主"},"hint":{"ko":"가주 심사를 통과해 가주가 되었을 때","en":"Pass the Evaluation and become Family Hierarch","ja":"家主審査を通り、家主になったとき"},"implies":null,"tier":"epic"},{"key":"rule_human","group":"heir","label":{"ko":"선황충을 한 번도 따르지 않음","en":"Never once followed the Xianhuang Worm","ja":"仙皇蟲に一度も従わなかった"},"hint":{"ko":"군주로서 다섯 번의 선택에서 한 번도 선황충을 따르지 않았을 때","en":"As Lord, refuse the Xianhuang Worm in all five choices","ja":"君主として五度の選択で一度も仙皇蟲に従わなかったとき"},"implies":null,"tier":"legend"},{"key":"rule_worm","group":"heir","label":{"ko":"다섯 번 모두 선황충을 따름","en":"Followed the Xianhuang Worm all five times","ja":"五度とも仙皇蟲に従った"},"hint":{"ko":"군주로서 다섯 번의 선택을 모두 선황충에 맡겼을 때","en":"As Lord, follow the Xianhuang Worm in all five choices","ja":"君主として五度の選択をすべて仙皇蟲に委ねたとき"},"implies":null,"tier":"myth"},{"key":"heir_lord","group":"heir","label":{"ko":"군주","en":"Lord","ja":"君主"},"hint":{"ko":"가주가 된 뒤 군주의 자리에 올랐을 때","en":"Become Family Hierarch, then rise to Lord","ja":"家主になった後、君主の座に就いたとき"},"implies":null,"tier":"legend"},{"key":"rule_mercy","group":"heir","label":{"ko":"자비로운 군주로 불림","en":"Called a merciful lord","ja":"慈悲深い君主と呼ばれた"},"hint":{"ko":"군주로서 다스리는 동안 자비로운 쪽을 거듭 택했을 때","en":"As Lord, choose mercy again and again while ruling","ja":"君主として治める間、慈悲深い側を選び続けたとき"},"implies":null,"tier":"myth"},{"key":"rule_tyrant","group":"heir","label":{"ko":"폭군으로 불림","en":"Called a tyrant","ja":"暴君と呼ばれた"},"hint":{"ko":"군주로서 다스리는 동안 가혹한 쪽을 거듭 택했을 때","en":"As Lord, choose cruelty again and again while ruling","ja":"君主として治める間、苛烈な側を選び続けたとき"},"implies":null,"tier":"myth"},{"key":"rule_abolish","group":"heir","label":{"ko":"가주 심사를 없앰","en":"Abolished the Family Hierarch Evaluation","ja":"家主審査を廃止した"},"hint":{"ko":"군주로서 가주 심사를 없앴을 때","en":"As Lord, abolish the Family Hierarch Evaluation","ja":"君主として家主審査を廃止したとき"},"implies":null,"tier":"myth"},{"key":"rule_kong","group":"heir","label":{"ko":"공씨의 이름을 되살림","en":"Restored the name of the Kong family","ja":"孔家の名を取り戻した"},"hint":{"ko":"군주로서 공씨의 이름을 되살렸을 때","en":"As Lord, restore the name of the Kong family","ja":"君主として孔家の名を取り戻したとき"},"implies":null,"tier":"myth"},{"key":"bf_stray","group":"bf","label":{"ko":"혈귀가 됨 (떠돌이)","en":"Became a Bloodfiend (stray)","ja":"血鬼になった（放浪者）"},"hint":{"ko":"가문 없는 떠돌이 혈귀가 되었을 때","en":"Become a stray Bloodfiend with no Family","ja":"家門のない放浪の血鬼になったとき"},"implies":null,"tier":"rare"},{"key":"bf_kin","group":"bf","label":{"ko":"가문의 권속이 됨","en":"Became a Family's Kindred","ja":"家門の眷属になった"},"hint":{"ko":"가문의 권속이 되었을 때","en":"Become a Family's Kindred","ja":"家門の眷属になったとき"},"implies":null,"tier":"rare"},{"key":"bloodbag","group":"bf","label":{"ko":"피주머니가 됨","en":"Became a Bloodbag","ja":"血袋になった"},"hint":{"ko":"혈귀에게 피주머니가 되었을 때","en":"Be made into a Bloodbag by a Bloodfiend","ja":"血鬼に血袋にされたとき"},"implies":null,"tier":"rare"},{"key":"bf_sleep","group":"bf","label":{"ko":"긴 잠에 듦","en":"Went into the long sleep","ja":"長い眠りについた"},"hint":{"ko":"혈귀로 긴 잠에 들었을 때","en":"Go into the long sleep as a Bloodfiend","ja":"血鬼として長い眠りについたとき"},"implies":null,"tier":"rare"},{"key":"bf_alive","group":"bf","label":{"ko":"살아서 이야기를 맺은 혈귀","en":"A Bloodfiend whose story ended alive","ja":"生きたまま物語を結んだ血鬼"},"hint":{"ko":"혈귀로 살아 있는 채 이야기를 맺었을 때","en":"End your story alive, as a Bloodfiend","ja":"血鬼として生きたまま物語を結んだとき"},"implies":null,"tier":"epic"},{"key":"bf_300","group":"bf","label":{"ko":"삼백 년을 살아낸 혈귀","en":"A Bloodfiend who lived three hundred years","ja":"三百年を生き抜いた血鬼"},"hint":{"ko":"혈귀로 300세를 넘겨 살았을 때","en":"Live past 300 as a Bloodfiend","ja":"血鬼として300歳を超えて生きたとき"},"implies":null,"tier":"legend"},{"key":"bf_reveal","group":"bf","label":{"ko":"소속에 정체를 밝힌 혈귀","en":"A Bloodfiend who revealed themselves to their own","ja":"所属に正体を明かした血鬼"},"hint":{"ko":"소속에 스스로 정체를 밝혔을 때","en":"Reveal what you are to your own organization","ja":"所属に自ら正体を明かしたとき"},"implies":null,"tier":"rare"},{"key":"bf_found","group":"bf","label":{"ko":"숨긴 정체를 들킨 혈귀","en":"A Bloodfiend whose secret was found out","ja":"隠した正体を知られた血鬼"},"hint":{"ko":"숨겨 온 정체를 소속에 들켰을 때","en":"Have your secret found out by your organization","ja":"隠してきた正体を所属に知られたとき"},"implies":null,"tier":"rare"},{"key":"bf_nobite","group":"bf","label":{"ko":"열 해 동안 물지 않은 혈귀","en":"A Bloodfiend who went ten years without biting","ja":"十年噛まなかった血鬼"},"hint":{"ko":"혈귀가 된 뒤 열 해 동안 한 번도 물지 않았을 때","en":"Go ten years as a Bloodfiend without biting anyone","ja":"血鬼になって十年、一度も噛まなかったとき"},"implies":null,"tier":"epic"},{"key":"bf_epi_nobite","group":"bf","label":{"ko":"물지 않은 스무 해","en":"Twenty years without a bite","ja":"噛まなかった二十年"},"hint":{"ko":"살아서 끝맺은 혈귀가 스무 해 넘게 아무도 물지 않았을 때","en":"End alive as a Bloodfiend who went twenty years without biting","ja":"生きたまま結んだ血鬼が二十年以上誰も噛まなかったとき"},"implies":"bf_nobite","tier":"myth"},{"key":"bf_two_kin","group":"bf","label":{"ko":"권속 둘을 모두 만듦","en":"Made both of your Kindred","ja":"眷属をふたりとも生み出した"},"hint":{"ko":"권속을 둘 다 만들었을 때","en":"Make both of your Kindred","ja":"眷属をふたりとも生み出したとき"},"implies":null,"tier":"epic"},{"key":"bf_gen1","group":"bf","label":{"ko":"제1권속(장로)에 오름","en":"Rose to First Kindred (Elder)","ja":"第一眷属（長老）に上り詰めた"},"hint":{"ko":"가문의 권속으로 제1권속(장로)까지 올랐을 때","en":"Rise to First Kindred (Elder) in a Family","ja":"家門の眷属として第一眷属（長老）まで上がったとき"},"implies":null,"tier":"legend"},{"key":"bf_bar20","group":"bf","label":{"ko":"혈액바 스무 해 치","en":"Twenty years' worth of Hemobars","ja":"血液バー二十年分"},"hint":{"ko":"혈귀로 혈액바를 스무 해 치 먹었을 때","en":"Live on Hemobars for twenty years as a Bloodfiend","ja":"血鬼として血液バーを二十年分食べたとき"},"implies":null,"tier":"legend"},{"key":"bf_end_hunter_last","group":"bf","label":{"ko":"마지막 사냥꾼을 기다린 혈귀","en":"A Bloodfiend who waited for the last hunter","ja":"最後の狩人を待った血鬼"},"hint":{"ko":"마지막 끝에서 사냥꾼을 기다리는 쪽을 골랐을 때","en":"At the end, choose to wait for the hunter","ja":"最後の終わりで狩人を待つ道を選んだとき"},"implies":null,"tier":"epic"},{"key":"bf_end_couple_sleep","group":"bf","label":{"ko":"둘이 함께 잠든 혈귀","en":"Bloodfiends who slept together","ja":"ふたりで眠った血鬼"},"hint":{"ko":"마지막 끝에서 배우자와 함께 잠드는 쪽을 골랐을 때","en":"At the end, choose to sleep together with your spouse","ja":"最後の終わりで配偶者と共に眠る道を選んだとき"},"implies":null,"tier":"epic"},{"key":"bf_end_smile_first","group":"bf","label":{"ko":"배우자를 먼저 재운 혈귀","en":"A Bloodfiend who let their spouse sleep first","ja":"配偶者を先に眠らせた血鬼"},"hint":{"ko":"마지막 끝에서 배우자를 먼저 재우는 쪽을 골랐을 때","en":"At the end, choose to let your spouse sleep first","ja":"最後の終わりで配偶者を先に眠らせる道を選んだとき"},"implies":null,"tier":"epic"},{"key":"bf_end_gone_grave","group":"bf","label":{"ko":"배우자 곁으로 돌아간 혈귀","en":"A Bloodfiend who returned to their spouse's side","ja":"配偶者のそばへ帰った血鬼"},"hint":{"ko":"배우자를 먼저 보낸 뒤, 그 곁으로 돌아가는 쪽을 골랐을 때","en":"After losing your spouse, choose to return to their side","ja":"配偶者を先に見送った後、そのそばへ帰る道を選んだとき"},"implies":null,"tier":"epic"},{"key":"bf_end_elder_hand","group":"bf","label":{"ko":"자리를 넘기고 잠든 장로","en":"An Elder who handed over the seat and slept","ja":"座を譲って眠った長老"},"hint":{"ko":"장로로서 자리를 넘기고 잠드는 쪽을 골랐을 때","en":"As an Elder, choose to hand over the seat and sleep","ja":"長老として座を譲り眠る道を選んだとき"},"implies":null,"tier":"epic"},{"key":"bf_end_kin_cup","group":"bf","label":{"ko":"권속에게 남긴 잔","en":"A cup left to the Kindred","ja":"眷属に遺した杯"},"hint":{"ko":"권속을 둔 채, 잔을 남기고 가는 쪽을 골랐을 때","en":"With Kindred of your own, choose to leave a cup behind","ja":"眷属を残し、杯を遺して去る道を選んだとき"},"implies":null,"tier":"epic"},{"key":"bf_end_faces","group":"bf","label":{"ko":"셀 수 없는 얼굴","en":"Countless faces","ja":"数えきれない顔"},"hint":{"ko":"서른 명 넘게 물거나 세 번 넘게 광란한 혈귀가 긴 잠에 들었을 때","en":"Go into the long sleep after biting thirty or frenzying three times","ja":"三十人以上噛むか三度以上狂乱した血鬼が長い眠りについたとき"},"implies":null,"tier":"legend"},{"key":"bf_epi_couple","group":"bf","label":{"ko":"둘이서 오래","en":"Together, for a long time","ja":"ふたりで長く"},"hint":{"ko":"배우자를 권속으로 만든 혈귀가 살아서 끝맺었을 때","en":"End alive as a Bloodfiend who made their spouse Kindred","ja":"配偶者を眷属にした血鬼が生きたまま結んだとき"},"implies":null,"tier":"legend"},{"key":"bf_epi_smile","group":"bf","label":{"ko":"늦게 온 웃음","en":"A smile that came late","ja":"遅れてきた笑み"},"hint":{"ko":"뜻을 거슬러 배우자를 문 혈귀가 살아서 끝맺었을 때","en":"End alive after biting a spouse who asked you not to","ja":"意に反して配偶者を噛んだ血鬼が生きたまま結んだとき"},"implies":null,"tier":"legend"},{"key":"bf_epi_gone","group":"bf","label":{"ko":"늙지 않는 쪽","en":"The one who does not age","ja":"老いないほう"},"hint":{"ko":"배우자를 사람으로 떠나보낸 혈귀가 살아서 끝맺었을 때","en":"End alive after letting your spouse leave as a human","ja":"配偶者を人として見送った血鬼が生きたまま結んだとき"},"implies":null,"tier":"legend"},{"key":"bf_epi_elder","group":"bf","label":{"ko":"오래 앉은 장로","en":"The long-seated Elder","ja":"長く座した長老"},"hint":{"ko":"장로(제1권속)가 살아서 끝맺었을 때","en":"End alive as an Elder (First Kindred)","ja":"長老（第一眷属）が生きたまま結んだとき"},"implies":null,"tier":"myth"},{"key":"bf_epi_hunter","group":"bf","label":{"ko":"잠그지 않는 문","en":"The unlocked door","ja":"鍵のない扉"},"hint":{"ko":"사냥꾼을 세 번 넘게 이기고 열 해 동안 사냥이 없던 혈귀가 살아서 끝맺었을 때","en":"End alive after beating hunters three times and ten quiet years","ja":"狩人に三度以上勝ち、十年間狩られなかった血鬼が生きたまま結んだとき"},"implies":null,"tier":"legend"},{"key":"bf_epi_faces","group":"bf","label":{"ko":"밤이 아는 이름","en":"A name the night knows","ja":"夜が知る名"},"hint":{"ko":"서른 명 넘게 물거나 세 번 넘게 광란한 혈귀가 살아서 끝맺었을 때","en":"End alive after biting thirty or frenzying three times","ja":"三十人以上噛むか三度以上狂乱した血鬼が生きたまま結んだとき"},"implies":null,"tier":"legend"},{"key":"bf_epi_kin","group":"bf","label":{"ko":"이름 없는 가문","en":"A nameless Family","ja":"名もなき家門"},"hint":{"ko":"떠돌이 혈귀가 권속을 만들고 살아서 끝맺었을 때","en":"End alive as a stray Bloodfiend who made Kindred","ja":"流れの血鬼が眷属を作り、生きたまま結んだとき"},"implies":null,"tier":"legend"},{"key":"bf_epi_bag","group":"bf","label":{"ko":"떠나지 않는 피주머니","en":"The Bloodbag that never left","ja":"去らない血袋"},"hint":{"ko":"피주머니를 둔 혈귀가 살아서 끝맺었을 때","en":"End alive as a Bloodfiend who kept a Bloodbag","ja":"血袋を持つ血鬼が生きたまま結んだとき"},"implies":null,"tier":"legend"},{"key":"bf_epi_bar","group":"bf","label":{"ko":"혈액바 상자의 탑","en":"A tower of Hemobar boxes","ja":"血液バーの箱の塔"},"hint":{"ko":"혈액바로 스무 해를 버틴 혈귀가 살아서 끝맺었을 때","en":"End alive after twenty years on Hemobars","ja":"血液バーで二十年しのいだ血鬼が生きたまま結んだとき"},"implies":null,"tier":"myth"},{"key":"bl_join","group":"blade","label":{"ko":"검계","en":"Blade Lineage","ja":"剣契"},"hint":{"ko":"검계에 들어갔을 때","en":"Join the Blade Lineage","ja":"剣契に入ったとき"},"implies":null,"tier":"rare"},{"key":"bl_salsu","group":"blade","label":{"ko":"검계 살수","en":"Blade Lineage Salsu","ja":"剣契 殺手"},"hint":{"ko":"검계에서 살수까지 올랐을 때","en":"Rise to Salsu in the Blade Lineage","ja":"剣契で殺手まで上がったとき"},"implies":"bl_join","tier":"epic"},{"key":"bl_mentor","group":"blade","label":{"ko":"검계 우두머리","en":"Blade Lineage Mentor","ja":"剣契 頭目"},"hint":{"ko":"검계에서 우두머리까지 올랐을 때","en":"Rise to Mentor in the Blade Lineage","ja":"剣契で頭目まで上がったとき"},"implies":"bl_salsu","tier":"legend"},{"key":"bl_scatter_leave","group":"blade","label":{"ko":"칼을 들고 떠난 자","en":"One who left with their blade","ja":"刀を手に去った者"},"hint":{"ko":"검계가 흩어질 때 칼을 들고 떠났을 때","en":"Leave with your blade when the Lineage scatters","ja":"剣契が散るとき、刀を手に去ったとき"},"implies":null,"tier":"rare"},{"key":"bl_last","group":"blade","label":{"ko":"마지막 항쟁에서 살아 나온 자","en":"One who survived the last stand","ja":"最後の抗争を生き延びた者"},"hint":{"ko":"마지막 항쟁에서 살아 나왔을 때","en":"Survive the last stand","ja":"最後の抗争を生き延びたとき"},"implies":null,"tier":"epic"},{"key":"bl_homeland","group":"blade","label":{"ko":"19구로 사람을 보낸 우두머리","en":"A Mentor who sent someone to District 19","ja":"19区へ人を送った頭目"},"hint":{"ko":"우두머리로서 19구로 사람을 보냈을 때","en":"As Mentor, send someone to District 19","ja":"頭目として19区へ人を送ったとき"},"implies":null,"tier":"legend"},{"key":"bl_m_retreat","group":"blade","label":{"ko":"칼을 거둔 우두머리","en":"A Mentor who sheathed the blade","ja":"刀を収めた頭目"},"hint":{"ko":"우두머리로서 마지막 항쟁 대신 칼을 거뒀을 때","en":"As Mentor, sheathe the blade instead of the last stand","ja":"頭目として最後の抗争の代わりに刀を収めたとき"},"implies":null,"tier":"legend"},{"key":"bl_m_distort","group":"blade","label":{"ko":"뒤틀린 우두머리","en":"The Distorted Mentor","ja":"ねじれた頭目"},"hint":{"ko":"우두머리가 뒤틀렸을 때","en":"Become Distorted as Mentor","ja":"頭目がねじれたとき"},"implies":null,"tier":"legend"},{"key":"bl_d_plague","group":"blade","label":{"ko":"도시 질병이 된 우두머리","en":"A Mentor rated Urban Plague","ja":"都市疾病となった頭目"},"hint":{"ko":"뒤틀린 우두머리가 도시 질병 등급까지 이르렀을 때","en":"As a Distorted Mentor, reach the Urban Plague rating","ja":"ねじれた頭目が都市疾病の等級に達したとき"},"implies":null,"tier":"myth"},{"key":"bl_d_lay","group":"blade","label":{"ko":"칼을 내려놓은 뒤틀림","en":"A Distortion that laid down the blade","ja":"刀を置いたねじれ"},"hint":{"ko":"뒤틀린 우두머리가 스스로 칼을 내려놓았을 때","en":"As a Distorted Mentor, lay down the blade yourself","ja":"ねじれた頭目が自ら刀を置いたとき"},"implies":null,"tier":"myth"},{"key":"bl_w_settle","group":"blade","label":{"ko":"칼을 내려놓은 검객","en":"A swordsman who laid down the blade","ja":"刀を置いた剣客"},"hint":{"ko":"떠돌이 검객으로 칼을 내려놓고 정착했을 때","en":"As a wandering swordsman, lay down the blade and settle","ja":"放浪の剣客として刀を置き、落ち着いたとき"},"implies":null,"tier":"rare"},{"key":"bl_w_student","group":"blade","label":{"ko":"본국검을 물려준 자","en":"One who passed on Bongukgeom","ja":"本国剣を伝えた者"},"hint":{"ko":"떠돌이 검객으로 아이에게 본국검을 물려주었을 때","en":"As a wandering swordsman, pass Bongukgeom on to a child","ja":"流れの剣客として子に本国剣を伝えたとき"},"implies":null,"tier":"legend"},{"key":"bl_w_reform","group":"blade","label":{"ko":"검계를 다시 세운 자","en":"One who rebuilt the Blade Lineage","ja":"剣契を再興した者"},"hint":{"ko":"떠돌이 검객으로 검계를 다시 세웠을 때","en":"As a wandering swordsman, rebuild the Blade Lineage","ja":"流れの剣客として剣契を再興したとき"},"implies":null,"tier":"legend"},{"key":"kk_join","group":"kuro","label":{"ko":"흑운회","en":"Kurokumo Clan","ja":"黒雲会"},"hint":{"ko":"흑운회에 들어갔을 때","en":"Join the Kurokumo Clan","ja":"黒雲会に入ったとき"},"implies":null,"tier":"rare"},{"key":"kk_captain","group":"kuro","label":{"ko":"흑운회 부조장","en":"Kurokumo Clan Captain","ja":"黒雲会 副組長"},"hint":{"ko":"흑운회에서 부조장까지 올랐을 때","en":"Rise to Captain in the Kurokumo Clan","ja":"黒雲会で副組長まで上がったとき"},"implies":"kk_join","tier":"epic"},{"key":"kk_patriarch","group":"kuro","label":{"ko":"흑운회 조장","en":"Kurokumo Clan Patriarch","ja":"黒雲会 組長"},"hint":{"ko":"흑운회에서 조장까지 올랐을 때","en":"Rise to Patriarch in the Kurokumo Clan","ja":"黒雲会で組長まで上がったとき"},"implies":"kk_captain","tier":"legend"},{"key":"kk_ink3","group":"kuro","label":{"ko":"세 겹의 검은 구름","en":"Three layers of black cloud","ja":"三重の黒い雲"},"hint":{"ko":"검은 구름 문신을 세 겹까지 새겼을 때","en":"Have the black cloud tattoo inked three layers deep","ja":"黒い雲の刺青を三重まで入れたとき"},"implies":null,"tier":"rare"},{"key":"kk_truce","group":"kuro","label":{"ko":"검계와 마주 앉은 자","en":"One who sat across from the Blade Lineage","ja":"剣契と向かい合って座った者"},"hint":{"ko":"흑운회로서 검계와 마주 앉았을 때","en":"Sit across from the Blade Lineage as Kurokumo","ja":"黒雲会として剣契と向かい合って座ったとき"},"implies":null,"tier":"rare"},{"key":"kk_finger","group":"kuro","label":{"ko":"손가락으로 값을 치른 자","en":"One who paid with a finger","ja":"指で代償を払った者"},"hint":{"ko":"손가락 하나로 값을 치르고 살아남았을 때","en":"Pay with a finger and live","ja":"指一本で代償を払い、生き延びたとき"},"implies":null,"tier":"rare"},{"key":"kk_bl_last","group":"kuro","label":{"ko":"검계의 마지막 골목을 본 자","en":"One who saw the Blade Lineage's last alley","ja":"剣契の最後の路地を見た者"},"hint":{"ko":"흑운회로서 검계의 마지막 골목을 보았을 때","en":"As Kurokumo, witness the Blade Lineage's last alley","ja":"黒雲会として剣契の最後の路地を見たとき"},"implies":null,"tier":"epic"},{"key":"kk_retire","group":"kuro","label":{"ko":"칼을 물려준 부조장","en":"A Captain who passed on the blade","ja":"刀を譲った副組長"},"hint":{"ko":"부조장으로서 칼을 물려주고 물러났을 때","en":"As Captain, pass on the blade and step down","ja":"副組長として刀を譲り、退いたとき"},"implies":null,"tier":"rare"},{"key":"kk_p_end","group":"kuro","label":{"ko":"자리를 넘긴 조장","en":"A Patriarch who passed on the seat","ja":"座を譲った組長"},"hint":{"ko":"조장으로서 자리를 넘겼을 때","en":"As Patriarch, pass on the seat","ja":"組長として座を譲ったとき"},"implies":null,"tier":"legend"},{"key":"kk_dojo","group":"kuro","label":{"ko":"도장을 차린 검객","en":"A swordsman who opened a dojo","ja":"道場を開いた剣客"},"hint":{"ko":"물러난 뒤 도장을 차렸을 때","en":"Open a dojo after stepping down","ja":"退いた後、道場を開いたとき"},"implies":null,"tier":"epic"},{"key":"kk_d_student","group":"kuro","label":{"ko":"검술을 물려준 자","en":"One who passed on swordsmanship","ja":"剣術を伝えた者"},"hint":{"ko":"도장을 차린 뒤 아이에게 검술을 물려주었을 때","en":"After opening a dojo, pass swordsmanship on to a child","ja":"道場を開いた後、子に剣術を伝えたとき"},"implies":null,"tier":"legend"},{"key":"index_e","group":"finger","label":{"ko":"e(무리수)","en":"e (the irrational number)","ja":"e（無理数）"},"hint":{"ko":"검지 대행자로서 e를 끝까지 읊으라는 지령을 받았을 때","en":"As an Agent of the Index, receive the order to recite e to the end","ja":"人差し指の代行者として、eを最後まで唱えよという指令を受けたとき"},"implies":null,"tier":"uncommon"},{"key":"ampoule","group":"city","label":{"ko":"K사 앰플","en":"K Corp. Ampoule","ja":"K社アンプル"},"hint":{"ko":"암시장에서 K사 앰플을 샀을 때","en":"Buy a K Corp. Ampoule on the black market","ja":"闇市でK社アンプルを買ったとき"},"implies":null,"tier":"legend"},{"key":"warp_citizen","group":"warp","label":{"ko":"시민칸의 스승","en":"The Teacher of the Citizens' Car","ja":"市民車両の師"},"hint":{"ko":"특색으로 시민 칸에 섞여 워프 열차에 올랐을 때","en":"As a Color, board the Warp Train disguised among the citizens","ja":"特色として市民に紛れてワープ列車に乗ったとき"},"implies":null,"tier":"legend"},{"key":"warp_lost","group":"warp","label":{"ko":"길을 잃음","en":"Lost","ja":"道を見失った"},"hint":{"ko":"워프 열차에서 붉은 상자를 쓰고 길을 잃었을 때","en":"Use the red box on the Warp Train and lose your way","ja":"ワープ列車で赤い箱を使い、道を見失ったとき"},"implies":null,"tier":"legend"},{"key":"blind_kill","group":"distortion","label":{"ko":"알아보지 못한 채 죽인 자","en":"One who killed without knowing who it was","ja":"誰かも分からないまま殺した者"},"hint":{"ko":"눈먼 뒤틀림을 알아보지 못하고 죽였을 때","en":"Kill the blind Distortion without recognizing who it was","ja":"盲目のねじれを見分けられずに殺したとき"},"implies":null,"tier":"myth"},{"key":"blind_love","group":"distortion","label":{"ko":"사랑하는 이에게","en":"To the One I Love","ja":"愛する人へ"},"hint":{"ko":"눈먼 뒤틀림이 누구인지 알아보았을 때","en":"Recognize who the blind Distortion is","ja":"盲目のねじれが誰かを見抜いたとき"},"implies":null,"tier":"myth"},{"key":"nameless","group":"finger","label":{"ko":"無名","en":"Nameless (無名)","ja":"無名"},"hint":{"ko":"검지 대행자로서 지령에 따라 모든 것에서 이름을 버렸을 때","en":"As an Agent of the Index, cast away your name from everything on an order","ja":"人差し指の代行者として、指令に従いあらゆるものから名前を捨てたとき"},"implies":null,"tier":"legend"},{"key":"lament_happy","group":"distortion","label":{"ko":"그곳에서는 행복하기를","en":"May They Be Happy There","ja":"そこでは幸せでありますように"},"hint":{"ko":"뒤틀려 가는 가까운 이를 직접 토벌했을 때","en":"Subjugate a loved one as they twist, by your own hand","ja":"ねじれていく身近な人を自ら討伐したとき"},"implies":null,"tier":"legend"},{"key":"lament_wait","group":"distortion","label":{"ko":"그곳에서 기다려 주기를","en":"May They Wait for Me There","ja":"そこで待っていてくれますように"},"hint":{"ko":"뒤틀려 가는 가까운 이를 두고 도망쳤을 때","en":"Run from a loved one as they twist","ja":"ねじれていく身近な人を置いて逃げたとき"},"implies":null,"tier":"legend"},{"key":"lament_meet","group":"distortion","label":{"ko":"그곳에서 만나기를","en":"May We Meet There","ja":"そこで会えますように"},"hint":{"ko":"뒤틀려 가는 가까운 이를 마주하고 죽었을 때","en":"Face a loved one as they twist, and die","ja":"ねじれていく身近な人と向き合い、死んだとき"},"implies":null,"tier":"legend"},{"key":"lotto","group":"city","label":{"ko":"부","en":"Wealth","ja":"富"},"hint":{"ko":"로또에 당첨되었을 때","en":"Win the lottery","ja":"宝くじに当たったとき"},"implies":null,"tier":"legend"},{"key":"love_first","group":"city","label":{"ko":"첫사랑과 가정을 이룸","en":"Built a home with a first love","ja":"初恋の人と家庭を築いた"},"hint":{"ko":"10대에 생긴 연인과 가정을 이루었을 때","en":"Start a family with the partner you met as a teen","ja":"10代で出会った恋人と家庭を築いたとき"},"implies":null,"tier":"uncommon"},{"key":"refuse_proposal","group":"city","label":{"ko":"청혼을 거절한 삶","en":"A life that turned down a proposal","ja":"プロポーズを断った人生"},"hint":{"ko":"청혼을 거절하고 끝내 혼자 살았을 때","en":"Turn down a proposal and never marry","ja":"プロポーズを断り、結婚しなかったとき"},"implies":null,"tier":"uncommon"},{"key":"widowed","group":"city","label":{"ko":"곁을 지킨 사람을 먼저 보냄","en":"Saw off the one who stayed by my side","ja":"そばにいてくれた人を先に見送った"},"hint":{"ko":"함께 살던 사람을 먼저 떠나보냈을 때","en":"Lose the person you lived with","ja":"共に暮らした人を先に見送ったとき"},"implies":null,"tier":"rare"},{"key":"unwed_lover","group":"city","label":{"ko":"끝내 이루지 못한 사이","en":"A bond that never came to be","ja":"結ばれなかった間柄"},"hint":{"ko":"연인은 있었지만 끝내 함께 살지 못했을 때","en":"Have a lover but never live together","ja":"恋人はいたが、共に暮らせなかったとき"},"implies":null,"tier":"uncommon"},{"key":"office_broken","group":"fixer","label":{"ko":"사무소 깨기","en":"Office Break-In","ja":"事務所破り"},"hint":{"ko":"사무소가 습격당해 지키지 못했을 때","en":"When your Office is attacked and you fail to hold it","ja":"事務所が襲撃され、守りきれなかったとき"},"implies":null,"tier":"uncommon"}],"flags":{"en":[["고아","Orphan"],["부유한집","Born into wealth"],["가난한집","Born into poverty"],["연인","Has a lover"],["가정","Has a family"],["아이","Has a child"],["K사앰플","Carries a K Corp. ampoule"],["가족이같은소속","Child shares your affiliation"],["빚","In debt"],["프로젝트완수","Completed a major project"],["후견","Has a Director's patronage"],["약물중독","Drug dependence"],["조직입문","Ties to a Syndicate"],["환상체목격","Has seen an Abnormality"],["환상체생존","Survived an Abnormality"],["E.G.O개화","Effloresced E.G.O"],["진학","Higher education"],["상층","Upper-class upbringing"],["사원증","Wing employee ID"],["복제","Clone from the Hatchery"],["기억소거","Memories erased on leaving R Corp."],["신분증명","Wing citizen"],["의뢰인","Ties to an Office"],["해결사동경","Admires Fixers"],["날개동경","Admires Wing employees"],["협회동경","Admires the Associations"],["엄지동경","Admires the Thumb"],["검지동경","Admires the Index"],["중지동경","Admires the Middle"],["약지동경","Admires the Ring"],["특색","Color"],["뒤틀림목격","Witnessed a Distortion"],["뒤틀림경계","Came to the brink of Distortion"],["이상한물건","Keeps a strange object"],["숭배","Joined a cult"],["고급장비","Workshop-made gear"],["의체","Backstreets prosthesis"],["좋은의체","Fine prosthesis"],["전투의체","Combat prosthesis"],["강화시술","Underwent augmentation"],["유물","Relic of the Outskirts"],["이단낙인","Branded a heretic by Nagel und Hammer"],["원한","Vengeance tattoo"],["기사의가호","Knight of Despair's blessing"],["혈귀","Bloodfiend"],["떠돌이","A stray with no Family"],["혈액바","Knows where to get Hemobars"],["잘린손가락","Lost a finger"],["잘린팔","Lost an arm"],["잘린손","Lost a hand"]],"ja":[["고아","孤児"],["부유한집","裕福な家に生まれた"],["가난한집","貧しい家に生まれた"],["연인","恋人がいる"],["가정","家庭を築いた"],["아이","子どもがいる"],["K사앰플","K社のアンプルを懐に持つ"],["가족이같은소속","子どもが同じ所属"],["빚","借金がある"],["프로젝트완수","大型プロジェクトをやり遂げた"],["후견","理事の後ろ盾がある"],["약물중독","薬物依存"],["조직입문","組織とつながりがある"],["환상체목격","幻想体を見たことがある"],["환상체생존","幻想体と遭遇して生き延びた"],["E.G.O개화","E.G.O開花"],["진학","上級課程を修めた"],["상층","上層の出身"],["사원증","翼の社員証"],["복제","孵化場出身のクローン"],["기억소거","R社退役時に記憶を消去"],["신분증명","翼の市民"],["의뢰인","事務所とつながりがある"],["해결사동경","フィクサーに憧れている"],["날개동경","翼の社員に憧れている"],["협회동경","協会に憧れている"],["엄지동경","親指に憧れている"],["검지동경","人差し指に憧れている"],["중지동경","中指に憧れている"],["약지동경","薬指に憧れている"],["특색","特色"],["뒤틀림목격","ねじれを目撃した"],["뒤틀림경계","ねじれの一歩手前から戻った"],["이상한물건","奇妙な物を持っている"],["숭배","崇拝の集まりに足を踏み入れた"],["고급장비","工房製の高級装備"],["의체","裏路地の義体"],["좋은의체","良質な義体"],["전투의체","戦闘用義体"],["강화시술","強化施術を受けた"],["유물","外郭の遺物"],["이단낙인","ナーゲルウントハマーの異端の烙印"],["원한","怨恨の刺青"],["기사의가호","絶望の騎士の加護"],["혈귀","血鬼"],["떠돌이","家門を持たない放浪者"],["혈액바","血液バーの入手先を知っている"],["잘린손가락","指を一本失った"],["잘린팔","腕を一本失った"],["잘린손","手を一つ失った"]],"ko":[["고아","고아"],["부유한집","부유한 집에서 태어남"],["가난한집","가난한 집에서 태어남"],["연인","연인이 있음"],["가정","가정을 이룸"],["아이","아이가 있음"],["K사앰플","K사 앰플을 품에 지님"],["가족이같은소속","자식이 같은 소속"],["빚","빚이 있음"],["프로젝트완수","큰 프로젝트를 마침"],["후견","이사의 후견을 받음"],["약물중독","약물 의존"],["조직입문","조직과 연이 닿음"],["환상체목격","환상체를 본 적 있음"],["환상체생존","환상체와 마주치고 살아남음"],["E.G.O개화","E.G.O 개화"],["진학","상급 과정을 거침"],["상층","상층 출신"],["사원증","날개의 사원증"],["복제","부화장 출신 복제인간"],["기억소거","R사 퇴역 때 기억을 지움"],["신분증명","날개 시민"],["의뢰인","사무소에 연이 닿음"],["해결사동경","해결사를 동경함"],["날개동경","날개의 사원을 동경함"],["협회동경","협회를 동경함"],["엄지동경","엄지를 동경함"],["검지동경","검지를 동경함"],["중지동경","중지를 동경함"],["약지동경","약지를 동경함"],["특색","특색"],["뒤틀림목격","뒤틀림을 목격함"],["뒤틀림경계","뒤틀림의 문턱까지 갔다 옴"],["이상한물건","이상한 물건을 간직함"],["숭배","숭배 모임에 발을 들임"],["고급장비","공방제 고급 장비"],["의체","뒷골목 의체"],["좋은의체","좋은 의체"],["전투의체","전투용 의체"],["강화시술","강화 시술을 받음"],["유물","외곽의 유물"],["이단낙인","나겔 운트 하머의 이단 낙인"],["원한","원한 문신"],["기사의가호","절망의 기사의 가호"],["혈귀","혈귀"],["떠돌이","가문 없는 떠돌이"],["혈액바","혈액바를 구할 곳을 앎"],["잘린손가락","손가락 하나를 잃음"],["잘린팔","팔 하나를 잃음"],["잘린손","손 하나를 잃음"]]}};
 if (document.getElementById('cityborn-advisor')) return;
 const C=advisorCommon(),supported=[...document.scripts].some(s=>s.src.endsWith('/assets/'+C.source));
@@ -76070,6 +76134,7 @@ label{display:block}.row{display:flex;gap:7px;align-items:end;margin:8px 0}.row>
 <div class="row"><label>Random seeds<input id="count" type="number" min="1" max="500" value="3"></label><label>Search effort<select id="effort"><option value="quick">Quick</option><option value="thorough">Thorough</option></select></label></div>
 <p class="hint">Each seed explores several routes; start with 1–3 seeds. Quick looks for a matching ending sooner. Thorough explores more alternatives. Neither can guarantee finding every possible route.</p></details>
 <button id="search" class="primary">Find matching lives</button><p id="searchNote" class="hint">Results are predictions with replayable choices. Nothing starts automatically.</p>
+<label>Result & planning order<select id="sort">${Object.entries(C.sorts).map(([key,name])=>`<option value="${key}">${name}</option>`).join('')}</select></label><p class="hint">Completed goal matches always come first. Recommended: alive ending, lifespan, lower of Health/Sanity, then total stats. This order also applies to new searches and plans. Rarity is the game's achievement tier; combat rating applies only to Fixers.</p>
 <div id="results"></div></div>
 <div id="viewPlay" role="tabpanel" hidden>
 <h3 id="liveTitle">Your current life</h3><div id="liveStats"></div>
@@ -76077,7 +76142,7 @@ label{display:block}.row{display:flex;gap:7px;align-items:end;margin:8px 0}.row>
 <div id="playPreview"></div><p id="playStatus" class="notice" role="status">Choose a searched life, import a route, or plan your current life.</p><div id="playNext" class="hint"></div>
 <button id="resume" class="primary" disabled>Resume saved life</button><div class="row"><button id="start" disabled>Start from birth & follow</button><button id="goHome">Save & go home</button></div><p class="hint">Resume keeps your saved progress. Start begins the selected seed again from birth.</p>
 <div class="row"><button id="follow" disabled>Follow route</button><button id="apply" disabled>Choose next step</button></div>
-<p class="hint">Names and reflections are yours to enter. Following pauses before typing prompts. Submit in the game, then Resume after typing. If your entry changes the predicted state, the remaining route is recalculated using this route's targets.</p>
+<p class="hint">Names and reflections are yours to enter. Submit in the game, then Resume after typing. Cosmetic entries keep the same choices when a native replay verifies the same gameplay outcome. Changes to randomness, such as custom child/partner names, require a new search using the original targets.</p>
 <div class="row"><label>Following speed<select id="speed"><option value="1">x1</option><option value="4">x4</option><option value="8">x8</option><option value="32" selected>x32</option></select></label><button id="stopAuto" disabled>Pause & stop following</button></div>
 <p class="hint">Following checks the live state before every choice. Manual game interaction stops following. No route edits your game save or grants traits.</p></div>
 <div id="viewSaved" role="tabpanel" hidden><p class="hint">Up to 8 recent saved lives. Selecting one validates it again before play. Export routes you want to keep longer.</p><div id="library"></div></div>
@@ -76099,7 +76164,8 @@ let chosen=new Set((saved.goals||[]).filter(g=>g.startsWith('record:')||g.starts
 let catalog=[],library=Array.isArray(stored.files)?stored.files:[],selected=null,active=null,results=[];
 let ready=false,worker=null,pending=new Map(),sequence=0,generation=0,job=null,auto=false,view='Find',previewFile=null;
 let position=saved.position&&Number.isFinite(saved.position.x)&&Number.isFinite(saved.position.y)?saved.position:null;
-for(const id of ['name','gender','seed','count','effort','speed','ending','min-age',...Object.keys(C.statNames).map(k=>'min-'+k)])if(saved[id]!=null)$(id).value=saved[id];
+for(const id of ['name','gender','seed','count','effort','speed','ending','min-age','sort',...Object.keys(C.statNames).map(k=>'min-'+k)])if(saved[id]!=null)$(id).value=saved[id];
+if(!Object.hasOwn(C.sorts,$('sort').value))$('sort').value='recommended';
 if(!newPreferences)$('count').value='3';
 if(!['quick','thorough'].includes($('effort').value))$('effort').value='quick';
 if(!['m','f'].includes($('gender').value))$('gender').value='m';
@@ -76107,7 +76173,7 @@ function draftGoals(){
   const goals=[...chosen];for(const key of Object.keys(C.statNames))if($('min-'+key).value!=='')goals.push(`stat:${key}:${Number($('min-'+key).value)}`);
   if($('min-age').value!=='')goals.push('age:'+Number($('min-age').value));if($('ending').value==='alive')goals.push('ending:alive');return goals;
 }
-function savePreferences(){write(prefsKey,{goals:[...chosen],...Object.fromEntries(['name','gender','seed','count','effort','speed','ending','min-age',...Object.keys(C.statNames).map(k=>'min-'+k)].map(id=>[id,$(id).value])),position,minimized:$('panel').hidden});renderDraftHint();}
+function savePreferences(){write(prefsKey,{goals:[...chosen],...Object.fromEntries(['name','gender','seed','count','effort','speed','ending','min-age','sort',...Object.keys(C.statNames).map(k=>'min-'+k)].map(id=>[id,$(id).value])),position,minimized:$('panel').hidden});renderDraftHint();}
 function renderDraftHint(){
   $('searchNote').textContent=auto?'Pause following in Play this life before starting a new search.':results.length&&JSON.stringify(draftGoals())!==JSON.stringify(results[0].goals)?'Targets changed. Existing cards still show their original requirements; search again to use the new targets.':'Results are predictions with replayable choices. Nothing starts automatically.';
 }
@@ -76176,6 +76242,12 @@ function card(file,buttons=true){
   badge.className='tag '+(full?'match':'partial');badge.textContent=file.scope==='birth'?'Birth only':full?(file.goals.length?'Match':'Completed'):'Partial';
   title.textContent=` Seed ${file.seed}`;meta.className='hint';meta.textContent=`${file.origin==='current'?'Continuation plan · ':''}${file.summary.region?file.summary.region+' · ':''}${file.summary.job||'No steady job'} · age ${file.summary.age} · ${file.summary.alive?'alive ending':file.summary.cause||'ending'}`;
   el.append(badge,title,meta,statsElement(file.summary.stats));
+  if(file.summary.comparison){
+    const c=file.summary.comparison,details=document.createElement('details'),heading=document.createElement('summary'),text=document.createElement('p');
+    heading.textContent='Comparison details';text.className='hint';
+    text.textContent=`Wellbeing floor (Health/Sanity): ${Math.min(file.summary.stats.health,file.summary.stats.sanity)} · Total stats: ${Object.values(file.summary.stats).reduce((a,b)=>a+b,0)} · Highest achievement tier: ${c.rarity||'None'}${c.fixerPower!=null?' · Native Fixer combat rating: '+c.fixerPower:''}${c.promotion?.required?' · Promotion merit: '+c.promotion.current+'/'+c.promotion.required:''}. These are comparison metrics, not a win probability.`;
+    details.append(heading,text);el.append(details);
+  }
   const used=document.createElement('p');used.className='hint';used.textContent='Targets used: '+(file.goals.slice(0,3).map(goalLabel).join(' · ')||'No required conditions')+(file.goals.length>3?` · ${file.goals.length-3} more`:'');el.append(used);
   const progress=document.createElement('p');progress.className='hint';progress.textContent=file.goals.length?`${matches}/${file.goals.length} conditions met${file.scope==='birth'?' at birth — final outcome not predicted':''}`:'No required conditions · ranked for overall stats and lifespan';el.append(progress);
   if(!full&&file.goals.length){const missing=document.createElement('p');missing.className='missing';missing.textContent='Missing: '+file.goals.filter((_,i)=>!file.matched[i]).map(goalLabel).join(', ');el.append(missing);}
@@ -76184,7 +76256,7 @@ function card(file,buttons=true){
   return el;
 }
 function renderResults(){
-  $('results').replaceChildren();renderDraftHint();if(!results.length)return;const h=document.createElement('h3');h.textContent='Compare completed outcomes';$('results').append(h);for(const file of results)$('results').append(card(file));
+  $('results').replaceChildren();renderDraftHint();if(!results.length)return;const h=document.createElement('h3');h.textContent='Compare completed outcomes';$('results').append(h);for(const file of [...results].sort((a,b)=>C.compareLives(a,b,$('sort').value)))$('results').append(card(file));
 }
 function showResults(){
   if(view!=='Find'||!results.length)return;
@@ -76192,7 +76264,7 @@ function showResults(){
 }
 function renderLibrary(){
   $('library').replaceChildren();if(!library.length){$('library').textContent='No saved lives yet. Save a search result or import a route.';return;}
-  for(const file of library){const el=card(file,false),row=document.createElement('div');row.className='row';const open=document.createElement('button'),remove=document.createElement('button');open.className='chooseRoute';open.disabled=!!job||auto;open.textContent='Validate & choose';open.onclick=()=>importRoute(file,null,true);remove.textContent='Remove';remove.onclick=()=>{library=library.filter(f=>fileKey(f)!==fileKey(file));saveLives();renderLibrary();};row.append(open,remove);el.append(row);$('library').append(el);}
+  for(const file of [...library].sort((a,b)=>C.compareLives(a,b,$('sort').value))){const el=card(file,false),row=document.createElement('div');row.className='row';const open=document.createElement('button'),remove=document.createElement('button');open.className='chooseRoute';open.disabled=!!job||auto;open.textContent='Validate & choose';open.onclick=()=>importRoute(file,null,true);remove.textContent='Remove';remove.onclick=()=>{library=library.filter(f=>fileKey(f)!==fileKey(file));saveLives();renderLibrary();};row.append(open,remove);el.append(row);$('library').append(el);}
 }
 function selectFile(file){
   stopFollowing(false);selected=file;active=null;keep(file);saveLives();switchView('Play');
@@ -76256,7 +76328,7 @@ function follow(){
   if(active.waitingForTyping){
     const sig=C.signature(s),waiting=active.waitingForTyping;
     if(sig===waiting.before){stopFollowing(true,'Your input is needed. Enter and submit your text in the game, then click Resume after typing.');return;}
-    if(sig!==waiting.after){planCurrent({goals:[...active.file.goals],followAfter:true});return;}
+    if(sig!==waiting.after){planCurrent({goals:[...active.file.goals],sort:active.file.sort||'recommended',followAfter:true});return;}
     active.index++;delete active.waitingForTyping;
   }
   if(b.runtime.auto)b.life.toggleAuto();b.life.setSpeed(Number($('speed').value));if(b.runtime.paused)b.life.togglePause();
@@ -76268,7 +76340,7 @@ async function search(){
   $('startSettings').open=false;$('goalPicker').open=false;
   say('Searching complete lives. You can stop and keep completed results.');results=[];renderResults();
   try{
-    const result=await request('search',{goals,options,seed:$('seed').value.trim(),count:Number($('count').value)||10,effort:$('effort').value},p=>{
+    const result=await request('search',{goals,options,seed:$('seed').value.trim(),count:Number($('count').value)||10,effort:$('effort').value,sort:$('sort').value},p=>{
       if(!current(task))return;if(p.results){results=p.results;renderResults();}
       say(`Checked ${p.tested}/${p.total} seeds${p.age!=null?` · exploring age ${p.age}`:''}${p.examined!=null?` · ${p.examined} branches evaluated`:''}.`);
     });
@@ -76277,7 +76349,7 @@ async function search(){
     say(!goals.length&&results.length?`${results.length} completed outcomes shown. No required conditions were set.`:matches?`${matches} matching outcome${matches===1?'':'s'} shown. Compare the final stats, then choose a life.`:results.length?'No full match in this search. Closest completed lives are shown with missing conditions. Try more seeds, Thorough effort, or fewer conditions.':'No completed life within the route-search limit. Try Quick effort or a different seed.');showResults();
   }catch(e){if(current(task))say('Search failed: '+e.message);}finally{finish(task);}
 }
-async function planCurrent({goals=draftGoals(),followAfter=false}={}){
+async function planCurrent({goals=draftGoals(),sort=$('sort').value,followAfter=false}={}){
   if(!followAfter&&!validInputs())return;const b=bridge(),s=b.runtime?.state;if(!b.life||!s||C.finished(s))return;
   let planned=false;
   const task=begin('plan'),snapshot=JSON.parse(JSON.stringify(s)),signature=C.signature(s),language=lang();
@@ -76285,13 +76357,16 @@ async function planCurrent({goals=draftGoals(),followAfter=false}={}){
   say(followAfter?'Updating the remaining route for your entry…':'Planning complete outcomes for your current life…');
   if(followAfter)$('playStatus').textContent='Updating the remaining route for your entry…';
   try{
-    const files=await request('plan',{state:snapshot,goals,effort:$('effort').value},p=>{if(current(task))say(`Planning your life · exploring age ${p.age} · ${p.expanded} branches evaluated.`);});
+    let retained=null;
+    if(followAfter&&active?.waitingForTyping)retained=await request('retainTyping',{file:active.file,index:active.index,state:snapshot});
+    if(!current(task))return;
+    const files=retained?[retained]:await request('plan',{state:snapshot,goals,effort:$('effort').value,sort},p=>{if(current(task))say(`Planning your life · exploring age ${p.age} · ${p.expanded} branches evaluated.`);});
     if(!current(task))return;if(bridge().runtime?.state!==s||C.signature(s)!==signature||lang()!==language)throw Error('The game changed during planning. Try again.');
     if(!files.length)throw Error('No completed route within this search limit. Try another effort.');
     selected=files[0];active={file:selected,index:0};keep(selected);saveLives();renderPlay();
     task.pause=null; // The explicitly paused review remains paused until Follow.
     planned=true;
-    say('Plan ready. The game is paused for review.');$('playStatus').textContent=`${selected.matched.filter(Boolean).length}/${selected.goals.length} conditions met in the predicted ending. Follow the route or choose one step at a time.`;
+    say(retained?'Your entry was preserved. The remaining choices and gameplay outcome are unchanged.':'Plan ready. The game is paused for review.');$('playStatus').textContent=`${selected.matched.filter(Boolean).length}/${selected.goals.length} conditions met in the predicted ending. Follow the route or choose one step at a time.`;
   }catch(e){if(current(task)){say('Planning stopped: '+e.message);if(followAfter)$('playStatus').textContent='Planning stopped: '+e.message;}}finally{finish(task);}
   if(planned&&followAfter)follow();
 }
@@ -76342,6 +76417,7 @@ $('goHome').onclick=()=>{const b=bridge();if(b.life){C.finished(b.runtime.state)
 $('copyStats').onclick=()=>{const s=bridge().runtime?.state;if(!s)return;for(const [key,value] of Object.entries(C.displayStats(s)))$('min-'+key).value=value;savePreferences();say('Stats copied as minimum ending targets. You can adjust each value.');};
 $('copyTraits').onclick=()=>{const s=bridge().runtime?.state;if(!s)return;for(const key of s.flags)if(catalog.some(c=>c.key==='flag:'+key)){chosen.delete('avoid:'+key);chosen.add('flag:'+key);}syncGoals();savePreferences();say('This life’s listed traits were added as ending requirements.');};
 $('filter').oninput=filterGoals;$('goalKind').onchange=filterGoals;$('onlySelected').onchange=filterGoals;$('clear').onclick=()=>{chosen.clear();syncGoals();savePreferences();};
+$('sort').onchange=()=>{savePreferences();renderResults();renderLibrary();};
 for(const id of ['name','gender','seed','count','effort','speed','ending','min-age',...Object.keys(C.statNames).map(k=>'min-'+k)])$(id).oninput=()=>{savePreferences();controls();if(id==='speed'&&auto)bridge().life?.setSpeed(Number($('speed').value));};
 $('import').onclick=()=>$('file').click();$('file').onchange=async()=>{const file=$('file').files[0];$('file').value='';if(file)try{await importRoute(JSON.parse(await file.text()));}catch(e){say('Could not read route: '+e.message);}};
 $('export').onclick=()=>{if(!selected)return;const url=URL.createObjectURL(new Blob([JSON.stringify(selected,null,2)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=`cityborn-${selected.seed}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};

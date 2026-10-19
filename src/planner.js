@@ -9,6 +9,11 @@ function makePlanner(E) {
     out.story=(s.story||[]).slice();out.reflections=(s.reflections||[]).slice();return out;
   }
   const efforts={quick:3,thorough:8};
+  function comparison(s){
+    const rare=E.recordDetails(s)[0];
+    return {rarity:rare?.tierLabel||null,rarityRank:rare?E.rarityOrder[rare.tier]:-1,fixerPower:E.fixerPower(s),promotion:E.promotion(s)};
+  }
+  function outcome(s,goals){return {complete:C.finished(s),scope:'life',goals,matched:targets(s,goals),summary:{age:s.age,alive:!!s.dead?.alive,stats:C.displayStats(s),comparison:comparison(s)}};}
   function choices(s){
     if(s.dead?.voice)return [-2];
     if(!s.prompt)return [];
@@ -60,8 +65,9 @@ function makePlanner(E) {
       throw Error('Unknown achievement, trait, or stat condition: '+g);
     }
   }
-  function plan(start,goals,effort='quick',progress=()=>{}){
+  function plan(start,goals,effort='quick',progress=()=>{},sort='recommended'){
     checkGoals(goals);if(!efforts[effort])throw Error('Unknown search effort');
+    if(!Object.hasOwn(C.sorts,sort))throw Error('Unknown result order');
     const root={state:copy(start),route:[],steps:0};
     let beam=[root],completed=[],expanded=0,incomplete=0;
     function settle(node){
@@ -69,8 +75,8 @@ function makePlanner(E) {
       if(C.finished(node.state)){
         const s=node.state;
         node.outcomeKey=JSON.stringify([s.age,s.dead.cause,!!s.dead.alive,C.displayStats(s),s.job,s.work,s.grade,[...s.flags].sort(),[...E.records(s)].sort()]);
-        node.value=score(s,goals);if(!completed.some(n=>n.outcomeKey===node.outcomeKey))completed.push(node);
-        completed.sort((a,b)=>b.value-a.value);completed=completed.slice(0,3);return false;
+        node.value=score(s,goals);node.order=outcome(s,goals);if(!completed.some(n=>n.outcomeKey===node.outcomeKey))completed.push(node);
+        completed.sort((a,b)=>C.compareLives(a.order,b.order,sort));completed=completed.slice(0,3);return false;
       }
       if(node.steps>=5000){incomplete++;return false;}
       return true;
@@ -97,12 +103,12 @@ function makePlanner(E) {
   function pack(result,goals,scope,lang,origin='seed',startState=null){
     const s=result.state;
     return {version:3,source:C.source,origin,seed:s.seed,options:result.options,goals:[...goals],scope,lang,
-      effort:result.effort||'quick',route:result.route,complete:scope==='birth'||C.finished(s),matched:targets(s,goals),
+      effort:result.effort||'quick',sort:result.sort||'recommended',route:result.route,complete:scope==='birth'||C.finished(s),matched:targets(s,goals),
       terminalSignature:scope==='life'&&C.finished(s)?C.signature(s):null,
       ...(origin==='current'?{startState:copy(startState)}:{}),
       summary:{age:s.age,cause:s.dead?(E.cause?E.cause(s.dead.cause):s.dead.cause):null,alive:!!s.dead?.alive,job:E.job?E.job(s):s.job,
         region:E.data().regions?.find(r=>r.id===s.regionId)?.name||s.regionId,
-        flags:[...s.flags],records:E.records(s),stats:C.displayStats(s)}};
+        flags:[...s.flags],records:E.records(s),stats:C.displayStats(s),comparison:comparison(s)}};
   }
   function simulate(options,goals,effort='quick',progress){
     const birth=E.create(E.data(),options),search=plan(birth,goals,effort,progress),best=search.completed[0];
@@ -129,9 +135,44 @@ function makePlanner(E) {
       }else advance(s);
     }
     if(cursor!==file.route.length||(file.scope==='life'&&!C.finished(s)))throw Error('Route is incomplete');
-    return pack({state:s,options,route,effort:efforts[file.effort]?file.effort:'quick'},file.goals,file.scope,file.lang,origin,file.startState);
+    return pack({state:s,options,route,effort:efforts[file.effort]?file.effort:'quick',sort:Object.hasOwn(C.sorts,file.sort)?file.sort:'recommended'},file.goals,file.scope,file.lang,origin,file.startState);
   }
-  return {copy,signature:C.signature,choices,apply,advance,targets,score,checkGoals,plan,simulate,pack,validate};
+  function gameplaySignature(state){
+    // Only for comparing rebuilt predictions, never for accepting live steps.
+    const s=copy(state);delete s.log;
+    for(const key of ['colorName','egoName','relicName','childName','partnerName'])delete s[key];
+    if(s.pinky)delete s.pinky.blade;
+    s.reflections=(s.reflections||[]).map(({text,...entry})=>entry);
+    if(s.dead)delete s.dead.text;
+    return C.signature(s);
+  }
+  function retainAfterTyping(file,index,state){
+    const checked=validate(file);
+    if(!Number.isInteger(index)||index<0||index>=checked.route.length)return null;
+    const expected=checked.origin==='current'?copy(checked.startState):E.create(E.data(),checked.options);
+    let transitions=0;
+    function settle(s){while(!C.finished(s)&&!C.actionable(s)){if(++transitions>10000)throw Error('Continuation exceeds replay limit');advance(s);}}
+    for(let n=0;n<index;n++){settle(expected);apply(expected,checked.route[n].i);}
+    settle(expected);if(!C.typing(expected))return null;
+    const prompt=expected.prompt,field=prompt.kind==='color'?'color':prompt.field;
+    if(prompt.kind!=='reflect'&&!['color','ego','relic','star'].includes(field))return null;
+    const text=prompt.kind==='reflect'?state.reflections?.at(-1)?.text:
+      field==='star'?state.pinky?.blade:state[{color:'colorName',ego:'egoName',relic:'relicName'}[field]];
+    if(typeof text!=='string')return null;
+    const entered=copy(expected);E.choose(entered,E.data(),-1,{text});
+    if(C.signature(entered)!==C.signature(state))return null; // Exactly this entry, no other game changes.
+    apply(expected,-1);const actual=copy(state),route=[];
+    for(const step of checked.route.slice(index+1)){
+      settle(expected);settle(actual);
+      if(C.finished(actual)||!choices(actual).includes(step.i)||gameplaySignature(actual)!==gameplaySignature(expected))return null;
+      const typing=C.typing(actual),next={signature:C.signature(actual),i:step.i};
+      apply(actual,step.i);apply(expected,step.i);if(typing)next.afterSignature=C.signature(actual);route.push(next);
+    }
+    settle(expected);settle(actual);
+    if(!C.finished(actual)||gameplaySignature(actual)!==gameplaySignature(expected)||JSON.stringify(E.records(actual))!==JSON.stringify(E.records(expected)))return null;
+    return pack({state:actual,options:{seed:state.seed,name:state.name,gender:state.gender},route,effort:checked.effort,sort:checked.sort},checked.goals,'life',checked.lang,'current',state);
+  }
+  return {copy,signature:C.signature,choices,apply,advance,targets,score,checkGoals,plan,simulate,pack,validate,gameplaySignature,retainAfterTyping};
 }
 
 function workerMain(){
@@ -142,11 +183,12 @@ function workerMain(){
       const send=result=>self.postMessage({id:m.id,result});
       if(m.type==='catalog')return send({records:E.catalog,flags:Object.entries(E.flags)});
       if(m.type==='validate')return send(P.validate(m.file));
+      if(m.type==='retainTyping')return send(P.retainAfterTyping(m.file,m.index,m.state));
       if(m.type==='check')return send({matched:P.targets(m.state,m.goals),signature:C.signature(m.state),complete:C.finished(m.state)});
       if(m.type==='plan'){
-        const result=P.plan(m.state,m.goals,m.effort,({age,expanded,completed})=>self.postMessage({id:m.id,progress:{age,expanded,completed}}));
+        const result=P.plan(m.state,m.goals,m.effort,({age,expanded,completed})=>self.postMessage({id:m.id,progress:{age,expanded,completed}}),m.sort);
         const options={seed:m.state.seed,name:m.state.name,gender:m.state.gender};
-        return send(result.completed.map(n=>P.pack({...n,options,effort:m.effort},m.goals,'life',m.lang,'current',m.state)));
+        return send(result.completed.map(n=>P.pack({...n,options,effort:m.effort,sort:m.sort},m.goals,'life',m.lang,'current',m.state)));
       }
       if(m.type==='search'){
         P.checkGoals(m.goals);
@@ -158,15 +200,15 @@ function workerMain(){
           let lastBest=null;
           function update(candidates){
             results=results.filter(r=>r.file.seed!==options.seed);results.push(...candidates);
-            results.sort((a,b)=>b.value-a.value);results=results.slice(0,5);
+            results.sort((a,b)=>C.compareLives(a.file,b.file,m.sort));results=results.slice(0,5);
           }
           const search=P.plan(E.create(E.data(),options),m.goals,m.effort,p=>{
             let changed=false;
-            if(p.best&&p.best!==lastBest){lastBest=p.best;update([{file:P.pack({...p.best,options,effort:m.effort},m.goals,'life',m.lang),value:p.best.value}]);changed=true;}
+            if(p.best&&p.best!==lastBest){lastBest=p.best;update([{file:P.pack({...p.best,options,effort:m.effort,sort:m.sort},m.goals,'life',m.lang),value:p.best.value}]);changed=true;}
             self.postMessage({id:m.id,progress:{age:p.age,expanded:p.expanded,completed:p.completed,tested:n,total:count,...(changed?{results:results.map(r=>r.file)}:{})}});
-          });
+          },m.sort);
           examined+=search.expanded;
-          const candidates=search.completed.map(node=>({file:P.pack({...node,options,effort:m.effort},m.goals,'life',m.lang),value:node.value}));
+          const candidates=search.completed.map(node=>({file:P.pack({...node,options,effort:m.effort,sort:m.sort},m.goals,'life',m.lang),value:node.value}));
           // Show different seeds in random search; keep alternative routes when
           // deliberately checking one seed.
           if(candidates.length)update(m.seed?candidates:candidates.slice(0,1));

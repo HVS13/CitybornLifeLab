@@ -10,8 +10,8 @@ const fs=require('node:fs'),assert=require('node:assert/strict');
       // dependency on the live site's uptime, updates, or network resources.
       await page.route('https://project-moon-life.cityborn.workers.dev/**',route=>{
         const path=new URL(route.request().url()).pathname;
-        if(path==='/')return route.fulfill({contentType:'text/html',body:'<!doctype html><html lang="en"><body><div id="root"></div><script type="module" src="/assets/index-BXsC1-XS.js"></script></body></html>'});
-        if(path==='/assets/index-BXsC1-XS.js')return route.fulfill({contentType:'application/javascript',body:fs.readFileSync('analysis/game.bundle.js','utf8')});
+        if(path==='/')return route.fulfill({contentType:'text/html',body:'<!doctype html><html lang="en"><body><div id="root"></div><script type="module" src="/assets/index-BujUmHjK.js"></script></body></html>'});
+        if(path==='/assets/index-BujUmHjK.js')return route.fulfill({contentType:'application/javascript',body:fs.readFileSync('analysis/game.bundle.js','utf8')});
         return route.fulfill({status:404,body:''});
       });
     }

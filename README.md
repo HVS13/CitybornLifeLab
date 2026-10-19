@@ -8,7 +8,7 @@ Find a life that fits your goals, see its predicted ending, and follow its choic
 
 1. Install [Tampermonkey](https://www.tampermonkey.net/) or a userscript manager supporting page-context scripts and workers.
 2. Open the userscript link above and confirm installation/update. If it opens as text, paste the entire file into a userscript and save. Remove any older separately installed local copy.
-3. Reload the game. The panel should say **Cityborn Life Lab 2.1.0**. The manager's script name remains **Cityborn Life Advisor** so existing installations can update normally.
+3. Reload the game. The panel should say **Cityborn Life Lab 2.2.0**. The manager's script name remains **Cityborn Life Advisor** so existing installations can update normally.
 
 No server, credentials, or npm installation is required to use the script. Calculations and saved routes stay in your browser. Its download/update URLs point to this repository.
 
@@ -31,7 +31,7 @@ No server, credentials, or npm installation is required to use the script. Calcu
 - **Plan the rest of this life** searches completed outcomes from your actual current state, using the targets in Find a life. The game pauses while planning and stays paused for review. Click **Follow route** or **Choose next step** when ready.
 - A continuation plan starts from an existing life. It cannot be used to start that seed from birth. Its saved starting snapshot is never assigned to the native game.
 - Set a following speed (default x32). **Pause & stop following** pauses the game. Manual game interaction stops following without overriding the action you took. Escape cancels a calculation or stops following.
-- **Names and reflections are yours to enter.** Following pauses at Color, E.G.O, relic, child, partner, sword, and reflection prompts. Submit your text in the game's dialog, then click **Resume after typing**. Blank submissions can retain the original verified route. If your entry changes the predicted state, the remaining route is recalculated from your actual state using the original route's goals. Its new prediction can differ from the old ending. Waiting for input survives saving and reloading.
+- **Names and reflections are yours to enter.** Following pauses at Color, E.G.O, relic, child, partner, sword, and reflection prompts. Submit your text in the game's dialog, then click **Resume after typing**. Cosmetic entries retain the remaining choices if a native replay confirms unchanged gameplay state and achievements; all full live fingerprints are rebuilt and still checked. Custom child/partner names skip the game's random-name draw, so they can change future events and require a new search using the original goals. Waiting for input survives saving and reloading.
 - **Save & go home** uses the game's own save/quit action. Auto-follow stays off after reload. The companion revalidates its saved route before you resume.
 - At the ending, the companion checks the actual conditions and compares the full state fingerprint with the prediction. It follows native post-death voice continuations rather than mistaking them for completed lives.
 
@@ -51,13 +51,17 @@ Drag the panel header or focus it and use arrow keys (Shift moves farther; Home 
 
 The route planner explores alternative choices through completed endings, retaining three paths in Quick or eight in Thorough. A route is capped at 600 choices and 5,000 native transitions. Quick stops exploring a seed once it finds a matching ending. Thorough can find routes that Quick discards, but neither exhaustively explores every possible life.
 
-Ranking favors the number of fulfilled conditions, progress toward missing numeric targets, then overall stats and lifespan. This is a search policy, not a calibrated win probability. Some conditions conflict; rare achievements or long quests may be missed. No result in a bounded search does not mean a goal is impossible. Following a verified route does not establish a general improvement in win rate.
+Completed results are ordered by full goal completion, then fulfilled-condition fraction and progress toward missing numeric targets. Recommended breaks ties by alive ending, lifespan, the lower of final Health/Sanity, then total final stats. Explicit sorts can prioritize lifespan, an individual stat, the game's highest achievement tier, or its native Fixer combat rating while keeping goal fit first. Sort preferences affect new searches/plans and reorder the retained candidates and saved lives; they do not exhaustively optimize all possible lives. Comparison details expose native achievement tier, Fixer-only combat rating, and career promotion merit where applicable. An active Distortion is not assigned a Fixer rating.
+
+The bounded search still prunes intermediate branches with a goal-progress heuristic; final ordering is a separate, transparent comparison, not a win probability or a universal lore power ranking. Some conditions conflict; rare achievements or long quests may be missed. No result in a bounded search does not mean a goal is impossible. Following a verified route does not establish a general improvement in win rate.
+
+Naming tests use three fixed seeds, fixed starting options, and seven controlled native typing prompts: 21 paired cases / 42 complete simulated lives. Color, E.G.O, relic, sword and reflection text preserved event paths, gameplay state and achievements in those cases. Custom child/partner names changed RNG, event paths and outcomes. These are controlled tests, not an exhaustive check of every storyline or a claim that the fixtures earned their titles naturally.
 
 Replay fingerprints include stats, flags, quests, history and RNG state; only the minor-choice countdown and saved UI progress are excluded. They detect accidental divergence and are not cryptographic authenticity guarantees. Changing settings, language, or choices can invalidate a route. The native game pauses progress in hidden tabs; the script does not bypass this. Source updates require an updated companion.
 
 The planner reads the game's saved language (or its native browser-language default), rather than the HTML language attribute. Version 2.0.2 fixes a replay failure when those differed: a continuation could match its starting state, then generate subsequent events in the wrong language and stop after one choice. If you have an affected older route, update, reload, and generate a new current-life plan once.
 
-The supported client is `index-BXsC1-XS.js`, inspected on 19 October 2026. Routes from a different client are rejected; search again after a client update. Its formatted snapshot and hash are retained in `analysis/`. Bundled game logic/text remain attributable to their original authors. This is an unofficial companion inspired by [DotaCaptainLab](https://github.com/HVS13/DotaCaptainLab).
+The supported client is `index-BujUmHjK.js`, inspected on 19 October 2026. Routes from a different client are rejected; search again after a client update. Its formatted snapshot and hash are retained in `analysis/`. Bundled game logic/text remain attributable to their original authors. This is an unofficial companion inspired by [DotaCaptainLab](https://github.com/HVS13/DotaCaptainLab).
 
 ## Build and verification
 

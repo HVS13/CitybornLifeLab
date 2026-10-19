@@ -1,5 +1,5 @@
 function advisorCommon() {
-  const source = 'index-BXsC1-XS.js';
+  const source = 'index-BujUmHjK.js';
   function normalized(s) {
     const state={...s,prompt:s.prompt?{...s.prompt}:null};
     delete state.savedProgress;
@@ -25,5 +25,25 @@ function advisorCommon() {
   const label=(s,i)=>i===-2?'Continue the post-death voice':i===-1?'Continue / leave blank / let pass':s.prompt.choices[i].label;
   const statNames={health:'Health',sanity:'Sanity',wealth:'Wealth',network:'Network',rep:'Reputation'};
   const displayStats=s=>Object.fromEntries(Object.keys(statNames).map(k=>[k,Math.round(s.stats[k])]));
-  return {source,signature,legacySignature,finished,actionable,typing,label,statNames,displayStats};
+  const sorts={recommended:'Recommended',age:'Lifespan',health:'Health',sanity:'Sanity',wealth:'Wealth',network:'Network',rep:'Reputation',rarity:'Achievement rarity',power:'Fixer combat rating'};
+  function compareLives(a,b,sort='recommended'){
+    function values(file){
+      const s=file.summary,stats=s.stats,goals=file.goals,met=file.matched.filter(Boolean).length,complete=file.complete&&file.scope==='life';
+      const progress=goals.length?goals.reduce((sum,g,i)=>{
+        if(file.matched[i])return sum+1;
+        const [kind,key,value]=g.split(':');
+        if(kind==='stat')return sum+Math.max(0,Math.min(1,stats[key]/Math.max(1,Number(value))));
+        const age=kind==='age'?Number(key):g==='record:age80'?80:g==='record:age100'?100:0;
+        return sum+(age?Math.min(1,s.age/age):0);
+      },0)/goals.length:1;
+      const base=[Number(complete&&met===goals.length),Number(complete),goals.length?met/goals.length:1,progress];
+      if(sort==='age')base.push(s.age);
+      else if(Object.hasOwn(statNames,sort))base.push(stats[sort]);
+      else if(sort==='rarity')base.push(s.comparison?.rarityRank??-1);
+      else if(sort==='power')base.push(s.comparison?.fixerPower??-1);
+      return [...base,Number(s.alive),s.age,Math.min(stats.health,stats.sanity),Object.values(stats).reduce((sum,v)=>sum+v,0)];
+    }
+    const av=values(a),bv=values(b);for(let i=0;i<av.length;i++)if(av[i]!==bv[i])return bv[i]-av[i];return 0;
+  }
+  return {source,signature,legacySignature,finished,actionable,typing,label,statNames,displayStats,sorts,compareLives};
 }

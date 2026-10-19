@@ -6,7 +6,7 @@ const start = source.indexOf('const jw =');
 const end = source.indexOf('function Gl(');
 if (start < 0 || end < start) throw Error('Inspected engine boundaries missing');
 const engine = source.slice(start, end);
-const engineExports = `return {create:Ju,data:yt,choose:Ti,continue:Kb,advance:cx,year:r0,records:s=>[...H2(ab(s).map(r=>r.key))],job:Te,cause:Ww,catalog:md,flags:xp,lang:js};`;
+const engineExports = `return {create:Ju,data:yt,choose:Ti,continue:Kb,advance:cx,year:r0,records:s=>[...H2(ab(s).map(r=>r.key))],recordDetails:s=>sb(ab(s),yt().rarity),rarityOrder:Lu,fixerPower:s=>s.job==='해결사'&&(!s.dr||s.dr.end==='return')?rr(s):null,promotion:s=>s.dr&&s.dr.end!=='return'?null:s.job==='해결사'&&s.grade>1?{current:s.merit||0,required:Go(s)}:Ba(s)?{current:Uu(s),required:Aa(s)}:null,job:Te,cause:Ww,catalog:md,flags:xp,lang:js};`;
 const factory = `function nativeEngine(){${engine}\n${engineExports}}`;
 // Browsing must not depend on worker startup or live-client compatibility.
 const inspected = vm.runInNewContext('('+factory+')()');
@@ -37,5 +37,5 @@ const metadata = `// ==UserScript==
 fs.mkdirSync('dist', {recursive:true});
 fs.writeFileSync('dist/cityborn-advisor.user.js', metadata + '\n(() => {\n"use strict";\n' + factory + '\n' + common + '\n' + planner + '\nconst ADVISOR_VERSION='+JSON.stringify(version)+';\nconst ADVISOR_CATALOG='+JSON.stringify(catalogue)+';\n' + ui + '\n})();\n');
 fs.writeFileSync('dist/cityborn-advisor.meta.js', metadata);
-fs.writeFileSync('analysis/source.json', JSON.stringify({url:'https://project-moon-life.cityborn.workers.dev/assets/index-BXsC1-XS.js', inspected:'2026-10-19', formattedSourceSha256:crypto.createHash('sha256').update(source).digest('hex')},null,2));
+fs.writeFileSync('analysis/source.json', JSON.stringify({url:'https://project-moon-life.cityborn.workers.dev/assets/index-BujUmHjK.js', inspected:'2026-10-19', formattedSourceSha256:crypto.createHash('sha256').update(source).digest('hex')},null,2));
 console.log('Built dist/cityborn-advisor.user.js');

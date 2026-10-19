@@ -30,6 +30,7 @@ label{display:block}.row{display:flex;gap:7px;align-items:end;margin:8px 0}.row>
 <div class="row"><label>Random seeds<input id="count" type="number" min="1" max="500" value="3"></label><label>Search effort<select id="effort"><option value="quick">Quick</option><option value="thorough">Thorough</option></select></label></div>
 <p class="hint">Each seed explores several routes; start with 1–3 seeds. Quick looks for a matching ending sooner. Thorough explores more alternatives. Neither can guarantee finding every possible route.</p></details>
 <button id="search" class="primary">Find matching lives</button><p id="searchNote" class="hint">Results are predictions with replayable choices. Nothing starts automatically.</p>
+<label>Result & planning order<select id="sort">${Object.entries(C.sorts).map(([key,name])=>`<option value="${key}">${name}</option>`).join('')}</select></label><p class="hint">Completed goal matches always come first. Recommended: alive ending, lifespan, lower of Health/Sanity, then total stats. This order also applies to new searches and plans. Rarity is the game's achievement tier; combat rating applies only to Fixers.</p>
 <div id="results"></div></div>
 <div id="viewPlay" role="tabpanel" hidden>
 <h3 id="liveTitle">Your current life</h3><div id="liveStats"></div>
@@ -37,7 +38,7 @@ label{display:block}.row{display:flex;gap:7px;align-items:end;margin:8px 0}.row>
 <div id="playPreview"></div><p id="playStatus" class="notice" role="status">Choose a searched life, import a route, or plan your current life.</p><div id="playNext" class="hint"></div>
 <button id="resume" class="primary" disabled>Resume saved life</button><div class="row"><button id="start" disabled>Start from birth & follow</button><button id="goHome">Save & go home</button></div><p class="hint">Resume keeps your saved progress. Start begins the selected seed again from birth.</p>
 <div class="row"><button id="follow" disabled>Follow route</button><button id="apply" disabled>Choose next step</button></div>
-<p class="hint">Names and reflections are yours to enter. Following pauses before typing prompts. Submit in the game, then Resume after typing. If your entry changes the predicted state, the remaining route is recalculated using this route's targets.</p>
+<p class="hint">Names and reflections are yours to enter. Submit in the game, then Resume after typing. Cosmetic entries keep the same choices when a native replay verifies the same gameplay outcome. Changes to randomness, such as custom child/partner names, require a new search using the original targets.</p>
 <div class="row"><label>Following speed<select id="speed"><option value="1">x1</option><option value="4">x4</option><option value="8">x8</option><option value="32" selected>x32</option></select></label><button id="stopAuto" disabled>Pause & stop following</button></div>
 <p class="hint">Following checks the live state before every choice. Manual game interaction stops following. No route edits your game save or grants traits.</p></div>
 <div id="viewSaved" role="tabpanel" hidden><p class="hint">Up to 8 recent saved lives. Selecting one validates it again before play. Export routes you want to keep longer.</p><div id="library"></div></div>
@@ -59,7 +60,8 @@ let chosen=new Set((saved.goals||[]).filter(g=>g.startsWith('record:')||g.starts
 let catalog=[],library=Array.isArray(stored.files)?stored.files:[],selected=null,active=null,results=[];
 let ready=false,worker=null,pending=new Map(),sequence=0,generation=0,job=null,auto=false,view='Find',previewFile=null;
 let position=saved.position&&Number.isFinite(saved.position.x)&&Number.isFinite(saved.position.y)?saved.position:null;
-for(const id of ['name','gender','seed','count','effort','speed','ending','min-age',...Object.keys(C.statNames).map(k=>'min-'+k)])if(saved[id]!=null)$(id).value=saved[id];
+for(const id of ['name','gender','seed','count','effort','speed','ending','min-age','sort',...Object.keys(C.statNames).map(k=>'min-'+k)])if(saved[id]!=null)$(id).value=saved[id];
+if(!Object.hasOwn(C.sorts,$('sort').value))$('sort').value='recommended';
 if(!newPreferences)$('count').value='3';
 if(!['quick','thorough'].includes($('effort').value))$('effort').value='quick';
 if(!['m','f'].includes($('gender').value))$('gender').value='m';
@@ -67,7 +69,7 @@ function draftGoals(){
   const goals=[...chosen];for(const key of Object.keys(C.statNames))if($('min-'+key).value!=='')goals.push(`stat:${key}:${Number($('min-'+key).value)}`);
   if($('min-age').value!=='')goals.push('age:'+Number($('min-age').value));if($('ending').value==='alive')goals.push('ending:alive');return goals;
 }
-function savePreferences(){write(prefsKey,{goals:[...chosen],...Object.fromEntries(['name','gender','seed','count','effort','speed','ending','min-age',...Object.keys(C.statNames).map(k=>'min-'+k)].map(id=>[id,$(id).value])),position,minimized:$('panel').hidden});renderDraftHint();}
+function savePreferences(){write(prefsKey,{goals:[...chosen],...Object.fromEntries(['name','gender','seed','count','effort','speed','ending','min-age','sort',...Object.keys(C.statNames).map(k=>'min-'+k)].map(id=>[id,$(id).value])),position,minimized:$('panel').hidden});renderDraftHint();}
 function renderDraftHint(){
   $('searchNote').textContent=auto?'Pause following in Play this life before starting a new search.':results.length&&JSON.stringify(draftGoals())!==JSON.stringify(results[0].goals)?'Targets changed. Existing cards still show their original requirements; search again to use the new targets.':'Results are predictions with replayable choices. Nothing starts automatically.';
 }
@@ -136,6 +138,12 @@ function card(file,buttons=true){
   badge.className='tag '+(full?'match':'partial');badge.textContent=file.scope==='birth'?'Birth only':full?(file.goals.length?'Match':'Completed'):'Partial';
   title.textContent=` Seed ${file.seed}`;meta.className='hint';meta.textContent=`${file.origin==='current'?'Continuation plan · ':''}${file.summary.region?file.summary.region+' · ':''}${file.summary.job||'No steady job'} · age ${file.summary.age} · ${file.summary.alive?'alive ending':file.summary.cause||'ending'}`;
   el.append(badge,title,meta,statsElement(file.summary.stats));
+  if(file.summary.comparison){
+    const c=file.summary.comparison,details=document.createElement('details'),heading=document.createElement('summary'),text=document.createElement('p');
+    heading.textContent='Comparison details';text.className='hint';
+    text.textContent=`Wellbeing floor (Health/Sanity): ${Math.min(file.summary.stats.health,file.summary.stats.sanity)} · Total stats: ${Object.values(file.summary.stats).reduce((a,b)=>a+b,0)} · Highest achievement tier: ${c.rarity||'None'}${c.fixerPower!=null?' · Native Fixer combat rating: '+c.fixerPower:''}${c.promotion?.required?' · Promotion merit: '+c.promotion.current+'/'+c.promotion.required:''}. These are comparison metrics, not a win probability.`;
+    details.append(heading,text);el.append(details);
+  }
   const used=document.createElement('p');used.className='hint';used.textContent='Targets used: '+(file.goals.slice(0,3).map(goalLabel).join(' · ')||'No required conditions')+(file.goals.length>3?` · ${file.goals.length-3} more`:'');el.append(used);
   const progress=document.createElement('p');progress.className='hint';progress.textContent=file.goals.length?`${matches}/${file.goals.length} conditions met${file.scope==='birth'?' at birth — final outcome not predicted':''}`:'No required conditions · ranked for overall stats and lifespan';el.append(progress);
   if(!full&&file.goals.length){const missing=document.createElement('p');missing.className='missing';missing.textContent='Missing: '+file.goals.filter((_,i)=>!file.matched[i]).map(goalLabel).join(', ');el.append(missing);}
@@ -144,7 +152,7 @@ function card(file,buttons=true){
   return el;
 }
 function renderResults(){
-  $('results').replaceChildren();renderDraftHint();if(!results.length)return;const h=document.createElement('h3');h.textContent='Compare completed outcomes';$('results').append(h);for(const file of results)$('results').append(card(file));
+  $('results').replaceChildren();renderDraftHint();if(!results.length)return;const h=document.createElement('h3');h.textContent='Compare completed outcomes';$('results').append(h);for(const file of [...results].sort((a,b)=>C.compareLives(a,b,$('sort').value)))$('results').append(card(file));
 }
 function showResults(){
   if(view!=='Find'||!results.length)return;
@@ -152,7 +160,7 @@ function showResults(){
 }
 function renderLibrary(){
   $('library').replaceChildren();if(!library.length){$('library').textContent='No saved lives yet. Save a search result or import a route.';return;}
-  for(const file of library){const el=card(file,false),row=document.createElement('div');row.className='row';const open=document.createElement('button'),remove=document.createElement('button');open.className='chooseRoute';open.disabled=!!job||auto;open.textContent='Validate & choose';open.onclick=()=>importRoute(file,null,true);remove.textContent='Remove';remove.onclick=()=>{library=library.filter(f=>fileKey(f)!==fileKey(file));saveLives();renderLibrary();};row.append(open,remove);el.append(row);$('library').append(el);}
+  for(const file of [...library].sort((a,b)=>C.compareLives(a,b,$('sort').value))){const el=card(file,false),row=document.createElement('div');row.className='row';const open=document.createElement('button'),remove=document.createElement('button');open.className='chooseRoute';open.disabled=!!job||auto;open.textContent='Validate & choose';open.onclick=()=>importRoute(file,null,true);remove.textContent='Remove';remove.onclick=()=>{library=library.filter(f=>fileKey(f)!==fileKey(file));saveLives();renderLibrary();};row.append(open,remove);el.append(row);$('library').append(el);}
 }
 function selectFile(file){
   stopFollowing(false);selected=file;active=null;keep(file);saveLives();switchView('Play');
@@ -216,7 +224,7 @@ function follow(){
   if(active.waitingForTyping){
     const sig=C.signature(s),waiting=active.waitingForTyping;
     if(sig===waiting.before){stopFollowing(true,'Your input is needed. Enter and submit your text in the game, then click Resume after typing.');return;}
-    if(sig!==waiting.after){planCurrent({goals:[...active.file.goals],followAfter:true});return;}
+    if(sig!==waiting.after){planCurrent({goals:[...active.file.goals],sort:active.file.sort||'recommended',followAfter:true});return;}
     active.index++;delete active.waitingForTyping;
   }
   if(b.runtime.auto)b.life.toggleAuto();b.life.setSpeed(Number($('speed').value));if(b.runtime.paused)b.life.togglePause();
@@ -228,7 +236,7 @@ async function search(){
   $('startSettings').open=false;$('goalPicker').open=false;
   say('Searching complete lives. You can stop and keep completed results.');results=[];renderResults();
   try{
-    const result=await request('search',{goals,options,seed:$('seed').value.trim(),count:Number($('count').value)||10,effort:$('effort').value},p=>{
+    const result=await request('search',{goals,options,seed:$('seed').value.trim(),count:Number($('count').value)||10,effort:$('effort').value,sort:$('sort').value},p=>{
       if(!current(task))return;if(p.results){results=p.results;renderResults();}
       say(`Checked ${p.tested}/${p.total} seeds${p.age!=null?` · exploring age ${p.age}`:''}${p.examined!=null?` · ${p.examined} branches evaluated`:''}.`);
     });
@@ -237,7 +245,7 @@ async function search(){
     say(!goals.length&&results.length?`${results.length} completed outcomes shown. No required conditions were set.`:matches?`${matches} matching outcome${matches===1?'':'s'} shown. Compare the final stats, then choose a life.`:results.length?'No full match in this search. Closest completed lives are shown with missing conditions. Try more seeds, Thorough effort, or fewer conditions.':'No completed life within the route-search limit. Try Quick effort or a different seed.');showResults();
   }catch(e){if(current(task))say('Search failed: '+e.message);}finally{finish(task);}
 }
-async function planCurrent({goals=draftGoals(),followAfter=false}={}){
+async function planCurrent({goals=draftGoals(),sort=$('sort').value,followAfter=false}={}){
   if(!followAfter&&!validInputs())return;const b=bridge(),s=b.runtime?.state;if(!b.life||!s||C.finished(s))return;
   let planned=false;
   const task=begin('plan'),snapshot=JSON.parse(JSON.stringify(s)),signature=C.signature(s),language=lang();
@@ -245,13 +253,16 @@ async function planCurrent({goals=draftGoals(),followAfter=false}={}){
   say(followAfter?'Updating the remaining route for your entry…':'Planning complete outcomes for your current life…');
   if(followAfter)$('playStatus').textContent='Updating the remaining route for your entry…';
   try{
-    const files=await request('plan',{state:snapshot,goals,effort:$('effort').value},p=>{if(current(task))say(`Planning your life · exploring age ${p.age} · ${p.expanded} branches evaluated.`);});
+    let retained=null;
+    if(followAfter&&active?.waitingForTyping)retained=await request('retainTyping',{file:active.file,index:active.index,state:snapshot});
+    if(!current(task))return;
+    const files=retained?[retained]:await request('plan',{state:snapshot,goals,effort:$('effort').value,sort},p=>{if(current(task))say(`Planning your life · exploring age ${p.age} · ${p.expanded} branches evaluated.`);});
     if(!current(task))return;if(bridge().runtime?.state!==s||C.signature(s)!==signature||lang()!==language)throw Error('The game changed during planning. Try again.');
     if(!files.length)throw Error('No completed route within this search limit. Try another effort.');
     selected=files[0];active={file:selected,index:0};keep(selected);saveLives();renderPlay();
     task.pause=null; // The explicitly paused review remains paused until Follow.
     planned=true;
-    say('Plan ready. The game is paused for review.');$('playStatus').textContent=`${selected.matched.filter(Boolean).length}/${selected.goals.length} conditions met in the predicted ending. Follow the route or choose one step at a time.`;
+    say(retained?'Your entry was preserved. The remaining choices and gameplay outcome are unchanged.':'Plan ready. The game is paused for review.');$('playStatus').textContent=`${selected.matched.filter(Boolean).length}/${selected.goals.length} conditions met in the predicted ending. Follow the route or choose one step at a time.`;
   }catch(e){if(current(task)){say('Planning stopped: '+e.message);if(followAfter)$('playStatus').textContent='Planning stopped: '+e.message;}}finally{finish(task);}
   if(planned&&followAfter)follow();
 }
@@ -302,6 +313,7 @@ $('goHome').onclick=()=>{const b=bridge();if(b.life){C.finished(b.runtime.state)
 $('copyStats').onclick=()=>{const s=bridge().runtime?.state;if(!s)return;for(const [key,value] of Object.entries(C.displayStats(s)))$('min-'+key).value=value;savePreferences();say('Stats copied as minimum ending targets. You can adjust each value.');};
 $('copyTraits').onclick=()=>{const s=bridge().runtime?.state;if(!s)return;for(const key of s.flags)if(catalog.some(c=>c.key==='flag:'+key)){chosen.delete('avoid:'+key);chosen.add('flag:'+key);}syncGoals();savePreferences();say('This life’s listed traits were added as ending requirements.');};
 $('filter').oninput=filterGoals;$('goalKind').onchange=filterGoals;$('onlySelected').onchange=filterGoals;$('clear').onclick=()=>{chosen.clear();syncGoals();savePreferences();};
+$('sort').onchange=()=>{savePreferences();renderResults();renderLibrary();};
 for(const id of ['name','gender','seed','count','effort','speed','ending','min-age',...Object.keys(C.statNames).map(k=>'min-'+k)])$(id).oninput=()=>{savePreferences();controls();if(id==='speed'&&auto)bridge().life?.setSpeed(Number($('speed').value));};
 $('import').onclick=()=>$('file').click();$('file').onchange=async()=>{const file=$('file').files[0];$('file').value='';if(file)try{await importRoute(JSON.parse(await file.text()));}catch(e){say('Could not read route: '+e.message);}};
 $('export').onclick=()=>{if(!selected)return;const url=URL.createObjectURL(new Blob([JSON.stringify(selected,null,2)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=`cityborn-${selected.seed}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};

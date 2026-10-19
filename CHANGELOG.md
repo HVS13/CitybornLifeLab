@@ -1,5 +1,12 @@
 # Changes
 
+## 2.0.1
+
+- Fix the empty catalogue when the game updates or a simulation worker cannot start. Bundle the inspected catalogue separately so browsing and target selection remain available.
+- List all 50 displayed traits before the 169 achievements, show available totals separately from selected targets, and add All / Traits / Achievements browsing filters. Keep native achievement hints searchable.
+- Update the extracted native engine and game compatibility check for client `index-DNffUPHt.js`. Routes from a different client must be searched again.
+- Add rendered-list regressions for an updated client, blocked and pending workers, catalogue counts, type filters, and hints.
+
 ## 2.0.0
 
 - Rebuild the companion around Find a life, Play this life, and Saved lives.

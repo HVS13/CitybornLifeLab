@@ -10,8 +10,8 @@ const fs=require('node:fs'),assert=require('node:assert/strict');
       // dependency on the live site's uptime, updates, or network resources.
       await page.route('https://project-moon-life.cityborn.workers.dev/**',route=>{
         const path=new URL(route.request().url()).pathname;
-        if(path==='/')return route.fulfill({contentType:'text/html',body:'<!doctype html><html lang="en"><body><div id="root"></div><script type="module" src="/assets/index-C_XxXzM6.js"></script></body></html>'});
-        if(path==='/assets/index-C_XxXzM6.js')return route.fulfill({contentType:'application/javascript',body:fs.readFileSync('analysis/game.bundle.js','utf8')});
+        if(path==='/')return route.fulfill({contentType:'text/html',body:'<!doctype html><html lang="en"><body><div id="root"></div><script type="module" src="/assets/index-DNffUPHt.js"></script></body></html>'});
+        if(path==='/assets/index-DNffUPHt.js')return route.fulfill({contentType:'application/javascript',body:fs.readFileSync('analysis/game.bundle.js','utf8')});
         return route.fulfill({status:404,body:''});
       });
     }
@@ -22,13 +22,25 @@ const fs=require('node:fs'),assert=require('node:assert/strict');
     await ui.locator('#goalPicker > summary').click();
     const labels=ui.locator('#goals > .goal'),visible=ui.locator('#goals > .goal:visible');
     const total=await labels.count();assert.ok(total>10);
+    assert.match(await ui.locator('#catalogSize').textContent(),/50 traits and 169 achievements/);
+    assert.equal(await visible.count(),219,'opening the picker lists everything without a query');
+    assert.equal(await visible.first().getAttribute('data-kind'),'trait','traits are discoverable first');
+    await ui.locator('#goalPicker').screenshot({path:'analysis/filter-browser.png'});
+    await ui.locator('#goalKind').selectOption('trait');
+    assert.equal(await visible.count(),50,'browse every displayed native trait');
+    await ui.locator('#filter').fill('Color');
+    assert.equal(await visible.count(),1,'type and query filters intersect');
+    await ui.locator('#filter').fill('');
+    await ui.locator('#goalKind').selectOption('achievement');
+    assert.equal(await visible.count(),169,'browse every native achievement');
+    assert.ok(await visible.first().locator('small').textContent(),'achievement includes its native hint');
+    await ui.locator('#goalKind').selectOption('all');
     await ui.locator('#filter').pressSequentially('born_head');
     const diagnostics=await labels.evaluateAll(nodes=>({total:nodes.length,hidden:nodes.filter(n=>n.hidden).length,rendered:nodes.filter(n=>getComputedStyle(n).display!=='none').length}));
     console.log('Exact ID filter:',JSON.stringify(diagnostics));
     assert.equal(await visible.count(),1,'born_head must render only its matching goal');
     assert.match(await visible.first().textContent(),/\[born_head\]/);
     assert.match(await ui.locator('#goalCount').textContent(),/^1 of /);
-    await ui.locator('#panel').screenshot({path:'analysis/filter-browser.png'});
     await ui.locator('#filter').fill('  BORN_HEAD  ');
     assert.equal(await visible.count(),1,'search trims whitespace and ignores case');
     await ui.locator('#filter').fill('no-such-goal-6cf15a');
@@ -57,6 +69,30 @@ const fs=require('node:fs'),assert=require('node:assert/strict');
     await ui.locator('#badge').click();
     assert.equal(await ui.locator('#panel').isVisible(),true);
     assert.deepEqual(errors,[]);
+    // Previously an unknown client skipped catalogue initialization entirely.
+    // Also cover blocked workers and startup that has not answered yet.
+    const support=require('./browser-support.cjs');
+    for(const mode of ['updated-client','blocked-worker','loading-worker']){
+      const test=await support.open(browser),{page:p,ui:u}=test;
+      await p.evaluate(mode=>{
+        if(mode==='updated-client')document.querySelector('script[src*="/assets/index-"]').src='/assets/unknown-future-client.js';
+        else if(mode==='blocked-worker')window.Worker=class{constructor(){throw Error('Workers blocked for regression');}};
+        else window.Worker=class{postMessage(){} terminate(){}};
+      },mode);
+      await p.addScriptTag({content:support.source});
+      await u.locator('#goalPicker > summary').click();
+      assert.equal(await u.locator('#goals > .goal:visible').count(),219,mode+' must retain the visible catalogue');
+      assert.ok(await u.locator('#search').isDisabled(),mode+' must not enable unavailable simulation');
+      if(mode==='updated-client')assert.match(await u.locator('#status').textContent(),/game has updated/);
+      if(mode==='blocked-worker')assert.match(await u.locator('#status').textContent(),/Workers blocked/);
+      await u.locator('#goalKind').selectOption('trait');
+      assert.equal(await u.locator('#goals > .goal:visible').count(),50);
+      await u.locator('#filter').fill('Color');
+      await u.locator('input[value="flag:특색"]').check();
+      assert.equal(await u.locator('#selected').textContent(),'1');
+      await test.ctx.close();
+    }
+    console.log('Catalogue regressions passed: all traits/achievements, type filters, hints, unknown client, worker blocked, worker still loading.');
     console.log(`Filter browser regressions passed (${process.env.FILTER_LIVE==='1'?'live site':'captured client'}): ID, case/whitespace, no match, clear, selected-only, combined filters, requirements, minimize.`);
   }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exit(1);});

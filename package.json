@@ -1,6 +1,6 @@
 {
   "name": "cityborn-life-lab",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "private": true,
   "description": "Native-engine userscript advisor and goal-filtered seed finder for Cityborn Life",
   "scripts": {

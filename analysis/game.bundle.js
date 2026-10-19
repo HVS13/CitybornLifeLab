@@ -28,14 +28,14 @@
     fetch(n.href, r);
   }
 })();
-function Mg(e) {
+function Hg(e) {
   return e && e.__esModule && Object.prototype.hasOwnProperty.call(e, "default")
     ? e.default
     : e;
 }
-var hc = { exports: {} },
-  _i = {},
-  dc = { exports: {} },
+var dc = { exports: {} },
+  ji = {},
+  uc = { exports: {} },
   V = {};
 /**
  * @license React
@@ -46,24 +46,24 @@ var hc = { exports: {} },
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */ var Zn = Symbol.for("react.element"),
-  $g = Symbol.for("react.portal"),
-  Hg = Symbol.for("react.fragment"),
-  Dg = Symbol.for("react.strict_mode"),
-  qg = Symbol.for("react.profiler"),
-  Gg = Symbol.for("react.provider"),
-  Kg = Symbol.for("react.context"),
-  zg = Symbol.for("react.forward_ref"),
-  Ug = Symbol.for("react.suspense"),
-  Jg = Symbol.for("react.memo"),
-  Vg = Symbol.for("react.lazy"),
-  bd = Symbol.iterator;
-function Xg(e) {
+  Dg = Symbol.for("react.portal"),
+  qg = Symbol.for("react.fragment"),
+  Gg = Symbol.for("react.strict_mode"),
+  Kg = Symbol.for("react.profiler"),
+  zg = Symbol.for("react.provider"),
+  Ug = Symbol.for("react.context"),
+  Jg = Symbol.for("react.forward_ref"),
+  Vg = Symbol.for("react.suspense"),
+  Xg = Symbol.for("react.memo"),
+  Qg = Symbol.for("react.lazy"),
+  kd = Symbol.iterator;
+function Zg(e) {
   return e === null || typeof e != "object"
     ? null
-    : ((e = (bd && e[bd]) || e["@@iterator"]),
+    : ((e = (kd && e[kd]) || e["@@iterator"]),
       typeof e == "function" ? e : null);
 }
-var uc = {
+var cc = {
     isMounted: function () {
       return !1;
     },
@@ -71,13 +71,13 @@ var uc = {
     enqueueReplaceState: function () {},
     enqueueSetState: function () {},
   },
-  cc = Object.assign,
-  fc = {};
+  fc = Object.assign,
+  wc = {};
 function La(e, t, o) {
   ((this.props = e),
     (this.context = t),
-    (this.refs = fc),
-    (this.updater = o || uc));
+    (this.refs = wc),
+    (this.updater = o || cc));
 }
 La.prototype.isReactComponent = {};
 La.prototype.setState = function (e, t) {
@@ -90,23 +90,23 @@ La.prototype.setState = function (e, t) {
 La.prototype.forceUpdate = function (e) {
   this.updater.enqueueForceUpdate(this, e, "forceUpdate");
 };
-function wc() {}
-wc.prototype = La.prototype;
-function Ul(e, t, o) {
+function gc() {}
+gc.prototype = La.prototype;
+function Jl(e, t, o) {
   ((this.props = e),
     (this.context = t),
-    (this.refs = fc),
-    (this.updater = o || uc));
+    (this.refs = wc),
+    (this.updater = o || cc));
 }
-var Jl = (Ul.prototype = new wc());
-Jl.constructor = Ul;
-cc(Jl, La.prototype);
-Jl.isPureReactComponent = !0;
-var kd = Array.isArray,
-  gc = Object.prototype.hasOwnProperty,
-  Vl = { current: null },
-  mc = { key: !0, ref: !0, __self: !0, __source: !0 };
-function yc(e, t, o) {
+var Vl = (Jl.prototype = new gc());
+Vl.constructor = Jl;
+fc(Vl, La.prototype);
+Vl.isPureReactComponent = !0;
+var xd = Array.isArray,
+  mc = Object.prototype.hasOwnProperty,
+  Xl = { current: null },
+  yc = { key: !0, ref: !0, __self: !0, __source: !0 };
+function pc(e, t, o) {
   var a,
     n = {},
     r = null,
@@ -115,7 +115,7 @@ function yc(e, t, o) {
     for (a in (t.ref !== void 0 && (i = t.ref),
     t.key !== void 0 && (r = "" + t.key),
     t))
-      gc.call(t, a) && !mc.hasOwnProperty(a) && (n[a] = t[a]);
+      mc.call(t, a) && !yc.hasOwnProperty(a) && (n[a] = t[a]);
   var l = arguments.length - 2;
   if (l === 1) n.children = o;
   else if (1 < l) {
@@ -130,10 +130,10 @@ function yc(e, t, o) {
     key: r,
     ref: i,
     props: n,
-    _owner: Vl.current,
+    _owner: Xl.current,
   };
 }
-function Qg(e, t) {
+function em(e, t) {
   return {
     $$typeof: Zn,
     type: e.type,
@@ -143,10 +143,10 @@ function Qg(e, t) {
     _owner: e._owner,
   };
 }
-function Xl(e) {
+function Ql(e) {
   return typeof e == "object" && e !== null && e.$$typeof === Zn;
 }
-function Zg(e) {
+function tm(e) {
   var t = { "=": "=0", ":": "=2" };
   return (
     "$" +
@@ -155,13 +155,13 @@ function Zg(e) {
     })
   );
 }
-var xd = /\/+/g;
-function Qi(e, t) {
+var vd = /\/+/g;
+function Zi(e, t) {
   return typeof e == "object" && e !== null && e.key != null
-    ? Zg("" + e.key)
+    ? tm("" + e.key)
     : t.toString(36);
 }
-function Ir(e, t, o, a, n) {
+function Nr(e, t, o, a, n) {
   var r = typeof e;
   (r === "undefined" || r === "boolean") && (e = null);
   var i = !1;
@@ -175,7 +175,7 @@ function Ir(e, t, o, a, n) {
       case "object":
         switch (e.$$typeof) {
           case Zn:
-          case $g:
+          case Dg:
             i = !0;
         }
     }
@@ -183,35 +183,35 @@ function Ir(e, t, o, a, n) {
     return (
       (i = e),
       (n = n(i)),
-      (e = a === "" ? "." + Qi(i, 0) : a),
-      kd(n)
+      (e = a === "" ? "." + Zi(i, 0) : a),
+      xd(n)
         ? ((o = ""),
-          e != null && (o = e.replace(xd, "$&/") + "/"),
-          Ir(n, t, o, "", function (u) {
+          e != null && (o = e.replace(vd, "$&/") + "/"),
+          Nr(n, t, o, "", function (u) {
             return u;
           }))
         : n != null &&
-          (Xl(n) &&
-            (n = Qg(
+          (Ql(n) &&
+            (n = em(
               n,
               o +
                 (!n.key || (i && i.key === n.key)
                   ? ""
-                  : ("" + n.key).replace(xd, "$&/") + "/") +
+                  : ("" + n.key).replace(vd, "$&/") + "/") +
                 e,
             )),
           t.push(n)),
       1
     );
-  if (((i = 0), (a = a === "" ? "." : a + ":"), kd(e)))
+  if (((i = 0), (a = a === "" ? "." : a + ":"), xd(e)))
     for (var l = 0; l < e.length; l++) {
       r = e[l];
-      var s = a + Qi(r, l);
-      i += Ir(r, t, o, s, n);
+      var s = a + Zi(r, l);
+      i += Nr(r, t, o, s, n);
     }
-  else if (((s = Xg(e)), typeof s == "function"))
+  else if (((s = Zg(e)), typeof s == "function"))
     for (e = s.call(e), l = 0; !(r = e.next()).done;)
-      ((r = r.value), (s = a + Qi(r, l++)), (i += Ir(r, t, o, s, n)));
+      ((r = r.value), (s = a + Zi(r, l++)), (i += Nr(r, t, o, s, n)));
   else if (r === "object")
     throw (
       (t = String(e)),
@@ -230,13 +230,13 @@ function lr(e, t, o) {
   var a = [],
     n = 0;
   return (
-    Ir(e, a, "", "", function (r) {
+    Nr(e, a, "", "", function (r) {
       return t.call(o, r, n++);
     }),
     a
   );
 }
-function em(e) {
+function om(e) {
   if (e._status === -1) {
     var t = e._result;
     ((t = t()),
@@ -256,13 +256,13 @@ function em(e) {
   throw e._result;
 }
 var Ge = { current: null },
-  Nr = { transition: null },
-  tm = {
+  Or = { transition: null },
+  am = {
     ReactCurrentDispatcher: Ge,
-    ReactCurrentBatchConfig: Nr,
-    ReactCurrentOwner: Vl,
+    ReactCurrentBatchConfig: Or,
+    ReactCurrentOwner: Xl,
   };
-function pc() {
+function bc() {
   throw Error("act(...) is not supported in production builds of React.");
 }
 V.Children = {
@@ -293,7 +293,7 @@ V.Children = {
     );
   },
   only: function (e) {
-    if (!Xl(e))
+    if (!Ql(e))
       throw Error(
         "React.Children.only expected to receive a single React element child.",
       );
@@ -301,13 +301,13 @@ V.Children = {
   },
 };
 V.Component = La;
-V.Fragment = Hg;
-V.Profiler = qg;
-V.PureComponent = Ul;
-V.StrictMode = Dg;
-V.Suspense = Ug;
-V.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = tm;
-V.act = pc;
+V.Fragment = qg;
+V.Profiler = Kg;
+V.PureComponent = Jl;
+V.StrictMode = Gg;
+V.Suspense = Vg;
+V.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = am;
+V.act = bc;
 V.cloneElement = function (e, t, o) {
   if (e == null)
     throw Error(
@@ -315,20 +315,20 @@ V.cloneElement = function (e, t, o) {
         e +
         ".",
     );
-  var a = cc({}, e.props),
+  var a = fc({}, e.props),
     n = e.key,
     r = e.ref,
     i = e._owner;
   if (t != null) {
     if (
-      (t.ref !== void 0 && ((r = t.ref), (i = Vl.current)),
+      (t.ref !== void 0 && ((r = t.ref), (i = Xl.current)),
       t.key !== void 0 && (n = "" + t.key),
       e.type && e.type.defaultProps)
     )
       var l = e.type.defaultProps;
     for (s in t)
-      gc.call(t, s) &&
-        !mc.hasOwnProperty(s) &&
+      mc.call(t, s) &&
+        !yc.hasOwnProperty(s) &&
         (a[s] = t[s] === void 0 && l !== void 0 ? l[s] : t[s]);
   }
   var s = arguments.length - 2;
@@ -343,7 +343,7 @@ V.cloneElement = function (e, t, o) {
 V.createContext = function (e) {
   return (
     (e = {
-      $$typeof: Kg,
+      $$typeof: Ug,
       _currentValue: e,
       _currentValue2: e,
       _threadCount: 0,
@@ -352,38 +352,38 @@ V.createContext = function (e) {
       _defaultValue: null,
       _globalName: null,
     }),
-    (e.Provider = { $$typeof: Gg, _context: e }),
+    (e.Provider = { $$typeof: zg, _context: e }),
     (e.Consumer = e)
   );
 };
-V.createElement = yc;
+V.createElement = pc;
 V.createFactory = function (e) {
-  var t = yc.bind(null, e);
+  var t = pc.bind(null, e);
   return ((t.type = e), t);
 };
 V.createRef = function () {
   return { current: null };
 };
 V.forwardRef = function (e) {
-  return { $$typeof: zg, render: e };
+  return { $$typeof: Jg, render: e };
 };
-V.isValidElement = Xl;
+V.isValidElement = Ql;
 V.lazy = function (e) {
-  return { $$typeof: Vg, _payload: { _status: -1, _result: e }, _init: em };
+  return { $$typeof: Qg, _payload: { _status: -1, _result: e }, _init: om };
 };
 V.memo = function (e, t) {
-  return { $$typeof: Jg, type: e, compare: t === void 0 ? null : t };
+  return { $$typeof: Xg, type: e, compare: t === void 0 ? null : t };
 };
 V.startTransition = function (e) {
-  var t = Nr.transition;
-  Nr.transition = {};
+  var t = Or.transition;
+  Or.transition = {};
   try {
     e();
   } finally {
-    Nr.transition = t;
+    Or.transition = t;
   }
 };
-V.unstable_act = pc;
+V.unstable_act = bc;
 V.useCallback = function (e, t) {
   return Ge.current.useCallback(e, t);
 };
@@ -428,9 +428,9 @@ V.useTransition = function () {
   return Ge.current.useTransition();
 };
 V.version = "18.3.1";
-dc.exports = V;
-var N = dc.exports;
-const om = Mg(N);
+uc.exports = V;
+var N = uc.exports;
+const nm = Hg(N);
 /**
  * @license React
  * react-jsx-runtime.production.min.js
@@ -439,13 +439,13 @@ const om = Mg(N);
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
- */ var am = N,
-  nm = Symbol.for("react.element"),
-  rm = Symbol.for("react.fragment"),
-  im = Object.prototype.hasOwnProperty,
-  sm = am.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentOwner,
-  lm = { key: !0, ref: !0, __self: !0, __source: !0 };
-function bc(e, t, o) {
+ */ var rm = N,
+  im = Symbol.for("react.element"),
+  sm = Symbol.for("react.fragment"),
+  lm = Object.prototype.hasOwnProperty,
+  hm = rm.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentOwner,
+  dm = { key: !0, ref: !0, __self: !0, __source: !0 };
+function kc(e, t, o) {
   var a,
     n = {},
     r = null,
@@ -453,26 +453,26 @@ function bc(e, t, o) {
   (o !== void 0 && (r = "" + o),
     t.key !== void 0 && (r = "" + t.key),
     t.ref !== void 0 && (i = t.ref));
-  for (a in t) im.call(t, a) && !lm.hasOwnProperty(a) && (n[a] = t[a]);
+  for (a in t) lm.call(t, a) && !dm.hasOwnProperty(a) && (n[a] = t[a]);
   if (e && e.defaultProps)
     for (a in ((t = e.defaultProps), t)) n[a] === void 0 && (n[a] = t[a]);
   return {
-    $$typeof: nm,
+    $$typeof: im,
     type: e,
     key: r,
     ref: i,
     props: n,
-    _owner: sm.current,
+    _owner: hm.current,
   };
 }
-_i.Fragment = rm;
-_i.jsx = bc;
-_i.jsxs = bc;
-hc.exports = _i;
-var d = hc.exports,
-  kc = { exports: {} },
-  ct = {},
+ji.Fragment = sm;
+ji.jsx = kc;
+ji.jsxs = kc;
+dc.exports = ji;
+var d = dc.exports,
   xc = { exports: {} },
+  ct = {},
+  vc = { exports: {} },
   Tc = {};
 /**
  * @license React
@@ -504,13 +504,13 @@ var d = hc.exports,
       j[0] = B;
       e: for (var $ = 0, U = j.length, ke = U >>> 1; $ < ke;) {
         var wt = 2 * ($ + 1) - 1,
-          io = j[wt],
+          so = j[wt],
           Wt = wt + 1,
           No = j[Wt];
-        if (0 > n(io, B))
-          Wt < U && 0 > n(No, io)
+        if (0 > n(so, B))
+          Wt < U && 0 > n(No, so)
             ? ((j[$] = No), (j[Wt] = B), ($ = Wt))
-            : ((j[$] = io), (j[wt] = B), ($ = wt));
+            : ((j[$] = so), (j[wt] = B), ($ = wt));
         else if (Wt < U && 0 > n(No, B)) ((j[$] = No), (j[Wt] = B), ($ = Wt));
         else break e;
       }
@@ -538,9 +538,9 @@ var d = hc.exports,
     f = 1,
     y = null,
     g = 3,
-    k = !1,
     x = !1,
-    T = !1,
+    k = !1,
+    v = !1,
     Y = typeof setTimeout == "function" ? setTimeout : null,
     c = typeof clearTimeout == "function" ? clearTimeout : null,
     m = typeof setImmediate < "u" ? setImmediate : null;
@@ -557,16 +557,16 @@ var d = hc.exports,
       O = o(u);
     }
   }
-  function v(j) {
-    if (((T = !1), w(j), !x))
-      if (o(s) !== null) ((x = !0), ee(_));
+  function T(j) {
+    if (((v = !1), w(j), !k))
+      if (o(s) !== null) ((k = !0), ee(_));
       else {
         var O = o(u);
-        O !== null && K(v, O.startTime - j);
+        O !== null && K(T, O.startTime - j);
       }
   }
   function _(j, O) {
-    ((x = !1), T && ((T = !1), c(W), (W = -1)), (k = !0));
+    ((k = !1), v && ((v = !1), c(W), (W = -1)), (x = !0));
     var B = g;
     try {
       for (
@@ -586,11 +586,11 @@ var d = hc.exports,
       if (y !== null) var ke = !0;
       else {
         var wt = o(u);
-        (wt !== null && K(v, wt.startTime - O), (ke = !1));
+        (wt !== null && K(T, wt.startTime - O), (ke = !1));
       }
       return ke;
     } finally {
-      ((y = null), (g = B), (k = !1));
+      ((y = null), (g = B), (x = !1));
     }
   }
   var C = !1,
@@ -647,7 +647,7 @@ var d = hc.exports,
       j.callback = null;
     }),
     (e.unstable_continueExecution = function () {
-      x || k || ((x = !0), ee(_));
+      k || x || ((k = !0), ee(_));
     }),
     (e.unstable_forceFrameRate = function (j) {
       0 > j || 125 < j
@@ -739,8 +739,8 @@ var d = hc.exports,
             t(u, j),
             o(s) === null &&
               j === o(u) &&
-              (T ? (c(W), (W = -1)) : (T = !0), K(v, B - $)))
-          : ((j.sortIndex = U), t(s, j), x || k || ((x = !0), ee(_))),
+              (v ? (c(W), (W = -1)) : (v = !0), K(T, B - $)))
+          : ((j.sortIndex = U), t(s, j), k || x || ((k = !0), ee(_))),
         j
       );
     }),
@@ -758,8 +758,8 @@ var d = hc.exports,
       };
     }));
 })(Tc);
-xc.exports = Tc;
-var hm = xc.exports;
+vc.exports = Tc;
+var um = vc.exports;
 /**
  * @license React
  * react-dom.production.min.js
@@ -768,8 +768,8 @@ var hm = xc.exports;
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
- */ var dm = N,
-  ut = hm;
+ */ var cm = N,
+  ut = um;
 function E(e) {
   for (
     var t = "https://reactjs.org/docs/error-decoder.html?invariant=" + e, o = 1;
@@ -785,34 +785,34 @@ function E(e) {
     " for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
   );
 }
-var vc = new Set(),
+var _c = new Set(),
   Yn = {};
 function Qo(e, t) {
   (Ya(e, t), Ya(e + "Capture", t));
 }
 function Ya(e, t) {
-  for (Yn[e] = t, e = 0; e < t.length; e++) vc.add(t[e]);
+  for (Yn[e] = t, e = 0; e < t.length; e++) _c.add(t[e]);
 }
 var Qt = !(
     typeof window > "u" ||
     typeof window.document > "u" ||
     typeof window.document.createElement > "u"
   ),
-  Bs = Object.prototype.hasOwnProperty,
-  um =
+  Fs = Object.prototype.hasOwnProperty,
+  fm =
     /^[:A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD][:A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\-.0-9\u00B7\u0300-\u036F\u203F-\u2040]*$/,
   Td = {},
-  vd = {};
-function cm(e) {
-  return Bs.call(vd, e)
+  _d = {};
+function wm(e) {
+  return Fs.call(_d, e)
     ? !0
-    : Bs.call(Td, e)
+    : Fs.call(Td, e)
       ? !1
-      : um.test(e)
-        ? (vd[e] = !0)
+      : fm.test(e)
+        ? (_d[e] = !0)
         : ((Td[e] = !0), !1);
 }
-function fm(e, t, o, a) {
+function gm(e, t, o, a) {
   if (o !== null && o.type === 0) return !1;
   switch (typeof t) {
     case "function":
@@ -828,8 +828,8 @@ function fm(e, t, o, a) {
       return !1;
   }
 }
-function wm(e, t, o, a) {
-  if (t === null || typeof t > "u" || fm(e, t, o, a)) return !0;
+function mm(e, t, o, a) {
+  if (t === null || typeof t > "u" || gm(e, t, o, a)) return !0;
   if (a) return !1;
   if (o !== null)
     switch (o.type) {
@@ -897,24 +897,24 @@ var Ne = {};
 ["rowSpan", "start"].forEach(function (e) {
   Ne[e] = new Ke(e, 5, !1, e.toLowerCase(), null, !1, !1);
 });
-var Ql = /[\-:]([a-z])/g;
-function Zl(e) {
+var Zl = /[\-:]([a-z])/g;
+function eh(e) {
   return e[1].toUpperCase();
 }
 "accent-height alignment-baseline arabic-form baseline-shift cap-height clip-path clip-rule color-interpolation color-interpolation-filters color-profile color-rendering dominant-baseline enable-background fill-opacity fill-rule flood-color flood-opacity font-family font-size font-size-adjust font-stretch font-style font-variant font-weight glyph-name glyph-orientation-horizontal glyph-orientation-vertical horiz-adv-x horiz-origin-x image-rendering letter-spacing lighting-color marker-end marker-mid marker-start overline-position overline-thickness paint-order panose-1 pointer-events rendering-intent shape-rendering stop-color stop-opacity strikethrough-position strikethrough-thickness stroke-dasharray stroke-dashoffset stroke-linecap stroke-linejoin stroke-miterlimit stroke-opacity stroke-width text-anchor text-decoration text-rendering underline-position underline-thickness unicode-bidi unicode-range units-per-em v-alphabetic v-hanging v-ideographic v-mathematical vector-effect vert-adv-y vert-origin-x vert-origin-y word-spacing writing-mode xmlns:xlink x-height"
   .split(" ")
   .forEach(function (e) {
-    var t = e.replace(Ql, Zl);
+    var t = e.replace(Zl, eh);
     Ne[t] = new Ke(t, 1, !1, e, null, !1, !1);
   });
 "xlink:actuate xlink:arcrole xlink:role xlink:show xlink:title xlink:type"
   .split(" ")
   .forEach(function (e) {
-    var t = e.replace(Ql, Zl);
+    var t = e.replace(Zl, eh);
     Ne[t] = new Ke(t, 1, !1, e, "http://www.w3.org/1999/xlink", !1, !1);
   });
 ["xml:base", "xml:lang", "xml:space"].forEach(function (e) {
-  var t = e.replace(Ql, Zl);
+  var t = e.replace(Zl, eh);
   Ne[t] = new Ke(t, 1, !1, e, "http://www.w3.org/XML/1998/namespace", !1, !1);
 });
 ["tabIndex", "crossOrigin"].forEach(function (e) {
@@ -932,7 +932,7 @@ Ne.xlinkHref = new Ke(
 ["src", "href", "action", "formAction"].forEach(function (e) {
   Ne[e] = new Ke(e, 1, !1, e.toLowerCase(), null, !0, !0);
 });
-function eh(e, t, o, a) {
+function th(e, t, o, a) {
   var n = Ne.hasOwnProperty(t) ? Ne[t] : null;
   (n !== null
     ? n.type !== 0
@@ -940,9 +940,9 @@ function eh(e, t, o, a) {
       !(2 < t.length) ||
       (t[0] !== "o" && t[0] !== "O") ||
       (t[1] !== "n" && t[1] !== "N")) &&
-    (wm(t, o, n, a) && (o = null),
+    (mm(t, o, n, a) && (o = null),
     a || n === null
-      ? cm(t) && (o === null ? e.removeAttribute(t) : e.setAttribute(t, "" + o))
+      ? wm(t) && (o === null ? e.removeAttribute(t) : e.setAttribute(t, "" + o))
       : n.mustUseProperty
         ? (e[n.propertyName] = o === null ? (n.type === 3 ? !1 : "") : o)
         : ((t = n.attributeName),
@@ -953,48 +953,48 @@ function eh(e, t, o, a) {
               (o = n === 3 || (n === 4 && o === !0) ? "" : "" + o),
               a ? e.setAttributeNS(a, t, o) : e.setAttribute(t, o))));
 }
-var ro = dm.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED,
+var io = cm.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED,
   hr = Symbol.for("react.element"),
   na = Symbol.for("react.portal"),
   ra = Symbol.for("react.fragment"),
-  th = Symbol.for("react.strict_mode"),
-  Fs = Symbol.for("react.profiler"),
-  _c = Symbol.for("react.provider"),
-  jc = Symbol.for("react.context"),
-  oh = Symbol.for("react.forward_ref"),
-  Ls = Symbol.for("react.suspense"),
-  Ps = Symbol.for("react.suspense_list"),
-  ah = Symbol.for("react.memo"),
-  lo = Symbol.for("react.lazy"),
-  Ac = Symbol.for("react.offscreen"),
-  _d = Symbol.iterator;
+  oh = Symbol.for("react.strict_mode"),
+  Ls = Symbol.for("react.profiler"),
+  jc = Symbol.for("react.provider"),
+  Ac = Symbol.for("react.context"),
+  ah = Symbol.for("react.forward_ref"),
+  Ps = Symbol.for("react.suspense"),
+  Ms = Symbol.for("react.suspense_list"),
+  nh = Symbol.for("react.memo"),
+  ho = Symbol.for("react.lazy"),
+  Yc = Symbol.for("react.offscreen"),
+  jd = Symbol.iterator;
 function za(e) {
   return e === null || typeof e != "object"
     ? null
-    : ((e = (_d && e[_d]) || e["@@iterator"]),
+    : ((e = (jd && e[jd]) || e["@@iterator"]),
       typeof e == "function" ? e : null);
 }
 var ge = Object.assign,
-  Zi;
+  es;
 function an(e) {
-  if (Zi === void 0)
+  if (es === void 0)
     try {
       throw Error();
     } catch (o) {
       var t = o.stack.trim().match(/\n( *(at )?)/);
-      Zi = (t && t[1]) || "";
+      es = (t && t[1]) || "";
     }
   return (
     `
 ` +
-    Zi +
+    es +
     e
   );
 }
-var es = !1;
-function ts(e, t) {
-  if (!e || es) return "";
-  es = !0;
+var ts = !1;
+function os(e, t) {
+  if (!e || ts) return "";
+  ts = !0;
   var o = Error.prepareStackTrace;
   Error.prepareStackTrace = void 0;
   try {
@@ -1064,11 +1064,11 @@ function ts(e, t) {
         }
     }
   } finally {
-    ((es = !1), (Error.prepareStackTrace = o));
+    ((ts = !1), (Error.prepareStackTrace = o));
   }
   return (e = e ? e.displayName || e.name : "") ? an(e) : "";
 }
-function gm(e) {
+function ym(e) {
   switch (e.tag) {
     case 5:
       return an(e.type);
@@ -1081,16 +1081,16 @@ function gm(e) {
     case 0:
     case 2:
     case 15:
-      return ((e = ts(e.type, !1)), e);
+      return ((e = os(e.type, !1)), e);
     case 11:
-      return ((e = ts(e.type.render, !1)), e);
+      return ((e = os(e.type.render, !1)), e);
     case 1:
-      return ((e = ts(e.type, !0)), e);
+      return ((e = os(e.type, !0)), e);
     default:
       return "";
   }
 }
-function Ms(e) {
+function $s(e) {
   if (e == null) return null;
   if (typeof e == "function") return e.displayName || e.name || null;
   if (typeof e == "string") return e;
@@ -1099,22 +1099,22 @@ function Ms(e) {
       return "Fragment";
     case na:
       return "Portal";
-    case Fs:
-      return "Profiler";
-    case th:
-      return "StrictMode";
     case Ls:
-      return "Suspense";
+      return "Profiler";
+    case oh:
+      return "StrictMode";
     case Ps:
+      return "Suspense";
+    case Ms:
       return "SuspenseList";
   }
   if (typeof e == "object")
     switch (e.$$typeof) {
-      case jc:
+      case Ac:
         return (e.displayName || "Context") + ".Consumer";
-      case _c:
+      case jc:
         return (e._context.displayName || "Context") + ".Provider";
-      case oh:
+      case ah:
         var t = e.render;
         return (
           (e = e.displayName),
@@ -1123,20 +1123,20 @@ function Ms(e) {
             (e = e !== "" ? "ForwardRef(" + e + ")" : "ForwardRef")),
           e
         );
-      case ah:
+      case nh:
         return (
           (t = e.displayName || null),
-          t !== null ? t : Ms(e.type) || "Memo"
+          t !== null ? t : $s(e.type) || "Memo"
         );
-      case lo:
+      case ho:
         ((t = e._payload), (e = e._init));
         try {
-          return Ms(e(t));
+          return $s(e(t));
         } catch {}
     }
   return null;
 }
-function mm(e) {
+function pm(e) {
   var t = e.type;
   switch (e.tag) {
     case 24:
@@ -1164,9 +1164,9 @@ function mm(e) {
     case 6:
       return "Text";
     case 16:
-      return Ms(t);
+      return $s(t);
     case 8:
-      return t === th ? "StrictMode" : "Mode";
+      return t === oh ? "StrictMode" : "Mode";
     case 22:
       return "Offscreen";
     case 12:
@@ -1190,7 +1190,7 @@ function mm(e) {
   }
   return null;
 }
-function jo(e) {
+function Ao(e) {
   switch (typeof e) {
     case "boolean":
     case "number":
@@ -1203,7 +1203,7 @@ function jo(e) {
       return "";
   }
 }
-function Yc(e) {
+function Sc(e) {
   var t = e.type;
   return (
     (e = e.nodeName) &&
@@ -1211,8 +1211,8 @@ function Yc(e) {
     (t === "checkbox" || t === "radio")
   );
 }
-function ym(e) {
-  var t = Yc(e) ? "checked" : "value",
+function bm(e) {
+  var t = Sc(e) ? "checked" : "value",
     o = Object.getOwnPropertyDescriptor(e.constructor.prototype, t),
     a = "" + e[t];
   if (
@@ -1249,21 +1249,21 @@ function ym(e) {
   }
 }
 function dr(e) {
-  e._valueTracker || (e._valueTracker = ym(e));
+  e._valueTracker || (e._valueTracker = bm(e));
 }
-function Sc(e) {
+function Rc(e) {
   if (!e) return !1;
   var t = e._valueTracker;
   if (!t) return !0;
   var o = t.getValue(),
     a = "";
   return (
-    e && (a = Yc(e) ? (e.checked ? "true" : "false") : e.value),
+    e && (a = Sc(e) ? (e.checked ? "true" : "false") : e.value),
     (e = a),
     e !== o ? (t.setValue(e), !0) : !1
   );
 }
-function Jr(e) {
+function Vr(e) {
   if (((e = e || (typeof document < "u" ? document : void 0)), typeof e > "u"))
     return null;
   try {
@@ -1272,7 +1272,7 @@ function Jr(e) {
     return e.body;
   }
 }
-function $s(e, t) {
+function Hs(e, t) {
   var o = t.checked;
   return ge({}, t, {
     defaultChecked: void 0,
@@ -1281,10 +1281,10 @@ function $s(e, t) {
     checked: o ?? e._wrapperState.initialChecked,
   });
 }
-function jd(e, t) {
+function Ad(e, t) {
   var o = t.defaultValue == null ? "" : t.defaultValue,
     a = t.checked != null ? t.checked : t.defaultChecked;
-  ((o = jo(t.value != null ? t.value : o)),
+  ((o = Ao(t.value != null ? t.value : o)),
     (e._wrapperState = {
       initialChecked: a,
       initialValue: o,
@@ -1294,12 +1294,12 @@ function jd(e, t) {
           : t.value != null,
     }));
 }
-function Rc(e, t) {
-  ((t = t.checked), t != null && eh(e, "checked", t, !1));
+function Cc(e, t) {
+  ((t = t.checked), t != null && th(e, "checked", t, !1));
 }
-function Hs(e, t) {
-  Rc(e, t);
-  var o = jo(t.value),
+function Ds(e, t) {
+  Cc(e, t);
+  var o = Ao(t.value),
     a = t.type;
   if (o != null)
     a === "number"
@@ -1310,13 +1310,13 @@ function Hs(e, t) {
     return;
   }
   (t.hasOwnProperty("value")
-    ? Ds(e, t.type, o)
-    : t.hasOwnProperty("defaultValue") && Ds(e, t.type, jo(t.defaultValue)),
+    ? qs(e, t.type, o)
+    : t.hasOwnProperty("defaultValue") && qs(e, t.type, Ao(t.defaultValue)),
     t.checked == null &&
       t.defaultChecked != null &&
       (e.defaultChecked = !!t.defaultChecked));
 }
-function Ad(e, t, o) {
+function Yd(e, t, o) {
   if (t.hasOwnProperty("value") || t.hasOwnProperty("defaultValue")) {
     var a = t.type;
     if (!(
@@ -1333,8 +1333,8 @@ function Ad(e, t, o) {
     (e.defaultChecked = !!e._wrapperState.initialChecked),
     o !== "" && (e.name = o));
 }
-function Ds(e, t, o) {
-  (t !== "number" || Jr(e.ownerDocument) !== e) &&
+function qs(e, t, o) {
+  (t !== "number" || Vr(e.ownerDocument) !== e) &&
     (o == null
       ? (e.defaultValue = "" + e._wrapperState.initialValue)
       : e.defaultValue !== "" + o && (e.defaultValue = "" + o));
@@ -1349,7 +1349,7 @@ function ya(e, t, o, a) {
         e[o].selected !== n && (e[o].selected = n),
         n && a && (e[o].defaultSelected = !0));
   } else {
-    for (o = "" + jo(o), t = null, n = 0; n < e.length; n++) {
+    for (o = "" + Ao(o), t = null, n = 0; n < e.length; n++) {
       if (e[n].value === o) {
         ((e[n].selected = !0), a && (e[n].defaultSelected = !0));
         return;
@@ -1359,7 +1359,7 @@ function ya(e, t, o, a) {
     t !== null && (t.selected = !0);
   }
 }
-function qs(e, t) {
+function Gs(e, t) {
   if (t.dangerouslySetInnerHTML != null) throw Error(E(91));
   return ge({}, t, {
     value: void 0,
@@ -1367,7 +1367,7 @@ function qs(e, t) {
     children: "" + e._wrapperState.initialValue,
   });
 }
-function Yd(e, t) {
+function Sd(e, t) {
   var o = t.value;
   if (o == null) {
     if (((o = t.children), (t = t.defaultValue), o != null)) {
@@ -1380,22 +1380,22 @@ function Yd(e, t) {
     }
     (t == null && (t = ""), (o = t));
   }
-  e._wrapperState = { initialValue: jo(o) };
+  e._wrapperState = { initialValue: Ao(o) };
 }
-function Cc(e, t) {
-  var o = jo(t.value),
-    a = jo(t.defaultValue);
+function Ic(e, t) {
+  var o = Ao(t.value),
+    a = Ao(t.defaultValue);
   (o != null &&
     ((o = "" + o),
     o !== e.value && (e.value = o),
     t.defaultValue == null && e.defaultValue !== o && (e.defaultValue = o)),
     a != null && (e.defaultValue = "" + a));
 }
-function Sd(e) {
+function Rd(e) {
   var t = e.textContent;
   t === e._wrapperState.initialValue && t !== "" && t !== null && (e.value = t);
 }
-function Ic(e) {
+function Nc(e) {
   switch (e) {
     case "svg":
       return "http://www.w3.org/2000/svg";
@@ -1405,15 +1405,15 @@ function Ic(e) {
       return "http://www.w3.org/1999/xhtml";
   }
 }
-function Gs(e, t) {
+function Ks(e, t) {
   return e == null || e === "http://www.w3.org/1999/xhtml"
-    ? Ic(t)
+    ? Nc(t)
     : e === "http://www.w3.org/2000/svg" && t === "foreignObject"
       ? "http://www.w3.org/1999/xhtml"
       : e;
 }
 var ur,
-  Nc = (function (e) {
+  Oc = (function (e) {
     return typeof MSApp < "u" && MSApp.execUnsafeLocalFunction
       ? function (t, o, a, n) {
           MSApp.execUnsafeLocalFunction(function () {
@@ -1490,29 +1490,29 @@ var wn = {
     strokeOpacity: !0,
     strokeWidth: !0,
   },
-  pm = ["Webkit", "ms", "Moz", "O"];
+  km = ["Webkit", "ms", "Moz", "O"];
 Object.keys(wn).forEach(function (e) {
-  pm.forEach(function (t) {
+  km.forEach(function (t) {
     ((t = t + e.charAt(0).toUpperCase() + e.substring(1)), (wn[t] = wn[e]));
   });
 });
-function Oc(e, t, o) {
+function Wc(e, t, o) {
   return t == null || typeof t == "boolean" || t === ""
     ? ""
     : o || typeof t != "number" || t === 0 || (wn.hasOwnProperty(e) && wn[e])
       ? ("" + t).trim()
       : t + "px";
 }
-function Wc(e, t) {
+function Ec(e, t) {
   e = e.style;
   for (var o in t)
     if (t.hasOwnProperty(o)) {
       var a = o.indexOf("--") === 0,
-        n = Oc(o, t[o], a);
+        n = Wc(o, t[o], a);
       (o === "float" && (o = "cssFloat"), a ? e.setProperty(o, n) : (e[o] = n));
     }
 }
-var bm = ge(
+var xm = ge(
   { menuitem: !0 },
   {
     area: !0,
@@ -1532,9 +1532,9 @@ var bm = ge(
     wbr: !0,
   },
 );
-function Ks(e, t) {
+function zs(e, t) {
   if (t) {
-    if (bm[e] && (t.children != null || t.dangerouslySetInnerHTML != null))
+    if (xm[e] && (t.children != null || t.dangerouslySetInnerHTML != null))
       throw Error(E(137, e));
     if (t.dangerouslySetInnerHTML != null) {
       if (t.children != null) throw Error(E(60));
@@ -1547,7 +1547,7 @@ function Ks(e, t) {
     if (t.style != null && typeof t.style != "object") throw Error(E(62));
   }
 }
-function zs(e, t) {
+function Us(e, t) {
   if (e.indexOf("-") === -1) return typeof t.is == "string";
   switch (e) {
     case "annotation-xml":
@@ -1563,52 +1563,52 @@ function zs(e, t) {
       return !0;
   }
 }
-var Us = null;
-function nh(e) {
+var Js = null;
+function rh(e) {
   return (
     (e = e.target || e.srcElement || window),
     e.correspondingUseElement && (e = e.correspondingUseElement),
     e.nodeType === 3 ? e.parentNode : e
   );
 }
-var Js = null,
+var Vs = null,
   pa = null,
   ba = null;
-function Rd(e) {
+function Cd(e) {
   if ((e = or(e))) {
-    if (typeof Js != "function") throw Error(E(280));
+    if (typeof Vs != "function") throw Error(E(280));
     var t = e.stateNode;
-    t && ((t = Ri(t)), Js(e.stateNode, e.type, t));
+    t && ((t = Ci(t)), Vs(e.stateNode, e.type, t));
   }
 }
-function Ec(e) {
+function Bc(e) {
   pa ? (ba ? ba.push(e) : (ba = [e])) : (pa = e);
 }
-function Bc() {
+function Fc() {
   if (pa) {
     var e = pa,
       t = ba;
-    if (((ba = pa = null), Rd(e), t)) for (e = 0; e < t.length; e++) Rd(t[e]);
+    if (((ba = pa = null), Cd(e), t)) for (e = 0; e < t.length; e++) Cd(t[e]);
   }
 }
-function Fc(e, t) {
+function Lc(e, t) {
   return e(t);
 }
-function Lc() {}
-var os = !1;
-function Pc(e, t, o) {
-  if (os) return e(t, o);
-  os = !0;
+function Pc() {}
+var as = !1;
+function Mc(e, t, o) {
+  if (as) return e(t, o);
+  as = !0;
   try {
-    return Fc(e, t, o);
+    return Lc(e, t, o);
   } finally {
-    ((os = !1), (pa !== null || ba !== null) && (Lc(), Bc()));
+    ((as = !1), (pa !== null || ba !== null) && (Pc(), Fc()));
   }
 }
 function Rn(e, t) {
   var o = e.stateNode;
   if (o === null) return null;
-  var a = Ri(o);
+  var a = Ci(o);
   if (a === null) return null;
   o = a[t];
   e: switch (t) {
@@ -1640,21 +1640,21 @@ function Rn(e, t) {
   if (o && typeof o != "function") throw Error(E(231, t, typeof o));
   return o;
 }
-var Vs = !1;
+var Xs = !1;
 if (Qt)
   try {
     var Ua = {};
     (Object.defineProperty(Ua, "passive", {
       get: function () {
-        Vs = !0;
+        Xs = !0;
       },
     }),
       window.addEventListener("test", Ua, Ua),
       window.removeEventListener("test", Ua, Ua));
   } catch {
-    Vs = !1;
+    Xs = !1;
   }
-function km(e, t, o, a, n, r, i, l, s) {
+function vm(e, t, o, a, n, r, i, l, s) {
   var u = Array.prototype.slice.call(arguments, 3);
   try {
     t.apply(o, u);
@@ -1663,24 +1663,24 @@ function km(e, t, o, a, n, r, i, l, s) {
   }
 }
 var gn = !1,
-  Vr = null,
-  Xr = !1,
-  Xs = null,
-  xm = {
+  Xr = null,
+  Qr = !1,
+  Qs = null,
+  Tm = {
     onError: function (e) {
-      ((gn = !0), (Vr = e));
+      ((gn = !0), (Xr = e));
     },
   };
-function Tm(e, t, o, a, n, r, i, l, s) {
-  ((gn = !1), (Vr = null), km.apply(xm, arguments));
+function _m(e, t, o, a, n, r, i, l, s) {
+  ((gn = !1), (Xr = null), vm.apply(Tm, arguments));
 }
-function vm(e, t, o, a, n, r, i, l, s) {
-  if ((Tm.apply(this, arguments), gn)) {
+function jm(e, t, o, a, n, r, i, l, s) {
+  if ((_m.apply(this, arguments), gn)) {
     if (gn) {
-      var u = Vr;
-      ((gn = !1), (Vr = null));
+      var u = Xr;
+      ((gn = !1), (Xr = null));
     } else throw Error(E(198));
-    Xr || ((Xr = !0), (Xs = u));
+    Qr || ((Qr = !0), (Qs = u));
   }
 }
 function Zo(e) {
@@ -1694,7 +1694,7 @@ function Zo(e) {
   }
   return t.tag === 3 ? o : null;
 }
-function Mc(e) {
+function $c(e) {
   if (e.tag === 13) {
     var t = e.memoizedState;
     if (
@@ -1705,10 +1705,10 @@ function Mc(e) {
   }
   return null;
 }
-function Cd(e) {
+function Id(e) {
   if (Zo(e) !== e) throw Error(E(188));
 }
-function _m(e) {
+function Am(e) {
   var t = e.alternate;
   if (!t) {
     if (((t = Zo(e)), t === null)) throw Error(E(188));
@@ -1727,8 +1727,8 @@ function _m(e) {
     }
     if (n.child === r.child) {
       for (r = n.child; r;) {
-        if (r === o) return (Cd(n), e);
-        if (r === a) return (Cd(n), t);
+        if (r === o) return (Id(n), e);
+        if (r === a) return (Id(n), t);
         r = r.sibling;
       }
       throw Error(E(188));
@@ -1766,42 +1766,42 @@ function _m(e) {
   if (o.tag !== 3) throw Error(E(188));
   return o.stateNode.current === o ? e : t;
 }
-function $c(e) {
-  return ((e = _m(e)), e !== null ? Hc(e) : null);
-}
 function Hc(e) {
+  return ((e = Am(e)), e !== null ? Dc(e) : null);
+}
+function Dc(e) {
   if (e.tag === 5 || e.tag === 6) return e;
   for (e = e.child; e !== null;) {
-    var t = Hc(e);
+    var t = Dc(e);
     if (t !== null) return t;
     e = e.sibling;
   }
   return null;
 }
-var Dc = ut.unstable_scheduleCallback,
-  Id = ut.unstable_cancelCallback,
-  jm = ut.unstable_shouldYield,
-  Am = ut.unstable_requestPaint,
+var qc = ut.unstable_scheduleCallback,
+  Nd = ut.unstable_cancelCallback,
+  Ym = ut.unstable_shouldYield,
+  Sm = ut.unstable_requestPaint,
   be = ut.unstable_now,
-  Ym = ut.unstable_getCurrentPriorityLevel,
-  rh = ut.unstable_ImmediatePriority,
-  qc = ut.unstable_UserBlockingPriority,
-  Qr = ut.unstable_NormalPriority,
-  Sm = ut.unstable_LowPriority,
-  Gc = ut.unstable_IdlePriority,
-  ji = null,
+  Rm = ut.unstable_getCurrentPriorityLevel,
+  ih = ut.unstable_ImmediatePriority,
+  Gc = ut.unstable_UserBlockingPriority,
+  Zr = ut.unstable_NormalPriority,
+  Cm = ut.unstable_LowPriority,
+  Kc = ut.unstable_IdlePriority,
+  Ai = null,
   Mt = null;
-function Rm(e) {
+function Im(e) {
   if (Mt && typeof Mt.onCommitFiberRoot == "function")
     try {
-      Mt.onCommitFiberRoot(ji, e, void 0, (e.current.flags & 128) === 128);
+      Mt.onCommitFiberRoot(Ai, e, void 0, (e.current.flags & 128) === 128);
     } catch {}
 }
-var Ct = Math.clz32 ? Math.clz32 : Nm,
-  Cm = Math.log,
-  Im = Math.LN2;
-function Nm(e) {
-  return ((e >>>= 0), e === 0 ? 32 : (31 - ((Cm(e) / Im) | 0)) | 0);
+var Ct = Math.clz32 ? Math.clz32 : Wm,
+  Nm = Math.log,
+  Om = Math.LN2;
+function Wm(e) {
+  return ((e >>>= 0), e === 0 ? 32 : (31 - ((Nm(e) / Om) | 0)) | 0);
 }
 var cr = 64,
   fr = 4194304;
@@ -1854,7 +1854,7 @@ function rn(e) {
       return e;
   }
 }
-function Zr(e, t) {
+function ei(e, t) {
   var o = e.pendingLanes;
   if (o === 0) return 0;
   var a = 0,
@@ -1878,7 +1878,7 @@ function Zr(e, t) {
       ((o = 31 - Ct(t)), (n = 1 << o), (a |= e[o]), (t &= ~n));
   return a;
 }
-function Om(e, t) {
+function Em(e, t) {
   switch (e) {
     case 1:
     case 2:
@@ -1919,7 +1919,7 @@ function Om(e, t) {
       return -1;
   }
 }
-function Wm(e, t) {
+function Bm(e, t) {
   for (
     var o = e.suspendedLanes,
       a = e.pingedLanes,
@@ -1931,22 +1931,22 @@ function Wm(e, t) {
       l = 1 << i,
       s = n[i];
     (s === -1
-      ? (!(l & o) || l & a) && (n[i] = Om(l, t))
+      ? (!(l & o) || l & a) && (n[i] = Em(l, t))
       : s <= t && (e.expiredLanes |= l),
       (r &= ~l));
   }
 }
-function Qs(e) {
+function Zs(e) {
   return (
     (e = e.pendingLanes & -1073741825),
     e !== 0 ? e : e & 1073741824 ? 1073741824 : 0
   );
 }
-function Kc() {
+function zc() {
   var e = cr;
   return ((cr <<= 1), !(cr & 4194240) && (cr = 64), e);
 }
-function as(e) {
+function ns(e) {
   for (var t = [], o = 0; 31 > o; o++) t.push(e);
   return t;
 }
@@ -1957,7 +1957,7 @@ function er(e, t, o) {
     (t = 31 - Ct(t)),
     (e[t] = o));
 }
-function Em(e, t) {
+function Fm(e, t) {
   var o = e.pendingLanes & ~t;
   ((e.pendingLanes = t),
     (e.suspendedLanes = 0),
@@ -1973,7 +1973,7 @@ function Em(e, t) {
     ((t[n] = 0), (a[n] = -1), (e[n] = -1), (o &= ~r));
   }
 }
-function ih(e, t) {
+function sh(e, t) {
   var o = (e.entangledLanes |= t);
   for (e = e.entanglements; o;) {
     var a = 31 - Ct(o),
@@ -1982,42 +1982,42 @@ function ih(e, t) {
   }
 }
 var ne = 0;
-function zc(e) {
+function Uc(e) {
   return (
     (e &= -e),
     1 < e ? (4 < e ? (e & 268435455 ? 16 : 536870912) : 4) : 1
   );
 }
-var Uc,
-  sh,
-  Jc,
+var Jc,
+  lh,
   Vc,
   Xc,
-  Zs = !1,
+  Qc,
+  el = !1,
   wr = [],
-  mo = null,
   yo = null,
   po = null,
+  bo = null,
   Cn = new Map(),
   In = new Map(),
-  uo = [],
-  Bm =
+  co = [],
+  Lm =
     "mousedown mouseup touchcancel touchend touchstart auxclick dblclick pointercancel pointerdown pointerup dragend dragstart drop compositionend compositionstart keydown keypress keyup input textInput copy cut paste click change contextmenu reset submit".split(
       " ",
     );
-function Nd(e, t) {
+function Od(e, t) {
   switch (e) {
     case "focusin":
     case "focusout":
-      mo = null;
+      yo = null;
       break;
     case "dragenter":
     case "dragleave":
-      yo = null;
+      po = null;
       break;
     case "mouseover":
     case "mouseout":
-      po = null;
+      bo = null;
       break;
     case "pointerover":
     case "pointerout":
@@ -2037,21 +2037,21 @@ function Ja(e, t, o, a, n, r) {
         nativeEvent: r,
         targetContainers: [n],
       }),
-      t !== null && ((t = or(t)), t !== null && sh(t)),
+      t !== null && ((t = or(t)), t !== null && lh(t)),
       e)
     : ((e.eventSystemFlags |= a),
       (t = e.targetContainers),
       n !== null && t.indexOf(n) === -1 && t.push(n),
       e);
 }
-function Fm(e, t, o, a, n) {
+function Pm(e, t, o, a, n) {
   switch (t) {
     case "focusin":
-      return ((mo = Ja(mo, e, t, o, a, n)), !0);
-    case "dragenter":
       return ((yo = Ja(yo, e, t, o, a, n)), !0);
-    case "mouseover":
+    case "dragenter":
       return ((po = Ja(po, e, t, o, a, n)), !0);
+    case "mouseover":
+      return ((bo = Ja(bo, e, t, o, a, n)), !0);
     case "pointerover":
       var r = n.pointerId;
       return (Cn.set(r, Ja(Cn.get(r) || null, e, t, o, a, n)), !0);
@@ -2064,16 +2064,16 @@ function Fm(e, t, o, a, n) {
   }
   return !1;
 }
-function Qc(e) {
+function Zc(e) {
   var t = Fo(e.target);
   if (t !== null) {
     var o = Zo(t);
     if (o !== null) {
       if (((t = o.tag), t === 13)) {
-        if (((t = Mc(o)), t !== null)) {
+        if (((t = $c(o)), t !== null)) {
           ((e.blockedOn = t),
-            Xc(e.priority, function () {
-              Jc(o);
+            Qc(e.priority, function () {
+              Vc(o);
             }));
           return;
         }
@@ -2085,36 +2085,36 @@ function Qc(e) {
   }
   e.blockedOn = null;
 }
-function Or(e) {
+function Wr(e) {
   if (e.blockedOn !== null) return !1;
   for (var t = e.targetContainers; 0 < t.length;) {
-    var o = el(e.domEventName, e.eventSystemFlags, t[0], e.nativeEvent);
+    var o = tl(e.domEventName, e.eventSystemFlags, t[0], e.nativeEvent);
     if (o === null) {
       o = e.nativeEvent;
       var a = new o.constructor(o.type, o);
-      ((Us = a), o.target.dispatchEvent(a), (Us = null));
-    } else return ((t = or(o)), t !== null && sh(t), (e.blockedOn = o), !1);
+      ((Js = a), o.target.dispatchEvent(a), (Js = null));
+    } else return ((t = or(o)), t !== null && lh(t), (e.blockedOn = o), !1);
     t.shift();
   }
   return !0;
 }
-function Od(e, t, o) {
-  Or(e) && o.delete(t);
+function Wd(e, t, o) {
+  Wr(e) && o.delete(t);
 }
-function Lm() {
-  ((Zs = !1),
-    mo !== null && Or(mo) && (mo = null),
-    yo !== null && Or(yo) && (yo = null),
-    po !== null && Or(po) && (po = null),
-    Cn.forEach(Od),
-    In.forEach(Od));
+function Mm() {
+  ((el = !1),
+    yo !== null && Wr(yo) && (yo = null),
+    po !== null && Wr(po) && (po = null),
+    bo !== null && Wr(bo) && (bo = null),
+    Cn.forEach(Wd),
+    In.forEach(Wd));
 }
 function Va(e, t) {
   e.blockedOn === t &&
     ((e.blockedOn = null),
-    Zs ||
-      ((Zs = !0),
-      ut.unstable_scheduleCallback(ut.unstable_NormalPriority, Lm)));
+    el ||
+      ((el = !0),
+      ut.unstable_scheduleCallback(ut.unstable_NormalPriority, Mm)));
 }
 function Nn(e) {
   function t(n) {
@@ -2128,77 +2128,77 @@ function Nn(e) {
     }
   }
   for (
-    mo !== null && Va(mo, e),
-      yo !== null && Va(yo, e),
+    yo !== null && Va(yo, e),
       po !== null && Va(po, e),
+      bo !== null && Va(bo, e),
       Cn.forEach(t),
       In.forEach(t),
       o = 0;
-    o < uo.length;
+    o < co.length;
     o++
   )
-    ((a = uo[o]), a.blockedOn === e && (a.blockedOn = null));
-  for (; 0 < uo.length && ((o = uo[0]), o.blockedOn === null);)
-    (Qc(o), o.blockedOn === null && uo.shift());
+    ((a = co[o]), a.blockedOn === e && (a.blockedOn = null));
+  for (; 0 < co.length && ((o = co[0]), o.blockedOn === null);)
+    (Zc(o), o.blockedOn === null && co.shift());
 }
-var ka = ro.ReactCurrentBatchConfig,
-  ei = !0;
-function Pm(e, t, o, a) {
+var ka = io.ReactCurrentBatchConfig,
+  ti = !0;
+function $m(e, t, o, a) {
   var n = ne,
     r = ka.transition;
   ka.transition = null;
   try {
-    ((ne = 1), lh(e, t, o, a));
+    ((ne = 1), hh(e, t, o, a));
   } finally {
     ((ne = n), (ka.transition = r));
   }
 }
-function Mm(e, t, o, a) {
+function Hm(e, t, o, a) {
   var n = ne,
     r = ka.transition;
   ka.transition = null;
   try {
-    ((ne = 4), lh(e, t, o, a));
+    ((ne = 4), hh(e, t, o, a));
   } finally {
     ((ne = n), (ka.transition = r));
   }
 }
-function lh(e, t, o, a) {
-  if (ei) {
-    var n = el(e, t, o, a);
-    if (n === null) (fs(e, t, a, ti, o), Nd(e, a));
-    else if (Fm(n, e, t, o, a)) a.stopPropagation();
-    else if ((Nd(e, a), t & 4 && -1 < Bm.indexOf(e))) {
+function hh(e, t, o, a) {
+  if (ti) {
+    var n = tl(e, t, o, a);
+    if (n === null) (ws(e, t, a, oi, o), Od(e, a));
+    else if (Pm(n, e, t, o, a)) a.stopPropagation();
+    else if ((Od(e, a), t & 4 && -1 < Lm.indexOf(e))) {
       for (; n !== null;) {
         var r = or(n);
         if (
-          (r !== null && Uc(r),
-          (r = el(e, t, o, a)),
-          r === null && fs(e, t, a, ti, o),
+          (r !== null && Jc(r),
+          (r = tl(e, t, o, a)),
+          r === null && ws(e, t, a, oi, o),
           r === n)
         )
           break;
         n = r;
       }
       n !== null && a.stopPropagation();
-    } else fs(e, t, a, null, o);
+    } else ws(e, t, a, null, o);
   }
 }
-var ti = null;
-function el(e, t, o, a) {
-  if (((ti = null), (e = nh(a)), (e = Fo(e)), e !== null))
+var oi = null;
+function tl(e, t, o, a) {
+  if (((oi = null), (e = rh(a)), (e = Fo(e)), e !== null))
     if (((t = Zo(e)), t === null)) e = null;
     else if (((o = t.tag), o === 13)) {
-      if (((e = Mc(t)), e !== null)) return e;
+      if (((e = $c(t)), e !== null)) return e;
       e = null;
     } else if (o === 3) {
       if (t.stateNode.current.memoizedState.isDehydrated)
         return t.tag === 3 ? t.stateNode.containerInfo : null;
       e = null;
     } else t !== e && (e = null);
-  return ((ti = e), null);
+  return ((oi = e), null);
 }
-function Zc(e) {
+function ef(e) {
   switch (e) {
     case "cancel":
     case "click":
@@ -2273,15 +2273,15 @@ function Zc(e) {
     case "pointerleave":
       return 4;
     case "message":
-      switch (Ym()) {
-        case rh:
+      switch (Rm()) {
+        case ih:
           return 1;
-        case qc:
-          return 4;
-        case Qr:
-        case Sm:
-          return 16;
         case Gc:
+          return 4;
+        case Zr:
+        case Cm:
+          return 16;
+        case Kc:
           return 536870912;
         default:
           return 16;
@@ -2290,23 +2290,23 @@ function Zc(e) {
       return 16;
   }
 }
-var fo = null,
-  hh = null,
-  Wr = null;
-function ef() {
-  if (Wr) return Wr;
+var wo = null,
+  dh = null,
+  Er = null;
+function tf() {
+  if (Er) return Er;
   var e,
-    t = hh,
+    t = dh,
     o = t.length,
     a,
-    n = "value" in fo ? fo.value : fo.textContent,
+    n = "value" in wo ? wo.value : wo.textContent,
     r = n.length;
   for (e = 0; e < o && t[e] === n[e]; e++);
   var i = o - e;
   for (a = 1; a <= i && t[o - a] === n[r - a]; a++);
-  return (Wr = n.slice(e, 1 < a ? 1 - a : void 0));
+  return (Er = n.slice(e, 1 < a ? 1 - a : void 0));
 }
-function Er(e) {
+function Br(e) {
   var t = e.keyCode;
   return (
     "charCode" in e
@@ -2319,7 +2319,7 @@ function Er(e) {
 function gr() {
   return !0;
 }
-function Wd() {
+function Ed() {
   return !1;
 }
 function ft(e) {
@@ -2337,8 +2337,8 @@ function ft(e) {
         r.defaultPrevented != null ? r.defaultPrevented : r.returnValue === !1
       )
         ? gr
-        : Wd),
-      (this.isPropagationStopped = Wd),
+        : Ed),
+      (this.isPropagationStopped = Ed),
       this
     );
   }
@@ -2377,13 +2377,13 @@ var Pa = {
     defaultPrevented: 0,
     isTrusted: 0,
   },
-  dh = ft(Pa),
+  uh = ft(Pa),
   tr = ge({}, Pa, { view: 0, detail: 0 }),
-  $m = ft(tr),
-  ns,
+  Dm = ft(tr),
   rs,
+  is,
   Xa,
-  Ai = ge({}, tr, {
+  Yi = ge({}, tr, {
     screenX: 0,
     screenY: 0,
     clientX: 0,
@@ -2394,7 +2394,7 @@ var Pa = {
     shiftKey: 0,
     altKey: 0,
     metaKey: 0,
-    getModifierState: uh,
+    getModifierState: ch,
     button: 0,
     buttons: 0,
     relatedTarget: function (e) {
@@ -2409,31 +2409,31 @@ var Pa = {
         ? e.movementX
         : (e !== Xa &&
             (Xa && e.type === "mousemove"
-              ? ((ns = e.screenX - Xa.screenX), (rs = e.screenY - Xa.screenY))
-              : (rs = ns = 0),
+              ? ((rs = e.screenX - Xa.screenX), (is = e.screenY - Xa.screenY))
+              : (is = rs = 0),
             (Xa = e)),
-          ns);
+          rs);
     },
     movementY: function (e) {
-      return "movementY" in e ? e.movementY : rs;
+      return "movementY" in e ? e.movementY : is;
     },
   }),
-  Ed = ft(Ai),
-  Hm = ge({}, Ai, { dataTransfer: 0 }),
-  Dm = ft(Hm),
-  qm = ge({}, tr, { relatedTarget: 0 }),
-  is = ft(qm),
-  Gm = ge({}, Pa, { animationName: 0, elapsedTime: 0, pseudoElement: 0 }),
-  Km = ft(Gm),
-  zm = ge({}, Pa, {
+  Bd = ft(Yi),
+  qm = ge({}, Yi, { dataTransfer: 0 }),
+  Gm = ft(qm),
+  Km = ge({}, tr, { relatedTarget: 0 }),
+  ss = ft(Km),
+  zm = ge({}, Pa, { animationName: 0, elapsedTime: 0, pseudoElement: 0 }),
+  Um = ft(zm),
+  Jm = ge({}, Pa, {
     clipboardData: function (e) {
       return "clipboardData" in e ? e.clipboardData : window.clipboardData;
     },
   }),
-  Um = ft(zm),
-  Jm = ge({}, Pa, { data: 0 }),
-  Bd = ft(Jm),
-  Vm = {
+  Vm = ft(Jm),
+  Xm = ge({}, Pa, { data: 0 }),
+  Fd = ft(Xm),
+  Qm = {
     Esc: "Escape",
     Spacebar: " ",
     Left: "ArrowLeft",
@@ -2447,7 +2447,7 @@ var Pa = {
     Scroll: "ScrollLock",
     MozPrintableKey: "Unidentified",
   },
-  Xm = {
+  Zm = {
     8: "Backspace",
     9: "Tab",
     12: "Clear",
@@ -2485,29 +2485,29 @@ var Pa = {
     145: "ScrollLock",
     224: "Meta",
   },
-  Qm = {
+  ey = {
     Alt: "altKey",
     Control: "ctrlKey",
     Meta: "metaKey",
     Shift: "shiftKey",
   };
-function Zm(e) {
+function ty(e) {
   var t = this.nativeEvent;
-  return t.getModifierState ? t.getModifierState(e) : (e = Qm[e]) ? !!t[e] : !1;
+  return t.getModifierState ? t.getModifierState(e) : (e = ey[e]) ? !!t[e] : !1;
 }
-function uh() {
-  return Zm;
+function ch() {
+  return ty;
 }
-var ey = ge({}, tr, {
+var oy = ge({}, tr, {
     key: function (e) {
       if (e.key) {
-        var t = Vm[e.key] || e.key;
+        var t = Qm[e.key] || e.key;
         if (t !== "Unidentified") return t;
       }
       return e.type === "keypress"
-        ? ((e = Er(e)), e === 13 ? "Enter" : String.fromCharCode(e))
+        ? ((e = Br(e)), e === 13 ? "Enter" : String.fromCharCode(e))
         : e.type === "keydown" || e.type === "keyup"
-          ? Xm[e.keyCode] || "Unidentified"
+          ? Zm[e.keyCode] || "Unidentified"
           : "";
     },
     code: 0,
@@ -2518,23 +2518,23 @@ var ey = ge({}, tr, {
     metaKey: 0,
     repeat: 0,
     locale: 0,
-    getModifierState: uh,
+    getModifierState: ch,
     charCode: function (e) {
-      return e.type === "keypress" ? Er(e) : 0;
+      return e.type === "keypress" ? Br(e) : 0;
     },
     keyCode: function (e) {
       return e.type === "keydown" || e.type === "keyup" ? e.keyCode : 0;
     },
     which: function (e) {
       return e.type === "keypress"
-        ? Er(e)
+        ? Br(e)
         : e.type === "keydown" || e.type === "keyup"
           ? e.keyCode
           : 0;
     },
   }),
-  ty = ft(ey),
-  oy = ge({}, Ai, {
+  ay = ft(oy),
+  ny = ge({}, Yi, {
     pointerId: 0,
     width: 0,
     height: 0,
@@ -2546,8 +2546,8 @@ var ey = ge({}, tr, {
     pointerType: 0,
     isPrimary: 0,
   }),
-  Fd = ft(oy),
-  ay = ge({}, tr, {
+  Ld = ft(ny),
+  ry = ge({}, tr, {
     touches: 0,
     targetTouches: 0,
     changedTouches: 0,
@@ -2555,12 +2555,12 @@ var ey = ge({}, tr, {
     metaKey: 0,
     ctrlKey: 0,
     shiftKey: 0,
-    getModifierState: uh,
+    getModifierState: ch,
   }),
-  ny = ft(ay),
-  ry = ge({}, Pa, { propertyName: 0, elapsedTime: 0, pseudoElement: 0 }),
   iy = ft(ry),
-  sy = ge({}, Ai, {
+  sy = ge({}, Pa, { propertyName: 0, elapsedTime: 0, pseudoElement: 0 }),
+  ly = ft(sy),
+  hy = ge({}, Yi, {
     deltaX: function (e) {
       return "deltaX" in e ? e.deltaX : "wheelDeltaX" in e ? -e.wheelDeltaX : 0;
     },
@@ -2576,19 +2576,19 @@ var ey = ge({}, tr, {
     deltaZ: 0,
     deltaMode: 0,
   }),
-  ly = ft(sy),
-  hy = [9, 13, 27, 32],
-  ch = Qt && "CompositionEvent" in window,
+  dy = ft(hy),
+  uy = [9, 13, 27, 32],
+  fh = Qt && "CompositionEvent" in window,
   mn = null;
 Qt && "documentMode" in document && (mn = document.documentMode);
-var dy = Qt && "TextEvent" in window && !mn,
-  tf = Qt && (!ch || (mn && 8 < mn && 11 >= mn)),
-  Ld = " ",
-  Pd = !1;
-function of(e, t) {
+var cy = Qt && "TextEvent" in window && !mn,
+  of = Qt && (!fh || (mn && 8 < mn && 11 >= mn)),
+  Pd = " ",
+  Md = !1;
+function af(e, t) {
   switch (e) {
     case "keyup":
-      return hy.indexOf(t.keyCode) !== -1;
+      return uy.indexOf(t.keyCode) !== -1;
     case "keydown":
       return t.keyCode !== 229;
     case "keypress":
@@ -2599,26 +2599,26 @@ function of(e, t) {
       return !1;
   }
 }
-function af(e) {
+function nf(e) {
   return ((e = e.detail), typeof e == "object" && "data" in e ? e.data : null);
 }
 var ia = !1;
-function uy(e, t) {
+function fy(e, t) {
   switch (e) {
     case "compositionend":
-      return af(t);
+      return nf(t);
     case "keypress":
-      return t.which !== 32 ? null : ((Pd = !0), Ld);
+      return t.which !== 32 ? null : ((Md = !0), Pd);
     case "textInput":
-      return ((e = t.data), e === Ld && Pd ? null : e);
+      return ((e = t.data), e === Pd && Md ? null : e);
     default:
       return null;
   }
 }
-function cy(e, t) {
+function wy(e, t) {
   if (ia)
-    return e === "compositionend" || (!ch && of(e, t))
-      ? ((e = ef()), (Wr = hh = fo = null), (ia = !1), e)
+    return e === "compositionend" || (!fh && af(e, t))
+      ? ((e = tf()), (Er = dh = wo = null), (ia = !1), e)
       : null;
   switch (e) {
     case "paste":
@@ -2630,12 +2630,12 @@ function cy(e, t) {
       }
       return null;
     case "compositionend":
-      return tf && t.locale !== "ko" ? null : t.data;
+      return of && t.locale !== "ko" ? null : t.data;
     default:
       return null;
   }
 }
-var fy = {
+var gy = {
   color: !0,
   date: !0,
   datetime: !0,
@@ -2652,71 +2652,71 @@ var fy = {
   url: !0,
   week: !0,
 };
-function Md(e) {
+function $d(e) {
   var t = e && e.nodeName && e.nodeName.toLowerCase();
-  return t === "input" ? !!fy[e.type] : t === "textarea";
+  return t === "input" ? !!gy[e.type] : t === "textarea";
 }
-function nf(e, t, o, a) {
-  (Ec(a),
-    (t = oi(t, "onChange")),
+function rf(e, t, o, a) {
+  (Bc(a),
+    (t = ai(t, "onChange")),
     0 < t.length &&
-      ((o = new dh("onChange", "change", null, o, a)),
+      ((o = new uh("onChange", "change", null, o, a)),
       e.push({ event: o, listeners: t })));
 }
 var yn = null,
   On = null;
-function wy(e) {
-  mf(e, 0);
+function my(e) {
+  yf(e, 0);
 }
-function Yi(e) {
+function Si(e) {
   var t = ha(e);
-  if (Sc(t)) return e;
+  if (Rc(t)) return e;
 }
-function gy(e, t) {
+function yy(e, t) {
   if (e === "change") return t;
 }
-var rf = !1;
+var sf = !1;
 if (Qt) {
-  var ss;
+  var ls;
   if (Qt) {
-    var ls = "oninput" in document;
-    if (!ls) {
-      var $d = document.createElement("div");
-      ($d.setAttribute("oninput", "return;"),
-        (ls = typeof $d.oninput == "function"));
+    var hs = "oninput" in document;
+    if (!hs) {
+      var Hd = document.createElement("div");
+      (Hd.setAttribute("oninput", "return;"),
+        (hs = typeof Hd.oninput == "function"));
     }
-    ss = ls;
-  } else ss = !1;
-  rf = ss && (!document.documentMode || 9 < document.documentMode);
+    ls = hs;
+  } else ls = !1;
+  sf = ls && (!document.documentMode || 9 < document.documentMode);
 }
-function Hd() {
-  yn && (yn.detachEvent("onpropertychange", sf), (On = yn = null));
+function Dd() {
+  yn && (yn.detachEvent("onpropertychange", lf), (On = yn = null));
 }
-function sf(e) {
-  if (e.propertyName === "value" && Yi(On)) {
+function lf(e) {
+  if (e.propertyName === "value" && Si(On)) {
     var t = [];
-    (nf(t, On, e, nh(e)), Pc(wy, t));
+    (rf(t, On, e, rh(e)), Mc(my, t));
   }
 }
-function my(e, t, o) {
+function py(e, t, o) {
   e === "focusin"
-    ? (Hd(), (yn = t), (On = o), yn.attachEvent("onpropertychange", sf))
-    : e === "focusout" && Hd();
+    ? (Dd(), (yn = t), (On = o), yn.attachEvent("onpropertychange", lf))
+    : e === "focusout" && Dd();
 }
-function yy(e) {
+function by(e) {
   if (e === "selectionchange" || e === "keyup" || e === "keydown")
-    return Yi(On);
-}
-function py(e, t) {
-  if (e === "click") return Yi(t);
-}
-function by(e, t) {
-  if (e === "input" || e === "change") return Yi(t);
+    return Si(On);
 }
 function ky(e, t) {
+  if (e === "click") return Si(t);
+}
+function xy(e, t) {
+  if (e === "input" || e === "change") return Si(t);
+}
+function vy(e, t) {
   return (e === t && (e !== 0 || 1 / e === 1 / t)) || (e !== e && t !== t);
 }
-var Nt = typeof Object.is == "function" ? Object.is : ky;
+var Nt = typeof Object.is == "function" ? Object.is : vy;
 function Wn(e, t) {
   if (Nt(e, t)) return !0;
   if (typeof e != "object" || e === null || typeof t != "object" || t === null)
@@ -2726,16 +2726,16 @@ function Wn(e, t) {
   if (o.length !== a.length) return !1;
   for (a = 0; a < o.length; a++) {
     var n = o[a];
-    if (!Bs.call(t, n) || !Nt(e[n], t[n])) return !1;
+    if (!Fs.call(t, n) || !Nt(e[n], t[n])) return !1;
   }
   return !0;
 }
-function Dd(e) {
+function qd(e) {
   for (; e && e.firstChild;) e = e.firstChild;
   return e;
 }
-function qd(e, t) {
-  var o = Dd(e);
+function Gd(e, t) {
+  var o = qd(e);
   e = 0;
   for (var a; o;) {
     if (o.nodeType === 3) {
@@ -2753,17 +2753,17 @@ function qd(e, t) {
       }
       o = void 0;
     }
-    o = Dd(o);
+    o = qd(o);
   }
 }
-function lf(e, t) {
+function hf(e, t) {
   return e && t
     ? e === t
       ? !0
       : e && e.nodeType === 3
         ? !1
         : t && t.nodeType === 3
-          ? lf(e, t.parentNode)
+          ? hf(e, t.parentNode)
           : "contains" in e
             ? e.contains(t)
             : e.compareDocumentPosition
@@ -2771,8 +2771,8 @@ function lf(e, t) {
               : !1
     : !1;
 }
-function hf() {
-  for (var e = window, t = Jr(); t instanceof e.HTMLIFrameElement;) {
+function df() {
+  for (var e = window, t = Vr(); t instanceof e.HTMLIFrameElement;) {
     try {
       var o = typeof t.contentWindow.location.href == "string";
     } catch {
@@ -2780,11 +2780,11 @@ function hf() {
     }
     if (o) e = t.contentWindow;
     else break;
-    t = Jr(e.document);
+    t = Vr(e.document);
   }
   return t;
 }
-function fh(e) {
+function wh(e) {
   var t = e && e.nodeName && e.nodeName.toLowerCase();
   return (
     t &&
@@ -2798,17 +2798,17 @@ function fh(e) {
       e.contentEditable === "true")
   );
 }
-function xy(e) {
-  var t = hf(),
+function Ty(e) {
+  var t = df(),
     o = e.focusedElem,
     a = e.selectionRange;
   if (
     t !== o &&
     o &&
     o.ownerDocument &&
-    lf(o.ownerDocument.documentElement, o)
+    hf(o.ownerDocument.documentElement, o)
   ) {
-    if (a !== null && fh(o)) {
+    if (a !== null && wh(o)) {
       if (
         ((t = a.start),
         (e = a.end),
@@ -2826,8 +2826,8 @@ function xy(e) {
           r = Math.min(a.start, n);
         ((a = a.end === void 0 ? r : Math.min(a.end, n)),
           !e.extend && r > a && ((n = a), (a = r), (r = n)),
-          (n = qd(o, r)));
-        var i = qd(o, a);
+          (n = Gd(o, r)));
+        var i = Gd(o, a);
         n &&
           i &&
           (e.rangeCount !== 1 ||
@@ -2852,18 +2852,18 @@ function xy(e) {
         (e.element.scrollTop = e.top));
   }
 }
-var Ty = Qt && "documentMode" in document && 11 >= document.documentMode,
+var _y = Qt && "documentMode" in document && 11 >= document.documentMode,
   sa = null,
-  tl = null,
+  ol = null,
   pn = null,
-  ol = !1;
-function Gd(e, t, o) {
+  al = !1;
+function Kd(e, t, o) {
   var a = o.window === o ? o.document : o.nodeType === 9 ? o : o.ownerDocument;
-  ol ||
+  al ||
     sa == null ||
-    sa !== Jr(a) ||
+    sa !== Vr(a) ||
     ((a = sa),
-    "selectionStart" in a && fh(a)
+    "selectionStart" in a && wh(a)
       ? (a = { start: a.selectionStart, end: a.selectionEnd })
       : ((a = (
           (a.ownerDocument && a.ownerDocument.defaultView) ||
@@ -2877,9 +2877,9 @@ function Gd(e, t, o) {
         })),
     (pn && Wn(pn, a)) ||
       ((pn = a),
-      (a = oi(tl, "onSelect")),
+      (a = ai(ol, "onSelect")),
       0 < a.length &&
-        ((t = new dh("onSelect", "select", null, t, o)),
+        ((t = new uh("onSelect", "select", null, t, o)),
         e.push({ event: t, listeners: a }),
         (t.target = sa))));
 }
@@ -2898,48 +2898,48 @@ var la = {
     animationstart: mr("Animation", "AnimationStart"),
     transitionend: mr("Transition", "TransitionEnd"),
   },
-  hs = {},
-  df = {};
+  ds = {},
+  uf = {};
 Qt &&
-  ((df = document.createElement("div").style),
+  ((uf = document.createElement("div").style),
   "AnimationEvent" in window ||
     (delete la.animationend.animation,
     delete la.animationiteration.animation,
     delete la.animationstart.animation),
   "TransitionEvent" in window || delete la.transitionend.transition);
-function Si(e) {
-  if (hs[e]) return hs[e];
+function Ri(e) {
+  if (ds[e]) return ds[e];
   if (!la[e]) return e;
   var t = la[e],
     o;
-  for (o in t) if (t.hasOwnProperty(o) && o in df) return (hs[e] = t[o]);
+  for (o in t) if (t.hasOwnProperty(o) && o in uf) return (ds[e] = t[o]);
   return e;
 }
-var uf = Si("animationend"),
-  cf = Si("animationiteration"),
-  ff = Si("animationstart"),
-  wf = Si("transitionend"),
-  gf = new Map(),
-  Kd =
+var cf = Ri("animationend"),
+  ff = Ri("animationiteration"),
+  wf = Ri("animationstart"),
+  gf = Ri("transitionend"),
+  mf = new Map(),
+  zd =
     "abort auxClick cancel canPlay canPlayThrough click close contextMenu copy cut drag dragEnd dragEnter dragExit dragLeave dragOver dragStart drop durationChange emptied encrypted ended error gotPointerCapture input invalid keyDown keyPress keyUp load loadedData loadedMetadata loadStart lostPointerCapture mouseDown mouseMove mouseOut mouseOver mouseUp paste pause play playing pointerCancel pointerDown pointerMove pointerOut pointerOver pointerUp progress rateChange reset resize seeked seeking stalled submit suspend timeUpdate touchCancel touchEnd touchStart volumeChange scroll toggle touchMove waiting wheel".split(
       " ",
     );
 function Ro(e, t) {
-  (gf.set(e, t), Qo(t, [e]));
+  (mf.set(e, t), Qo(t, [e]));
 }
-for (var ds = 0; ds < Kd.length; ds++) {
-  var us = Kd[ds],
-    vy = us.toLowerCase(),
-    _y = us[0].toUpperCase() + us.slice(1);
-  Ro(vy, "on" + _y);
+for (var us = 0; us < zd.length; us++) {
+  var cs = zd[us],
+    jy = cs.toLowerCase(),
+    Ay = cs[0].toUpperCase() + cs.slice(1);
+  Ro(jy, "on" + Ay);
 }
-Ro(uf, "onAnimationEnd");
-Ro(cf, "onAnimationIteration");
-Ro(ff, "onAnimationStart");
+Ro(cf, "onAnimationEnd");
+Ro(ff, "onAnimationIteration");
+Ro(wf, "onAnimationStart");
 Ro("dblclick", "onDoubleClick");
 Ro("focusin", "onFocus");
 Ro("focusout", "onBlur");
-Ro(wf, "onTransitionEnd");
+Ro(gf, "onTransitionEnd");
 Ya("onMouseEnter", ["mouseout", "mouseover"]);
 Ya("onMouseLeave", ["mouseout", "mouseover"]);
 Ya("onPointerEnter", ["pointerout", "pointerover"]);
@@ -2973,12 +2973,12 @@ var sn =
     "abort canplay canplaythrough durationchange emptied encrypted ended error loadeddata loadedmetadata loadstart pause play playing progress ratechange resize seeked seeking stalled suspend timeupdate volumechange waiting".split(
       " ",
     ),
-  jy = new Set("cancel close invalid load scroll toggle".split(" ").concat(sn));
-function zd(e, t, o) {
+  Yy = new Set("cancel close invalid load scroll toggle".split(" ").concat(sn));
+function Ud(e, t, o) {
   var a = e.type || "unknown-event";
-  ((e.currentTarget = o), vm(a, t, void 0, e), (e.currentTarget = null));
+  ((e.currentTarget = o), jm(a, t, void 0, e), (e.currentTarget = null));
 }
-function mf(e, t) {
+function yf(e, t) {
   t = (t & 4) !== 0;
   for (var o = 0; o < e.length; o++) {
     var a = e[o],
@@ -2992,7 +2992,7 @@ function mf(e, t) {
             s = l.instance,
             u = l.currentTarget;
           if (((l = l.listener), s !== r && n.isPropagationStopped())) break e;
-          (zd(n, l, u), (r = s));
+          (Ud(n, l, u), (r = s));
         }
       else
         for (i = 0; i < a.length; i++) {
@@ -3004,47 +3004,47 @@ function mf(e, t) {
             s !== r && n.isPropagationStopped())
           )
             break e;
-          (zd(n, l, u), (r = s));
+          (Ud(n, l, u), (r = s));
         }
     }
   }
-  if (Xr) throw ((e = Xs), (Xr = !1), (Xs = null), e);
+  if (Qr) throw ((e = Qs), (Qr = !1), (Qs = null), e);
 }
 function le(e, t) {
-  var o = t[sl];
-  o === void 0 && (o = t[sl] = new Set());
+  var o = t[ll];
+  o === void 0 && (o = t[ll] = new Set());
   var a = e + "__bubble";
-  o.has(a) || (yf(t, e, 2, !1), o.add(a));
+  o.has(a) || (pf(t, e, 2, !1), o.add(a));
 }
-function cs(e, t, o) {
+function fs(e, t, o) {
   var a = 0;
-  (t && (a |= 4), yf(o, e, a, t));
+  (t && (a |= 4), pf(o, e, a, t));
 }
 var yr = "_reactListening" + Math.random().toString(36).slice(2);
 function En(e) {
   if (!e[yr]) {
     ((e[yr] = !0),
-      vc.forEach(function (o) {
-        o !== "selectionchange" && (jy.has(o) || cs(o, !1, e), cs(o, !0, e));
+      _c.forEach(function (o) {
+        o !== "selectionchange" && (Yy.has(o) || fs(o, !1, e), fs(o, !0, e));
       }));
     var t = e.nodeType === 9 ? e : e.ownerDocument;
-    t === null || t[yr] || ((t[yr] = !0), cs("selectionchange", !1, t));
+    t === null || t[yr] || ((t[yr] = !0), fs("selectionchange", !1, t));
   }
 }
-function yf(e, t, o, a) {
-  switch (Zc(t)) {
+function pf(e, t, o, a) {
+  switch (ef(t)) {
     case 1:
-      var n = Pm;
+      var n = $m;
       break;
     case 4:
-      n = Mm;
+      n = Hm;
       break;
     default:
-      n = lh;
+      n = hh;
   }
   ((o = n.bind(null, t, o, e)),
     (n = void 0),
-    !Vs ||
+    !Xs ||
       (t !== "touchstart" && t !== "touchmove" && t !== "wheel") ||
       (n = !0),
     a
@@ -3055,7 +3055,7 @@ function yf(e, t, o, a) {
         ? e.addEventListener(t, o, { passive: n })
         : e.addEventListener(t, o, !1));
 }
-function fs(e, t, o, a, n) {
+function ws(e, t, o, a, n) {
   var r = a;
   if (!(t & 1) && !(t & 2) && a !== null)
     e: for (;;) {
@@ -3086,31 +3086,31 @@ function fs(e, t, o, a, n) {
       }
       a = a.return;
     }
-  Pc(function () {
+  Mc(function () {
     var u = r,
-      f = nh(o),
+      f = rh(o),
       y = [];
     e: {
-      var g = gf.get(e);
+      var g = mf.get(e);
       if (g !== void 0) {
-        var k = dh,
-          x = e;
+        var x = uh,
+          k = e;
         switch (e) {
           case "keypress":
-            if (Er(o) === 0) break e;
+            if (Br(o) === 0) break e;
           case "keydown":
           case "keyup":
-            k = ty;
+            x = ay;
             break;
           case "focusin":
-            ((x = "focus"), (k = is));
+            ((k = "focus"), (x = ss));
             break;
           case "focusout":
-            ((x = "blur"), (k = is));
+            ((k = "blur"), (x = ss));
             break;
           case "beforeblur":
           case "afterblur":
-            k = is;
+            x = ss;
             break;
           case "click":
             if (o.button === 2) break e;
@@ -3122,7 +3122,7 @@ function fs(e, t, o, a, n) {
           case "mouseout":
           case "mouseover":
           case "contextmenu":
-            k = Ed;
+            x = Bd;
             break;
           case "drag":
           case "dragend":
@@ -3132,32 +3132,32 @@ function fs(e, t, o, a, n) {
           case "dragover":
           case "dragstart":
           case "drop":
-            k = Dm;
+            x = Gm;
             break;
           case "touchcancel":
           case "touchend":
           case "touchmove":
           case "touchstart":
-            k = ny;
+            x = iy;
             break;
-          case uf:
           case cf:
           case ff:
-            k = Km;
-            break;
           case wf:
-            k = iy;
+            x = Um;
+            break;
+          case gf:
+            x = ly;
             break;
           case "scroll":
-            k = $m;
+            x = Dm;
             break;
           case "wheel":
-            k = ly;
+            x = dy;
             break;
           case "copy":
           case "cut":
           case "paste":
-            k = Um;
+            x = Vm;
             break;
           case "gotpointercapture":
           case "lostpointercapture":
@@ -3167,118 +3167,118 @@ function fs(e, t, o, a, n) {
           case "pointerout":
           case "pointerover":
           case "pointerup":
-            k = Fd;
+            x = Ld;
         }
-        var T = (t & 4) !== 0,
-          Y = !T && e === "scroll",
-          c = T ? (g !== null ? g + "Capture" : null) : g;
-        T = [];
+        var v = (t & 4) !== 0,
+          Y = !v && e === "scroll",
+          c = v ? (g !== null ? g + "Capture" : null) : g;
+        v = [];
         for (var m = u, w; m !== null;) {
           w = m;
-          var v = w.stateNode;
+          var T = w.stateNode;
           if (
             (w.tag === 5 &&
-              v !== null &&
-              ((w = v),
-              c !== null && ((v = Rn(m, c)), v != null && T.push(Bn(m, v, w)))),
+              T !== null &&
+              ((w = T),
+              c !== null && ((T = Rn(m, c)), T != null && v.push(Bn(m, T, w)))),
             Y)
           )
             break;
           m = m.return;
         }
-        0 < T.length &&
-          ((g = new k(g, x, null, o, f)), y.push({ event: g, listeners: T }));
+        0 < v.length &&
+          ((g = new x(g, k, null, o, f)), y.push({ event: g, listeners: v }));
       }
     }
     if (!(t & 7)) {
       e: {
         if (
           ((g = e === "mouseover" || e === "pointerover"),
-          (k = e === "mouseout" || e === "pointerout"),
+          (x = e === "mouseout" || e === "pointerout"),
           g &&
-            o !== Us &&
-            (x = o.relatedTarget || o.fromElement) &&
-            (Fo(x) || x[Zt]))
+            o !== Js &&
+            (k = o.relatedTarget || o.fromElement) &&
+            (Fo(k) || k[Zt]))
         )
           break e;
         if (
-          (k || g) &&
+          (x || g) &&
           ((g =
             f.window === f
               ? f
               : (g = f.ownerDocument)
                 ? g.defaultView || g.parentWindow
                 : window),
-          k
-            ? ((x = o.relatedTarget || o.toElement),
-              (k = u),
-              (x = x ? Fo(x) : null),
-              x !== null &&
-                ((Y = Zo(x)), x !== Y || (x.tag !== 5 && x.tag !== 6)) &&
-                (x = null))
-            : ((k = null), (x = u)),
-          k !== x)
+          x
+            ? ((k = o.relatedTarget || o.toElement),
+              (x = u),
+              (k = k ? Fo(k) : null),
+              k !== null &&
+                ((Y = Zo(k)), k !== Y || (k.tag !== 5 && k.tag !== 6)) &&
+                (k = null))
+            : ((x = null), (k = u)),
+          x !== k)
         ) {
           if (
-            ((T = Ed),
-            (v = "onMouseLeave"),
+            ((v = Bd),
+            (T = "onMouseLeave"),
             (c = "onMouseEnter"),
             (m = "mouse"),
             (e === "pointerout" || e === "pointerover") &&
-              ((T = Fd),
-              (v = "onPointerLeave"),
+              ((v = Ld),
+              (T = "onPointerLeave"),
               (c = "onPointerEnter"),
               (m = "pointer")),
-            (Y = k == null ? g : ha(k)),
-            (w = x == null ? g : ha(x)),
-            (g = new T(v, m + "leave", k, o, f)),
+            (Y = x == null ? g : ha(x)),
+            (w = k == null ? g : ha(k)),
+            (g = new v(T, m + "leave", x, o, f)),
             (g.target = Y),
             (g.relatedTarget = w),
-            (v = null),
+            (T = null),
             Fo(f) === u &&
-              ((T = new T(c, m + "enter", x, o, f)),
-              (T.target = w),
-              (T.relatedTarget = Y),
-              (v = T)),
-            (Y = v),
-            k && x)
+              ((v = new v(c, m + "enter", k, o, f)),
+              (v.target = w),
+              (v.relatedTarget = Y),
+              (T = v)),
+            (Y = T),
+            x && k)
           )
             t: {
-              for (T = k, c = x, m = 0, w = T; w; w = ta(w)) m++;
-              for (w = 0, v = c; v; v = ta(v)) w++;
-              for (; 0 < m - w;) ((T = ta(T)), m--);
+              for (v = x, c = k, m = 0, w = v; w; w = ta(w)) m++;
+              for (w = 0, T = c; T; T = ta(T)) w++;
+              for (; 0 < m - w;) ((v = ta(v)), m--);
               for (; 0 < w - m;) ((c = ta(c)), w--);
               for (; m--;) {
-                if (T === c || (c !== null && T === c.alternate)) break t;
-                ((T = ta(T)), (c = ta(c)));
+                if (v === c || (c !== null && v === c.alternate)) break t;
+                ((v = ta(v)), (c = ta(c)));
               }
-              T = null;
+              v = null;
             }
-          else T = null;
-          (k !== null && Ud(y, g, k, T, !1),
-            x !== null && Y !== null && Ud(y, Y, x, T, !0));
+          else v = null;
+          (x !== null && Jd(y, g, x, v, !1),
+            k !== null && Y !== null && Jd(y, Y, k, v, !0));
         }
       }
       e: {
         if (
           ((g = u ? ha(u) : window),
-          (k = g.nodeName && g.nodeName.toLowerCase()),
-          k === "select" || (k === "input" && g.type === "file"))
+          (x = g.nodeName && g.nodeName.toLowerCase()),
+          x === "select" || (x === "input" && g.type === "file"))
         )
-          var _ = gy;
-        else if (Md(g))
-          if (rf) _ = by;
+          var _ = yy;
+        else if ($d(g))
+          if (sf) _ = xy;
           else {
-            _ = yy;
-            var C = my;
+            _ = by;
+            var C = py;
           }
         else
-          (k = g.nodeName) &&
-            k.toLowerCase() === "input" &&
+          (x = g.nodeName) &&
+            x.toLowerCase() === "input" &&
             (g.type === "checkbox" || g.type === "radio") &&
-            (_ = py);
+            (_ = ky);
         if (_ && (_ = _(e, u))) {
-          nf(y, _, o, f);
+          rf(y, _, o, f);
           break e;
         }
         (C && C(e, g, u),
@@ -3286,32 +3286,32 @@ function fs(e, t, o, a, n) {
             (C = g._wrapperState) &&
             C.controlled &&
             g.type === "number" &&
-            Ds(g, "number", g.value));
+            qs(g, "number", g.value));
       }
       switch (((C = u ? ha(u) : window), e)) {
         case "focusin":
-          (Md(C) || C.contentEditable === "true") &&
-            ((sa = C), (tl = u), (pn = null));
+          ($d(C) || C.contentEditable === "true") &&
+            ((sa = C), (ol = u), (pn = null));
           break;
         case "focusout":
-          pn = tl = sa = null;
+          pn = ol = sa = null;
           break;
         case "mousedown":
-          ol = !0;
+          al = !0;
           break;
         case "contextmenu":
         case "mouseup":
         case "dragend":
-          ((ol = !1), Gd(y, o, f));
+          ((al = !1), Kd(y, o, f));
           break;
         case "selectionchange":
-          if (Ty) break;
+          if (_y) break;
         case "keydown":
         case "keyup":
-          Gd(y, o, f);
+          Kd(y, o, f);
       }
       var R;
-      if (ch)
+      if (fh)
         e: {
           switch (e) {
             case "compositionstart":
@@ -3328,35 +3328,35 @@ function fs(e, t, o, a, n) {
         }
       else
         ia
-          ? of(e, o) && (W = "onCompositionEnd")
+          ? af(e, o) && (W = "onCompositionEnd")
           : e === "keydown" && o.keyCode === 229 && (W = "onCompositionStart");
       (W &&
-        (tf &&
+        (of &&
           o.locale !== "ko" &&
           (ia || W !== "onCompositionStart"
-            ? W === "onCompositionEnd" && ia && (R = ef())
-            : ((fo = f),
-              (hh = "value" in fo ? fo.value : fo.textContent),
+            ? W === "onCompositionEnd" && ia && (R = tf())
+            : ((wo = f),
+              (dh = "value" in wo ? wo.value : wo.textContent),
               (ia = !0))),
-        (C = oi(u, W)),
+        (C = ai(u, W)),
         0 < C.length &&
-          ((W = new Bd(W, e, null, o, f)),
+          ((W = new Fd(W, e, null, o, f)),
           y.push({ event: W, listeners: C }),
-          R ? (W.data = R) : ((R = af(o)), R !== null && (W.data = R)))),
-        (R = dy ? uy(e, o) : cy(e, o)) &&
-          ((u = oi(u, "onBeforeInput")),
+          R ? (W.data = R) : ((R = nf(o)), R !== null && (W.data = R)))),
+        (R = cy ? fy(e, o) : wy(e, o)) &&
+          ((u = ai(u, "onBeforeInput")),
           0 < u.length &&
-            ((f = new Bd("onBeforeInput", "beforeinput", null, o, f)),
+            ((f = new Fd("onBeforeInput", "beforeinput", null, o, f)),
             y.push({ event: f, listeners: u }),
             (f.data = R))));
     }
-    mf(y, t);
+    yf(y, t);
   });
 }
 function Bn(e, t, o) {
   return { instance: e, listener: t, currentTarget: o };
 }
-function oi(e, t) {
+function ai(e, t) {
   for (var o = t + "Capture", a = []; e !== null;) {
     var n = e,
       r = n.stateNode;
@@ -3377,7 +3377,7 @@ function ta(e) {
   while (e && e.tag !== 5);
   return e || null;
 }
-function Ud(e, t, o, a, n) {
+function Jd(e, t, o, a, n) {
   for (var r = t._reactName, i = []; o !== null && o !== a;) {
     var l = o,
       s = l.alternate,
@@ -3393,24 +3393,24 @@ function Ud(e, t, o, a, n) {
   }
   i.length !== 0 && e.push({ event: t, listeners: i });
 }
-var Ay = /\r\n?/g,
-  Yy = /\u0000|\uFFFD/g;
-function Jd(e) {
+var Sy = /\r\n?/g,
+  Ry = /\u0000|\uFFFD/g;
+function Vd(e) {
   return (typeof e == "string" ? e : "" + e)
     .replace(
-      Ay,
+      Sy,
       `
 `,
     )
-    .replace(Yy, "");
+    .replace(Ry, "");
 }
 function pr(e, t, o) {
-  if (((t = Jd(t)), Jd(e) !== t && o)) throw Error(E(425));
+  if (((t = Vd(t)), Vd(e) !== t && o)) throw Error(E(425));
 }
-function ai() {}
-var al = null,
-  nl = null;
-function rl(e, t) {
+function ni() {}
+var nl = null,
+  rl = null;
+function il(e, t) {
   return (
     e === "textarea" ||
     e === "noscript" ||
@@ -3421,23 +3421,23 @@ function rl(e, t) {
       t.dangerouslySetInnerHTML.__html != null)
   );
 }
-var il = typeof setTimeout == "function" ? setTimeout : void 0,
-  Sy = typeof clearTimeout == "function" ? clearTimeout : void 0,
-  Vd = typeof Promise == "function" ? Promise : void 0,
-  Ry =
+var sl = typeof setTimeout == "function" ? setTimeout : void 0,
+  Cy = typeof clearTimeout == "function" ? clearTimeout : void 0,
+  Xd = typeof Promise == "function" ? Promise : void 0,
+  Iy =
     typeof queueMicrotask == "function"
       ? queueMicrotask
-      : typeof Vd < "u"
+      : typeof Xd < "u"
         ? function (e) {
-            return Vd.resolve(null).then(e).catch(Cy);
+            return Xd.resolve(null).then(e).catch(Ny);
           }
-        : il;
-function Cy(e) {
+        : sl;
+function Ny(e) {
   setTimeout(function () {
     throw e;
   });
 }
-function ws(e, t) {
+function gs(e, t) {
   var o = t,
     a = 0;
   do {
@@ -3454,7 +3454,7 @@ function ws(e, t) {
   } while (o);
   Nn(t);
 }
-function bo(e) {
+function ko(e) {
   for (; e != null; e = e.nextSibling) {
     var t = e.nodeType;
     if (t === 1 || t === 3) break;
@@ -3465,7 +3465,7 @@ function bo(e) {
   }
   return e;
 }
-function Xd(e) {
+function Qd(e) {
   e = e.previousSibling;
   for (var t = 0; e;) {
     if (e.nodeType === 8) {
@@ -3483,9 +3483,9 @@ var Ma = Math.random().toString(36).slice(2),
   Lt = "__reactFiber$" + Ma,
   Fn = "__reactProps$" + Ma,
   Zt = "__reactContainer$" + Ma,
-  sl = "__reactEvents$" + Ma,
-  Iy = "__reactListeners$" + Ma,
-  Ny = "__reactHandles$" + Ma;
+  ll = "__reactEvents$" + Ma,
+  Oy = "__reactListeners$" + Ma,
+  Wy = "__reactHandles$" + Ma;
 function Fo(e) {
   var t = e[Lt];
   if (t) return t;
@@ -3495,9 +3495,9 @@ function Fo(e) {
         ((o = t.alternate),
         t.child !== null || (o !== null && o.child !== null))
       )
-        for (e = Xd(e); e !== null;) {
+        for (e = Qd(e); e !== null;) {
           if ((o = e[Lt])) return o;
-          e = Xd(e);
+          e = Qd(e);
         }
       return t;
     }
@@ -3515,27 +3515,27 @@ function ha(e) {
   if (e.tag === 5 || e.tag === 6) return e.stateNode;
   throw Error(E(33));
 }
-function Ri(e) {
+function Ci(e) {
   return e[Fn] || null;
 }
-var ll = [],
+var hl = [],
   da = -1;
 function Co(e) {
   return { current: e };
 }
 function de(e) {
-  0 > da || ((e.current = ll[da]), (ll[da] = null), da--);
+  0 > da || ((e.current = hl[da]), (hl[da] = null), da--);
 }
 function se(e, t) {
-  (da++, (ll[da] = e.current), (e.current = t));
+  (da++, (hl[da] = e.current), (e.current = t));
 }
-var Ao = {},
-  Le = Co(Ao),
-  Qe = Co(!1),
-  zo = Ao;
+var Yo = {},
+  Le = Co(Yo),
+  Ze = Co(!1),
+  zo = Yo;
 function Sa(e, t) {
   var o = e.type.contextTypes;
-  if (!o) return Ao;
+  if (!o) return Yo;
   var a = e.stateNode;
   if (a && a.__reactInternalMemoizedUnmaskedChildContext === t)
     return a.__reactInternalMemoizedMaskedChildContext;
@@ -3550,58 +3550,58 @@ function Sa(e, t) {
     n
   );
 }
-function Ze(e) {
+function et(e) {
   return ((e = e.childContextTypes), e != null);
 }
-function ni() {
-  (de(Qe), de(Le));
+function ri() {
+  (de(Ze), de(Le));
 }
-function Qd(e, t, o) {
-  if (Le.current !== Ao) throw Error(E(168));
-  (se(Le, t), se(Qe, o));
+function Zd(e, t, o) {
+  if (Le.current !== Yo) throw Error(E(168));
+  (se(Le, t), se(Ze, o));
 }
-function pf(e, t, o) {
+function bf(e, t, o) {
   var a = e.stateNode;
   if (((t = t.childContextTypes), typeof a.getChildContext != "function"))
     return o;
   a = a.getChildContext();
-  for (var n in a) if (!(n in t)) throw Error(E(108, mm(e) || "Unknown", n));
+  for (var n in a) if (!(n in t)) throw Error(E(108, pm(e) || "Unknown", n));
   return ge({}, o, a);
 }
-function ri(e) {
+function ii(e) {
   return (
     (e =
-      ((e = e.stateNode) && e.__reactInternalMemoizedMergedChildContext) || Ao),
+      ((e = e.stateNode) && e.__reactInternalMemoizedMergedChildContext) || Yo),
     (zo = Le.current),
     se(Le, e),
-    se(Qe, Qe.current),
+    se(Ze, Ze.current),
     !0
   );
 }
-function Zd(e, t, o) {
+function eu(e, t, o) {
   var a = e.stateNode;
   if (!a) throw Error(E(169));
   (o
-    ? ((e = pf(e, t, zo)),
+    ? ((e = bf(e, t, zo)),
       (a.__reactInternalMemoizedMergedChildContext = e),
-      de(Qe),
+      de(Ze),
       de(Le),
       se(Le, e))
-    : de(Qe),
-    se(Qe, o));
+    : de(Ze),
+    se(Ze, o));
 }
 var zt = null,
-  Ci = !1,
-  gs = !1;
-function bf(e) {
+  Ii = !1,
+  ms = !1;
+function kf(e) {
   zt === null ? (zt = [e]) : zt.push(e);
 }
-function Oy(e) {
-  ((Ci = !0), bf(e));
+function Ey(e) {
+  ((Ii = !0), kf(e));
 }
 function Io() {
-  if (!gs && zt !== null) {
-    gs = !0;
+  if (!ms && zt !== null) {
+    ms = !0;
     var e = 0,
       t = ne;
     try {
@@ -3611,28 +3611,28 @@ function Io() {
         do a = a(!0);
         while (a !== null);
       }
-      ((zt = null), (Ci = !1));
+      ((zt = null), (Ii = !1));
     } catch (n) {
-      throw (zt !== null && (zt = zt.slice(e + 1)), Dc(rh, Io), n);
+      throw (zt !== null && (zt = zt.slice(e + 1)), qc(ih, Io), n);
     } finally {
-      ((ne = t), (gs = !1));
+      ((ne = t), (ms = !1));
     }
   }
   return null;
 }
 var ua = [],
   ca = 0,
-  ii = null,
-  si = 0,
+  si = null,
+  li = 0,
   yt = [],
   pt = 0,
   Uo = null,
   Ut = 1,
   Jt = "";
 function Oo(e, t) {
-  ((ua[ca++] = si), (ua[ca++] = ii), (ii = e), (si = t));
+  ((ua[ca++] = li), (ua[ca++] = si), (si = e), (li = t));
 }
-function kf(e, t, o) {
+function xf(e, t, o) {
   ((yt[pt++] = Ut), (yt[pt++] = Jt), (yt[pt++] = Uo), (Uo = e));
   var a = Ut;
   e = Jt;
@@ -3648,12 +3648,12 @@ function kf(e, t, o) {
       (Jt = r + e));
   } else ((Ut = (1 << r) | (o << n) | a), (Jt = e));
 }
-function wh(e) {
-  e.return !== null && (Oo(e, 1), kf(e, 1, 0));
-}
 function gh(e) {
-  for (; e === ii;)
-    ((ii = ua[--ca]), (ua[ca] = null), (si = ua[--ca]), (ua[ca] = null));
+  e.return !== null && (Oo(e, 1), xf(e, 1, 0));
+}
+function mh(e) {
+  for (; e === si;)
+    ((si = ua[--ca]), (ua[ca] = null), (li = ua[--ca]), (ua[ca] = null));
   for (; e === Uo;)
     ((Uo = yt[--pt]),
       (yt[pt] = null),
@@ -3666,7 +3666,7 @@ var dt = null,
   lt = null,
   ue = !1,
   Rt = null;
-function xf(e, t) {
+function vf(e, t) {
   var o = kt(5, null, null, 0);
   ((o.elementType = "DELETED"),
     (o.stateNode = t),
@@ -3674,7 +3674,7 @@ function xf(e, t) {
     (t = e.deletions),
     t === null ? ((e.deletions = [o]), (e.flags |= 16)) : t.push(o));
 }
-function eu(e, t) {
+function tu(e, t) {
   switch (e.tag) {
     case 5:
       var o = e.type;
@@ -3684,7 +3684,7 @@ function eu(e, t) {
             ? null
             : t),
         t !== null
-          ? ((e.stateNode = t), (dt = e), (lt = bo(t.firstChild)), !0)
+          ? ((e.stateNode = t), (dt = e), (lt = ko(t.firstChild)), !0)
           : !1
       );
     case 6:
@@ -3715,48 +3715,48 @@ function eu(e, t) {
       return !1;
   }
 }
-function hl(e) {
+function dl(e) {
   return (e.mode & 1) !== 0 && (e.flags & 128) === 0;
 }
-function dl(e) {
+function ul(e) {
   if (ue) {
     var t = lt;
     if (t) {
       var o = t;
-      if (!eu(e, t)) {
-        if (hl(e)) throw Error(E(418));
-        t = bo(o.nextSibling);
+      if (!tu(e, t)) {
+        if (dl(e)) throw Error(E(418));
+        t = ko(o.nextSibling);
         var a = dt;
-        t && eu(e, t)
-          ? xf(a, o)
+        t && tu(e, t)
+          ? vf(a, o)
           : ((e.flags = (e.flags & -4097) | 2), (ue = !1), (dt = e));
       }
     } else {
-      if (hl(e)) throw Error(E(418));
+      if (dl(e)) throw Error(E(418));
       ((e.flags = (e.flags & -4097) | 2), (ue = !1), (dt = e));
     }
   }
 }
-function tu(e) {
+function ou(e) {
   for (e = e.return; e !== null && e.tag !== 5 && e.tag !== 3 && e.tag !== 13;)
     e = e.return;
   dt = e;
 }
 function br(e) {
   if (e !== dt) return !1;
-  if (!ue) return (tu(e), (ue = !0), !1);
+  if (!ue) return (ou(e), (ue = !0), !1);
   var t;
   if (
     ((t = e.tag !== 3) &&
       !(t = e.tag !== 5) &&
       ((t = e.type),
-      (t = t !== "head" && t !== "body" && !rl(e.type, e.memoizedProps))),
+      (t = t !== "head" && t !== "body" && !il(e.type, e.memoizedProps))),
     t && (t = lt))
   ) {
-    if (hl(e)) throw (Tf(), Error(E(418)));
-    for (; t;) (xf(e, t), (t = bo(t.nextSibling)));
+    if (dl(e)) throw (Tf(), Error(E(418)));
+    for (; t;) (vf(e, t), (t = ko(t.nextSibling)));
   }
-  if ((tu(e), e.tag === 13)) {
+  if ((ou(e), e.tag === 13)) {
     if (((e = e.memoizedState), (e = e !== null ? e.dehydrated : null), !e))
       throw Error(E(317));
     e: {
@@ -3765,7 +3765,7 @@ function br(e) {
           var o = e.data;
           if (o === "/$") {
             if (t === 0) {
-              lt = bo(e.nextSibling);
+              lt = ko(e.nextSibling);
               break e;
             }
             t--;
@@ -3775,19 +3775,19 @@ function br(e) {
       }
       lt = null;
     }
-  } else lt = dt ? bo(e.stateNode.nextSibling) : null;
+  } else lt = dt ? ko(e.stateNode.nextSibling) : null;
   return !0;
 }
 function Tf() {
-  for (var e = lt; e;) e = bo(e.nextSibling);
+  for (var e = lt; e;) e = ko(e.nextSibling);
 }
 function Ra() {
   ((lt = dt = null), (ue = !1));
 }
-function mh(e) {
+function yh(e) {
   Rt === null ? (Rt = [e]) : Rt.push(e);
 }
-var Wy = ro.ReactCurrentBatchConfig;
+var By = io.ReactCurrentBatchConfig;
 function Qa(e, t, o) {
   if (
     ((e = o.ref), e !== null && typeof e != "function" && typeof e != "object")
@@ -3830,11 +3830,11 @@ function kr(e, t) {
     )
   );
 }
-function ou(e) {
+function au(e) {
   var t = e._init;
   return t(e._payload);
 }
-function vf(e) {
+function _f(e) {
   function t(c, m) {
     if (e) {
       var w = c.deletions;
@@ -3852,7 +3852,7 @@ function vf(e) {
     return c;
   }
   function n(c, m) {
-    return ((c = vo(c, m)), (c.index = 0), (c.sibling = null), c);
+    return ((c = _o(c, m)), (c.index = 0), (c.sibling = null), c);
   }
   function r(c, m, w) {
     return (
@@ -3868,38 +3868,38 @@ function vf(e) {
   function i(c) {
     return (e && c.alternate === null && (c.flags |= 2), c);
   }
-  function l(c, m, w, v) {
+  function l(c, m, w, T) {
     return m === null || m.tag !== 6
-      ? ((m = Ts(w, c.mode, v)), (m.return = c), m)
+      ? ((m = Ts(w, c.mode, T)), (m.return = c), m)
       : ((m = n(m, w)), (m.return = c), m);
   }
-  function s(c, m, w, v) {
+  function s(c, m, w, T) {
     var _ = w.type;
     return _ === ra
-      ? f(c, m, w.props.children, v, w.key)
+      ? f(c, m, w.props.children, T, w.key)
       : m !== null &&
           (m.elementType === _ ||
             (typeof _ == "object" &&
               _ !== null &&
-              _.$$typeof === lo &&
-              ou(_) === m.type))
-        ? ((v = n(m, w.props)), (v.ref = Qa(c, m, w)), (v.return = c), v)
-        : ((v = Hr(w.type, w.key, w.props, null, c.mode, v)),
-          (v.ref = Qa(c, m, w)),
-          (v.return = c),
-          v);
+              _.$$typeof === ho &&
+              au(_) === m.type))
+        ? ((T = n(m, w.props)), (T.ref = Qa(c, m, w)), (T.return = c), T)
+        : ((T = Dr(w.type, w.key, w.props, null, c.mode, T)),
+          (T.ref = Qa(c, m, w)),
+          (T.return = c),
+          T);
   }
-  function u(c, m, w, v) {
+  function u(c, m, w, T) {
     return m === null ||
       m.tag !== 4 ||
       m.stateNode.containerInfo !== w.containerInfo ||
       m.stateNode.implementation !== w.implementation
-      ? ((m = vs(w, c.mode, v)), (m.return = c), m)
+      ? ((m = _s(w, c.mode, T)), (m.return = c), m)
       : ((m = n(m, w.children || [])), (m.return = c), m);
   }
-  function f(c, m, w, v, _) {
+  function f(c, m, w, T, _) {
     return m === null || m.tag !== 7
-      ? ((m = $o(w, c.mode, v, _)), (m.return = c), m)
+      ? ((m = $o(w, c.mode, T, _)), (m.return = c), m)
       : ((m = n(m, w)), (m.return = c), m);
   }
   function y(c, m, w) {
@@ -3909,16 +3909,16 @@ function vf(e) {
       switch (m.$$typeof) {
         case hr:
           return (
-            (w = Hr(m.type, m.key, m.props, null, c.mode, w)),
+            (w = Dr(m.type, m.key, m.props, null, c.mode, w)),
             (w.ref = Qa(c, null, m)),
             (w.return = c),
             w
           );
         case na:
-          return ((m = vs(m, c.mode, w)), (m.return = c), m);
-        case lo:
-          var v = m._init;
-          return y(c, v(m._payload), w);
+          return ((m = _s(m, c.mode, w)), (m.return = c), m);
+        case ho:
+          var T = m._init;
+          return y(c, T(m._payload), w);
       }
       if (nn(m) || za(m))
         return ((m = $o(m, c.mode, w, null)), (m.return = c), m);
@@ -3926,56 +3926,56 @@ function vf(e) {
     }
     return null;
   }
-  function g(c, m, w, v) {
+  function g(c, m, w, T) {
     var _ = m !== null ? m.key : null;
     if ((typeof w == "string" && w !== "") || typeof w == "number")
-      return _ !== null ? null : l(c, m, "" + w, v);
+      return _ !== null ? null : l(c, m, "" + w, T);
     if (typeof w == "object" && w !== null) {
       switch (w.$$typeof) {
         case hr:
-          return w.key === _ ? s(c, m, w, v) : null;
+          return w.key === _ ? s(c, m, w, T) : null;
         case na:
-          return w.key === _ ? u(c, m, w, v) : null;
-        case lo:
-          return ((_ = w._init), g(c, m, _(w._payload), v));
+          return w.key === _ ? u(c, m, w, T) : null;
+        case ho:
+          return ((_ = w._init), g(c, m, _(w._payload), T));
       }
-      if (nn(w) || za(w)) return _ !== null ? null : f(c, m, w, v, null);
+      if (nn(w) || za(w)) return _ !== null ? null : f(c, m, w, T, null);
       kr(c, w);
     }
     return null;
   }
-  function k(c, m, w, v, _) {
-    if ((typeof v == "string" && v !== "") || typeof v == "number")
-      return ((c = c.get(w) || null), l(m, c, "" + v, _));
-    if (typeof v == "object" && v !== null) {
-      switch (v.$$typeof) {
+  function x(c, m, w, T, _) {
+    if ((typeof T == "string" && T !== "") || typeof T == "number")
+      return ((c = c.get(w) || null), l(m, c, "" + T, _));
+    if (typeof T == "object" && T !== null) {
+      switch (T.$$typeof) {
         case hr:
           return (
-            (c = c.get(v.key === null ? w : v.key) || null),
-            s(m, c, v, _)
+            (c = c.get(T.key === null ? w : T.key) || null),
+            s(m, c, T, _)
           );
         case na:
           return (
-            (c = c.get(v.key === null ? w : v.key) || null),
-            u(m, c, v, _)
+            (c = c.get(T.key === null ? w : T.key) || null),
+            u(m, c, T, _)
           );
-        case lo:
-          var C = v._init;
-          return k(c, m, w, C(v._payload), _);
+        case ho:
+          var C = T._init;
+          return x(c, m, w, C(T._payload), _);
       }
-      if (nn(v) || za(v)) return ((c = c.get(w) || null), f(m, c, v, _, null));
-      kr(m, v);
+      if (nn(T) || za(T)) return ((c = c.get(w) || null), f(m, c, T, _, null));
+      kr(m, T);
     }
     return null;
   }
-  function x(c, m, w, v) {
+  function k(c, m, w, T) {
     for (
       var _ = null, C = null, R = m, W = (m = 0), G = null;
       R !== null && W < w.length;
       W++
     ) {
       R.index > W ? ((G = R), (R = null)) : (G = R.sibling);
-      var b = g(c, R, w[W], v);
+      var b = g(c, R, w[W], T);
       if (b === null) {
         R === null && (R = G);
         break;
@@ -3989,7 +3989,7 @@ function vf(e) {
     if (W === w.length) return (o(c, R), ue && Oo(c, W), _);
     if (R === null) {
       for (; W < w.length; W++)
-        ((R = y(c, w[W], v)),
+        ((R = y(c, w[W], T)),
           R !== null &&
             ((m = r(R, m, W)),
             C === null ? (_ = R) : (C.sibling = R),
@@ -3997,7 +3997,7 @@ function vf(e) {
       return (ue && Oo(c, W), _);
     }
     for (R = a(c, R); W < w.length; W++)
-      ((G = k(R, c, W, w[W], v)),
+      ((G = x(R, c, W, w[W], T)),
         G !== null &&
           (e && G.alternate !== null && R.delete(G.key === null ? W : G.key),
           (m = r(G, m, W)),
@@ -4012,7 +4012,7 @@ function vf(e) {
       _
     );
   }
-  function T(c, m, w, v) {
+  function v(c, m, w, T) {
     var _ = za(w);
     if (typeof _ != "function") throw Error(E(150));
     if (((w = _.call(w)), w == null)) throw Error(E(151));
@@ -4022,7 +4022,7 @@ function vf(e) {
       W++, b = w.next()
     ) {
       R.index > W ? ((G = R), (R = null)) : (G = R.sibling);
-      var I = g(c, R, b.value, v);
+      var I = g(c, R, b.value, T);
       if (I === null) {
         R === null && (R = G);
         break;
@@ -4036,7 +4036,7 @@ function vf(e) {
     if (b.done) return (o(c, R), ue && Oo(c, W), _);
     if (R === null) {
       for (; !b.done; W++, b = w.next())
-        ((b = y(c, b.value, v)),
+        ((b = y(c, b.value, T)),
           b !== null &&
             ((m = r(b, m, W)),
             C === null ? (_ = b) : (C.sibling = b),
@@ -4044,7 +4044,7 @@ function vf(e) {
       return (ue && Oo(c, W), _);
     }
     for (R = a(c, R); !b.done; W++, b = w.next())
-      ((b = k(R, c, W, b.value, v)),
+      ((b = x(R, c, W, b.value, T)),
         b !== null &&
           (e && b.alternate !== null && R.delete(b.key === null ? W : b.key),
           (m = r(b, m, W)),
@@ -4059,7 +4059,7 @@ function vf(e) {
       _
     );
   }
-  function Y(c, m, w, v) {
+  function Y(c, m, w, T) {
     if (
       (typeof w == "object" &&
         w !== null &&
@@ -4085,8 +4085,8 @@ function vf(e) {
                   C.elementType === _ ||
                   (typeof _ == "object" &&
                     _ !== null &&
-                    _.$$typeof === lo &&
-                    ou(_) === C.type)
+                    _.$$typeof === ho &&
+                    au(_) === C.type)
                 ) {
                   (o(c, C.sibling),
                     (m = n(C, w.props)),
@@ -4101,13 +4101,13 @@ function vf(e) {
               C = C.sibling;
             }
             w.type === ra
-              ? ((m = $o(w.props.children, c.mode, v, w.key)),
+              ? ((m = $o(w.props.children, c.mode, T, w.key)),
                 (m.return = c),
                 (c = m))
-              : ((v = Hr(w.type, w.key, w.props, null, c.mode, v)),
-                (v.ref = Qa(c, m, w)),
-                (v.return = c),
-                (c = v));
+              : ((T = Dr(w.type, w.key, w.props, null, c.mode, T)),
+                (T.ref = Qa(c, m, w)),
+                (T.return = c),
+                (c = T));
           }
           return i(c);
         case na:
@@ -4131,40 +4131,40 @@ function vf(e) {
               else t(c, m);
               m = m.sibling;
             }
-            ((m = vs(w, c.mode, v)), (m.return = c), (c = m));
+            ((m = _s(w, c.mode, T)), (m.return = c), (c = m));
           }
           return i(c);
-        case lo:
-          return ((C = w._init), Y(c, m, C(w._payload), v));
+        case ho:
+          return ((C = w._init), Y(c, m, C(w._payload), T));
       }
-      if (nn(w)) return x(c, m, w, v);
-      if (za(w)) return T(c, m, w, v);
+      if (nn(w)) return k(c, m, w, T);
+      if (za(w)) return v(c, m, w, T);
       kr(c, w);
     }
     return (typeof w == "string" && w !== "") || typeof w == "number"
       ? ((w = "" + w),
         m !== null && m.tag === 6
           ? (o(c, m.sibling), (m = n(m, w)), (m.return = c), (c = m))
-          : (o(c, m), (m = Ts(w, c.mode, v)), (m.return = c), (c = m)),
+          : (o(c, m), (m = Ts(w, c.mode, T)), (m.return = c), (c = m)),
         i(c))
       : o(c, m);
   }
   return Y;
 }
-var Ca = vf(!0),
-  _f = vf(!1),
-  li = Co(null),
-  hi = null,
+var Ca = _f(!0),
+  jf = _f(!1),
+  hi = Co(null),
+  di = null,
   fa = null,
-  yh = null;
-function ph() {
-  yh = fa = hi = null;
+  ph = null;
+function bh() {
+  ph = fa = di = null;
 }
-function bh(e) {
-  var t = li.current;
-  (de(li), (e._currentValue = t));
+function kh(e) {
+  var t = hi.current;
+  (de(hi), (e._currentValue = t));
 }
-function ul(e, t, o) {
+function cl(e, t, o) {
   for (; e !== null;) {
     var a = e.alternate;
     if (
@@ -4178,30 +4178,30 @@ function ul(e, t, o) {
   }
 }
 function xa(e, t) {
-  ((hi = e),
-    (yh = fa = null),
+  ((di = e),
+    (ph = fa = null),
     (e = e.dependencies),
     e !== null &&
       e.firstContext !== null &&
-      (e.lanes & t && (Ve = !0), (e.firstContext = null)));
+      (e.lanes & t && (Xe = !0), (e.firstContext = null)));
 }
-function vt(e) {
+function Tt(e) {
   var t = e._currentValue;
-  if (yh !== e)
+  if (ph !== e)
     if (((e = { context: e, memoizedValue: t, next: null }), fa === null)) {
-      if (hi === null) throw Error(E(308));
-      ((fa = e), (hi.dependencies = { lanes: 0, firstContext: e }));
+      if (di === null) throw Error(E(308));
+      ((fa = e), (di.dependencies = { lanes: 0, firstContext: e }));
     } else fa = fa.next = e;
   return t;
 }
 var Lo = null;
-function kh(e) {
+function xh(e) {
   Lo === null ? (Lo = [e]) : Lo.push(e);
 }
-function jf(e, t, o, a) {
+function Af(e, t, o, a) {
   var n = t.interleaved;
   return (
-    n === null ? ((o.next = o), kh(t)) : ((o.next = n.next), (n.next = o)),
+    n === null ? ((o.next = o), xh(t)) : ((o.next = n.next), (n.next = o)),
     (t.interleaved = o),
     eo(e, a)
   );
@@ -4217,8 +4217,8 @@ function eo(e, t) {
       (e = e.return));
   return o.tag === 3 ? o.stateNode : null;
 }
-var ho = !1;
-function xh(e) {
+var uo = !1;
+function vh(e) {
   e.updateQueue = {
     baseState: e.memoizedState,
     firstBaseUpdate: null,
@@ -4227,7 +4227,7 @@ function xh(e) {
     effects: null,
   };
 }
-function Af(e, t) {
+function Yf(e, t) {
   ((e = e.updateQueue),
     t.updateQueue === e &&
       (t.updateQueue = {
@@ -4248,7 +4248,7 @@ function Vt(e, t) {
     next: null,
   };
 }
-function ko(e, t, o) {
+function xo(e, t, o) {
   var a = e.updateQueue;
   if (a === null) return null;
   if (((a = a.shared), Q & 2)) {
@@ -4261,20 +4261,20 @@ function ko(e, t, o) {
   }
   return (
     (n = a.interleaved),
-    n === null ? ((t.next = t), kh(a)) : ((t.next = n.next), (n.next = t)),
+    n === null ? ((t.next = t), xh(a)) : ((t.next = n.next), (n.next = t)),
     (a.interleaved = t),
     eo(e, o)
   );
 }
-function Br(e, t, o) {
+function Fr(e, t, o) {
   if (
     ((t = t.updateQueue), t !== null && ((t = t.shared), (o & 4194240) !== 0))
   ) {
     var a = t.lanes;
-    ((a &= e.pendingLanes), (o |= a), (t.lanes = o), ih(e, o));
+    ((a &= e.pendingLanes), (o |= a), (t.lanes = o), sh(e, o));
   }
 }
-function au(e, t) {
+function nu(e, t) {
   var o = e.updateQueue,
     a = e.alternate;
   if (a !== null && ((a = a.updateQueue), o === a)) {
@@ -4308,9 +4308,9 @@ function au(e, t) {
     e === null ? (o.firstBaseUpdate = t) : (e.next = t),
     (o.lastBaseUpdate = t));
 }
-function di(e, t, o, a) {
+function ui(e, t, o, a) {
   var n = e.updateQueue;
-  ho = !1;
+  uo = !1;
   var r = n.firstBaseUpdate,
     i = n.lastBaseUpdate,
     l = n.shared.pending;
@@ -4332,12 +4332,12 @@ function di(e, t, o, a) {
     ((i = 0), (f = u = s = null), (l = r));
     do {
       var g = l.lane,
-        k = l.eventTime;
+        x = l.eventTime;
       if ((a & g) === g) {
         f !== null &&
           (f = f.next =
             {
-              eventTime: k,
+              eventTime: x,
               lane: 0,
               tag: l.tag,
               payload: l.payload,
@@ -4345,29 +4345,29 @@ function di(e, t, o, a) {
               next: null,
             });
         e: {
-          var x = e,
-            T = l;
-          switch (((g = t), (k = o), T.tag)) {
+          var k = e,
+            v = l;
+          switch (((g = t), (x = o), v.tag)) {
             case 1:
-              if (((x = T.payload), typeof x == "function")) {
-                y = x.call(k, y, g);
+              if (((k = v.payload), typeof k == "function")) {
+                y = k.call(x, y, g);
                 break e;
               }
-              y = x;
+              y = k;
               break e;
             case 3:
-              x.flags = (x.flags & -65537) | 128;
+              k.flags = (k.flags & -65537) | 128;
             case 0:
               if (
-                ((x = T.payload),
-                (g = typeof x == "function" ? x.call(k, y, g) : x),
+                ((k = v.payload),
+                (g = typeof k == "function" ? k.call(x, y, g) : k),
                 g == null)
               )
                 break e;
               y = ge({}, y, g);
               break e;
             case 2:
-              ho = !0;
+              uo = !0;
           }
         }
         l.callback !== null &&
@@ -4376,15 +4376,15 @@ function di(e, t, o, a) {
           (g = n.effects),
           g === null ? (n.effects = [l]) : g.push(l));
       } else
-        ((k = {
-          eventTime: k,
+        ((x = {
+          eventTime: x,
           lane: g,
           tag: l.tag,
           payload: l.payload,
           callback: l.callback,
           next: null,
         }),
-          f === null ? ((u = f = k), (s = y)) : (f = f.next = k),
+          f === null ? ((u = f = x), (s = y)) : (f = f.next = x),
           (i |= g));
       if (((l = l.next), l === null)) {
         if (((l = n.shared.pending), l === null)) break;
@@ -4410,7 +4410,7 @@ function di(e, t, o, a) {
     ((Vo |= i), (e.lanes = i), (e.memoizedState = y));
   }
 }
-function nu(e, t, o) {
+function ru(e, t, o) {
   if (((e = t.effects), (t.effects = null), e !== null))
     for (t = 0; t < e.length; t++) {
       var a = e[t],
@@ -4434,30 +4434,30 @@ function Th(e, t) {
   switch ((se(Pn, t), se(Ln, e), se($t, ar), (e = t.nodeType), e)) {
     case 9:
     case 11:
-      t = (t = t.documentElement) ? t.namespaceURI : Gs(null, "");
+      t = (t = t.documentElement) ? t.namespaceURI : Ks(null, "");
       break;
     default:
       ((e = e === 8 ? t.parentNode : t),
         (t = e.namespaceURI || null),
         (e = e.tagName),
-        (t = Gs(t, e)));
+        (t = Ks(t, e)));
   }
   (de($t), se($t, t));
 }
 function Ia() {
   (de($t), de(Ln), de(Pn));
 }
-function Yf(e) {
+function Sf(e) {
   Po(Pn.current);
   var t = Po($t.current),
-    o = Gs(t, e.type);
+    o = Ks(t, e.type);
   t !== o && (se(Ln, e), se($t, o));
 }
-function vh(e) {
+function _h(e) {
   Ln.current === e && (de($t), de(Ln));
 }
 var ce = Co(0);
-function ui(e) {
+function ci(e) {
   for (var t = e; t !== null;) {
     if (t.tag === 13) {
       var o = t.memoizedState;
@@ -4481,39 +4481,39 @@ function ui(e) {
   }
   return null;
 }
-var ms = [];
-function _h() {
-  for (var e = 0; e < ms.length; e++)
-    ms[e]._workInProgressVersionPrimary = null;
-  ms.length = 0;
+var ys = [];
+function jh() {
+  for (var e = 0; e < ys.length; e++)
+    ys[e]._workInProgressVersionPrimary = null;
+  ys.length = 0;
 }
-var Fr = ro.ReactCurrentDispatcher,
-  ys = ro.ReactCurrentBatchConfig,
+var Lr = io.ReactCurrentDispatcher,
+  ps = io.ReactCurrentBatchConfig,
   Jo = 0,
   fe = null,
   _e = null,
   Ye = null,
-  ci = !1,
+  fi = !1,
   bn = !1,
   Mn = 0,
-  Ey = 0;
+  Fy = 0;
 function Oe() {
   throw Error(E(321));
 }
-function jh(e, t) {
+function Ah(e, t) {
   if (t === null) return !1;
   for (var o = 0; o < t.length && o < e.length; o++)
     if (!Nt(e[o], t[o])) return !1;
   return !0;
 }
-function Ah(e, t, o, a, n, r) {
+function Yh(e, t, o, a, n, r) {
   if (
     ((Jo = r),
     (fe = t),
     (t.memoizedState = null),
     (t.updateQueue = null),
     (t.lanes = 0),
-    (Fr.current = e === null || e.memoizedState === null ? Py : My),
+    (Lr.current = e === null || e.memoizedState === null ? $y : Hy),
     (e = o(a, n)),
     bn)
   ) {
@@ -4523,22 +4523,22 @@ function Ah(e, t, o, a, n, r) {
       ((r += 1),
         (Ye = _e = null),
         (t.updateQueue = null),
-        (Fr.current = $y),
+        (Lr.current = Dy),
         (e = o(a, n)));
     } while (bn);
   }
   if (
-    ((Fr.current = fi),
+    ((Lr.current = wi),
     (t = _e !== null && _e.next !== null),
     (Jo = 0),
     (Ye = _e = fe = null),
-    (ci = !1),
+    (fi = !1),
     t)
   )
     throw Error(E(300));
   return e;
 }
-function Yh() {
+function Sh() {
   var e = Mn !== 0;
   return ((Mn = 0), e);
 }
@@ -4576,7 +4576,7 @@ function _t() {
 function $n(e, t) {
   return typeof t == "function" ? t(e) : t;
 }
-function ps(e) {
+function bs(e) {
   var t = _t(),
     o = t.queue;
   if (o === null) throw Error(E(311));
@@ -4624,7 +4624,7 @@ function ps(e) {
       u = u.next;
     } while (u !== null && u !== r);
     (s === null ? (i = a) : (s.next = l),
-      Nt(a, t.memoizedState) || (Ve = !0),
+      Nt(a, t.memoizedState) || (Xe = !0),
       (t.memoizedState = a),
       (t.baseState = i),
       (t.baseQueue = s),
@@ -4637,7 +4637,7 @@ function ps(e) {
   } else n === null && (o.lanes = 0);
   return [t.memoizedState, o.dispatch];
 }
-function bs(e) {
+function ks(e) {
   var t = _t(),
     o = t.queue;
   if (o === null) throw Error(E(311));
@@ -4650,36 +4650,36 @@ function bs(e) {
     var i = (n = n.next);
     do ((r = e(r, i.action)), (i = i.next));
     while (i !== n);
-    (Nt(r, t.memoizedState) || (Ve = !0),
+    (Nt(r, t.memoizedState) || (Xe = !0),
       (t.memoizedState = r),
       t.baseQueue === null && (t.baseState = r),
       (o.lastRenderedState = r));
   }
   return [r, a];
 }
-function Sf() {}
-function Rf(e, t) {
+function Rf() {}
+function Cf(e, t) {
   var o = fe,
     a = _t(),
     n = t(),
     r = !Nt(a.memoizedState, n);
   if (
-    (r && ((a.memoizedState = n), (Ve = !0)),
+    (r && ((a.memoizedState = n), (Xe = !0)),
     (a = a.queue),
-    Sh(Nf.bind(null, o, a, e), [e]),
+    Rh(Of.bind(null, o, a, e), [e]),
     a.getSnapshot !== t || r || (Ye !== null && Ye.memoizedState.tag & 1))
   ) {
     if (
       ((o.flags |= 2048),
-      Hn(9, If.bind(null, o, a, n, t), void 0, null),
+      Hn(9, Nf.bind(null, o, a, n, t), void 0, null),
       Se === null)
     )
       throw Error(E(349));
-    Jo & 30 || Cf(o, t, n);
+    Jo & 30 || If(o, t, n);
   }
   return n;
 }
-function Cf(e, t, o) {
+function If(e, t, o) {
   ((e.flags |= 16384),
     (e = { getSnapshot: t, value: o }),
     (t = fe.updateQueue),
@@ -4689,15 +4689,15 @@ function Cf(e, t, o) {
         (t.stores = [e]))
       : ((o = t.stores), o === null ? (t.stores = [e]) : o.push(e)));
 }
-function If(e, t, o, a) {
-  ((t.value = o), (t.getSnapshot = a), Of(t) && Wf(e));
+function Nf(e, t, o, a) {
+  ((t.value = o), (t.getSnapshot = a), Wf(t) && Ef(e));
 }
-function Nf(e, t, o) {
+function Of(e, t, o) {
   return o(function () {
-    Of(t) && Wf(e);
+    Wf(t) && Ef(e);
   });
 }
-function Of(e) {
+function Wf(e) {
   var t = e.getSnapshot;
   e = e.value;
   try {
@@ -4707,11 +4707,11 @@ function Of(e) {
     return !0;
   }
 }
-function Wf(e) {
+function Ef(e) {
   var t = eo(e, 1);
   t !== null && It(t, e, 1, -1);
 }
-function ru(e) {
+function iu(e) {
   var t = Bt();
   return (
     typeof e == "function" && (e = e()),
@@ -4725,7 +4725,7 @@ function ru(e) {
       lastRenderedState: e,
     }),
     (t.queue = e),
-    (e = e.dispatch = Ly.bind(null, fe, e)),
+    (e = e.dispatch = My.bind(null, fe, e)),
     [t.memoizedState, e]
   );
 }
@@ -4744,40 +4744,40 @@ function Hn(e, t, o, a) {
     e
   );
 }
-function Ef() {
+function Bf() {
   return _t().memoizedState;
 }
-function Lr(e, t, o, a) {
+function Pr(e, t, o, a) {
   var n = Bt();
   ((fe.flags |= e),
     (n.memoizedState = Hn(1 | t, o, void 0, a === void 0 ? null : a)));
 }
-function Ii(e, t, o, a) {
+function Ni(e, t, o, a) {
   var n = _t();
   a = a === void 0 ? null : a;
   var r = void 0;
   if (_e !== null) {
     var i = _e.memoizedState;
-    if (((r = i.destroy), a !== null && jh(a, i.deps))) {
+    if (((r = i.destroy), a !== null && Ah(a, i.deps))) {
       n.memoizedState = Hn(t, o, r, a);
       return;
     }
   }
   ((fe.flags |= e), (n.memoizedState = Hn(1 | t, o, r, a)));
 }
-function iu(e, t) {
-  return Lr(8390656, 8, e, t);
+function su(e, t) {
+  return Pr(8390656, 8, e, t);
 }
-function Sh(e, t) {
-  return Ii(2048, 8, e, t);
-}
-function Bf(e, t) {
-  return Ii(4, 2, e, t);
+function Rh(e, t) {
+  return Ni(2048, 8, e, t);
 }
 function Ff(e, t) {
-  return Ii(4, 4, e, t);
+  return Ni(4, 2, e, t);
 }
 function Lf(e, t) {
+  return Ni(4, 4, e, t);
+}
+function Pf(e, t) {
   if (typeof t == "function")
     return (
       (e = e()),
@@ -4795,50 +4795,50 @@ function Lf(e, t) {
       }
     );
 }
-function Pf(e, t, o) {
+function Mf(e, t, o) {
   return (
     (o = o != null ? o.concat([e]) : null),
-    Ii(4, 4, Lf.bind(null, t, e), o)
+    Ni(4, 4, Pf.bind(null, t, e), o)
   );
 }
-function Rh() {}
-function Mf(e, t) {
-  var o = _t();
-  t = t === void 0 ? null : t;
-  var a = o.memoizedState;
-  return a !== null && t !== null && jh(t, a[1])
-    ? a[0]
-    : ((o.memoizedState = [e, t]), e);
-}
+function Ch() {}
 function $f(e, t) {
   var o = _t();
   t = t === void 0 ? null : t;
   var a = o.memoizedState;
-  return a !== null && t !== null && jh(t, a[1])
+  return a !== null && t !== null && Ah(t, a[1])
+    ? a[0]
+    : ((o.memoizedState = [e, t]), e);
+}
+function Hf(e, t) {
+  var o = _t();
+  t = t === void 0 ? null : t;
+  var a = o.memoizedState;
+  return a !== null && t !== null && Ah(t, a[1])
     ? a[0]
     : ((e = e()), (o.memoizedState = [e, t]), e);
 }
-function Hf(e, t, o) {
+function Df(e, t, o) {
   return Jo & 21
-    ? (Nt(o, t) || ((o = Kc()), (fe.lanes |= o), (Vo |= o), (e.baseState = !0)),
+    ? (Nt(o, t) || ((o = zc()), (fe.lanes |= o), (Vo |= o), (e.baseState = !0)),
       t)
-    : (e.baseState && ((e.baseState = !1), (Ve = !0)), (e.memoizedState = o));
+    : (e.baseState && ((e.baseState = !1), (Xe = !0)), (e.memoizedState = o));
 }
-function By(e, t) {
+function Ly(e, t) {
   var o = ne;
   ((ne = o !== 0 && 4 > o ? o : 4), e(!0));
-  var a = ys.transition;
-  ys.transition = {};
+  var a = ps.transition;
+  ps.transition = {};
   try {
     (e(!1), t());
   } finally {
-    ((ne = o), (ys.transition = a));
+    ((ne = o), (ps.transition = a));
   }
 }
-function Df() {
+function qf() {
   return _t().memoizedState;
 }
-function Fy(e, t, o) {
+function Py(e, t, o) {
   var a = To(e);
   if (
     ((o = {
@@ -4848,18 +4848,18 @@ function Fy(e, t, o) {
       eagerState: null,
       next: null,
     }),
-    qf(e))
+    Gf(e))
   )
-    Gf(t, o);
-  else if (((o = jf(e, t, o, a)), o !== null)) {
+    Kf(t, o);
+  else if (((o = Af(e, t, o, a)), o !== null)) {
     var n = De();
-    (It(o, e, a, n), Kf(o, t, a));
+    (It(o, e, a, n), zf(o, t, a));
   }
 }
-function Ly(e, t, o) {
+function My(e, t, o) {
   var a = To(e),
     n = { lane: a, action: o, hasEagerState: !1, eagerState: null, next: null };
-  if (qf(e)) Gf(t, n);
+  if (Gf(e)) Kf(t, n);
   else {
     var r = e.alternate;
     if (
@@ -4873,7 +4873,7 @@ function Ly(e, t, o) {
         if (((n.hasEagerState = !0), (n.eagerState = l), Nt(l, i))) {
           var s = t.interleaved;
           (s === null
-            ? ((n.next = n), kh(t))
+            ? ((n.next = n), xh(t))
             : ((n.next = s.next), (s.next = n)),
             (t.interleaved = n));
           return;
@@ -4881,28 +4881,28 @@ function Ly(e, t, o) {
       } catch {
       } finally {
       }
-    ((o = jf(e, t, n, a)),
-      o !== null && ((n = De()), It(o, e, a, n), Kf(o, t, a)));
+    ((o = Af(e, t, n, a)),
+      o !== null && ((n = De()), It(o, e, a, n), zf(o, t, a)));
   }
 }
-function qf(e) {
+function Gf(e) {
   var t = e.alternate;
   return e === fe || (t !== null && t === fe);
 }
-function Gf(e, t) {
-  bn = ci = !0;
+function Kf(e, t) {
+  bn = fi = !0;
   var o = e.pending;
   (o === null ? (t.next = t) : ((t.next = o.next), (o.next = t)),
     (e.pending = t));
 }
-function Kf(e, t, o) {
+function zf(e, t, o) {
   if (o & 4194240) {
     var a = t.lanes;
-    ((a &= e.pendingLanes), (o |= a), (t.lanes = o), ih(e, o));
+    ((a &= e.pendingLanes), (o |= a), (t.lanes = o), sh(e, o));
   }
 }
-var fi = {
-    readContext: vt,
+var wi = {
+    readContext: Tt,
     useCallback: Oe,
     useContext: Oe,
     useEffect: Oe,
@@ -4921,24 +4921,24 @@ var fi = {
     useId: Oe,
     unstable_isNewReconciler: !1,
   },
-  Py = {
-    readContext: vt,
+  $y = {
+    readContext: Tt,
     useCallback: function (e, t) {
       return ((Bt().memoizedState = [e, t === void 0 ? null : t]), e);
     },
-    useContext: vt,
-    useEffect: iu,
+    useContext: Tt,
+    useEffect: su,
     useImperativeHandle: function (e, t, o) {
       return (
         (o = o != null ? o.concat([e]) : null),
-        Lr(4194308, 4, Lf.bind(null, t, e), o)
+        Pr(4194308, 4, Pf.bind(null, t, e), o)
       );
     },
     useLayoutEffect: function (e, t) {
-      return Lr(4194308, 4, e, t);
+      return Pr(4194308, 4, e, t);
     },
     useInsertionEffect: function (e, t) {
-      return Lr(4, 2, e, t);
+      return Pr(4, 2, e, t);
     },
     useMemo: function (e, t) {
       var o = Bt();
@@ -4963,7 +4963,7 @@ var fi = {
           lastRenderedState: t,
         }),
         (a.queue = e),
-        (e = e.dispatch = Fy.bind(null, fe, e)),
+        (e = e.dispatch = Py.bind(null, fe, e)),
         [a.memoizedState, e]
       );
     },
@@ -4971,15 +4971,15 @@ var fi = {
       var t = Bt();
       return ((e = { current: e }), (t.memoizedState = e));
     },
-    useState: ru,
-    useDebugValue: Rh,
+    useState: iu,
+    useDebugValue: Ch,
     useDeferredValue: function (e) {
       return (Bt().memoizedState = e);
     },
     useTransition: function () {
-      var e = ru(!1),
+      var e = iu(!1),
         t = e[0];
-      return ((e = By.bind(null, e[1])), (Bt().memoizedState = e), [t, e]);
+      return ((e = Ly.bind(null, e[1])), (Bt().memoizedState = e), [t, e]);
     },
     useMutableSource: function () {},
     useSyncExternalStore: function (e, t, o) {
@@ -4990,15 +4990,15 @@ var fi = {
         o = o();
       } else {
         if (((o = t()), Se === null)) throw Error(E(349));
-        Jo & 30 || Cf(a, t, o);
+        Jo & 30 || If(a, t, o);
       }
       n.memoizedState = o;
       var r = { value: o, getSnapshot: t };
       return (
         (n.queue = r),
-        iu(Nf.bind(null, a, r, e), [e]),
+        su(Of.bind(null, a, r, e), [e]),
         (a.flags |= 2048),
-        Hn(9, If.bind(null, a, r, o, t), void 0, null),
+        Hn(9, Nf.bind(null, a, r, o, t), void 0, null),
         o
       );
     },
@@ -5013,67 +5013,67 @@ var fi = {
           (o = Mn++),
           0 < o && (t += "H" + o.toString(32)),
           (t += ":"));
-      } else ((o = Ey++), (t = ":" + t + "r" + o.toString(32) + ":"));
+      } else ((o = Fy++), (t = ":" + t + "r" + o.toString(32) + ":"));
       return (e.memoizedState = t);
     },
     unstable_isNewReconciler: !1,
   },
-  My = {
-    readContext: vt,
-    useCallback: Mf,
-    useContext: vt,
-    useEffect: Sh,
-    useImperativeHandle: Pf,
-    useInsertionEffect: Bf,
-    useLayoutEffect: Ff,
-    useMemo: $f,
-    useReducer: ps,
-    useRef: Ef,
-    useState: function () {
-      return ps($n);
-    },
-    useDebugValue: Rh,
-    useDeferredValue: function (e) {
-      var t = _t();
-      return Hf(t, _e.memoizedState, e);
-    },
-    useTransition: function () {
-      var e = ps($n)[0],
-        t = _t().memoizedState;
-      return [e, t];
-    },
-    useMutableSource: Sf,
-    useSyncExternalStore: Rf,
-    useId: Df,
-    unstable_isNewReconciler: !1,
-  },
-  $y = {
-    readContext: vt,
-    useCallback: Mf,
-    useContext: vt,
-    useEffect: Sh,
-    useImperativeHandle: Pf,
-    useInsertionEffect: Bf,
-    useLayoutEffect: Ff,
-    useMemo: $f,
+  Hy = {
+    readContext: Tt,
+    useCallback: $f,
+    useContext: Tt,
+    useEffect: Rh,
+    useImperativeHandle: Mf,
+    useInsertionEffect: Ff,
+    useLayoutEffect: Lf,
+    useMemo: Hf,
     useReducer: bs,
-    useRef: Ef,
+    useRef: Bf,
     useState: function () {
       return bs($n);
     },
-    useDebugValue: Rh,
+    useDebugValue: Ch,
     useDeferredValue: function (e) {
       var t = _t();
-      return _e === null ? (t.memoizedState = e) : Hf(t, _e.memoizedState, e);
+      return Df(t, _e.memoizedState, e);
     },
     useTransition: function () {
       var e = bs($n)[0],
         t = _t().memoizedState;
       return [e, t];
     },
-    useMutableSource: Sf,
-    useSyncExternalStore: Rf,
-    useId: Df,
+    useMutableSource: Rf,
+    useSyncExternalStore: Cf,
+    useId: qf,
+    unstable_isNewReconciler: !1,
+  },
+  Dy = {
+    readContext: Tt,
+    useCallback: $f,
+    useContext: Tt,
+    useEffect: Rh,
+    useImperativeHandle: Mf,
+    useInsertionEffect: Ff,
+    useLayoutEffect: Lf,
+    useMemo: Hf,
+    useReducer: ks,
+    useRef: Bf,
+    useState: function () {
+      return ks($n);
+    },
+    useDebugValue: Ch,
+    useDeferredValue: function (e) {
+      var t = _t();
+      return _e === null ? (t.memoizedState = e) : Df(t, _e.memoizedState, e);
+    },
+    useTransition: function () {
+      var e = ks($n)[0],
+        t = _t().memoizedState;
+      return [e, t];
+    },
+    useMutableSource: Rf,
+    useSyncExternalStore: Cf,
+    useId: qf,
     unstable_isNewReconciler: !1,
   };
 function At(e, t) {
@@ -5084,14 +5084,14 @@ function At(e, t) {
   }
   return t;
 }
-function cl(e, t, o, a) {
+function fl(e, t, o, a) {
   ((t = e.memoizedState),
     (o = o(a, t)),
     (o = o == null ? t : ge({}, t, o)),
     (e.memoizedState = o),
     e.lanes === 0 && (e.updateQueue.baseState = o));
 }
-var Ni = {
+var Oi = {
   isMounted: function (e) {
     return (e = e._reactInternals) ? Zo(e) === e : !1;
   },
@@ -5102,8 +5102,8 @@ var Ni = {
       r = Vt(a, n);
     ((r.payload = t),
       o != null && (r.callback = o),
-      (t = ko(e, r, n)),
-      t !== null && (It(t, e, n, a), Br(t, e, n)));
+      (t = xo(e, r, n)),
+      t !== null && (It(t, e, n, a), Fr(t, e, n)));
   },
   enqueueReplaceState: function (e, t, o) {
     e = e._reactInternals;
@@ -5113,8 +5113,8 @@ var Ni = {
     ((r.tag = 1),
       (r.payload = t),
       o != null && (r.callback = o),
-      (t = ko(e, r, n)),
-      t !== null && (It(t, e, n, a), Br(t, e, n)));
+      (t = xo(e, r, n)),
+      t !== null && (It(t, e, n, a), Fr(t, e, n)));
   },
   enqueueForceUpdate: function (e, t) {
     e = e._reactInternals;
@@ -5123,11 +5123,11 @@ var Ni = {
       n = Vt(o, a);
     ((n.tag = 2),
       t != null && (n.callback = t),
-      (t = ko(e, n, a)),
-      t !== null && (It(t, e, a, o), Br(t, e, a)));
+      (t = xo(e, n, a)),
+      t !== null && (It(t, e, a, o), Fr(t, e, a)));
   },
 };
-function su(e, t, o, a, n, r, i) {
+function lu(e, t, o, a, n, r, i) {
   return (
     (e = e.stateNode),
     typeof e.shouldComponentUpdate == "function"
@@ -5137,19 +5137,19 @@ function su(e, t, o, a, n, r, i) {
         : !0
   );
 }
-function zf(e, t, o) {
+function Uf(e, t, o) {
   var a = !1,
-    n = Ao,
+    n = Yo,
     r = t.contextType;
   return (
     typeof r == "object" && r !== null
-      ? (r = vt(r))
-      : ((n = Ze(t) ? zo : Le.current),
+      ? (r = Tt(r))
+      : ((n = et(t) ? zo : Le.current),
         (a = t.contextTypes),
-        (r = (a = a != null) ? Sa(e, n) : Ao)),
+        (r = (a = a != null) ? Sa(e, n) : Yo)),
     (t = new t(o, r)),
     (e.memoizedState = t.state !== null && t.state !== void 0 ? t.state : null),
-    (t.updater = Ni),
+    (t.updater = Oi),
     (e.stateNode = t),
     (t._reactInternals = e),
     a &&
@@ -5159,24 +5159,24 @@ function zf(e, t, o) {
     t
   );
 }
-function lu(e, t, o, a) {
+function hu(e, t, o, a) {
   ((e = t.state),
     typeof t.componentWillReceiveProps == "function" &&
       t.componentWillReceiveProps(o, a),
     typeof t.UNSAFE_componentWillReceiveProps == "function" &&
       t.UNSAFE_componentWillReceiveProps(o, a),
-    t.state !== e && Ni.enqueueReplaceState(t, t.state, null));
+    t.state !== e && Oi.enqueueReplaceState(t, t.state, null));
 }
-function fl(e, t, o, a) {
+function wl(e, t, o, a) {
   var n = e.stateNode;
-  ((n.props = o), (n.state = e.memoizedState), (n.refs = {}), xh(e));
+  ((n.props = o), (n.state = e.memoizedState), (n.refs = {}), vh(e));
   var r = t.contextType;
   (typeof r == "object" && r !== null
-    ? (n.context = vt(r))
-    : ((r = Ze(t) ? zo : Le.current), (n.context = Sa(e, r))),
+    ? (n.context = Tt(r))
+    : ((r = et(t) ? zo : Le.current), (n.context = Sa(e, r))),
     (n.state = e.memoizedState),
     (r = t.getDerivedStateFromProps),
-    typeof r == "function" && (cl(e, t, r, o), (n.state = e.memoizedState)),
+    typeof r == "function" && (fl(e, t, r, o), (n.state = e.memoizedState)),
     typeof t.getDerivedStateFromProps == "function" ||
       typeof n.getSnapshotBeforeUpdate == "function" ||
       (typeof n.UNSAFE_componentWillMount != "function" &&
@@ -5185,8 +5185,8 @@ function fl(e, t, o, a) {
       typeof n.componentWillMount == "function" && n.componentWillMount(),
       typeof n.UNSAFE_componentWillMount == "function" &&
         n.UNSAFE_componentWillMount(),
-      t !== n.state && Ni.enqueueReplaceState(n, n.state, null),
-      di(e, o, n, a),
+      t !== n.state && Oi.enqueueReplaceState(n, n.state, null),
+      ui(e, o, n, a),
       (n.state = e.memoizedState)),
     typeof n.componentDidMount == "function" && (e.flags |= 4194308));
 }
@@ -5194,7 +5194,7 @@ function Na(e, t) {
   try {
     var o = "",
       a = t;
-    do ((o += gm(a)), (a = a.return));
+    do ((o += ym(a)), (a = a.return));
     while (a);
     var n = o;
   } catch (r) {
@@ -5208,10 +5208,10 @@ Error generating stack: ` +
   }
   return { value: e, source: t, stack: n, digest: null };
 }
-function ks(e, t, o) {
+function xs(e, t, o) {
   return { value: e, source: null, stack: o ?? null, digest: t ?? null };
 }
-function wl(e, t) {
+function gl(e, t) {
   try {
     console.error(t.value);
   } catch (o) {
@@ -5220,18 +5220,18 @@ function wl(e, t) {
     });
   }
 }
-var Hy = typeof WeakMap == "function" ? WeakMap : Map;
-function Uf(e, t, o) {
+var qy = typeof WeakMap == "function" ? WeakMap : Map;
+function Jf(e, t, o) {
   ((o = Vt(-1, o)), (o.tag = 3), (o.payload = { element: null }));
   var a = t.value;
   return (
     (o.callback = function () {
-      (gi || ((gi = !0), (_l = a)), wl(e, t));
+      (mi || ((mi = !0), (jl = a)), gl(e, t));
     }),
     o
   );
 }
-function Jf(e, t, o) {
+function Vf(e, t, o) {
   ((o = Vt(-1, o)), (o.tag = 3));
   var a = e.type.getDerivedStateFromError;
   if (typeof a == "function") {
@@ -5240,7 +5240,7 @@ function Jf(e, t, o) {
       return a(n);
     }),
       (o.callback = function () {
-        wl(e, t);
+        gl(e, t);
       }));
   }
   var r = e.stateNode;
@@ -5248,9 +5248,9 @@ function Jf(e, t, o) {
     r !== null &&
       typeof r.componentDidCatch == "function" &&
       (o.callback = function () {
-        (wl(e, t),
+        (gl(e, t),
           typeof a != "function" &&
-            (xo === null ? (xo = new Set([this])) : xo.add(this)));
+            (vo === null ? (vo = new Set([this])) : vo.add(this)));
         var i = t.stack;
         this.componentDidCatch(t.value, {
           componentStack: i !== null ? i : "",
@@ -5259,16 +5259,16 @@ function Jf(e, t, o) {
     o
   );
 }
-function hu(e, t, o) {
+function du(e, t, o) {
   var a = e.pingCache;
   if (a === null) {
-    a = e.pingCache = new Hy();
+    a = e.pingCache = new qy();
     var n = new Set();
     a.set(t, n);
   } else ((n = a.get(t)), n === void 0 && ((n = new Set()), a.set(t, n)));
-  n.has(o) || (n.add(o), (e = op.bind(null, e, t, o)), t.then(e, e));
+  n.has(o) || (n.add(o), (e = np.bind(null, e, t, o)), t.then(e, e));
 }
-function du(e) {
+function uu(e) {
   do {
     var t;
     if (
@@ -5281,7 +5281,7 @@ function du(e) {
   } while (e !== null);
   return null;
 }
-function uu(e, t, o, a, n) {
+function cu(e, t, o, a, n) {
   return e.mode & 1
     ? ((e.flags |= 65536), (e.lanes = n), e)
     : (e === t
@@ -5292,40 +5292,40 @@ function uu(e, t, o, a, n) {
           o.tag === 1 &&
             (o.alternate === null
               ? (o.tag = 17)
-              : ((t = Vt(-1, 1)), (t.tag = 2), ko(o, t, 1))),
+              : ((t = Vt(-1, 1)), (t.tag = 2), xo(o, t, 1))),
           (o.lanes |= 1)),
       e);
 }
-var Dy = ro.ReactCurrentOwner,
-  Ve = !1;
+var Gy = io.ReactCurrentOwner,
+  Xe = !1;
 function Me(e, t, o, a) {
-  t.child = e === null ? _f(t, null, o, a) : Ca(t, e.child, o, a);
+  t.child = e === null ? jf(t, null, o, a) : Ca(t, e.child, o, a);
 }
-function cu(e, t, o, a, n) {
+function fu(e, t, o, a, n) {
   o = o.render;
   var r = t.ref;
   return (
     xa(t, n),
-    (a = Ah(e, t, o, a, r, n)),
-    (o = Yh()),
-    e !== null && !Ve
+    (a = Yh(e, t, o, a, r, n)),
+    (o = Sh()),
+    e !== null && !Xe
       ? ((t.updateQueue = e.updateQueue),
         (t.flags &= -2053),
         (e.lanes &= ~n),
         to(e, t, n))
-      : (ue && o && wh(t), (t.flags |= 1), Me(e, t, a, n), t.child)
+      : (ue && o && gh(t), (t.flags |= 1), Me(e, t, a, n), t.child)
   );
 }
-function fu(e, t, o, a, n) {
+function wu(e, t, o, a, n) {
   if (e === null) {
     var r = o.type;
     return typeof r == "function" &&
-      !Fh(r) &&
+      !Lh(r) &&
       r.defaultProps === void 0 &&
       o.compare === null &&
       o.defaultProps === void 0
-      ? ((t.tag = 15), (t.type = r), Vf(e, t, r, a, n))
-      : ((e = Hr(o.type, null, a, t, t.mode, n)),
+      ? ((t.tag = 15), (t.type = r), Xf(e, t, r, a, n))
+      : ((e = Dr(o.type, null, a, t, t.mode, n)),
         (e.ref = t.ref),
         (e.return = t),
         (t.child = e));
@@ -5339,31 +5339,31 @@ function fu(e, t, o, a, n) {
   }
   return (
     (t.flags |= 1),
-    (e = vo(r, a)),
+    (e = _o(r, a)),
     (e.ref = t.ref),
     (e.return = t),
     (t.child = e)
   );
 }
-function Vf(e, t, o, a, n) {
+function Xf(e, t, o, a, n) {
   if (e !== null) {
     var r = e.memoizedProps;
     if (Wn(r, a) && e.ref === t.ref)
-      if (((Ve = !1), (t.pendingProps = a = r), (e.lanes & n) !== 0))
-        e.flags & 131072 && (Ve = !0);
+      if (((Xe = !1), (t.pendingProps = a = r), (e.lanes & n) !== 0))
+        e.flags & 131072 && (Xe = !0);
       else return ((t.lanes = e.lanes), to(e, t, n));
   }
-  return gl(e, t, o, a, n);
+  return ml(e, t, o, a, n);
 }
-function Xf(e, t, o) {
+function Qf(e, t, o) {
   var a = t.pendingProps,
     n = a.children,
     r = e !== null ? e.memoizedState : null;
   if (a.mode === "hidden")
     if (!(t.mode & 1))
       ((t.memoizedState = { baseLanes: 0, cachePool: null, transitions: null }),
-        se(ga, rt),
-        (rt |= o));
+        se(ga, it),
+        (it |= o));
     else {
       if (!(o & 1073741824))
         return (
@@ -5375,48 +5375,48 @@ function Xf(e, t, o) {
             transitions: null,
           }),
           (t.updateQueue = null),
-          se(ga, rt),
-          (rt |= e),
+          se(ga, it),
+          (it |= e),
           null
         );
       ((t.memoizedState = { baseLanes: 0, cachePool: null, transitions: null }),
         (a = r !== null ? r.baseLanes : o),
-        se(ga, rt),
-        (rt |= a));
+        se(ga, it),
+        (it |= a));
     }
   else
     (r !== null ? ((a = r.baseLanes | o), (t.memoizedState = null)) : (a = o),
-      se(ga, rt),
-      (rt |= a));
+      se(ga, it),
+      (it |= a));
   return (Me(e, t, n, o), t.child);
 }
-function Qf(e, t) {
+function Zf(e, t) {
   var o = t.ref;
   ((e === null && o !== null) || (e !== null && e.ref !== o)) &&
     ((t.flags |= 512), (t.flags |= 2097152));
 }
-function gl(e, t, o, a, n) {
-  var r = Ze(o) ? zo : Le.current;
+function ml(e, t, o, a, n) {
+  var r = et(o) ? zo : Le.current;
   return (
     (r = Sa(t, r)),
     xa(t, n),
-    (o = Ah(e, t, o, a, r, n)),
-    (a = Yh()),
-    e !== null && !Ve
+    (o = Yh(e, t, o, a, r, n)),
+    (a = Sh()),
+    e !== null && !Xe
       ? ((t.updateQueue = e.updateQueue),
         (t.flags &= -2053),
         (e.lanes &= ~n),
         to(e, t, n))
-      : (ue && a && wh(t), (t.flags |= 1), Me(e, t, o, n), t.child)
+      : (ue && a && gh(t), (t.flags |= 1), Me(e, t, o, n), t.child)
   );
 }
-function wu(e, t, o, a, n) {
-  if (Ze(o)) {
+function gu(e, t, o, a, n) {
+  if (et(o)) {
     var r = !0;
-    ri(t);
+    ii(t);
   } else r = !1;
   if ((xa(t, n), t.stateNode === null))
-    (Pr(e, t), zf(t, o, a), fl(t, o, a, n), (a = !0));
+    (Mr(e, t), Uf(t, o, a), wl(t, o, a, n), (a = !0));
   else if (e === null) {
     var i = t.stateNode,
       l = t.memoizedProps;
@@ -5424,8 +5424,8 @@ function wu(e, t, o, a, n) {
     var s = i.context,
       u = o.contextType;
     typeof u == "object" && u !== null
-      ? (u = vt(u))
-      : ((u = Ze(o) ? zo : Le.current), (u = Sa(t, u)));
+      ? (u = Tt(u))
+      : ((u = et(o) ? zo : Le.current), (u = Sa(t, u)));
     var f = o.getDerivedStateFromProps,
       y =
         typeof f == "function" ||
@@ -5433,15 +5433,15 @@ function wu(e, t, o, a, n) {
     (y ||
       (typeof i.UNSAFE_componentWillReceiveProps != "function" &&
         typeof i.componentWillReceiveProps != "function") ||
-      ((l !== a || s !== u) && lu(t, i, a, u)),
-      (ho = !1));
+      ((l !== a || s !== u) && hu(t, i, a, u)),
+      (uo = !1));
     var g = t.memoizedState;
     ((i.state = g),
-      di(t, a, i, n),
+      ui(t, a, i, n),
       (s = t.memoizedState),
-      l !== a || g !== s || Qe.current || ho
-        ? (typeof f == "function" && (cl(t, o, f, a), (s = t.memoizedState)),
-          (l = ho || su(t, o, l, a, g, s, u))
+      l !== a || g !== s || Ze.current || uo
+        ? (typeof f == "function" && (fl(t, o, f, a), (s = t.memoizedState)),
+          (l = uo || lu(t, o, l, a, g, s, u))
             ? (y ||
                 (typeof i.UNSAFE_componentWillMount != "function" &&
                   typeof i.componentWillMount != "function") ||
@@ -5461,7 +5461,7 @@ function wu(e, t, o, a, n) {
           (a = !1)));
   } else {
     ((i = t.stateNode),
-      Af(e, t),
+      Yf(e, t),
       (l = t.memoizedProps),
       (u = t.type === t.elementType ? l : At(t.type, l)),
       (i.props = u),
@@ -5469,30 +5469,30 @@ function wu(e, t, o, a, n) {
       (g = i.context),
       (s = o.contextType),
       typeof s == "object" && s !== null
-        ? (s = vt(s))
-        : ((s = Ze(o) ? zo : Le.current), (s = Sa(t, s))));
-    var k = o.getDerivedStateFromProps;
+        ? (s = Tt(s))
+        : ((s = et(o) ? zo : Le.current), (s = Sa(t, s))));
+    var x = o.getDerivedStateFromProps;
     ((f =
-      typeof k == "function" ||
+      typeof x == "function" ||
       typeof i.getSnapshotBeforeUpdate == "function") ||
       (typeof i.UNSAFE_componentWillReceiveProps != "function" &&
         typeof i.componentWillReceiveProps != "function") ||
-      ((l !== y || g !== s) && lu(t, i, a, s)),
-      (ho = !1),
+      ((l !== y || g !== s) && hu(t, i, a, s)),
+      (uo = !1),
       (g = t.memoizedState),
       (i.state = g),
-      di(t, a, i, n));
-    var x = t.memoizedState;
-    l !== y || g !== x || Qe.current || ho
-      ? (typeof k == "function" && (cl(t, o, k, a), (x = t.memoizedState)),
-        (u = ho || su(t, o, u, a, g, x, s) || !1)
+      ui(t, a, i, n));
+    var k = t.memoizedState;
+    l !== y || g !== k || Ze.current || uo
+      ? (typeof x == "function" && (fl(t, o, x, a), (k = t.memoizedState)),
+        (u = uo || lu(t, o, u, a, g, k, s) || !1)
           ? (f ||
               (typeof i.UNSAFE_componentWillUpdate != "function" &&
                 typeof i.componentWillUpdate != "function") ||
               (typeof i.componentWillUpdate == "function" &&
-                i.componentWillUpdate(a, x, s),
+                i.componentWillUpdate(a, k, s),
               typeof i.UNSAFE_componentWillUpdate == "function" &&
-                i.UNSAFE_componentWillUpdate(a, x, s)),
+                i.UNSAFE_componentWillUpdate(a, k, s)),
             typeof i.componentDidUpdate == "function" && (t.flags |= 4),
             typeof i.getSnapshotBeforeUpdate == "function" && (t.flags |= 1024))
           : (typeof i.componentDidUpdate != "function" ||
@@ -5502,9 +5502,9 @@ function wu(e, t, o, a, n) {
               (l === e.memoizedProps && g === e.memoizedState) ||
               (t.flags |= 1024),
             (t.memoizedProps = a),
-            (t.memoizedState = x)),
+            (t.memoizedState = k)),
         (i.props = a),
-        (i.state = x),
+        (i.state = k),
         (i.context = s),
         (a = u))
       : (typeof i.componentDidUpdate != "function" ||
@@ -5515,13 +5515,13 @@ function wu(e, t, o, a, n) {
           (t.flags |= 1024),
         (a = !1));
   }
-  return ml(e, t, o, a, r, n);
+  return yl(e, t, o, a, r, n);
 }
-function ml(e, t, o, a, n, r) {
-  Qf(e, t);
+function yl(e, t, o, a, n, r) {
+  Zf(e, t);
   var i = (t.flags & 128) !== 0;
-  if (!a && !i) return (n && Zd(t, o, !1), to(e, t, r));
-  ((a = t.stateNode), (Dy.current = t));
+  if (!a && !i) return (n && eu(t, o, !1), to(e, t, r));
+  ((a = t.stateNode), (Gy.current = t));
   var l =
     i && typeof o.getDerivedStateFromError != "function" ? null : a.render();
   return (
@@ -5530,25 +5530,25 @@ function ml(e, t, o, a, n, r) {
       ? ((t.child = Ca(t, e.child, null, r)), (t.child = Ca(t, null, l, r)))
       : Me(e, t, l, r),
     (t.memoizedState = a.state),
-    n && Zd(t, o, !0),
+    n && eu(t, o, !0),
     t.child
   );
 }
-function Zf(e) {
+function ew(e) {
   var t = e.stateNode;
   (t.pendingContext
-    ? Qd(e, t.pendingContext, t.pendingContext !== t.context)
-    : t.context && Qd(e, t.context, !1),
+    ? Zd(e, t.pendingContext, t.pendingContext !== t.context)
+    : t.context && Zd(e, t.context, !1),
     Th(e, t.containerInfo));
 }
-function gu(e, t, o, a, n) {
-  return (Ra(), mh(n), (t.flags |= 256), Me(e, t, o, a), t.child);
+function mu(e, t, o, a, n) {
+  return (Ra(), yh(n), (t.flags |= 256), Me(e, t, o, a), t.child);
 }
-var yl = { dehydrated: null, treeContext: null, retryLane: 0 };
-function pl(e) {
+var pl = { dehydrated: null, treeContext: null, retryLane: 0 };
+function bl(e) {
   return { baseLanes: e, cachePool: null, transitions: null };
 }
-function ew(e, t, o) {
+function tw(e, t, o) {
   var a = t.pendingProps,
     n = ce.current,
     r = !1,
@@ -5564,7 +5564,7 @@ function ew(e, t, o) {
     e === null)
   )
     return (
-      dl(t),
+      ul(t),
       (e = t.memoizedState),
       e !== null && ((e = e.dehydrated), e !== null)
         ? (t.mode & 1
@@ -5581,19 +5581,19 @@ function ew(e, t, o) {
               (i = { mode: "hidden", children: i }),
               !(a & 1) && r !== null
                 ? ((r.childLanes = 0), (r.pendingProps = i))
-                : (r = Ei(i, a, 0, null)),
+                : (r = Bi(i, a, 0, null)),
               (e = $o(e, a, o, null)),
               (r.return = t),
               (e.return = t),
               (r.sibling = e),
               (t.child = r),
-              (t.child.memoizedState = pl(o)),
-              (t.memoizedState = yl),
+              (t.child.memoizedState = bl(o)),
+              (t.memoizedState = pl),
               e)
-            : Ch(t, i))
+            : Ih(t, i))
     );
   if (((n = e.memoizedState), n !== null && ((l = n.dehydrated), l !== null)))
-    return qy(e, t, i, a, l, n, o);
+    return Ky(e, t, i, a, l, n, o);
   if (r) {
     ((r = a.fallback), (i = t.mode), (n = e.child), (l = n.sibling));
     var s = { mode: "hidden", children: a.children };
@@ -5603,8 +5603,8 @@ function ew(e, t, o) {
           (a.childLanes = 0),
           (a.pendingProps = s),
           (t.deletions = null))
-        : ((a = vo(n, s)), (a.subtreeFlags = n.subtreeFlags & 14680064)),
-      l !== null ? (r = vo(l, r)) : ((r = $o(r, i, o, null)), (r.flags |= 2)),
+        : ((a = _o(n, s)), (a.subtreeFlags = n.subtreeFlags & 14680064)),
+      l !== null ? (r = _o(l, r)) : ((r = $o(r, i, o, null)), (r.flags |= 2)),
       (r.return = t),
       (a.return = t),
       (a.sibling = r),
@@ -5614,7 +5614,7 @@ function ew(e, t, o) {
       (i = e.child.memoizedState),
       (i =
         i === null
-          ? pl(o)
+          ? bl(o)
           : {
               baseLanes: i.baseLanes | o,
               cachePool: null,
@@ -5622,14 +5622,14 @@ function ew(e, t, o) {
             }),
       (r.memoizedState = i),
       (r.childLanes = e.childLanes & ~o),
-      (t.memoizedState = yl),
+      (t.memoizedState = pl),
       a
     );
   }
   return (
     (r = e.child),
     (e = r.sibling),
-    (a = vo(r, { mode: "visible", children: a.children })),
+    (a = _o(r, { mode: "visible", children: a.children })),
     !(t.mode & 1) && (a.lanes = o),
     (a.return = t),
     (a.sibling = null),
@@ -5641,32 +5641,32 @@ function ew(e, t, o) {
     a
   );
 }
-function Ch(e, t) {
+function Ih(e, t) {
   return (
-    (t = Ei({ mode: "visible", children: t }, e.mode, 0, null)),
+    (t = Bi({ mode: "visible", children: t }, e.mode, 0, null)),
     (t.return = e),
     (e.child = t)
   );
 }
 function xr(e, t, o, a) {
   return (
-    a !== null && mh(a),
+    a !== null && yh(a),
     Ca(t, e.child, null, o),
-    (e = Ch(t, t.pendingProps.children)),
+    (e = Ih(t, t.pendingProps.children)),
     (e.flags |= 2),
     (t.memoizedState = null),
     e
   );
 }
-function qy(e, t, o, a, n, r, i) {
+function Ky(e, t, o, a, n, r, i) {
   if (o)
     return t.flags & 256
-      ? ((t.flags &= -257), (a = ks(Error(E(422)))), xr(e, t, i, a))
+      ? ((t.flags &= -257), (a = xs(Error(E(422)))), xr(e, t, i, a))
       : t.memoizedState !== null
         ? ((t.child = e.child), (t.flags |= 128), null)
         : ((r = a.fallback),
           (n = t.mode),
-          (a = Ei({ mode: "visible", children: a.children }, n, 0, null)),
+          (a = Bi({ mode: "visible", children: a.children }, n, 0, null)),
           (r = $o(r, n, i, null)),
           (r.flags |= 2),
           (a.return = t),
@@ -5674,8 +5674,8 @@ function qy(e, t, o, a, n, r, i) {
           (a.sibling = r),
           (t.child = a),
           t.mode & 1 && Ca(t, e.child, null, i),
-          (t.child.memoizedState = pl(i)),
-          (t.memoizedState = yl),
+          (t.child.memoizedState = bl(i)),
+          (t.memoizedState = pl),
           r);
   if (!(t.mode & 1)) return xr(e, t, i, null);
   if (n.data === "$!") {
@@ -5683,11 +5683,11 @@ function qy(e, t, o, a, n, r, i) {
     return (
       (a = l),
       (r = Error(E(419))),
-      (a = ks(r, a, void 0)),
+      (a = xs(r, a, void 0)),
       xr(e, t, i, a)
     );
   }
-  if (((l = (i & e.childLanes) !== 0), Ve || l)) {
+  if (((l = (i & e.childLanes) !== 0), Xe || l)) {
     if (((a = Se), a !== null)) {
       switch (i & -i) {
         case 4:
@@ -5730,16 +5730,16 @@ function qy(e, t, o, a, n, r, i) {
           n !== r.retryLane &&
           ((r.retryLane = n), eo(e, n), It(a, e, n, -1)));
     }
-    return (Bh(), (a = ks(Error(E(421)))), xr(e, t, i, a));
+    return (Fh(), (a = xs(Error(E(421)))), xr(e, t, i, a));
   }
   return n.data === "$?"
     ? ((t.flags |= 128),
       (t.child = e.child),
-      (t = ap.bind(null, e)),
+      (t = rp.bind(null, e)),
       (n._reactRetry = t),
       null)
     : ((e = r.treeContext),
-      (lt = bo(n.nextSibling)),
+      (lt = ko(n.nextSibling)),
       (dt = t),
       (ue = !0),
       (Rt = null),
@@ -5750,16 +5750,16 @@ function qy(e, t, o, a, n, r, i) {
         (Ut = e.id),
         (Jt = e.overflow),
         (Uo = t)),
-      (t = Ch(t, a.children)),
+      (t = Ih(t, a.children)),
       (t.flags |= 4096),
       t);
 }
-function mu(e, t, o) {
+function yu(e, t, o) {
   e.lanes |= t;
   var a = e.alternate;
-  (a !== null && (a.lanes |= t), ul(e.return, t, o));
+  (a !== null && (a.lanes |= t), cl(e.return, t, o));
 }
-function xs(e, t, o, a, n) {
+function vs(e, t, o, a, n) {
   var r = e.memoizedState;
   r === null
     ? (e.memoizedState = {
@@ -5777,7 +5777,7 @@ function xs(e, t, o, a, n) {
       (r.tail = o),
       (r.tailMode = n));
 }
-function tw(e, t, o) {
+function ow(e, t, o) {
   var a = t.pendingProps,
     n = a.revealOrder,
     r = a.tail;
@@ -5786,8 +5786,8 @@ function tw(e, t, o) {
   else {
     if (e !== null && e.flags & 128)
       e: for (e = t.child; e !== null;) {
-        if (e.tag === 13) e.memoizedState !== null && mu(e, o, t);
-        else if (e.tag === 19) mu(e, o, t);
+        if (e.tag === 13) e.memoizedState !== null && yu(e, o, t);
+        else if (e.tag === 19) yu(e, o, t);
         else if (e.child !== null) {
           ((e.child.return = e), (e = e.child));
           continue;
@@ -5807,33 +5807,33 @@ function tw(e, t, o) {
       case "forwards":
         for (o = t.child, n = null; o !== null;)
           ((e = o.alternate),
-            e !== null && ui(e) === null && (n = o),
+            e !== null && ci(e) === null && (n = o),
             (o = o.sibling));
         ((o = n),
           o === null
             ? ((n = t.child), (t.child = null))
             : ((n = o.sibling), (o.sibling = null)),
-          xs(t, !1, n, o, r));
+          vs(t, !1, n, o, r));
         break;
       case "backwards":
         for (o = null, n = t.child, t.child = null; n !== null;) {
-          if (((e = n.alternate), e !== null && ui(e) === null)) {
+          if (((e = n.alternate), e !== null && ci(e) === null)) {
             t.child = n;
             break;
           }
           ((e = n.sibling), (n.sibling = o), (o = n), (n = e));
         }
-        xs(t, !0, o, null, r);
+        vs(t, !0, o, null, r);
         break;
       case "together":
-        xs(t, !1, null, null, void 0);
+        vs(t, !1, null, null, void 0);
         break;
       default:
         t.memoizedState = null;
     }
   return t.child;
 }
-function Pr(e, t) {
+function Mr(e, t) {
   !(t.mode & 1) &&
     e !== null &&
     ((e.alternate = null), (t.alternate = null), (t.flags |= 2));
@@ -5848,26 +5848,26 @@ function to(e, t, o) {
   if (e !== null && t.child !== e.child) throw Error(E(153));
   if (t.child !== null) {
     for (
-      e = t.child, o = vo(e, e.pendingProps), t.child = o, o.return = t;
+      e = t.child, o = _o(e, e.pendingProps), t.child = o, o.return = t;
       e.sibling !== null;
     )
       ((e = e.sibling),
-        (o = o.sibling = vo(e, e.pendingProps)),
+        (o = o.sibling = _o(e, e.pendingProps)),
         (o.return = t));
     o.sibling = null;
   }
   return t.child;
 }
-function Gy(e, t, o) {
+function zy(e, t, o) {
   switch (t.tag) {
     case 3:
-      (Zf(t), Ra());
+      (ew(t), Ra());
       break;
     case 5:
-      Yf(t);
+      Sf(t);
       break;
     case 1:
-      Ze(t.type) && ri(t);
+      et(t.type) && ii(t);
       break;
     case 4:
       Th(t, t.stateNode.containerInfo);
@@ -5875,14 +5875,14 @@ function Gy(e, t, o) {
     case 10:
       var a = t.type._context,
         n = t.memoizedProps.value;
-      (se(li, a._currentValue), (a._currentValue = n));
+      (se(hi, a._currentValue), (a._currentValue = n));
       break;
     case 13:
       if (((a = t.memoizedState), a !== null))
         return a.dehydrated !== null
           ? (se(ce, ce.current & 1), (t.flags |= 128), null)
           : o & t.child.childLanes
-            ? ew(e, t, o)
+            ? tw(e, t, o)
             : (se(ce, ce.current & 1),
               (e = to(e, t, o)),
               e !== null ? e.sibling : null);
@@ -5890,7 +5890,7 @@ function Gy(e, t, o) {
       break;
     case 19:
       if (((a = (o & t.childLanes) !== 0), e.flags & 128)) {
-        if (a) return tw(e, t, o);
+        if (a) return ow(e, t, o);
         t.flags |= 128;
       }
       if (
@@ -5904,12 +5904,12 @@ function Gy(e, t, o) {
       return null;
     case 22:
     case 23:
-      return ((t.lanes = 0), Xf(e, t, o));
+      return ((t.lanes = 0), Qf(e, t, o));
   }
   return to(e, t, o);
 }
-var ow, bl, aw, nw;
-ow = function (e, t) {
+var aw, kl, nw, rw;
+aw = function (e, t) {
   for (var o = t.child; o !== null;) {
     if (o.tag === 5 || o.tag === 6) e.appendChild(o.stateNode);
     else if (o.tag !== 4 && o.child !== null) {
@@ -5924,15 +5924,15 @@ ow = function (e, t) {
     ((o.sibling.return = o.return), (o = o.sibling));
   }
 };
-bl = function () {};
-aw = function (e, t, o, a) {
+kl = function () {};
+nw = function (e, t, o, a) {
   var n = e.memoizedProps;
   if (n !== a) {
     ((e = t.stateNode), Po($t.current));
     var r = null;
     switch (o) {
       case "input":
-        ((n = $s(e, n)), (a = $s(e, a)), (r = []));
+        ((n = Hs(e, n)), (a = Hs(e, a)), (r = []));
         break;
       case "select":
         ((n = ge({}, n, { value: void 0 })),
@@ -5940,14 +5940,14 @@ aw = function (e, t, o, a) {
           (r = []));
         break;
       case "textarea":
-        ((n = qs(e, n)), (a = qs(e, a)), (r = []));
+        ((n = Gs(e, n)), (a = Gs(e, a)), (r = []));
         break;
       default:
         typeof n.onClick != "function" &&
           typeof a.onClick == "function" &&
-          (e.onclick = ai);
+          (e.onclick = ni);
     }
-    Ks(o, a);
+    zs(o, a);
     var i;
     o = null;
     for (u in n)
@@ -6001,7 +6001,7 @@ aw = function (e, t, o, a) {
     (t.updateQueue = u) && (t.flags |= 4);
   }
 };
-nw = function (e, t, o, a) {
+rw = function (e, t, o, a) {
   o !== a && (t.flags |= 4);
 };
 function Za(e, t) {
@@ -6044,9 +6044,9 @@ function We(e) {
         (n = n.sibling));
   return ((e.subtreeFlags |= a), (e.childLanes = o), t);
 }
-function Ky(e, t, o) {
+function Uy(e, t, o) {
   var a = t.pendingProps;
-  switch ((gh(t), t.tag)) {
+  switch ((mh(t), t.tag)) {
     case 2:
     case 16:
     case 15:
@@ -6059,14 +6059,14 @@ function Ky(e, t, o) {
     case 14:
       return (We(t), null);
     case 1:
-      return (Ze(t.type) && ni(), We(t), null);
+      return (et(t.type) && ri(), We(t), null);
     case 3:
       return (
         (a = t.stateNode),
         Ia(),
-        de(Qe),
+        de(Ze),
         de(Le),
-        _h(),
+        jh(),
         a.pendingContext &&
           ((a.context = a.pendingContext), (a.pendingContext = null)),
         (e === null || e.child === null) &&
@@ -6074,16 +6074,16 @@ function Ky(e, t, o) {
             ? (t.flags |= 4)
             : e === null ||
               (e.memoizedState.isDehydrated && !(t.flags & 256)) ||
-              ((t.flags |= 1024), Rt !== null && (Yl(Rt), (Rt = null)))),
-        bl(e, t),
+              ((t.flags |= 1024), Rt !== null && (Sl(Rt), (Rt = null)))),
+        kl(e, t),
         We(t),
         null
       );
     case 5:
-      vh(t);
+      _h(t);
       var n = Po(Pn.current);
       if (((o = t.type), e !== null && t.stateNode != null))
-        (aw(e, t, o, a, n),
+        (nw(e, t, o, a, n),
           e.ref !== t.ref && ((t.flags |= 512), (t.flags |= 2097152)));
       else {
         if (!a) {
@@ -6118,16 +6118,16 @@ function Ky(e, t, o) {
               le("toggle", a);
               break;
             case "input":
-              (jd(a, r), le("invalid", a));
+              (Ad(a, r), le("invalid", a));
               break;
             case "select":
               ((a._wrapperState = { wasMultiple: !!r.multiple }),
                 le("invalid", a));
               break;
             case "textarea":
-              (Yd(a, r), le("invalid", a));
+              (Sd(a, r), le("invalid", a));
           }
-          (Ks(o, r), (n = null));
+          (zs(o, r), (n = null));
           for (var i in r)
             if (r.hasOwnProperty(i)) {
               var l = r[i];
@@ -6149,21 +6149,21 @@ function Ky(e, t, o) {
             }
           switch (o) {
             case "input":
-              (dr(a), Ad(a, r, !0));
+              (dr(a), Yd(a, r, !0));
               break;
             case "textarea":
-              (dr(a), Sd(a));
+              (dr(a), Rd(a));
               break;
             case "select":
             case "option":
               break;
             default:
-              typeof r.onClick == "function" && (a.onclick = ai);
+              typeof r.onClick == "function" && (a.onclick = ni);
           }
           ((a = n), (t.updateQueue = a), a !== null && (t.flags |= 4));
         } else {
           ((i = n.nodeType === 9 ? n : n.ownerDocument),
-            e === "http://www.w3.org/1999/xhtml" && (e = Ic(o)),
+            e === "http://www.w3.org/1999/xhtml" && (e = Nc(o)),
             e === "http://www.w3.org/1999/xhtml"
               ? o === "script"
                 ? ((e = i.createElement("div")),
@@ -6180,10 +6180,10 @@ function Ky(e, t, o) {
               : (e = i.createElementNS(e, o)),
             (e[Lt] = t),
             (e[Fn] = a),
-            ow(e, t, !1, !1),
+            aw(e, t, !1, !1),
             (t.stateNode = e));
           e: {
-            switch (((i = zs(o, a)), o)) {
+            switch (((i = Us(o, a)), o)) {
               case "dialog":
                 (le("cancel", e), le("close", e), (n = a));
                 break;
@@ -6209,7 +6209,7 @@ function Ky(e, t, o) {
                 (le("toggle", e), (n = a));
                 break;
               case "input":
-                (jd(e, a), (n = $s(e, a)), le("invalid", e));
+                (Ad(e, a), (n = Hs(e, a)), le("invalid", e));
                 break;
               case "option":
                 n = a;
@@ -6220,19 +6220,19 @@ function Ky(e, t, o) {
                   le("invalid", e));
                 break;
               case "textarea":
-                (Yd(e, a), (n = qs(e, a)), le("invalid", e));
+                (Sd(e, a), (n = Gs(e, a)), le("invalid", e));
                 break;
               default:
                 n = a;
             }
-            (Ks(o, n), (l = n));
+            (zs(o, n), (l = n));
             for (r in l)
               if (l.hasOwnProperty(r)) {
                 var s = l[r];
                 r === "style"
-                  ? Wc(e, s)
+                  ? Ec(e, s)
                   : r === "dangerouslySetInnerHTML"
-                    ? ((s = s ? s.__html : void 0), s != null && Nc(e, s))
+                    ? ((s = s ? s.__html : void 0), s != null && Oc(e, s))
                     : r === "children"
                       ? typeof s == "string"
                         ? (o !== "textarea" || s !== "") && Sn(e, s)
@@ -6242,17 +6242,17 @@ function Ky(e, t, o) {
                         r !== "autoFocus" &&
                         (Yn.hasOwnProperty(r)
                           ? s != null && r === "onScroll" && le("scroll", e)
-                          : s != null && eh(e, r, s, i));
+                          : s != null && th(e, r, s, i));
               }
             switch (o) {
               case "input":
-                (dr(e), Ad(e, a, !1));
+                (dr(e), Yd(e, a, !1));
                 break;
               case "textarea":
-                (dr(e), Sd(e));
+                (dr(e), Rd(e));
                 break;
               case "option":
-                a.value != null && e.setAttribute("value", "" + jo(a.value));
+                a.value != null && e.setAttribute("value", "" + Ao(a.value));
                 break;
               case "select":
                 ((e.multiple = !!a.multiple),
@@ -6263,7 +6263,7 @@ function Ky(e, t, o) {
                       ya(e, !!a.multiple, a.defaultValue, !0));
                 break;
               default:
-                typeof n.onClick == "function" && (e.onclick = ai);
+                typeof n.onClick == "function" && (e.onclick = ni);
             }
             switch (o) {
               case "button":
@@ -6285,7 +6285,7 @@ function Ky(e, t, o) {
       }
       return (We(t), null);
     case 6:
-      if (e && t.stateNode != null) nw(e, t, e.memoizedProps, a);
+      if (e && t.stateNode != null) rw(e, t, e.memoizedProps, a);
       else {
         if (typeof a != "string" && t.stateNode === null) throw Error(E(166));
         if (((o = Po(Pn.current)), Po($t.current), br(t))) {
@@ -6334,7 +6334,7 @@ function Ky(e, t, o) {
               !(t.flags & 128) && (t.memoizedState = null),
               (t.flags |= 4));
           (We(t), (r = !1));
-        } else (Rt !== null && (Yl(Rt), (Rt = null)), (r = !0));
+        } else (Rt !== null && (Sl(Rt), (Rt = null)), (r = !0));
         if (!r) return t.flags & 65536 ? t : null;
       }
       return t.flags & 128
@@ -6344,22 +6344,22 @@ function Ky(e, t, o) {
             a &&
             ((t.child.flags |= 8192),
             t.mode & 1 &&
-              (e === null || ce.current & 1 ? je === 0 && (je = 3) : Bh())),
+              (e === null || ce.current & 1 ? je === 0 && (je = 3) : Fh())),
           t.updateQueue !== null && (t.flags |= 4),
           We(t),
           null);
     case 4:
       return (
         Ia(),
-        bl(e, t),
+        kl(e, t),
         e === null && En(t.stateNode.containerInfo),
         We(t),
         null
       );
     case 10:
-      return (bh(t.type._context), We(t), null);
+      return (kh(t.type._context), We(t), null);
     case 17:
-      return (Ze(t.type) && ni(), We(t), null);
+      return (et(t.type) && ri(), We(t), null);
     case 19:
       if ((de(ce), (r = t.memoizedState), r === null)) return (We(t), null);
       if (((a = (t.flags & 128) !== 0), (i = r.rendering), i === null))
@@ -6367,7 +6367,7 @@ function Ky(e, t, o) {
         else {
           if (je !== 0 || (e !== null && e.flags & 128))
             for (e = t.child; e !== null;) {
-              if (((i = ui(e)), i !== null)) {
+              if (((i = ci(e)), i !== null)) {
                 for (
                   t.flags |= 128,
                     Za(r, !1),
@@ -6420,7 +6420,7 @@ function Ky(e, t, o) {
         }
       else {
         if (!a)
-          if (((e = ui(i)), e !== null)) {
+          if (((e = ci(i)), e !== null)) {
             if (
               ((t.flags |= 128),
               (a = !0),
@@ -6453,11 +6453,11 @@ function Ky(e, t, o) {
     case 22:
     case 23:
       return (
-        Eh(),
+        Bh(),
         (a = t.memoizedState !== null),
         e !== null && (e.memoizedState !== null) !== a && (t.flags |= 8192),
         a && t.mode & 1
-          ? rt & 1073741824 && (We(t), t.subtreeFlags & 6 && (t.flags |= 8192))
+          ? it & 1073741824 && (We(t), t.subtreeFlags & 6 && (t.flags |= 8192))
           : We(t),
         null
       );
@@ -6468,25 +6468,25 @@ function Ky(e, t, o) {
   }
   throw Error(E(156, t.tag));
 }
-function zy(e, t) {
-  switch ((gh(t), t.tag)) {
+function Jy(e, t) {
+  switch ((mh(t), t.tag)) {
     case 1:
       return (
-        Ze(t.type) && ni(),
+        et(t.type) && ri(),
         (e = t.flags),
         e & 65536 ? ((t.flags = (e & -65537) | 128), t) : null
       );
     case 3:
       return (
         Ia(),
-        de(Qe),
+        de(Ze),
         de(Le),
-        _h(),
+        jh(),
         (e = t.flags),
         e & 65536 && !(e & 128) ? ((t.flags = (e & -65537) | 128), t) : null
       );
     case 5:
-      return (vh(t), null);
+      return (_h(t), null);
     case 13:
       if (
         (de(ce), (e = t.memoizedState), e !== null && e.dehydrated !== null)
@@ -6503,19 +6503,19 @@ function zy(e, t) {
     case 4:
       return (Ia(), null);
     case 10:
-      return (bh(t.type._context), null);
+      return (kh(t.type._context), null);
     case 22:
     case 23:
-      return (Eh(), null);
+      return (Bh(), null);
     case 24:
       return null;
     default:
       return null;
   }
 }
-var Tr = !1,
+var vr = !1,
   Ee = !1,
-  Uy = typeof WeakSet == "function" ? WeakSet : Set,
+  Vy = typeof WeakSet == "function" ? WeakSet : Set,
   M = null;
 function wa(e, t) {
   var o = e.ref;
@@ -6528,16 +6528,16 @@ function wa(e, t) {
       }
     else o.current = null;
 }
-function kl(e, t, o) {
+function xl(e, t, o) {
   try {
     o();
   } catch (a) {
     ye(e, t, a);
   }
 }
-var yu = !1;
-function Jy(e, t) {
-  if (((al = ei), (e = hf()), fh(e))) {
+var pu = !1;
+function Xy(e, t) {
+  if (((nl = ti), (e = df()), wh(e))) {
     if ("selectionStart" in e)
       var o = { start: e.selectionStart, end: e.selectionEnd };
     else
@@ -6564,38 +6564,38 @@ function Jy(e, t) {
             g = null;
           t: for (;;) {
             for (
-              var k;
+              var x;
               y !== o || (n !== 0 && y.nodeType !== 3) || (l = i + n),
                 y !== r || (a !== 0 && y.nodeType !== 3) || (s = i + a),
                 y.nodeType === 3 && (i += y.nodeValue.length),
-                (k = y.firstChild) !== null;
+                (x = y.firstChild) !== null;
             )
-              ((g = y), (y = k));
+              ((g = y), (y = x));
             for (;;) {
               if (y === e) break t;
               if (
                 (g === o && ++u === n && (l = i),
                 g === r && ++f === a && (s = i),
-                (k = y.nextSibling) !== null)
+                (x = y.nextSibling) !== null)
               )
                 break;
               ((y = g), (g = y.parentNode));
             }
-            y = k;
+            y = x;
           }
           o = l === -1 || s === -1 ? null : { start: l, end: s };
         } else o = null;
       }
     o = o || { start: 0, end: 0 };
   } else o = null;
-  for (nl = { focusedElem: e, selectionRange: o }, ei = !1, M = t; M !== null;)
+  for (rl = { focusedElem: e, selectionRange: o }, ti = !1, M = t; M !== null;)
     if (((t = M), (e = t.child), (t.subtreeFlags & 1028) !== 0 && e !== null))
       ((e.return = t), (M = e));
     else
       for (; M !== null;) {
         t = M;
         try {
-          var x = t.alternate;
+          var k = t.alternate;
           if (t.flags & 1024)
             switch (t.tag) {
               case 0:
@@ -6603,12 +6603,12 @@ function Jy(e, t) {
               case 15:
                 break;
               case 1:
-                if (x !== null) {
-                  var T = x.memoizedProps,
-                    Y = x.memoizedState,
+                if (k !== null) {
+                  var v = k.memoizedProps,
+                    Y = k.memoizedState,
                     c = t.stateNode,
                     m = c.getSnapshotBeforeUpdate(
-                      t.elementType === t.type ? T : At(t.type, T),
+                      t.elementType === t.type ? v : At(t.type, v),
                       Y,
                     );
                   c.__reactInternalSnapshotBeforeUpdate = m;
@@ -6630,8 +6630,8 @@ function Jy(e, t) {
               default:
                 throw Error(E(163));
             }
-        } catch (v) {
-          ye(t, t.return, v);
+        } catch (T) {
+          ye(t, t.return, T);
         }
         if (((e = t.sibling), e !== null)) {
           ((e.return = t.return), (M = e));
@@ -6639,7 +6639,7 @@ function Jy(e, t) {
         }
         M = t.return;
       }
-  return ((x = yu), (yu = !1), x);
+  return ((k = pu), (pu = !1), k);
 }
 function kn(e, t, o) {
   var a = t.updateQueue;
@@ -6648,13 +6648,13 @@ function kn(e, t, o) {
     do {
       if ((n.tag & e) === e) {
         var r = n.destroy;
-        ((n.destroy = void 0), r !== void 0 && kl(t, o, r));
+        ((n.destroy = void 0), r !== void 0 && xl(t, o, r));
       }
       n = n.next;
     } while (n !== a);
   }
 }
-function Oi(e, t) {
+function Wi(e, t) {
   if (
     ((t = t.updateQueue), (t = t !== null ? t.lastEffect : null), t !== null)
   ) {
@@ -6668,7 +6668,7 @@ function Oi(e, t) {
     } while (o !== t);
   }
 }
-function xl(e) {
+function vl(e) {
   var t = e.ref;
   if (t !== null) {
     var o = e.stateNode;
@@ -6682,16 +6682,16 @@ function xl(e) {
     typeof t == "function" ? t(e) : (t.current = e);
   }
 }
-function rw(e) {
+function iw(e) {
   var t = e.alternate;
-  (t !== null && ((e.alternate = null), rw(t)),
+  (t !== null && ((e.alternate = null), iw(t)),
     (e.child = null),
     (e.deletions = null),
     (e.sibling = null),
     e.tag === 5 &&
       ((t = e.stateNode),
       t !== null &&
-        (delete t[Lt], delete t[Fn], delete t[sl], delete t[Iy], delete t[Ny])),
+        (delete t[Lt], delete t[Fn], delete t[ll], delete t[Oy], delete t[Wy])),
     (e.stateNode = null),
     (e.return = null),
     (e.dependencies = null),
@@ -6701,13 +6701,13 @@ function rw(e) {
     (e.stateNode = null),
     (e.updateQueue = null));
 }
-function iw(e) {
+function sw(e) {
   return e.tag === 5 || e.tag === 3 || e.tag === 4;
 }
-function pu(e) {
+function bu(e) {
   e: for (;;) {
     for (; e.sibling === null;) {
-      if (e.return === null || iw(e.return)) return null;
+      if (e.return === null || sw(e.return)) return null;
       e = e.return;
     }
     for (
@@ -6732,28 +6732,28 @@ function Tl(e, t, o) {
             ? ((t = o.parentNode), t.insertBefore(e, o))
             : ((t = o), t.appendChild(e)),
           (o = o._reactRootContainer),
-          o != null || t.onclick !== null || (t.onclick = ai)));
+          o != null || t.onclick !== null || (t.onclick = ni)));
   else if (a !== 4 && ((e = e.child), e !== null))
     for (Tl(e, t, o), e = e.sibling; e !== null;)
       (Tl(e, t, o), (e = e.sibling));
 }
-function vl(e, t, o) {
+function _l(e, t, o) {
   var a = e.tag;
   if (a === 5 || a === 6)
     ((e = e.stateNode), t ? o.insertBefore(e, t) : o.appendChild(e));
   else if (a !== 4 && ((e = e.child), e !== null))
-    for (vl(e, t, o), e = e.sibling; e !== null;)
-      (vl(e, t, o), (e = e.sibling));
+    for (_l(e, t, o), e = e.sibling; e !== null;)
+      (_l(e, t, o), (e = e.sibling));
 }
 var Ce = null,
   St = !1;
-function so(e, t, o) {
-  for (o = o.child; o !== null;) (sw(e, t, o), (o = o.sibling));
+function lo(e, t, o) {
+  for (o = o.child; o !== null;) (lw(e, t, o), (o = o.sibling));
 }
-function sw(e, t, o) {
+function lw(e, t, o) {
   if (Mt && typeof Mt.onCommitFiberUnmount == "function")
     try {
-      Mt.onCommitFiberUnmount(ji, o);
+      Mt.onCommitFiberUnmount(Ai, o);
     } catch {}
   switch (o.tag) {
     case 5:
@@ -6762,7 +6762,7 @@ function sw(e, t, o) {
       var a = Ce,
         n = St;
       ((Ce = null),
-        so(e, t, o),
+        lo(e, t, o),
         (Ce = a),
         (St = n),
         Ce !== null &&
@@ -6778,17 +6778,17 @@ function sw(e, t, o) {
           ? ((e = Ce),
             (o = o.stateNode),
             e.nodeType === 8
-              ? ws(e.parentNode, o)
-              : e.nodeType === 1 && ws(e, o),
+              ? gs(e.parentNode, o)
+              : e.nodeType === 1 && gs(e, o),
             Nn(e))
-          : ws(Ce, o.stateNode));
+          : gs(Ce, o.stateNode));
       break;
     case 4:
       ((a = Ce),
         (n = St),
         (Ce = o.stateNode.containerInfo),
         (St = !0),
-        so(e, t, o),
+        lo(e, t, o),
         (Ce = a),
         (St = n));
       break;
@@ -6805,11 +6805,11 @@ function sw(e, t, o) {
           var r = n,
             i = r.destroy;
           ((r = r.tag),
-            i !== void 0 && (r & 2 || r & 4) && kl(o, t, i),
+            i !== void 0 && (r & 2 || r & 4) && xl(o, t, i),
             (n = n.next));
         } while (n !== a);
       }
-      so(e, t, o);
+      lo(e, t, o);
       break;
     case 1:
       if (
@@ -6825,28 +6825,28 @@ function sw(e, t, o) {
         } catch (l) {
           ye(o, t, l);
         }
-      so(e, t, o);
+      lo(e, t, o);
       break;
     case 21:
-      so(e, t, o);
+      lo(e, t, o);
       break;
     case 22:
       o.mode & 1
-        ? ((Ee = (a = Ee) || o.memoizedState !== null), so(e, t, o), (Ee = a))
-        : so(e, t, o);
+        ? ((Ee = (a = Ee) || o.memoizedState !== null), lo(e, t, o), (Ee = a))
+        : lo(e, t, o);
       break;
     default:
-      so(e, t, o);
+      lo(e, t, o);
   }
 }
-function bu(e) {
+function ku(e) {
   var t = e.updateQueue;
   if (t !== null) {
     e.updateQueue = null;
     var o = e.stateNode;
-    (o === null && (o = e.stateNode = new Uy()),
+    (o === null && (o = e.stateNode = new Vy()),
       t.forEach(function (a) {
-        var n = np.bind(null, e, a);
+        var n = ip.bind(null, e, a);
         o.has(a) || (o.add(a), a.then(n, n));
       }));
   }
@@ -6875,7 +6875,7 @@ function jt(e, t) {
           l = l.return;
         }
         if (Ce === null) throw Error(E(160));
-        (sw(r, i, n), (Ce = null), (St = !1));
+        (lw(r, i, n), (Ce = null), (St = !1));
         var s = n.alternate;
         (s !== null && (s.return = null), (n.return = null));
       } catch (u) {
@@ -6883,9 +6883,9 @@ function jt(e, t) {
       }
     }
   if (t.subtreeFlags & 12854)
-    for (t = t.child; t !== null;) (lw(t, e), (t = t.sibling));
+    for (t = t.child; t !== null;) (hw(t, e), (t = t.sibling));
 }
-function lw(e, t) {
+function hw(e, t) {
   var o = e.alternate,
     a = e.flags;
   switch (e.tag) {
@@ -6895,14 +6895,14 @@ function lw(e, t) {
     case 15:
       if ((jt(t, e), Et(e), a & 4)) {
         try {
-          (kn(3, e, e.return), Oi(3, e));
-        } catch (T) {
-          ye(e, e.return, T);
+          (kn(3, e, e.return), Wi(3, e));
+        } catch (v) {
+          ye(e, e.return, v);
         }
         try {
           kn(5, e, e.return);
-        } catch (T) {
-          ye(e, e.return, T);
+        } catch (v) {
+          ye(e, e.return, v);
         }
       }
       break;
@@ -6919,8 +6919,8 @@ function lw(e, t) {
         var n = e.stateNode;
         try {
           Sn(n, "");
-        } catch (T) {
-          ye(e, e.return, T);
+        } catch (v) {
+          ye(e, e.return, v);
         }
       }
       if (a & 4 && ((n = e.stateNode), n != null)) {
@@ -6930,41 +6930,41 @@ function lw(e, t) {
           s = e.updateQueue;
         if (((e.updateQueue = null), s !== null))
           try {
-            (l === "input" && r.type === "radio" && r.name != null && Rc(n, r),
-              zs(l, i));
-            var u = zs(l, r);
+            (l === "input" && r.type === "radio" && r.name != null && Cc(n, r),
+              Us(l, i));
+            var u = Us(l, r);
             for (i = 0; i < s.length; i += 2) {
               var f = s[i],
                 y = s[i + 1];
               f === "style"
-                ? Wc(n, y)
+                ? Ec(n, y)
                 : f === "dangerouslySetInnerHTML"
-                  ? Nc(n, y)
+                  ? Oc(n, y)
                   : f === "children"
                     ? Sn(n, y)
-                    : eh(n, f, y, u);
+                    : th(n, f, y, u);
             }
             switch (l) {
               case "input":
-                Hs(n, r);
+                Ds(n, r);
                 break;
               case "textarea":
-                Cc(n, r);
+                Ic(n, r);
                 break;
               case "select":
                 var g = n._wrapperState.wasMultiple;
                 n._wrapperState.wasMultiple = !!r.multiple;
-                var k = r.value;
-                k != null
-                  ? ya(n, !!r.multiple, k, !1)
+                var x = r.value;
+                x != null
+                  ? ya(n, !!r.multiple, x, !1)
                   : g !== !!r.multiple &&
                     (r.defaultValue != null
                       ? ya(n, !!r.multiple, r.defaultValue, !0)
                       : ya(n, !!r.multiple, r.multiple ? [] : "", !1));
             }
             n[Fn] = r;
-          } catch (T) {
-            ye(e, e.return, T);
+          } catch (v) {
+            ye(e, e.return, v);
           }
       }
       break;
@@ -6974,8 +6974,8 @@ function lw(e, t) {
         ((n = e.stateNode), (r = e.memoizedProps));
         try {
           n.nodeValue = r;
-        } catch (T) {
-          ye(e, e.return, T);
+        } catch (v) {
+          ye(e, e.return, v);
         }
       }
       break;
@@ -6985,8 +6985,8 @@ function lw(e, t) {
       )
         try {
           Nn(t.containerInfo);
-        } catch (T) {
-          ye(e, e.return, T);
+        } catch (v) {
+          ye(e, e.return, v);
         }
       break;
     case 4:
@@ -7001,8 +7001,8 @@ function lw(e, t) {
           (n.stateNode.isHidden = r),
           !r ||
             (n.alternate !== null && n.alternate.memoizedState !== null) ||
-            (Oh = be())),
-        a & 4 && bu(e));
+            (Wh = be())),
+        a & 4 && ku(e));
       break;
     case 22:
       if (
@@ -7017,7 +7017,7 @@ function lw(e, t) {
         )
           for (M = e, f = e.child; f !== null;) {
             for (y = M = f; M !== null;) {
-              switch (((g = M), (k = g.child), g.tag)) {
+              switch (((g = M), (x = g.child), g.tag)) {
                 case 0:
                 case 11:
                 case 14:
@@ -7026,16 +7026,16 @@ function lw(e, t) {
                   break;
                 case 1:
                   wa(g, g.return);
-                  var x = g.stateNode;
-                  if (typeof x.componentWillUnmount == "function") {
+                  var k = g.stateNode;
+                  if (typeof k.componentWillUnmount == "function") {
                     ((a = g), (o = g.return));
                     try {
                       ((t = a),
-                        (x.props = t.memoizedProps),
-                        (x.state = t.memoizedState),
-                        x.componentWillUnmount());
-                    } catch (T) {
-                      ye(a, o, T);
+                        (k.props = t.memoizedProps),
+                        (k.state = t.memoizedState),
+                        k.componentWillUnmount());
+                    } catch (v) {
+                      ye(a, o, v);
                     }
                   }
                   break;
@@ -7044,11 +7044,11 @@ function lw(e, t) {
                   break;
                 case 22:
                   if (g.memoizedState !== null) {
-                    xu(y);
+                    vu(y);
                     continue;
                   }
               }
-              k !== null ? ((k.return = g), (M = k)) : xu(y);
+              x !== null ? ((x.return = g), (M = x)) : vu(y);
             }
             f = f.sibling;
           }
@@ -7069,17 +7069,17 @@ function lw(e, t) {
                         s != null && s.hasOwnProperty("display")
                           ? s.display
                           : null),
-                      (l.style.display = Oc("display", i))));
-              } catch (T) {
-                ye(e, e.return, T);
+                      (l.style.display = Wc("display", i))));
+              } catch (v) {
+                ye(e, e.return, v);
               }
             }
           } else if (y.tag === 6) {
             if (f === null)
               try {
                 y.stateNode.nodeValue = u ? "" : y.memoizedProps;
-              } catch (T) {
-                ye(e, e.return, T);
+              } catch (v) {
+                ye(e, e.return, v);
               }
           } else if (
             ((y.tag !== 22 && y.tag !== 23) ||
@@ -7102,7 +7102,7 @@ function lw(e, t) {
       }
       break;
     case 19:
-      (jt(t, e), Et(e), a & 4 && bu(e));
+      (jt(t, e), Et(e), a & 4 && ku(e));
       break;
     case 21:
       break;
@@ -7116,7 +7116,7 @@ function Et(e) {
     try {
       e: {
         for (var o = e.return; o !== null;) {
-          if (iw(o)) {
+          if (sw(o)) {
             var a = o;
             break e;
           }
@@ -7128,13 +7128,13 @@ function Et(e) {
         case 5:
           var n = a.stateNode;
           a.flags & 32 && (Sn(n, ""), (a.flags &= -33));
-          var r = pu(e);
-          vl(e, r, n);
+          var r = bu(e);
+          _l(e, r, n);
           break;
         case 3:
         case 4:
           var i = a.stateNode.containerInfo,
-            l = pu(e);
+            l = bu(e);
           Tl(e, l, i);
           break;
         default:
@@ -7147,21 +7147,21 @@ function Et(e) {
   }
   t & 4096 && (e.flags &= -4097);
 }
-function Vy(e, t, o) {
-  ((M = e), hw(e));
+function Qy(e, t, o) {
+  ((M = e), dw(e));
 }
-function hw(e, t, o) {
+function dw(e, t, o) {
   for (var a = (e.mode & 1) !== 0; M !== null;) {
     var n = M,
       r = n.child;
     if (n.tag === 22 && a) {
-      var i = n.memoizedState !== null || Tr;
+      var i = n.memoizedState !== null || vr;
       if (!i) {
         var l = n.alternate,
           s = (l !== null && l.memoizedState !== null) || Ee;
-        l = Tr;
+        l = vr;
         var u = Ee;
-        if (((Tr = i), (Ee = s) && !u))
+        if (((vr = i), (Ee = s) && !u))
           for (M = n; M !== null;)
             ((i = M),
               (s = i.child),
@@ -7170,15 +7170,15 @@ function hw(e, t, o) {
                 : s !== null
                   ? ((s.return = i), (M = s))
                   : Tu(n));
-        for (; r !== null;) ((M = r), hw(r), (r = r.sibling));
-        ((M = n), (Tr = l), (Ee = u));
+        for (; r !== null;) ((M = r), dw(r), (r = r.sibling));
+        ((M = n), (vr = l), (Ee = u));
       }
-      ku(e);
+      xu(e);
     } else
-      n.subtreeFlags & 8772 && r !== null ? ((r.return = n), (M = r)) : ku(e);
+      n.subtreeFlags & 8772 && r !== null ? ((r.return = n), (M = r)) : xu(e);
   }
 }
-function ku(e) {
+function xu(e) {
   for (; M !== null;) {
     var t = M;
     if (t.flags & 8772) {
@@ -7189,7 +7189,7 @@ function ku(e) {
             case 0:
             case 11:
             case 15:
-              Ee || Oi(5, t);
+              Ee || Wi(5, t);
               break;
             case 1:
               var a = t.stateNode;
@@ -7207,7 +7207,7 @@ function ku(e) {
                   );
                 }
               var r = t.updateQueue;
-              r !== null && nu(t, r, a);
+              r !== null && ru(t, r, a);
               break;
             case 3:
               var i = t.updateQueue;
@@ -7220,7 +7220,7 @@ function ku(e) {
                     case 1:
                       o = t.child.stateNode;
                   }
-                nu(t, i, o);
+                ru(t, i, o);
               }
               break;
             case 5:
@@ -7268,7 +7268,7 @@ function ku(e) {
             default:
               throw Error(E(163));
           }
-        Ee || (t.flags & 512 && xl(t));
+        Ee || (t.flags & 512 && vl(t));
       } catch (g) {
         ye(t, t.return, g);
       }
@@ -7284,7 +7284,7 @@ function ku(e) {
     M = t.return;
   }
 }
-function xu(e) {
+function vu(e) {
   for (; M !== null;) {
     var t = M;
     if (t === e) {
@@ -7309,7 +7309,7 @@ function Tu(e) {
         case 15:
           var o = t.return;
           try {
-            Oi(4, t);
+            Wi(4, t);
           } catch (s) {
             ye(t, o, s);
           }
@@ -7326,7 +7326,7 @@ function Tu(e) {
           }
           var r = t.return;
           try {
-            xl(t);
+            vl(t);
           } catch (s) {
             ye(t, r, s);
           }
@@ -7334,7 +7334,7 @@ function Tu(e) {
         case 5:
           var i = t.return;
           try {
-            xl(t);
+            vl(t);
           } catch (s) {
             ye(t, i, s);
           }
@@ -7354,135 +7354,135 @@ function Tu(e) {
     M = t.return;
   }
 }
-var Xy = Math.ceil,
-  wi = ro.ReactCurrentDispatcher,
-  Ih = ro.ReactCurrentOwner,
-  xt = ro.ReactCurrentBatchConfig,
+var Zy = Math.ceil,
+  gi = io.ReactCurrentDispatcher,
+  Nh = io.ReactCurrentOwner,
+  xt = io.ReactCurrentBatchConfig,
   Q = 0,
   Se = null,
-  Te = null,
+  ve = null,
   Ie = 0,
-  rt = 0,
+  it = 0,
   ga = Co(0),
   je = 0,
   Dn = null,
   Vo = 0,
-  Wi = 0,
-  Nh = 0,
+  Ei = 0,
+  Oh = 0,
   xn = null,
   Ue = null,
-  Oh = 0,
+  Wh = 0,
   Oa = 1 / 0,
   Kt = null,
-  gi = !1,
-  _l = null,
-  xo = null,
-  vr = !1,
-  wo = null,
-  mi = 0,
-  Tn = 0,
+  mi = !1,
   jl = null,
-  Mr = -1,
-  $r = 0;
+  vo = null,
+  Tr = !1,
+  go = null,
+  yi = 0,
+  vn = 0,
+  Al = null,
+  $r = -1,
+  Hr = 0;
 function De() {
-  return Q & 6 ? be() : Mr !== -1 ? Mr : (Mr = be());
+  return Q & 6 ? be() : $r !== -1 ? $r : ($r = be());
 }
 function To(e) {
   return e.mode & 1
     ? Q & 2 && Ie !== 0
       ? Ie & -Ie
-      : Wy.transition !== null
-        ? ($r === 0 && ($r = Kc()), $r)
+      : By.transition !== null
+        ? (Hr === 0 && (Hr = zc()), Hr)
         : ((e = ne),
-          e !== 0 || ((e = window.event), (e = e === void 0 ? 16 : Zc(e.type))),
+          e !== 0 || ((e = window.event), (e = e === void 0 ? 16 : ef(e.type))),
           e)
     : 1;
 }
 function It(e, t, o, a) {
-  if (50 < Tn) throw ((Tn = 0), (jl = null), Error(E(185)));
+  if (50 < vn) throw ((vn = 0), (Al = null), Error(E(185)));
   (er(e, o, a),
     (!(Q & 2) || e !== Se) &&
-      (e === Se && (!(Q & 2) && (Wi |= o), je === 4 && co(e, Ie)),
-      et(e, a),
-      o === 1 && Q === 0 && !(t.mode & 1) && ((Oa = be() + 500), Ci && Io())));
+      (e === Se && (!(Q & 2) && (Ei |= o), je === 4 && fo(e, Ie)),
+      tt(e, a),
+      o === 1 && Q === 0 && !(t.mode & 1) && ((Oa = be() + 500), Ii && Io())));
 }
-function et(e, t) {
+function tt(e, t) {
   var o = e.callbackNode;
-  Wm(e, t);
-  var a = Zr(e, e === Se ? Ie : 0);
+  Bm(e, t);
+  var a = ei(e, e === Se ? Ie : 0);
   if (a === 0)
-    (o !== null && Id(o), (e.callbackNode = null), (e.callbackPriority = 0));
+    (o !== null && Nd(o), (e.callbackNode = null), (e.callbackPriority = 0));
   else if (((t = a & -a), e.callbackPriority !== t)) {
-    if ((o != null && Id(o), t === 1))
-      (e.tag === 0 ? Oy(vu.bind(null, e)) : bf(vu.bind(null, e)),
-        Ry(function () {
+    if ((o != null && Nd(o), t === 1))
+      (e.tag === 0 ? Ey(_u.bind(null, e)) : kf(_u.bind(null, e)),
+        Iy(function () {
           !(Q & 6) && Io();
         }),
         (o = null));
     else {
-      switch (zc(a)) {
+      switch (Uc(a)) {
         case 1:
-          o = rh;
+          o = ih;
           break;
         case 4:
-          o = qc;
-          break;
-        case 16:
-          o = Qr;
-          break;
-        case 536870912:
           o = Gc;
           break;
+        case 16:
+          o = Zr;
+          break;
+        case 536870912:
+          o = Kc;
+          break;
         default:
-          o = Qr;
+          o = Zr;
       }
-      o = yw(o, dw.bind(null, e));
+      o = pw(o, uw.bind(null, e));
     }
     ((e.callbackPriority = t), (e.callbackNode = o));
   }
 }
-function dw(e, t) {
-  if (((Mr = -1), ($r = 0), Q & 6)) throw Error(E(327));
+function uw(e, t) {
+  if ((($r = -1), (Hr = 0), Q & 6)) throw Error(E(327));
   var o = e.callbackNode;
-  if (Ta() && e.callbackNode !== o) return null;
-  var a = Zr(e, e === Se ? Ie : 0);
+  if (va() && e.callbackNode !== o) return null;
+  var a = ei(e, e === Se ? Ie : 0);
   if (a === 0) return null;
-  if (a & 30 || a & e.expiredLanes || t) t = yi(e, a);
+  if (a & 30 || a & e.expiredLanes || t) t = pi(e, a);
   else {
     t = a;
     var n = Q;
     Q |= 2;
-    var r = cw();
+    var r = fw();
     (Se !== e || Ie !== t) && ((Kt = null), (Oa = be() + 500), Mo(e, t));
     do
       try {
-        ep();
+        op();
         break;
       } catch (l) {
-        uw(e, l);
+        cw(e, l);
       }
     while (!0);
-    (ph(),
-      (wi.current = r),
+    (bh(),
+      (gi.current = r),
       (Q = n),
-      Te !== null ? (t = 0) : ((Se = null), (Ie = 0), (t = je)));
+      ve !== null ? (t = 0) : ((Se = null), (Ie = 0), (t = je)));
   }
   if (t !== 0) {
     if (
-      (t === 2 && ((n = Qs(e)), n !== 0 && ((a = n), (t = Al(e, n)))), t === 1)
+      (t === 2 && ((n = Zs(e)), n !== 0 && ((a = n), (t = Yl(e, n)))), t === 1)
     )
-      throw ((o = Dn), Mo(e, 0), co(e, a), et(e, be()), o);
-    if (t === 6) co(e, a);
+      throw ((o = Dn), Mo(e, 0), fo(e, a), tt(e, be()), o);
+    if (t === 6) fo(e, a);
     else {
       if (
         ((n = e.current.alternate),
         !(a & 30) &&
-          !Qy(n) &&
-          ((t = yi(e, a)),
-          t === 2 && ((r = Qs(e)), r !== 0 && ((a = r), (t = Al(e, r)))),
+          !ep(n) &&
+          ((t = pi(e, a)),
+          t === 2 && ((r = Zs(e)), r !== 0 && ((a = r), (t = Yl(e, r)))),
           t === 1))
       )
-        throw ((o = Dn), Mo(e, 0), co(e, a), et(e, be()), o);
+        throw ((o = Dn), Mo(e, 0), fo(e, a), tt(e, be()), o);
       switch (((e.finishedWork = n), (e.finishedLanes = a), t)) {
         case 0:
         case 1:
@@ -7492,20 +7492,20 @@ function dw(e, t) {
           break;
         case 3:
           if (
-            (co(e, a), (a & 130023424) === a && ((t = Oh + 500 - be()), 10 < t))
+            (fo(e, a), (a & 130023424) === a && ((t = Wh + 500 - be()), 10 < t))
           ) {
-            if (Zr(e, 0) !== 0) break;
+            if (ei(e, 0) !== 0) break;
             if (((n = e.suspendedLanes), (n & a) !== a)) {
               (De(), (e.pingedLanes |= e.suspendedLanes & n));
               break;
             }
-            e.timeoutHandle = il(Wo.bind(null, e, Ue, Kt), t);
+            e.timeoutHandle = sl(Wo.bind(null, e, Ue, Kt), t);
             break;
           }
           Wo(e, Ue, Kt);
           break;
         case 4:
-          if ((co(e, a), (a & 4194240) === a)) break;
+          if ((fo(e, a), (a & 4194240) === a)) break;
           for (t = e.eventTimes, n = -1; 0 < a;) {
             var i = 31 - Ct(a);
             ((r = 1 << i), (i = t[i]), i > n && (n = i), (a &= ~r));
@@ -7526,10 +7526,10 @@ function dw(e, t) {
                         ? 3e3
                         : 4320 > a
                           ? 4320
-                          : 1960 * Xy(a / 1960)) - a),
+                          : 1960 * Zy(a / 1960)) - a),
             10 < a)
           ) {
-            e.timeoutHandle = il(Wo.bind(null, e, Ue, Kt), a);
+            e.timeoutHandle = sl(Wo.bind(null, e, Ue, Kt), a);
             break;
           }
           Wo(e, Ue, Kt);
@@ -7542,21 +7542,21 @@ function dw(e, t) {
       }
     }
   }
-  return (et(e, be()), e.callbackNode === o ? dw.bind(null, e) : null);
+  return (tt(e, be()), e.callbackNode === o ? uw.bind(null, e) : null);
 }
-function Al(e, t) {
+function Yl(e, t) {
   var o = xn;
   return (
     e.current.memoizedState.isDehydrated && (Mo(e, t).flags |= 256),
-    (e = yi(e, t)),
-    e !== 2 && ((t = Ue), (Ue = o), t !== null && Yl(t)),
+    (e = pi(e, t)),
+    e !== 2 && ((t = Ue), (Ue = o), t !== null && Sl(t)),
     e
   );
 }
-function Yl(e) {
+function Sl(e) {
   Ue === null ? (Ue = e) : Ue.push.apply(Ue, e);
 }
-function Qy(e) {
+function ep(e) {
   for (var t = e; ;) {
     if (t.flags & 16384) {
       var o = t.updateQueue;
@@ -7585,10 +7585,10 @@ function Qy(e) {
   }
   return !0;
 }
-function co(e, t) {
+function fo(e, t) {
   for (
-    t &= ~Nh,
-      t &= ~Wi,
+    t &= ~Oh,
+      t &= ~Ei,
       e.suspendedLanes |= t,
       e.pingedLanes &= ~t,
       e = e.expirationTimes;
@@ -7599,37 +7599,37 @@ function co(e, t) {
     ((e[o] = -1), (t &= ~a));
   }
 }
-function vu(e) {
+function _u(e) {
   if (Q & 6) throw Error(E(327));
-  Ta();
-  var t = Zr(e, 0);
-  if (!(t & 1)) return (et(e, be()), null);
-  var o = yi(e, t);
+  va();
+  var t = ei(e, 0);
+  if (!(t & 1)) return (tt(e, be()), null);
+  var o = pi(e, t);
   if (e.tag !== 0 && o === 2) {
-    var a = Qs(e);
-    a !== 0 && ((t = a), (o = Al(e, a)));
+    var a = Zs(e);
+    a !== 0 && ((t = a), (o = Yl(e, a)));
   }
-  if (o === 1) throw ((o = Dn), Mo(e, 0), co(e, t), et(e, be()), o);
+  if (o === 1) throw ((o = Dn), Mo(e, 0), fo(e, t), tt(e, be()), o);
   if (o === 6) throw Error(E(345));
   return (
     (e.finishedWork = e.current.alternate),
     (e.finishedLanes = t),
     Wo(e, Ue, Kt),
-    et(e, be()),
+    tt(e, be()),
     null
   );
 }
-function Wh(e, t) {
+function Eh(e, t) {
   var o = Q;
   Q |= 1;
   try {
     return e(t);
   } finally {
-    ((Q = o), Q === 0 && ((Oa = be() + 500), Ci && Io()));
+    ((Q = o), Q === 0 && ((Oa = be() + 500), Ii && Io()));
   }
 }
 function Xo(e) {
-  wo !== null && wo.tag === 0 && !(Q & 6) && Ta();
+  go !== null && go.tag === 0 && !(Q & 6) && va();
   var t = Q;
   Q |= 1;
   var o = xt.transition,
@@ -7640,24 +7640,24 @@ function Xo(e) {
     ((ne = a), (xt.transition = o), (Q = t), !(Q & 6) && Io());
   }
 }
-function Eh() {
-  ((rt = ga.current), de(ga));
+function Bh() {
+  ((it = ga.current), de(ga));
 }
 function Mo(e, t) {
   ((e.finishedWork = null), (e.finishedLanes = 0));
   var o = e.timeoutHandle;
-  if ((o !== -1 && ((e.timeoutHandle = -1), Sy(o)), Te !== null))
-    for (o = Te.return; o !== null;) {
+  if ((o !== -1 && ((e.timeoutHandle = -1), Cy(o)), ve !== null))
+    for (o = ve.return; o !== null;) {
       var a = o;
-      switch ((gh(a), a.tag)) {
+      switch ((mh(a), a.tag)) {
         case 1:
-          ((a = a.type.childContextTypes), a != null && ni());
+          ((a = a.type.childContextTypes), a != null && ri());
           break;
         case 3:
-          (Ia(), de(Qe), de(Le), _h());
+          (Ia(), de(Ze), de(Le), jh());
           break;
         case 5:
-          vh(a);
+          _h(a);
           break;
         case 4:
           Ia();
@@ -7669,21 +7669,21 @@ function Mo(e, t) {
           de(ce);
           break;
         case 10:
-          bh(a.type._context);
+          kh(a.type._context);
           break;
         case 22:
         case 23:
-          Eh();
+          Bh();
       }
       o = o.return;
     }
   if (
     ((Se = e),
-    (Te = e = vo(e.current, null)),
-    (Ie = rt = t),
+    (ve = e = _o(e.current, null)),
+    (Ie = it = t),
     (je = 0),
     (Dn = null),
-    (Nh = Wi = Vo = 0),
+    (Oh = Ei = Vo = 0),
     (Ue = xn = null),
     Lo !== null)
   ) {
@@ -7702,26 +7702,26 @@ function Mo(e, t) {
   }
   return e;
 }
-function uw(e, t) {
+function cw(e, t) {
   do {
-    var o = Te;
+    var o = ve;
     try {
-      if ((ph(), (Fr.current = fi), ci)) {
+      if ((bh(), (Lr.current = wi), fi)) {
         for (var a = fe.memoizedState; a !== null;) {
           var n = a.queue;
           (n !== null && (n.pending = null), (a = a.next));
         }
-        ci = !1;
+        fi = !1;
       }
       if (
         ((Jo = 0),
         (Ye = _e = fe = null),
         (bn = !1),
         (Mn = 0),
-        (Ih.current = null),
+        (Nh.current = null),
         o === null || o.return === null)
       ) {
-        ((je = 1), (Dn = t), (Te = null));
+        ((je = 1), (Dn = t), (ve = null));
         break;
       }
       e: {
@@ -7745,32 +7745,32 @@ function uw(e, t) {
                 (f.lanes = g.lanes))
               : ((f.updateQueue = null), (f.memoizedState = null));
           }
-          var k = du(i);
-          if (k !== null) {
-            ((k.flags &= -257),
-              uu(k, i, l, r, t),
-              k.mode & 1 && hu(r, u, t),
-              (t = k),
+          var x = uu(i);
+          if (x !== null) {
+            ((x.flags &= -257),
+              cu(x, i, l, r, t),
+              x.mode & 1 && du(r, u, t),
+              (t = x),
               (s = u));
-            var x = t.updateQueue;
-            if (x === null) {
-              var T = new Set();
-              (T.add(s), (t.updateQueue = T));
-            } else x.add(s);
+            var k = t.updateQueue;
+            if (k === null) {
+              var v = new Set();
+              (v.add(s), (t.updateQueue = v));
+            } else k.add(s);
             break e;
           } else {
             if (!(t & 1)) {
-              (hu(r, u, t), Bh());
+              (du(r, u, t), Fh());
               break e;
             }
             s = Error(E(426));
           }
         } else if (ue && l.mode & 1) {
-          var Y = du(i);
+          var Y = uu(i);
           if (Y !== null) {
             (!(Y.flags & 65536) && (Y.flags |= 256),
-              uu(Y, i, l, r, t),
-              mh(Na(s, l)));
+              cu(Y, i, l, r, t),
+              yh(Na(s, l)));
             break e;
           }
         }
@@ -7782,8 +7782,8 @@ function uw(e, t) {
           switch (r.tag) {
             case 3:
               ((r.flags |= 65536), (t &= -t), (r.lanes |= t));
-              var c = Uf(r, s, t);
-              au(r, c);
+              var c = Jf(r, s, t);
+              nu(r, c);
               break e;
             case 1:
               l = s;
@@ -7794,85 +7794,85 @@ function uw(e, t) {
                 (typeof m.getDerivedStateFromError == "function" ||
                   (w !== null &&
                     typeof w.componentDidCatch == "function" &&
-                    (xo === null || !xo.has(w))))
+                    (vo === null || !vo.has(w))))
               ) {
                 ((r.flags |= 65536), (t &= -t), (r.lanes |= t));
-                var v = Jf(r, l, t);
-                au(r, v);
+                var T = Vf(r, l, t);
+                nu(r, T);
                 break e;
               }
           }
           r = r.return;
         } while (r !== null);
       }
-      ww(o);
+      gw(o);
     } catch (_) {
-      ((t = _), Te === o && o !== null && (Te = o = o.return));
+      ((t = _), ve === o && o !== null && (ve = o = o.return));
       continue;
     }
     break;
   } while (!0);
 }
-function cw() {
-  var e = wi.current;
-  return ((wi.current = fi), e === null ? fi : e);
+function fw() {
+  var e = gi.current;
+  return ((gi.current = wi), e === null ? wi : e);
 }
-function Bh() {
+function Fh() {
   ((je === 0 || je === 3 || je === 2) && (je = 4),
-    Se === null || (!(Vo & 268435455) && !(Wi & 268435455)) || co(Se, Ie));
+    Se === null || (!(Vo & 268435455) && !(Ei & 268435455)) || fo(Se, Ie));
 }
-function yi(e, t) {
+function pi(e, t) {
   var o = Q;
   Q |= 2;
-  var a = cw();
+  var a = fw();
   (Se !== e || Ie !== t) && ((Kt = null), Mo(e, t));
   do
     try {
-      Zy();
+      tp();
       break;
     } catch (n) {
-      uw(e, n);
+      cw(e, n);
     }
   while (!0);
-  if ((ph(), (Q = o), (wi.current = a), Te !== null)) throw Error(E(261));
+  if ((bh(), (Q = o), (gi.current = a), ve !== null)) throw Error(E(261));
   return ((Se = null), (Ie = 0), je);
 }
-function Zy() {
-  for (; Te !== null;) fw(Te);
+function tp() {
+  for (; ve !== null;) ww(ve);
 }
-function ep() {
-  for (; Te !== null && !jm();) fw(Te);
-}
-function fw(e) {
-  var t = mw(e.alternate, e, rt);
-  ((e.memoizedProps = e.pendingProps),
-    t === null ? ww(e) : (Te = t),
-    (Ih.current = null));
+function op() {
+  for (; ve !== null && !Ym();) ww(ve);
 }
 function ww(e) {
+  var t = yw(e.alternate, e, it);
+  ((e.memoizedProps = e.pendingProps),
+    t === null ? gw(e) : (ve = t),
+    (Nh.current = null));
+}
+function gw(e) {
   var t = e;
   do {
     var o = t.alternate;
     if (((e = t.return), t.flags & 32768)) {
-      if (((o = zy(o, t)), o !== null)) {
-        ((o.flags &= 32767), (Te = o));
+      if (((o = Jy(o, t)), o !== null)) {
+        ((o.flags &= 32767), (ve = o));
         return;
       }
       if (e !== null)
         ((e.flags |= 32768), (e.subtreeFlags = 0), (e.deletions = null));
       else {
-        ((je = 6), (Te = null));
+        ((je = 6), (ve = null));
         return;
       }
-    } else if (((o = Ky(o, t, rt)), o !== null)) {
-      Te = o;
+    } else if (((o = Uy(o, t, it)), o !== null)) {
+      ve = o;
       return;
     }
     if (((t = t.sibling), t !== null)) {
-      Te = t;
+      ve = t;
       return;
     }
-    Te = t = e;
+    ve = t = e;
   } while (t !== null);
   je === 0 && (je = 5);
 }
@@ -7880,15 +7880,15 @@ function Wo(e, t, o) {
   var a = ne,
     n = xt.transition;
   try {
-    ((xt.transition = null), (ne = 1), tp(e, t, o, a));
+    ((xt.transition = null), (ne = 1), ap(e, t, o, a));
   } finally {
     ((xt.transition = n), (ne = a));
   }
   return null;
 }
-function tp(e, t, o, a) {
-  do Ta();
-  while (wo !== null);
+function ap(e, t, o, a) {
+  do va();
+  while (go !== null);
   if (Q & 6) throw Error(E(327));
   o = e.finishedWork;
   var n = e.finishedLanes;
@@ -7898,13 +7898,13 @@ function tp(e, t, o, a) {
   ((e.callbackNode = null), (e.callbackPriority = 0));
   var r = o.lanes | o.childLanes;
   if (
-    (Em(e, r),
-    e === Se && ((Te = Se = null), (Ie = 0)),
+    (Fm(e, r),
+    e === Se && ((ve = Se = null), (Ie = 0)),
     (!(o.subtreeFlags & 2064) && !(o.flags & 2064)) ||
-      vr ||
-      ((vr = !0),
-      yw(Qr, function () {
-        return (Ta(), null);
+      Tr ||
+      ((Tr = !0),
+      pw(Zr, function () {
+        return (va(), null);
       })),
     (r = (o.flags & 15990) !== 0),
     o.subtreeFlags & 15990 || r)
@@ -7914,48 +7914,48 @@ function tp(e, t, o, a) {
     ne = 1;
     var l = Q;
     ((Q |= 4),
-      (Ih.current = null),
-      Jy(e, o),
-      lw(o, e),
-      xy(nl),
-      (ei = !!al),
-      (nl = al = null),
+      (Nh.current = null),
+      Xy(e, o),
+      hw(o, e),
+      Ty(rl),
+      (ti = !!nl),
+      (rl = nl = null),
       (e.current = o),
-      Vy(o),
-      Am(),
+      Qy(o),
+      Sm(),
       (Q = l),
       (ne = i),
       (xt.transition = r));
   } else e.current = o;
   if (
-    (vr && ((vr = !1), (wo = e), (mi = n)),
+    (Tr && ((Tr = !1), (go = e), (yi = n)),
     (r = e.pendingLanes),
-    r === 0 && (xo = null),
-    Rm(o.stateNode),
-    et(e, be()),
+    r === 0 && (vo = null),
+    Im(o.stateNode),
+    tt(e, be()),
     t !== null)
   )
     for (a = e.onRecoverableError, o = 0; o < t.length; o++)
       ((n = t[o]), a(n.value, { componentStack: n.stack, digest: n.digest }));
-  if (gi) throw ((gi = !1), (e = _l), (_l = null), e);
+  if (mi) throw ((mi = !1), (e = jl), (jl = null), e);
   return (
-    mi & 1 && e.tag !== 0 && Ta(),
+    yi & 1 && e.tag !== 0 && va(),
     (r = e.pendingLanes),
-    r & 1 ? (e === jl ? Tn++ : ((Tn = 0), (jl = e))) : (Tn = 0),
+    r & 1 ? (e === Al ? vn++ : ((vn = 0), (Al = e))) : (vn = 0),
     Io(),
     null
   );
 }
-function Ta() {
-  if (wo !== null) {
-    var e = zc(mi),
+function va() {
+  if (go !== null) {
+    var e = Uc(yi),
       t = xt.transition,
       o = ne;
     try {
-      if (((xt.transition = null), (ne = 16 > e ? 16 : e), wo === null))
+      if (((xt.transition = null), (ne = 16 > e ? 16 : e), go === null))
         var a = !1;
       else {
-        if (((e = wo), (wo = null), (mi = 0), Q & 6)) throw Error(E(331));
+        if (((e = go), (go = null), (yi = 0), Q & 6)) throw Error(E(331));
         var n = Q;
         for (Q |= 4, M = e.current; M !== null;) {
           var r = M,
@@ -7979,28 +7979,28 @@ function Ta() {
                     for (; M !== null;) {
                       f = M;
                       var g = f.sibling,
-                        k = f.return;
-                      if ((rw(f), f === u)) {
+                        x = f.return;
+                      if ((iw(f), f === u)) {
                         M = null;
                         break;
                       }
                       if (g !== null) {
-                        ((g.return = k), (M = g));
+                        ((g.return = x), (M = g));
                         break;
                       }
-                      M = k;
+                      M = x;
                     }
                 }
               }
-              var x = r.alternate;
-              if (x !== null) {
-                var T = x.child;
-                if (T !== null) {
-                  x.child = null;
+              var k = r.alternate;
+              if (k !== null) {
+                var v = k.child;
+                if (v !== null) {
+                  k.child = null;
                   do {
-                    var Y = T.sibling;
-                    ((T.sibling = null), (T = Y));
-                  } while (T !== null);
+                    var Y = v.sibling;
+                    ((v.sibling = null), (v = Y));
+                  } while (v !== null);
                 }
               }
               M = r;
@@ -8037,7 +8037,7 @@ function Ta() {
                     case 0:
                     case 11:
                     case 15:
-                      Oi(9, l);
+                      Wi(9, l);
                   }
                 } catch (_) {
                   ye(l, l.return, _);
@@ -8046,9 +8046,9 @@ function Ta() {
                 M = null;
                 break e;
               }
-              var v = l.sibling;
-              if (v !== null) {
-                ((v.return = l.return), (M = v));
+              var T = l.sibling;
+              if (T !== null) {
+                ((T.return = l.return), (M = T));
                 break e;
               }
               M = l.return;
@@ -8058,7 +8058,7 @@ function Ta() {
           ((Q = n), Io(), Mt && typeof Mt.onPostCommitFiberRoot == "function")
         )
           try {
-            Mt.onPostCommitFiberRoot(ji, e);
+            Mt.onPostCommitFiberRoot(Ai, e);
           } catch {}
         a = !0;
       }
@@ -8069,64 +8069,64 @@ function Ta() {
   }
   return !1;
 }
-function _u(e, t, o) {
+function ju(e, t, o) {
   ((t = Na(o, t)),
-    (t = Uf(e, t, 1)),
-    (e = ko(e, t, 1)),
+    (t = Jf(e, t, 1)),
+    (e = xo(e, t, 1)),
     (t = De()),
-    e !== null && (er(e, 1, t), et(e, t)));
+    e !== null && (er(e, 1, t), tt(e, t)));
 }
 function ye(e, t, o) {
-  if (e.tag === 3) _u(e, e, o);
+  if (e.tag === 3) ju(e, e, o);
   else
     for (; t !== null;) {
       if (t.tag === 3) {
-        _u(t, e, o);
+        ju(t, e, o);
         break;
       } else if (t.tag === 1) {
         var a = t.stateNode;
         if (
           typeof t.type.getDerivedStateFromError == "function" ||
           (typeof a.componentDidCatch == "function" &&
-            (xo === null || !xo.has(a)))
+            (vo === null || !vo.has(a)))
         ) {
           ((e = Na(o, e)),
-            (e = Jf(t, e, 1)),
-            (t = ko(t, e, 1)),
+            (e = Vf(t, e, 1)),
+            (t = xo(t, e, 1)),
             (e = De()),
-            t !== null && (er(t, 1, e), et(t, e)));
+            t !== null && (er(t, 1, e), tt(t, e)));
           break;
         }
       }
       t = t.return;
     }
 }
-function op(e, t, o) {
+function np(e, t, o) {
   var a = e.pingCache;
   (a !== null && a.delete(t),
     (t = De()),
     (e.pingedLanes |= e.suspendedLanes & o),
     Se === e &&
       (Ie & o) === o &&
-      (je === 4 || (je === 3 && (Ie & 130023424) === Ie && 500 > be() - Oh)
+      (je === 4 || (je === 3 && (Ie & 130023424) === Ie && 500 > be() - Wh)
         ? Mo(e, 0)
-        : (Nh |= o)),
-    et(e, t));
+        : (Oh |= o)),
+    tt(e, t));
 }
-function gw(e, t) {
+function mw(e, t) {
   t === 0 &&
     (e.mode & 1
       ? ((t = fr), (fr <<= 1), !(fr & 130023424) && (fr = 4194304))
       : (t = 1));
   var o = De();
-  ((e = eo(e, t)), e !== null && (er(e, t, o), et(e, o)));
+  ((e = eo(e, t)), e !== null && (er(e, t, o), tt(e, o)));
 }
-function ap(e) {
+function rp(e) {
   var t = e.memoizedState,
     o = 0;
-  (t !== null && (o = t.retryLane), gw(e, o));
+  (t !== null && (o = t.retryLane), mw(e, o));
 }
-function np(e, t) {
+function ip(e, t) {
   var o = 0;
   switch (e.tag) {
     case 13:
@@ -8140,24 +8140,24 @@ function np(e, t) {
     default:
       throw Error(E(314));
   }
-  (a !== null && a.delete(t), gw(e, o));
+  (a !== null && a.delete(t), mw(e, o));
 }
-var mw;
-mw = function (e, t, o) {
+var yw;
+yw = function (e, t, o) {
   if (e !== null)
-    if (e.memoizedProps !== t.pendingProps || Qe.current) Ve = !0;
+    if (e.memoizedProps !== t.pendingProps || Ze.current) Xe = !0;
     else {
-      if (!(e.lanes & o) && !(t.flags & 128)) return ((Ve = !1), Gy(e, t, o));
-      Ve = !!(e.flags & 131072);
+      if (!(e.lanes & o) && !(t.flags & 128)) return ((Xe = !1), zy(e, t, o));
+      Xe = !!(e.flags & 131072);
     }
-  else ((Ve = !1), ue && t.flags & 1048576 && kf(t, si, t.index));
+  else ((Xe = !1), ue && t.flags & 1048576 && xf(t, li, t.index));
   switch (((t.lanes = 0), t.tag)) {
     case 2:
       var a = t.type;
-      (Pr(e, t), (e = t.pendingProps));
+      (Mr(e, t), (e = t.pendingProps));
       var n = Sa(t, Le.current);
-      (xa(t, o), (n = Ah(null, t, a, e, n, o)));
-      var r = Yh();
+      (xa(t, o), (n = Yh(null, t, a, e, n, o)));
+      var r = Sh();
       return (
         (t.flags |= 1),
         typeof n == "object" &&
@@ -8167,42 +8167,42 @@ mw = function (e, t, o) {
           ? ((t.tag = 1),
             (t.memoizedState = null),
             (t.updateQueue = null),
-            Ze(a) ? ((r = !0), ri(t)) : (r = !1),
+            et(a) ? ((r = !0), ii(t)) : (r = !1),
             (t.memoizedState =
               n.state !== null && n.state !== void 0 ? n.state : null),
-            xh(t),
-            (n.updater = Ni),
+            vh(t),
+            (n.updater = Oi),
             (t.stateNode = n),
             (n._reactInternals = t),
-            fl(t, a, e, o),
-            (t = ml(null, t, a, !0, r, o)))
-          : ((t.tag = 0), ue && r && wh(t), Me(null, t, n, o), (t = t.child)),
+            wl(t, a, e, o),
+            (t = yl(null, t, a, !0, r, o)))
+          : ((t.tag = 0), ue && r && gh(t), Me(null, t, n, o), (t = t.child)),
         t
       );
     case 16:
       a = t.elementType;
       e: {
         switch (
-          (Pr(e, t),
+          (Mr(e, t),
           (e = t.pendingProps),
           (n = a._init),
           (a = n(a._payload)),
           (t.type = a),
-          (n = t.tag = ip(a)),
+          (n = t.tag = lp(a)),
           (e = At(a, e)),
           n)
         ) {
           case 0:
-            t = gl(null, t, a, e, o);
+            t = ml(null, t, a, e, o);
             break e;
           case 1:
-            t = wu(null, t, a, e, o);
+            t = gu(null, t, a, e, o);
             break e;
           case 11:
-            t = cu(null, t, a, e, o);
+            t = fu(null, t, a, e, o);
             break e;
           case 14:
-            t = fu(null, t, a, At(a.type, e), o);
+            t = wu(null, t, a, At(a.type, e), o);
             break e;
         }
         throw Error(E(306, a, ""));
@@ -8213,23 +8213,23 @@ mw = function (e, t, o) {
         (a = t.type),
         (n = t.pendingProps),
         (n = t.elementType === a ? n : At(a, n)),
-        gl(e, t, a, n, o)
+        ml(e, t, a, n, o)
       );
     case 1:
       return (
         (a = t.type),
         (n = t.pendingProps),
         (n = t.elementType === a ? n : At(a, n)),
-        wu(e, t, a, n, o)
+        gu(e, t, a, n, o)
       );
     case 3:
       e: {
-        if ((Zf(t), e === null)) throw Error(E(387));
+        if ((ew(t), e === null)) throw Error(E(387));
         ((a = t.pendingProps),
           (r = t.memoizedState),
           (n = r.element),
-          Af(e, t),
-          di(t, a, null, o));
+          Yf(e, t),
+          ui(t, a, null, o));
         var i = t.memoizedState;
         if (((a = i.element), r.isDehydrated))
           if (
@@ -8244,18 +8244,18 @@ mw = function (e, t, o) {
             (t.memoizedState = r),
             t.flags & 256)
           ) {
-            ((n = Na(Error(E(423)), t)), (t = gu(e, t, a, o, n)));
+            ((n = Na(Error(E(423)), t)), (t = mu(e, t, a, o, n)));
             break e;
           } else if (a !== n) {
-            ((n = Na(Error(E(424)), t)), (t = gu(e, t, a, o, n)));
+            ((n = Na(Error(E(424)), t)), (t = mu(e, t, a, o, n)));
             break e;
           } else
             for (
-              lt = bo(t.stateNode.containerInfo.firstChild),
+              lt = ko(t.stateNode.containerInfo.firstChild),
                 dt = t,
                 ue = !0,
                 Rt = null,
-                o = _f(t, null, a, o),
+                o = jf(t, null, a, o),
                 t.child = o;
               o;
             )
@@ -8272,21 +8272,21 @@ mw = function (e, t, o) {
       return t;
     case 5:
       return (
-        Yf(t),
-        e === null && dl(t),
+        Sf(t),
+        e === null && ul(t),
         (a = t.type),
         (n = t.pendingProps),
         (r = e !== null ? e.memoizedProps : null),
         (i = n.children),
-        rl(a, n) ? (i = null) : r !== null && rl(a, r) && (t.flags |= 32),
-        Qf(e, t),
+        il(a, n) ? (i = null) : r !== null && il(a, r) && (t.flags |= 32),
+        Zf(e, t),
         Me(e, t, i, o),
         t.child
       );
     case 6:
-      return (e === null && dl(t), null);
+      return (e === null && ul(t), null);
     case 13:
-      return ew(e, t, o);
+      return tw(e, t, o);
     case 4:
       return (
         Th(t, t.stateNode.containerInfo),
@@ -8299,7 +8299,7 @@ mw = function (e, t, o) {
         (a = t.type),
         (n = t.pendingProps),
         (n = t.elementType === a ? n : At(a, n)),
-        cu(e, t, a, n, o)
+        fu(e, t, a, n, o)
       );
     case 7:
       return (Me(e, t, t.pendingProps, o), t.child);
@@ -8314,12 +8314,12 @@ mw = function (e, t, o) {
           (n = t.pendingProps),
           (r = t.memoizedProps),
           (i = n.value),
-          se(li, a._currentValue),
+          se(hi, a._currentValue),
           (a._currentValue = i),
           r !== null)
         )
           if (Nt(r.value, i)) {
-            if (r.children === n.children && !Qe.current) {
+            if (r.children === n.children && !Ze.current) {
               t = to(e, t, o);
               break e;
             }
@@ -8345,7 +8345,7 @@ mw = function (e, t, o) {
                     ((r.lanes |= o),
                       (s = r.alternate),
                       s !== null && (s.lanes |= o),
-                      ul(r.return, o, t),
+                      cl(r.return, o, t),
                       (l.lanes |= o));
                     break;
                   }
@@ -8357,7 +8357,7 @@ mw = function (e, t, o) {
                 ((i.lanes |= o),
                   (l = i.alternate),
                   l !== null && (l.lanes |= o),
-                  ul(i, o, t),
+                  cl(i, o, t),
                   (i = r.sibling));
               } else i = r.child;
               if (i !== null) i.return = r;
@@ -8383,7 +8383,7 @@ mw = function (e, t, o) {
         (n = t.type),
         (a = t.pendingProps.children),
         xa(t, o),
-        (n = vt(n)),
+        (n = Tt(n)),
         (a = a(n)),
         (t.flags |= 1),
         Me(e, t, a, o),
@@ -8394,34 +8394,34 @@ mw = function (e, t, o) {
         (a = t.type),
         (n = At(a, t.pendingProps)),
         (n = At(a.type, n)),
-        fu(e, t, a, n, o)
+        wu(e, t, a, n, o)
       );
     case 15:
-      return Vf(e, t, t.type, t.pendingProps, o);
+      return Xf(e, t, t.type, t.pendingProps, o);
     case 17:
       return (
         (a = t.type),
         (n = t.pendingProps),
         (n = t.elementType === a ? n : At(a, n)),
-        Pr(e, t),
+        Mr(e, t),
         (t.tag = 1),
-        Ze(a) ? ((e = !0), ri(t)) : (e = !1),
+        et(a) ? ((e = !0), ii(t)) : (e = !1),
         xa(t, o),
-        zf(t, a, n),
-        fl(t, a, n, o),
-        ml(null, t, a, !0, e, o)
+        Uf(t, a, n),
+        wl(t, a, n, o),
+        yl(null, t, a, !0, e, o)
       );
     case 19:
-      return tw(e, t, o);
+      return ow(e, t, o);
     case 22:
-      return Xf(e, t, o);
+      return Qf(e, t, o);
   }
   throw Error(E(156, t.tag));
 };
-function yw(e, t) {
-  return Dc(e, t);
+function pw(e, t) {
+  return qc(e, t);
 }
-function rp(e, t, o, a) {
+function sp(e, t, o, a) {
   ((this.tag = e),
     (this.key = o),
     (this.sibling =
@@ -8446,20 +8446,20 @@ function rp(e, t, o, a) {
     (this.alternate = null));
 }
 function kt(e, t, o, a) {
-  return new rp(e, t, o, a);
+  return new sp(e, t, o, a);
 }
-function Fh(e) {
+function Lh(e) {
   return ((e = e.prototype), !(!e || !e.isReactComponent));
 }
-function ip(e) {
-  if (typeof e == "function") return Fh(e) ? 1 : 0;
+function lp(e) {
+  if (typeof e == "function") return Lh(e) ? 1 : 0;
   if (e != null) {
-    if (((e = e.$$typeof), e === oh)) return 11;
-    if (e === ah) return 14;
+    if (((e = e.$$typeof), e === ah)) return 11;
+    if (e === nh) return 14;
   }
   return 2;
 }
-function vo(e, t) {
+function _o(e, t) {
   var o = e.alternate;
   return (
     o === null
@@ -8490,46 +8490,46 @@ function vo(e, t) {
     o
   );
 }
-function Hr(e, t, o, a, n, r) {
+function Dr(e, t, o, a, n, r) {
   var i = 2;
-  if (((a = e), typeof e == "function")) Fh(e) && (i = 1);
+  if (((a = e), typeof e == "function")) Lh(e) && (i = 1);
   else if (typeof e == "string") i = 5;
   else
     e: switch (e) {
       case ra:
         return $o(o.children, n, r, t);
-      case th:
+      case oh:
         ((i = 8), (n |= 8));
         break;
-      case Fs:
+      case Ls:
         return (
           (e = kt(12, o, t, n | 2)),
-          (e.elementType = Fs),
+          (e.elementType = Ls),
           (e.lanes = r),
           e
         );
-      case Ls:
-        return ((e = kt(13, o, t, n)), (e.elementType = Ls), (e.lanes = r), e);
       case Ps:
-        return ((e = kt(19, o, t, n)), (e.elementType = Ps), (e.lanes = r), e);
-      case Ac:
-        return Ei(o, n, r, t);
+        return ((e = kt(13, o, t, n)), (e.elementType = Ps), (e.lanes = r), e);
+      case Ms:
+        return ((e = kt(19, o, t, n)), (e.elementType = Ms), (e.lanes = r), e);
+      case Yc:
+        return Bi(o, n, r, t);
       default:
         if (typeof e == "object" && e !== null)
           switch (e.$$typeof) {
-            case _c:
+            case jc:
               i = 10;
               break e;
-            case jc:
+            case Ac:
               i = 9;
               break e;
-            case oh:
+            case ah:
               i = 11;
               break e;
-            case ah:
+            case nh:
               i = 14;
               break e;
-            case lo:
+            case ho:
               ((i = 16), (a = null));
               break e;
           }
@@ -8546,10 +8546,10 @@ function Hr(e, t, o, a, n, r) {
 function $o(e, t, o, a) {
   return ((e = kt(7, e, a, t)), (e.lanes = o), e);
 }
-function Ei(e, t, o, a) {
+function Bi(e, t, o, a) {
   return (
     (e = kt(22, e, a, t)),
-    (e.elementType = Ac),
+    (e.elementType = Yc),
     (e.lanes = o),
     (e.stateNode = { isHidden: !1 }),
     e
@@ -8558,7 +8558,7 @@ function Ei(e, t, o, a) {
 function Ts(e, t, o) {
   return ((e = kt(6, e, null, t)), (e.lanes = o), e);
 }
-function vs(e, t, o) {
+function _s(e, t, o) {
   return (
     (t = kt(4, e.children !== null ? e.children : [], e.key, t)),
     (t.lanes = o),
@@ -8570,7 +8570,7 @@ function vs(e, t, o) {
     t
   );
 }
-function sp(e, t, o, a, n) {
+function hp(e, t, o, a, n) {
   ((this.tag = t),
     (this.containerInfo = e),
     (this.finishedWork =
@@ -8581,8 +8581,8 @@ function sp(e, t, o, a, n) {
     (this.timeoutHandle = -1),
     (this.callbackNode = this.pendingContext = this.context = null),
     (this.callbackPriority = 0),
-    (this.eventTimes = as(0)),
-    (this.expirationTimes = as(-1)),
+    (this.eventTimes = ns(0)),
+    (this.expirationTimes = ns(-1)),
     (this.entangledLanes =
       this.finishedLanes =
       this.mutableReadLanes =
@@ -8591,14 +8591,14 @@ function sp(e, t, o, a, n) {
       this.suspendedLanes =
       this.pendingLanes =
         0),
-    (this.entanglements = as(0)),
+    (this.entanglements = ns(0)),
     (this.identifierPrefix = a),
     (this.onRecoverableError = n),
     (this.mutableSourceEagerHydrationData = null));
 }
-function Lh(e, t, o, a, n, r, i, l, s) {
+function Ph(e, t, o, a, n, r, i, l, s) {
   return (
-    (e = new sp(e, t, o, l, s)),
+    (e = new hp(e, t, o, l, s)),
     t === 1 ? ((t = 1), r === !0 && (t |= 8)) : (t = 0),
     (r = kt(3, null, null, t)),
     (e.current = r),
@@ -8610,11 +8610,11 @@ function Lh(e, t, o, a, n, r, i, l, s) {
       transitions: null,
       pendingSuspenseBoundaries: null,
     }),
-    xh(r),
+    vh(r),
     e
   );
 }
-function lp(e, t, o) {
+function dp(e, t, o) {
   var a = 3 < arguments.length && arguments[3] !== void 0 ? arguments[3] : null;
   return {
     $$typeof: na,
@@ -8624,8 +8624,8 @@ function lp(e, t, o) {
     implementation: o,
   };
 }
-function pw(e) {
-  if (!e) return Ao;
+function bw(e) {
+  if (!e) return Yo;
   e = e._reactInternals;
   e: {
     if (Zo(e) !== e || e.tag !== 1) throw Error(E(170));
@@ -8636,7 +8636,7 @@ function pw(e) {
           t = t.stateNode.context;
           break e;
         case 1:
-          if (Ze(t.type)) {
+          if (et(t.type)) {
             t = t.stateNode.__reactInternalMemoizedMergedChildContext;
             break e;
           }
@@ -8647,43 +8647,43 @@ function pw(e) {
   }
   if (e.tag === 1) {
     var o = e.type;
-    if (Ze(o)) return pf(e, o, t);
+    if (et(o)) return bf(e, o, t);
   }
   return t;
 }
-function bw(e, t, o, a, n, r, i, l, s) {
+function kw(e, t, o, a, n, r, i, l, s) {
   return (
-    (e = Lh(o, a, !0, e, n, r, i, l, s)),
-    (e.context = pw(null)),
+    (e = Ph(o, a, !0, e, n, r, i, l, s)),
+    (e.context = bw(null)),
     (o = e.current),
     (a = De()),
     (n = To(o)),
     (r = Vt(a, n)),
     (r.callback = t ?? null),
-    ko(o, r, n),
+    xo(o, r, n),
     (e.current.lanes = n),
     er(e, n, a),
-    et(e, a),
+    tt(e, a),
     e
   );
 }
-function Bi(e, t, o, a) {
+function Fi(e, t, o, a) {
   var n = t.current,
     r = De(),
     i = To(n);
   return (
-    (o = pw(o)),
+    (o = bw(o)),
     t.context === null ? (t.context = o) : (t.pendingContext = o),
     (t = Vt(r, i)),
     (t.payload = { element: e }),
     (a = a === void 0 ? null : a),
     a !== null && (t.callback = a),
-    (e = ko(n, t, i)),
-    e !== null && (It(e, n, i, r), Br(e, n, i)),
+    (e = xo(n, t, i)),
+    e !== null && (It(e, n, i, r), Fr(e, n, i)),
     i
   );
 }
-function pi(e) {
+function bi(e) {
   if (((e = e.current), !e.child)) return null;
   switch (e.child.tag) {
     case 5:
@@ -8692,58 +8692,58 @@ function pi(e) {
       return e.child.stateNode;
   }
 }
-function ju(e, t) {
+function Au(e, t) {
   if (((e = e.memoizedState), e !== null && e.dehydrated !== null)) {
     var o = e.retryLane;
     e.retryLane = o !== 0 && o < t ? o : t;
   }
 }
-function Ph(e, t) {
-  (ju(e, t), (e = e.alternate) && ju(e, t));
+function Mh(e, t) {
+  (Au(e, t), (e = e.alternate) && Au(e, t));
 }
-function hp() {
+function up() {
   return null;
 }
-var kw =
+var xw =
   typeof reportError == "function"
     ? reportError
     : function (e) {
         console.error(e);
       };
-function Mh(e) {
+function $h(e) {
   this._internalRoot = e;
 }
-Fi.prototype.render = Mh.prototype.render = function (e) {
+Li.prototype.render = $h.prototype.render = function (e) {
   var t = this._internalRoot;
   if (t === null) throw Error(E(409));
-  Bi(e, t, null, null);
+  Fi(e, t, null, null);
 };
-Fi.prototype.unmount = Mh.prototype.unmount = function () {
+Li.prototype.unmount = $h.prototype.unmount = function () {
   var e = this._internalRoot;
   if (e !== null) {
     this._internalRoot = null;
     var t = e.containerInfo;
     (Xo(function () {
-      Bi(null, e, null, null);
+      Fi(null, e, null, null);
     }),
       (t[Zt] = null));
   }
 };
-function Fi(e) {
+function Li(e) {
   this._internalRoot = e;
 }
-Fi.prototype.unstable_scheduleHydration = function (e) {
+Li.prototype.unstable_scheduleHydration = function (e) {
   if (e) {
-    var t = Vc();
+    var t = Xc();
     e = { blockedOn: null, target: e, priority: t };
-    for (var o = 0; o < uo.length && t !== 0 && t < uo[o].priority; o++);
-    (uo.splice(o, 0, e), o === 0 && Qc(e));
+    for (var o = 0; o < co.length && t !== 0 && t < co[o].priority; o++);
+    (co.splice(o, 0, e), o === 0 && Zc(e));
   }
 };
-function $h(e) {
+function Hh(e) {
   return !(!e || (e.nodeType !== 1 && e.nodeType !== 9 && e.nodeType !== 11));
 }
-function Li(e) {
+function Pi(e) {
   return !(
     !e ||
     (e.nodeType !== 1 &&
@@ -8752,17 +8752,17 @@ function Li(e) {
       (e.nodeType !== 8 || e.nodeValue !== " react-mount-point-unstable "))
   );
 }
-function Au() {}
-function dp(e, t, o, a, n) {
+function Yu() {}
+function cp(e, t, o, a, n) {
   if (n) {
     if (typeof a == "function") {
       var r = a;
       a = function () {
-        var u = pi(i);
+        var u = bi(i);
         r.call(u);
       };
     }
-    var i = bw(t, a, e, 0, null, !1, !1, "", Au);
+    var i = kw(t, a, e, 0, null, !1, !1, "", Yu);
     return (
       (e._reactRootContainer = i),
       (e[Zt] = i.current),
@@ -8775,44 +8775,44 @@ function dp(e, t, o, a, n) {
   if (typeof a == "function") {
     var l = a;
     a = function () {
-      var u = pi(s);
+      var u = bi(s);
       l.call(u);
     };
   }
-  var s = Lh(e, 0, !1, null, null, !1, !1, "", Au);
+  var s = Ph(e, 0, !1, null, null, !1, !1, "", Yu);
   return (
     (e._reactRootContainer = s),
     (e[Zt] = s.current),
     En(e.nodeType === 8 ? e.parentNode : e),
     Xo(function () {
-      Bi(t, s, o, a);
+      Fi(t, s, o, a);
     }),
     s
   );
 }
-function Pi(e, t, o, a, n) {
+function Mi(e, t, o, a, n) {
   var r = o._reactRootContainer;
   if (r) {
     var i = r;
     if (typeof n == "function") {
       var l = n;
       n = function () {
-        var s = pi(i);
+        var s = bi(i);
         l.call(s);
       };
     }
-    Bi(t, i, e, n);
-  } else i = dp(o, t, e, n, a);
-  return pi(i);
+    Fi(t, i, e, n);
+  } else i = cp(o, t, e, n, a);
+  return bi(i);
 }
-Uc = function (e) {
+Jc = function (e) {
   switch (e.tag) {
     case 3:
       var t = e.stateNode;
       if (t.current.memoizedState.isDehydrated) {
         var o = rn(t.pendingLanes);
         o !== 0 &&
-          (ih(t, o | 1), et(t, be()), !(Q & 6) && ((Oa = be() + 500), Io()));
+          (sh(t, o | 1), tt(t, be()), !(Q & 6) && ((Oa = be() + 500), Io()));
       }
       break;
     case 13:
@@ -8823,20 +8823,20 @@ Uc = function (e) {
           It(a, e, 1, n);
         }
       }),
-        Ph(e, 1));
+        Mh(e, 1));
   }
 };
-sh = function (e) {
+lh = function (e) {
   if (e.tag === 13) {
     var t = eo(e, 134217728);
     if (t !== null) {
       var o = De();
       It(t, e, 134217728, o);
     }
-    Ph(e, 134217728);
+    Mh(e, 134217728);
   }
 };
-Jc = function (e) {
+Vc = function (e) {
   if (e.tag === 13) {
     var t = To(e),
       o = eo(e, t);
@@ -8844,13 +8844,13 @@ Jc = function (e) {
       var a = De();
       It(o, e, t, a);
     }
-    Ph(e, t);
+    Mh(e, t);
   }
 };
-Vc = function () {
+Xc = function () {
   return ne;
 };
-Xc = function (e, t) {
+Qc = function (e, t) {
   var o = ne;
   try {
     return ((ne = e), t());
@@ -8858,10 +8858,10 @@ Xc = function (e, t) {
     ne = o;
   }
 };
-Js = function (e, t, o) {
+Vs = function (e, t, o) {
   switch (t) {
     case "input":
-      if ((Hs(e, o), (t = o.name), o.type === "radio" && t != null)) {
+      if ((Ds(e, o), (t = o.name), o.type === "radio" && t != null)) {
         for (o = e; o.parentNode;) o = o.parentNode;
         for (
           o = o.querySelectorAll(
@@ -8873,30 +8873,30 @@ Js = function (e, t, o) {
         ) {
           var a = o[t];
           if (a !== e && a.form === e.form) {
-            var n = Ri(a);
+            var n = Ci(a);
             if (!n) throw Error(E(90));
-            (Sc(a), Hs(a, n));
+            (Rc(a), Ds(a, n));
           }
         }
       }
       break;
     case "textarea":
-      Cc(e, o);
+      Ic(e, o);
       break;
     case "select":
       ((t = o.value), t != null && ya(e, !!o.multiple, t, !1));
   }
 };
-Fc = Wh;
-Lc = Xo;
-var up = { usingClientEntryPoint: !1, Events: [or, ha, Ri, Ec, Bc, Wh] },
+Lc = Eh;
+Pc = Xo;
+var fp = { usingClientEntryPoint: !1, Events: [or, ha, Ci, Bc, Fc, Eh] },
   en = {
     findFiberByHostInstance: Fo,
     bundleType: 0,
     version: "18.3.1",
     rendererPackageName: "react-dom",
   },
-  cp = {
+  wp = {
     bundleType: en.bundleType,
     version: en.version,
     rendererPackageName: en.rendererPackageName,
@@ -8910,11 +8910,11 @@ var up = { usingClientEntryPoint: !1, Events: [or, ha, Ri, Ec, Bc, Wh] },
     setErrorHandler: null,
     setSuspenseHandler: null,
     scheduleUpdate: null,
-    currentDispatcherRef: ro.ReactCurrentDispatcher,
+    currentDispatcherRef: io.ReactCurrentDispatcher,
     findHostInstanceByFiber: function (e) {
-      return ((e = $c(e)), e === null ? null : e.stateNode);
+      return ((e = Hc(e)), e === null ? null : e.stateNode);
     },
-    findFiberByHostInstance: en.findFiberByHostInstance || hp,
+    findFiberByHostInstance: en.findFiberByHostInstance || up,
     findHostInstancesForRefresh: null,
     scheduleRefresh: null,
     scheduleRoot: null,
@@ -8926,29 +8926,29 @@ if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ < "u") {
   var _r = __REACT_DEVTOOLS_GLOBAL_HOOK__;
   if (!_r.isDisabled && _r.supportsFiber)
     try {
-      ((ji = _r.inject(cp)), (Mt = _r));
+      ((Ai = _r.inject(wp)), (Mt = _r));
     } catch {}
 }
-ct.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = up;
+ct.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = fp;
 ct.createPortal = function (e, t) {
   var o = 2 < arguments.length && arguments[2] !== void 0 ? arguments[2] : null;
-  if (!$h(t)) throw Error(E(200));
-  return lp(e, t, null, o);
+  if (!Hh(t)) throw Error(E(200));
+  return dp(e, t, null, o);
 };
 ct.createRoot = function (e, t) {
-  if (!$h(e)) throw Error(E(299));
+  if (!Hh(e)) throw Error(E(299));
   var o = !1,
     a = "",
-    n = kw;
+    n = xw;
   return (
     t != null &&
       (t.unstable_strictMode === !0 && (o = !0),
       t.identifierPrefix !== void 0 && (a = t.identifierPrefix),
       t.onRecoverableError !== void 0 && (n = t.onRecoverableError)),
-    (t = Lh(e, 1, !1, null, null, o, !1, a, n)),
+    (t = Ph(e, 1, !1, null, null, o, !1, a, n)),
     (e[Zt] = t.current),
     En(e.nodeType === 8 ? e.parentNode : e),
-    new Mh(t)
+    new $h(t)
   );
 };
 ct.findDOMNode = function (e) {
@@ -8959,27 +8959,27 @@ ct.findDOMNode = function (e) {
     throw typeof e.render == "function"
       ? Error(E(188))
       : ((e = Object.keys(e).join(",")), Error(E(268, e)));
-  return ((e = $c(t)), (e = e === null ? null : e.stateNode), e);
+  return ((e = Hc(t)), (e = e === null ? null : e.stateNode), e);
 };
 ct.flushSync = function (e) {
   return Xo(e);
 };
 ct.hydrate = function (e, t, o) {
-  if (!Li(t)) throw Error(E(200));
-  return Pi(null, e, t, !0, o);
+  if (!Pi(t)) throw Error(E(200));
+  return Mi(null, e, t, !0, o);
 };
 ct.hydrateRoot = function (e, t, o) {
-  if (!$h(e)) throw Error(E(405));
+  if (!Hh(e)) throw Error(E(405));
   var a = (o != null && o.hydratedSources) || null,
     n = !1,
     r = "",
-    i = kw;
+    i = xw;
   if (
     (o != null &&
       (o.unstable_strictMode === !0 && (n = !0),
       o.identifierPrefix !== void 0 && (r = o.identifierPrefix),
       o.onRecoverableError !== void 0 && (i = o.onRecoverableError)),
-    (t = bw(t, null, e, 1, o ?? null, n, !1, r, i)),
+    (t = kw(t, null, e, 1, o ?? null, n, !1, r, i)),
     (e[Zt] = t.current),
     En(e),
     a)
@@ -8991,73 +8991,73 @@ ct.hydrateRoot = function (e, t, o) {
         t.mutableSourceEagerHydrationData == null
           ? (t.mutableSourceEagerHydrationData = [o, n])
           : t.mutableSourceEagerHydrationData.push(o, n));
-  return new Fi(t);
+  return new Li(t);
 };
 ct.render = function (e, t, o) {
-  if (!Li(t)) throw Error(E(200));
-  return Pi(null, e, t, !1, o);
+  if (!Pi(t)) throw Error(E(200));
+  return Mi(null, e, t, !1, o);
 };
 ct.unmountComponentAtNode = function (e) {
-  if (!Li(e)) throw Error(E(40));
+  if (!Pi(e)) throw Error(E(40));
   return e._reactRootContainer
     ? (Xo(function () {
-        Pi(null, null, e, !1, function () {
+        Mi(null, null, e, !1, function () {
           ((e._reactRootContainer = null), (e[Zt] = null));
         });
       }),
       !0)
     : !1;
 };
-ct.unstable_batchedUpdates = Wh;
+ct.unstable_batchedUpdates = Eh;
 ct.unstable_renderSubtreeIntoContainer = function (e, t, o, a) {
-  if (!Li(o)) throw Error(E(200));
+  if (!Pi(o)) throw Error(E(200));
   if (e == null || e._reactInternals === void 0) throw Error(E(38));
-  return Pi(e, t, o, !1, a);
+  return Mi(e, t, o, !1, a);
 };
 ct.version = "18.3.1-next-f1338f8080-20240426";
-function xw() {
+function vw() {
   if (!(
     typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ > "u" ||
     typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE != "function"
   ))
     try {
-      __REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE(xw);
+      __REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE(vw);
     } catch (e) {
       console.error(e);
     }
 }
-(xw(), (kc.exports = ct));
-var fp = kc.exports,
+(vw(), (xc.exports = ct));
+var gp = xc.exports,
   Tw,
-  Yu = fp;
-((Tw = Yu.createRoot), Yu.hydrateRoot);
-const vw = "cbl.lang",
-  _w = ["ko", "en", "ja"];
+  Su = gp;
+((Tw = Su.createRoot), Su.hydrateRoot);
+const _w = "cbl.lang",
+  jw = ["ko", "en", "ja"];
 let Xt = "ko";
 if (typeof window < "u")
   try {
-    const e = window.localStorage.getItem(vw),
+    const e = window.localStorage.getItem(_w),
       t = (window.navigator && window.navigator.language) || "ko";
-    _w.includes(e)
+    jw.includes(e)
       ? (Xt = e)
       : /^ja/i.test(t)
         ? (Xt = "ja")
         : /^ko/i.test(t) || (Xt = "en");
   } catch {}
-const Sl = new Set(),
+const Rl = new Set(),
   Pe = () => Xt;
-function _s(e) {
-  if (_w.includes(e)) {
+function js(e) {
+  if (jw.includes(e)) {
     Xt = e;
     try {
-      window.localStorage.setItem(vw, e);
+      window.localStorage.setItem(_w, e);
     } catch {}
     typeof document < "u" && (document.documentElement.lang = e);
-    for (const t of Sl) t(e);
+    for (const t of Rl) t(e);
   }
 }
-function wp(e) {
-  return (Sl.add(e), () => Sl.delete(e));
+function mp(e) {
+  return (Rl.add(e), () => Rl.delete(e));
 }
 const h = (e, t, o) => (Xt === "en" ? t : Xt === "ja" ? (o ?? t) : e),
   jr = (e) => e[Xt] || e.ko;
@@ -9085,12 +9085,12 @@ function qt(e) {
     },
   });
 }
-const gp = 6e4,
+const yp = 6e4,
   ln = [1, 2, 4, 8, 16, 32],
-  jw = 1e4,
-  Rl = 110,
-  Yo = ["health", "sanity", "wealth", "network", "rep"],
-  st = Dt({
+  Aw = 1e4,
+  Cl = 110,
+  oo = ["health", "sanity", "wealth", "network", "rep"],
+  Je = Dt({
     ko: {
       health: "건강",
       sanity: "정신력",
@@ -9131,13 +9131,13 @@ const gp = 6e4,
       heir_in: "仁",
     },
   }),
-  Aw = qt({
+  Yw = qt({
     ko: ["봄", "여름", "가을", "겨울"],
     en: ["Spring", "Summer", "Autumn", "Winter"],
     ja: ["春", "夏", "秋", "冬"],
   }),
-  js = {},
-  mp = {
+  As = {},
+  pp = {
     none: 2.4,
     "날개 직원": 5,
     손가락: 6.5,
@@ -9159,7 +9159,7 @@ const gp = 6e4,
     가주: 9,
     군주: 9,
   },
-  Hh = [
+  Dh = [
     "손가락",
     "협회 직원",
     "흑수",
@@ -9172,8 +9172,8 @@ const gp = 6e4,
     "검계",
     "흑운회",
   ],
-  yp = ["E.G.O개화", "특색", "유물", "혈귀"],
-  pp = Dt({
+  bp = ["E.G.O개화", "특색", "유물", "혈귀"],
+  kp = Dt({
     ko: {
       고아: "고아",
       부유한집: "부유한 집에서 태어남",
@@ -9331,8 +9331,8 @@ const gp = 6e4,
       잘린손: "手を一つ失った",
     },
   });
-function Dh(e, t = {}) {
-  const o = pp[e];
+function qh(e, t = {}) {
+  const o = kp[e];
   return (
     o &&
     (e === "E.G.O개화" && t.egoName
@@ -9342,7 +9342,7 @@ function Dh(e, t = {}) {
         : o)
   );
 }
-const bi = Dt({
+const ki = Dt({
     ko: {
       m: [
         "도윤",
@@ -9446,7 +9446,7 @@ const bi = Dt({
       ],
     },
   }),
-  bp = Dt({
+  xp = Dt({
     ko: { m: "남성", f: "여성" },
     en: { m: "Male", f: "Female" },
     ja: { m: "男性", f: "女性" },
@@ -9518,27 +9518,27 @@ const bi = Dt({
       { label: "両親なし", birth: "" },
     ),
   };
-function Cl(e, t, o) {
+function Il(e, t, o) {
   const a = (e || "").charCodeAt((e || "").length - 1);
   return a >= 44032 && a <= 55203 ? ((a - 44032) % 28 ? t : o) : t;
 }
-function va(e) {
+function Ta(e) {
   const t = (e || "").charCodeAt((e || "").length - 1);
   return t >= 44032 && t <= 55203 ? ((t - 44032) % 28 ? "이라" : "라") : "이라";
 }
-const Xe = Dt({
+const Qe = Dt({
   ko: { 엄지: "엄지", 검지: "검지", 중지: "중지", 약지: "약지" },
   en: { 엄지: "Thumb", 검지: "Index", 중지: "Middle", 약지: "Ring" },
   ja: { 엄지: "親指", 검지: "人差し指", 중지: "中指", 약지: "薬指" },
 });
-function qh(e) {
+function Gh(e) {
   let t = 2166136261;
   const o = String(e);
   for (let a = 0; a < o.length; a++)
     ((t ^= o.charCodeAt(a)), (t = Math.imul(t, 16777619)));
   return t >>> 0;
 }
-function kp() {
+function vp() {
   return String(Math.floor(Math.random() * 4294967296));
 }
 function oe(e) {
@@ -9584,7 +9584,7 @@ function oe(e) {
   };
   return t;
 }
-function xp(e) {
+function Tp(e) {
   const t = [];
   for (const o of e || [])
     if (o.kind === "birth")
@@ -9606,7 +9606,7 @@ function xp(e) {
     }
   return t;
 }
-function Yw(e) {
+function Sw(e) {
   const t = [];
   for (const o of e || []) {
     const a = t[t.length - 1];
@@ -9614,9 +9614,9 @@ function Yw(e) {
   }
   return t;
 }
-const Sw = (e) => h(`${e}세`, `Age ${e}`, `${e}歳`),
-  Rw = () => h("흘려보냈다", "Let it pass", "やり過ごした");
-function Cw(e, t) {
+const Rw = (e) => h(`${e}세`, `Age ${e}`, `${e}歳`),
+  Cw = () => h("흘려보냈다", "Let it pass", "やり過ごした");
+function Iw(e, t) {
   const o = [];
   o.push(
     h(
@@ -9632,11 +9632,11 @@ function Cw(e, t) {
   (o.push(a),
     e.job && o.push(`${h("직업", "Occupation", "職業")}: ${e.job}`),
     e.seed && o.push(`${h("시드", "Seed", "シード")}: ${e.seed}`));
-  for (const n of Yw(t)) {
-    o.push("", `── ${Sw(n.age)} ──`);
+  for (const n of Sw(t)) {
+    o.push("", `── ${Rw(n.age)} ──`);
     for (const r of n.items)
       r.k === "r"
-        ? (o.push(`  ▸ ${r.x ? Rw() : r.c || ""}`.replace(/▸ $/, "▸")),
+        ? (o.push(`  ▸ ${r.x ? Cw() : r.c || ""}`.replace(/▸ $/, "▸")),
           o.push(`    ${r.t}`),
           r.j && o.push(`    (${r.j})`))
         : o.push(`${r.s ? `[${r.s}] ` : ""}${r.t}`);
@@ -9644,28 +9644,28 @@ function Cw(e, t) {
   return o.join(`
 `);
 }
-function Tp(e) {
+function _p(e) {
   const t = String(e.seed || "")
     .replace(/[^0-9A-Za-z_-]+/g, "")
     .slice(0, 16);
   return `city-born-${e.age}${t ? `-${t}` : ""}.txt`;
 }
-function vp(e, t) {
-  const o = new Blob(["\uFEFF" + Cw(e, t)], {
+function jp(e, t) {
+  const o = new Blob(["\uFEFF" + Iw(e, t)], {
       type: "text/plain;charset=utf-8",
     }),
     a = URL.createObjectURL(o),
     n = document.createElement("a");
   ((n.href = a),
-    (n.download = Tp(e)),
+    (n.download = _p(e)),
     document.body.appendChild(n),
     n.click(),
     n.remove(),
     setTimeout(() => URL.revokeObjectURL(a), 2e3));
 }
-const _p = 0.085;
-function Iw(e, t, o) {
-  let a = o * Math.exp(_p * t);
+const Ap = 0.085;
+function Nw(e, t, o) {
+  let a = o * Math.exp(Ap * t);
   return (
     t === 0
       ? (a += e.infantMort)
@@ -9675,37 +9675,37 @@ function Iw(e, t, o) {
     a
   );
 }
-function Su(e, t) {
+function Ru(e, t) {
   let o = 1,
     a = 0;
-  for (let n = 0; n < Rl; n++) {
-    const r = 1 - Math.exp(-Iw(e, n, t)),
+  for (let n = 0; n < Cl; n++) {
+    const r = 1 - Math.exp(-Nw(e, n, t)),
       i = o * r;
     ((a += i * n), (o -= i));
   }
-  return ((a += o * Rl), a);
+  return ((a += o * Cl), a);
 }
-const As = new Map();
-function jp(e) {
-  if (As.has(e.id)) return As.get(e.id);
+const Ys = new Map();
+function Yp(e) {
+  if (Ys.has(e.id)) return Ys.get(e.id);
   const t = e.lifeExp + (e.calib || 0);
   let o = 0,
     a = 0.2,
     n;
-  if (Su(e, 0) <= t) n = 0;
+  if (Ru(e, 0) <= t) n = 0;
   else {
     for (let r = 0; r < 60; r++) {
       const i = (o + a) / 2;
-      Su(e, i) > t ? (o = i) : (a = i);
+      Ru(e, i) > t ? (o = i) : (a = i);
     }
     n = (o + a) / 2;
   }
-  return (As.set(e.id, n), n);
+  return (Ys.set(e.id, n), n);
 }
-function Ap(e, t) {
-  return Iw(e, t, jp(e));
+function Sp(e, t) {
+  return Nw(e, t, Yp(e));
 }
-function Yp(e, t, o = 0) {
+function Rp(e, t, o = 0) {
   const a = e.age,
     n = e.stats,
     r = 0.5 + t.orgPressure * 0.35 + (10 - t.safety) * 0.35,
@@ -9883,7 +9883,7 @@ const $a = {
       "It was a morning they never woke from.",
     ],
   },
-  Sp = {
+  Cp = {
     사고: [
       "날개 시설의 폭발이 구역 하나를 삼켰다. 그 많은 싸움을 넘긴 사람도 하늘이 무너지는 것은 막지 못했다.",
       "도시가 보낸 것은 적이 아니라 우연이었다. 누구도 그것이 끝이 될 줄 몰랐다.",
@@ -9909,7 +9909,7 @@ const $a = {
       "무기를 벽에 걸어 둔 채 침대 위에서 눈을 감았다. 이 일을 하는 사람에게는 드문 끝이다.",
     ],
   },
-  Rp = {
+  Ip = {
     사고: [
       "의뢰를 마치고 돌아오던 길이었다. 그날따라 운이 없었다.",
       "현장을 정리하다 무너진 잔해 아래 깔렸다.",
@@ -9920,7 +9920,7 @@ const $a = {
     ],
     부상: ["일에서 얻은 상처가 끝내 아물지 않았다."],
   },
-  Cp = {
+  Np = {
     사고: [
       "An explosion at a Wing facility swallowed an entire district. Even someone who had survived so many fights could not stop the sky from falling.",
       "What the City sent was not an enemy but chance. No one knew it would be the end.",
@@ -9948,7 +9948,7 @@ const $a = {
       "They closed their eyes in bed, their weapon hung on the wall. A rare ending for someone in this line of work.",
     ],
   },
-  Ip = {
+  Op = {
     사고: [
       "They were on their way back from a job. Their luck simply ran out that day.",
       "They were buried under collapsing debris while clearing a site.",
@@ -9959,7 +9959,7 @@ const $a = {
     ],
     부상: ["A wound from the job never healed."],
   },
-  Np = {
+  Wp = {
     사고: [
       "翼の施設の爆発が、区ひとつを呑み込んだ。あれほどの戦いをくぐり抜けた者でも、空が落ちてくるのは止められなかった。",
       "都市が寄越したのは敵ではなく、偶然だった。それが最期になるとは、誰も思わなかった。",
@@ -9985,7 +9985,7 @@ const $a = {
       "武器を壁に掛けたまま、ベッドの上で目を閉じた。この仕事をする者には珍しい最期だ。",
     ],
   },
-  Op = {
+  Ep = {
     사고: [
       "依頼を終えて帰る途中だった。その日に限って運がなかった。",
       "現場を片付けている最中、崩れた瓦礫の下敷きになった。",
@@ -9996,7 +9996,7 @@ const $a = {
     ],
     부상: ["仕事で負った傷が、ついに癒えなかった。"],
   },
-  Wp = {
+  Bp = {
     노화: "Old age",
     질병: "Illness",
     "영유아 질병": "Infant illness",
@@ -10087,7 +10087,7 @@ const $a = {
       "目覚めることのない朝だった。",
     ],
   },
-  Ep = {
+  Fp = {
     노화: "老衰",
     질병: "病死",
     "영유아 질병": "乳幼児の病気",
@@ -10214,15 +10214,15 @@ Object.assign(Da, {
   ],
   "부화장 경쟁": ["孵化場で残れなかった。同じ顔のひとりが代わりに残った。"],
 });
-const Nw = (e) => {
+const Ow = (e) => {
   const t = Pe();
-  return t === "en" ? Wp[e] || e : (t === "ja" && Ep[e]) || e;
+  return t === "en" ? Bp[e] || e : (t === "ja" && Fp[e]) || e;
 };
-function Bp(e, t, o = 0) {
+function Lp(e, t, o = 0) {
   const a = Pe(),
     n = a === "en" ? Ha : a === "ja" ? Da : $a,
-    r = a === "en" ? Cp : a === "ja" ? Np : Sp,
-    i = a === "en" ? Ip : a === "ja" ? Op : Rp;
+    r = a === "en" ? Np : a === "ja" ? Wp : Cp,
+    i = a === "en" ? Op : a === "ja" ? Ep : Ip;
   if (o >= 3 && r[e]) return t.pick(r[e]);
   if (o === 2 && i[e]) return t.pick(i[e]);
   const l = n[e] || n.노화;
@@ -10415,8 +10415,8 @@ const qn = [
     ["지적성", "地賊星", "Dizei Star", "ちぞくせい"],
     ["지구성", "地狗星", "Digou Star", "ちくせい"],
   ],
-  Ow = 36;
-function Gh(e, t) {
+  Ww = 36;
+function Kh(e, t) {
   if (!e.pinky) return null;
   const o = qn[e.pinky.star];
   if (!o) return null;
@@ -10427,7 +10427,7 @@ function Gh(e, t) {
       ? `生まれたとき、${o[1]}（${o[3]}）の名を受けた。剣の名は「${a || `${o[1]}刀`}」。`
       : `태어날 때 ${o[0]}(${o[1]})의 이름을 받았다. 검의 이름은 ${a || `${o[0]}도`}.`;
 }
-const Fp = [
+const Pp = [
     "떠돌이",
     "정체공개",
     "정체들킴",
@@ -10441,18 +10441,18 @@ const Fp = [
     "환상체생존",
     "숭배",
   ],
-  Kh = (e) => ((e.log || []).find((t) => t.kind === "year") || { age: 0 }).age;
+  zh = (e) => ((e.log || []).find((t) => t.kind === "year") || { age: 0 }).age;
 function ie(e, t) {
   (e.story || (e.story = []), e.story.push({ age: e.age, ...t }));
 }
-function Ww(e, t) {
+function Ew(e, t) {
   for (const o of t || [])
-    Fp.includes(o) &&
+    Pp.includes(o) &&
       ((e.story || []).some((a) => a.k === "flag" && a.flag === o) ||
         ie(e, { k: "flag", flag: o }));
 }
-const Lp = ["사원", "대리", "과장", "부장", "이사", "대표"],
-  Pp = [
+const Mp = ["사원", "대리", "과장", "부장", "이사", "대표"],
+  $p = [
     "Staff",
     "Assistant Manager",
     "Manager",
@@ -10460,8 +10460,8 @@ const Lp = ["사원", "대리", "과장", "부장", "이사", "대표"],
     "Director",
     "CEO",
   ],
-  Mp = ["社員", "代理", "課長", "部長", "理事", "代表"];
-function zh(e, t) {
+  Hp = ["社員", "代理", "課長", "部長", "理事", "代表"];
+function Uh(e, t) {
   let o = 0;
   for (let a = t + 1; a < e.length; a++) {
     const n = e[a];
@@ -10470,7 +10470,7 @@ function zh(e, t) {
   }
   return o;
 }
-const Ru = {
+const Cu = {
     "날개 직원": "날개의 사원이 되었다",
     "협회 직원": "사원으로 협회에 들어갔다",
     흑수: "환을 삼키고 흑수가 되었다",
@@ -10481,7 +10481,7 @@ const Ru = {
     "4무리": "R사 4무리에 들어갔다",
     권속: "혈귀에게 물려 가문의 권속이 되었다",
   },
-  Cu = {
+  Iu = {
     가정: "가정을 꾸렸다",
     아이: "아이를 얻었다",
     "E.G.O개화": "E.G.O를 개화했다",
@@ -10495,7 +10495,7 @@ const Ru = {
     정체공개: "몸담은 곳에 혈귀임을 밝혔다",
     정체들킴: "숨겨 온 정체를 몸담은 곳에 들켰다",
   },
-  $p = {
+  Dp = {
     노화: "늙어 조용히 눈을 감았다",
     질병: "병으로 세상을 떠났다",
     "영유아 질병": "걸음마도 떼기 전에 병으로 떠났다",
@@ -10524,7 +10524,7 @@ const Ru = {
     메마름: "인격과 이성이 메마른 채 시키는 일만 하며 남았다",
     "앰플 부패": "어긋난 앰플에 몸이 녹아 죽었다",
   },
-  Iu = {
+  Nu = {
     ko: ["뜬소문", "도시 괴담", "도시 전설", "도시 질병", "도시 악몽"],
     en: [
       "Canard",
@@ -10535,10 +10535,10 @@ const Ru = {
     ],
     ja: ["あらぬ噂", "都市怪談", "都市伝説", "都市疾病", "都市悪夢"],
   };
-function Uh(e, t) {
+function Jh(e, t) {
   const o = e.dr;
   if (!o) return null;
-  const a = Iu[t][o.grade] || Iu[t][0],
+  const a = Nu[t][o.grade] || Nu[t][0],
     n = {
       ko: `${o.since}세에 뒤틀려 ${a} 등급의 뒤틀림이 되었다.`,
       en: `At ${o.since}, you Distorted and were designated a Distortion rated ${a}.`,
@@ -10568,7 +10568,7 @@ function Uh(e, t) {
     }[o.end];
   return { line: n, phrase: r ? r[t] : null };
 }
-const Hp = {
+const qp = {
   ko: {
     marlin: "모든 것을 꿰뚫는 청새치 고래",
     pallid: "모든 것을 집어삼키는 창백한 고래",
@@ -10585,7 +10585,7 @@ const Hp = {
     crimson: "すべてを枯らす真紅の鯨",
   },
 };
-function Jh(e, t) {
+function Vh(e, t) {
   const o = e.lakeRec,
     a = [];
   if (
@@ -10607,10 +10607,10 @@ function Jh(e, t) {
           )),
     e.lakeWhale)
   ) {
-    const r = Hp[t][e.lakeWhale];
+    const r = qp[t][e.lakeWhale];
     a.push(
       {
-        ko: `대호수에서 ${r}${Dr(r, "이", "가")} 지나가는 것을 보았다.`,
+        ko: `대호수에서 ${r}${qr(r, "이", "가")} 지나가는 것을 보았다.`,
         en: `On the Great Lake, you saw ${r} pass by.`,
         ja: `大湖で、${r}が通り過ぎるのを見た。`,
       }[t],
@@ -10626,16 +10626,16 @@ function Jh(e, t) {
       : null;
   return { lines: a, phrase: n };
 }
-function Dr(e, t, o) {
+function qr(e, t, o) {
   const a = e.charCodeAt(e.length - 1);
   return a < 44032 || a > 55203 ? o : (a - 44032) % 28 ? t : o;
 }
-const Dp = {
+const Gp = {
   ko: ["뜬소문", "도시 괴담", "도시 전설", "도시 질병"],
   en: ["Canard", "Urban Myth", "Urban Legend", "Urban Plague"],
   ja: ["あらぬ噂", "都市怪談", "都市伝説", "都市疾病"],
 };
-function Vh(e, t) {
+function Xh(e, t) {
   const o = (i, l, s) => (t === "en" ? l : t === "ja" ? s : i),
     a = e.bld,
     n = a.hunterName || o("해결사들", "the Fixers", "フィクサーたち"),
@@ -10664,7 +10664,7 @@ function Vh(e, t) {
         `フィクサーたちに倒れた${r}`,
       );
 }
-function Xh(e, t) {
+function Qh(e, t) {
   const o = e.kx;
   if (!o || !o.hp)
     return o && o.dreamer
@@ -10696,7 +10696,7 @@ function Xh(e, t) {
     n
   );
 }
-function Qh(e, t) {
+function Zh(e, t) {
   const o = e.nh;
   if (!o) return [];
   const a = [];
@@ -10720,7 +10720,7 @@ function Qh(e, t) {
     a
   );
 }
-function qp(e, t, o, a) {
+function Kp(e, t, o, a) {
   const n = t[o],
     r = e.kk || {};
   if (n.k === "job" && n.job === "흑운회") {
@@ -10801,10 +10801,10 @@ function qp(e, t, o, a) {
           : []
       : null;
 }
-function Zh(e, t, o, a) {
+function ed(e, t, o, a) {
   const n = t[o],
     r = (l, s, u) => (a === "en" ? s : a === "ja" ? u : l),
-    i = qp(e, t, o, r);
+    i = Kp(e, t, o, r);
   if (i) return i;
   if (n.k === "blre")
     return [
@@ -10828,7 +10828,7 @@ function Zh(e, t, o, a) {
             "最も長くそばにいた古参を",
           ),
       u = e.dead ? e.dead.age : e.age,
-      f = Dp[a][Math.max(0, Math.min(3, l.threat || 0))],
+      f = Gp[a][Math.max(0, Math.min(3, l.threat || 0))],
       y = Math.max(0, u - l.since),
       g = [
         r(
@@ -10900,12 +10900,12 @@ function Zh(e, t, o, a) {
         ]
     : null;
 }
-function Gp(e, t) {
-  const o = Up(e, t);
-  return zp(e, o);
-}
-const Kp = ["가주 심사 낙방", "영생", "군주의 자리"];
 function zp(e, t) {
+  const o = Vp(e, t);
+  return Jp(e, o);
+}
+const Up = ["가주 심사 낙방", "영생", "군주의 자리"];
+function Jp(e, t) {
   if (!e.heir) return t;
   const o = e.dead,
     a = (r, i, l) => (Pe() === "en" ? i : Pe() === "ja" ? l : r),
@@ -10926,35 +10926,35 @@ function zp(e, t) {
         "31歳、家主審査に出なかった。某種の契約によって黒獣十二獣を率い、鉄檻寺の家主承継の儀式に踏み込んだ。その日から自らを君主と呼ばせ、鴻園は長くその統治の下にあった。",
       ),
     }[o && o.cause];
-  return !n || !o.alive || !Kp.includes(o.cause) ? t : [...t.slice(0, -1), n];
+  return !n || !o.alive || !Up.includes(o.cause) ? t : [...t.slice(0, -1), n];
 }
-function Up(e, t) {
-  if (Pe() === "en") return Xp(e, t);
-  if (Pe() === "ja") return Zp(e, t);
+function Vp(e, t) {
+  if (Pe() === "en") return Zp(e, t);
+  if (Pe() === "ja") return tb(e, t);
   const o = e.story || [],
     a = [],
     n = `${t.ward ? `${t.ward}구 ` : ""}${t.name}`;
   (e.flags.includes("복제")
-    ? a.push(`${n}의 부화장에서 ${Kh(e)}세의 몸으로 만들어졌다.`)
+    ? a.push(`${n}의 부화장에서 ${zh(e)}세의 몸으로 만들어졌다.`)
     : e.family === "none"
       ? a.push(`${n}에서 부모 없이 태어났다.`)
       : t.id === "outskirts"
         ? a.push(`외곽의 ${(Fe[e.family] || Fe.normal).label}에서 태어났다.`)
         : a.push(`${n}의 ${(Fe[e.family] || Fe.normal).label}에서 태어났다.`),
-    e.pinky && a.push(Gh(e, "ko")));
+    e.pinky && a.push(Kh(e, "ko")));
   let r = 0,
     i = -1;
   const l = new Set(),
-    s = (k) => (k === i ? "" : ((i = k), `${k}세에 `));
+    s = (x) => (x === i ? "" : ((i = x), `${x}세에 `));
   for (; r < o.length;) {
-    const k = o[r],
-      x = Zh(e, o, r, "ko");
-    if (x) {
-      (a.push(...x), r++);
+    const x = o[r],
+      k = ed(e, o, r, "ko");
+    if (k) {
+      (a.push(...k), r++);
       continue;
     }
-    if (k.k === "job" && k.job === "해결사") {
-      let T = k.grade || 9;
+    if (x.k === "job" && x.job === "해결사") {
+      let v = x.grade || 9;
       const Y = [];
       let c = r + 1;
       for (
@@ -10964,88 +10964,88 @@ function Up(e, t) {
         o[c].k !== "quit" &&
         o[c].k !== "finger";
       )
-        (o[c].k === "grade" && (T = Math.min(T, o[c].grade)),
+        (o[c].k === "grade" && (v = Math.min(v, o[c].grade)),
           o[c].k === "org" && !Y.includes(o[c].name) && Y.push(o[c].name),
           c++);
-      const m = k.grade || 9;
+      const m = x.grade || 9;
       let w = "";
       (Y.length === 1 && (w = `${Y[0]}에 몸담았다`),
         Y.length > 1 &&
-          (w = `${Y.slice(0, -1).join(", ")}${Dr(Y[Y.length - 2], "을", "를")} 거쳐 ${Y[Y.length - 1]}에 몸담았다`),
-        T < m
+          (w = `${Y.slice(0, -1).join(", ")}${qr(Y[Y.length - 2], "을", "를")} 거쳐 ${Y[Y.length - 1]}에 몸담았다`),
+        v < m
           ? a.push(
-              `${s(k.age)}${m}급 해결사로 일을 시작해 ${T}급까지 올랐${w ? `고, ${w}` : "다"}.`,
+              `${s(x.age)}${m}급 해결사로 일을 시작해 ${v}급까지 올랐${w ? `고, ${w}` : "다"}.`,
             )
           : a.push(
-              `${s(k.age)}${m}급 해결사가 되었지만 끝내 급수를 올리지 못했다.${w ? ` ${w}.` : ""}`,
+              `${s(x.age)}${m}급 해결사가 되었지만 끝내 급수를 올리지 못했다.${w ? ` ${w}.` : ""}`,
             ),
         (r = c));
       continue;
     }
-    if (k.k === "finger") {
-      let T = k.rankName,
+    if (x.k === "finger") {
+      let v = x.rankName,
         Y = r + 1;
       for (; Y < o.length && o[Y].k !== "quit" && o[Y].k !== "job";)
-        (o[Y].k === "frank" && (T = o[Y].rankName), Y++);
+        (o[Y].k === "frank" && (v = o[Y].rankName), Y++);
       const c = a.length > 1 ? "그러다 " : "";
       (a.push(
-        T && T !== k.rankName
-          ? `${c}${s(k.age)}${k.finger}에 합류해 ${T}까지 올랐다.`
-          : `${c}${s(k.age)}${k.finger}에 합류해 ${k.rankName}${Dr(k.rankName, "으로", "로")} 살았다.`,
+        v && v !== x.rankName
+          ? `${c}${s(x.age)}${x.finger}에 합류해 ${v}까지 올랐다.`
+          : `${c}${s(x.age)}${x.finger}에 합류해 ${x.rankName}${qr(x.rankName, "으로", "로")} 살았다.`,
       ),
         (r = Y));
       continue;
     }
-    if (k.k === "quit") {
-      (k.finger === "약지"
-        ? a.push(`${s(k.age)}약지를 떠났다.`)
-        : k.finger
-          ? a.push(`${k.finger}를 떠난 뒤로는 손가락들에게 쫓기는 삶을 살았다.`)
-          : k.job === "해결사" && a.push(`${s(k.age)}해결사 일을 그만두었다.`),
+    if (x.k === "quit") {
+      (x.finger === "약지"
+        ? a.push(`${s(x.age)}약지를 떠났다.`)
+        : x.finger
+          ? a.push(`${x.finger}를 떠난 뒤로는 손가락들에게 쫓기는 삶을 살았다.`)
+          : x.job === "해결사" && a.push(`${s(x.age)}해결사 일을 그만두었다.`),
         r++);
       continue;
     }
-    if (k.k === "job" && Ru[k.job]) {
-      const T = o
+    if (x.k === "job" && Cu[x.job]) {
+      const v = o
         .slice(r + 1)
         .find((c) => c.k === "job" || c.k === "quit" || c.k === "finger");
       if (
-        (T ? T.age : e.dead ? e.dead.age : e.age) - k.age >= 3 &&
-        !l.has(k.job)
+        (v ? v.age : e.dead ? e.dead.age : e.age) - x.age >= 3 &&
+        !l.has(x.job)
       ) {
-        (l.add(k.job), a.push(`${s(k.age)}${Ru[k.job]}.`));
-        const c = k.job === "날개 직원" ? zh(o, r) : 0;
+        (l.add(x.job), a.push(`${s(x.age)}${Cu[x.job]}.`));
+        const c = x.job === "날개 직원" ? Uh(o, r) : 0;
         c >= 3 &&
           a.push(
             c === 6
               ? "끝내 대표의 자리에 올랐다."
-              : `이후 ${Lp[c - 1]}까지 올랐다.`,
+              : `이후 ${Mp[c - 1]}까지 올랐다.`,
           );
       }
       r++;
       continue;
     }
-    if (k.k === "flag") {
+    if (x.k === "flag") {
       if (
-        k.flag === "가정" &&
+        x.flag === "가정" &&
         o[r + 1] &&
         o[r + 1].k === "flag" &&
         o[r + 1].flag === "아이"
       ) {
-        (a.push(`${s(k.age)}가정을 꾸리고 아이를 얻었다.`), (r += 2));
+        (a.push(`${s(x.age)}가정을 꾸리고 아이를 얻었다.`), (r += 2));
         continue;
       }
-      (k.flag === "특색" && e.colorName
+      (x.flag === "특색" && e.colorName
         ? a.push(
-            `${s(k.age)}'${e.colorName}'${va(e.colorName)}는 특색의 이름을 얻었다.`,
+            `${s(x.age)}'${e.colorName}'${Ta(e.colorName)}는 특색의 이름을 얻었다.`,
           )
-        : k.flag === "E.G.O개화" && e.egoName
-          ? a.push(`${s(k.age)}E.G.O를 개화했다. 이름은 '${e.egoName}'.`)
-          : k.flag === "유물" && e.relicName
+        : x.flag === "E.G.O개화" && e.egoName
+          ? a.push(`${s(x.age)}E.G.O를 개화했다. 이름은 '${e.egoName}'.`)
+          : x.flag === "유물" && e.relicName
             ? a.push(
-                `${s(k.age)}외곽의 폐허에서 유물을 얻었다. 이름은 '${e.relicName}'.`,
+                `${s(x.age)}외곽의 폐허에서 유물을 얻었다. 이름은 '${e.relicName}'.`,
               )
-            : Cu[k.flag] && a.push(`${s(k.age)}${Cu[k.flag]}.`),
+            : Iu[x.flag] && a.push(`${s(x.age)}${Iu[x.flag]}.`),
         r++);
       continue;
     }
@@ -11060,42 +11060,42 @@ function Up(e, t) {
           ? `${u.age}세, 워프 열차에 올라 ${u.cars}칸을 돌파했다.`
           : `${u.age}세, 워프 열차에 올랐지만 첫 칸을 넘지 못했다.`,
     ),
-    a.push(...Xh(e, "ko")),
-    a.push(...Qh(e, "ko")));
-  const f = Jh(e, "ko");
+    a.push(...Qh(e, "ko")),
+    a.push(...Zh(e, "ko")));
+  const f = Vh(e, "ko");
   a.push(...f.lines);
   const y = e.dead,
-    g = Uh(e, "ko");
+    g = Jh(e, "ko");
   if ((g && a.push(g.line), y)) {
-    const k = e.deathContext ? `${e.deathContext} ` : "";
-    let x = y.phrase || $p[y.cause] || "생을 마쳤다";
+    const x = e.deathContext ? `${e.deathContext} ` : "";
+    let k = y.phrase || Dp[y.cause] || "생을 마쳤다";
     if (
       (y.cause === "뒤틀림" &&
         e.flags.includes("검계뒤틀림") &&
-        (x = "마지막 골목에서 목소리에 답해 뒤틀렸다"),
-      y.cause === "해결사의 토벌" && e.bld && (x = Vh(e, "ko")),
-      g && g.phrase && (x = g.phrase),
-      y.cause === "인어가 되었다" && f.phrase && (x = f.phrase),
-      !k && y.cause === "환상체 사고")
+        (k = "마지막 골목에서 목소리에 답해 뒤틀렸다"),
+      y.cause === "해결사의 토벌" && e.bld && (k = Xh(e, "ko")),
+      g && g.phrase && (k = g.phrase),
+      y.cause === "인어가 되었다" && f.phrase && (k = f.phrase),
+      !x && y.cause === "환상체 사고")
     ) {
       const c = [...(e.log || [])]
         .reverse()
         .find((m) => m.kind === "event" && /【(.+?)】/.test(m.text));
       if (c && c.age === y.age) {
         const m = c.text.match(/【(.+?)】/)[1];
-        x = `환상체 '${m}'${Dr(m, "을", "를")} 마주친 끝에 숨을 거뒀다`;
+        k = `환상체 '${m}'${qr(m, "을", "를")} 마주친 끝에 숨을 거뒀다`;
       }
     }
-    const T =
-        e.flags.includes("손가락이탈") && y.cause === "범죄·항쟁" && !k
+    const v =
+        e.flags.includes("손가락이탈") && y.cause === "범죄·항쟁" && !x
           ? "쫓아온 손가락의 손에 "
           : "",
       Y = a.length > 1 ? "그리고 " : "";
-    a.push(`${Y}${y.age}세, ${k}${T}${x}.`);
+    a.push(`${Y}${y.age}세, ${x}${v}${k}.`);
   }
   return a;
 }
-const Nu = {
+const Ou = {
     "날개 직원": "became a Wing employee",
     "협회 직원": "joined an Association as staff",
     흑수: "swallowed the Bolus and became one of the Heishou Pack",
@@ -11106,7 +11106,7 @@ const Nu = {
     "4무리": "joined R Corp.'s 4th Pack",
     권속: "were bitten by a Bloodfiend and became a Kindred of its Family",
   },
-  Ou = {
+  Wu = {
     가정: "started a family",
     아이: "had a child",
     "E.G.O개화": "effloresced their E.G.O",
@@ -11121,7 +11121,7 @@ const Nu = {
     정체공개: "told the people you worked with that you were a Bloodfiend",
     정체들킴: "had the secret you kept found out by the people you worked with",
   },
-  Jp = {
+  Xp = {
     노화: "you quietly closed your eyes in old age",
     질병: "you died of illness",
     "영유아 질병": "you died of illness before you could even walk",
@@ -11152,8 +11152,8 @@ const Nu = {
       "you remained, your self and reason dried up, doing only what you were told",
     "앰플 부패": "a mismatched ampule melted your body",
   },
-  Vp = (e) => e.charAt(0).toUpperCase() + e.slice(1);
-function Xp(e, t) {
+  Qp = (e) => e.charAt(0).toUpperCase() + e.slice(1);
+function Zp(e, t) {
   const o = e.story || [],
     a = [],
     n = `${t.name}${t.ward ? ` (District ${t.ward})` : ""}`,
@@ -11161,32 +11161,32 @@ function Xp(e, t) {
     l = /^[aeiou]/.test(i) ? "an" : "a";
   (e.flags.includes("복제")
     ? a.push(
-        `You were made in the Hatchery of ${n}, in a body recorded as ${Kh(e)} years old.`,
+        `You were made in the Hatchery of ${n}, in a body recorded as ${zh(e)} years old.`,
       )
     : e.family === "none"
       ? a.push(`You were born in ${n} with no parents.`)
       : t.id === "outskirts"
         ? a.push(`You were born into ${l} ${i} family in the Outskirts.`)
         : a.push(`You were born into ${l} ${i} family in ${n}.`),
-    e.pinky && a.push(Gh(e, "en")));
+    e.pinky && a.push(Kh(e, "en")));
   let s = 0,
     u = -1;
   const f = new Set(),
     y = (c) => (c === u ? "" : ((u = c), `At ${c}, `)),
     g = (c, m) => {
       const w = y(c);
-      return w ? `${w}you ${m}` : Vp(`you ${m}`);
+      return w ? `${w}you ${m}` : Qp(`you ${m}`);
     };
   for (; s < o.length;) {
     const c = o[s],
-      m = Zh(e, o, s, "en");
+      m = ed(e, o, s, "en");
     if (m) {
       (a.push(...m), s++);
       continue;
     }
     if (c.k === "job" && c.job === "해결사") {
       let w = c.grade || 9;
-      const v = [];
+      const T = [];
       let _ = s + 1;
       for (
         ;
@@ -11196,13 +11196,13 @@ function Xp(e, t) {
         o[_].k !== "finger";
       )
         (o[_].k === "grade" && (w = Math.min(w, o[_].grade)),
-          o[_].k === "org" && !v.includes(o[_].name) && v.push(o[_].name),
+          o[_].k === "org" && !T.includes(o[_].name) && T.push(o[_].name),
           _++);
       const C = c.grade || 9;
       let R = "";
-      (v.length === 1 && (R = `served with ${v[0]}`),
-        v.length > 1 &&
-          (R = `passed through ${v.slice(0, -1).join(", ")} before settling with ${v[v.length - 1]}`),
+      (T.length === 1 && (R = `served with ${T[0]}`),
+        T.length > 1 &&
+          (R = `passed through ${T.slice(0, -1).join(", ")} before settling with ${T[T.length - 1]}`),
         w < C
           ? a.push(
               `${g(c.age, `started out as a Grade ${C} Fixer and rose to Grade ${w}`)}${R ? `, and ${R}` : ""}.`,
@@ -11215,10 +11215,10 @@ function Xp(e, t) {
     }
     if (c.k === "finger") {
       let w = c.rankName,
-        v = s + 1;
-      for (; v < o.length && o[v].k !== "quit" && o[v].k !== "job";)
-        (o[v].k === "frank" && (w = o[v].rankName), v++);
-      const _ = Xe[c.finger],
+        T = s + 1;
+      for (; T < o.length && o[T].k !== "quit" && o[T].k !== "job";)
+        (o[T].k === "frank" && (w = o[T].rankName), T++);
+      const _ = Qe[c.finger],
         C = a.length > 1 ? "Then, " : "",
         R =
           w && w !== c.rankName
@@ -11226,22 +11226,22 @@ function Xp(e, t) {
             : `joined the ${_} and lived as a ${c.rankName}`,
         W = g(c.age, R);
       (a.push(`${C}${C ? W.charAt(0).toLowerCase() + W.slice(1) : W}.`),
-        (s = v));
+        (s = T));
       continue;
     }
     if (c.k === "quit") {
       (c.finger === "약지"
-        ? a.push(`You left the ${Xe[c.finger]}.`)
+        ? a.push(`You left the ${Qe[c.finger]}.`)
         : c.finger
           ? a.push(
-              `After leaving the ${Xe[c.finger]}, you lived your life hunted by the Fingers.`,
+              `After leaving the ${Qe[c.finger]}, you lived your life hunted by the Fingers.`,
             )
           : c.job === "해결사" &&
             a.push(`${g(c.age, "quit working as a Fixer")}.`),
         s++);
       continue;
     }
-    if (c.k === "job" && Nu[c.job]) {
+    if (c.k === "job" && Ou[c.job]) {
       const w = o
         .slice(s + 1)
         .find((_) => _.k === "job" || _.k === "quit" || _.k === "finger");
@@ -11249,13 +11249,13 @@ function Xp(e, t) {
         (w ? w.age : e.dead ? e.dead.age : e.age) - c.age >= 3 &&
         !f.has(c.job)
       ) {
-        (f.add(c.job), a.push(`${g(c.age, Nu[c.job])}.`));
-        const _ = c.job === "날개 직원" ? zh(o, s) : 0;
+        (f.add(c.job), a.push(`${g(c.age, Ou[c.job])}.`));
+        const _ = c.job === "날개 직원" ? Uh(o, s) : 0;
         _ >= 3 &&
           a.push(
             _ === 6
               ? "In the end, they took the CEO's seat."
-              : `They later rose to ${Pp[_ - 1]}.`,
+              : `They later rose to ${$p[_ - 1]}.`,
           );
       }
       s++;
@@ -11281,57 +11281,57 @@ function Xp(e, t) {
             ? a.push(
                 `${g(c.age, `found a relic in the ruins of the Outskirts, named '${e.relicName}'`)}.`,
               )
-            : Ou[c.flag] && a.push(`${g(c.age, Ou[c.flag])}.`),
+            : Wu[c.flag] && a.push(`${g(c.age, Wu[c.flag])}.`),
         s++);
       continue;
     }
     s++;
   }
-  const k = e.warpRec;
-  (k &&
+  const x = e.warpRec;
+  (x &&
     a.push(
-      k.clear
-        ? `At ${k.age}, you ran the Warp Train to the very end.`
-        : k.cars > 0
-          ? `At ${k.age}, you boarded a Warp Train and cleared ${k.cars} car${k.cars === 1 ? "" : "s"}.`
-          : `At ${k.age}, you boarded a Warp Train but could not get past the first car.`,
+      x.clear
+        ? `At ${x.age}, you ran the Warp Train to the very end.`
+        : x.cars > 0
+          ? `At ${x.age}, you boarded a Warp Train and cleared ${x.cars} car${x.cars === 1 ? "" : "s"}.`
+          : `At ${x.age}, you boarded a Warp Train but could not get past the first car.`,
     ),
-    a.push(...Xh(e, "en")),
-    a.push(...Qh(e, "en")));
-  const x = Jh(e, "en");
-  a.push(...x.lines);
-  const T = e.dead,
-    Y = Uh(e, "en");
-  if ((Y && a.push(Y.line), T)) {
+    a.push(...Qh(e, "en")),
+    a.push(...Zh(e, "en")));
+  const k = Vh(e, "en");
+  a.push(...k.lines);
+  const v = e.dead,
+    Y = Jh(e, "en");
+  if ((Y && a.push(Y.line), v)) {
     const c = e.deathContext ? ` ${e.deathContext}` : "";
-    let m = T.phrase || Jp[T.cause] || "your life came to an end";
+    let m = v.phrase || Xp[v.cause] || "your life came to an end";
     if (
-      (T.cause === "뒤틀림" &&
+      (v.cause === "뒤틀림" &&
         e.flags.includes("검계뒤틀림") &&
         (m = "you answered the voice in the last alley and Distorted"),
-      T.cause === "해결사의 토벌" && e.bld && (m = Vh(e, "en")),
+      v.cause === "해결사의 토벌" && e.bld && (m = Xh(e, "en")),
       Y && Y.phrase && (m = Y.phrase),
-      T.cause === "인어가 되었다" && x.phrase && (m = x.phrase),
-      !c && T.cause === "환상체 사고")
+      v.cause === "인어가 되었다" && k.phrase && (m = k.phrase),
+      !c && v.cause === "환상체 사고")
     ) {
       const _ = [...(e.log || [])]
         .reverse()
         .find((C) => C.kind === "event" && /【(.+?)】/.test(C.text));
       _ &&
-        _.age === T.age &&
+        _.age === v.age &&
         (m = `you died after encountering the Abnormality '${_.text.match(/【(.+?)】/)[1]}'`);
     }
     c && (m = m.replace(/^you /, "you ") + c);
     const w =
-        e.flags.includes("손가락이탈") && T.cause === "범죄·항쟁" && !c
+        e.flags.includes("손가락이탈") && v.cause === "범죄·항쟁" && !c
           ? ", cut down by the Finger that had hunted you"
           : "",
-      v = a.length > 1 ? "And at " : "At ";
-    a.push(`${v}${T.age}, ${m}${w}.`);
+      T = a.length > 1 ? "And at " : "At ";
+    a.push(`${T}${v.age}, ${m}${w}.`);
   }
   return a;
 }
-const Wu = {
+const Eu = {
     "날개 직원": "翼の社員になった",
     "협회 직원": "職員として協会に入った",
     흑수: "丸を呑んで黒獣となった",
@@ -11342,7 +11342,7 @@ const Wu = {
     "4무리": "R社第4群に入った",
     권속: "血鬼に噛まれ、家門の眷属となった",
   },
-  Eu = {
+  Bu = {
     가정: "家庭を築いた",
     아이: "子どもを授かった",
     "E.G.O개화": "E.G.Oを開花させた",
@@ -11356,7 +11356,7 @@ const Wu = {
     정체공개: "身を置く場所に血鬼であることを明かした",
     정체들킴: "隠してきた正体を身を置く場所に知られた",
   },
-  Qp = {
+  eb = {
     노화: "年老いて静かに目を閉じた",
     질병: "病でこの世を去った",
     "영유아 질병": "歩き始める前に病で旅立った",
@@ -11385,32 +11385,32 @@ const Wu = {
     메마름: "人格と理性が枯れ果て、命じられたことだけをして残った",
     "앰플 부패": "合わないアンプルに体を溶かされて死んだ",
   };
-function Zp(e, t) {
+function tb(e, t) {
   const o = e.story || [],
     a = [],
     n = `${t.name}${t.ward ? `（${t.ward}区）` : ""}`,
     r = (Fe[e.family] || Fe.normal).label;
   (e.flags.includes("복제")
-    ? a.push(`${n}の孵化場で、${Kh(e)}歳の体として作られた。`)
+    ? a.push(`${n}の孵化場で、${zh(e)}歳の体として作られた。`)
     : e.family === "none"
       ? a.push(`${n}で、両親のいないまま生まれた。`)
       : t.id === "outskirts"
         ? a.push(`外郭の${r}に生まれた。`)
         : a.push(`${n}の${r}に生まれた。`),
-    e.pinky && a.push(Gh(e, "ja")));
+    e.pinky && a.push(Kh(e, "ja")));
   let i = 0,
     l = -1;
   const s = new Set(),
-    u = (x) => (x === l ? "" : ((l = x), `${x}歳で`));
+    u = (k) => (k === l ? "" : ((l = k), `${k}歳で`));
   for (; i < o.length;) {
-    const x = o[i],
-      T = Zh(e, o, i, "ja");
-    if (T) {
-      (a.push(...T), i++);
+    const k = o[i],
+      v = ed(e, o, i, "ja");
+    if (v) {
+      (a.push(...v), i++);
       continue;
     }
-    if (x.k === "job" && x.job === "해결사") {
-      let Y = x.grade || 9;
+    if (k.k === "job" && k.job === "해결사") {
+      let Y = k.grade || 9;
       const c = [];
       let m = i + 1;
       for (
@@ -11423,85 +11423,85 @@ function Zp(e, t) {
         (o[m].k === "grade" && (Y = Math.min(Y, o[m].grade)),
           o[m].k === "org" && !c.includes(o[m].name) && c.push(o[m].name),
           m++);
-      const w = x.grade || 9;
-      let v = "";
-      (c.length === 1 && (v = `${c[0]}に身を置いた`),
+      const w = k.grade || 9;
+      let T = "";
+      (c.length === 1 && (T = `${c[0]}に身を置いた`),
         c.length > 1 &&
-          (v = `${c.slice(0, -1).join("、")}を経て${c[c.length - 1]}に身を置いた`),
+          (T = `${c.slice(0, -1).join("、")}を経て${c[c.length - 1]}に身を置いた`),
         Y < w
           ? a.push(
-              `${u(x.age)}${w}級フィクサーとして働き始め、${Y}級まで上り詰めた${v ? `。${v}` : ""}。`,
+              `${u(k.age)}${w}級フィクサーとして働き始め、${Y}級まで上り詰めた${T ? `。${T}` : ""}。`,
             )
           : a.push(
-              `${u(x.age)}${w}級フィクサーになったが、最後まで等級は上がらなかった。${v ? `${v}。` : ""}`,
+              `${u(k.age)}${w}級フィクサーになったが、最後まで等級は上がらなかった。${T ? `${T}。` : ""}`,
             ),
         (i = m));
       continue;
     }
-    if (x.k === "finger") {
-      let Y = x.rankName,
+    if (k.k === "finger") {
+      let Y = k.rankName,
         c = i + 1;
       for (; c < o.length && o[c].k !== "quit" && o[c].k !== "job";)
         (o[c].k === "frank" && (Y = o[c].rankName), c++);
-      const m = Xe[x.finger],
+      const m = Qe[k.finger],
         w = a.length > 1 ? "やがて" : "";
       (a.push(
-        Y && Y !== x.rankName
-          ? `${w}${u(x.age)}${m}に加わり、${Y}まで上り詰めた。`
-          : `${w}${u(x.age)}${m}に加わり、${x.rankName}として生きた。`,
+        Y && Y !== k.rankName
+          ? `${w}${u(k.age)}${m}に加わり、${Y}まで上り詰めた。`
+          : `${w}${u(k.age)}${m}に加わり、${k.rankName}として生きた。`,
       ),
         (i = c));
       continue;
     }
-    if (x.k === "quit") {
-      (x.finger === "약지"
-        ? a.push(`${Xe[x.finger]}を離れた。`)
-        : x.finger
-          ? a.push(`${Xe[x.finger]}を離れてからは、指に追われる人生を送った。`)
-          : x.job === "해결사" &&
-            a.push(`${u(x.age)}フィクサーの仕事を辞めた。`),
+    if (k.k === "quit") {
+      (k.finger === "약지"
+        ? a.push(`${Qe[k.finger]}を離れた。`)
+        : k.finger
+          ? a.push(`${Qe[k.finger]}を離れてからは、指に追われる人生を送った。`)
+          : k.job === "해결사" &&
+            a.push(`${u(k.age)}フィクサーの仕事を辞めた。`),
         i++);
       continue;
     }
-    if (x.k === "job" && Wu[x.job]) {
+    if (k.k === "job" && Eu[k.job]) {
       const Y = o
         .slice(i + 1)
         .find((m) => m.k === "job" || m.k === "quit" || m.k === "finger");
       if (
-        (Y ? Y.age : e.dead ? e.dead.age : e.age) - x.age >= 3 &&
-        !s.has(x.job)
+        (Y ? Y.age : e.dead ? e.dead.age : e.age) - k.age >= 3 &&
+        !s.has(k.job)
       ) {
-        (s.add(x.job), a.push(`${u(x.age)}${Wu[x.job]}。`));
-        const m = x.job === "날개 직원" ? zh(o, i) : 0;
+        (s.add(k.job), a.push(`${u(k.age)}${Eu[k.job]}。`));
+        const m = k.job === "날개 직원" ? Uh(o, i) : 0;
         m >= 3 &&
           a.push(
             m === 6
               ? "ついに代表の座に就いた。"
-              : `のち${Mp[m - 1]}にまで上った。`,
+              : `のち${Hp[m - 1]}にまで上った。`,
           );
       }
       i++;
       continue;
     }
-    if (x.k === "flag") {
+    if (k.k === "flag") {
       if (
-        x.flag === "가정" &&
+        k.flag === "가정" &&
         o[i + 1] &&
         o[i + 1].k === "flag" &&
         o[i + 1].flag === "아이"
       ) {
-        (a.push(`${u(x.age)}家庭を築き、子どもを授かった。`), (i += 2));
+        (a.push(`${u(k.age)}家庭を築き、子どもを授かった。`), (i += 2));
         continue;
       }
-      (x.flag === "특색" && e.colorName
-        ? a.push(`${u(x.age)}「${e.colorName}」という特色の名を得た。`)
-        : x.flag === "E.G.O개화" && e.egoName
-          ? a.push(`${u(x.age)}E.G.Oを開花させた。名は「${e.egoName}」。`)
-          : x.flag === "유물" && e.relicName
+      (k.flag === "특색" && e.colorName
+        ? a.push(`${u(k.age)}「${e.colorName}」という特色の名を得た。`)
+        : k.flag === "E.G.O개화" && e.egoName
+          ? a.push(`${u(k.age)}E.G.Oを開花させた。名は「${e.egoName}」。`)
+          : k.flag === "유물" && e.relicName
             ? a.push(
-                `${u(x.age)}外郭の廃墟で遺物を得た。名は「${e.relicName}」。`,
+                `${u(k.age)}外郭の廃墟で遺物を得た。名は「${e.relicName}」。`,
               )
-            : Eu[x.flag] && a.push(`${u(x.age)}${Eu[x.flag]}。`),
+            : Bu[k.flag] && a.push(`${u(k.age)}${Bu[k.flag]}。`),
         i++);
       continue;
     }
@@ -11516,43 +11516,43 @@ function Zp(e, t) {
           ? `${f.age}歳、ワープ列車に乗り、${f.cars}両を突破した。`
           : `${f.age}歳、ワープ列車に乗ったが、最初の車両を越えられなかった。`,
     ),
-    a.push(...Xh(e, "ja")),
-    a.push(...Qh(e, "ja")));
-  const y = Jh(e, "ja");
+    a.push(...Qh(e, "ja")),
+    a.push(...Zh(e, "ja")));
+  const y = Vh(e, "ja");
   a.push(...y.lines);
   const g = e.dead,
-    k = Uh(e, "ja");
-  if ((k && a.push(k.line), g)) {
-    const x = e.deathContext ? `${e.deathContext}、` : "";
-    let T = g.phrase || Qp[g.cause] || "生涯を終えた";
+    x = Jh(e, "ja");
+  if ((x && a.push(x.line), g)) {
+    const k = e.deathContext ? `${e.deathContext}、` : "";
+    let v = g.phrase || eb[g.cause] || "生涯を終えた";
     if (
       (g.cause === "뒤틀림" &&
         e.flags.includes("검계뒤틀림") &&
-        (T = "最後の路地で声に応え、ねじれた"),
-      g.cause === "해결사의 토벌" && e.bld && (T = Vh(e, "ja")),
-      k && k.phrase && (T = k.phrase),
-      g.cause === "인어가 되었다" && y.phrase && (T = y.phrase),
-      !x && g.cause === "환상체 사고")
+        (v = "最後の路地で声に応え、ねじれた"),
+      g.cause === "해결사의 토벌" && e.bld && (v = Xh(e, "ja")),
+      x && x.phrase && (v = x.phrase),
+      g.cause === "인어가 되었다" && y.phrase && (v = y.phrase),
+      !k && g.cause === "환상체 사고")
     ) {
       const m = [...(e.log || [])]
         .reverse()
         .find((w) => w.kind === "event" && /【(.+?)】/.test(w.text));
       m &&
         m.age === g.age &&
-        (T = `幻想体「${m.text.match(/【(.+?)】/)[1]}」と遭遇した末に息を引き取った`);
+        (v = `幻想体「${m.text.match(/【(.+?)】/)[1]}」と遭遇した末に息を引き取った`);
     }
     const Y =
-        e.flags.includes("손가락이탈") && g.cause === "범죄·항쟁" && !x
+        e.flags.includes("손가락이탈") && g.cause === "범죄·항쟁" && !k
           ? "追ってきた指の手にかかり、"
           : "",
       c = a.length > 1 ? "そして" : "";
-    a.push(`${c}${g.age}歳、${x}${Y}${T}。`);
+    a.push(`${c}${g.age}歳、${k}${Y}${v}。`);
   }
   return a;
 }
-function eb(e) {
+function ob(e) {
   const t = [],
-    o = (w, v) => t.push({ key: w, label: v }),
+    o = (w, T) => t.push({ key: w, label: T }),
     a = e.story || [],
     n = e.log || [],
     r = e.flags || [],
@@ -11730,7 +11730,7 @@ function eb(e) {
     o("fixer", h("해결사가 됨", "Became a Fixer", "フィクサーになった"));
     const w = Math.min(
       9,
-      ...a.filter((v) => v.k === "grade").map((v) => v.grade),
+      ...a.filter((T) => T.k === "grade").map((T) => T.grade),
     );
     w <= 7 &&
       o(
@@ -11773,8 +11773,8 @@ function eb(e) {
       `finger_${s.finger}`,
       h(
         `${s.finger} 입단`,
-        `Joined the ${Xe[s.finger]}`,
-        `${Xe[s.finger]}に入団`,
+        `Joined the ${Qe[s.finger]}`,
+        `${Qe[s.finger]}に入団`,
       ),
     );
     const w = (_) => {
@@ -11785,23 +11785,23 @@ function eb(e) {
       }
       return 1;
     };
-    let v = 1;
-    for (const _ of a) _.k === "frank" && (v = Math.max(v, w(_.rankName)));
-    if (v >= 2) {
-      const _ = gt(s.finger, v, e.gender);
+    let T = 1;
+    for (const _ of a) _.k === "frank" && (T = Math.max(T, w(_.rankName)));
+    if (T >= 2) {
+      const _ = gt(s.finger, T, e.gender);
       o(
-        `frank_${s.finger}_${v}`,
+        `frank_${s.finger}_${T}`,
         h(
           `${s.finger} ${_} 도달`,
-          `Reached ${Xe[s.finger]} ${_}`,
-          `${Xe[s.finger]}の${_}に到達`,
+          `Reached ${Qe[s.finger]} ${_}`,
+          `${Qe[s.finger]}の${_}に到達`,
         ),
       );
     }
   }
   r.includes("손가락이탈") &&
     o("finger_quit", h("손가락을 떠남", "Left the Fingers", "指を離れた"));
-  for (const [w, v, _] of [
+  for (const [w, T, _] of [
     ["날개 직원", "corp", h("날개의 사원", "Wing employee", "翼の社員")],
     [
       "협회 직원",
@@ -11809,7 +11809,7 @@ function eb(e) {
       h("협회 직원", "Association staff", "協会職員"),
     ],
   ])
-    a.some((C) => C.k === "job" && C.job === w) && o(v, _);
+    a.some((C) => C.k === "job" && C.job === w) && o(T, _);
   (r.includes("유물") &&
     o(
       "relic",
@@ -12180,7 +12180,7 @@ function eb(e) {
           "生きたまま物語を結んだ血鬼",
         ),
       );
-      const v = {
+      const T = {
           couple: h("둘이서 오래", "Together, for a long time", "ふたりで長く"),
           smile: h("늦게 온 웃음", "A smile that came late", "遅れてきた笑み"),
           gone: h("늙지 않는 쪽", "The one who does not age", "老いないほう"),
@@ -12206,7 +12206,7 @@ function eb(e) {
           ),
         },
         _ = Ko(e).k;
-      v[_] && o(`bf_epi_${_ === "slept" ? "gone" : _}`, v[_]);
+      T[_] && o(`bf_epi_${_ === "slept" ? "gone" : _}`, T[_]);
     }
     (i &&
       i.cause === "긴 잠" &&
@@ -12215,7 +12215,7 @@ function eb(e) {
         "bf_end_faces",
         h("셀 수 없는 얼굴", "Countless faces", "数えきれない顔"),
       ),
-      a.some((v) => v.k === "flag" && v.flag === "정체공개") &&
+      a.some((T) => T.k === "flag" && T.flag === "정체공개") &&
         o(
           "bf_reveal",
           h(
@@ -12224,7 +12224,7 @@ function eb(e) {
             "所属に正体を明かした血鬼",
           ),
         ),
-      a.some((v) => v.k === "flag" && v.flag === "정체들킴") &&
+      a.some((T) => T.k === "flag" && T.flag === "정체들킴") &&
         o(
           "bf_found",
           h(
@@ -12257,20 +12257,20 @@ function eb(e) {
     i &&
       i.cause === "피주머니" &&
       o("bloodbag", h("피주머니가 됨", "Became a Bloodbag", "血袋になった")));
-  const k = e.kk;
-  k &&
+  const x = e.kk;
+  x &&
     (o("kk_join", h("흑운회", "Kurokumo Clan", "黒雲会")),
-    (k.best || 1) >= 2 &&
+    (x.best || 1) >= 2 &&
       o(
         "kk_captain",
         h("흑운회 부조장", "Kurokumo Clan Captain", "黒雲会 副組長"),
       ),
-    (k.best || 1) >= 3 &&
+    (x.best || 1) >= 3 &&
       o(
         "kk_patriarch",
         h("흑운회 조장", "Kurokumo Clan Patriarch", "黒雲会 組長"),
       ),
-    (k.ink || 0) >= 3 &&
+    (x.ink || 0) >= 3 &&
       o(
         "kk_ink3",
         h("세 겹의 검은 구름", "Three layers of black cloud", "三重の黒い雲"),
@@ -12293,7 +12293,7 @@ function eb(e) {
           "剣契と向かい合って座った者",
         ),
       ),
-    (k.punish || 0) >= 1 &&
+    (x.punish || 0) >= 1 &&
       !(i && i.cause === "흑운회의 처벌") &&
       o(
         "kk_finger",
@@ -12339,12 +12339,12 @@ function eb(e) {
           "剣術を伝えた者",
         ),
       ));
-  const x = e.bl;
-  (x &&
+  const k = e.bl;
+  (k &&
     (o("bl_join", h("검계", "Blade Lineage", "剣契")),
-    (x.best || 1) >= 2 &&
+    (k.best || 1) >= 2 &&
       o("bl_salsu", h("검계 살수", "Blade Lineage Salsu", "剣契 殺手")),
-    (x.best || 1) >= 3 &&
+    (k.best || 1) >= 3 &&
       o("bl_mentor", h("검계 우두머리", "Blade Lineage Mentor", "剣契 頭目")),
     r.includes("칼을들고떠남") &&
       o(
@@ -12530,7 +12530,7 @@ function eb(e) {
         "lament_meet",
         h("그곳에서 만나기를", "May We Meet There", "そこで会えますように"),
       ),
-    ((w) => n.some((v) => v.eventId === w))("t_love") &&
+    ((w) => n.some((T) => T.eventId === w))("t_love") &&
       r.includes("가정") &&
       o(
         "love_first",
@@ -12580,16 +12580,16 @@ const aa = [
   { id: "legend", ko: "전설", en: "Legendary", ja: "伝説", min: 3e-4 },
   { id: "myth", ko: "신화", en: "Mythic", ja: "神話", min: 0 },
 ];
-function tb(e) {
+function ab(e) {
   return e == null
     ? aa[aa.length - 1]
     : aa.find((t) => e >= t.min) || aa[aa.length - 1];
 }
-const ob = { id: "miracle", ko: "기적", en: "Miracle", ja: "奇跡" },
-  vn = aa.concat([ob]),
-  ab = Object.fromEntries(vn.map((e) => [e.id, e])),
-  Bu = Object.fromEntries(vn.map((e, t) => [e.id, t])),
-  Ew = {
+const nb = { id: "miracle", ko: "기적", en: "Miracle", ja: "奇跡" },
+  Tn = aa.concat([nb]),
+  rb = Object.fromEntries(Tn.map((e) => [e.id, e])),
+  Fu = Object.fromEntries(Tn.map((e, t) => [e.id, t])),
+  Bw = {
     born_head: "uncommon",
     born_outskirts: "uncommon",
     orphan: "uncommon",
@@ -12760,25 +12760,25 @@ const ob = { id: "miracle", ko: "기적", en: "Miracle", ja: "奇跡" },
     bl_w_student: "legend",
     bl_w_reform: "legend",
   };
-function nb(e, t) {
+function ib(e, t) {
   return e
     .map((o) => {
       const a = t && t[o.key] != null ? t[o.key] : null,
-        n = ab[Ew[o.key]] || tb(a);
+        n = rb[Bw[o.key]] || ab(a);
       return { ...o, p: a, tier: n.id, tierLabel: h(n.ko, n.en, n.ja) };
     })
-    .sort((o, a) => Bu[a.tier] - Bu[o.tier] || (o.p ?? 0) - (a.p ?? 0));
+    .sort((o, a) => Fu[a.tier] - Fu[o.tier] || (o.p ?? 0) - (a.p ?? 0));
 }
 const q = (e) => ({ o: "ok", k: e }),
   me = (e) => ({ o: "cross", k: e }),
   H = (e) => ({ o: "wave", w: e }),
-  tt = (e, t) => {
+  ot = (e, t) => {
     const o = t.reduce((n, [, r]) => n + r, 0);
     let a = e.next() * o;
     for (const [n, r] of t) if (((a -= r), a < 0)) return n;
     return t[t.length - 1][0];
   },
-  Bw = [
+  Fw = [
     {
       id: "L01",
       max: 3,
@@ -12803,7 +12803,7 @@ const q = (e) => ({ o: "ok", k: e }),
       scene: (e, t, o, a) =>
         a
           ? "fog"
-          : tt(o, [
+          : ot(o, [
               ["empty", 35],
               ["music", 20],
               ["people", 25],
@@ -12851,7 +12851,7 @@ const q = (e) => ({ o: "ok", k: e }),
       scene: (e, t, o, a) =>
         a
           ? "quiet"
-          : tt(o, [
+          : ot(o, [
               ["quiet", 35],
               ["one", 25],
               ["two", 20],
@@ -12915,7 +12915,7 @@ const q = (e) => ({ o: "ok", k: e }),
       scene: (e, t, o, a) =>
         a
           ? "clear"
-          : tt(o, [
+          : ot(o, [
               ["name", 30],
               ["shoulder", 20],
               ["steps", 25],
@@ -12944,7 +12944,7 @@ const q = (e) => ({ o: "ok", k: e }),
       max: 4,
       choices: ["down", "shut", "rope", "wave"],
       scene: (e, t, o) =>
-        tt(o, [
+        ot(o, [
           ["hand", 30],
           ["face", 25],
           ["rope", 20],
@@ -13058,7 +13058,7 @@ const q = (e) => ({ o: "ok", k: e }),
       scene: (e, t, o, a) =>
         a
           ? "calm"
-          : tt(o, [
+          : ot(o, [
               ["mine", 25],
               ["other", 25],
               ["calm", 50],
@@ -13099,7 +13099,7 @@ const q = (e) => ({ o: "ok", k: e }),
           i =
             n > 0 && r <= n
               ? "good"
-              : tt(o, [
+              : ot(o, [
                   ["good", 50],
                   ["broken", 25],
                   ["none", 25],
@@ -13147,7 +13147,7 @@ const q = (e) => ({ o: "ok", k: e }),
             ? "calm"
             : t === 3 && o.chance(0.6)
               ? "path"
-              : tt(o, [
+              : ot(o, [
                   ["fill", 35],
                   ["tide", 65],
                 ]);
@@ -13180,7 +13180,7 @@ const q = (e) => ({ o: "ok", k: e }),
           ? o.chance(0.5)
             ? "knob"
             : "closed"
-          : tt(o, [
+          : ot(o, [
               ["come", 25],
               ["knob", 35],
               ["closed", 40],
@@ -13211,7 +13211,7 @@ const q = (e) => ({ o: "ok", k: e }),
         const n =
           a || (t === 4 && !e.lineSeen)
             ? "line"
-            : tt(o, [
+            : ot(o, [
                 ["line", 35],
                 ["rainbow", 35],
                 ["tilt", 30],
@@ -13233,7 +13233,7 @@ const q = (e) => ({ o: "ok", k: e }),
       scene: (e, t, o, a) =>
         a
           ? "calm"
-          : tt(o, [
+          : ot(o, [
               ["b1", 15],
               ["b2", 15],
               ["b3", 15],
@@ -13283,7 +13283,7 @@ const q = (e) => ({ o: "ok", k: e }),
             ? (a = "quiet")
             : t >= 5
               ? (a = "stop")
-              : (a = tt(o, [
+              : (a = ot(o, [
                   ["laugh", 40],
                   ["stop", 30],
                   ["prints", 20],
@@ -13325,7 +13325,7 @@ const q = (e) => ({ o: "ok", k: e }),
       scene: (e, t, o, a) =>
         a
           ? "dark"
-          : tt(o, [
+          : ot(o, [
               ["ask", 30],
               ["wind", 25],
               ["water", 25],
@@ -13357,7 +13357,7 @@ const q = (e) => ({ o: "ok", k: e }),
       scene: (e, t, o, a) =>
         a
           ? "out"
-          : tt(o, [
+          : ot(o, [
               ["in", 40],
               ["out", 35],
               ["stop", 25],
@@ -13398,27 +13398,27 @@ const q = (e) => ({ o: "ok", k: e }),
       },
     },
   ],
-  Fu = [0, 1, 2, 3, 4, 5, 6, 7],
-  rb = [8, 9, 10, 11, 12, 13, 14],
-  Fw = [15, 16, 17, 18, 19],
-  Lw = (e) => `21-${String(e + 1).padStart(2, "0")}`;
-function ib(e) {
+  Lu = [0, 1, 2, 3, 4, 5, 6, 7],
+  sb = [8, 9, 10, 11, 12, 13, 14],
+  Lw = [15, 16, 17, 18, 19],
+  Pw = (e) => `21-${String(e + 1).padStart(2, "0")}`;
+function lb(e) {
   const t = new Set(),
     o = (n) => {
       const r = n.filter((l) => !t.has(l)),
         i = e.pick(r.length ? r : n);
       return (t.add(i), i);
     },
-    a = [o(Fu), o(Fu)];
-  for (let n = 0; n < 3; n++) a.push(o(e.chance(0.6) ? rb : Fw));
+    a = [o(Lu), o(Lu)];
+  for (let n = 0; n < 3; n++) a.push(o(e.chance(0.6) ? sb : Lw));
   return a;
 }
-const sb = (e, t) => e.choices.filter((o) => !e.visible || e.visible(o, t));
-function lb(e, t, o, a) {
+const hb = (e, t) => e.choices.filter((o) => !e.visible || e.visible(o, t));
+function db(e, t, o, a) {
   const n = e.before ? e.before(t) : null;
   return n ? { wave: n } : { scene: e.scene(t, o, a, o >= e.max) };
 }
-function hb(e, t, o, a, n) {
+function ub(e, t, o, a, n) {
   const r = e.resolve(t, o, a, n);
   if (r.o === "ok") {
     const i = e.endTurn ? e.endTurn(t, n) : null;
@@ -13429,41 +13429,41 @@ function hb(e, t, o, a, n) {
 }
 const P = (e, t = 0, o = 100) => Math.max(t, Math.min(o, e)),
   ht = (e) => Math.round(e * 10) / 10,
-  Lu = new WeakMap();
+  Pu = new WeakMap();
 function z(e, t) {
-  let o = Lu.get(e);
-  return (
-    o || ((o = new Map(e.events.map((a) => [a.id, a]))), Lu.set(e, o)),
-    o.get(t)
-  );
-}
-const Pu = new WeakMap();
-function Pw(e, t) {
   let o = Pu.get(e);
   return (
-    o || ((o = new Map((e.daily || []).map((a) => [a.id, a]))), Pu.set(e, o)),
+    o || ((o = new Map(e.events.map((a) => [a.id, a]))), Pu.set(e, o)),
     o.get(t)
   );
 }
-function ki(e, t) {
+const Mu = new WeakMap();
+function Mw(e, t) {
+  let o = Mu.get(e);
+  return (
+    o || ((o = new Map((e.daily || []).map((a) => [a.id, a]))), Mu.set(e, o)),
+    o.get(t)
+  );
+}
+function xi(e, t) {
   return e.some((o) => o === t.id || (t.tags || []).includes(o));
 }
-const db = {
+const cb = {
     "마침표 사무소": { ko: "총", en: "gun", ja: "銃" },
     "시 협회": { ko: "단검", en: "dagger", ja: "短剣" },
   },
-  ub = { ko: "검", en: "sword", ja: "剣" };
-function cb(e) {
+  fb = { ko: "검", en: "sword", ja: "剣" };
+function wb(e) {
   if (!e) return null;
   if (e.org) return e.org.name;
   const t = e.orgHistory || [];
   return t.length ? t[t.length - 1] : null;
 }
-function fb(e) {
-  const t = db[cb(e)] || ub;
+function gb(e) {
+  const t = cb[wb(e)] || fb;
   return h(t.ko, t.en, t.ja);
 }
-const wb = {
+const mb = {
     "츠바이 협회": { types: ["호위"], p: 0.7 },
     "리우 협회": { types: ["전쟁", "조직 소탕"], p: 0.6 },
     "세븐 협회": { types: ["수색"], p: 0.5 },
@@ -13472,21 +13472,21 @@ const wb = {
     "섕크 협회": { types: ["결투"], p: 0.5 },
     "마침표 사무소": { types: ["조직 소탕"], p: 0.2 },
   },
-  Mu = {
+  $u = {
     "시선 사무소": (e) =>
       e.flags.includes("의체") || e.flags.includes("좋은의체"),
   },
-  xi = (e, t) =>
+  vi = (e, t) =>
     (e.story || []).some((o) => o.k === "job" && o.job === t) || e.job === t,
-  Tt = (e, t, o) =>
+  vt = (e, t, o) =>
     e &&
     e
-      .replaceAll("{무기}", fb(o))
+      .replaceAll("{무기}", gb(o))
       .replaceAll("{지역}", t.name)
       .replaceAll("{구역}", t.sub || t.name)
       .replaceAll(
         "{손가락}",
-        o && o.finger ? Xe[o.finger] : h("손가락", "the Finger", "指"),
+        o && o.finger ? Qe[o.finger] : h("손가락", "the Finger", "指"),
       )
       .replaceAll(
         "{소속}",
@@ -13511,8 +13511,8 @@ const wb = {
               "配偶者は長く患っていた。医者は首を横に振った。",
             ),
       )
-      .replaceAll("{R팀}", ik(o))
-      .replaceAll("{R직급}", sk(o))
+      .replaceAll("{R팀}", lk(o))
+      .replaceAll("{R직급}", hk(o))
       .replaceAll(
         "{상처줄}",
         o && (o.hatchHurt || 0) >= 2
@@ -13537,23 +13537,23 @@ const wb = {
         /\{R:([^|}]*)\|([^|}]*)\|([^}]*)\}/g,
         (a, n, r, i) => ({ 토끼: n, 순록: r, 코뿔소: i })[Kn(o)] ?? n,
       )
-      .replace(/\{(BF_[A-Z]+|윗사람|형님|어버이)\}/g, (a, n) => $x(n, o))
+      .replace(/\{(BF_[A-Z]+|윗사람|형님|어버이)\}/g, (a, n) => Dx(n, o))
       .replace(/\{(해답|칙령\d|결정\d|평판줄|공씨줄|남은사람줄)\}/g, (a, n) =>
-        xb(n, o),
+        Tb(n, o),
       )
       .replace(/\{BL고향:([^|}]*)\|([^}]*)\}/g, (a, n, r) =>
         o && o.regionId === "S" ? n : r,
       )
-      .replace(/\{BL(뜻줄|칼줄)\}/g, (a, n) => Ab(n, o))
+      .replace(/\{BL(뜻줄|칼줄)\}/g, (a, n) => Sb(n, o))
       .replaceAll("{KK번호}", String((o && o.kk && o.kk.seat) || ""))
       .replace(
         /\{(KK직급|KK잉크사유|KK출신):([^|}]*)\|([^}]*)\}/g,
-        (a, n, r, i) => Eb(n, r, i, o),
+        (a, n, r, i) => Fb(n, r, i, o),
       )
       .replace(/\{(BL제자|토벌무기):([^|}]*)\|([^}]*)\}/g, (a, n, r, i) =>
-        Fb(n, r, i, o),
+        Pb(n, r, i, o),
       )
-      .replaceAll("{윗등급}", mb(o))
+      .replaceAll("{윗등급}", pb(o))
       .replace(/\{KX심사:([^|}]*)\|([^}]*)\}/g, (a, n, r) =>
         ((o && o.wingRank) || 1) <= 1 ? n : r,
       )
@@ -13564,11 +13564,11 @@ const wb = {
         o && o.nh && o.nh.rites ? r : n,
       )
       .replace(/\{(연인|배우자|아이)(?::([^|}]*)\|([^}]*))?\}/g, (a, n, r, i) =>
-        gb(n, r, i, o),
+        yb(n, r, i, o),
       )
-      .replaceAll("{토벌}", Gw(o))
-      .replaceAll("{등급}", Lb(o));
-function gb(e, t, o, a) {
+      .replaceAll("{토벌}", Kw(o))
+      .replaceAll("{등급}", Mb(o));
+function yb(e, t, o, a) {
   const r =
     (e === "아이" ? a && a.childName : a && a.partnerName) ||
     (e === "아이"
@@ -13576,9 +13576,9 @@ function gb(e, t, o, a) {
       : e === "연인"
         ? h("연인", "your partner", "恋人")
         : h("배우자", "your spouse", "配偶者"));
-  return t !== void 0 && Pe() === "ko" ? r + Cl(r, t, o) : r;
+  return t !== void 0 && Pe() === "ko" ? r + Il(r, t, o) : r;
 }
-function mb(e) {
+function pb(e) {
   const t = (e && e.wingRank) || 3;
   return t >= 5
     ? h(
@@ -13625,7 +13625,7 @@ const Ot = Dt({
       약지: ["スチューデント", "ドーセント", "マエストロ"],
     },
   }),
-  yb = Dt({
+  bb = Dt({
     ko: {
       "날개 직원": "날개 직원",
       "협회 직원": "협회 직원",
@@ -13657,7 +13657,7 @@ const Ot = Dt({
       "이단 심문관": "N社 異端審問官",
     },
   }),
-  qr = {
+  Gr = {
     흑수: 2,
     시간징수직: 10,
     "정리 요원": 5,
@@ -13665,20 +13665,20 @@ const Ot = Dt({
     적출직: 5,
     "이단 심문관": 3,
   },
-  Mw = ["토끼", "순록", "코뿔소"],
-  ed = Dt({
+  $w = ["토끼", "순록", "코뿔소"],
+  td = Dt({
     ko: { 토끼: "토끼", 순록: "순록", 코뿔소: "코뿔소" },
     en: { 토끼: "Rabbit", 순록: "Reindeer", 코뿔소: "Rhino" },
     ja: { 토끼: "ウサギ", 순록: "トナカイ", 코뿔소: "サイ" },
   }),
-  pb = 0.2,
-  bb = 0.1,
+  kb = 0.2,
+  xb = 0.1,
   hn = 78,
   Ae = (e) => Math.min(15e3, Math.max(4e3, String(e || "").length * 55)),
-  $w = (e) =>
+  Hw = (e) =>
     !!e.heir && ((e.flags.includes("가주후보") && e.age >= 5) || !!e.rule),
-  Gr = (e) => (e.heir && e.heir.kong) || 0;
-function $u(e) {
+  Kr = (e) => (e.heir && e.heir.kong) || 0;
+function Hu(e) {
   const t = e.heir;
   return (
     !!t &&
@@ -13688,11 +13688,11 @@ function $u(e) {
     t.ji + t.yong + t.in >= 60
   );
 }
-function kb(e) {
+function vb(e) {
   const t = e.heir || { ji: 0, yong: 0, in: 0 };
   return t.ji >= t.yong && t.ji >= t.in ? "ji" : t.yong >= t.in ? "yong" : "in";
 }
-function xb(e, t) {
+function Tb(e, t) {
   if (!t || !t.heir) return "";
   if (e === "해답")
     return {
@@ -13711,7 +13711,7 @@ function xb(e, t) {
         "presented, as your answer, the passing of names and shares to the next person.",
         "名と取り分が次の人へと渡っていくことを答えとして出した。",
       ),
-    }[kb(t)];
+    }[vb(t)];
   const o = t.rule || {},
     a = /^(칙령|결정)(\d)$/.exec(e);
   if (a) return (o.lines || [])[Number(a[2]) - 1] || "";
@@ -13777,7 +13777,7 @@ That year, in that section of the archive, names without a line through them rem
   }
   return "";
 }
-const Il = qt({
+const Nl = qt({
     ko: ["검계 조직원", "검계 살수", "검계 우두머리"],
     en: [
       "Blade Lineage Cutthroat",
@@ -13794,9 +13794,9 @@ const Il = qt({
     tick: 0.6,
     income: [4.5, 5.5, 7],
   },
-  Mi = (e) => (e && e.bl) || null,
+  $i = (e) => (e && e.bl) || null,
   qa = (e) => (e && e.job === "검계" && e.bl ? e.bl.rank || 1 : 0);
-function Hw(e) {
+function Dw(e) {
   if (["A", "B", "C", "outskirts"].includes(e.regionId)) return !1;
   const t = e.flags;
   return (
@@ -13806,7 +13806,7 @@ function Hw(e) {
     t.includes("조직입문")
   );
 }
-function Tb(e) {
+function _b(e) {
   return e.bl ||
     e.kk ||
     [
@@ -13823,10 +13823,10 @@ function Tb(e) {
     (e.job === "해결사" && e.grade && e.grade <= 4) ||
     e.flags.includes("가주후보")
     ? !1
-    : Hw(e);
+    : Dw(e);
 }
-function vb(e) {
-  const t = Mi(e);
+function jb(e) {
+  const t = $i(e);
   return (
     !!t &&
     t.rank === 2 &&
@@ -13836,8 +13836,8 @@ function vb(e) {
     e.stats.network >= ma.mentorNet
   );
 }
-function _b(e) {
-  const t = Mi(e),
+function Ab(e) {
+  const t = $i(e),
     o = t ? Math.max(0, t.way || 0) : 0;
   return P(
     0.45 + Math.min(0.25, 0.05 * o) + (e.stats.sanity <= 30 ? 0.15 : 0),
@@ -13845,13 +13845,13 @@ function _b(e) {
     0.95,
   );
 }
-function jb(e) {
+function Yb(e) {
   return e.flags.includes("E.G.O개화")
     ? 0
     : P(0.5 + (e.stats.sanity - 50) * 0.005, 0.25, 0.75);
 }
-function Dw(e) {
-  const t = Mi(e) || { best: 1, cut: 0 },
+function qw(e) {
+  const t = $i(e) || { best: 1, cut: 0 },
     o = t.cut || 0;
   return (t.best || 1) >= 3
     ? o >= 60
@@ -13869,8 +13869,8 @@ function Dw(e) {
         ? 7
         : 8;
 }
-function Ab(e, t) {
-  const o = Mi(t);
+function Sb(e, t) {
+  const o = $i(t);
   return e === "뜻줄"
     ? o && (o.way || 0) >= 3
       ? h(
@@ -13887,7 +13887,7 @@ function Ab(e, t) {
         )
       : "";
 }
-const go = {
+const mo = {
     income: [5.5, 7, 9],
     tribute: 0.2,
     tributeLedger: 0.25,
@@ -13896,7 +13896,7 @@ const go = {
     patStat: 35,
     seatMax: 40,
   },
-  Yb = qt({
+  Rb = qt({
     ko: ["흑운회 와카슈", "흑운회 부조장", "흑운회 조장"],
     en: [
       "Kurokumo Clan Wakashu",
@@ -13913,12 +13913,12 @@ function dn(e) {
   return t === 2 && o && o.seat
     ? h(
         `흑운회 제${o.seat}대 부조장`,
-        `Kurokumo Clan Captain, the ${ig(o.seat)}`,
+        `Kurokumo Clan Captain, the ${sg(o.seat)}`,
         `黒雲会 ${o.seat}代 副組長`,
       )
-    : Yb[t - 1];
+    : Rb[t - 1];
 }
-function Sb(e) {
+function Cb(e) {
   return e.kk ||
     e.bl ||
     [
@@ -13936,33 +13936,33 @@ function Sb(e) {
     (e.job === "해결사" && e.grade && e.grade <= 4) ||
     e.flags.includes("가주후보")
     ? !1
-    : Hw(e);
+    : Dw(e);
 }
-function Rb(e) {
-  return Gt(e) === 1 && qi(e);
+function Ib(e) {
+  return Gt(e) === 1 && Gi(e);
 }
-function Cb(e) {
+function Nb(e) {
   const t = nr(e);
   return (
     Gt(e) === 2 &&
-    e.age - (t.rankAt ?? e.age) >= go.patYears &&
-    qi(e) &&
-    e.stats.rep >= go.patStat &&
-    e.stats.network >= go.patStat
+    e.age - (t.rankAt ?? e.age) >= mo.patYears &&
+    Gi(e) &&
+    e.stats.rep >= mo.patStat &&
+    e.stats.network >= mo.patStat
   );
 }
-function Ib(e) {
+function Ob(e) {
   const t = nr(e);
   return !!t && !!t.inkWhy && e.age - t.inkWhy.age <= 1;
 }
-function Nb(e) {
+function Wb(e) {
   const t = nr(e),
     o = Gt(e) || 1,
-    a = t ? Math.min(1, Math.max(0, -(t.way || 0)) * go.wayIncome) : 0,
-    n = e.flags.includes("흑운회장부") ? go.tributeLedger : go.tribute;
-  return (go.income[o - 1] + a) * (1 - n);
+    a = t ? Math.min(1, Math.max(0, -(t.way || 0)) * mo.wayIncome) : 0,
+    n = e.flags.includes("흑운회장부") ? mo.tributeLedger : mo.tribute;
+  return (mo.income[o - 1] + a) * (1 - n);
 }
-function Ob(e) {
+function Eb(e) {
   if (e.job === "흑운회" && e.kk) {
     const t = e.kk,
       o = (t.ink || 0) >= 3 ? 6 : (t.ink || 0) >= 2 ? 3 : 0,
@@ -13978,9 +13978,9 @@ function Ob(e) {
   }
   return 0;
 }
-function Wb(e, t) {
+function Bb(e, t) {
   if (!e.some((n) => n.skillSave)) return e;
-  const o = Ob(t);
+  const o = Eb(t);
   if (!o) return e;
   const a = e.map((n) => ({ ...n }));
   for (const n of a) {
@@ -13994,7 +13994,7 @@ function Wb(e, t) {
   }
   return a;
 }
-function Eb(e, t, o, a) {
+function Fb(e, t, o, a) {
   const n = nr(a);
   return e === "KK직급"
     ? Gt(a) >= 3
@@ -14009,21 +14009,21 @@ function Eb(e, t, o, a) {
         : t;
 }
 const So = (e) => !!e.bld && !e.dead,
-  qw = [2, 0, 3, 4],
-  Bb = 4;
-function Fb(e, t, o, a) {
+  Gw = [2, 0, 3, 4],
+  Lb = 4;
+function Pb(e, t, o, a) {
   const n = a && (a.dr || a.bld);
   return e === "BL제자"
     ? a && a.flags.includes("아낀제자")
       ? t
       : o
     : e === "토벌무기"
-      ? n && n.hunter && n.hunter.type === "office" && n.hunter.idx === Bb
+      ? n && n.hunter && n.hunter.type === "office" && n.hunter.idx === Lb
         ? t
         : o
       : t;
 }
-function Gw(e) {
+function Kw(e) {
   const t = e && (e.dr || e.bld);
   if (t && t.hunter && t.hunter.type === "nm") return re("hunterNm");
   if (!t || !t.hunter || !X)
@@ -14031,7 +14031,7 @@ function Gw(e) {
   const o = (X.orgs[t.hunter.type] || [])[t.hunter.idx];
   return o ? o.name : h("해결사들", "the Fixers", "フィクサーたち");
 }
-function Lb(e) {
+function Mb(e) {
   if (e && e.dr)
     return X && X.orgs && X.orgs.tiers ? X.orgs.tiers[e.dr.grade] : "";
   const t = e && e.bld,
@@ -14052,9 +14052,9 @@ const _a = {
     blindP: 0.2,
   },
   Ho = (e) => !!e.dr && !e.dead,
-  Pb = () => (X && z(X, "dr_lines")) || null;
-function it(e) {
-  let t = Pb();
+  $b = () => (X && z(X, "dr_lines")) || null;
+function st(e) {
+  let t = $b();
   for (const o of e.split(".")) {
     if (!t) return null;
     t = t[o];
@@ -14062,7 +14062,7 @@ function it(e) {
   return t;
 }
 function re(e) {
-  const t = it(e);
+  const t = st(e);
   return (t && t.text) || "";
 }
 function Ft(e, t, o) {
@@ -14081,8 +14081,8 @@ function Ft(e, t, o) {
   const l = oe(e).pick(i);
   return (r.push(l), (a.used[t] = r), l);
 }
-const Mb = (e) => (e.dr.grade >= 4 ? "nm" : e.dr.grade >= 2 ? "mid" : "low");
-function $b(e) {
+const Hb = (e) => (e.dr.grade >= 4 ? "nm" : e.dr.grade >= 2 ? "mid" : "low");
+function Db(e) {
   return e.bf
     ? "bf"
     : e.job === "해결사"
@@ -14095,32 +14095,32 @@ function $b(e) {
             ? "worker"
             : "other";
 }
-const Hb = qt({
+const qb = qt({
   ko: ["첫 번째", "두 번째", "세 번째", "네 번째", "다섯 번째", "여섯 번째"],
   en: ["first", "second", "third", "fourth", "fifth", "sixth"],
   ja: ["一つ目の", "二つ目の", "三つ目の", "四つ目の", "五つ目の", "六つ目の"],
 });
 function Do(e, t) {
   const o = t.dr;
-  return Tt(e, qe(X, t), t)
-    .replaceAll("{회차}", Hb[Math.max(0, Math.min(5, (o.n || 1) - 1))])
+  return vt(e, qe(X, t), t)
+    .replaceAll("{회차}", qb[Math.max(0, Math.min(5, (o.n || 1) - 1))])
     .replaceAll("{물리친수}", String(o.beat || 0));
 }
-function Db(e, t) {
+function Gb(e, t) {
   X = t;
   const o = e.dead;
   if (!o || !o.voice) return !1;
   const a = oe(e),
     n = e.log[e.log.length - 1];
   (n && n.kind === "death" && e.log.pop(), (e.dead = null));
-  const r = hd(e),
+  const r = dd(e),
     i = Math.round(((r ?? 2) / 2 + a.next() * 4) * 10) / 10,
     l = i < 1.5 ? 0 : i < 3 ? 1 : i < 4.5 ? 2 : i < 7 ? 3 : 4,
     s =
       l >= 4
         ? { type: "nm" }
         : l === 3
-          ? { type: "assoc", idx: a.pick(qw) }
+          ? { type: "assoc", idx: a.pick(Gw) }
           : {
               type: "office",
               idx: a.int(
@@ -14139,7 +14139,7 @@ function Db(e, t) {
     n: 0,
     kills: 0,
     hunter: s,
-    kind: $b(e),
+    kind: Db(e),
     used: {},
     lastProg: -1,
     resJust: !1,
@@ -14166,7 +14166,7 @@ function Db(e, t) {
     !0
   );
 }
-function qb(e) {
+function Kb(e) {
   const t = e.dr,
     a = (t.grade >= 4 ? 6 : 5) - (t.n || 0);
   if (a <= 0) return;
@@ -14186,7 +14186,7 @@ function qb(e) {
       }),
       e.plan.push({ dr: "raid", t: r[l] }));
 }
-function Gb(e, t, o) {
+function zb(e, t, o) {
   const a = e.dr;
   if (!a || e.dead) return !0;
   const n = oe(e);
@@ -14206,10 +14206,10 @@ function Gb(e, t, o) {
         !0
       );
     if (!n.chance(_a.restP)) return !0;
-    const g = [...(it("rest") || [])];
+    const g = [...(st("rest") || [])];
     return (
-      e.bf && g.push(it("restBf")),
-      a.res >= 1 && g.push(it("restRes")),
+      e.bf && g.push(st("restBf")),
+      a.res >= 1 && g.push(st("restRes")),
       L(
         e,
         { kind: "flavor", text: Do(Ft(e, "rest", g), e), tone: "system" },
@@ -14227,15 +14227,15 @@ function Gb(e, t, o) {
     e.flags.includes("가정") &&
     n.chance(_a.blindP)
   )
-    return ((a.blindDone = !0), a.n--, Kb(e, t, o));
+    return ((a.blindDone = !0), a.n--, Ub(e, t, o));
   const i =
       r <= 4 ? "raid" : r === 5 ? (a.grade >= 4 ? "nm5" : "final") : "nm6",
-    l = Mb(e),
-    s = i === "raid" ? Ft(e, `pre.${l}`, it(`pre.${l}`)) : re(`${i}.pre`);
+    l = Hb(e),
+    s = i === "raid" ? Ft(e, `pre.${l}`, st(`pre.${l}`)) : re(`${i}.pre`);
   L(e, { kind: "event", text: Do(s, e), tone: "event" }, o.t);
   let u;
   if (i === "raid") {
-    const g = [Ft(e, `body.${l}`, it(`body.${l}`))];
+    const g = [Ft(e, `body.${l}`, st(`body.${l}`))];
     (a.prog !== a.lastProg && g.push(re(`prog.${Math.min(2, a.prog)}`)),
       a.resJust &&
         a.res >= 1 &&
@@ -14262,7 +14262,7 @@ function Gb(e, t, o) {
     !0
   );
 }
-function Kb(e, t, o) {
+function Ub(e, t, o) {
   const a = z(t, "cm_blind"),
     n = Do(a.text, e);
   return (
@@ -14281,7 +14281,7 @@ function Kb(e, t, o) {
     !0
   );
 }
-const Hu = (e) => P(0.35 + ((e.dr.san || 0) - 30) * 0.005, 0.2, 0.6);
+const Du = (e) => P(0.35 + ((e.dr.san || 0) - 30) * 0.005, 0.2, 0.6);
 function ze(e, t, o, a = {}) {
   const n = Do(t, e);
   L(
@@ -14296,7 +14296,7 @@ function Yr(e, t, o, a, n, r = 5e3) {
   (He(e, a, t, "event", { text: Do(n, e) }),
     e.dead && (e.dead.hold = Ae(i ? i.text : n) + r));
 }
-function Du(e, t, o) {
+function qu(e, t, o) {
   const a = e.dr;
   (ze(e, re("ret.body"), t, { tone: "rare" }),
     ze(
@@ -14315,7 +14315,7 @@ function Du(e, t, o) {
   (He(e, "돌아온 사람", t, "event", { alive: !0, text: n }),
     e.dead && (e.dead.hold = Ae(n) + 3e3));
 }
-function zb(e, t, o, a) {
+function Jb(e, t, o, a) {
   const n = e.dr,
     r = oe(e),
     i = o.t || 0.5;
@@ -14336,7 +14336,7 @@ ${re("turnCommon")}`;
         text: y,
         tone: "rare",
         hold: Math.max(6e3, Ae(y)),
-        job: ve(e),
+        job: Te(e),
       },
       i,
     ),
@@ -14374,7 +14374,7 @@ ${re("turnCommon")}`;
         choice: f,
         scene: "end",
       }),
-      Yr(e, i, "final", "해결사의 토벌", Ft(e, "obit.final", it("obit.final")))
+      Yr(e, i, "final", "해결사의 토벌", Ft(e, "obit.final", st("obit.final")))
     );
   if (o.dr === "nm6")
     return (
@@ -14389,7 +14389,7 @@ ${re("turnCommon")}`;
         i,
         "nm6",
         "분노한 사람의 손",
-        Ft(e, "obit.nm6", it("obit.nm6")),
+        Ft(e, "obit.nm6", st("obit.nm6")),
         9e3,
       )
     );
@@ -14398,14 +14398,14 @@ ${re("turnCommon")}`;
       (n.beat++,
         (n.kills += 1),
         ze(e, re("nm5.fight"), i, { tone: "rare", choice: f }));
-    else if (r.chance(Hu(e))) {
+    else if (r.chance(Du(e))) {
       if (
         (n.res++,
         (n.resJust = !0),
         ze(e, re("nm5.resOk"), i, { tone: "rare", choice: f }),
         n.res >= 3)
       )
-        return Du(e, i, !0);
+        return qu(e, i, !0);
     } else
       ((n.prog = Math.min(_a.progMax - 1, n.prog + 1)),
         ze(e, re("nm5.resFail"), i, { tone: "bad", choice: f }));
@@ -14417,27 +14417,27 @@ ${re("turnCommon")}`;
     r.chance(y)
       ? (n.beat++,
         (n.kills += r.int(1, 3)),
-        ze(e, Ft(e, "win", it("win")), i, { tone: "good", choice: f }))
+        ze(e, Ft(e, "win", st("win")), i, { tone: "good", choice: f }))
       : ((n.prog += 2),
-        ze(e, Ft(e, "lose", it("lose")), i, { tone: "bad", choice: f }));
-  } else if (r.chance(Hu(e))) {
+        ze(e, Ft(e, "lose", st("lose")), i, { tone: "bad", choice: f }));
+  } else if (r.chance(Du(e))) {
     (n.res++, (n.resJust = !0));
     const y = n.res <= 2 ? ` ${re(`resTail.${n.res - 1}`)}` : "";
     if (
-      (ze(e, `${Ft(e, "resOk", it("resOk"))}${y}`, i, {
+      (ze(e, `${Ft(e, "resOk", st("resOk"))}${y}`, i, {
         tone: "rare",
         choice: f,
       }),
       n.res >= 3)
     )
-      return Du(e, i, !1);
+      return qu(e, i, !1);
   } else
     ((n.prog += 1),
-      ze(e, Ft(e, "resFail", it("resFail")), i, { tone: "bad", choice: f }));
+      ze(e, Ft(e, "resFail", st("resFail")), i, { tone: "bad", choice: f }));
   if (n.prog >= _a.progMax) {
     const y = e.log[e.log.length - 1];
     (y && (y.scene = "end"),
-      Yr(e, i, "prog", "해결사의 토벌", Ft(e, "obit.prog", it("obit.prog"))));
+      Yr(e, i, "prog", "해결사의 토벌", Ft(e, "obit.prog", st("obit.prog"))));
   }
 }
 const _n = {
@@ -14451,13 +14451,13 @@ const _n = {
     pirateX: [0.005, 0.002],
   },
 };
-function Ub(e) {
-  const t = oe({ rngState: qh(`${e}:lake`) });
+function Vb(e) {
+  const t = oe({ rngState: Gh(`${e}:lake`) });
   return t.chance(_n.drinkP) ? t.int(16, 60) : null;
 }
-const Jb = () => (X && z(X, "lk_lines")) || null;
-function Kw(e) {
-  let t = Jb();
+const Xb = () => (X && z(X, "lk_lines")) || null;
+function zw(e) {
+  let t = Xb();
   for (const o of e.split(".")) {
     if (t == null) return null;
     t = t[o];
@@ -14465,11 +14465,11 @@ function Kw(e) {
   return t;
 }
 const te = (e) => {
-    const t = Kw(e);
+    const t = zw(e);
     return (t && t.text) || "";
   },
-  qu = (e) => e.regionId === "U";
-function zw(e) {
+  Gu = (e) => e.regionId === "U";
+function Uw(e) {
   return e.dead ||
     e.lake ||
     e.lakeRec ||
@@ -14485,33 +14485,33 @@ function zw(e) {
     ? !1
     : e.age >= 16;
 }
-function Vb(e, t) {
+function Qb(e, t) {
   return e.job === "해결사"
     ? "lk_u_fixer"
-    : oo(e)
+    : ao(e)
       ? "lk_u_work"
       : e.age >= 30 && t.chance(0.4)
         ? "lk_u_ferry"
         : "lk_u_fish";
 }
-function Xb(e, t) {
+function Zb(e, t) {
   const o = [],
-    a = zw(e);
+    a = Uw(e);
   (e.lakeDrinkAt != null &&
     e.age >= e.lakeDrinkAt &&
     (a && e.age === e.lakeDrinkAt && o.push({ id: "lk_drink", lakeEnter: !0 }),
     (e.lakeDrinkAt = null)),
     a &&
-      qu(e) &&
+      Gu(e) &&
       !e.lakeOffered &&
       e.age >= 18 &&
       e.age <= 65 &&
       t.chance(_n.uP) &&
-      o.push({ id: Vb(e, t), lakeEnter: !0 }));
+      o.push({ id: Qb(e, t), lakeEnter: !0 }));
   const n = e.lakeHints || 0;
   if (n < 2 && !e.bf && e.age >= 16) {
     const r = n >= 1 ? 1 : 0,
-      i = qu(e),
+      i = Gu(e),
       l = !!e.lakeRec && !e.lakeRec.dead;
     (i || l) &&
       (t.chance(_n.hint[i ? "sailor" : "sailorX"][r])
@@ -14547,7 +14547,7 @@ function Gn(e, t) {
       : t.flags.includes("고아")
         ? h("오래전 동료", "an old comrade", "昔の仲間")
         : h("어머니", "your mother", "母");
-  let i = Tt(e, qe(X, t), t)
+  let i = vt(e, qe(X, t), t)
     .replaceAll("{동행}", n)
     .replaceAll("{아는얼굴}", r);
   const l = o && o.st;
@@ -14560,15 +14560,15 @@ function Gn(e, t) {
   }
   return i;
 }
-const $i = (e) => Bw[e.lake.route[e.lake.i]],
-  Hi = (e) => Lw(e.lake.route[e.lake.i]);
-function Qb(e) {
-  const t = $i(e);
+const Hi = (e) => Fw[e.lake.route[e.lake.i]],
+  Di = (e) => Pw(e.lake.route[e.lake.i]);
+function ek(e) {
+  const t = Hi(e);
   return te("common.tag")
-    .replaceAll("{호수}", Hi(e))
+    .replaceAll("{호수}", Di(e))
     .replaceAll("{이름}", te(`lakes.${t.id}.name`));
 }
-function Zb(e, t, o, a) {
+function tk(e, t, o, a) {
   X = t;
   const n = oe(e);
   e.lakeOffered = !0;
@@ -14577,7 +14577,7 @@ function Zb(e, t, o, a) {
     : null;
   ((e.lake = {
     source: a,
-    route: ib(n),
+    route: lb(n),
     i: 0,
     t: 1,
     st: null,
@@ -14589,15 +14589,15 @@ function Zb(e, t, o, a) {
   }),
     e.flags.includes("대호수항해") || e.flags.push("대호수항해"));
   const i = te(a === "drink" ? "common.departDrink" : "common.depart");
-  (L(e, { kind: "flavor", text: i, tone: "system", hold: Ae(i) }, o), Uw(e, o));
+  (L(e, { kind: "flavor", text: i, tone: "system", hold: Ae(i) }, o), Jw(e, o));
 }
-function Uw(e, t) {
+function Jw(e, t) {
   const o = e.lake,
     a = oe(e),
-    n = $i(e);
+    n = Hi(e);
   ((o.t = 1),
     (o.st = n.init ? n.init(a) : {}),
-    L(e, { kind: "lakesep", text: Hi(e), lake: o.route[o.i] }, t),
+    L(e, { kind: "lakesep", text: Di(e), lake: o.route[o.i] }, t),
     L(
       e,
       { kind: "event", text: Gn(te(`lakes.${n.id}.enter`), e), tone: "event" },
@@ -14606,11 +14606,11 @@ function Uw(e, t) {
     o.whale &&
       o.whale.at === o.i &&
       !o.whaleDone &&
-      ((o.whaleDone = !0), tk(e, o.whale.kind, t)),
-    Jw(e, t));
+      ((o.whaleDone = !0), ak(e, o.whale.kind, t)),
+    Vw(e, t));
 }
-const ek = { marlin: "Marlin", pallid: "Pallid", crimson: "Crimson" };
-function tk(e, t, o) {
+const ok = { marlin: "Marlin", pallid: "Pallid", crimson: "Crimson" };
+function ak(e, t, o) {
   ((e.lakeWhale = t), ie(e, { k: "lakeWhale", whale: t }));
   const a =
       t === "marlin"
@@ -14624,7 +14624,7 @@ function tk(e, t, o) {
     ((e.stats[r] = ht(P(l + i, 1, 100))), (n[r] = Math.round(e.stats[r] - l)));
   }
   for (let r = 1; r <= 3; r++) {
-    const i = te(`common.whale${ek[t]}${r}`);
+    const i = te(`common.whale${ok[t]}${r}`);
     L(
       e,
       {
@@ -14639,17 +14639,17 @@ function tk(e, t, o) {
     );
   }
 }
-function Jw(e, t) {
+function Vw(e, t) {
   const o = e.lake,
     a = oe(e),
-    n = $i(e),
-    r = lb(n, o.st, o.t, a);
-  if (r.wave) return Vw(e, n, r.wave, t);
+    n = Hi(e),
+    r = db(n, o.st, o.t, a);
+  if (r.wave) return Xw(e, n, r.wave, t);
   ((o.scene = r.scene),
     o.t > 1 && (e.stats.sanity = ht(P(e.stats.sanity - 1, 1, 100))));
   const i = Gn(te(`lakes.${n.id}.scene.${r.scene}`), e);
   L(e, { kind: "event", text: i, tone: "event" }, t);
-  const l = sb(n, o.st).map((s, u) => ({
+  const l = hb(n, o.st).map((s, u) => ({
     label: Gn(te(`lakes.${n.id}.c.${s}`), e),
     i: u,
     key: s,
@@ -14657,8 +14657,8 @@ function Jw(e, t) {
   e.prompt = {
     kind: "major",
     lake: n.id,
-    lakeNum: Hi(e),
-    tag: Qb(e),
+    lakeNum: Di(e),
+    tag: ek(e),
     eventId: `lk_${n.id}`,
     text: i,
     choices: l,
@@ -14667,15 +14667,15 @@ function Jw(e, t) {
     t,
   };
 }
-function ok(e, t, o, a) {
+function nk(e, t, o, a) {
   const n = e.lake;
   if (!n) return;
   const r = o.t || 0.5,
-    i = $i(e);
+    i = Hi(e);
   let l = a;
   (l == null || l < 0 || !o.choices[l]) && (l = 0);
   const s = o.choices[l],
-    u = hb(i, n.st, s.key, n.scene, n.t);
+    u = ub(i, n.st, s.key, n.scene, n.t);
   if ((u.k === "haul" && (n.fished = !0), u.k)) {
     const f = Gn(te(`lakes.${i.id}.r.${u.k}`), e);
     L(
@@ -14689,18 +14689,18 @@ function ok(e, t, o, a) {
       r,
     );
   }
-  if (u.o === "wave") return Vw(e, i, u.w, r, u.k ? null : s.label);
+  if (u.o === "wave") return Xw(e, i, u.w, r, u.k ? null : s.label);
   if (u.o === "cross")
     return (
-      Fw.includes(n.route[n.i]) && n.deep++,
+      Lw.includes(n.route[n.i]) && n.deep++,
       n.i++,
-      n.i >= n.route.length ? ak(e, r) : Uw(e, r)
+      n.i >= n.route.length ? rk(e, r) : Jw(e, r)
     );
-  (n.t++, Jw(e, r));
+  (n.t++, Vw(e, r));
 }
-function Vw(e, t, o, a, n) {
+function Xw(e, t, o, a, n) {
   const r = e.lake,
-    i = Hi(e),
+    i = Di(e),
     l = te(`lakes.${t.id}.w.${o}`) || te("common.stay"),
     s = Gn(l, e);
   L(
@@ -14739,15 +14739,15 @@ function Vw(e, t, o, a, n) {
     (e.lake = null));
   const y = e.name || "",
     g = y.charCodeAt(y.length - 1),
-    k = g >= 44032 && g <= 55203 && (g - 44032) % 28 === 0 ? "는" : "은",
-    x = te("common.obit")
-      .replaceAll("{이름}은", y + k)
+    x = g >= 44032 && g <= 55203 && (g - 44032) % 28 === 0 ? "는" : "은",
+    k = te("common.obit")
+      .replaceAll("{이름}은", y + x)
       .replaceAll("{이름}", y)
       .replaceAll("{호수}", i);
-  (He(e, "인어가 되었다", a, "event", { text: x }),
+  (He(e, "인어가 되었다", a, "event", { text: k }),
     e.dead && (e.dead.hold = Ae(f) + 4e3));
 }
-function ak(e, t) {
+function rk(e, t) {
   const o = e.lake,
     a = te("common.arrive");
   (L(
@@ -14783,13 +14783,13 @@ function ak(e, t) {
         te(o.source === "u_fixer" ? "common.r_fixerReq" : "common.r_fixer"),
       ))
     : e.job === "손가락"
-      ? (jn(e, 6), l.push(Tt(te("common.r_finger"), qe(X, e), e)))
+      ? (jn(e, 6), l.push(vt(te("common.r_finger"), qe(X, e), e)))
       : we(e)
         ? e.work === "4무리"
           ? (i("rep", 5), l.push(te("common.r_rcorp")))
           : (jn(e, 6), l.push(te("common.r_wing")))
-        : oo(e)
-          ? (od(e, 6), l.push(te("common.r_office")))
+        : ao(e)
+          ? (ad(e, 6), l.push(te("common.r_office")))
           : e.job === "검계" && e.bl
             ? ((e.bl.cut = (e.bl.cut || 0) + 3), l.push(te("common.r_blade")))
             : e.job === "떠돌이 검객" && e.bl
@@ -14798,7 +14798,7 @@ function ak(e, t) {
               : e.job === "흑운회" && (jn(e, 6), l.push(te("common.r_kuro"))),
     o.fished && (i("wealth", 6), l.push(te("common.r_fish"))),
     o.source === "drink" && (i("wealth", 10), l.push(te("common.r_drink"))));
-  for (const u of Yo) n[u] = ht(P(n[u]));
+  for (const u of oo) n[u] = ht(P(n[u]));
   const s = l.join(" ");
   (L(
     e,
@@ -14822,16 +14822,16 @@ function ak(e, t) {
     ie(e, { k: "lake", age: o.age, crossed: !0, deep: o.deep }),
     (e.lake = null));
 }
-function nk(e, t, o) {
+function ik(e, t, o) {
   const a = oe(e),
     n = [];
-  Bw.forEach((u, f) =>
-    (Kw(`lakes.${u.id}.hint`) || []).forEach((y) => n.push({ li: f, h: y })),
+  Fw.forEach((u, f) =>
+    (zw(`lakes.${u.id}.hint`) || []).forEach((y) => n.push({ li: f, h: y })),
   );
   const r = a.pick(n);
   if (!r) return;
   e.lakeHints = (e.lakeHints || 0) + 1;
-  const i = Lw(r.li),
+  const i = Pw(r.li),
     l = (r.h[t === "pirate" ? "p" : "s"] || {}).text || "",
     s = te(t === "pirate" ? "common.hintPirate" : "common.hintSailor")
       .replaceAll("{호수}", i)
@@ -14849,15 +14849,15 @@ function nk(e, t, o) {
       o,
     ));
 }
-function rk(e) {
+function sk(e) {
   const t = e.prompt;
   return oe(e).int(0, Math.max(0, t.choices.length - 1));
 }
 const Kn = (e) => (e && (e.branch || e.cloneTeam)) || "토끼";
-function ik(e) {
-  return ed[Kn(e)] || Kn(e);
+function lk(e) {
+  return td[Kn(e)] || Kn(e);
 }
-function sk(e) {
+function hk(e) {
   const t = e && (e.work === "4무리" ? e.wingRank : e.cloneRank);
   return t >= 3
     ? h("사령관", "Commander", "司令官")
@@ -14865,14 +14865,14 @@ function sk(e) {
       ? h("대장", "Team Leader", "隊長")
       : h("대원", "Member", "隊員");
 }
-const lk = Dt({
+const dk = Dt({
   ko: { 묘: "묘", 오: "오", 사: "사", 유: "유", 미: "미" },
   en: { 묘: "Mao", 오: "Wu", 사: "Si", 유: "You", 미: "Wei" },
   ja: { 묘: "卯", 오: "午", 사: "巳", 유: "酉", 미: "未" },
 });
 function un(e, t, o) {
   if (e === "흑수") {
-    const a = lk[o] || o || "";
+    const a = dk[o] || o || "";
     return t >= 2
       ? h(
           `흑수 - ${a} 필두`,
@@ -14922,7 +14922,7 @@ function un(e, t, o) {
         "R Corp. 4th Pack Commander",
         "R社 第4群 司令官",
       );
-    const a = ed[o] || o || "";
+    const a = td[o] || o || "";
     return t >= 2
       ? h(
           `R사 4무리 - ${a}팀 대장`,
@@ -14937,7 +14937,7 @@ function un(e, t, o) {
   }
   return "";
 }
-function hk(e) {
+function uk(e) {
   const t = e.wingRank || 1;
   return e.work === "흑수"
     ? t >= 2
@@ -14973,7 +14973,7 @@ function hk(e) {
                 : 1
             : 0;
 }
-const we = (e) => e.job === "사원" && !!qr[e.work],
+const we = (e) => e.job === "사원" && !!Gr[e.work],
   Pt = {
     heal: 40,
     drain: 1.5,
@@ -14985,17 +14985,17 @@ const we = (e) => e.job === "사원" && !!qr[e.work],
     hpChoiceP: 0.7,
     hpMiss: 30,
   },
-  Je = (e) => we(e) && e.work === "적출직",
-  Xw = (e) => e.kx || (e.kx = { hp: 0, fit: 0, tube: !1, ideal: !1 }),
-  dk = (e) => (e.kx && e.kx.ideal ? 10 : 20);
+  Ve = (e) => we(e) && e.work === "적출직",
+  Qw = (e) => e.kx || (e.kx = { hp: 0, fit: 0, tube: !1, ideal: !1 }),
+  ck = (e) => (e.kx && e.kx.ideal ? 10 : 20);
 function Wa(e) {
-  return !e || !e.kx ? 100 : Math.max(0, 100 - dk(e) * (e.kx.hp || 0));
+  return !e || !e.kx ? 100 : Math.max(0, 100 - ck(e) * (e.kx.hp || 0));
 }
-function td(e) {
+function od(e) {
   e.kx && e.stats.sanity > Wa(e) && (e.stats.sanity = Wa(e));
 }
-const uk = new Set(["x_ego_edge"]),
-  ck = new Set([
+const fk = new Set(["x_ego_edge"]),
+  wk = new Set([
     "a_marriage",
     "a_child_born",
     "x_burglary",
@@ -15004,14 +15004,14 @@ const uk = new Set(["x_ego_edge"]),
     "x_care_old",
     "x_inquisition",
   ]);
-function fk(e, t) {
-  return Je(t)
-    ? uk.has(e.id)
+function gk(e, t) {
+  return Ve(t)
+    ? fk.has(e.id)
       ? !0
-      : !!(t.kx && t.kx.tube && ck.has(e.id))
+      : !!(t.kx && t.kx.tube && wk.has(e.id))
     : !1;
 }
-function wk(e, t) {
+function mk(e, t) {
   const o = t.kx;
   return !(
     (e.kxIdeal != null && !!(o && o.ideal) !== e.kxIdeal) ||
@@ -15021,9 +15021,9 @@ function wk(e, t) {
     (e.kxTube && !(o && o.tube))
   );
 }
-function Qw(e, t, o) {
+function Zw(e, t, o) {
   const a = oe(e),
-    n = Xw(e),
+    n = Qw(e),
     r = z(t, "kx_hp_bullet");
   L(e, { kind: "event", text: r.text, tone: "event" }, o);
   const i = n.ideal
@@ -15038,14 +15038,14 @@ function Qw(e, t, o) {
   n.hp = (n.hp || 0) + 1;
   const l = e.stats,
     s = { health: l.health, sanity: l.sanity };
-  ((l.health = P(Math.max(0, l.health) + Pt.heal)), td(e));
+  ((l.health = P(Math.max(0, l.health) + Pt.heal)), od(e));
   const u = {};
   for (const g of ["health", "sanity"]) {
-    const k = Math.round(l[g] - s[g]);
-    k && (u[g] = k);
+    const x = Math.round(l[g] - s[g]);
+    x && (u[g] = x);
   }
   if (Wa(e) <= 0) {
-    gk(e, t, o, u);
+    yk(e, t, o, u);
     return;
   }
   const f = n.ideal ? (n.hp % 2 === 0 ? n.hp / 2 - 1 : -1) : n.hp - 1,
@@ -15062,18 +15062,18 @@ function Qw(e, t, o) {
     o,
   );
 }
-function gk(e, t, o, a) {
+function yk(e, t, o, a) {
   const n = z(t, "kx_end_hollow"),
     r = e.kx,
     i = qe(t, e),
     l = e.wingRank || 1;
   let s = 0;
   const u = (y, g = {}) => {
-    const k = Ae(y);
-    ((s += k),
+    const x = Ae(y);
+    ((s += x),
       L(
         e,
-        { kind: "result", text: y, tone: "normal", keep: !0, hold: k, ...g },
+        { kind: "result", text: y, tone: "normal", keep: !0, hold: x, ...g },
         o,
       ));
   };
@@ -15087,7 +15087,7 @@ function gk(e, t, o, a) {
     e.flags.includes("가정") || e.flags.includes("아이"))
   ) {
     let y = n.family.text;
-    (e.flags.includes("선반의그림") && (y += ` ${Tt(n.shelf.text, i, e)}`),
+    (e.flags.includes("선반의그림") && (y += ` ${vt(n.shelf.text, i, e)}`),
       u(y));
   }
   r.end = "hollow";
@@ -15095,7 +15095,7 @@ function gk(e, t, o, a) {
   (He(e, "메마름", o, "event", { text: f, alive: !0 }),
     e.dead && (e.dead.hold = Math.min(3e4, s + Ae(f) + 3e3)));
 }
-const Nl = {
+const Ol = {
   시간징수직: () => [
     h(
       "이 장면은 처음이 아니다. 시계는 그 횟수까지 세어 두었다.",
@@ -15142,7 +15142,7 @@ const Nl = {
           ),
         ],
 };
-Nl["이단 심문관"] = () => [
+Ol["이단 심문관"] = () => [
   h(
     "같은 문, 같은 망치 소리. 다른 이름.",
     "The same door, the same sound of the hammer. A different name.",
@@ -15166,12 +15166,12 @@ const Be = {
     riteEvery: 5,
   },
   Ht = (e) => we(e) && e.work === "이단 심문관",
-  Di = (e) =>
+  qi = (e) =>
     e.nh || (e.nh = { faith: Be.start, since: e.age, rites: 0, ate: 0 }),
-  Ol = (e) => (e >= Be.hi ? 1 : e < Be.lo ? -1 : 0);
-function Zw(e, t) {
+  Wl = (e) => (e >= Be.hi ? 1 : e < Be.lo ? -1 : 0);
+function eg(e, t) {
   if (!Ht(e) || !e.nh) return 1;
-  const o = Ol(e.nh.faith);
+  const o = Wl(e.nh.faith);
   return t === "merit"
     ? o > 0
       ? Be.hiMerit
@@ -15184,14 +15184,14 @@ function Zw(e, t) {
         ? Be.loDrain
         : 1;
 }
-function mk(e, t, o, a) {
+function pk(e, t, o, a) {
   if (!t || !Ht(e)) return;
-  const n = Di(e),
-    r = Ol(n.faith);
+  const n = qi(e),
+    r = Wl(n.faith);
   ((n.faith = P(n.faith + t, 0, 100)),
     n.faith >= 100 && (n.peak = !0),
     n.faith <= 0 && (n.empty = !0));
-  const i = Ol(n.faith);
+  const i = Wl(n.faith);
   if (i !== r && i !== 0 && o) {
     const l = z(o, "nh_lines");
     L(
@@ -15205,42 +15205,42 @@ function mk(e, t, o, a) {
     );
   }
 }
-const yk = ["의체", "좋은의체", "전투의체", "강화시술"];
-function pk(e) {
+const bk = ["의체", "좋은의체", "전투의체", "강화시술"];
+function kk(e) {
   return [e, ...(e.outcomes || [])].some(
-    (t) => t.prosthetic > 0 || (t.flagsAdd || []).some((o) => yk.includes(o)),
+    (t) => t.prosthetic > 0 || (t.flagsAdd || []).some((o) => bk.includes(o)),
   );
 }
-const bk = new Set([
+const xk = new Set([
   "x_care_young",
   "x_care_mid",
   "x_care_old",
   "x_inquisition",
 ]);
-function kk(e, t) {
+function vk(e, t) {
   if (
     (e.noPros && ((t.prosthetics || 0) > 0 || t.flags.includes("강화시술"))) ||
-    (Ht(t) && bk.has(e.id))
+    (Ht(t) && xk.has(e.id))
   )
     return !1;
   if (e.nhRite) {
     if (!Ht(t)) return !1;
-    const o = Di(t),
+    const o = qi(t),
       a = t.age - o.since;
     if (a < Be.riteEvery || a % Be.riteEvery !== 0 || o.riteAge === t.age)
       return !1;
   }
   return !0;
 }
-function xk(e, t, o) {
+function Tk(e, t, o) {
   if (!o || !e.evN || (e.evN[o] || 0) < 3) return null;
   const a = z(t, o);
   if (!a || a.rankGate || !a.repeat || !a.jobs) return null;
-  const n = a.jobs.find((r) => Nl[r]);
-  return n ? oe(e).pick(Nl[n](e)) : null;
+  const n = a.jobs.find((r) => Ol[r]);
+  return n ? oe(e).pick(Ol[n](e)) : null;
 }
-const oo = (e) => e.job === "사원" && e.work === "날개 직원",
-  zn = (e) => (oo(e) ? e.officeRank || 1 : 0),
+const ao = (e) => e.job === "사원" && e.work === "날개 직원",
+  zn = (e) => (ao(e) ? e.officeRank || 1 : 0),
   cn = qt({
     ko: ["사원", "대리", "과장", "부장", "이사", "대표"],
     en: [
@@ -15253,12 +15253,12 @@ const oo = (e) => e.job === "사원" && e.work === "날개 직원",
     ],
     ja: ["社員", "代理", "課長", "部長", "理事", "代表"],
   }),
-  eg = ["A", "B", "C", "H"],
-  Tk = [5, 15, 36, 62, 60],
-  tg = 3;
+  tg = ["A", "B", "C", "H"],
+  _k = [5, 15, 36, 62, 60],
+  og = 3;
 function Ea(e, t) {
   const o = P(t || zn(e) || 1, 1, 5);
-  let a = Tk[o - 1];
+  let a = _k[o - 1];
   return (
     e.stats.rep >= 50 && (a *= 0.85),
     e.stats.network >= 50 && (a *= 0.9),
@@ -15269,14 +15269,14 @@ function Ea(e, t) {
     Math.max(1, Math.round(a))
   );
 }
-function vk(e) {
+function jk(e) {
   const t = X ? qe(X, e) : null,
     o = t ? t.name : "",
     a = cn[(e.officeRank || 1) - 1];
   return o ? `${o} ${a}` : a;
 }
-function _k(e) {
-  return zn(e) !== 5 || eg.includes(e.regionId)
+function Ak(e) {
+  return zn(e) !== 5 || tg.includes(e.regionId)
     ? !1
     : (e.perf || 0) >= Ea(e, 5) &&
         e.age - (e.dirSince ?? e.age) >= 8 &&
@@ -15284,7 +15284,7 @@ function _k(e) {
         e.stats.rep >= 50 &&
         e.stats.network >= 50;
 }
-function od(e, t) {
+function ad(e, t) {
   const o = 1 + 0.4 * ((e.officeRank || 1) - 1),
     a = e.perf || 0;
   return (
@@ -15292,13 +15292,13 @@ function od(e, t) {
     Math.round(e.perf - a)
   );
 }
-function jk(e) {
-  oo(e) &&
+function Yk(e) {
+  ao(e) &&
     (e.officeRank == null &&
       ((e.officeRank = 1), (e.perf = e.perf || 0), (e.warn = e.warn || 0)),
-    e.officeRank <= 3 && od(e, 1 / (1 + 0.4 * (e.officeRank - 1))));
+    e.officeRank <= 3 && ad(e, 1 / (1 + 0.4 * (e.officeRank - 1))));
 }
-const Wl = {
+const El = {
     엄지: [12, 120, 70],
     검지: [11, 28],
     중지: [1, 2, 85],
@@ -15310,25 +15310,25 @@ const Wl = {
     "이단 심문관": [30, 44],
     흑운회: [24, 36],
   },
-  Ak = 1,
-  Yk = 2,
-  Sk = 0.6,
-  Rk = 0.05,
-  og = (e) => (e && e.pinky ? qn[e.pinky.star] : null),
-  ag = (e) => (e && e.pinky ? (e.pinky.star < Ow ? 1 : 2) : 0),
-  ao = (e, t, o) => {
-    const a = ag(e);
+  Sk = 1,
+  Rk = 2,
+  Ck = 0.6,
+  Ik = 0.05,
+  ag = (e) => (e && e.pinky ? qn[e.pinky.star] : null),
+  ng = (e) => (e && e.pinky ? (e.pinky.star < Ww ? 1 : 2) : 0),
+  no = (e, t, o) => {
+    const a = ng(e);
     return a === 1 ? t : a === 2 ? o : 1;
   };
 function Un(e) {
-  const t = og(e);
+  const t = ag(e);
   return t ? h(t[0], t[2], t[1]) : "";
 }
-function ad(e) {
-  const t = og(e);
+function nd(e) {
+  const t = ag(e);
   return t ? e.pinky.blade || h(`${t[0]}도`, `${t[2]} Blade`, `${t[1]}刀`) : "";
 }
-const Ck = [
+const Nk = [
   "R사 4무리 ",
   "T사 ",
   "W사 ",
@@ -15341,9 +15341,9 @@ const Ck = [
   "剣契 ",
   "黒雲会 ",
 ];
-function El(e) {
+function Bl(e) {
   if (e.job === "손가락" && e.finger)
-    return `${Xe[e.finger]} - ${gt(e.finger, e.fingerRank, e.gender)}`;
+    return `${Qe[e.finger]} - ${gt(e.finger, e.fingerRank, e.gender)}`;
   if (e.job === "해결사" && e.flags.includes("특색")) {
     const o = e.colorName || h("특색", "Color", "特色");
     return h(`해결사 - ${o}`, `Fixer - ${o}`, `フィクサー - ${o}`);
@@ -15354,59 +15354,59 @@ function El(e) {
       `Fixer - Grade ${e.grade}`,
       `フィクサー - ${e.grade}級`,
     );
-  const t = ve(e);
+  const t = Te(e);
   if (!t) return "";
   if (t.includes(" - ")) return t;
   if (we(e) || e.job === "검계" || e.job === "흑운회") {
-    const o = Ck.find((a) => t.startsWith(a) && t.length > a.length);
+    const o = Nk.find((a) => t.startsWith(a) && t.length > a.length);
     if (o) return `${o.trim()} - ${t.slice(o.length)}`;
   }
   return t;
 }
-function Ik(e) {
-  if (!e.pinky) return ve(e);
-  const t = El(e);
+function Ok(e) {
+  if (!e.pinky) return Te(e);
+  const t = Bl(e);
   return t ? `${Un(e)} (${t})` : Un(e);
 }
-const Ys = new WeakMap();
-function Nk(e, t) {
+const Ss = new WeakMap();
+function Wk(e, t) {
   return t.pinky
     ? e.bf === "none" ||
       e.id === "bf_bitten" ||
       e.id.startsWith("bf_child_distort")
       ? !0
-      : (Ys.has(e) || Ys.set(e, JSON.stringify(e).includes('"bfTurn"')),
-        Ys.get(e))
+      : (Ss.has(e) || Ss.set(e, JSON.stringify(e).includes('"bfTurn"')),
+        Ss.get(e))
     : !1;
 }
-const Bl = (e) =>
+const Fl = (e) =>
     e && e.job === "사원" && (e.work || "날개 직원") === "날개 직원",
-  Ok = (e) =>
-    Bl(e) || (!!e.outcomes && e.outcomes.length > 0 && e.outcomes.every(Bl)),
-  Gu = (e) => !!(e && (e.flagsAdd || []).includes("유물")),
-  Wk = (e) => Gu(e) || (e.outcomes || []).some(Gu),
-  Ek = new Set([
+  Ek = (e) =>
+    Fl(e) || (!!e.outcomes && e.outcomes.length > 0 && e.outcomes.every(Fl)),
+  Ku = (e) => !!(e && (e.flagsAdd || []).includes("유물")),
+  Bk = (e) => Ku(e) || (e.outcomes || []).some(Ku),
+  Fk = new Set([
     "bl_mentor_named",
     "kk_seat_open",
     "kk_patriarch_open",
     "rc_captain_named",
     "rc_cmdr_named",
   ]);
-function Bk(e) {
-  const t = oe({ rngState: qh(`${e}:pinky`) });
-  return t.chance(Rk) ? t.int(0, qn.length - 1) : null;
+function Lk(e) {
+  const t = oe({ rngState: Gh(`${e}:pinky`) });
+  return t.chance(Ik) ? t.int(0, qn.length - 1) : null;
 }
-const Fk = 0.25;
+const Pk = 0.25;
 function Ba(e) {
-  return e.job === "손가락" && e.finger && Wl[e.finger]
+  return e.job === "손가락" && e.finger && El[e.finger]
     ? e.finger
-    : we(e) && Wl[e.work]
+    : we(e) && El[e.work]
       ? e.work
       : e.job === "흑운회" && e.kk && (e.kk.rank || 1) < 3
         ? `흑운회:${e.kk.rank || 1}`
         : null;
 }
-const Lk = (e) =>
+const Mk = (e) =>
   e.job === "손가락"
     ? e.fingerRank || 1
     : e.job === "흑운회" && e.kk
@@ -15415,7 +15415,7 @@ const Lk = (e) =>
 function ja(e) {
   const t = Ba(e);
   if (!t) return 0;
-  const o = Wl[t.split(":")[0]][Lk(e) - 1];
+  const o = El[t.split(":")[0]][Mk(e) - 1];
   if (o == null) return 0;
   let a = o;
   const n = e.flags.includes("유물");
@@ -15424,11 +15424,11 @@ function ja(e) {
     e.stats.rep >= 50 && (a *= 0.9),
     e.flags.includes("좋은의체") && (a *= 0.97),
     e.flags.includes("강화시술") && (a *= 0.93),
-    (a *= ao(e, 0.8, 0.9)),
+    (a *= no(e, 0.8, 0.9)),
     Math.max(1, Math.round(a))
   );
 }
-function ng(e) {
+function rg(e) {
   const t = Ba(e);
   return (
     (e.rmeritKey || null) !== t && ((e.rmeritKey = t), (e.rmerit = 0)),
@@ -15436,8 +15436,8 @@ function ng(e) {
   );
 }
 function jn(e, t) {
-  if (!ng(e) || !t) return;
-  t > 0 && (t *= Zw(e, "merit"));
+  if (!rg(e) || !t) return;
+  t > 0 && (t *= eg(e, "merit"));
   const o = ja(e);
   o &&
     (e.rmerit = Math.max(
@@ -15445,18 +15445,18 @@ function jn(e, t) {
       Math.min(o, Math.round(((e.rmerit || 0) + t) * 10) / 10),
     ));
 }
-function qi(e) {
-  if (!ng(e)) return !1;
+function Gi(e) {
+  if (!rg(e)) return !1;
   const t = ja(e);
   return !!t && (e.rmerit || 0) >= t;
 }
-function Ku(e) {
+function zu(e) {
   return ((e.rmeritKey || null) === Ba(e) && e.rmerit) || 0;
 }
-function Pk(e) {
+function $k(e) {
   jn(e, 1);
 }
-function Mk(e, t) {
+function Hk(e, t) {
   const o = (e.pastPower || 0) - 1;
   return t === "시간징수직"
     ? o >= 3
@@ -15476,7 +15476,7 @@ function Mk(e, t) {
             : 1
       : 1;
 }
-function $k(e) {
+function Dk(e) {
   const t = (e.wingRank || 1) - 1,
     o = e.flags.includes("유물"),
     a = e.flags.includes("E.G.O개화");
@@ -15486,7 +15486,7 @@ function $k(e) {
     (a ? 2 : o ? 1.6 : 1) / (1 + n * t * t)
   );
 }
-const Hk = Dt({
+const qk = Dt({
     ko: {},
     en: {
       운반: "Courier",
@@ -15517,7 +15517,7 @@ const Hk = Dt({
       "환상체 토벌": "幻想体討伐",
     },
   }),
-  An = (e) => Hk[e] || e,
+  An = (e) => qk[e] || e,
   ae = {
     birthP: 0.006,
     thirstBase: 12,
@@ -15545,12 +15545,12 @@ const Hk = Dt({
     kinDeepen: 0.06,
     kinDeepenMax: 5,
   },
-  nd = (e) =>
+  rd = (e) =>
     Math.max(ae.bar.floor, 1 - ae.bar.decay * ((e && e.barUses) || 0)),
-  rg = (e) =>
+  ig = (e) =>
     Math.max(ae.pack.floor, 1 - ae.pack.decay * ((e && e.packUses) || 0)),
-  _o = (e) => (e.bf ? e.age - e.bf.since : 0);
-function Ss(e) {
+  jo = (e) => (e.bf ? e.age - e.bf.since : 0);
+function Rs(e) {
   const t = e.bf && e.bf.family;
   return t
     ? t.ward != null
@@ -15562,18 +15562,18 @@ function Ss(e) {
       : h("어느 구의 가문", "a District Family", "ある区の家門")
     : "";
 }
-function Fl(e) {
+function Ll(e) {
   const t = (e.bf && e.bf.gen) || 5,
     o = t === 1 ? h(" · 장로", " · Elder", "・長老") : "";
   return (
     h(
-      `${Ss(e)} 제${t}권속`,
-      `${Ss(e).replace(/^(the|a) /, (a) => a.charAt(0).toUpperCase() + a.slice(1))} · ${ig(t)} Kindred`,
-      `${Ss(e)} 第${t}眷属`,
+      `${Rs(e)} 제${t}권속`,
+      `${Rs(e).replace(/^(the|a) /, (a) => a.charAt(0).toUpperCase() + a.slice(1))} · ${sg(t)} Kindred`,
+      `${Rs(e)} 第${t}眷属`,
     ) + o
   );
 }
-const ig = (e) =>
+const sg = (e) =>
   e +
   (e % 10 === 1 && e % 100 !== 11
     ? "st"
@@ -15582,17 +15582,17 @@ const ig = (e) =>
       : e % 10 === 3 && e % 100 !== 13
         ? "rd"
         : "th");
-function Dk(e) {
+function Gk(e) {
   return e >= 85 ? 3 : e >= 60 ? 2 : e >= 30 ? 1 : 0;
 }
 function gt(e, t, o) {
   const a = (Ot[e] || [])[(t || 1) - 1];
   return Array.isArray(a) ? (o === "f" ? a[1] : a[0]) : a || "";
 }
-function ve(e) {
+function Te(e) {
   return e.dr
     ? e.dr.end === "return"
-      ? `${ve({ ...e, dr: null }) || h("무직", "Unemployed", "無職")} · ${h("뒤틀렸다 돌아옴", "Returned from Distortion", "ねじれから戻った")}`
+      ? `${Te({ ...e, dr: null }) || h("무직", "Unemployed", "無職")} · ${h("뒤틀렸다 돌아옴", "Returned from Distortion", "ねじれから戻った")}`
       : h("이름 없는 뒤틀림", "Nameless Distortion", "名もなきねじれ")
     : e.job === "가주"
       ? h("가주", "Family Hierarch", "家主")
@@ -15609,11 +15609,11 @@ function ve(e) {
                   `${e.grade}級フィクサー`,
                 )
               : e.job === "손가락" && e.finger
-                ? `${Xe[e.finger]} ${gt(e.finger, e.fingerRank, e.gender)}`.trim()
+                ? `${Qe[e.finger]} ${gt(e.finger, e.fingerRank, e.gender)}`.trim()
                 : we(e)
                   ? un(e.work, e.wingRank || 1, e.branch)
                   : e.job === "검계"
-                    ? Il[(qa(e) || 1) - 1]
+                    ? Nl[(qa(e) || 1) - 1]
                     : e.job === "흑운회"
                       ? dn(e)
                       : e.job === "도장 사범"
@@ -15631,11 +15631,11 @@ function ve(e) {
                                 "放浪の剣客",
                               )
                             : e.job === "권속"
-                              ? Fl(e)
-                              : oo(e)
-                                ? vk(e)
+                              ? Ll(e)
+                              : ao(e)
+                                ? jk(e)
                                 : e.job === "사원" && e.work
-                                  ? h(`사원 - ${e.work}`, yb[e.work] || e.work)
+                                  ? h(`사원 - ${e.work}`, bb[e.work] || e.work)
                                   : e.job === "해결사"
                                     ? h("해결사", "Fixer", "フィクサー")
                                     : e.job === "손가락"
@@ -15647,7 +15647,7 @@ function Jn(e, t) {
     ? !0
     : !!(t.job === "사원" && t.work && e.includes(t.work));
 }
-function sg(e, t) {
+function lg(e, t) {
   const [o, a] = e;
   return t.org && o && (o.includes("*") || o.includes(t.org.name))
     ? !0
@@ -15657,26 +15657,26 @@ function qe(e, t) {
   return e.regions.find((o) => o.id === t.regionId);
 }
 const qo = (e) => Array.isArray(e.choices) && e.choices.length > 0;
-function qk(e) {
-  return Aw[Math.min(3, Math.floor(e * 4))];
+function Kk(e) {
+  return Yw[Math.min(3, Math.floor(e * 4))];
 }
 function L(e, t, o) {
-  e.log.push({ id: e.log.length, age: e.age, season: qk(o), ...t });
+  e.log.push({ id: e.log.length, age: e.age, season: Kk(o), ...t });
 }
-function Gk(e) {
+function zk(e) {
   const t = Object.entries(e).reduce(
     (o, [a, n]) => o + (a === "thirst" ? -n / 4 : n),
     0,
   );
   return t >= 4 ? "good" : t <= -4 ? "bad" : "normal";
 }
-function zu(e, t = {}) {
+function Uu(e, t = {}) {
   X = e;
-  const o = t.seed ? String(t.seed) : kp(),
+  const o = t.seed ? String(t.seed) : vp(),
     a = {
       v: 7,
       seed: o,
-      rngState: qh(o),
+      rngState: Gh(o),
       name: "",
       gender: "m",
       regionId: null,
@@ -15711,7 +15711,7 @@ function zu(e, t = {}) {
       : n.chance(0.5)
         ? "f"
         : "m"),
-    (a.name = (t.name || "").trim().slice(0, 12) || n.pick(bi[a.gender])));
+    (a.name = (t.name || "").trim().slice(0, 12) || n.pick(ki[a.gender])));
   const r = t.regionId
     ? e.regions.find((u) => u.id === t.regionId)
     : n.weighted(e.regions, (u) => u.birthWeight);
@@ -15724,11 +15724,11 @@ function zu(e, t = {}) {
       network: P(15 + r.orgPressure + n.int(-5, 5)),
       rep: P(20 + n.int(-5, 5)),
     }),
-    r.id === "R" && n.chance(pb))
+    r.id === "R" && n.chance(kb))
   )
-    return Kk(a, e, r, n);
+    return Uk(a, e, r, n);
   (r.tags || []).includes("top") && a.flags.push("상층");
-  const i = r.id === "H" && (t.heir || n.chance(bb));
+  const i = r.id === "H" && (t.heir || n.chance(xb));
   i
     ? (a.flags.push("가주후보"), (a.heir = { ji: 0, yong: 0, in: 0, kong: 0 }))
     : n.chance(ae.birthP) && a.flags.push("피의기색");
@@ -15762,13 +15762,13 @@ function zu(e, t = {}) {
     },
     0,
   ),
-    (a.lakeDrinkAt = Ub(o)));
+    (a.lakeDrinkAt = Vb(o)));
   const s =
     t.pinky != null
       ? t.pinky
       : i || a.flags.includes("피의기색")
         ? null
-        : Bk(o);
+        : Lk(o);
   if (s != null && s !== !1) {
     ((a.pinky = {
       star: Math.max(0, Math.min(qn.length - 1, Number(s) || 0)),
@@ -15788,7 +15788,7 @@ function zu(e, t = {}) {
         ),
         name: h(u[0], u[2], u[1]),
         sub: h(u[1], u[1], u[3]),
-        heaven: a.pinky.star < Ow,
+        heaven: a.pinky.star < Ww,
         tone: "rare",
       },
       0,
@@ -15809,15 +15809,15 @@ function zu(e, t = {}) {
   }
   return (
     L(a, { kind: "year", text: h("0세", "Age 0", "0歳") }, 0),
-    sd(a, e),
+    ld(a, e),
     a
   );
 }
-function Kk(e, t, o, a) {
+function Uk(e, t, o, a) {
   ((e.age = a.int(20, 30)),
     (e.family = "none"),
     e.flags.push("복제", "고아", "부화장"),
-    (e.cloneTeam = a.pick(Mw)),
+    (e.cloneTeam = a.pick($w)),
     (e.cloneRank = a.chance(0.1) ? 2 : 1),
     (e.hatchHurt = 0),
     (e.cloneYear = e.age),
@@ -15845,7 +15845,7 @@ function Kk(e, t, o, a) {
         "鎧の重さも、ハンマーを振り下ろす順番も。",
       ),
     }[e.cloneTeam],
-    r = ed[e.cloneTeam],
+    r = td[e.cloneTeam],
     i =
       e.cloneRank >= 2
         ? h("대장", "Team Leader", "隊長")
@@ -15892,15 +15892,15 @@ The door opens.`,
       { kind: "year", text: h(`${e.age}세`, `Age ${e.age}`, `${e.age}歳`) },
       0,
     ),
-    sd(e, t),
+    ld(e, t),
     e
   );
 }
-const Uu = new WeakMap();
-function lg(e, t) {
+const Ju = new WeakMap();
+function hg(e, t) {
   if (!e) return !1;
-  let o = Uu.get(e);
-  if ((o || Uu.set(e, (o = {})), o[t] == null)) {
+  let o = Ju.get(e);
+  if ((o || Ju.set(e, (o = {})), o[t] == null)) {
     const a = (n) => !!n && (n.flagsAdd || []).includes(t);
     o[t] =
       a(e) ||
@@ -15909,36 +15909,36 @@ function lg(e, t) {
   }
   return o[t];
 }
-const hg = (e) => lg(e, "가정"),
-  zk = (e) => lg(e, "연인");
-function Uk(e) {
+const dg = (e) => hg(e, "가정"),
+  Jk = (e) => hg(e, "연인");
+function Vk(e) {
   (e.flags.includes("결혼불가") || e.flags.push("결혼불가"),
     (e.flags = e.flags.filter((t) => t !== "연인")));
 }
-function dg(e) {
-  return oe(e).pick(bi[e.gender === "f" ? "m" : "f"]);
+function ug(e) {
+  return oe(e).pick(ki[e.gender === "f" ? "m" : "f"]);
 }
-const Jk = (e) =>
+const Xk = (e) =>
   e.flags.includes("아이") && e.childBorn != null ? e.age - e.childBorn : null;
 function Aa(e, t, o) {
   if (
     (e.offer && (t.job === "검계" || t.job === "흑운회")) ||
-    Nk(e, t) ||
-    fk(e, t) ||
-    !wk(e, t) ||
-    !kk(e, t)
+    Wk(e, t) ||
+    gk(e, t) ||
+    !mk(e, t) ||
+    !vk(e, t)
   )
     return !1;
-  if (hg(e)) {
+  if (dg(e)) {
     if (
       t.flags.includes("결혼불가") ||
       Ht(t) ||
       (t.flags.includes("연인") && !(e.requires && e.requires.includes("연인")))
     )
       return !1;
-  } else if (zk(e) && t.flags.includes("결혼불가")) return !1;
+  } else if (Jk(e) && t.flags.includes("결혼불가")) return !1;
   if (e.childAge) {
-    const r = Jk(t);
+    const r = Xk(t);
     if (r != null && (r < e.childAge[0] || r > e.childAge[1])) return !1;
   }
   if (e.wingRankEven && (t.wingRank || 1) % 2) return !1;
@@ -15948,8 +15948,8 @@ function Aa(e, t, o) {
     (e.age && (a < e.age[0] || a > e.age[1])) ||
     (e.ageEvery &&
       (a < e.ageEvery[0] || (a - e.ageEvery[0]) % e.ageEvery[1] !== 0)) ||
-    (e.regions && !ki(e.regions, o)) ||
-    (e.notRegions && ki(e.notRegions, o)) ||
+    (e.regions && !xi(e.regions, o)) ||
+    (e.notRegions && xi(e.notRegions, o)) ||
     (!e.repeat && t.used.includes(e.id)) ||
     (e.cooldown &&
       t.last &&
@@ -15961,10 +15961,10 @@ function Aa(e, t, o) {
     (e.notJobs && Jn(e.notJobs, t)) ||
     (e.noJob && t.job) ||
     (e.orgName && !(t.org && e.orgName.includes(t.org.name))) ||
-    (e.everJob && !xi(t, e.everJob)) ||
-    (e.neverJob && xi(t, e.neverJob)) ||
+    (e.everJob && !vi(t, e.everJob)) ||
+    (e.neverJob && vi(t, e.neverJob)) ||
     (e.prosMin && (t.prosthetics || 0) < e.prosMin) ||
-    (e.orgOrJobs && !sg(e.orgOrJobs, t))
+    (e.orgOrJobs && !lg(e.orgOrJobs, t))
   )
     return !1;
   if (e.afterLast) {
@@ -15975,7 +15975,7 @@ function Aa(e, t, o) {
       );
     if (!(a - l >= i)) return !1;
   }
-  if (!rd(e.power, t) || !Qk(e.presence, t) || (e.ego && !wg(t))) return !1;
+  if (!id(e.power, t) || !ex(e.presence, t) || (e.ego && !gg(t))) return !1;
   const n = e.bf && e.bf !== "none" && !!t.bf;
   if (
     (t.job === "손가락" && !e.finger && !e.anyone && !n) ||
@@ -15985,16 +15985,16 @@ function Aa(e, t, o) {
       !n &&
       !(e.jobs && e.jobs.includes(t.work))) ||
     (t.job === "검계" && !e.bl && !e.anyone && !e.wingOk && !n) ||
-    (e.blEntry && !Tb(t)) ||
+    (e.blEntry && !_b(t)) ||
     (e.blRank && !Z(qa(t), e.blRank)) ||
     (e.blCutAt && !(t.bl && Z(t.bl.cut || 0, e.blCutAt))) ||
     (e.blWayAt && !(t.bl && Z(t.bl.way || 0, e.blWayAt))) ||
     (e.blYearsAt && !(t.bl && Z(a - (t.bl.since ?? a), e.blYearsAt))) ||
     (e.blBestAt && !(t.bl && Z(t.bl.best || 1, e.blBestAt))) ||
     (e.blEver && !t.bl) ||
-    (e.blMentorReady && !vb(t)) ||
+    (e.blMentorReady && !jb(t)) ||
     (t.job === "흑운회" && !e.kk && !e.anyone && !e.wingOk && !n) ||
-    (e.kkEntry && !Sb(t)) ||
+    (e.kkEntry && !Cb(t)) ||
     (e.kkRank && !Z(Gt(t), e.kkRank)) ||
     (e.kkEver && !t.kk) ||
     (e.kkYearsAt && !(t.kk && Z(a - (t.kk.since ?? a), e.kkYearsAt))) ||
@@ -16004,15 +16004,15 @@ function Aa(e, t, o) {
     (e.kkInkAt && !(t.kk && Z(t.kk.ink || 0, e.kkInkAt))) ||
     (e.kkDueAt && !(t.kk && Z(t.kk.due || 0, e.kkDueAt))) ||
     (e.kkBestAt && !(t.kk && Z(t.kk.best || 1, e.kkBestAt))) ||
-    (e.kkSeatReady && !Rb(t)) ||
-    (e.kkPatReady && !Cb(t)) ||
-    (e.kkInkReason && !Ib(t)) ||
+    (e.kkSeatReady && !Ib(t)) ||
+    (e.kkPatReady && !Nb(t)) ||
+    (e.kkInkReason && !Ob(t)) ||
     (e.bld && !So(t)) ||
     (So(t) && !e.bld) ||
     Ho(t) ||
     (e.bldRemAt && !(t.bld && Z(t.bld.rem || 0, e.bldRemAt))) ||
     (e.bldThreatAt && !(t.bld && Z(t.bld.threat || 0, e.bldThreatAt))) ||
-    (e.notExec && vx(t)) ||
+    (e.notExec && jx(t)) ||
     (e.exec && zn(t) < 5)
   )
     return !1;
@@ -16026,11 +16026,11 @@ function Aa(e, t, o) {
     (e.perfLow && !((t.perf || 0) < Ea(t) * 0.3)) ||
     (e.warnAt && !Z(t.warn || 0, e.warnAt)) ||
     (e.warnQuiet && !(a - (t.warnLast ?? -99) >= e.warnQuiet)) ||
-    (e.ceoReady && !_k(t)) ||
-    (e.rankGate && !qi(t)) ||
-    (e.heirKong && !(Gr(t) >= e.heirKong)) ||
-    (e.heirHead && !(Gr(t) < 3 && $u(t))) ||
-    (e.heirFail && !(Gr(t) < 3 && !$u(t)))
+    (e.ceoReady && !Ak(t)) ||
+    (e.rankGate && !Gi(t)) ||
+    (e.heirKong && !(Kr(t) >= e.heirKong)) ||
+    (e.heirHead && !(Kr(t) < 3 && Hu(t))) ||
+    (e.heirFail && !(Kr(t) < 3 && !Hu(t)))
   )
     return !1;
   if (e.wingRank) {
@@ -16041,15 +16041,15 @@ function Aa(e, t, o) {
   return (e.branch && !(we(t) && e.branch.includes(t.branch))) ||
     (e.rOverAt && !Z(t.rOver || 0, e.rOverAt)) ||
     (e.rMisAt && !Z(t.rMis || 0, e.rMisAt)) ||
-    (e.org && !fg(e.org, t)) ||
-    !id(e, t) ||
-    !ug(e, t) ||
+    (e.org && !wg(e.org, t)) ||
+    !sd(e, t) ||
+    !cg(e, t) ||
     (t.bf && e.age && e.age[0] >= 55 && !e.bf && !e.bfOk)
     ? !1
-    : cg(e, t, o);
+    : fg(e, t, o);
 }
 const Z = (e, t) => !t || (e >= t[0] && e <= t[1]);
-function ug(e, t) {
+function cg(e, t) {
   const o = t.bf;
   if (e.bf) {
     if (e.bf === "none") {
@@ -16062,7 +16062,7 @@ function ug(e, t) {
     (Array.isArray(e.heat) && !(o && Z(o.heat, e.heat))) ||
     (e.bfYears && !(o && Z(t.age - o.since, e.bfYears))) ||
     (e.kinSlot && !(o && o.made < 2)) ||
-    (e.hasKin && !(o && cd(t) > 0)) ||
+    (e.hasKin && !(o && fd(t) > 0)) ||
     (e.barStreak && !(o && Z(o.barStreak, e.barStreak))) ||
     (e.barUses && !(o && Z(o.barUses || 0, e.barUses))) ||
     (e.neverBit && !(o && o.bites === 0)) ||
@@ -16075,14 +16075,14 @@ function ug(e, t) {
     (e.life && !(o && e.life.includes(Ko(t).k))) ||
     (e.lifeSub && !(o && e.lifeSub.includes(Ko(t).sub))) ||
     (e.lifeNot && o && e.lifeNot.includes(Ko(t).k)) ||
-    (e.bfActive && !(o && Hl(t))) ||
-    (e.bfRetired && !(o && !Hl(t))) ||
-    (e.outlive && !(o && Fx(t))) ||
-    (e.revealOk && !(o && Lx(t))) ||
+    (e.bfActive && !(o && Dl(t))) ||
+    (e.bfRetired && !(o && !Dl(t))) ||
+    (e.outlive && !(o && Px(t))) ||
+    (e.revealOk && !(o && Mx(t))) ||
     (e.revealAt && !(o && o.revealOrg && o.revealOrg === Fa(t)))
   );
 }
-function cg(e, t, o) {
+function fg(e, t, o) {
   if (e.needs)
     for (const [a, [n, r]] of Object.entries(e.needs)) {
       const i = t.stats[a];
@@ -16099,13 +16099,13 @@ function cg(e, t, o) {
   }
   return !0;
 }
-function fg(e, t) {
+function wg(e, t) {
   const o = t.org;
   return e === "none" ? !o : e === "any" ? !!o : !!o && o.type === e;
 }
-const Vk = { 엄지: 2, 검지: 2, 중지: 3, 약지: 2 },
-  Xk = { 엄지: !0 };
-function Gi(e) {
+const Qk = { 엄지: 2, 검지: 2, 중지: 3, 약지: 2 },
+  Zk = { 엄지: !0 };
+function Ki(e) {
   let t = 0;
   if (e.job === "해결사" && e.grade)
     e.flags.includes("특색") || e.grade <= 1
@@ -16121,7 +16121,7 @@ function Gi(e) {
     t = a >= o ? 4 : a >= o - 1 ? 3 : a >= 2 ? 2 : 1;
   } else
     we(e)
-      ? (t = hk(e))
+      ? (t = uk(e))
       : e.job === "검계"
         ? (t = qa(e))
         : e.job === "흑운회"
@@ -16130,20 +16130,20 @@ function Gi(e) {
   return (e.flags.includes("E.G.O개화") && (t = Math.max(t, 3)), t);
 }
 function Vn(e) {
-  return Math.max(Gi(e), Math.max(0, (e.pastPower || 0) - 1));
+  return Math.max(Ki(e), Math.max(0, (e.pastPower || 0) - 1));
 }
-const Qk = (e, t) => !e || (Vn(t) >= e[0] && Vn(t) <= e[1]),
-  rd = (e, t) => !e || (Vn(t) >= e[0] && Vn(t) <= e[1]);
-function wg(e) {
+const ex = (e, t) => !e || (Vn(t) >= e[0] && Vn(t) <= e[1]),
+  id = (e, t) => !e || (Vn(t) >= e[0] && Vn(t) <= e[1]);
+function gg(e) {
   return e.flags.includes("E.G.O개화")
     ? !1
     : e.job === "해결사"
       ? !!e.grade && e.grade <= 3
       : e.job === "손가락" && e.finger
-        ? (e.fingerRank || 1) >= (Vk[e.finger] || 2)
+        ? (e.fingerRank || 1) >= (Qk[e.finger] || 2)
         : !1;
 }
-function id(e, t) {
+function sd(e, t) {
   if (
     e.finger &&
     !(Array.isArray(e.finger) ? e.finger : [e.finger]).includes(t.finger)
@@ -16155,18 +16155,18 @@ function id(e, t) {
   }
   return !0;
 }
-function Zk(e, t, o) {
+function tx(e, t, o) {
   return !(
-    (t.pinky && Ok(e)) ||
+    (t.pinky && Ek(e)) ||
     (e.requires && !e.requires.every((a) => t.flags.includes(a))) ||
     (e.forbids && e.forbids.some((a) => t.flags.includes(a))) ||
     (e.jobs && !Jn(e.jobs, t)) ||
     (e.notJobs && Jn(e.notJobs, t)) ||
-    !rd(e.power, t) ||
-    (e.ego && !wg(t)) ||
-    (e.org && !fg(e.org, t)) ||
+    !id(e.power, t) ||
+    (e.ego && !gg(t)) ||
+    (e.org && !wg(e.org, t)) ||
     (e.orgName && !(t.org && e.orgName.includes(t.org.name))) ||
-    (e.orgOrJobs && !sg(e.orgOrJobs, t)) ||
+    (e.orgOrJobs && !lg(e.orgOrJobs, t)) ||
     (e.branch && !(we(t) && e.branch.includes(t.branch))) ||
     (e.wingRank &&
       !(
@@ -16174,10 +16174,10 @@ function Zk(e, t, o) {
         (t.wingRank || 1) >= e.wingRank[0] &&
         (t.wingRank || 1) <= e.wingRank[1]
       )) ||
-    (e.everJob && !xi(t, e.everJob)) ||
-    (e.neverJob && xi(t, e.neverJob)) ||
-    (e.regions && !ki(e.regions, o)) ||
-    (e.notRegions && ki(e.notRegions, o)) ||
+    (e.everJob && !vi(t, e.everJob)) ||
+    (e.neverJob && vi(t, e.neverJob)) ||
+    (e.regions && !xi(e.regions, o)) ||
+    (e.notRegions && xi(e.notRegions, o)) ||
     (e.blScar &&
       !(
         t.job === "해결사" ||
@@ -16188,15 +16188,15 @@ function Zk(e, t, o) {
     (e.kkBestAt && !(t.kk && Z(t.kk.best || 1, e.kkBestAt))) ||
     (e.kkWayAt && !(t.kk && Z(t.kk.way || 0, e.kkWayAt))) ||
     (e.bldRemAt && !(t.bld && Z(t.bld.rem || 0, e.bldRemAt))) ||
-    !id(e, t) ||
-    !ug(e, t) ||
+    !sd(e, t) ||
+    !cg(e, t) ||
     (e.age && !Z(t.age, e.age)) ||
-    (e.heirKong && !(Gr(t) >= e.heirKong)) ||
-    (e.rneeds && !cg({ rneeds: e.rneeds }, t, o)) ||
-    ((Ht(t) || t.flags.includes("시술금지서약")) && pk(e))
+    (e.heirKong && !(Kr(t) >= e.heirKong)) ||
+    (e.rneeds && !fg({ rneeds: e.rneeds }, t, o)) ||
+    ((Ht(t) || t.flags.includes("시술금지서약")) && kk(e))
   );
 }
-function Ll(e, t) {
+function Pl(e, t) {
   if (
     (e.needs &&
       e.orGrade &&
@@ -16223,15 +16223,15 @@ function Ll(e, t) {
       const r = t.stats[o];
       if (r < a)
         return h(
-          `${st[o]} ${a} 이상 필요`,
-          `Requires ${st[o]} ${a}+`,
-          `${st[o]} ${a}以上が必要`,
+          `${Je[o]} ${a} 이상 필요`,
+          `Requires ${Je[o]} ${a}+`,
+          `${Je[o]} ${a}以上が必要`,
         );
       if (r > n)
         return h(
-          `${st[o]} ${n} 이하일 때만`,
-          `Only with ${st[o]} ${n} or less`,
-          `${st[o]} ${n}以下のときのみ`,
+          `${Je[o]} ${n} 이하일 때만`,
+          `Only with ${Je[o]} ${n} or less`,
+          `${Je[o]} ${n}以下のときのみ`,
         );
     }
   if (e.grade) {
@@ -16245,22 +16245,22 @@ function Ll(e, t) {
   }
   return null;
 }
-function gg(e, t) {
+function mg(e, t) {
   return e.bias
     ? e.bias.startsWith("!")
       ? 0.3 + (10 - t[e.bias.slice(1)]) / 5
       : 0.3 + t[e.bias] / 5
     : 1;
 }
-function Rs(e, t) {
-  const o = (e.weight ?? 1) * (e.rankGate ? Ak : 1);
-  return e.chance == null ? o * gg(e, t) : o;
+function Cs(e, t) {
+  const o = (e.weight ?? 1) * (e.rankGate ? Sk : 1);
+  return e.chance == null ? o * mg(e, t) : o;
 }
-function ex(e, t, o, a) {
+function ox(e, t, o, a) {
   if (e.chance == null) return !0;
-  let n = e.chance * gg(e, t);
-  (e.rankGate && (n = Math.min(1, n * Yk)),
-    (e.rankGate || Ek.has(e.id)) && (n = Math.min(1, n * ao(a, 1.2, 1.1))),
+  let n = e.chance * mg(e, t);
+  (e.rankGate && (n = Math.min(1, n * Rk)),
+    (e.rankGate || Fk.has(e.id)) && (n = Math.min(1, n * no(a, 1.2, 1.1))),
     e.prosScale && (n *= Math.min(a.prosthetics || 0, 6)),
     e.regionMult &&
       e.regionMult[a.regionId] &&
@@ -16269,13 +16269,13 @@ function ex(e, t, o, a) {
     a.flags.includes(r) && (n *= i);
   return (e.noJobMult && !a.job && (n *= e.noJobMult), o.chance(n));
 }
-function tx(e, t) {
+function ax(e, t) {
   if (e <= 4) return t.chance(0.6) ? 1 : 0;
   const o = t.next();
   return o < 0.15 ? 0 : o < 0.55 ? 1 : o < 0.87 ? 2 : 3;
 }
-function sd(e, t) {
-  var v;
+function ld(e, t) {
+  var T;
   X = t;
   const o = oe(e),
     a = qe(t, e);
@@ -16284,17 +16284,17 @@ function sd(e, t) {
     return;
   }
   if (
-    (js[e.age] &&
+    (As[e.age] &&
       !e.reflections.some((_) => _.age === e.age) &&
       (e.prompt = {
         kind: "reflect",
         age: e.age,
-        question: js[e.age],
-        text: js[e.age],
+        question: As[e.age],
+        text: As[e.age],
         choices: [],
         t: 0,
       }),
-    $w(e))
+    Hw(e))
   ) {
     const _ = t.events.filter((C) => C.heir && Aa(C, e, a));
     _.length && _[0].forceGroup === "hh31"
@@ -16303,26 +16303,26 @@ function sd(e, t) {
     return;
   }
   if (Ho(e)) {
-    qb(e);
+    Kb(e);
     return;
   }
   if (So(e)) {
-    ox(e, t, a, o);
+    nx(e, t, a, o);
     return;
   }
-  (jk(e), Pk(e));
-  const n = t.events.filter((_) => Aa(_, e, a) && ex(_, a, o, e)),
+  (Yk(e), $k(e));
+  const n = t.events.filter((_) => Aa(_, e, a) && ox(_, a, o, e)),
     r = n.filter((_) => _.must && e.age >= _.age[1]).slice(0, 1),
     i = {};
   for (const _ of n)
     _.force &&
       !r.includes(_) &&
-      (i[(v = _.forceGroup || _.id)] ?? (i[v] = [])).push(_);
+      (i[(T = _.forceGroup || _.id)] ?? (i[T] = [])).push(_);
   for (const _ of Object.values(i)) r.push(o.pick(_));
   const l = r.some((_) => _.forceGroup === "bf_feed") ? 1 : 0;
   let s = 0,
     u = null;
-  if (oo(e) && o.chance(0.9)) {
+  if (ao(e) && o.chance(0.9)) {
     const _ = n.filter(
       (C) =>
         C.office &&
@@ -16330,44 +16330,44 @@ function sd(e, t) {
         !r.includes(C) &&
         !(C.major && r.some((R) => R.major)),
     );
-    ((u = o.weighted(_, (C) => Rs(C, a))), u && (r.push(u), (s = 1)));
+    ((u = o.weighted(_, (C) => Cs(C, a))), u && (r.push(u), (s = 1)));
   }
   let f = 0;
   if (
-    qi(e) &&
+    Gi(e) &&
     !r.some((_) => _.major) &&
-    o.chance(Math.min(1, Sk * ao(e, 1.2, 1.1)))
+    o.chance(Math.min(1, Ck * no(e, 1.2, 1.1)))
   ) {
     const _ = o.weighted(
       n.filter((C) => C.rankGate && !r.includes(C)),
-      (C) => Rs(C, a),
+      (C) => Cs(C, a),
     );
     _ && (r.push(_), (f = 1));
   }
-  let y = Math.max(tx(e.age, o) + l + s + f, r.length),
+  let y = Math.max(ax(e.age, o) + l + s + f, r.length),
     g = r.filter((_) => _.major).length,
-    k = r.filter(qo).length;
+    x = r.filter(qo).length;
   for (; r.length < y;) {
     const _ = n.filter(
         (R) =>
           !r.includes(R) &&
           !(R.major && g >= 1) &&
-          !(qo(R) && k >= 2) &&
-          !(R.office && oo(e)),
+          !(qo(R) && x >= 2) &&
+          !(R.office && ao(e)),
       ),
-      C = o.weighted(_, (R) => Rs(R, a));
+      C = o.weighted(_, (R) => Cs(R, a));
     if (!C) break;
-    (r.push(C), C.major && g++, qo(C) && k++);
+    (r.push(C), C.major && g++, qo(C) && x++);
   }
-  let x = 0;
+  let k = 0;
   e.job === "해결사" &&
     t.requests &&
     e.age >= 16 &&
-    (x = (o.chance(0.85) ? 1 : 0) + (e.org && o.chance(0.45) ? 1 : 0));
-  const T = Tg(e) && o.chance(Yx(e.age)),
-    Y = e.bf ? qx(e, o, r) : [],
-    c = Xb(e, o);
-  if (r.length === 0 && x === 0 && !T && !Y.length && !c.length) {
+    (k = (o.chance(0.85) ? 1 : 0) + (e.org && o.chance(0.45) ? 1 : 0));
+  const v = Tg(e) && o.chance(Rx(e.age)),
+    Y = e.bf ? Kx(e, o, r) : [],
+    c = Zb(e, o);
+  if (r.length === 0 && k === 0 && !v && !Y.length && !c.length) {
     const _ = e.recentDaily || [],
       C = (t.daily || []).filter((W) => Aa(W, e, a) && !_.includes(W.id)),
       R = o.weighted(C, (W) => (W.regions ? 2.2 : 1) * (W.weight ?? 1));
@@ -16382,12 +16382,12 @@ function sd(e, t) {
   }
   const m = [
     ...r.map((_) => ({ id: _.id })),
-    ...Array.from({ length: x }, () => ({ id: "request", req: !0 })),
+    ...Array.from({ length: k }, () => ({ id: "request", req: !0 })),
   ];
-  (T && m.push({ id: xg(e), warpEnter: !0 }),
+  (v && m.push({ id: vg(e), warpEnter: !0 }),
     e.fingerLeave &&
       e.age >= e.fingerLeave.at &&
-      (vg(e) && m.push({ id: "f_finger_leave", fingerLeave: !0 }),
+      (_g(e) && m.push({ id: "f_finger_leave", fingerLeave: !0 }),
       (e.fingerLeave = null)),
     m.push(...Y, ...c));
   const w = o.shuffle(m);
@@ -16396,8 +16396,8 @@ function sd(e, t) {
     e.plan.push({ ..._, t: Math.round(R * 1e3) / 1e3 });
   });
 }
-const Ju = { huntLegend: 0.25, maxYears: 5 };
-function ox(e, t, o, a) {
+const Vu = { huntLegend: 0.25, maxYears: 5 };
+function nx(e, t, o, a) {
   const n = e.bld,
     r = e.age - n.since;
   let i = !1;
@@ -16406,14 +16406,14 @@ function ox(e, t, o, a) {
       ? (n.noHunt = !1)
       : (n.huntNext ||
           (n.threat || 0) >= 3 ||
-          r >= Ju.maxYears ||
-          ((n.threat || 0) >= 2 && a.chance(Ju.huntLegend))) &&
+          r >= Vu.maxYears ||
+          ((n.threat || 0) >= 2 && a.chance(Vu.huntLegend))) &&
         (i = !0),
     i)
   ) {
     ((n.hunter =
       (n.threat || 0) >= 3
-        ? { type: "assoc", idx: a.pick(qw) }
+        ? { type: "assoc", idx: a.pick(Gw) }
         : {
             type: "office",
             idx: a.int(0, Math.max(0, (t.orgs.office || []).length - 1)),
@@ -16431,7 +16431,7 @@ function ox(e, t, o, a) {
       (e.last.bl_d_pass = e.age),
       e.plan.push({ id: "bl_d_pass", chain: !0, t: 0.4 }));
 }
-const ld = 0.55,
+const hd = 0.55,
   Ga = [0.5, 1.5, 3, 4.5, 6.5, 8.5];
 function rr(e) {
   let t = 10 - (e.grade || 9);
@@ -16444,7 +16444,7 @@ function rr(e) {
     t
   );
 }
-function mg(e) {
+function yg(e) {
   const t = rr(e);
   let o = 0;
   return (
@@ -16454,22 +16454,22 @@ function mg(e) {
     o
   );
 }
-function Vu(e, t, o) {
+function Xu(e, t, o) {
   const a = Ga[t] - rr(e);
-  let n = 0.025 * Math.pow(1.85, a) * ld;
+  let n = 0.025 * Math.pow(1.85, a) * hd;
   return (
     (n *= o === "bold" ? 1.3 : 0.45),
     e.org && (n *= 0.85),
     (n *= P(1 + (50 - e.stats.health) / 150, 0.7, 1.5)),
     (n *= 1.15 - e.stats.network * 0.006),
     e.bf && e.bf.vigor && (n *= 0.75),
-    (n *= ao(e, 0.8, 0.9)),
+    (n *= no(e, 0.8, 0.9)),
     P(n, 0.005, 0.92)
   );
 }
-function Pl(e, t, o) {
+function Ml(e, t, o) {
   const a = Ga[t] - rr(e),
-    n = (e.bf && e.bf.vigor ? 0.1 : 0) + (ao(e, 1.08, 1.04) - 1);
+    n = (e.bf && e.bf.vigor ? 0.1 : 0) + (no(e, 1.08, 1.04) - 1);
   return o === "bold"
     ? P(0.68 - 0.12 * a + n, 0.12, 0.95)
     : P(0.82 - 0.12 * a + n, 0.2, 0.97);
@@ -16484,11 +16484,11 @@ function Go(e) {
     e.stats.rep >= 50 && (o *= 0.85),
     e.flags.includes("좋은의체") && (o *= 0.97),
     e.flags.includes("강화시술") && (o *= 0.93),
-    (o *= ao(e, 0.8, 0.9)),
+    (o *= no(e, 0.8, 0.9)),
     Math.max(1, Math.round(o))
   );
 }
-function ax(e, t, o) {
+function rx(e, t, o) {
   const a = Ga[t] - rr(e),
     n = P(1 + a * 0.35, 0.4, 2.5);
   return Math.max(
@@ -16501,10 +16501,10 @@ function ax(e, t, o) {
     ),
   );
 }
-const nx = [3, 5, 8, 13, 20, 32, 50],
-  rx = [2, 3, 5, 8, 12, 18, 26];
-function ix(e, t, o) {
-  const a = mg(e),
+const ix = [3, 5, 8, 13, 20, 32, 50],
+  sx = [2, 3, 5, 8, 12, 18, 26];
+function lx(e, t, o) {
+  const a = yg(e),
     n = o.weighted(
       [
         [-1, 18],
@@ -16513,47 +16513,47 @@ function ix(e, t, o) {
         [2, 9],
         [3, 3],
       ],
-      (T) => T[1],
+      (v) => v[1],
     )[0],
     r = e.org && e.org.type === "assoc" && o.chance(0.35) ? 1 : 0,
     i = P(a + n + r, 0, Ga.length - 1),
     l = e.org ? e.org.name : null,
-    s = t.requests.filter((T) => !T.org || T.org === l);
-  let u = s.filter((T) => i >= T.tiers[0] && i <= T.tiers[1]);
-  u.length || (u = s.filter((T) => T.tiers[1] >= i - 1 && T.tiers[0] <= i + 1));
+    s = t.requests.filter((v) => !v.org || v.org === l);
+  let u = s.filter((v) => i >= v.tiers[0] && i <= v.tiers[1]);
+  u.length || (u = s.filter((v) => v.tiers[1] >= i - 1 && v.tiers[0] <= i + 1));
   const f = e.recentReq || [],
-    y = u.filter((T) => !f.includes(T.id));
+    y = u.filter((v) => !f.includes(v.id));
   let g = y.length ? y : u;
-  const k = wb[l];
-  if (k && o.chance(k.p)) {
-    const T = s.filter((m) => k.types.includes(m.type));
-    let Y = T.filter((m) => m.tiers[0] <= i + 1 && m.tiers[1] >= i - 1);
+  const x = mb[l];
+  if (x && o.chance(x.p)) {
+    const v = s.filter((m) => x.types.includes(m.type));
+    let Y = v.filter((m) => m.tiers[0] <= i + 1 && m.tiers[1] >= i - 1);
     if (!Y.length) {
-      const m = (v) =>
-          Math.min(Math.abs(v.tiers[0] - i), Math.abs(v.tiers[1] - i)),
-        w = Math.min(...T.map(m));
-      Y = T.filter((v) => m(v) === w);
+      const m = (T) =>
+          Math.min(Math.abs(T.tiers[0] - i), Math.abs(T.tiers[1] - i)),
+        w = Math.min(...v.map(m));
+      Y = v.filter((T) => m(T) === w);
     }
     const c = Y.filter((m) => !f.includes(m.id));
     Y.length && (g = c.length ? c : Y);
   }
-  const x = o.pick(g);
-  return ((e.recentReq = [...f, x.id].slice(-8)), { tpl: x.id, tier: i });
+  const k = o.pick(g);
+  return ((e.recentReq = [...f, k.id].slice(-8)), { tpl: k.id, tier: i });
 }
-function Xu(e, t) {
+function Qu(e, t) {
   const o = e < 0.01 ? 0 : Math.round(e * 100),
     a = Math.round((1 - e) * t * 100);
   return { ok: a, fail: Math.max(0, 100 - a - o), die: o, tiny: e < 0.01 };
 }
-function sx(e, t, o, a) {
-  const n = ix(e, t, o),
-    r = t.requests.find((x) => x.id === n.tpl);
+function hx(e, t, o, a) {
+  const n = lx(e, t, o),
+    r = t.requests.find((k) => k.id === n.tpl);
   if (r.text.includes("{환상체}")) {
-    const T = (t.orgs.abnormal || []).filter(
+    const v = (t.orgs.abnormal || []).filter(
       (Y) => n.tier >= Y.tiers[0] && n.tier <= Y.tiers[1] && (!Y.aleph || !1),
     );
     n.abn = (
-      o.pick(T.length ? T : t.orgs.abnormal) || {
+      o.pick(v.length ? v : t.orgs.abnormal) || {
         name: h("환상체", "an Abnormality", "幻想体"),
       }
     ).name;
@@ -16566,8 +16566,8 @@ function sx(e, t, o, a) {
       ),
     },
     l = t.orgs.tiers[n.tier],
-    s = Vu(e, n.tier, "bold"),
-    u = Vu(e, n.tier, "care"),
+    s = Xu(e, n.tier, "bold"),
+    u = Xu(e, n.tier, "care"),
     f = e.org ? e.org.name : h("개인", "Freelance", "個人"),
     y = `${i.text}`;
   L(
@@ -16584,8 +16584,8 @@ function sx(e, t, o, a) {
     },
     a,
   );
-  const g = t.orgs.tiers[mg(e)],
-    k =
+  const g = t.orgs.tiers[yg(e)],
+    x =
       e.grade > 1
         ? h(
             ` · 승급 공적 ${e.merit || 0}/${Go(e)}`,
@@ -16599,21 +16599,21 @@ function sx(e, t, o, a) {
     text: y,
     badge: `${l} · ${An(i.type)}`,
     sub: h(
-      `${f} · ${ve(e)} (적정 등급: ${g})${k}`,
-      `${f} · ${ve(e)} (suited for: ${g})${k}`,
-      `${f} · ${ve(e)} (適正等級: ${g})${k}`,
+      `${f} · ${Te(e)} (적정 등급: ${g})${x}`,
+      `${f} · ${Te(e)} (suited for: ${g})${x}`,
+      `${f} · ${Te(e)} (適正等級: ${g})${x}`,
     ),
     choices: [
       {
         label: h("정면으로 해치운다", "Go in head-on", "正面から片付ける"),
         pay: h("보수 많음", "higher pay", "報酬多め"),
-        odds: Xu(s, Pl(e, n.tier, "bold")),
+        odds: Qu(s, Ml(e, n.tier, "bold")),
         i: 0,
       },
       {
         label: h("신중하게 처리한다", "Handle it carefully", "慎重に処理する"),
         pay: h("보수 적음", "lower pay", "報酬少なめ"),
-        odds: Xu(u, Pl(e, n.tier, "care")),
+        odds: Qu(u, Ml(e, n.tier, "care")),
         i: 1,
       },
       {
@@ -16626,7 +16626,7 @@ function sx(e, t, o, a) {
     rare: n.tier >= 5,
   };
 }
-function lx(e, t, o, a, n) {
+function dx(e, t, o, a, n) {
   const r = oe(e),
     i = o.req,
     l = t.requests.find((c) => c.id === i.tpl);
@@ -16657,9 +16657,9 @@ function lx(e, t, o, a, n) {
       const c = z(t, "bf_bitten");
       bt(e, t, c, o.t, { ...u, kind: "result" });
     },
-    k = l.bite && !e.bf && !e.pinky && z(t, "bf_bitten");
+    x = l.bite && !e.bf && !e.pinky && z(t, "bf_bitten");
   if (r.chance(y)) {
-    if (k && r.chance(0.3)) return g();
+    if (x && r.chance(0.3)) return g();
     ((e.deathContext = h(
       `${t.orgs.tiers[i.tier]} 등급의 ${i.abn ? `'${i.abn}' ` : ""}${l.type} 의뢰 도중`,
       `during a ${t.orgs.tiers[i.tier]} ${An(l.type)} request${i.abn ? ` against '${i.abn}'` : ""}`,
@@ -16668,40 +16668,40 @@ function lx(e, t, o, a, n) {
       bt(e, t, { text: l.death, death: l.cause }, o.t, u));
     return;
   }
-  const x = i.tier;
-  Ga[x] - rr(e);
-  const T =
+  const k = i.tier;
+  Ga[k] - rr(e);
+  const v =
       (f === "bold" ? 1.5 : 0.7) *
       (e.org ? (e.org.type === "assoc" ? 1.2 : 1) : 0.85),
-    Y = l.type === "뒤틀림" || l.type.includes("환상체") || x >= 5;
-  if (r.chance(Pl(e, x, f))) {
+    Y = l.type === "뒤틀림" || l.type.includes("환상체") || k >= 5;
+  if (r.chance(Ml(e, k, f))) {
     let c = 0;
     if (e.grade > 1) {
-      e.merit = (e.merit || 0) + ax(e, x, f);
+      e.merit = (e.merit || 0) + rx(e, k, f);
       const w = Go(e);
       e.merit >= w && ((e.merit -= w), (c = 1));
     }
     const m = {
       text: r.pick(l.ok),
       effects: {
-        wealth: Math.round(nx[x] * T),
-        rep: Math.round(rx[x] * (f === "bold" ? 1.3 : 0.8)),
-        health: f === "bold" ? -Math.round(1 + x * 0.6) : 0,
-        sanity: Y ? -Math.round(1 + x * 0.45) : 0,
+        wealth: Math.round(ix[k] * v),
+        rep: Math.round(sx[k] * (f === "bold" ? 1.3 : 0.8)),
+        health: f === "bold" ? -Math.round(1 + k * 0.6) : 0,
+        sanity: Y ? -Math.round(1 + k * 0.45) : 0,
       },
       gradeUp: c,
     };
-    (x >= 5 && r.chance(0.3) && (m.flagsAdd = ["환상체생존"]),
-      (e.bestReq = Math.max(e.bestReq ?? -1, x)),
+    (k >= 5 && r.chance(0.3) && (m.flagsAdd = ["환상체생존"]),
+      (e.bestReq = Math.max(e.bestReq ?? -1, k)),
       bt(e, t, m, o.t, u));
   } else {
-    if (k && r.chance(0.06)) return g();
+    if (x && r.chance(0.06)) return g();
     const c = {
       text: r.pick(l.fail),
       effects: {
-        health: -Math.round(5 + x * 1.3),
-        sanity: -Math.round(3 + x * 0.7),
-        rep: -Math.max(1, x),
+        health: -Math.round(5 + k * 1.3),
+        sanity: -Math.round(3 + k * 0.7),
+        rep: -Math.max(1, k),
       },
     };
     bt(e, t, c, o.t, u);
@@ -16711,11 +16711,11 @@ function Eo(e, t, o, a) {
   const n = qe(t, e),
     r = [];
   (o.choices.forEach((l, s) => {
-    if (!Zk(l, e, n)) return;
-    const u = Ll(l, e),
+    if (!tx(l, e, n)) return;
+    const u = Pl(l, e),
       f = l.dream && [].concat(l.dream).some((g) => e.flags.includes(g)),
       y =
-        Tt(l.label, n, e) +
+        vt(l.label, n, e) +
         (f ? h(" (어릴 적 꿈)", " (childhood dream)", "（幼い頃の夢）") : "");
     r.push(
       u
@@ -16724,8 +16724,8 @@ function Eo(e, t, o, a) {
     );
   }),
     r.some((l) => !l.locked) ||
-      r.push({ label: Tt(o.choices[0].label, n, e), i: 0 }));
-  const i = Tt(o.text, n, e);
+      r.push({ label: vt(o.choices[0].label, n, e), i: 0 }));
+  const i = vt(o.text, n, e);
   (L(e, { kind: "event", text: i, tone: o.rare ? "rare" : "event" }, a),
     (e.prompt = {
       kind: o.major ? "major" : "minor",
@@ -16735,18 +16735,18 @@ function Eo(e, t, o, a) {
       ignoreLabel: o.major
         ? null
         : o.ignoreLabel || h("흘려보낸다", "Let it pass", "やり過ごす"),
-      remainingMs: o.major ? null : jw,
+      remainingMs: o.major ? null : Aw,
       t: a,
       rare: !!o.rare,
     }));
 }
-function hx(e, t) {
+function ux(e, t) {
   X = t;
   const o = e.plan[e.cursor];
   if (!o) return !1;
   e.cursor++;
   const a = qe(t, e);
-  if (o.dr) return Gb(e, t, o);
+  if (o.dr) return zb(e, t, o);
   if (o.banner) {
     const r = h(
       "가주 심사가 시작되었다.",
@@ -16766,9 +16766,9 @@ function hx(e, t) {
       !0
     );
   }
-  if (o.req) return (e.job !== "해결사" || sx(e, t, oe(e), o.t), !0);
+  if (o.req) return (e.job !== "해결사" || hx(e, t, oe(e), o.t), !0);
   if (o.daily) {
-    const r = Pw(t, o.id);
+    const r = Mw(t, o.id);
     return r
       ? (Aa(r, e, a) &&
           bt(e, t, r, o.t, { kind: "daily", tone: "daily", eventId: r.id }),
@@ -16781,7 +16781,7 @@ function hx(e, t) {
       !r ||
         !e.bf ||
         e.dead ||
-        (r.id === "bf_hunt" && Hx(e),
+        (r.id === "bf_hunt" && qx(e),
         e.last || (e.last = {}),
         (e.last[r.id] = e.age),
         qo(r)
@@ -16795,7 +16795,7 @@ function hx(e, t) {
     return (
       !r ||
         e.dead ||
-        !vg(e) ||
+        !_g(e) ||
         (e.last || (e.last = {}), (e.last[r.id] = e.age), Eo(e, t, r, o.t)),
       !0
     );
@@ -16804,7 +16804,7 @@ function hx(e, t) {
     const r = z(t, o.id);
     if (!r || e.dead || e.prompt) return !0;
     if (o.lakeEnter) {
-      if (!zw(e)) return !0;
+      if (!Uw(e)) return !0;
       o.id !== "lk_drink" && (e.lakeOffered = !0);
     }
     return (
@@ -16819,7 +16819,7 @@ function hx(e, t) {
     return (
       !r ||
         !Tg(e) ||
-        xg(e) !== r.id ||
+        vg(e) !== r.id ||
         (e.last || (e.last = {}), (e.last[r.id] = e.age), Eo(e, t, r, o.t)),
       !0
     );
@@ -16831,7 +16831,7 @@ function hx(e, t) {
     const r = oe(e),
       i = (t.orgs[n.offer] || []).filter(
         (s) =>
-          (!e.org || s.name !== e.org.name) && (!Mu[s.name] || Mu[s.name](e)),
+          (!e.org || s.name !== e.org.name) && (!$u[s.name] || $u[s.name](e)),
       ),
       l = r.pick(i);
     e.offer = l ? { type: n.offer, name: l.name } : null;
@@ -16851,7 +16851,7 @@ function hx(e, t) {
     !0
   );
 }
-function dx(e) {
+function cx(e) {
   const t = 9 - (e.grade || 9),
     o =
       (e.flags.includes("좋은의체") ? 1.05 : 1) *
@@ -16863,7 +16863,7 @@ function dx(e) {
       ? (1.7 * o) / (1 + 0.015 * t * t)
       : o / (1 + 0.06 * t * t);
 }
-function Qu(e) {
+function Zu(e) {
   const t = (e.fingerRank || 1) - 1,
     o =
       (e.flags.includes("좋은의체") ? 1.05 : 1) *
@@ -16875,18 +16875,18 @@ function Qu(e) {
       ? (1.7 * o) / (1 + 0.6 * t * t)
       : o / (1 + 3 * t * t);
 }
-function Ml(e) {
+function $l(e) {
   const t =
     e.job === "해결사" ||
     e.job === "손가락" ||
     e.job === "검계" ||
     e.job === "흑운회" ||
     we(e)
-      ? Gi(e)
+      ? Ki(e)
       : 0;
   e.pastPower = Math.max(e.pastPower || 0, t);
 }
-function ux(e, t, o) {
+function fx(e, t, o) {
   const a = oe(e),
     n = qe(t, e);
   e.bf ||
@@ -16910,12 +16910,12 @@ function ux(e, t, o) {
   if (o === "stray")
     return (
       e.flags.includes("떠돌이") || e.flags.push("떠돌이"),
-      Ww(e, ["떠돌이"]),
+      Ew(e, ["떠돌이"]),
       null
     );
   if (
-    (Ml(e),
-    e.job === "해결사" && $l(e),
+    ($l(e),
+    e.job === "해결사" && Hl(e),
     e.org && (e.orgHistory.push(e.org.name), (e.org = null)),
     e.finger)
   )
@@ -16938,17 +16938,17 @@ function ux(e, t, o) {
     (e.wingRank = null),
     (e.branch = null),
     ie(e, { k: "job", job: "권속" }),
-    ve(e)
+    Te(e)
   );
 }
-function $l(e) {
+function Hl(e) {
   e.flags = e.flags.filter((t) => t !== "특색");
 }
-function cx(e) {
+function wx(e) {
   const t = (e.pastPower || 0) - 1;
   return t >= 3 ? 3 : t === 2 ? 5 : t === 1 ? 8 : 9;
 }
-function fx(e, t) {
+function gx(e, t) {
   const o = Ot[e].length;
   return t >= 6
     ? 1
@@ -16958,25 +16958,25 @@ function fx(e, t) {
         ? Math.min(o, e === "중지" ? 3 : 2)
         : Math.max(1, o - 1);
 }
-function wx(e, t) {
+function mx(e, t) {
   const o = Ot[t].length,
     a = (e.pastPower || 0) - 1;
   return a >= 3 ? Math.max(1, o - 1) : a === 2 ? Math.min(2, o - 1) : 1;
 }
-const gx = (e) =>
+const yx = (e) =>
   e.job === "해결사" && !!e.grade && (e.flags.includes("특색") || e.grade <= 3);
-function mx(e, t) {
+function px(e, t) {
   if (
-    (t.pinky && Bl(e)) ||
-    (e.fingerRank && !id({ fingerRank: e.fingerRank }, t)) ||
-    (e.top3 != null && e.top3 !== gx(t)) ||
-    (e.death === "뒤틀림" && Je(t)) ||
+    (t.pinky && Fl(e)) ||
+    (e.fingerRank && !sd({ fingerRank: e.fingerRank }, t)) ||
+    (e.top3 != null && e.top3 !== yx(t)) ||
+    (e.death === "뒤틀림" && Ve(t)) ||
     (e.kxFitAt && !Z((t.kx && t.kx.fit) || 0, e.kxFitAt))
   )
     return 0;
   if (e.exact) return e.w ?? 1;
   if (e.blDistort != null) {
-    const a = _b(t);
+    const a = Ab(t);
     return e.blDistort ? a * 100 : (1 - a) * 50;
   }
   if (e.hatch) {
@@ -16991,7 +16991,7 @@ function mx(e, t) {
   }
   let o = e.w ?? 1;
   if (
-    (e.death && (o *= ld),
+    (e.death && (o *= hd),
     e.death &&
       t.bf &&
       t.bf.vigor &&
@@ -16999,14 +16999,14 @@ function mx(e, t) {
       (o *= 0.75),
     e.death &&
       (we(t) || t.job === "손가락" || t.job === "검계" || t.job === "흑운회") &&
-      (o *= ao(t, 0.8, 0.9)),
+      (o *= no(t, 0.8, 0.9)),
     (e.fingerUp > 0 || e.wingUp > 0 || e.kkUp || e.blUp || e.gradeUp > 0) &&
-      (o *= ao(t, 1.15, 1.07)),
-    e.gradeUp > 0 && t.job === "해결사" && (o *= dx(t)),
-    e.fingerUp > 0 && t.finger && !e.topRank && !Ba(t) && (o *= Qu(t)),
-    e.rmerit > 0 && t.finger && (o *= Qu(t)),
-    e.wingUp > 0 && we(t) && !Ba(t) && (o *= $k(t)),
-    !rd(e.power, t))
+      (o *= no(t, 1.15, 1.07)),
+    e.gradeUp > 0 && t.job === "해결사" && (o *= cx(t)),
+    e.fingerUp > 0 && t.finger && !e.topRank && !Ba(t) && (o *= Zu(t)),
+    e.rmerit > 0 && t.finger && (o *= Zu(t)),
+    e.wingUp > 0 && we(t) && !Ba(t) && (o *= Dk(t)),
+    !id(e.power, t))
   )
     return 0;
   for (const a of e.wPower || []) {
@@ -17024,16 +17024,16 @@ function mx(e, t) {
   }
   return o;
 }
-function yg(e) {
+function pg(e) {
   return e >= 20
     ? 0
     : e <= 0
       ? 1
       : Math.min(1, 0.015 * Math.pow(2, (20 - e) / 3.2));
 }
-function yx(e, t, o) {
+function bx(e, t, o) {
   if (!e.bf || e.bf.kind !== "stray" || !o.eventId) return 1;
-  const a = z(t, o.eventId) || Pw(t, o.eventId);
+  const a = z(t, o.eventId) || Mw(t, o.eventId);
   return !a || !a.bf || a.bf === "none" || a.forceGroup || a.noBoost ? 1 : 2;
 }
 function bt(e, t, o, a, n = {}) {
@@ -17047,7 +17047,7 @@ function bt(e, t, o, a, n = {}) {
   }
   if (
     (e.pinky &&
-      Wk(i) &&
+      Bk(i) &&
       (i = {
         text: h(
           "당신은 이미 한 자루를 보유하고 있다.",
@@ -17057,21 +17057,21 @@ function bt(e, t, o, a, n = {}) {
       }),
     i.outcomes)
   ) {
-    const b = Wb(i.outcomes, e);
-    i = r.weighted(b, (I) => mx(I, e)) || b[0];
+    const b = Bb(i.outcomes, e);
+    i = r.weighted(b, (I) => px(I, e)) || b[0];
   }
   i.bloomAlt &&
     (i.death === "뒤틀림" || i.bldStart) &&
-    r.chance(jb(e)) &&
+    r.chance(Yb(e)) &&
     (i = i.bloomAlt);
   const l = e.job,
     s = {},
-    u = yx(e, t, n),
+    u = bx(e, t, n),
     f =
-      Je(e) && n.eventId && n.eventId.startsWith("kx")
+      Ve(e) && n.eventId && n.eventId.startsWith("kx")
         ? Pt.drain
         : Ht(e) && n.eventId && n.eventId.startsWith("nh_")
-          ? Zw(e, "drain")
+          ? eg(e, "drain")
           : 1;
   if (i.effects)
     for (const [b, I] of Object.entries(i.effects)) {
@@ -17081,7 +17081,7 @@ function bt(e, t, o, a, n = {}) {
       const F = Math.round(e.stats[b] - A);
       F && (s[b] = F);
     }
-  if (i.kxHp && Je(e) && e.stats.health > 0) {
+  if (i.kxHp && Ve(e) && e.stats.health > 0) {
     const b = e.stats.health;
     ((e.stats.health = r.chance(Pt.hpChoiceP) ? 0 : Math.max(0, b - Pt.hpMiss)),
       (s.health = (s.health || 0) + Math.round(e.stats.health - b)));
@@ -17093,13 +17093,13 @@ function bt(e, t, o, a, n = {}) {
       (e.kx.fit = P((e.kx.fit || 0) + i.kxFit, 0, 5)),
     n.eventId === "nh_canned_rite" && Ht(e))
   ) {
-    const b = Di(e);
+    const b = qi(e);
     ((b.rites = (b.rites || 0) + 1),
       (b.riteAge = e.age),
       (i.nhFaith || 0) > 0 && (b.ate = (b.ate || 0) + 1));
   }
-  (typeof i.nhFaith == "number" && mk(e, i.nhFaith, t, a),
-    Ww(
+  (typeof i.nhFaith == "number" && pk(e, i.nhFaith, t, a),
+    Ew(
       e,
       (i.flagsAdd || []).filter((b) => !e.flags.includes(b)),
     ),
@@ -17117,10 +17117,10 @@ function bt(e, t, o, a, n = {}) {
   if (!i.death) {
     const b = n.eventId ? z(t, n.eventId) : null;
     (b &&
-      hg(b) &&
+      dg(b) &&
       ((i.flagsAdd || []).includes("가정")
         ? e.partnerName || (g = "spouse")
-        : e.flags.includes("가정") || Uk(e)),
+        : e.flags.includes("가정") || Vk(e)),
       (i.flagsAdd || []).includes("연인") && !e.partnerName && (g = "lover"));
   }
   if (Ba(e)) {
@@ -17166,10 +17166,10 @@ function bt(e, t, o, a, n = {}) {
         (b) => !["의체", "좋은의체", "전투의체", "최고급의체"].includes(b),
       )));
   }
-  let k = null;
-  i.bfTurn && (k = ux(e, t, i.bfTurn));
-  const x = [];
-  let T = null;
+  let x = null;
+  i.bfTurn && (x = fx(e, t, i.bfTurn));
+  const k = [];
+  let v = null;
   if (e.bf) {
     const b = e.bf;
     let I = typeof i.thirst == "number" ? i.thirst * u : null;
@@ -17178,12 +17178,12 @@ function bt(e, t, o, a, n = {}) {
       i.tithe && (b.tithe = !0),
       i.pack &&
         I < 0 &&
-        ((I *= rg(b)),
+        ((I *= ig(b)),
         (b.packUses = (b.packUses || 0) + (i.feedPack ? 2 : 1)),
         i.feedPack &&
           r.chance(ae.pack.spoil) &&
           ((I /= 2),
-          x.push(
+          k.push(
             h(
               " 차갑고 비렸다. 반쯤 상해 있었다.",
               " It was cold and rank. Half of it had gone bad.",
@@ -17192,7 +17192,7 @@ function bt(e, t, o, a, n = {}) {
           ))),
       i.barUse &&
         I < 0 &&
-        ((I *= nd(b)), (b.barUses = (b.barUses || 0) + (i.feedBar ? 2 : 1))),
+        ((I *= rd(b)), (b.barUses = (b.barUses || 0) + (i.feedBar ? 2 : 1))),
       i.feedRation &&
         ((b.rations = (b.rations || 0) + 1),
         b.tithe && I < 0 && ((I *= 1.5), (b.tithe = !1))),
@@ -17224,7 +17224,7 @@ function bt(e, t, o, a, n = {}) {
       const K = Math.round(e.stats.wealth - ee);
       (K && (s.wealth = (s.wealth || 0) + K),
         (b.heat += i.bagBite ? 2 : ae.biteHeat + (F === 2 ? ae.richHeat : 0)),
-        x.push(
+        k.push(
           [
             h(
               " 주머니에는 아무것도 없었다.",
@@ -17244,7 +17244,7 @@ function bt(e, t, o, a, n = {}) {
           ][F],
         ),
         (b.wither || 0) >= 2 &&
-          x.push(
+          k.push(
             h(
               " 거울 속 얼굴이 돌아왔다.",
               " The face in the mirror came back.",
@@ -17256,12 +17256,12 @@ function bt(e, t, o, a, n = {}) {
         i.feedBite &&
           e.age >= 16 &&
           ((b.bagsMade || 0) < 3 || b.made < 2) &&
-          (T = "bf_bag_make"));
+          (v = "bf_bag_make"));
     }
     (i.barUse && (b.barUsed = e.age),
       i.barShort && (b.barShort = e.age + 1),
       i.kinMake && (b.made = Math.min(2, b.made + 1)),
-      i.kinLose && cd(e) > 0 && (b.lost = Math.min(b.made, b.lost + 1)),
+      i.kinLose && fd(e) > 0 && (b.lost = Math.min(b.made, b.lost + 1)),
       i.bagMake &&
         ((b.bags ?? (b.bags = [])).push(e.age + r.int(6, 10)),
         (b.bagsMade = (b.bagsMade || 0) + 1)),
@@ -17303,7 +17303,7 @@ function bt(e, t, o, a, n = {}) {
       (typeof i.tyr == "number" && (e.rule.tyr += i.tyr),
       typeof i.human == "number" &&
         (e.rule.human = Math.max(0, e.rule.human + i.human)),
-      i.ruleLine && e.rule.lines.push(Tt(i.ruleLine, qe(t, e), e))),
+      i.ruleLine && e.rule.lines.push(vt(i.ruleLine, qe(t, e), e))),
     e.job === "해결사" &&
       e.flags.includes("특색") &&
       e.grade &&
@@ -17312,19 +17312,19 @@ function bt(e, t, o, a, n = {}) {
   const c = qe(t, e);
   let m = n.tone,
     w = null,
-    v = null;
+    T = null;
   const _ = [];
-  (x.length && _.push((b) => b + x.join("")),
-    (i.joinFinger || i.job || i.clearJob) && Ml(e),
+  (k.length && _.push((b) => b + k.join("")),
+    (i.joinFinger || i.job || i.clearJob) && $l(e),
     (i.blFixer || l === "떠돌이 검객") &&
       i.job === "해결사" &&
       e.job !== "해결사" &&
-      (e.grade = Dw(e)));
+      (e.grade = qw(e)));
   const C =
     i.wingRetire && we(e) ? { 1: 5, 2: 3, 3: 1 }[e.wingRank || 1] || 5 : null;
   if (i.joinFinger) {
     const b =
-      i.gradeRank && e.grade ? fx(i.joinFinger, e.grade) : wx(e, i.joinFinger);
+      i.gradeRank && e.grade ? gx(i.joinFinger, e.grade) : mx(e, i.joinFinger);
     if (
       ((e.job = "손가락"),
       (e.work = null),
@@ -17337,7 +17337,7 @@ function bt(e, t, o, a, n = {}) {
         finger: e.finger,
         rankName: gt(e.finger, 1, e.gender),
       }),
-      Ax(e, r),
+      Sx(e, r),
       b > 1)
     ) {
       ie(e, { k: "frank", rankName: gt(e.finger, b, e.gender) });
@@ -17354,11 +17354,11 @@ function bt(e, t, o, a, n = {}) {
             ),
         ));
     }
-    ((w = ve(e)), (m = "rare"));
+    ((w = Te(e)), (m = "rare"));
   } else if (i.job) {
     const b = i.job === "사원" ? i.work || "날개 직원" : null,
-      I = i.job === "해결사" && !e.grade ? C || cx(e) : null;
-    (e.job === "해결사" && i.job !== "해결사" && $l(e),
+      I = i.job === "해결사" && !e.grade ? C || wx(e) : null;
+    (e.job === "해결사" && i.job !== "해결사" && Hl(e),
       (i.job !== e.job || b !== e.work) &&
         ie(e, {
           k: "job",
@@ -17382,15 +17382,15 @@ function bt(e, t, o, a, n = {}) {
       b === "이단 심문관" &&
         A !== b &&
         (e.nh = { faith: Be.start, since: e.age, rites: 0, ate: 0, best: 1 }),
-      qr[b] && A !== b)
+      Gr[b] && A !== b)
     ) {
-      ((e.wingRank = b === "4무리" && e.cloneRank ? e.cloneRank : Mk(e, b)),
+      ((e.wingRank = b === "4무리" && e.cloneRank ? e.cloneRank : Hk(e, b)),
         (e.wingBest = Math.max(e.wingBest || 0, e.wingRank)),
         (e.branch =
           b === "흑수"
             ? i.branch || oe(e).pick(["묘", "오", "사", "유", "미"])
             : b === "4무리"
-              ? i.branch || e.cloneTeam || oe(e).pick(Mw)
+              ? i.branch || e.cloneTeam || oe(e).pick($w)
               : null));
       const S = b === "4무리" && !!e.cloneRank;
       (b === "4무리" && ((e.rOver = 0), (e.rMis = 0), (e.cloneRank = null)),
@@ -17408,7 +17408,7 @@ function bt(e, t, o, a, n = {}) {
                 ),
             )),
         (m = "rare"));
-    } else qr[b] || ((e.wingRank = null), (e.branch = null));
+    } else Gr[b] || ((e.wingRank = null), (e.branch = null));
     if (i.job === "해결사" && !e.grade && ((e.grade = I || 9), e.grade < 9)) {
       ie(e, { k: "grade", grade: e.grade });
       const S = e.grade;
@@ -17427,11 +17427,11 @@ function bt(e, t, o, a, n = {}) {
             ),
         ));
     }
-    ((w = ve(e)),
+    ((w = Te(e)),
       i.job !== "해결사" && (e.grade = null),
       (e.finger = null),
       (e.fingerRank = null),
-      Hh.includes(b || i.job) && (m = "rare"));
+      Dh.includes(b || i.job) && (m = "rare"));
   }
   if (
     (i.joinOffer &&
@@ -17450,11 +17450,11 @@ function bt(e, t, o, a, n = {}) {
     i.clearJob && e.job)
   ) {
     if (
-      (e.job === "해결사" && $l(e),
+      (e.job === "해결사" && Hl(e),
       (e.wingRank = null),
       (e.branch = null),
       ie(e, { k: "quit", job: e.work || e.job, finger: e.finger }),
-      (e.lastJob = ve(e)),
+      (e.lastJob = Te(e)),
       e.org && (e.orgHistory.push(e.org.name), (e.org = null)),
       e.finger)
     )
@@ -17471,11 +17471,11 @@ function bt(e, t, o, a, n = {}) {
     e.finger &&
     !i.fingerUp &&
     (e.fingerRank || 1) < Ot[e.finger].length - 1 &&
-    r.chance(Fk);
+    r.chance(Pk);
   if ((i.fingerUp || R) && e.finger) {
     const b = e.fingerRank || 1,
       I = Ot[e.finger].length,
-      A = Xk[e.finger] && !i.topRank ? I - 1 : I,
+      A = Zk[e.finger] && !i.topRank ? I - 1 : I,
       S = e.rmerit || 0;
     ((e.fingerRank = P(b + (i.fingerUp || 1), 1, Math.max(A, b))),
       e.fingerRank !== b &&
@@ -17491,13 +17491,13 @@ function bt(e, t, o, a, n = {}) {
               ),
           ),
         ie(e, { k: "frank", rankName: gt(e.finger, e.fingerRank, e.gender) }),
-        (v = `${gt(e.finger, b, e.gender)} → ${gt(e.finger, e.fingerRank, e.gender)}`),
+        (T = `${gt(e.finger, b, e.gender)} → ${gt(e.finger, e.fingerRank, e.gender)}`),
         (m = "rare")));
   }
   if (i.wingUp && we(e)) {
     const b = e.wingRank || 1;
     if (
-      ((e.wingRank = P(b + i.wingUp, 1, qr[e.work])),
+      ((e.wingRank = P(b + i.wingUp, 1, Gr[e.work])),
       Ht(e) && e.nh && (e.nh.best = Math.max(e.nh.best || 1, e.wingRank)),
       (e.wingBest = Math.max(e.wingBest || 0, e.wingRank)),
       e.wingRank !== b)
@@ -17506,7 +17506,7 @@ function bt(e, t, o, a, n = {}) {
         ((e.rmerit = 0),
         e.work === "적출직" && e.wingRank >= 3 && !(e.kx && e.kx.tube))
       ) {
-        const A = Xw(e);
+        const A = Qw(e);
         if (
           ((A.tube = !0),
           (A.fit = Math.max(A.fit || 0, 2)),
@@ -17519,7 +17519,7 @@ function bt(e, t, o, a, n = {}) {
       }
       const I = un(e.work, e.wingRank, e.branch);
       (ie(e, { k: "wrank", name: I }),
-        (v = `${un(e.work, b, e.branch)} → ${I}`),
+        (T = `${un(e.work, b, e.branch)} → ${I}`),
         (m = "rare"));
     }
   }
@@ -17528,7 +17528,7 @@ function bt(e, t, o, a, n = {}) {
     ((e.grade = P(b - i.gradeUp, 1, 9)),
       e.grade !== b &&
         ((e.merit = Math.min(e.merit || 0, Math.floor(Go(e) / 2))),
-        (v = h(
+        (T = h(
           `${b}급 → ${e.grade}급`,
           `Grade ${b} → Grade ${e.grade}`,
           `${b}級 → ${e.grade}級`,
@@ -17537,16 +17537,16 @@ function bt(e, t, o, a, n = {}) {
       e.grade <= 3 && e.grade < b && (m = "rare"));
   }
   if (i.genUp && e.bf && e.bf.kind === "kin") {
-    const b = Fl(e);
+    const b = Ll(e);
     ((e.bf.gen = Math.max(1, e.bf.gen - i.genUp)),
       (e.bf.rankAt = e.age),
       (e.bf.favor = 0),
       (e.bf.bestGen = Math.min(e.bf.bestGen || 99, e.bf.gen)));
-    const I = Fl(e);
+    const I = Ll(e);
     I !== b &&
-      ((v = `${b} → ${I}`), ie(e, { k: "kgen", gen: e.bf.gen }), (m = "rare"));
+      ((T = `${b} → ${I}`), ie(e, { k: "kgen", gen: e.bf.gen }), (m = "rare"));
   }
-  if (oo(e)) {
+  if (ao(e)) {
     if (
       (e.officeRank == null &&
         ((e.officeRank = 1), (e.perf = e.perf || 0), (e.warn = e.warn || 0)),
@@ -17555,20 +17555,20 @@ function bt(e, t, o, a, n = {}) {
       const b = -Math.round(e.perf || 0);
       ((e.perf = 0), (e.warn = 0), b && (s.perf = b));
     } else if (typeof i.perf == "number" && i.perf) {
-      const b = od(e, i.perf);
+      const b = ad(e, i.perf);
       b && (s.perf = b);
     }
     if (typeof i.warn == "number" && i.warn) {
       const b = e.warn || 0;
-      ((e.warn = P(b + i.warn, 0, tg)),
+      ((e.warn = P(b + i.warn, 0, og)),
         e.warn !== b &&
           ((s.warn = e.warn - b), i.warn > 0 && (e.warnLast = e.age)));
     }
     if ((i.warnSet != null && (e.warn = i.warnSet), i.officeUp)) {
       const b = e.officeRank || 1,
-        I = P(b + 1, 1, eg.includes(e.regionId) ? 5 : 6);
+        I = P(b + 1, 1, tg.includes(e.regionId) ? 5 : 6);
       I !== b &&
-        ((v = `${cn[b - 1]} → ${cn[I - 1]}`),
+        ((T = `${cn[b - 1]} → ${cn[I - 1]}`),
         (e.officeRank = I),
         (e.officeBest = Math.max(e.officeBest || 1, I)),
         I === 5 && (e.dirSince = e.age),
@@ -17581,7 +17581,7 @@ function bt(e, t, o, a, n = {}) {
       const b = e.officeRank || 1,
         I = P(b - 1, 1, 6);
       I !== b &&
-        ((v = `${cn[b - 1]} → ${cn[I - 1]}`),
+        ((T = `${cn[b - 1]} → ${cn[I - 1]}`),
         (e.officeRank = I),
         (e.perf = 0),
         (e.warn = 0),
@@ -17617,7 +17617,7 @@ function bt(e, t, o, a, n = {}) {
         b.rank !== I &&
           ((b.best = Math.max(b.best || 1, b.rank)),
           (b.rankAt = e.age),
-          (v = `${Il[I - 1]} → ${Il[b.rank - 1]}`),
+          (T = `${Nl[I - 1]} → ${Nl[b.rank - 1]}`),
           ie(e, { k: "blrank", rank: b.rank }),
           (m = "rare")));
     }
@@ -17631,7 +17631,7 @@ function bt(e, t, o, a, n = {}) {
       (b.rankAt = e.age),
       (b.since = e.age),
       ie(e, { k: "blre" }),
-      (w = ve(e)),
+      (w = Te(e)),
       (m = "rare"));
   }
   if (
@@ -17664,9 +17664,9 @@ function bt(e, t, o, a, n = {}) {
       ((b.rank = 2),
         (b.best = Math.max(b.best || 1, 2)),
         (b.rankAt = e.age),
-        (b.seat = r.int(1, go.seatMax)),
+        (b.seat = r.int(1, mo.seatMax)),
         (e.rmerit = 0),
-        (v = `${I} → ${dn(e)}`),
+        (T = `${I} → ${dn(e)}`),
         ie(e, { k: "kkrank", rank: 2, seat: b.seat }),
         (m = "rare"));
     }
@@ -17676,7 +17676,7 @@ function bt(e, t, o, a, n = {}) {
         (b.best = 3),
         (b.rankAt = e.age),
         (e.rmerit = 0),
-        (v = `${I} → ${dn(e)}`),
+        (T = `${I} → ${dn(e)}`),
         ie(e, { k: "kkrank", rank: 3 }),
         (m = "rare"));
     }
@@ -17684,7 +17684,7 @@ function bt(e, t, o, a, n = {}) {
   if (
     (i.bldStart &&
       !e.bld &&
-      (Ml(e),
+      ($l(e),
       e.org && (e.orgHistory.push(e.org.name), (e.org = null)),
       (e.bld = {
         since: e.age,
@@ -17699,7 +17699,7 @@ function bt(e, t, o, a, n = {}) {
       (e.work = null),
       (e.grade = null),
       ie(e, { k: "bld" }),
-      (w = ve(e)),
+      (w = Te(e)),
       (m = "rare")),
     e.bld)
   ) {
@@ -17711,12 +17711,12 @@ function bt(e, t, o, a, n = {}) {
       i.bldNoHunt && (b.noHunt = !0),
       i.bldHuntNext && (b.huntNext = !0));
   }
-  (k && ((w = k), (m = "rare")),
-    (i.flagsAdd || []).some((b) => yp.includes(b)) && (m = "rare"),
-    m || (m = Gk(s)));
-  const W = xk(e, t, n.eventId);
-  (W && _.push((b) => `${b} ${W}`), td(e));
-  const G = _.reduce((b, I) => I(b), Tt(i.text, c, e));
+  (x && ((w = x), (m = "rare")),
+    (i.flagsAdd || []).some((b) => bp.includes(b)) && (m = "rare"),
+    m || (m = zk(s)));
+  const W = Tk(e, t, n.eventId);
+  (W && _.push((b) => `${b} ${W}`), od(e));
+  const G = _.reduce((b, I) => I(b), vt(i.text, c, e));
   if (
     (L(
       e,
@@ -17725,7 +17725,7 @@ function bt(e, t, o, a, n = {}) {
         text: G,
         delta: s,
         job: w,
-        grade: v,
+        grade: T,
         tone: m,
         auto: !!n.auto,
         timeout: !!n.timeout,
@@ -17758,7 +17758,7 @@ function bt(e, t, o, a, n = {}) {
         choices: [],
         t: a,
       })),
-    kg(e, a),
+    xg(e, a),
     i.nameChild && !e.dead && !e.prompt
       ? (e.prompt = {
           kind: "name",
@@ -17775,16 +17775,16 @@ function bt(e, t, o, a, n = {}) {
         })
       : i.nameChildRandom &&
         !e.dead &&
-        ((e.childName = pg(e)),
+        ((e.childName = bg(e)),
         L(
           e,
-          { kind: "result", text: bg(e.childName, !0), tone: "rare" },
+          { kind: "result", text: kg(e.childName, !0), tone: "rare" },
           Math.min(0.99, a + 0.01),
         )),
     g &&
       !e.dead &&
       (e.prompt
-        ? (e.partnerName = dg(e))
+        ? (e.partnerName = ug(e))
         : (e.prompt = {
             kind: "name",
             field: "partner",
@@ -17846,9 +17846,9 @@ function bt(e, t, o, a, n = {}) {
     )
       return;
   }
-  if (!(Je(e) && e.stats.health <= 0 && (Qw(e, t, a), e.dead))) {
-    if (s.health < 0 && !So(e) && !Je(e)) {
-      const b = yg(e.stats.health);
+  if (!(Ve(e) && e.stats.health <= 0 && (Zw(e, t, a), e.dead))) {
+    if (s.health < 0 && !So(e) && !Ve(e)) {
+      const b = pg(e.stats.health);
       if (
         b > 0 &&
         r.chance(b) &&
@@ -17868,7 +17868,7 @@ function bt(e, t, o, a, n = {}) {
       const b = 1.15 - e.stats.network * 0.006,
         I = P(1 + (50 - e.stats.health) / 100, 0.5, 2) * b;
       for (const [A, S] of Object.entries(i.risk))
-        if (r.chance(S * I * ld) && He(e, A, a)) return;
+        if (r.chance(S * I * hd) && He(e, A, a)) return;
     }
     if (i.next && i.nextLater && !e.dead && !e.prompt) {
       const b = z(t, i.next);
@@ -17881,9 +17881,9 @@ function bt(e, t, o, a, n = {}) {
           chain: !0,
           t: Math.min(0.98, a + 0.03),
         }));
-    } else if ((i.next || T) && !e.dead && !e.prompt) {
+    } else if ((i.next || v) && !e.dead && !e.prompt) {
       const I = []
-        .concat(i.next || T)
+        .concat(i.next || v)
         .map((A) => z(t, A))
         .find((A) => A && (!A.branch || A.branch.includes(Kn(e))));
       I &&
@@ -17897,17 +17897,17 @@ function bt(e, t, o, a, n = {}) {
               eventId: I.id,
             }));
     }
-    (i.warpStart && !e.dead && !e.prompt && Rx(e, t, a),
-      i.lakeHint && !e.dead && nk(e, i.lakeHint, a),
-      i.lakeStart && !e.dead && !e.prompt && Zb(e, t, a, i.lakeStart));
+    (i.warpStart && !e.dead && !e.prompt && Ix(e, t, a),
+      i.lakeHint && !e.dead && ik(e, i.lakeHint, a),
+      i.lakeStart && !e.dead && !e.prompt && tk(e, t, a, i.lakeStart));
   }
 }
-function px(e) {
-  return e.flags.includes("E.G.O개화") || Je(e)
+function kx(e) {
+  return e.flags.includes("E.G.O개화") || Ve(e)
     ? 0
     : P((e.stats.sanity - 30) * 0.0015, 0, 0.08);
 }
-const bx = qt({
+const xx = qt({
   ko: [
     "몸이 속삭임이 원하는 모양으로 비틀리려던 순간, 끝내 놓지 않은 것이 있었다. 뒤틀림이 되어야 했던 마음이 형태를 얻었다. E.G.O가 개화했다.",
     "뼈가 다른 모양을 기억해 내던 그때, 당신은 자신이 무엇을 원하는지 똑바로 보았다. 마음은 괴물이 되는 대신 무기가 되었다. E.G.O가 개화했다.",
@@ -17921,23 +17921,23 @@ const bx = qt({
     "骨が別の形を思い出しかけたその時、あなたは自分が何を望んでいるのかをまっすぐに見た。心は怪物になる代わりに武器になった。E.G.Oが開花した。",
   ],
 });
-function pg(e) {
-  return oe(e).pick([...bi.m, ...bi.f]);
+function bg(e) {
+  return oe(e).pick([...ki.m, ...ki.f]);
 }
-function bg(e, t) {
+function kg(e, t) {
   return t
     ? h(
-        `아이는 '${e}'${va(e)}는 이름으로 자라났다.`,
+        `아이는 '${e}'${Ta(e)}는 이름으로 자라났다.`,
         `The child grew up as '${e}'.`,
         `子は「${e}」という名で育った。`,
       )
     : h(
-        `아이에게 '${e}'${va(e)}는 이름을 지어 주었다.`,
+        `아이에게 '${e}'${Ta(e)}는 이름을 지어 주었다.`,
         `You named the child '${e}'.`,
         `子には「${e}」という名を付けた。`,
       );
 }
-function kg(e, t) {
+function xg(e, t) {
   if (e.prompt || e.dead) return;
   const o = (a) => e.flags.includes(a);
   if (o("E.G.O개화") && !e.egoAsked) {
@@ -17974,7 +17974,7 @@ function kg(e, t) {
       t,
     }));
 }
-const kx = [
+const vx = [
   "노화",
   "시듦",
   "긴 잠",
@@ -17985,11 +17985,11 @@ const kx = [
   "해결사의 토벌",
   "분노한 사람의 손",
 ];
-function xx(e, t, o, a) {
+function Tx(e, t, o, a) {
   if (
     !e.flags.includes("K사앰플") ||
     a.alive ||
-    kx.includes(t) ||
+    vx.includes(t) ||
     e.heir ||
     e.rule ||
     Ho(e) ||
@@ -18022,7 +18022,7 @@ function xx(e, t, o, a) {
 }
 function He(e, t, o, a = "event", n = {}) {
   const r = oe(e);
-  if (t === "뒤틀림" && Je(e) && X)
+  if (t === "뒤틀림" && Ve(e) && X)
     return (
       L(
         e,
@@ -18035,7 +18035,7 @@ function He(e, t, o, a = "event", n = {}) {
       ),
       !1
     );
-  if (t === "뒤틀림" && !n.noBloom && r.chance(px(e)))
+  if (t === "뒤틀림" && !n.noBloom && r.chance(kx(e)))
     return (
       e.flags.push("E.G.O개화"),
       ie(e, { k: "flag", flag: "E.G.O개화" }),
@@ -18044,19 +18044,19 @@ function He(e, t, o, a = "event", n = {}) {
         e,
         {
           kind: "result",
-          text: r.pick(bx),
+          text: r.pick(xx),
           tone: "rare",
           delta: { sanity: -6 },
         },
         o,
       ),
-      kg(e, o),
+      xg(e, o),
       !1
     );
-  if (xx(e, t, o, n)) return !1;
+  if (Tx(e, t, o, n)) return !1;
   let i = t;
   i === "질병" && e.age <= 4 && (i = "영유아 질병");
-  let l = n.text || Bp(i, r, Gi(e));
+  let l = n.text || Lp(i, r, Ki(e));
   if (
     (i === "뒤틀림" &&
       !n.text &&
@@ -18081,7 +18081,7 @@ function He(e, t, o, a = "event", n = {}) {
           "路地の奥から何が来たのか、最後まで見えなかった。",
         ),
       ])),
-    e.bld && (e.bld.hunterName = Gw(e)),
+    e.bld && (e.bld.hunterName = Kw(e)),
     i === "해결사의 토벌" &&
       !n.text &&
       (l = e.flags.includes("칼을내려놓은뒤틀림")
@@ -18099,9 +18099,9 @@ function He(e, t, o, a = "event", n = {}) {
       !n.text &&
       (i === "혈귀 사냥" || i === "시듦") &&
       (l = fn(e, i === "시듦" ? "wither" : "hunt") || l),
-    e.bf && Bx.includes(i))
+    e.bf && Lx.includes(i))
   ) {
-    const y = Px(e);
+    const y = $x(e);
     y && (l = `${l} ${y}`);
   }
   e.kx &&
@@ -18119,7 +18119,7 @@ function He(e, t, o, a = "event", n = {}) {
     text: l,
     source: a,
     alive: !!n.alive,
-    phrase: e.bf ? Mx(e, i) : null,
+    phrase: e.bf ? Hx(e, i) : null,
     hold: e.heir && n.alive ? Ae(l) : u,
   }),
     i === "뒤틀림" &&
@@ -18141,7 +18141,7 @@ function He(e, t, o, a = "event", n = {}) {
     !0
   );
 }
-function hd(e) {
+function dd(e) {
   let t = null;
   const o = e.flags;
   if (e.job === "해결사" && e.grade) t = 10 - e.grade;
@@ -18166,16 +18166,16 @@ function hd(e) {
               : e.work === "이단 심문관" && (t = [3, 6, 8][Math.min(a, 3) - 1]);
   } else
     e.job === "검계" && e.bl
-      ? (t = [3, 6, 8][Math.min(3, qa(e) || 1) - 1] + Zu(e))
+      ? (t = [3, 6, 8][Math.min(3, qa(e) || 1) - 1] + ec(e))
       : e.job === "흑운회" && e.kk
-        ? (t = [3, 6, 8][Math.min(3, Gt(e) || 1) - 1] + Zu(e))
-        : e.job === "떠돌이 검객" && (t = 10 - Dw(e));
+        ? (t = [3, 6, 8][Math.min(3, Gt(e) || 1) - 1] + ec(e))
+        : e.job === "떠돌이 검객" && (t = 10 - qw(e));
   if (t == null) return null;
   (o.includes("특색") && (t += 1),
     o.includes("E.G.O개화") && (t += 2),
     o.includes("유물") && (t += 1),
     e.bf && (t += 1),
-    (t += ao(e, 2, 1.5) - 1));
+    (t += no(e, 2, 1.5) - 1));
   for (const a of ["강화시술", "전투의체", "고급장비"])
     o.includes(a) && (t += 0.5);
   return (
@@ -18185,7 +18185,7 @@ function hd(e) {
     t
   );
 }
-const Ki = [
+const zi = [
     { E: 3, kind: "person" },
     { E: 4.5, kind: "person" },
     { E: 5.5, kind: "person" },
@@ -18195,8 +18195,8 @@ const Ki = [
     { E: 8.5, kind: "thing", mindHalf: !0 },
     { E: 11.5, kind: "person", noRed: !0 },
   ],
-  Tx = Ki.length;
-function zi(e) {
+  _x = zi.length;
+function Ui(e) {
   return e.job === "해결사" && e.grade
     ? "fixer"
     : e.job === "손가락" && e.finger
@@ -18222,7 +18222,7 @@ function zi(e) {
               ? "wanderer"
               : null;
 }
-function Zu(e) {
+function ec(e) {
   if (e.job === "검계" && e.bl) {
     const t = e.bl.cut || 0;
     return Math.min(
@@ -18240,8 +18240,8 @@ function Zu(e) {
   }
   return 0;
 }
-function xg(e) {
-  const t = zi(e);
+function vg(e) {
+  const t = Ui(e);
   return t === "kcorp" && (e.wingRank || 1) < 3
     ? "wt_enter_kcorp_low"
     : t === "fixer" && e.flags.includes("특색")
@@ -18254,10 +18254,10 @@ function Tg(e) {
     !e.warp &&
     !e.flags.includes("워프열차") &&
     !e.flags.includes("부화장") &&
-    !!zi(e)
+    !!Ui(e)
   );
 }
-const ec = {
+const tc = {
   흑수: 2,
   시간징수직: 10,
   "정리 요원": 5,
@@ -18265,38 +18265,38 @@ const ec = {
   적출직: 5,
   "이단 심문관": 3,
 };
-function vx(e) {
+function jx(e) {
   return zn(e) >= 5 ||
     (e.job === "해결사" &&
       (e.flags.includes("특색") || (e.grade && e.grade <= 2))) ||
     (e.job === "손가락" &&
       e.finger &&
       (e.fingerRank || 1) >= Ot[e.finger].length) ||
-    (we(e) && ec[e.work] && (e.wingRank || 1) >= ec[e.work]) ||
+    (we(e) && tc[e.work] && (e.wingRank || 1) >= tc[e.work]) ||
     qa(e) >= 3 ||
     Gt(e) >= 3
     ? !0
     : e.job === "가주" || e.job === "군주";
 }
-const _x = 0.3,
-  jx = { 엄지: 1, 검지: 1, 중지: 4, 약지: 3 },
-  vg = (e) =>
+const Ax = 0.3,
+  Yx = { 엄지: 1, 검지: 1, 중지: 4, 약지: 3 },
+  _g = (e) =>
     e.job === "손가락" &&
     !!e.finger &&
-    (e.fingerRank || 1) <= (jx[e.finger] || 0);
-function Ax(e, t) {
-  if (e.fingerLeaveRolled || ((e.fingerLeaveRolled = !0), !t.chance(_x)))
+    (e.fingerRank || 1) <= (Yx[e.finger] || 0);
+function Sx(e, t) {
+  if (e.fingerLeaveRolled || ((e.fingerLeaveRolled = !0), !t.chance(Ax)))
     return;
   const o = e.finger === "엄지" || e.finger === "검지",
     a = Math.min(65, e.age + (o ? t.int(1, 4) : t.int(2, 25)));
   e.fingerLeave = { at: Math.max(e.age + 1, a) };
 }
-function Yx(e) {
+function Rx(e) {
   return e < 25 ? 0 : e >= 50 ? 1 : 0.005 + (e - 25) * 0.006;
 }
-function _g(e, t) {
+function jg(e, t) {
   const o = z(t, "wt_common").labels,
-    a = zi(e);
+    a = Ui(e);
   if (a === "fixer")
     return {
       label: (e.flags.includes("특색") ? o.color : o.fixer).label,
@@ -18322,7 +18322,7 @@ function _g(e, t) {
       ? { label: o.코뿔소.label, bonus: 1.5, h: 5 }
       : { label: o.토끼.label, bonus: 1 };
 }
-const Sx = [
+const Cx = [
     { bonus: -0.5, half: !0 },
     { bonus: 1, h: 5 },
     { bonus: 0, link: !0 },
@@ -18332,7 +18332,7 @@ const Sx = [
     { bonus: 1, s: 6 },
     { bonus: 3, h: 20, s: 20 },
   ],
-  jg = () => h("????세", "Age ????", "????歳");
+  Ag = () => h("????세", "Age ????", "????歳");
 function ir(e, t, o, a, n, r) {
   const i = o === "fight" ? e.warp.car : o === "rest" ? e.warp.cleared : null;
   e.prompt = {
@@ -18345,13 +18345,13 @@ function ir(e, t, o, a, n, r) {
     t: r,
   };
 }
-function Rx(e, t, o) {
+function Ix(e, t, o) {
   ((e.warp = {
     car: 1,
     red: 0,
     link: 0,
     cleared: 0,
-    cp: (hd(e) ?? 1) + (e.bf && e.bf.vigor ? 0.5 : 0) + (e.warpBonus || 0),
+    cp: (dd(e) ?? 1) + (e.bf && e.bf.vigor ? 0.5 : 0) + (e.warpBonus || 0),
     age: e.age,
     down: !1,
     snapshot: {
@@ -18360,13 +18360,13 @@ function Rx(e, t, o) {
     },
   }),
     (e.warpBonus = 0),
-    Kr(e, t, o, !1));
+    zr(e, t, o, !1));
 }
-const Cx = 0.1;
-function Ix(e, t, o) {
+const Nx = 0.1;
+function Ox(e, t, o) {
   const a = z(t, "cm_warp_portal");
   ((e.warp.portalDone = !0),
-    L(e, { kind: "warpsep", text: jg() }, o),
+    L(e, { kind: "warpsep", text: Ag() }, o),
     L(e, { kind: "event", text: a.text, tone: "event" }, o),
     ir(
       e,
@@ -18377,7 +18377,7 @@ function Ix(e, t, o) {
       o,
     ));
 }
-function Kr(e, t, o, a) {
+function zr(e, t, o, a) {
   const n = e.warp,
     r = z(t, `wt_car_${n.car}`),
     i = qe(t, e);
@@ -18385,20 +18385,20 @@ function Kr(e, t, o, a) {
   let l;
   if (a) {
     const f = z(t, "wt_common").retry;
-    l = (Ki[n.car - 1].kind === "thing" ? f.thing : f.person).text;
+    l = (zi[n.car - 1].kind === "thing" ? f.thing : f.person).text;
   } else {
-    L(e, { kind: "warpsep", text: jg() }, o);
+    L(e, { kind: "warpsep", text: Ag() }, o);
     const f = [],
       y = r.lines || {};
     (n.car === 6 &&
       n.linkSet &&
       f.push((n.link > 0 ? y.linkWin : y.linkLose).text),
       e.bf && y.bf && f.push(y.bf.text),
-      (l = [Tt(r.text, i, e), ...f].join(" ")));
+      (l = [vt(r.text, i, e), ...f].join(" ")));
   }
   L(e, { kind: "event", text: l, tone: "event" }, o);
   const s = z(t, "wt_common").labels.front.label,
-    u = _g(e, t);
+    u = jg(e, t);
   ir(
     e,
     r,
@@ -18412,16 +18412,16 @@ function Kr(e, t, o, a) {
     o,
   );
 }
-function tc(e, t, o, a) {
+function oc(e, t, o, a) {
   const n = z(t, "wt_rest"),
     r = n.text.replaceAll("{칸}", String(e.warp.cleared));
   a && L(e, { kind: "event", text: r, tone: "event" }, o);
   const i = n.choices.map((l, s) => {
     const u =
       s === 0
-        ? Ll({ needs: { sanity: [13, 100] } }, e)
+        ? Pl({ needs: { sanity: [13, 100] } }, e)
         : s === 1
-          ? Ll({ needs: { health: [11, 100] } }, e)
+          ? Pl({ needs: { health: [11, 100] } }, e)
           : null;
     return u ? { label: l.label, i: s, locked: u } : { label: l.label, i: s };
   });
@@ -18433,12 +18433,12 @@ function Sr(e, t, o) {
     L(e, { kind: "event", text: a.text, tone: "warpdown" }, o),
     ir(e, a, "down", a.text, [{ label: a.choices[0].label, i: 0 }], o));
 }
-function Nx(e, t, o) {
+function Wx(e, t, o) {
   const a = z(t, "wt_clear");
   (L(e, { kind: "event", text: a.text, tone: "rare" }, o),
     ir(e, a, "clear", a.text, [{ label: a.choices[0].label, i: 0 }], o));
 }
-function ot(e, t, o, a) {
+function at(e, t, o, a) {
   if (!a) return;
   const n = e.stats[o];
   e.stats[o] = ht(P(n + a));
@@ -18446,7 +18446,7 @@ function ot(e, t, o, a) {
   r && (t[o] = (t[o] || 0) + r);
 }
 const Rr = (e) => e.stats.health <= 0 || e.stats.sanity <= 0;
-function Ox(e, t, o, a) {
+function Ex(e, t, o, a) {
   const n = e.warp,
     r = z(t, o.eventId);
   ((e.stats = { ...n.snapshot.stats }), (e.flags = [...n.snapshot.flags]));
@@ -18466,7 +18466,7 @@ function Ox(e, t, o, a) {
       o.t,
     ));
 }
-function Wx(e, t, o, a, n) {
+function Bx(e, t, o, a, n) {
   const r = oe(e),
     i = e.warp,
     l = o.t;
@@ -18481,7 +18481,7 @@ function Wx(e, t, o, a, n) {
     y = !!n.auto;
   if (!i) return;
   if (o.warp === "down" || o.warp === "clear") {
-    Ox(e, t, o, f);
+    Ex(e, t, o, f);
     return;
   }
   if (o.warp === "portal") {
@@ -18503,7 +18503,7 @@ function Wx(e, t, o, a, n) {
         ),
         i.car++,
         (i.red = 0),
-        Kr(e, t, l, !1)
+        zr(e, t, l, !1)
       );
     ((e.stats = { ...i.snapshot.stats }),
       (e.flags = [...i.snapshot.flags]),
@@ -18531,7 +18531,7 @@ function Wx(e, t, o, a, n) {
     const b = z(t, "wt_rest"),
       I = {};
     return u.i === 2
-      ? (ot(e, I, "sanity", -4),
+      ? (at(e, I, "sanity", -4),
         L(
           e,
           {
@@ -18549,13 +18549,13 @@ function Wx(e, t, o, a, n) {
           ? Sr(e, t, l)
           : i.car === 2 &&
               !i.portalDone &&
-              zi(e) === "wcorp" &&
-              ((i.portalDone = !0), r.chance(Cx))
-            ? Ix(e, t, l)
-            : (i.car++, (i.red = 0), Kr(e, t, l, !1)))
+              Ui(e) === "wcorp" &&
+              ((i.portalDone = !0), r.chance(Nx))
+            ? Ox(e, t, l)
+            : (i.car++, (i.red = 0), zr(e, t, l, !1)))
       : (u.i === 0
-          ? (ot(e, I, "health", 8), ot(e, I, "sanity", -12))
-          : (ot(e, I, "sanity", 6), ot(e, I, "health", -10)),
+          ? (at(e, I, "health", 8), at(e, I, "sanity", -12))
+          : (at(e, I, "sanity", 6), at(e, I, "health", -10)),
         L(
           e,
           {
@@ -18569,37 +18569,37 @@ function Wx(e, t, o, a, n) {
           },
           l,
         ),
-        Rr(e) ? Sr(e, t, l) : tc(e, t, l, !1));
+        Rr(e) ? Sr(e, t, l) : oc(e, t, l, !1));
   }
-  const g = Ki[i.car - 1],
-    k = z(t, `wt_car_${i.car}`),
-    x = {};
-  let T = 1,
+  const g = zi[i.car - 1],
+    x = z(t, `wt_car_${i.car}`),
+    k = {};
+  let v = 1,
     Y = null;
   const c = [];
   if (u.i === 1) {
-    const b = _g(e, t);
-    ((T = b.bonus),
-      ot(e, x, "sanity", -(b.s || 0)),
-      ot(e, x, "health", -(b.h || 0)),
-      b.heal && ot(e, x, "health", b.heal),
+    const b = jg(e, t);
+    ((v = b.bonus),
+      at(e, k, "sanity", -(b.s || 0)),
+      at(e, k, "health", -(b.h || 0)),
+      b.heal && at(e, k, "health", b.heal),
       b.discharge &&
         r.chance(0.3) &&
-        (ot(e, x, "health", -10), c.push(z(t, "wt_common").discharge.text)));
+        (at(e, k, "health", -10), c.push(z(t, "wt_common").discharge.text)));
   } else
     u.i === 2 &&
-      ((Y = Sx[i.car - 1]),
-      (T = Y.bonus),
-      ot(e, x, "sanity", -(Y.s || 0)),
-      ot(e, x, "health", -(Y.h || 0)));
+      ((Y = Cx[i.car - 1]),
+      (v = Y.bonus),
+      at(e, k, "sanity", -(Y.s || 0)),
+      at(e, k, "health", -(Y.h || 0)));
   if (Rr(e))
     return (
       L(
         e,
         {
           kind: "result",
-          text: c.join(" ") || k.res.lose.text,
-          delta: x,
+          text: c.join(" ") || x.res.lose.text,
+          delta: k,
           tone: "bad",
           choice: f,
           auto: y,
@@ -18611,8 +18611,8 @@ function Wx(e, t, o, a, n) {
     );
   const m = (r.next() * 2 - 1) * (g.jit || 1),
     w = g.E - (g.noRed ? 0 : i.red) - (i.car === 6 ? i.link : 0),
-    v = i.cp + T - (w + m),
-    _ = v >= 1 ? "big" : v >= 0 ? "win" : v >= -1.5 ? "hold" : "lose",
+    T = i.cp + v - (w + m),
+    _ = T >= 1 ? "big" : T >= 0 ? "win" : T >= -1.5 ? "hold" : "lose",
     C = _ === "big" || _ === "win";
   let R = { big: 3, win: 8, hold: 15, lose: 25 }[_],
     W = { big: 0, win: 0, hold: 6, lose: 8 }[_];
@@ -18622,16 +18622,16 @@ function Wx(e, t, o, a, n) {
     g.failMindX2 && !C && (W *= 2),
     g.mindHalf && ((W += R / 2), (R /= 2)),
     Y && Y.link && ((i.link = C ? 0.5 : -0.5), (i.linkSet = !0)),
-    ot(e, x, "health", -Math.round(R)),
-    ot(e, x, "sanity", -Math.round(W)));
-  const G = [...c, k.res[_].text].join(" ");
+    at(e, k, "health", -Math.round(R)),
+    at(e, k, "sanity", -Math.round(W)));
+  const G = [...c, x.res[_].text].join(" ");
   return (
     L(
       e,
       {
         kind: "result",
         text: G,
-        delta: x,
+        delta: k,
         tone: C ? "good" : "bad",
         choice: f,
         auto: y,
@@ -18642,11 +18642,11 @@ function Wx(e, t, o, a, n) {
     Rr(e)
       ? Sr(e, t, l)
       : C
-        ? ((i.cleared = i.car), i.car >= Tx ? Nx(e, t, l) : tc(e, t, l, !0))
-        : (g.noRed || i.red++, Kr(e, t, l, !0))
+        ? ((i.cleared = i.car), i.car >= _x ? Wx(e, t, l) : oc(e, t, l, !0))
+        : (g.noRed || i.red++, zr(e, t, l, !0))
   );
 }
-function Ex(e) {
+function Fx(e) {
   const t = e.prompt,
     o = e.warp;
   if (!o || t.warp === "down" || t.warp === "clear" || t.warp === "portal")
@@ -18660,12 +18660,12 @@ function Ex(e) {
         ? 1
         : 2;
   }
-  const n = Ki[o.car - 1],
+  const n = zi[o.car - 1],
     r = n.E - (n.noRed ? 0 : o.red) - (o.car === 6 ? o.link : 0);
   return o.cp + 1 - r >= 0.5 || a.sanity <= 12 ? 0 : 1;
 }
 let X = null;
-function dd(e, t) {
+function ud(e, t) {
   let o = X && z(X, e);
   for (const a of t.split(".")) {
     if (!o) return "";
@@ -18673,22 +18673,22 @@ function dd(e, t) {
   }
   return (o && o.text) || "";
 }
-const $e = (e) => dd("bf_end_lines", e),
-  Bx = ["긴 잠", "세월", "이야기의 끝", "혈귀 사냥", "시듦"];
-function Hl(e) {
+const $e = (e) => ud("bf_end_lines", e),
+  Lx = ["긴 잠", "세월", "이야기의 끝", "혈귀 사냥", "시듦"];
+function Dl(e) {
   return !!(e.org || e.job === "해결사" || e.job === "손가락" || we(e));
 }
-function ud(e) {
-  return e.bf && _o(e) >= ae.compressAfter ? 10 : 1;
+function cd(e) {
+  return e.bf && jo(e) >= ae.compressAfter ? 10 : 1;
 }
-function Fx(e) {
+function Px(e) {
   const t = e.bf,
     o = t.outlives || 0;
-  return _o(e) < 60 || o >= 2
+  return jo(e) < 60 || o >= 2
     ? !1
     : o === 0 || e.age - (t.lastOutlive ?? 0) >= 50;
 }
-function cd(e) {
+function fd(e) {
   const t = e.bf;
   return t
     ? Math.max(
@@ -18708,7 +18708,7 @@ function Ko(e) {
   if (o("쓸쓸한배우자")) return { k: "smile" };
   if (o("배우자권속")) return { k: "couple" };
   if (t.kind === "kin" && t.gen === 1) return { k: "elder" };
-  if (t.bites === 0 && _o(e) >= 20) {
+  if (t.bites === 0 && jo(e) >= 20) {
     const n = t.barUses || 0,
       r = t.packUses || 0,
       i = t.rations || 0;
@@ -18721,7 +18721,7 @@ function Ko(e) {
     return { k: "hunter" };
   if (t.bites >= 30) return { k: "faces", sub: "a" };
   if ((t.frenzies || 0) >= 3) return { k: "faces", sub: "b" };
-  const a = cd(e);
+  const a = fd(e);
   return t.kind === "stray" && a >= 1
     ? { k: "kin", sub: a >= 2 ? "2" : "1" }
     : (t.bags || []).length
@@ -18754,8 +18754,8 @@ function Fa(e) {
           ? "org"
           : null;
 }
-const Ag = { 엄지: "thumb", 검지: "index", 중지: "middle", 약지: "ring" },
-  oc = {
+const Yg = { 엄지: "thumb", 검지: "index", 중지: "middle", 약지: "ring" },
+  ac = {
     thumb: "th_bf_found",
     index: "in_bf_found",
     middle: "mi_bf_found",
@@ -18764,10 +18764,10 @@ const Ag = { 엄지: "thumb", 검지: "index", 중지: "middle", 약지: "ring" 
     wing: "wg_bf_found",
     org: "og_bf_found",
   };
-function Lx(e) {
+function Mx(e) {
   if (
     e.bf.kind !== "stray" ||
-    _o(e) < 2 ||
+    jo(e) < 2 ||
     ["정체공개", "정체숨김", "정체들킴"].some((a) => e.flags.includes(a))
   )
     return !1;
@@ -18778,7 +18778,7 @@ function Lx(e) {
       (e.fingerRank || 1) >= (Ot[e.finger] || []).length)
   );
 }
-function Px(e) {
+function $x(e) {
   const t = e.bf;
   if (!t) return "";
   const o = (r) => e.flags.includes(r),
@@ -18786,8 +18786,8 @@ function Px(e) {
     n = Fa(e);
   if (n && n.startsWith("finger:")) {
     const r = (e.fingerRank || 1) >= (Ot[e.finger] || []).length;
-    return Tt(
-      $e(`org.${Ag[e.finger]}_${a === "open" && r ? "top" : a}`),
+    return vt(
+      $e(`org.${Yg[e.finger]}_${a === "open" && r ? "top" : a}`),
       {},
       e,
     );
@@ -18795,7 +18795,7 @@ function Px(e) {
   return t.revealOrg && t.revealOrg.startsWith("finger:") && n !== t.revealOrg
     ? $e("org.fingerPast").replaceAll(
         "{손가락}",
-        Xe[t.revealOrg.slice(7)] || "",
+        Qe[t.revealOrg.slice(7)] || "",
       )
     : n === "heishou"
       ? $e("org.heishou")
@@ -18807,7 +18807,7 @@ function Px(e) {
             ? $e("org.fixer")
             : "";
 }
-function Mx(e, t) {
+function Hx(e, t) {
   if (t === "이야기의 끝")
     return h(
       "그 뒤로도 살아갔다",
@@ -18855,7 +18855,7 @@ function Mx(e, t) {
   }
   return null;
 }
-function $x(e, t) {
+function Dx(e, t) {
   const o = t && t.bf;
   if (e === "형님")
     return t && t.gender === "f"
@@ -18879,7 +18879,7 @@ function $x(e, t) {
     return a ? `${a} ` : "";
   }
   return e === "BF_BODY"
-    ? $e(Hl(t) ? "misc.bodyActive" : "misc.bodyRetired")
+    ? $e(Dl(t) ? "misc.bodyActive" : "misc.bodyRetired")
     : e === "BF_SLEEP"
       ? fn(t, "sleep") || $e("misc.sleepBase")
       : e === "BF_EPI"
@@ -18888,14 +18888,14 @@ function $x(e, t) {
           ? fn(t, "live") ||
             $e((o.outlives || 0) >= 2 ? "misc.live2" : "misc.live1")
           : e === "BF_HUNTER"
-            ? dd("bf_hunt", `tiers.t${(o.curHunt && o.curHunt.tier) || 1}`)
-            : e === "BF_BAR" && nd(o) <= ae.bar.floor
+            ? ud("bf_hunt", `tiers.t${(o.curHunt && o.curHunt.tier) || 1}`)
+            : e === "BF_BAR" && rd(o) <= ae.bar.floor
               ? $e("misc.barWeak")
               : "";
 }
-function Yg(e) {
+function Sg(e) {
   const t = e.bf;
-  let o = hd(e) ?? 1;
+  let o = dd(e) ?? 1;
   return (
     e.age >= 65 ? (o += 2) : e.age >= 55 && (o += 1),
     t
@@ -18905,28 +18905,28 @@ function Yg(e) {
           (t.strong || 0) +
           (t.vigor ? 1 : 0) -
           0.5 * (t.wither || 0) +
-          Math.min(1, Math.floor(_o(e) / 50) * 0.25)),
+          Math.min(1, Math.floor(jo(e) / 50) * 0.25)),
         Math.round(o * 100) / 100)
       : o
   );
 }
-const Cs = [
+const Is = [
   [18, 9.5, 4],
   [13, 7, 3],
   [9, 4.5, 2],
   [5, 2, 1],
 ];
-function Hx(e) {
+function qx(e) {
   const t = e.bf,
-    o = t.finalHunt ? Cs[0] : Cs.find(([n]) => t.heat >= n) || Cs[3],
+    o = t.finalHunt ? Is[0] : Is.find(([n]) => t.heat >= n) || Is[3],
     a = t.kind === "stray" ? ae.strayHunter : (7 - (t.gen || 7)) * ae.genHunter;
   t.curHunt = { h: o[1] + a, tier: o[2] };
 }
-function Dx(e, t, o) {
+function Gx(e, t, o) {
   const a = oe(e),
     n = e.bf,
     r = n.curHunt || { h: 2, tier: 1 },
-    i = (c) => dd("bf_hunt", `res.${c}`);
+    i = (c) => ud("bf_hunt", `res.${c}`);
   ((n.lastHunt = e.age),
     (n.hunts ?? (n.hunts = [])).push(r.tier),
     (n.finalHunt = !1));
@@ -18936,44 +18936,44 @@ function Dx(e, t, o) {
   let f = 0,
     y = 0,
     g = 1,
-    k = !1;
+    x = !1;
   if (o.hunt === "flee") {
     if (((y -= 6), s("wealth", -15), s("network", -5), !a.chance(0.3)))
       return { text: i("flee"), effects: l, heat: y };
-    (u.push(i("caught")), (g = 0), (k = !0));
+    (u.push(i("caught")), (g = 0), (x = !0));
   }
   (o.hunt === "surge" &&
-    ((g = 2), (f += 30), s("sanity", -5), (k = !0), u.push(i("surge"))),
+    ((g = 2), (f += 30), s("sanity", -5), (x = !0), u.push(i("surge"))),
     o.hunt === "bag" &&
       ((g = 1.5), (n.bags || []).length && n.bags.pop(), u.push(i("bag"))));
-  const x = Yg(e) + g - (r.h + (a.next() * 2 - 1)),
-    T = (c) => ({
+  const k = Sg(e) + g - (r.h + (a.next() * 2 - 1)),
+    v = (c) => ({
       text: u.join(" "),
       effects: l,
       heat: y,
       ...(f ? { thirst: f } : {}),
       ...c,
     });
-  if (x >= 0)
+  if (k >= 0)
     return (
-      s("health", x >= 1 ? -3 : -10),
-      u.push(i(x >= 1 ? "big" : "win")),
-      T({ next: "bf_hunt_drink" })
+      s("health", k >= 1 ? -3 : -10),
+      u.push(i(k >= 1 ? "big" : "win")),
+      v({ next: "bf_hunt_drink" })
     );
-  if (x >= -1.5) return (s("health", -15), u.push(i("hold")), T({}));
+  if (k >= -1.5) return (s("health", -15), u.push(i("hold")), v({}));
   s("health", -25);
   const Y =
-    (k ? 0.6 : 0.5) *
+    (x ? 0.6 : 0.5) *
     (n.vigor ? 0.7 : 1) *
     (n.kind === "kin" ? ae.kinGuard : ae.strayDie);
   return a.chance(Y)
-    ? (u.push(i("dead")), T({ death: "혈귀 사냥" }))
-    : (u.push(i("lose")), T({}));
+    ? (u.push(i("dead")), v({ death: "혈귀 사냥" }))
+    : (u.push(i("lose")), v({}));
 }
-function qx(e, t, o) {
+function Kx(e, t, o) {
   const a = e.bf,
     n = [],
-    r = ud(e),
+    r = cd(e),
     i = (u) => e.flags.includes(u);
   if (a.lastHunter)
     ((a.lastHunter = !1),
@@ -19010,12 +19010,12 @@ function qx(e, t, o) {
     a.revealOrg === s &&
     t.chance(Math.min(0.12, 0.03 + 0.003 * (a.bites || 0)))
   ) {
-    const u = s.startsWith("finger:") ? Ag[s.slice(7)] : s;
-    oc[u] && n.push({ id: oc[u], bfEng: !0 });
+    const u = s.startsWith("finger:") ? Yg[s.slice(7)] : s;
+    ac[u] && n.push({ id: ac[u], bfEng: !0 });
   }
   return n;
 }
-function Gx(e, t, o) {
+function zx(e, t, o) {
   const a = e.bf;
   if (!a.bags || !a.bags.length) return;
   const n = a.bags.filter((r) => r > e.age);
@@ -19038,7 +19038,7 @@ function Gx(e, t, o) {
       (a.heat += 3),
       L(e, { kind: "result", text: $e("misc.bagHunted"), tone: "bad" }, 0.96)));
 }
-function Kx(e, t, o) {
+function Ux(e, t, o) {
   const a = X && z(X, t.eventId);
   if (!a || !a.choices) return;
   const n = e.bf,
@@ -19054,9 +19054,9 @@ function Kx(e, t, o) {
     }
     return r("feed", "ration") >= 0 && o.chance(0.6)
       ? r("feed", "ration")
-      : r("feed", "pack") >= 0 && rg(n) > 0.5
+      : r("feed", "pack") >= 0 && ig(n) > 0.5
         ? r("feed", "pack")
-        : r("feed", "bar") >= 0 && nd(n) > 0.4
+        : r("feed", "bar") >= 0 && rd(n) > 0.4
           ? r("feed", "bar")
           : r("feed", "bag") >= 0
             ? r("feed", "bag")
@@ -19065,7 +19065,7 @@ function Kx(e, t, o) {
               : -1;
   }
   if (a.id === "bf_hunt") {
-    const i = Yg(e) + 1 - (n.curHunt ? n.curHunt.h : 2);
+    const i = Sg(e) + 1 - (n.curHunt ? n.curHunt.h : 2);
     return i >= 0
       ? r("hunt", "fight")
       : i >= -1.5
@@ -19099,7 +19099,7 @@ function Ti(e, t, o, a = {}) {
   }
   if (n.kind === "color") {
     const f = (a.text || "").trim().slice(0, 16),
-      y = va(f);
+      y = Ta(f);
     ((e.colorName = f || null),
       L(
         e,
@@ -19117,7 +19117,7 @@ function Ti(e, t, o, a = {}) {
                 "もはや都市はあなたの等級を問わない。人々はあなたをただ「特色」と呼ぶ。",
               ),
           tone: "rare",
-          job: ve(e),
+          job: Te(e),
         },
         n.t || 0,
       ));
@@ -19127,7 +19127,7 @@ function Ti(e, t, o, a = {}) {
     const f = (a.text || "").trim().slice(0, 16);
     if (n.field === "star") {
       e.pinky && (e.pinky.blade = f || null);
-      const y = ad(e);
+      const y = nd(e);
       L(
         e,
         {
@@ -19144,16 +19144,16 @@ function Ti(e, t, o, a = {}) {
       return;
     }
     if (n.field === "child") {
-      ((e.childName = f || pg(e)),
+      ((e.childName = f || bg(e)),
         L(
           e,
-          { kind: "result", text: bg(e.childName, !f), tone: "rare" },
+          { kind: "result", text: kg(e.childName, !f), tone: "rare" },
           n.t || 0,
         ));
       return;
     }
     if (n.field === "partner") {
-      e.partnerName = f || dg(e);
+      e.partnerName = f || ug(e);
       const y = e.partnerName;
       L(
         e,
@@ -19161,12 +19161,12 @@ function Ti(e, t, o, a = {}) {
           kind: "result",
           text: n.lover
             ? h(
-                `${y}${Cl(y, "은", "는")} 걸음을 맞추어 주었다.`,
+                `${y}${Il(y, "은", "는")} 걸음을 맞추어 주었다.`,
                 `${y} fell into step with you.`,
                 `${y}は歩調を合わせてくれた。`,
               )
             : h(
-                `${y}${Cl(y, "과", "와")} 한 지붕 아래 살게 되었다.`,
+                `${y}${Il(y, "과", "와")} 한 지붕 아래 살게 되었다.`,
                 `You began to live under one roof with ${y}.`,
                 `${y}と一つ屋根の下で暮らすことになった。`,
               ),
@@ -19185,12 +19185,12 @@ function Ti(e, t, o, a = {}) {
             text:
               n.field === "ego"
                 ? h(
-                    `당신의 E.G.O는 '${f}'${va(f)} 불린다.`,
+                    `당신의 E.G.O는 '${f}'${Ta(f)} 불린다.`,
                     `Your E.G.O is called '${f}'.`,
                     `あなたのE.G.Oは「${f}」と呼ばれる。`,
                   )
                 : h(
-                    `그 유물에는 '${f}'${va(f)}는 이름이 붙었다.`,
+                    `그 유물에는 '${f}'${Ta(f)}는 이름이 붙었다.`,
                     `You named the relic '${f}'.`,
                     `その遺物には「${f}」という名が付いた。`,
                   ),
@@ -19201,21 +19201,21 @@ function Ti(e, t, o, a = {}) {
     return;
   }
   if (n.warp) {
-    Wx(e, t, n, o, a);
+    Bx(e, t, n, o, a);
     return;
   }
   if (n.dr) {
-    zb(e, t, n, o);
+    Jb(e, t, n, o);
     return;
   }
   if (n.lake) {
-    ok(e, t, n, o);
+    nk(e, t, n, o);
     return;
   }
   if (n.req) {
     let f = o;
     ((f == null || f < 0) && (f = 1),
-      lx(e, t, n, f, { auto: !!a.auto, timeout: !!a.timeout }));
+      dx(e, t, n, f, { auto: !!a.auto, timeout: !!a.timeout }));
     return;
   }
   const r = z(t, n.eventId);
@@ -19241,16 +19241,16 @@ function Ti(e, t, o, a = {}) {
     return;
   }
   let s = r.choices[i];
-  const u = Tt(s.label, qe(t, e), e);
-  (s.hunt && e.bf && (s = Dx(e, t, s)),
+  const u = vt(s.label, qe(t, e), e);
+  (s.hunt && e.bf && (s = Gx(e, t, s)),
     bt(e, t, s, n.t, { ...l, kind: "result", choiceLabel: u }));
 }
-function zx(e) {
+function Jx(e) {
   const t = e.prompt;
   if (!t || t.kind === "reflect" || t.kind === "color" || t.kind === "name")
     return -1;
-  if (t.warp) return Ex(e);
-  if (t.lake) return rk(e);
+  if (t.warp) return Fx(e);
+  if (t.lake) return sk(e);
   const o = oe(e);
   if (/^lk_(u_|drink)/.test(t.eventId || "")) return o.chance(0.5) ? 0 : 1;
   if (/^wt_enter_/.test(t.eventId || "")) return o.chance(0.8) ? 0 : 1;
@@ -19270,7 +19270,7 @@ function zx(e) {
           : 1;
   }
   if (e.bf) {
-    const r = Kx(e, t, o);
+    const r = Ux(e, t, o);
     if (r !== void 0) return r;
   }
   if (t.kind === "minor" && o.chance(0.2)) return -1;
@@ -19278,7 +19278,7 @@ function zx(e) {
     n = a.filter((r) => t.choices[r].dream);
   return n.length && o.chance(0.6) ? o.pick(n) : a.length ? o.pick(a) : -1;
 }
-const Ux = qt({
+const Vx = qt({
     ko: [
       "뜻밖의 돈이 들어왔다. 연락이 끊겼던 친척의 유산이었다.",
       "헐값에 사 둔 물건의 값이 갑자기 뛰었다.",
@@ -19301,7 +19301,7 @@ const Ux = qt({
       "住んでいた町が再開発区域に指定され、補償金を受け取った。",
     ],
   }),
-  Jx = qt({
+  Xx = qt({
     ko: [
       "맡겨 둔 돈이 사라졌다. 맡아 준 사람도 함께 사라졌다.",
       "믿고 투자한 가게가 하룻밤 사이 문을 닫았다.",
@@ -19321,26 +19321,26 @@ const Ux = qt({
       "翼の税金が突然上がった。理由は告知されなかった。",
     ],
   });
-function Vx(e) {
+function Qx(e) {
   return e < 90 ? 0 : P(0.15 * Math.pow(1.2, e - 90), 0, 0.95);
 }
-function Xx(e, t) {
+function Zx(e, t) {
   const o = e.stats;
-  let a = Ap(t, e.age);
+  let a = Sp(t, e.age);
   return (
     (a *=
       P(1 + (50 - o.health) / 50, 0.25, 3) *
       P(1 + (30 - o.wealth) / 150, 0.8, 1.4)),
-    o.sanity <= 10 && !Je(e) && (a += 0.06),
+    o.sanity <= 10 && !Ve(e) && (a += 0.06),
     1 - Math.exp(-a)
   );
 }
-function Qx(e) {
+function e0(e) {
   if (!e.bf) return e;
   const t = Math.max(e.bf.since, 20);
   return { ...e, age: Math.min(e.age, t) };
 }
-const Zx = qt({
+const t0 = qt({
     ko: [
       "그 십 년 동안 도시는 바뀌었다. 당신은 그대로였다.",
       "간판이 몇 번 바뀌었다. 당신의 얼굴은 바뀌지 않았다.",
@@ -19357,7 +19357,7 @@ const Zx = qt({
       "十年が過ぎた。鏡はそれを教えてくれなかった。",
     ],
   }),
-  e0 = qt({
+  o0 = qt({
     ko: [
       "손끝이 조금 말랐다.",
       "거울 속 얼굴에서 핏기가 빠졌다.",
@@ -19377,14 +19377,14 @@ const Zx = qt({
       "肌が紙のように薄くなった。",
     ],
   });
-function t0(e, t, o) {
+function a0(e, t, o) {
   const a = e.bf,
     n = e.stats;
   (a.barUsed === e.age || a.barUsed === e.age - 1) && a.bitAge !== e.age
     ? (a.barStreak++, (a.barBest = Math.max(a.barBest, a.barStreak)))
     : (a.bitAge === e.age || (a.barUsed ?? -99) < e.age - 1) &&
       (a.barStreak = 0);
-  const r = Dk(a.thirst);
+  const r = Gk(a.thirst);
   if (
     (r === 1 && (n.sanity -= 2),
     a.vigor &&
@@ -19395,7 +19395,7 @@ function t0(e, t, o) {
         { kind: "result", text: $e("misc.vigorGone"), tone: "system" },
         0.97,
       )),
-    Gx(e, t),
+    zx(e, t),
     a.wither > 0 && (n.sanity -= a.wither),
     a.wither >= 3 && (n.health -= a.wither),
     a.thirst >= 50)
@@ -19408,13 +19408,13 @@ function t0(e, t, o) {
       a.wither >= ae.witherMax)
     )
       return (He(e, "시듦", 0.5 + t.next() * 0.48, "year"), !0);
-    L(e, { kind: "result", text: e0[a.wither - 1], tone: "bad" }, 0.98);
+    L(e, { kind: "result", text: o0[a.wither - 1], tone: "bad" }, 0.98);
   } else r === 0 && a.wither > 0 && ++a.low >= 4 && (a.wither--, (a.low = 0));
   n.health = Math.min(n.health, 100 - a.wither * 12);
-  for (const f of Yo) n[f] = ht(P(n[f]));
+  for (const f of oo) n[f] = ht(P(n[f]));
   const i =
       a.kind === "kin"
-        ? Math.min(ae.kinDeepenMax, 1 + ae.kinDeepen * _o(e))
+        ? Math.min(ae.kinDeepenMax, 1 + ae.kinDeepen * jo(e))
         : 1,
     l = Math.max(0, (a.made || 0) - (a.lost || 0)),
     u =
@@ -19425,23 +19425,23 @@ function t0(e, t, o) {
       i;
   return (
     (a.thirst = ht(P(a.thirst + ae.thirstBase * u))),
-    (a.heat = Math.max(0, a.heat - ae.heatDecay * ud(e))),
-    _o(e) > 0 && _o(e) % 10 === 0 && (a.heat += 1),
+    (a.heat = Math.max(0, a.heat - ae.heatDecay * cd(e))),
+    jo(e) > 0 && jo(e) % 10 === 0 && (a.heat += 1),
     !1
   );
 }
-const ac = { 검지: 1.25, 약지: 0.58 };
-function o0(e, t) {
+const nc = { 검지: 1.25, 약지: 0.58 };
+function n0(e, t) {
   if (((X = t), e.dead)) return;
   const o = oe(e),
     a = qe(t, e),
     n = e.stats,
-    r = $w(e) || So(e) || Ho(e);
+    r = Hw(e) || So(e) || Ho(e);
   if (
     (So(e) &&
       ((e.bld.threat = P((e.bld.threat || 0) + 1, 0, 3)),
       (e.bld.kills = (e.bld.kills || 0) + o.int(2, 5))),
-    Je(e) &&
+    Ve(e) &&
       n.health > 0 &&
       o.chance(Pt.yearHurt[Math.min(5, e.wingRank || 1) - 1]))
   ) {
@@ -19452,7 +19452,7 @@ function o0(e, t) {
       0,
       n.health - o.int(Pt.yearHurtDmg[0], Pt.yearHurtDmg[1]),
     );
-    const k =
+    const x =
       n.health <= 0
         ? f
           ? u.hurtHigh
@@ -19464,7 +19464,7 @@ function o0(e, t) {
       e,
       {
         kind: "flavor",
-        text: k.text,
+        text: x.text,
         tone: "bad",
         delta: { health: Math.round(n.health - y) },
       },
@@ -19472,10 +19472,10 @@ function o0(e, t) {
     );
   }
   if (
-    (Je(e) && n.health <= 0 && (Qw(e, t, 0.5), e.dead)) ||
+    (Ve(e) && n.health <= 0 && (Zw(e, t, 0.5), e.dead)) ||
     (!r &&
-      !Je(e) &&
-      o.chance(yg(n.health)) &&
+      !Ve(e) &&
+      o.chance(pg(n.health)) &&
       He(
         e,
         e.bf
@@ -19490,10 +19490,10 @@ function o0(e, t) {
       ))
   )
     return;
-  const i = Qx(e);
-  if (!r && o.chance(Xx(i, a) * (e.bf ? 0.6 : 1))) {
-    const u = Yp(i, a, Gi(e));
-    (e.bf && (delete u.노화, delete u["영양 결핍"]), Je(e) && delete u.뒤틀림);
+  const i = e0(e);
+  if (!r && o.chance(Zx(i, a) * (e.bf ? 0.6 : 1))) {
+    const u = Rp(i, a, Ki(e));
+    (e.bf && (delete u.노화, delete u["영양 결핍"]), Ve(e) && delete u.뒤틀림);
     const f = Object.entries(u).filter(([, g]) => g > 0),
       y = o.weighted(f, (g) => g[1]);
     if (He(e, y ? y[0] : "질병", 0.5 + o.next() * 0.48, "year")) return;
@@ -19501,7 +19501,7 @@ function o0(e, t) {
   if (
     !r &&
     !e.bf &&
-    o.chance(Vx(e.age)) &&
+    o.chance(Qx(e.age)) &&
     He(e, "노화", 0.5 + o.next() * 0.48, "year")
   )
     return;
@@ -19513,20 +19513,20 @@ function o0(e, t) {
         ((e.job === "검계"
           ? ma.income[(qa(e) || 1) - 1]
           : e.job === "흑운회"
-            ? Nb(e)
-            : (mp[f] ?? 1)) -
+            ? Wb(e)
+            : (pp[f] ?? 1)) -
           3.6) *
           0.6 +
         u,
-      k = (o.next() + o.next() + o.next() - 1.5) * 12;
-    let x = g + k - (n.wealth - 50) * 0.05;
+      x = (o.next() + o.next() + o.next() - 1.5) * 12;
+    let k = g + x - (n.wealth - 50) * 0.05;
     if (e.cloneYear !== e.age && o.chance(0.07)) {
-      const T = o.chance(0.45),
+      const v = o.chance(0.45),
         Y = o.int(15, 40);
-      x += T ? Y : -Y;
-      const c = T ? Ux : Jx,
+      k += v ? Y : -Y;
+      const c = v ? Vx : Xx,
         m = n.wealth;
-      n.wealth = ht(P(n.wealth + x));
+      n.wealth = ht(P(n.wealth + k));
       const w = Math.round(n.wealth - m);
       L(
         e,
@@ -19538,7 +19538,7 @@ function o0(e, t) {
         },
         0.97,
       );
-    } else n.wealth = P(n.wealth + x);
+    } else n.wealth = P(n.wealth + k);
   }
   (e.age >= 18 &&
     e.prosthetics > 0 &&
@@ -19565,24 +19565,24 @@ function o0(e, t) {
         ? (n.sanity += 2.5 + (n.network >= 40 ? 1.5 : 0))
         : n.sanity < 75 && (n.sanity += 1)),
     e.job === "손가락" &&
-      ac[e.finger] &&
+      nc[e.finger] &&
       n.sanity < 70 &&
-      (n.sanity += ac[e.finger]),
+      (n.sanity += nc[e.finger]),
     n.sanity > 75 && (n.sanity -= 0.3),
-    Je(e) && e.kx && e.kx.tube && (e.kx.fit = Math.min(5, (e.kx.fit || 0) + 1)),
+    Ve(e) && e.kx && e.kx.tube && (e.kx.fit = Math.min(5, (e.kx.fit || 0) + 1)),
     Ht(e))
   ) {
-    const u = Di(e);
+    const u = qi(e);
     u.faith < Be.start
       ? (u.faith = Math.min(Be.start, u.faith + Be.drift))
       : u.faith > Be.start &&
         (u.faith = Math.max(Be.start, u.faith - Be.drift));
   }
-  td(e);
-  for (const u of Yo) n[u] = ht(P(n[u]));
-  if (e.bf && !Ho(e) && t0(e, o)) return;
-  const s = e.rule ? 10 : Ho(e) ? 1 : ud(e);
-  if (((e.age += s), e.age >= Rl && !e.bf)) {
+  od(e);
+  for (const u of oo) n[u] = ht(P(n[u]));
+  if (e.bf && !Ho(e) && a0(e, o)) return;
+  const s = e.rule ? 10 : Ho(e) ? 1 : cd(e);
+  if (((e.age += s), e.age >= Cl && !e.bf)) {
     He(e, "노화", 0.9, "year");
     return;
   }
@@ -19606,24 +19606,24 @@ function o0(e, t) {
             "Ten years passed. The ledgers passed through the Family Hierarch's hands all the while.",
             "十年が過ぎた。その間も、帳簿は家主の手を通った。",
           )
-      : o.pick(Zx);
+      : o.pick(t0);
     L(e, { kind: "flavor", text: u, tone: "system" }, 0.01);
   }
-  sd(e, t);
+  ld(e, t);
 }
-function Sg(e, t) {
+function Rg(e, t) {
   X = t;
   const o = qe(t, e),
     a = e.dead,
     n = [];
-  (Hh.includes(e.work || e.job) && n.push(ve(e)),
+  (Dh.includes(e.work || e.job) && n.push(Te(e)),
     e.flags.includes("E.G.O개화") &&
       n.push(h("E.G.O 개화", "Effloresced E.G.O", "E.G.O開花")),
-    e.job === "해결사" && e.grade && e.grade <= 3 && n.push(ve(e)),
+    e.job === "해결사" && e.grade && e.grade <= 3 && n.push(Te(e)),
     e.flags.includes("특색") &&
       n.push(h("특색 해결사", "Color Fixer", "特色フィクサー")));
-  const r = Gp(e, o),
-    i = nb(eb(e), t.rarity),
+  const r = zp(e, o),
+    i = ib(ob(e), t.rarity),
     l = o.avgLife ?? o.lifeExp;
   return {
     seed: e.seed,
@@ -19635,21 +19635,21 @@ function Sg(e, t) {
     age: a.age,
     alive: !!a.alive,
     undying: a.cause === "영생",
-    cause: Nw(a.cause),
+    cause: Ow(a.cause),
     causeKey: a.cause,
     obituary: a.text,
     region: { id: o.id, name: o.name, ward: o.ward, avgLife: l },
     diff: a.age - l,
     jobLord: e.job === "군주",
     job: e.pinky
-      ? !ve(e) && e.lastJob
+      ? !Te(e) && e.lastJob
         ? `${Un(e)} (${h(`전 ${e.lastJob}`, `Former ${e.lastJob}`, `元${e.lastJob}`)})`
-        : Ik(e)
-      : ve(e) ||
+        : Ok(e)
+      : Te(e) ||
         (e.lastJob
           ? h(`전 ${e.lastJob}`, `Former ${e.lastJob}`, `元${e.lastJob}`)
           : null),
-    pinky: e.pinky ? { star: Un(e), blade: ad(e), heaven: ag(e) === 1 } : null,
+    pinky: e.pinky ? { star: Un(e), blade: nd(e), heaven: ng(e) === 1 } : null,
     rare: n,
     stats: { ...e.stats },
     flags: [...e.flags],
@@ -19657,7 +19657,7 @@ function Sg(e, t) {
     relicName: e.relicName || null,
     reflections: e.reflections.filter((s) => s.text),
     story: r,
-    chronicle: xp(e.log),
+    chronicle: Tp(e.log),
     records: i,
     jobTier:
       (
@@ -19669,7 +19669,7 @@ function Sg(e, t) {
       ).tier || null,
   };
 }
-const a0 = [
+const r0 = [
     {
       id: "A",
       name: "A사",
@@ -20344,7 +20344,7 @@ const a0 = [
       avgLife: 36,
     },
   ],
-  n0 = [
+  i0 = [
     {
       text: "특별한 일 없이 한 해가 지나갔다. 같은 길, 같은 얼굴, 같은 하늘.",
       age: [13, 110],
@@ -21022,7 +21022,7 @@ const a0 = [
       age: [150, 99999],
     },
   ],
-  r0 = [
+  s0 = [
     {
       id: "c_fever",
       age: [1, 9],
@@ -21944,7 +21944,7 @@ const a0 = [
       regions: ["outskirts"],
     },
   ],
-  i0 = [
+  l0 = [
     {
       id: "t_school_end",
       age: [13, 16],
@@ -22450,7 +22450,7 @@ const a0 = [
       regions: ["wing"],
     },
   ],
-  s0 = [
+  h0 = [
     {
       id: "a_career_top",
       age: [18, 22],
@@ -22764,7 +22764,7 @@ const a0 = [
       ],
     },
   ],
-  l0 = [
+  d0 = [
     {
       id: "a_marriage",
       age: [22, 55],
@@ -24091,7 +24091,7 @@ const a0 = [
       },
     },
   ],
-  h0 = [
+  u0 = [
     {
       id: "j_corp_overtime_exec",
       age: [20, 80],
@@ -24844,7 +24844,7 @@ const a0 = [
       ],
     },
   ],
-  d0 = [
+  c0 = [
     {
       id: "o_memory",
       age: [60, 95],
@@ -24965,7 +24965,7 @@ const a0 = [
       effects: { rep: 3, sanity: 3, network: 2 },
     },
   ],
-  u0 = [
+  f0 = [
     {
       id: "ff_fantasm_market",
       age: [10, 70],
@@ -26590,7 +26590,7 @@ const a0 = [
       },
     },
   ],
-  c0 = [
+  w0 = [
     {
       id: "x_client_trap",
       grade: [3, 9],
@@ -27038,7 +27038,7 @@ const a0 = [
       },
     },
   ],
-  f0 = [
+  g0 = [
     {
       id: "f_recruit_thumb",
       age: [16, 35],
@@ -27660,7 +27660,7 @@ const a0 = [
       ],
     },
   ],
-  w0 = [
+  m0 = [
     {
       id: "th_drill",
       age: [16, 90],
@@ -28431,7 +28431,7 @@ const a0 = [
       ],
     },
   ],
-  g0 = [
+  y0 = [
     {
       id: "in_shoe",
       age: [16, 70],
@@ -29056,7 +29056,7 @@ const a0 = [
       ],
     },
   ],
-  m0 = [
+  p0 = [
     {
       id: "mi_collect",
       age: [16, 90],
@@ -29719,7 +29719,7 @@ const a0 = [
       ],
     },
   ],
-  y0 = [
+  b0 = [
     {
       id: "ri_submit",
       age: [16, 70],
@@ -30412,7 +30412,7 @@ const a0 = [
       ],
     },
   ],
-  p0 = [
+  k0 = [
     {
       id: "og_office_offer",
       age: [18, 60],
@@ -31454,7 +31454,7 @@ const a0 = [
       ],
     },
   ],
-  b0 = [
+  x0 = [
     {
       id: "ab_nothing_there",
       age: [14, 90],
@@ -32269,7 +32269,7 @@ const a0 = [
       anyone: !0,
     },
   ],
-  k0 = [
+  v0 = [
     {
       id: "wc_checkpoint",
       age: [19, 70],
@@ -33477,7 +33477,7 @@ const a0 = [
       officeRank: [1, 4],
     },
   ],
-  x0 = [
+  T0 = [
     {
       id: "hs_join",
       age: [18, 40],
@@ -38429,7 +38429,7 @@ const a0 = [
       ],
     },
   ],
-  T0 = [
+  _0 = [
     {
       id: "wo_task_stock",
       age: [18, 70],
@@ -40686,7 +40686,7 @@ const a0 = [
       ],
     },
   ],
-  v0 = [
+  j0 = [
     {
       id: "bf_birth_sign",
       age: [0, 0],
@@ -43753,7 +43753,7 @@ const a0 = [
       ],
     },
   ],
-  _0 = [
+  A0 = [
     {
       id: "wt_enter_fixer",
       manual: !0,
@@ -44214,7 +44214,7 @@ const a0 = [
       ],
     },
   ],
-  j0 = [
+  Y0 = [
     {
       id: "hh_05",
       age: [5, 5],
@@ -45630,7 +45630,7 @@ const a0 = [
 {남은사람줄}`,
     },
   ],
-  A0 = [
+  S0 = [
     {
       id: "bl_join",
       age: [18, 35],
@@ -47165,7 +47165,7 @@ const a0 = [
       ],
     },
   ],
-  Y0 = [
+  R0 = [
     {
       id: "kk_join",
       age: [18, 35],
@@ -48685,7 +48685,7 @@ const a0 = [
       ],
     },
   ],
-  S0 = [
+  C0 = [
     {
       id: "dr_lines",
       manual: !0,
@@ -49046,7 +49046,7 @@ const a0 = [
       hunterNm: { text: "협회 연합" },
     },
   ],
-  R0 = [
+  I0 = [
     {
       id: "lk_u_work",
       manual: !0,
@@ -50437,7 +50437,7 @@ const a0 = [
       ],
     },
   ],
-  C0 = [
+  N0 = [
     {
       id: "cm_ring_art",
       age: [12, 22],
@@ -52137,7 +52137,7 @@ const a0 = [
       ],
     },
   ],
-  I0 = [
+  O0 = [
     {
       id: "kx_join",
       age: [18, 40],
@@ -53739,7 +53739,7 @@ const a0 = [
       ],
     },
   ],
-  N0 = [
+  W0 = [
     {
       id: "nh_join",
       age: [18, 40],
@@ -54823,7 +54823,7 @@ const a0 = [
       banned: { text: "이단 심문관은 몸을 바꾸지 않는다." },
     },
   ],
-  O0 = [
+  E0 = [
     {
       id: "rq_delivery",
       type: "단순 업무",
@@ -56024,7 +56024,7 @@ const a0 = [
       death: "장로가 직접 내려왔다.",
     },
   ],
-  W0 = [
+  B0 = [
     "뜬소문",
     "도시 괴담",
     "도시 전설",
@@ -56032,7 +56032,7 @@ const a0 = [
     "도시 악몽",
     "도시의 별",
   ],
-  E0 = [
+  F0 = [
     { name: "윤 사무소" },
     { name: "가로등 사무소" },
     { name: "갈고리 사무소" },
@@ -56045,7 +56045,7 @@ const a0 = [
     { name: "송곳니 사냥 사무소" },
     { name: "솔 사무소" },
   ],
-  B0 = [
+  L0 = [
     {
       name: "하나 협회",
       desc: "해결사 면허 발급과 등급 심사, 특색 지정을 맡는 협회",
@@ -56059,7 +56059,7 @@ const a0 = [
     { name: "디에치 협회", desc: "" },
     { name: "외우피 협회", desc: "거래 중개와 계약을 다루는 협회" },
   ],
-  F0 = [
+  P0 = [
     { name: "불타버린 소녀", tiers: [1, 2] },
     { name: "거미봉오리", tiers: [1, 2] },
     { name: "행복한 테디", tiers: [2, 3] },
@@ -56075,280 +56075,280 @@ const a0 = [
     { name: "푸른 별", tiers: [5, 5], aleph: !0 },
     { name: "종말새", tiers: [5, 5], aleph: !0 },
   ],
-  L0 = { tiers: W0, office: E0, assoc: B0, abnormal: F0 },
-  P0 = 0.494667,
-  M0 = 0.409417,
-  $0 = 0.348833,
-  H0 = 0.303167,
-  D0 = 0.277583,
-  q0 = 0.252667,
-  G0 = 0.22725,
-  K0 = 0.221083,
-  z0 = 0.19425,
-  U0 = 0.191667,
-  J0 = 0.184,
-  V0 = 0.117167,
-  X0 = 0.105917,
-  Q0 = 0.089667,
-  Z0 = 0.07275,
-  e1 = 0.071583,
-  t1 = 0.066667,
-  o1 = 0.05725,
-  a1 = 0.056917,
-  n1 = 0.05575,
-  r1 = 0.05475,
-  i1 = 0.044083,
-  s1 = 0.041083,
-  l1 = 0.039917,
-  h1 = 0.038833,
-  d1 = 0.036667,
-  u1 = 0.033417,
-  c1 = 0.030583,
-  f1 = 0.027917,
-  w1 = 0.027667,
-  g1 = 0.020167,
-  m1 = 0.020167,
-  y1 = 0.016917,
-  p1 = 0.016667,
-  b1 = 0.0165,
-  k1 = 0.013917,
-  x1 = 0.01275,
-  T1 = 0.0115,
-  v1 = 0.010167,
-  _1 = 0.009333,
-  j1 = 0.008833,
-  A1 = 0.008,
-  Y1 = 0.00725,
-  S1 = 0.007083,
-  R1 = 0.006917,
-  C1 = 0.0055,
-  I1 = 0.0055,
+  M0 = { tiers: B0, office: F0, assoc: L0, abnormal: P0 },
+  $0 = 0.494667,
+  H0 = 0.409417,
+  D0 = 0.348833,
+  q0 = 0.303167,
+  G0 = 0.277583,
+  K0 = 0.252667,
+  z0 = 0.22725,
+  U0 = 0.221083,
+  J0 = 0.19425,
+  V0 = 0.191667,
+  X0 = 0.184,
+  Q0 = 0.117167,
+  Z0 = 0.105917,
+  e1 = 0.089667,
+  t1 = 0.07275,
+  o1 = 0.071583,
+  a1 = 0.066667,
+  n1 = 0.05725,
+  r1 = 0.056917,
+  i1 = 0.05575,
+  s1 = 0.05475,
+  l1 = 0.044083,
+  h1 = 0.041083,
+  d1 = 0.039917,
+  u1 = 0.038833,
+  c1 = 0.036667,
+  f1 = 0.033417,
+  w1 = 0.030583,
+  g1 = 0.027917,
+  m1 = 0.027667,
+  y1 = 0.020167,
+  p1 = 0.020167,
+  b1 = 0.016917,
+  k1 = 0.016667,
+  x1 = 0.0165,
+  v1 = 0.013917,
+  T1 = 0.01275,
+  _1 = 0.0115,
+  j1 = 0.010167,
+  A1 = 0.009333,
+  Y1 = 0.008833,
+  S1 = 0.008,
+  R1 = 0.00725,
+  C1 = 0.007083,
+  I1 = 0.006917,
   N1 = 0.0055,
-  O1 = 0.004833,
-  W1 = 0.004583,
-  E1 = 0.00375,
-  B1 = 0.00375,
-  F1 = 0.003583,
-  L1 = 0.003417,
-  P1 = 0.003167,
-  M1 = 0.00275,
-  $1 = 0.00275,
-  H1 = 0.002667,
-  D1 = 0.002667,
-  q1 = 0.0025,
-  G1 = 0.0025,
-  K1 = 0.002417,
-  z1 = 0.002417,
-  U1 = 0.002333,
-  J1 = 0.002167,
-  V1 = 0.002083,
-  X1 = 0.001917,
-  Q1 = 0.001917,
+  O1 = 0.0055,
+  W1 = 0.0055,
+  E1 = 0.004833,
+  B1 = 0.004583,
+  F1 = 0.00375,
+  L1 = 0.00375,
+  P1 = 0.003583,
+  M1 = 0.003417,
+  $1 = 0.003167,
+  H1 = 0.00275,
+  D1 = 0.00275,
+  q1 = 0.002667,
+  G1 = 0.002667,
+  K1 = 0.0025,
+  z1 = 0.0025,
+  U1 = 0.002417,
+  J1 = 0.002417,
+  V1 = 0.002333,
+  X1 = 0.002167,
+  Q1 = 0.002083,
   Z1 = 0.001917,
-  eT = 0.001833,
-  tT = 0.001833,
-  oT = 0.001833,
-  aT = 0.001667,
-  nT = 0.0015,
-  rT = 0.0015,
-  iT = 0.0015,
-  sT = 0.0015,
-  lT = 0.001417,
-  hT = 0.001333,
-  dT = 0.001167,
-  uT = 0.001,
-  cT = 833e-6,
-  fT = 833e-6,
-  wT = 75e-5,
-  gT = 75e-5,
-  mT = 75e-5,
-  yT = 75e-5,
-  pT = 667e-6,
-  bT = 583e-6,
-  kT = 583e-6,
-  xT = 583e-6,
-  TT = 5e-4,
-  vT = 417e-6,
-  _T = 417e-6,
-  jT = 417e-6,
-  AT = 417e-6,
-  YT = 417e-6,
-  ST = 417e-6,
-  RT = 417e-6,
-  CT = 417e-6,
-  IT = 417e-6,
-  NT = 333e-6,
-  OT = 333e-6,
-  WT = 333e-6,
-  ET = 25e-5,
-  BT = 25e-5,
-  FT = 25e-5,
-  LT = 25e-5,
-  PT = 25e-5,
-  MT = 25e-5,
-  $T = 167e-6,
-  HT = 167e-6,
-  DT = 167e-6,
-  qT = 167e-6,
-  GT = 167e-6,
-  KT = 83e-6,
-  zT = 83e-6,
-  UT = 83e-6,
-  JT = 83e-6,
-  VT = 83e-6,
-  XT = 83e-6,
-  QT = 83e-6,
-  ZT = 83e-6,
-  ev = 83e-6,
-  tv = 0.11975,
-  ov = 0.181,
-  av = 0.00575,
-  nv = 0.014,
-  rv = {
-    fixer: P0,
-    fixer_g7: M0,
-    fixer_g6: $0,
-    prosthetic_good: H0,
-    fixer_g5: D0,
-    office: q0,
-    prosthetic: G0,
-    corp: K0,
-    fixer_g4: z0,
-    req_star: U0,
-    age80: J0,
-    assoc: V0,
-    fixer_g3: X0,
-    assoc_staff: Q0,
-    office_dept: Z0,
-    warp_car_6: e1,
-    warp_car_3: t1,
-    born_outskirts: o1,
-    warp_car_5: a1,
-    orphan: n1,
-    warp_car_4: r1,
+  ev = 0.001917,
+  tv = 0.001917,
+  ov = 0.001833,
+  av = 0.001833,
+  nv = 0.001833,
+  rv = 0.001667,
+  iv = 0.0015,
+  sv = 0.0015,
+  lv = 0.0015,
+  hv = 0.0015,
+  dv = 0.001417,
+  uv = 0.001333,
+  cv = 0.001167,
+  fv = 0.001,
+  wv = 833e-6,
+  gv = 833e-6,
+  mv = 75e-5,
+  yv = 75e-5,
+  pv = 75e-5,
+  bv = 75e-5,
+  kv = 667e-6,
+  xv = 583e-6,
+  vv = 583e-6,
+  Tv = 583e-6,
+  _v = 5e-4,
+  jv = 417e-6,
+  Av = 417e-6,
+  Yv = 417e-6,
+  Sv = 417e-6,
+  Rv = 417e-6,
+  Cv = 417e-6,
+  Iv = 417e-6,
+  Nv = 417e-6,
+  Ov = 417e-6,
+  Wv = 333e-6,
+  Ev = 333e-6,
+  Bv = 333e-6,
+  Fv = 25e-5,
+  Lv = 25e-5,
+  Pv = 25e-5,
+  Mv = 25e-5,
+  $v = 25e-5,
+  Hv = 25e-5,
+  Dv = 167e-6,
+  qv = 167e-6,
+  Gv = 167e-6,
+  Kv = 167e-6,
+  zv = 167e-6,
+  Uv = 83e-6,
+  Jv = 83e-6,
+  Vv = 83e-6,
+  Xv = 83e-6,
+  Qv = 83e-6,
+  Zv = 83e-6,
+  eT = 83e-6,
+  tT = 83e-6,
+  oT = 83e-6,
+  aT = 0.11975,
+  nT = 0.181,
+  rT = 0.00575,
+  iT = 0.014,
+  sT = {
+    fixer: $0,
+    fixer_g7: H0,
+    fixer_g6: D0,
+    prosthetic_good: q0,
+    fixer_g5: G0,
+    office: K0,
+    prosthetic: z0,
+    corp: U0,
+    fixer_g4: J0,
+    req_star: V0,
+    age80: X0,
+    assoc: Q0,
+    fixer_g3: Z0,
+    assoc_staff: e1,
+    office_dept: t1,
+    warp_car_6: o1,
+    warp_car_3: a1,
+    born_outskirts: n1,
+    warp_car_5: r1,
+    orphan: i1,
+    warp_car_4: s1,
     finger_엄지: 0.050083,
     finger_중지: 0.048917,
     finger_검지: 0.048417,
     finger_약지: 0.047083,
     frank_중지_2: 0.044417,
-    warp_car_7: i1,
+    warp_car_7: l1,
     frank_약지_2: 0.041083,
-    warp_car_2: s1,
-    aleph_survive: l1,
+    warp_car_2: h1,
+    aleph_survive: d1,
     frank_중지_3: 0.039083,
-    fixer_g2: h1,
+    fixer_g2: u1,
     frank_엄지_2: 0.037,
-    born_head: d1,
-    die_child: u1,
+    born_head: c1,
+    die_child: f1,
     frank_검지_2: 0.033333,
-    pinky_star_earth: c1,
-    office_dir: f1,
-    distorted: w1,
-    ego: g1,
-    kk_join: m1,
-    bl_join: y1,
-    kk_captain: p1,
-    pinky_star_heaven: b1,
-    finger_quit: k1,
-    bl_salsu: x1,
-    warp_car_1: T1,
-    lake_drink: v1,
-    kk_truce: _1,
-    bf_two_kin: j1,
-    fixer_g1: A1,
-    bf_kin: Y1,
+    pinky_star_earth: w1,
+    office_dir: g1,
+    distorted: m1,
+    ego: y1,
+    kk_join: p1,
+    bl_join: b1,
+    kk_captain: k1,
+    pinky_star_heaven: x1,
+    finger_quit: v1,
+    bl_salsu: T1,
+    warp_car_1: _1,
+    lake_drink: j1,
+    kk_truce: A1,
+    bf_two_kin: Y1,
+    fixer_g1: S1,
+    bf_kin: R1,
     frank_엄지_3: 0.007167,
-    kk_retire: S1,
-    r_pack: R1,
+    kk_retire: C1,
+    r_pack: I1,
     frank_약지_3: 0.006167,
     frank_중지_4: 0.005583,
-    bf_stray: C1,
-    color: I1,
-    kk_finger: N1,
+    bf_stray: N1,
+    color: O1,
+    kk_finger: W1,
     frank_검지_3: 0.005083,
-    heir_cand: O1,
-    age100: W1,
-    bloodbag: E1,
-    w_cleanup: B1,
-    library_lost: F1,
-    dist_grade_3: L1,
-    bl_scatter_leave: P1,
-    bf_alive: M1,
-    heir_head: $1,
-    dist_final: H1,
-    library_back: D1,
+    heir_cand: E1,
+    age100: B1,
+    bloodbag: F1,
+    w_cleanup: L1,
+    library_lost: P1,
+    dist_grade_3: M1,
+    bl_scatter_leave: $1,
+    bf_alive: H1,
+    heir_head: D1,
+    dist_final: q1,
+    library_back: G1,
     frank_엄지_4: 0.002583,
-    bf_sleep: q1,
-    lake_hint2: G1,
-    dist_grade_2: K1,
-    heishou: z1,
-    t_collector: U1,
-    kk_patriarch: J1,
-    kk_bl_last: V1,
-    bl_last: X1,
-    heir_fail: Q1,
-    office_ceo: Z1,
-    age200: eT,
-    kk_ink3: tT,
-    warp_clear: oT,
-    bl_mentor: aT,
-    bf_epi_hunter: nT,
-    dist_grade_1: rT,
-    heishou_adept: iT,
-    kk_p_end: sT,
-    n_inquisitor: lT,
-    kk_dojo: hT,
-    bf_300: dT,
-    lament_happy: uT,
-    lament_meet: cT,
-    warp_car_0: fT,
-    apocalypse: wT,
-    n_grosshammer: gT,
-    n_zealot: mT,
-    relic: yT,
-    w_level5: pT,
-    bf_end_hunter_last: bT,
-    bl_w_student: kT,
-    t_class5: xT,
-    bf_nobite: TT,
-    bf_end_faces: vT,
-    bf_end_kin_cup: _T,
-    bf_epi_gone: jT,
-    bf_found: AT,
-    bf_reveal: YT,
-    bl_w_settle: ST,
-    dist_grade_4: RT,
-    lament_wait: CT,
-    rule_human: IT,
-    bl_w_reform: NT,
-    dist_grade_0: OT,
-    kk_d_student: WT,
-    bf_epi_faces: ET,
-    bf_epi_kin: BT,
-    bl_homeland: FT,
-    dist_nm6: LT,
-    dist_return: PT,
-    index_e: MT,
-    bf_end_smile_first: $T,
-    bl_m_retreat: HT,
-    heir_lord: DT,
-    lake_whale_crimson: qT,
-    rule_abolish: GT,
-    bf_end_couple_sleep: KT,
-    bf_end_gone_grave: zT,
-    bf_epi_couple: UT,
-    bf_epi_elder: JT,
-    bf_gen1: VT,
-    lake_whale_marlin: XT,
-    r_commander: QT,
-    rule_kong: ZT,
-    rule_tyrant: ev,
-    love_first: tv,
-    refuse_proposal: ov,
-    widowed: av,
-    unwed_lover: nv,
+    bf_sleep: K1,
+    lake_hint2: z1,
+    dist_grade_2: U1,
+    heishou: J1,
+    t_collector: V1,
+    kk_patriarch: X1,
+    kk_bl_last: Q1,
+    bl_last: Z1,
+    heir_fail: ev,
+    office_ceo: tv,
+    age200: ov,
+    kk_ink3: av,
+    warp_clear: nv,
+    bl_mentor: rv,
+    bf_epi_hunter: iv,
+    dist_grade_1: sv,
+    heishou_adept: lv,
+    kk_p_end: hv,
+    n_inquisitor: dv,
+    kk_dojo: uv,
+    bf_300: cv,
+    lament_happy: fv,
+    lament_meet: wv,
+    warp_car_0: gv,
+    apocalypse: mv,
+    n_grosshammer: yv,
+    n_zealot: pv,
+    relic: bv,
+    w_level5: kv,
+    bf_end_hunter_last: xv,
+    bl_w_student: vv,
+    t_class5: Tv,
+    bf_nobite: _v,
+    bf_end_faces: jv,
+    bf_end_kin_cup: Av,
+    bf_epi_gone: Yv,
+    bf_found: Sv,
+    bf_reveal: Rv,
+    bl_w_settle: Cv,
+    dist_grade_4: Iv,
+    lament_wait: Nv,
+    rule_human: Ov,
+    bl_w_reform: Wv,
+    dist_grade_0: Ev,
+    kk_d_student: Bv,
+    bf_epi_faces: Fv,
+    bf_epi_kin: Lv,
+    bl_homeland: Pv,
+    dist_nm6: Mv,
+    dist_return: $v,
+    index_e: Hv,
+    bf_end_smile_first: Dv,
+    bl_m_retreat: qv,
+    heir_lord: Gv,
+    lake_whale_crimson: Kv,
+    rule_abolish: zv,
+    bf_end_couple_sleep: Uv,
+    bf_end_gone_grave: Jv,
+    bf_epi_couple: Vv,
+    bf_epi_elder: Xv,
+    bf_gen1: Qv,
+    lake_whale_marlin: Zv,
+    r_commander: eT,
+    rule_kong: tT,
+    rule_tyrant: oT,
+    love_first: aT,
+    refuse_proposal: nT,
+    widowed: rT,
+    unwed_lover: iT,
   };
-function iv({
+function lT({
   regions: e,
   events: t,
   daily: o,
@@ -56365,29 +56365,29 @@ function iv({
   const s = o.map((u, f) => ({ id: u.id || `d${f}`, repeat: !0, ...u }));
   return { regions: e, events: i, daily: s, requests: a, orgs: n, rarity: r };
 }
-const sv = new Set(["text", "label", "ignoreLabel", "ruleLine"]),
-  lv = new Set(["verse"]);
-function nc(e, t, o) {
+const hT = new Set(["text", "label", "ignoreLabel", "ruleLine"]),
+  dT = new Set(["verse"]);
+function rc(e, t, o) {
   const a = new Set(),
     n = (g) => {
       if (typeof g != "string" || !/[가-힣]/.test(g)) return g;
-      const k = t[g];
-      return k ?? (a.add(g), g);
+      const x = t[g];
+      return x ?? (a.add(g), g);
     },
     r = (g) => {
       if (Array.isArray(g)) return g.map(r);
       if (g && typeof g == "object") {
-        const k = {};
-        for (const [x, T] of Object.entries(g))
-          k[x] =
-            sv.has(x) && typeof T == "string"
-              ? n(T)
-              : lv.has(x) && Array.isArray(T)
-                ? T.map(n)
-                : typeof T == "object"
-                  ? r(T)
-                  : T;
-        return k;
+        const x = {};
+        for (const [k, v] of Object.entries(g))
+          x[k] =
+            hT.has(k) && typeof v == "string"
+              ? n(v)
+              : dT.has(k) && Array.isArray(v)
+                ? v.map(n)
+                : typeof v == "object"
+                  ? r(v)
+                  : v;
+        return x;
       }
       return g;
     },
@@ -56423,10 +56423,10 @@ function nc(e, t, o) {
     missing: [...a],
   };
 }
-function rc(e) {
+function ic(e) {
   return Object.assign({}, ...e);
 }
-const hv = {
+const uT = {
     "밤새 열이 내리지 않는다. 이마 위의 젖은 천이 금세 미지근해진다.":
       "The fever won't break all night. The wet cloth on your forehead turns lukewarm in no time.",
     "있는 돈을 털어 약을 구한다": "Spend every last coin on medicine",
@@ -56815,7 +56815,7 @@ const hv = {
     "흰 옷의 사람은 웃으며 명함을 남겼다. 명함에는 이름 대신 작은 반지가 그려져 있었다.":
       "The person in white smiled and left a card. Instead of a name, a small ring was drawn on it.",
   },
-  dv = {
+  cT = {
     "학교를 마칠 때가 다가온다. 상급 과정에 가려면 시간과 돈이 든다. 일을 시작하면 당장의 생활이 나아진다.":
       "School is coming to an end. Going on to higher education takes time and money. Starting work would make life easier right now.",
     "상급 과정에 진학한다": "Go on to higher education",
@@ -57117,7 +57117,7 @@ const hv = {
     "흰 옷의 사람은 웃으며 명함을 남겼다. 명함에는 이름 대신 작은 반지가 그려져 있었다.":
       "The person in white smiled and left a card. Instead of a name, a small ring was drawn on it.",
   },
-  uv = {
+  fT = {
     "{지역}의 상층에서 자란 아이에게 열린 길은 많다. 그러나 그 길 모두에 날개의 이름이 붙어 있다.":
       "Many paths are open to a child raised in the upper levels of {지역}. But every one of them bears the Wing's name.",
     "날개의 정규 사원이 된다": "Become a regular employee of the Wing",
@@ -57193,7 +57193,7 @@ const hv = {
     "뒷골목에서 무허가 일을 받으며 버텼다. 몇 년 뒤 9급 해결사 면허를 손에 쥐었다.":
       "You got by in the Backstreets taking unlicensed jobs. A few years later, you held a Grade 9 Fixer license in your hand.",
   },
-  cv = {
+  wT = {
     "함께 산다": "Live together",
     "좁은 방 하나에 두 사람의 짐이 섞였다. 이상하게도 덜 외로웠다.":
       "Two people's belongings mixed together in one small room. Strangely, it felt less lonely.",
@@ -57562,7 +57562,7 @@ const hv = {
     "서로의 거리가 조금씩 멀어졌다. {연인}의 이름은 더 이상 입에 오르지 않았다.":
       "The distance between you grew little by little. {연인}'s name no longer came up.",
   },
-  fv = {
+  gT = {
     "분기 실적 발표를 앞두고 부서 전체가 불을 끄지 못했다. 복도의 시계는 새벽 세 시를 가리킨다. 월급 명세서에는 '성과 보너스'라는 항목이 생겼다.":
       "With the quarterly results announcement coming up, the whole department couldn't turn off the lights. The clock in the hallway reads three in the morning. A new line appeared on your payslip: 'performance bonus.'",
     "승진 심사가 다가온다. 상사는 은근히 말한다. '이번 프로젝트, 책임자 이름에 네 이름을 올려 줄 수도 있어. 대신…'":
@@ -57786,7 +57786,7 @@ const hv = {
     "그 사람은 봉투를 도로 넣었다. 다음 날부터 거스름돈은 챙겨져 있지 않았다.":
       "That person put the envelope back. From the next day, your change was no longer set aside for you.",
   },
-  wv = {
+  mT = {
     "문득 옛날 일이 선명하게 떠올랐다. 첫 월급으로 샀던 낡은 외투, 함께 걷던 사람의 뒷모습. 도시는 그때보다 훨씬 조용해졌다.":
       "Out of nowhere, old memories came back vividly. The worn coat you bought with your first paycheck, the back of someone you used to walk with. The City has grown much quieter since then.",
     "같은 골목에서 오래 살던 이웃이 어느 날 보이지 않는다. 방은 비어 있고, 우편함은 가득 찼다.":
@@ -57823,7 +57823,7 @@ const hv = {
     "{아이}에게 남긴다": "Leave it to {아이}",
     "가족에게 남긴다": "Leave it to your family",
   },
-  gv = {
+  yT = {
     "장 보러 나간 시장 한복판, 생선 좌판 너머의 사람들이 한꺼번에 소리 없이 쓰러진다. 그 뒤에서 무언가가 천천히 몸을 일으킨다. 아무도 경보를 울리지 않았다.":
       "You're in the middle of the market for groceries when the people beyond the fish stall all collapse at once, without a sound. Behind them, something slowly rises. No one has sounded an alarm.",
     "좌판 밑으로 기어 들어가 숨을 죽인다":
@@ -58317,7 +58317,7 @@ const hv = {
     "빗나간 칼날이 구경꾼 쪽으로 날아왔다. 구경꾼들에게 가는 칼을 막다 부상을 입었다.":
       "A stray blade flew toward the onlookers. You were wounded blocking the blade meant for the bystanders.",
   },
-  mv = {
+  pT = {
     "평범한 배달 의뢰였다. 그런데 약속 장소에 도착하자 의뢰인 대신 다른 사무소의 해결사 다섯이 기다리고 있다. 누군가 당신 목에 현상금을 걸었다.":
       "It was an ordinary delivery request. But when you arrive at the meeting point, five Fixers from another Office are waiting instead of the client. Someone has put a bounty on your head.",
     "싸워서 뚫는다": "Fight your way through",
@@ -58458,7 +58458,7 @@ const hv = {
     "봉투는 책상 위에서 며칠을 기다리다 돌아갔다.":
       "The envelope sat on your desk for a few days, then went back.",
   },
-  yv = {
+  bT = {
     "붉은 코트에 중절모를 쓴 사내들이 골목 끝 식당을 통째로 빌렸다. 카포라 불리는 남자가 손짓으로 당신을 부른다. '예의를 아는 얼굴이군. 엄지에서는 위를 공경하는 자에게 빵과 총알이 주어진다.'":
       "Men in red coats and fedoras have rented out an entire restaurant at the end of the alley. A man they call Capo beckons you over. 'You've got the face of someone who knows manners. In the Thumb, bread and bullets are given to those who respect their superiors.'",
     "모자를 벗고 고개를 숙여 예를 갖춘다":
@@ -58636,7 +58636,7 @@ const hv = {
     "대행자는 한참 서 있다가 종이를 접었다. 지령은 수행되지 못했고, 그 책임은 그의 몫이 되었다. 그는 끝까지 칼에 손을 대지 않았다.":
       "The Proxy stood there a long while, then folded the note. The Prescript went unfulfilled, and the responsibility became his. He never once reached for his blade.",
   },
-  pv = {
+  kT = {
     "솔다토의 하루는 막사에서 시작해 막사에서 끝난다. 새벽 점호, 사격 자세, 경례 각도. 같은 솔다토 안에서도 프리모부터 콰르토까지 서열이 있고, 당신은 아직 맨 끝이다.":
       "A Soldato's day starts and ends in the barracks. Dawn roll call, firing stance, the angle of your salute. Even among Soldati there's a pecking order from Primo to Quarto, and you're still at the very bottom.",
     "이를 악물고 훈련을 버틴다": "Grit your teeth and endure the training",
@@ -58887,7 +58887,7 @@ const hv = {
     "이름이 장부에 적혔다. 대신 그날 밤의 식탁은 오래 비어 있지 않았다. 다음 날 아침 누군가 말없이 당신의 어깨를 두드렸다.":
       "Your name was written in the ledger. In exchange, the table that night was not empty for long. The next morning someone tapped your shoulder without a word.",
   },
-  bv = {
+  xT = {
     "검지 인장이 찍힌 쪽지가 문틈에 꽂혀 있다. '오늘 해가 지기 전, 다섯 번째로 마주친 사람의 오른쪽 신발을 가져올 것.'":
       "A note bearing the Index's seal is tucked into the crack of your door. 'Before sunset today, bring the right shoe of the fifth person you meet.'",
     "지령대로 신발을 가져온다": "Bring the shoe as the Prescript says",
@@ -59089,7 +59089,7 @@ const hv = {
     "그 사람은 다른 문을 두드렸다. 그 문이 열렸는지는 알지 못한다.":
       "They knocked on another door. You never learned whether it opened.",
   },
-  kv = {
+  vT = {
     "형님이 오늘 돌 가게 목록을 건넨다. 밀린 돈, 밀린 인사, 밀린 의리. 첫 번째 가게 주인은 당신 얼굴을 보자마자 금고부터 연다. 두 번째 가게는 셔터가 내려져 있다.":
       "Big Brother hands you today's list of shops to make the rounds. Overdue money, overdue respects, overdue loyalty. The first shopkeeper opens the safe the moment he sees your face. The second shop has its shutter down.",
     "셔터를 걷어차고 들어간다": "Kick in the shutter and go inside",
@@ -59286,7 +59286,7 @@ const hv = {
     '가족은 사흘 안에 구역을 떠났다. 문 앞에서 {배우자:이|가} 말했다. "어디로 가든 같이 가는 거야."':
       'Your family left the district within three days. At the door, {배우자} said, "Wherever we go, we go together."',
   },
-  xv = {
+  TT = {
     "작품 제출일. 상급자가 작품을 보고 인정하면 반지가 한 번 더 감긴다. 스튜던트는 한 번, 도슨트는 두 번, 마에스트로는 세 번. 낙제가 쌓이면 다음 재료가 되는 사람도 있다.":
       "Submission day. If a superior sees your work and approves, your ring is wound one more time. Once for a Student, twice for a Docent, three times for a Maestro. Some who pile up failures become the material for the next piece.",
     "몇 달을 매달린 대작을 낸다":
@@ -59509,7 +59509,7 @@ const hv = {
     "작품은 완성되었다. 가장 아름다운 것이 가장 가까이에 있었다는 사실을 당신은 완성된 뒤에야 알았다. {배우자:은|는} 오래 말이 없었다.":
       "The work was finished. Only once it was done did you realize the most beautiful thing had been closest all along. {배우자} was silent for a long time.",
   },
-  Tv = {
+  _T = {
     "{제안}에서 사람을 구한다는 소식이 들어왔다. 혼자 의뢰를 받으면 보수는 전부 내 것이지만, 등 뒤를 맡길 사람이 없다. 사무소에 들어가면 의뢰도 동료도 늘어난다.":
       "Word came that {제안} is hiring. Working solo, every fee is yours, but there's no one to watch your back. Join an Office, and you get more requests and more colleagues.",
     "{제안}에 들어간다": "Join {제안}",
@@ -59808,7 +59808,7 @@ const hv = {
     "그 사람은 책을 한 권 더 꺼내 건넸다. 이번에는 책갈피 자리에 쪽지가 없었다. 도서관에서 마주쳐도 두 사람은 서가만 보았다.":
       "That person took out one more book and handed it over. This time there was no note at the bookmark. Even when you met in the library, the two of you looked only at the shelves.",
   },
-  vv = {
+  jT = {
     "【아무것도 없는】 ALEPH. 도시의 재해다. 구역 전광판에 '재해 경보'가 뜨기도 전에 그것은 이미 사람들 사이에 섞여 있었다. 늘 인사하던 이웃이 골목 끝에서 손을 흔든다. 목소리의 간격이, 웃음의 길이가 조금씩 틀렸다. 얼굴 가장자리가 녹아내리듯 흐물거린다. 이것과 싸울 수 있는 사람은 이 구역에 없다.":
       "【Nothing There】 ALEPH. A disaster of the City. Before the 'Disaster Warning' even appeared on the District billboards, it was already mingling among the people. The neighbor you always greet waves at you from the end of the alley. The pauses in the voice, the length of the laugh, are all slightly off. The edges of the face sag as if melting. No one in this District can fight this.",
     "아무것도 모르는 척 인사하고 지나간다":
@@ -60062,7 +60062,7 @@ const hv = {
       "The child was one step faster. You were caught in the blast, but held on.",
     "아이가 웃는 얼굴로 당신을 안았다.": "The child embraced you with a smile.",
   },
-  _v = {
+  AT = {
     "출근길 둥지 검문소에서 줄이 멈췄다. 앞사람의 출입증이 읽히지 않는다. 뒷골목 쪽에서 온 사람이다. 경비가 당신을 힐끗 본다. 사원증 하나면 보증을 설 수 있다.":
       "On your way to work, the line at the Nest checkpoint has stopped. The ID of the person in front of you won't scan. They're from the Backstreets side. The guard glances at you. With your employee ID, you could vouch for them.",
     "보증을 서 준다": "Vouch for them",
@@ -60396,7 +60396,7 @@ const hv = {
     "연줄 몇 개를 당겼다. 옮기지는 않았지만, 옮길 수 있다는 것을 알았다.":
       "You pulled a few strings. You didn't move, but you learned that you could.",
   },
-  jv = {
+  YT = {
     "대관원 명문가의 사람이 찾아왔다. 당신의 몸이 '쓸 만하다'고 한다. 선인이라 불리는 노인이 환 한 알을 내밀었다. 삼키면 돌아갈 수 없다는 것을 이 구역 사람이라면 모두 안다.":
       "Someone from one of Daguanyuan's great families came to see you. They say your body is 'usable.' An old man called a Xianren held out a single Bolus. Everyone in this District knows that once you swallow it, there is no going back.",
     "환을 삼킨다": "Swallow the Bolus",
@@ -61930,7 +61930,7 @@ const hv = {
     "그 사람은 고개를 숙이고 다음 명을 기다렸다. 뜻을 말하는 일은 그날이 마지막이었다.":
       "That person bowed their head and waited for the next order. Speaking their own will was something they never did again after that day.",
   },
-  Av = {
+  ST = {
     "분기말이다. 창고 장부와 실물이 맞지 않는다. 사흘 안에 대조를 끝내라는 지시가 내려왔다.":
       "It's the end of the quarter. The warehouse ledger doesn't match the actual stock. An order has come down to finish the reconciliation within three days.",
     "장부 순서대로 센다": "Count in ledger order",
@@ -62665,7 +62665,7 @@ const hv = {
     "회사로 가던 길에 발이 느려졌고, 행사장에는 끝난 뒤에야 닿았다. 어느 쪽에서도 환영받지 못했다.":
       "Your steps slowed on the way to the office, and you reached the venue only after it was over. You were welcome in neither place.",
   },
-  Yv = {
+  RT = {
     "갓난아이는 젖을 물고도 오래 울었다. 무엇을 찾는지는 아무도 몰랐다.":
       "The baby cried for a long time, even at the breast. No one knew what it was looking for.",
     "열이 사흘 밤낮 내리지 않았다. 나흘째 아침, 열은 거짓말처럼 내려 있었다. 대신 목이 말랐다. 물로는 가시지 않았다.":
@@ -63716,7 +63716,7 @@ const hv = {
     "{아이:이|가} 자라 당신의 겉나이를 넘었다. 이제는 {아이:이|가} 당신을 걱정한다. {아이:은|는} 이유를 모른다.":
       "{아이} has grown older than you look. Now {아이} worries about you. They do not know why.",
   },
-  Sv = {
+  CT = {
     "W사의 의뢰가 왔다. 운행 중인 워프 열차에 들어가 '도착 전에' 칸을 정리하라는 것이다. 바깥에서는 10초. 안에서는 아무도 모른다.":
       "A request came from W Corp.: board a Warp Train in transit and clear its cars 'before arrival.' Outside, it takes 10 seconds. Inside, no one knows.",
     "의뢰를 받는다": "Accept the request",
@@ -63957,7 +63957,7 @@ const hv = {
       "10 seconds later, the doors opened. Only Cleanup Agents stepped off. On the list, the targets became 'Whereabouts unknown.'",
     "못을 박는다": "Drive the nail in",
   },
-  Rv = {
+  IT = {
     "가문의 어른이 다섯 살이 된 당신을 앞에 앉혔다. 오늘부터 배우는 것은 글이 아니라 사람이라고 했다. 어른이 첫 질문을 던졌다. '저 문 안에는 무엇이 있겠느냐.'":
       "An elder of the family sat you down, five years old now. From today, the elder said, you would learn not letters but people. The first question came. 'What lies behind that door?'",
     "[지] 문틈의 불빛과 발소리를 세어 대답한다":
@@ -64639,7 +64639,7 @@ You paid your respects to the elders at Tiekan Temple. When you climbed the stai
     "철함사의 어르신들은 승계식 날 군주의 손에 모두 죽었다. 그래도 철함사 아래에는 그들이 남긴 것이 있었다. 환의 처방, 오래된 그릇, 이름 없는 방들. 대관원의 몇몇은 그것으로 다시 늙지 않는 길을 찾으려 했다.":
       "The elders of Tiekan Temple had all died by the Lord's hand on the day of the succession ceremony. Still, beneath Tiekan Temple, what they had left behind remained. Bolus prescriptions, old vessels, rooms with no names. A few in Daguanyuan tried to use them to find a way to never grow old again.",
   },
-  Cv = {
+  NT = {
     '비 오는 밤, 골목 끝에 두루마기를 걸친 사람이 서 있었다. 정장 위에 한복, 허리에는 매듭 달린 환도. "갈 곳이 없어 보이는군. 상처는 있소?"':
       'On a rainy night, someone in a durumagi stood at the end of the alley. Hanbok over a suit, a hwando with a knotted cord at the hip. "You look like you have nowhere to go. Do you have scars?"',
     "소매를 걷어 보인다": "Roll up your sleeve and show them",
@@ -65145,7 +65145,7 @@ You paid your respects to the elders at Tiekan Temple. When you climbed the stai
     "그 사람은 골목 끝까지 바래다주었다. 이후로 그 길에서는 마주치지 않았다.":
       "That person walked you to the end of the alley. After that, you never crossed paths on that road again.",
   },
-  Iv = {
+  OT = {
     '구역 사이 길목에서 검은 정장들이 통행료를 걷고 있었다. 낼 돈이 없는 당신을 막아선 사내가 한참 보더니 웃었다. 목덜미까지 검은 구름이 번져 있다. "돈 대신 몸으로 낼 생각 있나. 위에서 시키는 대로만 하면 된다."':
       'Black suits were collecting tolls at the passage between districts. The man who stopped you, with no money to pay, looked at you for a long while and smiled. Black clouds spread all the way up his neck. "Want to pay with your body instead of money? You just do what the people above tell you."',
     "고개를 숙이고 따른다": "Bow your head and follow",
@@ -65631,7 +65631,7 @@ You paid your respects to the elders at Tiekan Temple. When you climbed the stai
     "그 사람은 말없이 자리를 비웠다. 얼마 지나지 않아 도장에서 그 사람을 더 이상 볼 수 없었다.":
       "The person left without a word. Before long, they were no longer to be seen at the dojo.",
   },
-  Nv = {
+  WT = {
     "목소리를 듣는다": "Listen to the voice",
     맞선다: "Stand and fight",
     "목소리를 거스른다": "Defy the voice",
@@ -65866,7 +65866,7 @@ Your breath became human again. Your hands were hands again.`,
       "One person ended what even a Color could not. No one remembered that person's name or face.",
     "협회 연합": "the Association coalition",
   },
-  Ov = {
+  ET = {
     "잔잔한 회색 물 · 서두르는 물": "Still Grey Water · The Hurried Water",
     '물이 회색으로 바뀌었다. 바람이 없다. 선장이 짧게 말했다. "여기선 오래 못 있어. 다들 저어."': `The water turned grey. There is no wind. The captain said, curtly, "We can't stay here long. Everyone, row."`,
     "부표가 한 줄로 늘어서 있다. 부표가 하나씩 뒤로 지나간다.":
@@ -66689,7 +66689,7 @@ You thought you heard seagulls somewhere. This place is far from the sea.`,
       "The pirate shrugged and stepped aside.",
     '누군가 어깨를 툭 친다. 손목에 닻 문신. "대호수 다녀왔지? 표정 보면 알아. 다음 판엔 이거 하나 사 가."': `Someone taps your shoulder. An anchor tattoo on their wrist. "You've been to the Great Lake, right? I can tell from your face. Buy one of these for next time."`,
   },
-  Wv = {
+  BT = {
     "약지의 콘테스트 심사 자리다. 스튜던트들이 저마다 몸과 작품을 내보인다.":
       "It is the judging for a Ring contest. Students show off their bodies and their works.",
     "내 몸으로 예술을 뽐낸다": "Show off art with my own body",
@@ -67155,7 +67155,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     '"조금만 시간을 줘." {배우자:은|는} 오래 당신을 보다가 길을 비켜 주었다. 그 눈이 기한을 세고 있다는 것을 알 수 있었다.':
       '"Give me a little time." {배우자} looked at you for a long while and stepped out of the way. You could tell those eyes were counting down a deadline.',
   },
-  Ev = {
+  FT = {
     "적출직 모집 공고가 사내 게시판에 붙었다. '주 70시간 근무, 앰플 무상 지급.' 아래에 작은 글씨로 한 줄이 더 있다. '교차 적합성 검사 필수.'":
       "A recruitment notice for Excision Staff went up on the company board. '70-hour weeks. Free ampules.' Below it, one more line in small print: 'Cross-compatibility test required.'",
     지원한다: "Apply",
@@ -67699,7 +67699,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "출동하고 돌아올 때마다 편지가 보였다. 맨 아래 한 줄은 외울 수 있었지만, 매번 다시 읽었다.":
       "Every time you came back from a deployment, you saw the letter. You could recite the line at the bottom, but you read it again each time.",
   },
-  Bv = {
+  LT = {
     "사내 게시판 맨 위에 하얀 종이 한 장. '순수한 몸을 찾는다. 불결한 이물을 들이지 않은 몸을.' 지원서에는 이름 칸보다 시술 이력 칸이 먼저 있다. 당신의 칸은 비어 있다.":
       "A single white sheet at the top of the company board. 'Seeking pure bodies. Bodies that have let in no unclean foreign matter.' On the application, the procedure history field comes before the name field. Yours is blank.",
     지원한다: "Apply",
@@ -68030,7 +68030,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "이단 심문관은 몸을 바꾸지 않는다.":
       "Inquisitors do not change their bodies.",
   },
-  Fv = {
+  PT = {
     "특별한 일 없이 한 해가 지나갔다. 같은 길, 같은 얼굴, 같은 하늘.":
       "A year passed with nothing special. The same streets, the same faces, the same sky.",
     "한 해가 조용히 흘렀다. 다행이라는 말이 입에서 나오지 않을 만큼.":
@@ -68320,7 +68320,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "정리 부서 단체 대화방에는 오늘도 좌석 번호만 올라왔다.":
       "Once again today, nothing but seat numbers came up in the Cleanup Department group chat.",
   },
-  Lv = {
+  MT = {
     "봉투 하나를 구역 반대편 사무소까지 운반한다. 내용물은 알 필요가 없다고 했다. 봉투가 생각보다 무겁다.":
       "Carry an envelope to an Office on the other side of the District. You were told you don't need to know what's inside. The envelope is heavier than you expected.",
     "봉투를 노린 쪽이 생각보다 많았다.":
@@ -69160,7 +69160,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "서명은 지켜졌다. 당신은 그것을 보지 못했다.":
       "The signatures were honored. You didn't live to see it.",
   },
-  Pv = {
+  $T = {
     A: {
       name: "A Corp.",
       alias: "the Head",
@@ -69418,7 +69418,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
       sub: "Outside the Wings' protection",
     },
   },
-  Mv = {
+  HT = {
     tiers: [
       "Canard",
       "Urban Myth",
@@ -69472,8 +69472,8 @@ Your spouse looked at your pale face and asked if you were all right.`,
       "거래 중개와 계약을 다루는 협회": "Handles brokering and contracts",
     },
   },
-  $v = { regions: Pv, orgs: Mv },
-  Hv = {
+  DT = { regions: $T, orgs: HT },
+  qT = {
     "밤새 열이 내리지 않는다. 이마 위의 젖은 천이 금세 미지근해진다.":
       "一晩中熱が下がらない。額に載せた濡れ布巾はすぐにぬるくなる。",
     "있는 돈을 털어 약을 구한다": "ありったけの金をはたいて薬を手に入れる",
@@ -69855,7 +69855,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "흰 옷의 사람은 웃으며 명함을 남겼다. 명함에는 이름 대신 작은 반지가 그려져 있었다.":
       "白い服の人は微笑んで名刺を置いていった。名刺には名前の代わりに小さな指輪が描かれていた。",
   },
-  Dv = {
+  GT = {
     "학교를 마칠 때가 다가온다. 상급 과정에 가려면 시간과 돈이 든다. 일을 시작하면 당장의 생활이 나아진다.":
       "学校を終える時期が近づいている。上級課程に進むには時間と金がかかる。働き始めれば、目先の暮らしは楽になる。",
     "상급 과정에 진학한다": "上級課程に進学する",
@@ -70152,7 +70152,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "흰 옷의 사람은 웃으며 명함을 남겼다. 명함에는 이름 대신 작은 반지가 그려져 있었다.":
       "白い服の人は微笑んで名刺を置いていった。名刺には名前の代わりに小さな指輪が描かれていた。",
   },
-  qv = {
+  KT = {
     "{지역}의 상층에서 자란 아이에게 열린 길은 많다. 그러나 그 길 모두에 날개의 이름이 붙어 있다.":
       "{지역}の上層で育った子どもに開かれた道は多い。だが、そのどれにも翼の名がついている。",
     "날개의 정규 사원이 된다": "翼の正社員になる",
@@ -70224,7 +70224,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "뒷골목에서 무허가 일을 받으며 버텼다. 몇 년 뒤 9급 해결사 면허를 손에 쥐었다.":
       "裏路地で無許可の仕事を受けてしのいだ。数年後、9級フィクサーの免許を手にした。",
   },
-  Gv = {
+  zT = {
     "함께 산다": "一緒に暮らす",
     "좁은 방 하나에 두 사람의 짐이 섞였다. 이상하게도 덜 외로웠다.":
       "狭い部屋ひとつに、二人分の荷物が混ざり合った。不思議と、前ほど寂しくなかった。",
@@ -70582,7 +70582,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "서로의 거리가 조금씩 멀어졌다. {연인}의 이름은 더 이상 입에 오르지 않았다.":
       "互いの距離が少しずつ遠のいた。{연인}の名前は、もう口に上らなくなった。",
   },
-  Kv = {
+  UT = {
     "분기 실적 발표를 앞두고 부서 전체가 불을 끄지 못했다. 복도의 시계는 새벽 세 시를 가리킨다. 월급 명세서에는 '성과 보너스'라는 항목이 생겼다.":
       "四半期の業績発表を前に、部署全体が明かりを消せずにいた。廊下の時計は午前三時を指している。給与明細には「成果ボーナス」という項目ができた。",
     "승진 심사가 다가온다. 상사는 은근히 말한다. '이번 프로젝트, 책임자 이름에 네 이름을 올려 줄 수도 있어. 대신…'":
@@ -70797,7 +70797,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "그 사람은 봉투를 도로 넣었다. 다음 날부터 거스름돈은 챙겨져 있지 않았다.":
       "その人は封筒をしまった。翌日から、お釣りは取っておかれなくなった。",
   },
-  zv = {
+  JT = {
     "문득 옛날 일이 선명하게 떠올랐다. 첫 월급으로 샀던 낡은 외투, 함께 걷던 사람의 뒷모습. 도시는 그때보다 훨씬 조용해졌다.":
       "ふと昔のことが鮮明によみがえった。初任給で買った古びた外套、並んで歩いた人の後ろ姿。都市はあの頃よりずっと静かになった。",
     "같은 골목에서 오래 살던 이웃이 어느 날 보이지 않는다. 방은 비어 있고, 우편함은 가득 찼다.":
@@ -70833,7 +70833,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "{아이}에게 남긴다": "{아이}に遺す",
     "가족에게 남긴다": "家族に遺す",
   },
-  Uv = {
+  VT = {
     "장 보러 나간 시장 한복판, 생선 좌판 너머의 사람들이 한꺼번에 소리 없이 쓰러진다. 그 뒤에서 무언가가 천천히 몸을 일으킨다. 아무도 경보를 울리지 않았다.":
       "買い物に出た市場の真ん中で、魚の露店の向こうにいた人々が一斉に音もなく倒れる。その後ろで、何かがゆっくりと身を起こす。誰も警報を鳴らさなかった。",
     "좌판 밑으로 기어 들어가 숨을 죽인다": "露店の下に潜り込んで息を殺す",
@@ -71310,7 +71310,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "빗나간 칼날이 구경꾼 쪽으로 날아왔다. 구경꾼들에게 가는 칼을 막다 부상을 입었다.":
       "逸れた刃が野次馬の方へ飛んできた。野次馬に向かう刃を防ごうとして傷を負った。",
   },
-  Jv = {
+  XT = {
     "평범한 배달 의뢰였다. 그런데 약속 장소에 도착하자 의뢰인 대신 다른 사무소의 해결사 다섯이 기다리고 있다. 누군가 당신 목에 현상금을 걸었다.":
       "ありふれた配達の依頼だった。だが約束の場所に着くと、依頼人の代わりに別の事務所のフィクサーが五人待ち構えている。誰かがあなたの首に懸賞金をかけたのだ。",
     "싸워서 뚫는다": "戦って突破する",
@@ -71448,7 +71448,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "봉투는 책상 위에서 며칠을 기다리다 돌아갔다.":
       "封筒は数日机の上で待ったあと、返っていった。",
   },
-  Vv = {
+  QT = {
     "붉은 코트에 중절모를 쓴 사내들이 골목 끝 식당을 통째로 빌렸다. 카포라 불리는 남자가 손짓으로 당신을 부른다. '예의를 아는 얼굴이군. 엄지에서는 위를 공경하는 자에게 빵과 총알이 주어진다.'":
       "赤いコートに中折れ帽の男たちが、路地の奥の食堂を丸ごと借り切った。カポと呼ばれる男が手招きであなたを呼ぶ。「礼儀を知っている顔だな。親指では、上を敬う者にパンと弾丸が与えられる」",
     "모자를 벗고 고개를 숙여 예를 갖춘다": "帽子を取り、頭を下げて礼を尽くす",
@@ -71624,7 +71624,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "대행자는 한참 서 있다가 종이를 접었다. 지령은 수행되지 못했고, 그 책임은 그의 몫이 되었다. 그는 끝까지 칼에 손을 대지 않았다.":
       "代行者は長いこと立ち尽くしてから紙を畳んだ。指令は遂行されず、その責任は彼が負うことになった。彼は最後まで剣に手をかけなかった。",
   },
-  Xv = {
+  ZT = {
     "솔다토의 하루는 막사에서 시작해 막사에서 끝난다. 새벽 점호, 사격 자세, 경례 각도. 같은 솔다토 안에서도 프리모부터 콰르토까지 서열이 있고, 당신은 아직 맨 끝이다.":
       "ソルダートの一日は兵舎で始まり、兵舎で終わる。明け方の点呼、射撃姿勢、敬礼の角度。同じソルダートの中にもプリモからクァルトまで序列があり、あなたはまだ最下位だ。",
     "이를 악물고 훈련을 버틴다": "歯を食いしばって訓練に耐える",
@@ -71865,7 +71865,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "이름이 장부에 적혔다. 대신 그날 밤의 식탁은 오래 비어 있지 않았다. 다음 날 아침 누군가 말없이 당신의 어깨를 두드렸다.":
       "名前は帳簿に記された。その代わり、その夜の食卓は長く空いたままにはならなかった。翌朝、誰かが黙ってあなたの肩を叩いた。",
   },
-  Qv = {
+  e2 = {
     "검지 인장이 찍힌 쪽지가 문틈에 꽂혀 있다. '오늘 해가 지기 전, 다섯 번째로 마주친 사람의 오른쪽 신발을 가져올 것.'":
       "人差し指の印章が押された紙切れが、扉の隙間に差し込まれている。「今日日が暮れる前に、五番目に出会った者の右の靴を持ってくること」",
     "지령대로 신발을 가져온다": "指令どおりに靴を持ってくる",
@@ -72061,7 +72061,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "그 사람은 다른 문을 두드렸다. 그 문이 열렸는지는 알지 못한다.":
       "その者は別の扉を叩いた。その扉が開いたのかどうかは知らない。",
   },
-  Zv = {
+  t2 = {
     "형님이 오늘 돌 가게 목록을 건넨다. 밀린 돈, 밀린 인사, 밀린 의리. 첫 번째 가게 주인은 당신 얼굴을 보자마자 금고부터 연다. 두 번째 가게는 셔터가 내려져 있다.":
       "兄貴が今日回る店のリストを渡してくる。溜まった金、溜まった挨拶、溜まった義理。一軒目の店の主人は、あなたの顔を見るなり金庫を開ける。二軒目の店はシャッターが下りている。",
     "셔터를 걷어차고 들어간다": "シャッターを蹴破って入る",
@@ -72250,7 +72250,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     '가족은 사흘 안에 구역을 떠났다. 문 앞에서 {배우자:이|가} 말했다. "어디로 가든 같이 가는 거야."':
       "家族は三日以内に区を離れた。戸口で{배우자}が言った。『どこへ行っても、一緒に行くの。』",
   },
-  e2 = {
+  o2 = {
     "작품 제출일. 상급자가 작품을 보고 인정하면 반지가 한 번 더 감긴다. 스튜던트는 한 번, 도슨트는 두 번, 마에스트로는 세 번. 낙제가 쌓이면 다음 재료가 되는 사람도 있다.":
       "作品の提出日。上の者が作品を見て認めれば、指輪がもう一巻き巻かれる。スチューデントは一巻き、ドーセントは二巻き、マエストロは三巻き。落第が重なれば、次の材料になる者もいる。",
     "몇 달을 매달린 대작을 낸다": "何か月もかけた大作を出す",
@@ -72467,7 +72467,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "작품은 완성되었다. 가장 아름다운 것이 가장 가까이에 있었다는 사실을 당신은 완성된 뒤에야 알았다. {배우자:은|는} 오래 말이 없었다.":
       "作品は完成した。いちばん美しいものがいちばん近くにあったと、あなたは完成したあとで知った。{배우자}は長いこと黙っていた。",
   },
-  t2 = {
+  a2 = {
     "{제안}에서 사람을 구한다는 소식이 들어왔다. 혼자 의뢰를 받으면 보수는 전부 내 것이지만, 등 뒤를 맡길 사람이 없다. 사무소에 들어가면 의뢰도 동료도 늘어난다.":
       "{제안}が人を募っているという知らせが入った。ひとりで依頼を受ければ報酬は全部自分のものだが、背中を預けられる人がいない。事務所に入れば、依頼も仲間も増える。",
     "{제안}에 들어간다": "{제안}に入る",
@@ -72764,7 +72764,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "그 사람은 책을 한 권 더 꺼내 건넸다. 이번에는 책갈피 자리에 쪽지가 없었다. 도서관에서 마주쳐도 두 사람은 서가만 보았다.":
       "その人はもう一冊、本を取り出して差し出した。今度は栞の位置にメモがなかった。図書館で顔を合わせても、二人は書架だけを見ていた。",
   },
-  o2 = {
+  n2 = {
     "【아무것도 없는】 ALEPH. 도시의 재해다. 구역 전광판에 '재해 경보'가 뜨기도 전에 그것은 이미 사람들 사이에 섞여 있었다. 늘 인사하던 이웃이 골목 끝에서 손을 흔든다. 목소리의 간격이, 웃음의 길이가 조금씩 틀렸다. 얼굴 가장자리가 녹아내리듯 흐물거린다. 이것과 싸울 수 있는 사람은 이 구역에 없다.":
       "【何もない】 ALEPH。都市の災害だ。区の電光掲示板に「災害警報」が出るより先に、それはすでに人々の間に紛れ込んでいた。いつも挨拶していた隣人が、路地の奥で手を振っている。声の間合いも、笑いの長さも、少しずつずれていた。顔の縁が溶け落ちるようにぐにゃりと崩れている。これと戦える者は、この区にはいない。",
     "아무것도 모르는 척 인사하고 지나간다":
@@ -73013,7 +73013,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
       "子どもの方が一歩速かった。爆発に巻き込まれたが、持ちこたえた。",
     "아이가 웃는 얼굴로 당신을 안았다.": "子どもは笑顔であなたを抱きしめた。",
   },
-  a2 = {
+  r2 = {
     "출근길 둥지 검문소에서 줄이 멈췄다. 앞사람의 출입증이 읽히지 않는다. 뒷골목 쪽에서 온 사람이다. 경비가 당신을 힐끗 본다. 사원증 하나면 보증을 설 수 있다.":
       "出勤途中、巣の検問所で列が止まった。前の人の通行証が読み取れない。裏路地の方から来た人だ。警備員がちらりとあなたを見る。社員証があれば保証人になれる。",
     "보증을 서 준다": "保証人になってやる",
@@ -73335,7 +73335,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "연줄 몇 개를 당겼다. 옮기지는 않았지만, 옮길 수 있다는 것을 알았다.":
       "伝手をいくつか引いてみた。移りはしなかったが、移れることは分かった。",
   },
-  n2 = {
+  i2 = {
     "대관원 명문가의 사람이 찾아왔다. 당신의 몸이 '쓸 만하다'고 한다. 선인이라 불리는 노인이 환 한 알을 내밀었다. 삼키면 돌아갈 수 없다는 것을 이 구역 사람이라면 모두 안다.":
       "大観園の名家の者が訪ねてきた。あなたの体が「使える」という。仙人と呼ばれる老人が丸を一粒差し出した。呑めば後戻りはできないことを、この区の者なら誰もが知っている。",
     "환을 삼킨다": "丸を呑む",
@@ -74851,7 +74851,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "그 사람은 고개를 숙이고 다음 명을 기다렸다. 뜻을 말하는 일은 그날이 마지막이었다.":
       "その人は頭を下げ、次の命を待った。意思を口にすることは、あの日が最後になった。",
   },
-  r2 = {
+  s2 = {
     "분기말이다. 창고 장부와 실물이 맞지 않는다. 사흘 안에 대조를 끝내라는 지시가 내려왔다.":
       "四半期末だ。倉庫の帳簿と実物が合わない。三日以内に照合を終えろという指示が下りてきた。",
     "장부 순서대로 센다": "帳簿の順に数える",
@@ -75549,7 +75549,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "회사로 가던 길에 발이 느려졌고, 행사장에는 끝난 뒤에야 닿았다. 어느 쪽에서도 환영받지 못했다.":
       "会社へ向かう途中で足が鈍り、行事の会場には終わったあとにようやく着いた。どちらでも歓迎されなかった。",
   },
-  i2 = {
+  l2 = {
     "갓난아이는 젖을 물고도 오래 울었다. 무엇을 찾는지는 아무도 몰랐다.":
       "赤子は乳を含んでもなお長く泣いた。何を求めているのか、誰にもわからなかった。",
     "열이 사흘 밤낮 내리지 않았다. 나흘째 아침, 열은 거짓말처럼 내려 있었다. 대신 목이 말랐다. 물로는 가시지 않았다.":
@@ -76580,7 +76580,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "{아이:이|가} 자라 당신의 겉나이를 넘었다. 이제는 {아이:이|가} 당신을 걱정한다. {아이:은|는} 이유를 모른다.":
       "{아이}は育って、あなたの見た目の歳を追い越した。今では{아이}があなたを心配する。{아이}は理由を知らない。",
   },
-  s2 = {
+  h2 = {
     "W사의 의뢰가 왔다. 운행 중인 워프 열차에 들어가 '도착 전에' 칸을 정리하라는 것이다. 바깥에서는 10초. 안에서는 아무도 모른다.":
       "W社から依頼が来た。運行中のワープ列車に入り、「到着前に」車両を整理しろというのだ。外では10秒。中のことは誰にもわからない。",
     "의뢰를 받는다": "依頼を受ける",
@@ -76819,7 +76819,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
       "10秒後に扉が開いた。降りてきたのは整理要員だけだった。浄化対象は名簿の上で「所在不明」になった。",
     "못을 박는다": "釘を打ち込む",
   },
-  l2 = {
+  d2 = {
     "가문의 어른이 다섯 살이 된 당신을 앞에 앉혔다. 오늘부터 배우는 것은 글이 아니라 사람이라고 했다. 어른이 첫 질문을 던졌다. '저 문 안에는 무엇이 있겠느냐.'":
       "家門の大人が、五歳になったあなたを前に座らせた。今日から学ぶのは文字ではなく人だという。大人が最初の問いを投げた。「あの扉の内には何があると思う」",
     "[지] 문틈의 불빛과 발소리를 세어 대답한다":
@@ -77482,7 +77482,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "철함사의 어르신들은 승계식 날 군주의 손에 모두 죽었다. 그래도 철함사 아래에는 그들이 남긴 것이 있었다. 환의 처방, 오래된 그릇, 이름 없는 방들. 대관원의 몇몇은 그것으로 다시 늙지 않는 길을 찾으려 했다.":
       "鉄檻寺の長老たちは、家主承継の儀式の日に君主の手でみな死んだ。それでも鉄檻寺の下には、彼らが遺したものがあった。丸の処方、古い器、名もない部屋。大観園の何人かは、それでふたたび老いない道を探そうとした。",
   },
-  h2 = {
+  u2 = {
     '비 오는 밤, 골목 끝에 두루마기를 걸친 사람이 서 있었다. 정장 위에 한복, 허리에는 매듭 달린 환도. "갈 곳이 없어 보이는군. 상처는 있소?"':
       "雨の夜、路地の突き当たりにトゥルマギを羽織った者が立っていた。スーツの上に韓服、腰には飾り紐の付いた環刀。「行く当てがなさそうだな。傷はあるか」",
     "소매를 걷어 보인다": "袖をまくって見せる",
@@ -77973,7 +77973,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "그 사람은 골목 끝까지 바래다주었다. 이후로 그 길에서는 마주치지 않았다.":
       "その人は路地の端まで送ってくれた。それ以来、その道ですれ違うことはなかった。",
   },
-  d2 = {
+  c2 = {
     '구역 사이 길목에서 검은 정장들이 통행료를 걷고 있었다. 낼 돈이 없는 당신을 막아선 사내가 한참 보더니 웃었다. 목덜미까지 검은 구름이 번져 있다. "돈 대신 몸으로 낼 생각 있나. 위에서 시키는 대로만 하면 된다."':
       "区と区の間の路地で、黒いスーツの者たちが通行料を取っていた。払う金のないあなたを止めた男がしばらく眺めてから笑った。首筋まで黒い雲が広がっている。「金の代わりに体で払う気はあるか。上に言われた通りにやるだけでいい」",
     "고개를 숙이고 따른다": "頭を下げてついていく",
@@ -78442,7 +78442,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "그 사람은 말없이 자리를 비웠다. 얼마 지나지 않아 도장에서 그 사람을 더 이상 볼 수 없었다.":
       "その人は何も言わずに席を外した。ほどなくして、道場でその人の姿を見ることはなくなった。",
   },
-  u2 = {
+  f2 = {
     "목소리를 듣는다": "声を聞く",
     맞선다: "立ち向かう",
     "목소리를 거스른다": "声に逆らう",
@@ -78674,7 +78674,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
       "特色にも終わらせられなかったものを、一人の人間が終わらせた。その人の名も顔も、誰も覚えていなかった。",
     "협회 연합": "協会連合",
   },
-  c2 = {
+  w2 = {
     "잔잔한 회색 물 · 서두르는 물": "静かな灰色の水・急ぐ水",
     '물이 회색으로 바뀌었다. 바람이 없다. 선장이 짧게 말했다. "여기선 오래 못 있어. 다들 저어."':
       "水が灰色に変わった。風はない。船長が短く言った。「ここには長くいられない。皆、漕げ」",
@@ -79471,7 +79471,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     '누군가 어깨를 툭 친다. 손목에 닻 문신. "대호수 다녀왔지? 표정 보면 알아. 다음 판엔 이거 하나 사 가."':
       "誰かが肩をとんと叩く。手首に錨の刺青。「大湖に行ってきただろ? 顔を見りゃ分かる。次のために一つ買っていきな」",
   },
-  f2 = {
+  g2 = {
     "약지의 콘테스트 심사 자리다. 스튜던트들이 저마다 몸과 작품을 내보인다.":
       "薬指のコンテストの審査の場だ。スチューデントたちがそれぞれ自分の体と作品を披露している。",
     "내 몸으로 예술을 뽐낸다": "自分の体で芸術を披露する",
@@ -79935,7 +79935,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     '"조금만 시간을 줘." {배우자:은|는} 오래 당신을 보다가 길을 비켜 주었다. 그 눈이 기한을 세고 있다는 것을 알 수 있었다.':
       "『少しだけ時間をちょうだい。』{배우자}は長くあなたを見てから、道を空けてくれた。その目が期限を数えているのが分かった。",
   },
-  w2 = {
+  m2 = {
     "적출직 모집 공고가 사내 게시판에 붙었다. '주 70시간 근무, 앰플 무상 지급.' 아래에 작은 글씨로 한 줄이 더 있다. '교차 적합성 검사 필수.'":
       "摘出職の募集告知が社内掲示板に貼られた。「週70時間勤務、アンプル無償支給」。その下に小さな字でもう一行ある。「交差適合性検査必須」。",
     지원한다: "応募する",
@@ -80496,7 +80496,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "출동하고 돌아올 때마다 편지가 보였다. 맨 아래 한 줄은 외울 수 있었지만, 매번 다시 읽었다.":
       "出動から戻るたびに手紙が目に入った。いちばん下の一行は暗唱できたが、そのたびに読み返した。",
   },
-  g2 = {
+  y2 = {
     "사내 게시판 맨 위에 하얀 종이 한 장. '순수한 몸을 찾는다. 불결한 이물을 들이지 않은 몸을.' 지원서에는 이름 칸보다 시술 이력 칸이 먼저 있다. 당신의 칸은 비어 있다.":
       "社内掲示板の一番上に白い紙が一枚。「純粋な体を求む。不浄な異物を入れていない体を」。志願書には名前の欄より先に施術歴の欄がある。あなたの欄は空白だ。",
     지원한다: "応募する",
@@ -80826,7 +80826,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
       "説教の文句が耳から滑り落ちる。槌が重い。",
     "이단 심문관은 몸을 바꾸지 않는다.": "異端審問官は体を替えない。",
   },
-  m2 = {
+  p2 = {
     "특별한 일 없이 한 해가 지나갔다. 같은 길, 같은 얼굴, 같은 하늘.":
       "特に何事もなく一年が過ぎた。同じ道、同じ顔、同じ空。",
     "한 해가 조용히 흘렀다. 다행이라는 말이 입에서 나오지 않을 만큼.":
@@ -81115,7 +81115,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "정리 부서 단체 대화방에는 오늘도 좌석 번호만 올라왔다.":
       "整理部門のグループチャットには、今日も座席番号ばかりが上がってきた。",
   },
-  y2 = {
+  b2 = {
     "봉투 하나를 구역 반대편 사무소까지 운반한다. 내용물은 알 필요가 없다고 했다. 봉투가 생각보다 무겁다.":
       "封筒をひとつ、区の反対側の事務所まで運ぶ。中身は知る必要がないと言われた。封筒は思ったより重い。",
     "봉투를 노린 쪽이 생각보다 많았다.": "封筒を狙う者は思ったより多かった。",
@@ -81946,7 +81946,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "서명은 지켜졌다. 당신은 그것을 보지 못했다.":
       "署名は守られた。あなたはそれを見ることができなかった。",
   },
-  p2 = {
+  k2 = {
     A: {
       name: "A社",
       alias: "頭",
@@ -82190,7 +82190,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
       sub: "翼の庇護の外",
     },
   },
-  b2 = {
+  x2 = {
     tiers: [
       "あらぬ噂",
       "都市怪談",
@@ -82244,16 +82244,14 @@ Your spouse looked at your pale face and asked if you were all right.`,
       "거래 중개와 계약을 다루는 협회": "取引の仲介と契約を扱う協会",
     },
   },
-  k2 = { regions: p2, orgs: b2 },
-  Is = iv({
-    regions: a0,
-    daily: n0,
-    requests: O0,
-    orgs: L0,
-    rarity: rv,
+  v2 = { regions: k2, orgs: x2 },
+  Ns = lT({
+    regions: r0,
+    daily: i0,
+    requests: E0,
+    orgs: M0,
+    rarity: sT,
     events: [
-      r0,
-      i0,
       s0,
       l0,
       h0,
@@ -82269,8 +82267,8 @@ Your spouse looked at your pale face and asked if you were all right.`,
       b0,
       k0,
       x0,
-      T0,
       v0,
+      T0,
       _0,
       j0,
       A0,
@@ -82280,65 +82278,65 @@ Your spouse looked at your pale face and asked if you were all right.`,
       C0,
       I0,
       N0,
+      O0,
+      W0,
     ],
   });
-let Ns = null,
-  Os = null;
+let Os = null,
+  Ws = null;
 function mt() {
   const e = Pe();
   if (e === "en") {
-    if (!Ns) {
-      const t = rc([
-        hv,
-        dv,
-        uv,
-        cv,
-        fv,
-        wv,
-        gv,
-        mv,
-        yv,
-        pv,
-        bv,
-        kv,
-        xv,
-        Tv,
-        vv,
-        _v,
-        jv,
-        Av,
-        Yv,
-        Sv,
-        Rv,
-        Cv,
-        Iv,
-        Nv,
-        Ov,
-        Wv,
-        Ev,
-        Bv,
-        Fv,
-        Lv,
+    if (!Os) {
+      const t = ic([
+        uT,
+        cT,
+        fT,
+        wT,
+        gT,
+        mT,
+        yT,
+        pT,
+        bT,
+        kT,
+        xT,
+        vT,
+        TT,
+        _T,
+        jT,
+        AT,
+        YT,
+        ST,
+        RT,
+        CT,
+        IT,
+        NT,
+        OT,
+        WT,
+        ET,
+        BT,
+        FT,
+        LT,
+        PT,
+        MT,
       ]);
-      Ns = nc(Is, t, $v);
+      Os = rc(Ns, t, DT);
     }
-    return Ns;
+    return Os;
   }
   if (e === "ja") {
-    if (!Os) {
-      const t = rc([
-        Hv,
-        Dv,
-        qv,
-        Gv,
-        Kv,
-        zv,
-        Uv,
-        Jv,
-        Vv,
-        Xv,
-        Qv,
-        Zv,
+    if (!Ws) {
+      const t = ic([
+        qT,
+        GT,
+        KT,
+        zT,
+        UT,
+        JT,
+        VT,
+        XT,
+        QT,
+        ZT,
         e2,
         t2,
         o2,
@@ -82357,23 +82355,25 @@ function mt() {
         g2,
         m2,
         y2,
+        p2,
+        b2,
       ]);
-      Os = nc(Is, t, k2);
+      Ws = rc(Ns, t, v2);
     }
-    return Os;
+    return Ws;
   }
-  return Is;
+  return Ns;
 }
-const x2 = 250;
-function T2(e, t, o) {
+const T2 = 250;
+function _2(e, t, o) {
   const a = e.state,
     n = { changed: !1, yearEnded: !1 };
   if (!a || a.dead) return n;
-  const r = Math.min(Math.max(o, 0), x2);
+  const r = Math.min(Math.max(o, 0), T2);
   if (
     (a.prompt &&
       (e.auto
-        ? (Ti(a, t, zx(a), { auto: !0 }), (n.changed = !0))
+        ? (Ti(a, t, Jx(a), { auto: !0 }), (n.changed = !0))
         : a.prompt.kind === "minor" &&
           !e.paused &&
           ((a.prompt.remainingMs -= r),
@@ -82383,7 +82383,7 @@ function T2(e, t, o) {
   )
     return n;
   const i = a.prompt ? 1 : e.speed;
-  e.progress += (r * i) / gp;
+  e.progress += (r * i) / yp;
   for (let l = 0; l < 60 && !a.dead; l++) {
     if (a.prompt) {
       const u = a.cursor < a.plan.length ? a.plan[a.cursor].t : 0.999;
@@ -82392,22 +82392,22 @@ function T2(e, t, o) {
     }
     const s = a.plan[a.cursor];
     if (s && e.progress >= s.t) {
-      (hx(a, t), (n.changed = !0));
+      (ux(a, t), (n.changed = !0));
       continue;
     }
     if (e.progress >= 1) {
-      ((e.progress -= 1), o0(a, t), (n.changed = !0), (n.yearEnded = !0));
+      ((e.progress -= 1), n0(a, t), (n.changed = !0), (n.yearEnded = !0));
       continue;
     }
     break;
   }
   return n;
 }
-const fd = "cbl.save.v1",
-  Ui = "cbl.memorial.v1",
-  v2 = 20,
-  _2 = 5;
-function Ji(e) {
+const wd = "cbl.save.v1",
+  Ji = "cbl.memorial.v1",
+  j2 = 20,
+  A2 = 5;
+function Vi(e) {
   try {
     const t = localStorage.getItem(e);
     return t ? JSON.parse(t) : null;
@@ -82420,8 +82420,8 @@ function ea(e, t) {
     localStorage.setItem(e, JSON.stringify(t));
   } catch {}
 }
-function Rg() {
-  const e = Ji(fd);
+function Cg() {
+  const e = Vi(wd);
   return e && e.v === 7 && (!e.dead || e.dead.voice)
     ? (Array.isArray(e.flags) &&
         (e.flags = e.flags.map((t) => (t === "E.G.O.계약" ? "E.G.O개화" : t))),
@@ -82429,31 +82429,31 @@ function Rg() {
     : null;
 }
 function tn(e) {
-  ea(fd, e);
+  ea(wd, e);
 }
-function Ws() {
+function Es() {
   try {
-    localStorage.removeItem(fd);
+    localStorage.removeItem(wd);
   } catch {}
 }
-function Vi() {
-  const e = Ji(Ui);
+function Xi() {
+  const e = Vi(Ji);
   return Array.isArray(e) ? e : [];
 }
-const j2 = 30;
-function Cg(e) {
-  const t = e.filter((r) => r.pinned).slice(0, j2),
-    o = e.filter((r) => !r.pinned).slice(0, v2);
+const Y2 = 30;
+function Ig(e) {
+  const t = e.filter((r) => r.pinned).slice(0, Y2),
+    o = e.filter((r) => !r.pinned).slice(0, j2);
   let a = 0;
   const n = [];
   for (const r of e)
     r.pinned
       ? t.includes(r) && n.push(r)
-      : o.includes(r) && (n.push(a < _2 ? r : { ...r, chronicle: null }), a++);
+      : o.includes(r) && (n.push(a < A2 ? r : { ...r, chronicle: null }), a++);
   return n;
 }
-function A2(e) {
-  const t = Vi();
+function S2(e) {
+  const t = Xi();
   (t.unshift({
     at: Date.now(),
     name: e.name,
@@ -82467,29 +82467,29 @@ function A2(e) {
     seed: e.seed,
     chronicle: e.chronicle || null,
   }),
-    ea(Ui, Cg(t)));
+    ea(Ji, Ig(t)));
 }
-function Y2(e, t) {
-  const o = Vi().map((n) => (n.at === e ? { ...n, pinned: !!t } : n)),
-    a = Cg(o);
-  return (ea(Ui, a), a);
+function R2(e, t) {
+  const o = Xi().map((n) => (n.at === e ? { ...n, pinned: !!t } : n)),
+    a = Ig(o);
+  return (ea(Ji, a), a);
 }
-function S2(e) {
-  const t = Vi().filter((o) => o.at !== e);
-  return (ea(Ui, t), t);
+function C2(e) {
+  const t = Xi().filter((o) => o.at !== e);
+  return (ea(Ji, t), t);
 }
-const Ig = "cityborn.profile";
-function Ng() {
-  return Ji(Ig) || {};
+const Ng = "cityborn.profile";
+function Og() {
+  return Vi(Ng) || {};
 }
-function R2(e) {
-  ea(Ig, e);
+function I2(e) {
+  ea(Ng, e);
 }
-const wd = "cbl.codex.v1",
-  C2 = "cityborn-codex-7f3a";
+const gd = "cbl.codex.v1",
+  N2 = "cityborn-codex-7f3a";
 function Xn(e, t) {
   const o =
-    C2 +
+    N2 +
     JSON.stringify(
       Object.keys(e)
         .sort()
@@ -82502,18 +82502,18 @@ function Xn(e, t) {
   return a.toString(36);
 }
 function Ka() {
-  const e = Ji(wd);
+  const e = Vi(gd);
   return !e || e.v !== 1 || typeof e.got != "object"
     ? { v: 1, got: {}, lives: 0 }
     : e.sig !== Xn(e.got, e.lives || 0)
       ? { v: 1, got: {}, lives: 0 }
       : { v: 1, got: e.got, lives: e.lives || 0 };
 }
-function I2(e) {
+function O2(e) {
   const t = Ka();
   return [...e].filter((o) => !t.got[o]);
 }
-function N2(e, t) {
+function W2(e, t) {
   const o = Ka();
   for (const a of e) {
     const n = o.got[a];
@@ -82532,22 +82532,22 @@ function N2(e, t) {
   }
   return (
     (o.lives += 1),
-    ea(wd, { v: 1, got: o.got, lives: o.lives, sig: Xn(o.got, o.lives) }),
+    ea(gd, { v: 1, got: o.got, lives: o.lives, sig: Xn(o.got, o.lives) }),
     o
   );
 }
-const Dl = "CBL-CODEX-1:";
-function O2(e) {
+const ql = "CBL-CODEX-1:";
+function E2(e) {
   return btoa(unescape(encodeURIComponent(e)));
 }
-function W2(e) {
+function B2(e) {
   return decodeURIComponent(escape(atob(e)));
 }
-function E2() {
+function F2() {
   const e = Ka();
   return Object.keys(e.got).length
-    ? Dl +
-        O2(
+    ? ql +
+        E2(
           JSON.stringify({
             v: 1,
             got: e.got,
@@ -82557,12 +82557,12 @@ function E2() {
         )
     : null;
 }
-function B2(e) {
+function L2(e) {
   const t = String(e || "").trim();
-  if (!t.startsWith(Dl)) return { ok: !1, reason: "format" };
+  if (!t.startsWith(ql)) return { ok: !1, reason: "format" };
   let o;
   try {
-    o = JSON.parse(W2(t.slice(Dl.length)));
+    o = JSON.parse(B2(t.slice(ql.length)));
   } catch {
     return { ok: !1, reason: "format" };
   }
@@ -82585,11 +82585,11 @@ function B2(e) {
   }
   return (
     (a.lives = Math.max(a.lives, o.lives || 0)),
-    ea(wd, { v: 1, got: a.got, lives: a.lives, sig: Xn(a.got, a.lives) }),
+    ea(gd, { v: 1, got: a.got, lives: a.lives, sig: Xn(a.got, a.lives) }),
     { ok: !0, added: n }
   );
 }
-const F2 = [
+const P2 = [
     {
       id: "birth",
       label: () => h("출생·수명", "Birth & lifespan", "出生・寿命"),
@@ -82620,7 +82620,7 @@ const F2 = [
     { id: "city", label: () => h("도시의 일", "City affairs", "都市の出来事") },
   ],
   p = (e, t, o) => ({ ko: e, en: t, ja: o }),
-  L2 = [
+  M2 = [
     [
       "born_head",
       "birth",
@@ -84785,35 +84785,35 @@ const F2 = [
       null,
     ],
   ],
-  gd = L2.map(([e, t, o, a, n]) => ({
+  md = M2.map(([e, t, o, a, n]) => ({
     key: e,
     group: t,
     label: o,
     hint: a,
     implies: n,
-    tier: Ew[e] || "myth",
+    tier: Bw[e] || "myth",
   })),
-  ic = Object.fromEntries(gd.map((e) => [e.key, e]));
-function P2(e) {
+  sc = Object.fromEntries(md.map((e) => [e.key, e]));
+function $2(e) {
   const t = new Set(),
     o = [...e];
   for (; o.length;) {
     const a = o.pop();
-    if (!a || t.has(a) || !ic[a]) continue;
+    if (!a || t.has(a) || !sc[a]) continue;
     t.add(a);
-    const n = ic[a].implies;
+    const n = sc[a].implies;
     n && o.push(n);
   }
   return t;
 }
-function ql(e) {
+function Gl(e) {
   return e === "miracle" || e === "myth"
     ? "tier"
     : e === "legend"
       ? "name"
       : "open";
 }
-function M2(e) {
+function H2(e) {
   return {
     ...e,
     stats: { ...e.stats },
@@ -84828,7 +84828,7 @@ function M2(e) {
     prompt: e.prompt ? { ...e.prompt } : null,
   };
 }
-function $2() {
+function D2() {
   const e = N.useRef({
       state: null,
       progress: 0,
@@ -84842,12 +84842,12 @@ function $2() {
     [i, l] = N.useState(1),
     [s, u] = N.useState(!1),
     [f, y] = N.useState(!1),
-    [g, k] = N.useState(null),
-    x = N.useCallback(() => {
+    [g, x] = N.useState(null),
+    k = N.useCallback(() => {
       const A = e.current.state;
-      a(A ? M2(A) : null);
+      a(A ? H2(A) : null);
     }, []),
-    T = N.useCallback(
+    v = N.useCallback(
       (A) => {
         const S = e.current;
         ((S.state = A),
@@ -84861,40 +84861,40 @@ function $2() {
           (S.paused = !1),
           (t.current = !1),
           u(!1),
-          k(null),
+          x(null),
           r({ progress: 0, countdown: 1 }),
           tn(A),
-          x());
+          k());
       },
-      [x],
+      [k],
     ),
     Y = N.useCallback(
       (A = {}) => {
         const S = (A.seed || "").trim();
-        T(zu(mt(), { seed: S || void 0, name: A.name, gender: A.gender }));
+        v(Uu(mt(), { seed: S || void 0, name: A.name, gender: A.gender }));
       },
-      [T],
+      [v],
     ),
     c = N.useCallback(() => {
-      const A = Ng();
-      (Ws(), T(zu(mt(), { name: A.name || "", gender: A.gender || "m" })));
-    }, [T]),
+      const A = Og();
+      (Es(), v(Uu(mt(), { name: A.name || "", gender: A.gender || "m" })));
+    }, [v]),
     m = N.useCallback(() => {
-      const A = Rg();
-      A && T(A);
-    }, [T]),
+      const A = Cg();
+      A && v(A);
+    }, [v]),
     w = N.useCallback(() => {
       const A = e.current.state;
       if (!A || !A.dead) return;
-      const S = Sg(A, mt()),
-        F = P2((S.records || []).map((D) => D.key));
-      ((S.newRecords = I2(F)),
-        N2(F, { at: Date.now(), name: S.name, age: S.age, seed: S.seed }),
-        k(S),
-        A2(S),
-        Ws(),
-        x());
-    }, [x]);
+      const S = Rg(A, mt()),
+        F = $2((S.records || []).map((D) => D.key));
+      ((S.newRecords = O2(F)),
+        W2(F, { at: Date.now(), name: S.name, age: S.age, seed: S.seed }),
+        x(S),
+        S2(S),
+        Es(),
+        k());
+    }, [k]);
   N.useEffect(() => {
     let A = 0,
       S = performance.now(),
@@ -84924,19 +84924,19 @@ function $2() {
         }
       }
       if (j.holdUntil && ee < j.holdUntil) return;
-      const B = T2(j, mt(), K);
-      if ((B.yearEnded && !O.dead && tn(O), B.changed && x(), ee - F > 90)) {
+      const B = _2(j, mt(), K);
+      if ((B.yearEnded && !O.dead && tn(O), B.changed && k(), ee - F > 90)) {
         F = ee;
         const $ =
           O.prompt && O.prompt.kind === "minor"
-            ? Math.max(0, O.prompt.remainingMs / jw)
+            ? Math.max(0, O.prompt.remainingMs / Aw)
             : 1;
         r({ progress: j.progress, countdown: $ });
       }
     };
     return ((A = requestAnimationFrame(D)), () => cancelAnimationFrame(A));
-  }, [x, w]);
-  const v = N.useCallback(
+  }, [k, w]);
+  const T = N.useCallback(
       (A) => {
         const S = e.current.state;
         !S ||
@@ -84944,9 +84944,9 @@ function $2() {
           S.prompt.kind === "reflect" ||
           S.prompt.kind === "color" ||
           S.prompt.kind === "name" ||
-          (Ti(S, mt(), A, {}), x());
+          (Ti(S, mt(), A, {}), k());
       },
-      [x],
+      [k],
     ),
     _ = N.useCallback(
       (A) => {
@@ -84956,17 +84956,17 @@ function $2() {
           (S.prompt.kind !== "reflect" &&
             S.prompt.kind !== "color" &&
             S.prompt.kind !== "name") ||
-          (Ti(S, mt(), -1, { text: A }), x());
+          (Ti(S, mt(), -1, { text: A }), k());
       },
-      [x],
+      [k],
     ),
     C = N.useCallback(() => {
       const A = e.current.state;
       !A ||
         !A.dead ||
         !A.dead.voice ||
-        (Db(A, mt()), (t.current = !1), tn(A), x());
-    }, [x]),
+        (Gb(A, mt()), (t.current = !1), tn(A), k());
+    }, [k]),
     R = N.useCallback((A) => {
       ((e.current.speed = A), l(A));
     }, []),
@@ -84986,17 +84986,17 @@ function $2() {
         (A.progress = 0),
         (A.auto = !1),
         y(!1),
-        k(null),
+        x(null),
         a(null));
     }, []),
     I = N.useCallback(() => {
-      Ws();
+      Es();
       const A = e.current;
       ((A.state = null),
         (A.progress = 0),
         (A.auto = !1),
         y(!1),
-        k(null),
+        x(null),
         a(null));
     }, []);
   return {
@@ -85010,7 +85010,7 @@ function $2() {
     start: Y,
     restart: c,
     resume: m,
-    choose: v,
+    choose: T,
     submitReflection: _,
     acceptVoice: C,
     setSpeed: R,
@@ -85020,7 +85020,7 @@ function $2() {
     saveAndQuit: b,
   };
 }
-function Og(e) {
+function Wg(e) {
   return e.undying
     ? h(
         `${e.region.name}에서 태어난 ${e.name}, 영생. (${e.cause})`,
@@ -85039,7 +85039,7 @@ function Og(e) {
           `${e.region.name}に生まれた${e.name}、${e.age}歳で生涯を終えた。（${e.cause}）`,
         );
 }
-function H2(e) {
+function q2(e) {
   const t = e.diff >= 0 ? "+" : "−",
     o = [
       h(
@@ -85048,7 +85048,7 @@ function H2(e) {
         "都市の一人として生まれ、",
       ),
       "",
-      Og(e),
+      Wg(e),
       `“${e.obituary}”`,
       "",
       `${h("태어난 집", "Born into", "生まれた家")}: ${(Fe[e.family] || {}).label || "-"}`,
@@ -85080,9 +85080,9 @@ function H2(e) {
           .join(h(", ", ", ", "、")),
     ),
     o.push(
-      `${h("마지막 상태", "Final state", "最後の状態")}: ${Yo.map((n) => `${st[n]} ${Math.round(e.stats[n])}`).join(" / ")}`,
+      `${h("마지막 상태", "Final state", "最後の状態")}: ${oo.map((n) => `${Je[n]} ${Math.round(e.stats[n])}`).join(" / ")}`,
     ));
-  const a = e.flags.map((n) => Dh(n, e)).filter(Boolean);
+  const a = e.flags.map((n) => qh(n, e)).filter(Boolean);
   if (
     (a.length &&
       o.push(`${h("기록", "Traits", "記録")}: ${a.join(h(", ", ", ", "、"))}`),
@@ -85123,9 +85123,9 @@ async function Qn(e) {
     }
   }
 }
-function Wg({ info: e, chronicle: t, onClose: o }) {
+function Eg({ info: e, chronicle: t, onClose: o }) {
   const [a, n] = N.useState(null),
-    r = Yw(t);
+    r = Sw(t);
   N.useEffect(() => {
     const s = (u) => u.key === "Escape" && o();
     return (
@@ -85137,7 +85137,7 @@ function Wg({ info: e, chronicle: t, onClose: o }) {
       (n(s), setTimeout(() => n(null), 2e3));
     },
     l = async () => {
-      const s = await Qn(Cw(e, t));
+      const s = await Qn(Iw(e, t));
       i(
         s
           ? h("복사했습니다", "Copied", "コピーしました")
@@ -85213,7 +85213,7 @@ function Wg({ info: e, chronicle: t, onClose: o }) {
                 {
                   className: "lifelog-year",
                   children: [
-                    d.jsx("h3", { children: Sw(s.age) }),
+                    d.jsx("h3", { children: Rw(s.age) }),
                     s.items.map((u, f) =>
                       u.k === "r"
                         ? d.jsxs(
@@ -85223,7 +85223,7 @@ function Wg({ info: e, chronicle: t, onClose: o }) {
                               children: [
                                 d.jsxs("div", {
                                   className: "chosen",
-                                  children: ["▸ ", u.x ? Rw() : u.c],
+                                  children: ["▸ ", u.x ? Cw() : u.c],
                                 }),
                                 d.jsx("p", { children: u.t }),
                                 u.j &&
@@ -85263,7 +85263,7 @@ function Wg({ info: e, chronicle: t, onClose: o }) {
           children: [
             d.jsx("button", {
               className: "btn primary",
-              onClick: () => vp(e, t),
+              onClick: () => jp(e, t),
               children: h("txt로 저장", "Save as .txt", "txtで保存"),
             }),
             d.jsx("button", {
@@ -85283,7 +85283,7 @@ function Wg({ info: e, chronicle: t, onClose: o }) {
     }),
   });
 }
-function Gl({
+function Kl({
   text: e,
   okLabel: t,
   cancelLabel: o,
@@ -85330,11 +85330,11 @@ function Gl({
     })
   );
 }
-function D2(e) {
+function G2(e) {
   const t = new Date(e);
   return `${t.getMonth() + 1}/${t.getDate()}`;
 }
-function q2({ lives: e, onChange: t, onReplay: o, onClose: a }) {
+function K2({ lives: e, onChange: t, onReplay: o, onClose: a }) {
   const [n, r] = N.useState(null),
     [i, l] = N.useState(null),
     [s, u] = N.useState("all"),
@@ -85349,12 +85349,12 @@ function q2({ lives: e, onChange: t, onReplay: o, onClose: a }) {
   const g = (c) => {
       (y(c), setTimeout(() => y(null), 1800));
     },
-    k = N.useMemo(
+    x = N.useMemo(
       () => [...e.filter((c) => c.pinned), ...e.filter((c) => !c.pinned)],
       [e],
     ),
-    x = s === "pinned" ? k.filter((c) => c.pinned) : k,
-    T = e.filter((c) => c.pinned).length,
+    k = s === "pinned" ? x.filter((c) => c.pinned) : x,
+    v = e.filter((c) => c.pinned).length,
     Y = async (c) =>
       g(
         (await Qn(c.seed))
@@ -85397,7 +85397,7 @@ function q2({ lives: e, onChange: t, onReplay: o, onClose: a }) {
                   "aria-selected": s === "pinned",
                   className: s === "pinned" ? "on" : "",
                   onClick: () => u("pinned"),
-                  children: ["★ ", T],
+                  children: ["★ ", v],
                 }),
               ],
             }),
@@ -85420,7 +85420,7 @@ function q2({ lives: e, onChange: t, onReplay: o, onClose: a }) {
         d.jsxs("div", {
           className: "pl-body",
           children: [
-            x.length === 0 &&
+            k.length === 0 &&
               d.jsx("p", {
                 className: "dim",
                 children: h(
@@ -85429,7 +85429,7 @@ function q2({ lives: e, onChange: t, onReplay: o, onClose: a }) {
                   "まだありません。",
                 ),
               }),
-            x.map((c) =>
+            k.map((c) =>
               d.jsxs(
                 "article",
                 {
@@ -85451,7 +85451,7 @@ function q2({ lives: e, onChange: t, onReplay: o, onClose: a }) {
                         }),
                         d.jsx("span", {
                           className: "pl-date",
-                          children: D2(c.at),
+                          children: G2(c.at),
                         }),
                       ],
                     }),
@@ -85505,7 +85505,7 @@ function q2({ lives: e, onChange: t, onReplay: o, onClose: a }) {
                         }),
                         d.jsx("button", {
                           className: `btn small ghost pl-pin ${c.pinned ? "on" : ""}`,
-                          onClick: () => t(Y2(c.at, !c.pinned)),
+                          onClick: () => t(R2(c.at, !c.pinned)),
                           "aria-pressed": !!c.pinned,
                           title: c.pinned
                             ? h("고정 해제", "Unpin", "固定を外す")
@@ -85530,7 +85530,7 @@ function q2({ lives: e, onChange: t, onReplay: o, onClose: a }) {
         }),
         f && d.jsx("p", { className: "dim img-msg", children: f }),
         n &&
-          d.jsx(Wg, {
+          d.jsx(Eg, {
             info: {
               name: n.name,
               region: n.region,
@@ -85543,7 +85543,7 @@ function q2({ lives: e, onChange: t, onReplay: o, onClose: a }) {
             onClose: () => r(null),
           }),
         i &&
-          d.jsx(Gl, {
+          d.jsx(Kl, {
             danger: !0,
             text: h(
               `${i.name ? i.name + " · " : ""}${i.age}세의 삶을 지울까요? 되돌릴 수 없습니다.`,
@@ -85552,7 +85552,7 @@ function q2({ lives: e, onChange: t, onReplay: o, onClose: a }) {
             ),
             okLabel: h("지운다", "Delete", "削除する"),
             onOk: () => {
-              (t(S2(i.at)), l(null));
+              (t(C2(i.at)), l(null));
             },
             onCancel: () => l(null),
           }),
@@ -85560,22 +85560,22 @@ function q2({ lives: e, onChange: t, onReplay: o, onClose: a }) {
     }),
   });
 }
-const Eg = "cbl.ui.orientation",
-  Bg = ["auto", "portrait", "landscape"];
-function Fg() {
+const Bg = "cbl.ui.orientation",
+  Fg = ["auto", "portrait", "landscape"];
+function Lg() {
   try {
-    const e = localStorage.getItem(Eg);
-    return Bg.includes(e) ? e : "auto";
+    const e = localStorage.getItem(Bg);
+    return Fg.includes(e) ? e : "auto";
   } catch {
     return "auto";
   }
 }
-function G2(e) {
+function z2(e) {
   try {
-    localStorage.setItem(Eg, e);
+    localStorage.setItem(Bg, e);
   } catch {}
 }
-async function Lg(e) {
+async function Pg(e) {
   const t = typeof screen < "u" && screen.orientation;
   if (!t) return "unsupported";
   try {
@@ -85588,23 +85588,23 @@ async function Lg(e) {
     return "unsupported";
   }
 }
-function K2() {
-  const e = Fg();
-  e !== "auto" && Lg(e);
+function U2() {
+  const e = Lg();
+  e !== "auto" && Pg(e);
 }
-function z2(e) {
+function J2(e) {
   const t = new Date(e);
   return `${t.getFullYear()}.${t.getMonth() + 1}.${t.getDate()}`;
 }
-function U2({ onClose: e }) {
+function V2({ onClose: e }) {
   const [t, o] = N.useState(0),
     a = N.useMemo(() => Ka(), [t]),
     [n, r] = N.useState(null),
     [i, l] = N.useState(""),
     [s, u] = N.useState(null),
     f = Pe(),
-    [y, g] = N.useState(() => new Set(vn.map((S) => S.id))),
-    [k, x] = N.useState(!1);
+    [y, g] = N.useState(() => new Set(Tn.map((S) => S.id))),
+    [x, k] = N.useState(!1);
   N.useEffect(() => {
     const S = (F) => F.key === "Escape" && e();
     return (
@@ -85612,17 +85612,15 @@ function U2({ onClose: e }) {
       () => window.removeEventListener("keydown", S)
     );
   }, [e]);
-  const T = a.got,
-    Y = (S) => !!T[S],
-    c = gd.filter((S) => ql(S.tier) !== "none" || Y(S.key)),
+  const v = a.got,
+    Y = (S) => !!v[S],
+    c = md.filter((S) => Gl(S.tier) !== "none" || Y(S.key)),
     m = c.length,
     w = c.filter((S) => Y(S.key)).length,
-    v = vn
-      .map((S) => {
-        const F = c.filter((D) => D.tier === S.id);
-        return { ...S, all: F.length, got: F.filter((D) => Y(D.key)).length };
-      })
-      .filter((S) => S.all > 0),
+    T = Tn.map((S) => {
+      const F = c.filter((D) => D.tier === S.id);
+      return { ...S, all: F.length, got: F.filter((D) => Y(D.key)).length };
+    }).filter((S) => S.all > 0),
     _ = (S) =>
       g((F) => {
         const D = new Set(F);
@@ -85633,7 +85631,7 @@ function U2({ onClose: e }) {
       (u(S), setTimeout(() => u(null), 2500));
     },
     W = () => {
-      const S = E2();
+      const S = F2();
       if (!S)
         return R(
           h(
@@ -85664,7 +85662,7 @@ function U2({ onClose: e }) {
         setTimeout(() => URL.revokeObjectURL(F), 2e3));
     },
     I = (S) => {
-      const F = B2(S);
+      const F = L2(S);
       if (!F.ok) {
         R(
           F.reason === "sig"
@@ -85735,7 +85733,7 @@ function U2({ onClose: e }) {
         d.jsx("div", {
           className: "codex-bar",
           "aria-hidden": "true",
-          children: v.map(
+          children: T.map(
             (S) =>
               S.got > 0 &&
               d.jsx(
@@ -85750,7 +85748,7 @@ function U2({ onClose: e }) {
         }),
         d.jsx("div", {
           className: "codex-legend",
-          children: v.map((S) =>
+          children: T.map((S) =>
             d.jsxs(
               "span",
               {
@@ -85769,7 +85767,7 @@ function U2({ onClose: e }) {
         d.jsxs("div", {
           className: "codex-filters",
           children: [
-            v.map((S) =>
+            T.map((S) =>
               d.jsx(
                 "button",
                 {
@@ -85782,8 +85780,8 @@ function U2({ onClose: e }) {
               ),
             ),
             d.jsx("button", {
-              className: `chip ${k ? "on" : ""}`,
-              onClick: () => x((S) => !S),
+              className: `chip ${x ? "on" : ""}`,
+              onClick: () => k((S) => !S),
               children: h("못 얻은 것만", "Missing only", "未取得のみ"),
             }),
           ],
@@ -85791,10 +85789,10 @@ function U2({ onClose: e }) {
         d.jsxs("div", {
           className: "codex-body",
           children: [
-            F2.map((S) => {
+            P2.map((S) => {
               const F = c.filter((K) => K.group === S.id),
                 D = F.filter((K) => Y(K.key)).length,
-                ee = F.filter((K) => y.has(K.tier) && !(k && Y(K.key)));
+                ee = F.filter((K) => y.has(K.tier) && !(x && Y(K.key)));
               return (
                 ee.sort(
                   (K, j) =>
@@ -85824,9 +85822,9 @@ function U2({ onClose: e }) {
                         : d.jsx("div", {
                             className: "codex-grid",
                             children: ee.map((K) => {
-                              const j = T[K.key],
-                                O = j ? "got" : ql(K.tier),
-                                B = vn.find((ke) => ke.id === K.tier),
+                              const j = v[K.key],
+                                O = j ? "got" : Gl(K.tier),
+                                B = Tn.find((ke) => ke.id === K.tier),
                                 $ =
                                   O === "tier"
                                     ? "???"
@@ -85870,7 +85868,7 @@ function U2({ onClose: e }) {
                                                   `${j.first.age}歳`,
                                                 )
                                               : "",
-                                            z2(j.first.at),
+                                            J2(j.first.at),
                                           ]
                                             .filter(Boolean)
                                             .join(" · "),
@@ -86018,11 +86016,11 @@ function U2({ onClose: e }) {
     }),
   });
 }
-function J2(e) {
+function X2(e) {
   const t = new Date(e);
   return `${t.getMonth() + 1}/${t.getDate()}`;
 }
-function Pg() {
+function Mg() {
   const e = Pe();
   return d.jsxs("div", {
     className: "lang-switch",
@@ -86031,39 +86029,39 @@ function Pg() {
     children: [
       d.jsx("button", {
         className: e === "ko" ? "on" : "",
-        onClick: () => _s("ko"),
+        onClick: () => js("ko"),
         lang: "ko",
         children: "한국어",
       }),
       d.jsx("button", {
         className: e === "en" ? "on" : "",
-        onClick: () => _s("en"),
+        onClick: () => js("en"),
         lang: "en",
         children: "English",
       }),
       d.jsx("button", {
         className: e === "ja" ? "on" : "",
-        onClick: () => _s("ja"),
+        onClick: () => js("ja"),
         lang: "ja",
         children: "日本語",
       }),
     ],
   });
 }
-function V2({ onStart: e, onResume: t }) {
-  const o = N.useMemo(() => Rg(), []),
-    [a, n] = N.useState(() => Vi()),
+function Q2({ onStart: e, onResume: t }) {
+  const o = N.useMemo(() => Cg(), []),
+    [a, n] = N.useState(() => Xi()),
     [r, i] = N.useState(""),
     [l, s] = N.useState(!1),
     [u, f] = N.useState(null),
     y = (A) => {
       (f(A), setTimeout(() => f(null), 1800));
     },
-    [g, k] = N.useState(() => Fg()),
-    x = async (A) => {
-      (k(A),
-        G2(A),
-        (await Lg(A)) === "unsupported" &&
+    [g, x] = N.useState(() => Lg()),
+    k = async (A) => {
+      (x(A),
+        z2(A),
+        (await Pg(A)) === "unsupported" &&
           A !== "auto" &&
           y(
             h(
@@ -86096,16 +86094,16 @@ function V2({ onStart: e, onResume: t }) {
       } catch {}
     },
     [m, w] = N.useState(!1),
-    v = N.useMemo(() => {
+    T = N.useMemo(() => {
       const A = Ka().got,
-        S = gd.filter((F) => ql(F.tier) !== "none" || A[F.key]);
+        S = md.filter((F) => Gl(F.tier) !== "none" || A[F.key]);
       return { got: S.filter((F) => A[F.key]).length, total: S.length };
     }, []),
-    _ = N.useMemo(() => Ng(), []),
+    _ = N.useMemo(() => Og(), []),
     [C, R] = N.useState(_.name || ""),
     [W, G] = N.useState(_.gender || "m"),
     b = () => {
-      (R2({ name: C.trim(), gender: W }),
+      (I2({ name: C.trim(), gender: W }),
         e({ seed: r, name: C.trim(), gender: W }));
     },
     I = o ? mt().regions.find((A) => A.id === o.regionId) : null;
@@ -86114,7 +86112,7 @@ function V2({ onStart: e, onResume: t }) {
     children: d.jsxs("div", {
       className: "landing-inner",
       children: [
-        d.jsx(Pg, {}),
+        d.jsx(Mg, {}),
         d.jsx("p", {
           className: "eyebrow",
           children: h(
@@ -86388,14 +86386,14 @@ function V2({ onStart: e, onResume: t }) {
               className: "seg orient-seg",
               role: "radiogroup",
               "aria-label": h("화면 회전", "Screen rotation", "画面の回転"),
-              children: Bg.map((A) =>
+              children: Fg.map((A) =>
                 d.jsx(
                   "button",
                   {
                     role: "radio",
                     "aria-checked": g === A,
                     className: g === A ? "on" : "",
-                    onClick: () => x(A),
+                    onClick: () => k(A),
                     children:
                       A === "auto"
                         ? h("기기 설정", "Device", "端末設定")
@@ -86417,7 +86415,7 @@ function V2({ onStart: e, onResume: t }) {
             "死、病気、犯罪、精神の崩壊といった重い場面が登場します。15歳以上を推奨します。",
           ),
         }),
-        (a.length > 0 || v.got > 0) &&
+        (a.length > 0 || T.got > 0) &&
           d.jsxs("section", {
             className: "memorial",
             children: [
@@ -86443,9 +86441,9 @@ function V2({ onStart: e, onResume: t }) {
                         children: [
                           h("기록", "Records", "記録"),
                           " ",
-                          v.got,
+                          T.got,
                           " / ",
-                          v.total,
+                          T.total,
                         ],
                       }),
                     ],
@@ -86491,7 +86489,7 @@ function V2({ onStart: e, onResume: t }) {
                                 ),
                                 children: h("다시 살기", "Replay", "もう一度"),
                               })
-                            : J2(A.at),
+                            : X2(A.at),
                         }),
                       ],
                     },
@@ -86503,13 +86501,13 @@ function V2({ onStart: e, onResume: t }) {
             ],
           }),
         l &&
-          d.jsx(q2, {
+          d.jsx(K2, {
             lives: a,
             onChange: n,
             onReplay: c,
             onClose: () => s(!1),
           }),
-        m && d.jsx(U2, { onClose: () => w(!1) }),
+        m && d.jsx(V2, { onClose: () => w(!1) }),
         d.jsxs("footer", {
           className: "foot",
           children: [
@@ -86574,7 +86572,7 @@ function V2({ onStart: e, onResume: t }) {
     }),
   });
 }
-const vi = [
+const _i = [
     { top: "#59636a", bot: "#161b1f", sky: "#20262b", amp: 0.5, m: "buoys" },
     {
       top: "#a3abaf",
@@ -86616,8 +86614,8 @@ const vi = [
     { top: "#13595b", bot: "#03181a", sky: "#071415", amp: 0.5, m: "breath" },
     { top: "#2b2b2b", bot: "#2b2b2b", sky: "#2b2b2b", amp: 0, m: "nothing" },
   ],
-  X2 = ["#24477a", "#6a6f73", "#2f6b4a", "#7a1f24", "#a8842e"],
-  zr = (e) => {
+  Z2 = ["#24477a", "#6a6f73", "#2f6b4a", "#7a1f24", "#a8842e"],
+  Ur = (e) => {
     const t = e.replace("#", "");
     return [
       parseInt(t.slice(0, 2), 16),
@@ -86625,26 +86623,26 @@ const vi = [
       parseInt(t.slice(4, 6), 16),
     ];
   },
-  at = (e, t, o) => e.map((a, n) => a + (t[n] - a) * o),
+  nt = (e, t, o) => e.map((a, n) => a + (t[n] - a) * o),
   Cr = (e, t = 1) => `rgba(${e[0] | 0},${e[1] | 0},${e[2] | 0},${t})`,
-  Es = (e) => {
-    const t = vi[e] || vi[0];
-    return { top: zr(t.top), bot: zr(t.bot), sky: zr(t.sky) };
+  Bs = (e) => {
+    const t = _i[e] || _i[0];
+    return { top: Ur(t.top), bot: Ur(t.bot), sky: Ur(t.sky) };
   },
   oa = (e, t) => Array.from({ length: e }, t),
-  Q2 = () =>
+  e_ = () =>
     typeof window < "u" &&
     window.matchMedia &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-function Z2({ on: e, idx: t, whale: o, wave: a, tint: n }) {
+function t_({ on: e, idx: t, whale: o, wave: a, tint: n }) {
   const r = N.useRef(null),
     i = N.useRef(null);
   return (
     i.current ||
       (i.current = {
         cur: t || 0,
-        P: Es(t || 0),
-        Pp: Es(t || 0),
+        P: Bs(t || 0),
+        Pp: Bs(t || 0),
         blend: 1,
         fx: {
           whale: null,
@@ -86696,12 +86694,12 @@ function Z2({ on: e, idx: t, whale: o, wave: a, tint: n }) {
       if (t == null || t === l.cur) return;
       const s = Math.min(1, l.blend);
       ((l.Pp = {
-        top: at(l.Pp.top, l.P.top, s),
-        bot: at(l.Pp.bot, l.P.bot, s),
-        sky: at(l.Pp.sky, l.P.sky, s),
+        top: nt(l.Pp.top, l.P.top, s),
+        bot: nt(l.Pp.bot, l.P.bot, s),
+        sky: nt(l.Pp.sky, l.P.sky, s),
       }),
         (l.cur = t),
-        (l.P = Es(t)),
+        (l.P = Bs(t)),
         (l.blend = 0));
     }, [t]),
     N.useEffect(() => {
@@ -86716,7 +86714,7 @@ function Z2({ on: e, idx: t, whale: o, wave: a, tint: n }) {
       ((i.current.sinking = !!a), a || (i.current.fx.sink = 0));
     }, [a]),
     N.useEffect(() => {
-      if (!e || Q2()) return;
+      if (!e || e_()) return;
       const l = r.current;
       if (!l) return;
       const s = l.getContext("2d");
@@ -86725,52 +86723,52 @@ function Z2({ on: e, idx: t, whale: o, wave: a, tint: n }) {
       let f = 0,
         y = 0;
       const g = () => {
-        const x = Math.min(2, window.devicePixelRatio || 1);
+        const k = Math.min(2, window.devicePixelRatio || 1);
         ((f = window.innerWidth),
           (y = window.innerHeight),
-          (l.width = f * x),
-          (l.height = y * x),
-          s.setTransform(x, 0, 0, x, 0, 0));
+          (l.width = f * k),
+          (l.height = y * k),
+          s.setTransform(k, 0, 0, k, 0, 0));
       };
       (g(), window.addEventListener("resize", g));
-      const k = (x) => {
-        const T = (x - u.t0) / 1e3,
-          Y = vi[u.cur] || vi[0],
+      const x = (k) => {
+        const v = (k - u.t0) / 1e3,
+          Y = _i[u.cur] || _i[0],
           c = u.fx;
         u.blend = Math.min(1, u.blend + 0.012);
-        const m = (j) => at(u.Pp[j], u.P[j], u.blend);
+        const m = (j) => nt(u.Pp[j], u.P[j], u.blend);
         let w = m("top"),
-          v = m("bot"),
+          T = m("bot"),
           _ = m("sky");
         if (Y.m === "shift") {
-          const j = zr(X2[u.tint != null ? u.tint : 0]);
-          u.tc = u.tc ? at(u.tc, j, 0.02) : j;
+          const j = Ur(Z2[u.tint != null ? u.tint : 0]);
+          u.tc = u.tc ? nt(u.tc, j, 0.02) : j;
           const O = u.tc;
-          ((w = at(w, O, u.blend)),
-            (v = at(
-              v,
+          ((w = nt(w, O, u.blend)),
+            (T = nt(
+              T,
               O.map((B) => B * 0.25),
               u.blend,
             )));
         }
         if (c.pale > 0) {
           const j = [226, 229, 228];
-          ((w = at(w, j, c.pale * 0.8)),
-            (v = at(v, [150, 155, 155], c.pale * 0.7)),
-            (_ = at(_, j, c.pale * 0.6)));
+          ((w = nt(w, j, c.pale * 0.8)),
+            (T = nt(T, [150, 155, 155], c.pale * 0.7)),
+            (_ = nt(_, j, c.pale * 0.6)));
         }
         (c.heat > 0 &&
-          ((w = at(w, [170, 40, 30], c.heat * 0.6)),
-          (v = at(v, [60, 8, 6], c.heat * 0.6)),
-          (_ = at(_, [120, 30, 20], c.heat * 0.7))),
+          ((w = nt(w, [170, 40, 30], c.heat * 0.6)),
+          (T = nt(T, [60, 8, 6], c.heat * 0.6)),
+          (_ = nt(_, [120, 30, 20], c.heat * 0.7))),
           u.sinking &&
             ((c.sink = Math.min(1, c.sink + 0.006)),
             (c.wave = Math.max(c.wave, Math.min(2, c.sink * 3)))));
-        const C = Y.m === "breath" ? Math.sin(T * 0.7) : 0,
+        const C = Y.m === "breath" ? Math.sin(v * 0.7) : 0,
           R =
             y *
             (0.42 +
-              (Y.m === "tide" ? 0.02 * Math.sin(T * 0.25) : 0) +
+              (Y.m === "tide" ? 0.02 * Math.sin(v * 0.25) : 0) +
               c.level * 0.08 -
               C * 0.025);
         let W = s.createLinearGradient(0, 0, 0, R);
@@ -86782,12 +86780,12 @@ function Z2({ on: e, idx: t, whale: o, wave: a, tint: n }) {
           Y.m !== "nothing" && Y.m !== "dark" && Y.fog == null)
         )
           for (const j of u.stars)
-            ((s.fillStyle = `rgba(255,255,255,${(0.15 + 0.25 * Math.abs(Math.sin(T * 0.6 + j.s * 9))) * (1 - c.pale)})`),
+            ((s.fillStyle = `rgba(255,255,255,${(0.15 + 0.25 * Math.abs(Math.sin(v * 0.6 + j.s * 9))) * (1 - c.pale)})`),
               s.fillRect(j.x * f, j.y * y, 1.2, 1.2));
         if (
           ((W = s.createLinearGradient(0, R, 0, y)),
           W.addColorStop(0, Cr(w)),
-          W.addColorStop(1, Cr(v)),
+          W.addColorStop(1, Cr(T)),
           (s.fillStyle = W),
           s.fillRect(0, R, f, y - R),
           Y.m === "rainbow")
@@ -86796,7 +86794,7 @@ function Z2({ on: e, idx: t, whale: o, wave: a, tint: n }) {
           (["#d36a6a", "#d9b35a", "#7fc28f", "#6ea8e8", "#b48cf0"].forEach(
             (O, B) => j.addColorStop(B / 4, O),
           ),
-            (s.globalAlpha = 0.22 + 0.06 * Math.sin(T)),
+            (s.globalAlpha = 0.22 + 0.06 * Math.sin(v)),
             (s.fillStyle = j),
             s.fillRect(0, R, f, y - R),
             (s.globalAlpha = 1));
@@ -86816,8 +86814,8 @@ function Z2({ on: e, idx: t, whale: o, wave: a, tint: n }) {
             for (let ke = 0; ke <= f; ke += 8) {
               const wt =
                 O +
-                Math.sin(ke * $ + T * U + j) * B +
-                Math.sin(ke * $ * 2.3 - T * U * 0.7) * B * 0.35;
+                Math.sin(ke * $ + v * U + j) * B +
+                Math.sin(ke * $ * 2.3 - v * U * 0.7) * B * 0.35;
               ke ? s.lineTo(ke, wt) : s.moveTo(ke, wt);
             }
             ((s.strokeStyle = `rgba(255,255,255,${0.035 + j * 0.004})`),
@@ -86829,7 +86827,7 @@ function Z2({ on: e, idx: t, whale: o, wave: a, tint: n }) {
           case "buoys":
             for (let j = 0; j < 9; j++) {
               const O = f * (0.1 + j * 0.1),
-                B = b(0.12 + j * 0.07) + Math.sin(T * 1.2 + j) * 2,
+                B = b(0.12 + j * 0.07) + Math.sin(v * 1.2 + j) * 2,
                 $ = 2 + j * 0.6;
               ((s.fillStyle = "rgba(225,90,60,.75)"),
                 s.fillRect(O - $, B - $ * 2, $ * 2, $ * 2),
@@ -86844,17 +86842,17 @@ function Z2({ on: e, idx: t, whale: o, wave: a, tint: n }) {
               s.fillRect(j - 70, O - 26, 140, 26),
               s.fillRect(j - 40, O - 46, 70, 20));
             for (let B = 0; B < 7; B++)
-              ((s.fillStyle = `rgba(255,220,150,${0.5 + 0.3 * Math.sin(T * 3 + B)})`),
+              ((s.fillStyle = `rgba(255,220,150,${0.5 + 0.3 * Math.sin(v * 3 + B)})`),
                 s.fillRect(j - 60 + B * 19, O - 19, 5, 5));
             break;
           }
           case "mirror":
             for (const j of u.stars)
-              ((s.fillStyle = `rgba(255,255,255,${0.12 + 0.2 * Math.abs(Math.sin(T * 0.6 + j.s * 9))})`),
+              ((s.fillStyle = `rgba(255,255,255,${0.12 + 0.2 * Math.abs(Math.sin(v * 0.6 + j.s * 9))})`),
                 s.fillRect(j.x * f, R + (R - j.y * y) * 0.9, 1.2, 1.2));
             break;
           case "bell": {
-            const j = T % 7;
+            const j = v % 7;
             j < 2.4 &&
               (j % 0.8 < 0.15 && (c.shake = Math.max(c.shake, 0.06)),
               (s.strokeStyle = `rgba(200,200,210,${0.25 * (1 - (j % 0.8) / 0.8)})`),
@@ -86865,7 +86863,7 @@ function Z2({ on: e, idx: t, whale: o, wave: a, tint: n }) {
           }
           case "lanterns":
             for (const j of u.lan) {
-              const O = j.x * f + Math.sin(T * 0.3 + j.p) * 20,
+              const O = j.x * f + Math.sin(v * 0.3 + j.p) * 20,
                 B = b(0.05 + j.y * 0.9),
                 $ = 2 + j.y * 5,
                 U = s.createRadialGradient(O, B, 0, O, B, $ * 4);
@@ -86884,20 +86882,20 @@ function Z2({ on: e, idx: t, whale: o, wave: a, tint: n }) {
               s.fill(),
               s.fillRect(j - 50, O - 36, 100, 30));
             for (let B = 0; B < 5; B++)
-              ((s.fillStyle = `rgba(255,230,160,${0.6 + 0.3 * Math.sin(T * 2 + B)})`),
+              ((s.fillStyle = `rgba(255,230,160,${0.6 + 0.3 * Math.sin(v * 2 + B)})`),
                 s.fillRect(j - 40 + B * 18, O - 28, 5, 5));
             s.globalAlpha = 1;
             break;
           }
           case "fish":
             for (const j of u.fish) {
-              const O = (T * 0.6 + j.p) % 6,
+              const O = (v * 0.6 + j.p) % 6,
                 B = j.x * f,
                 $ = b(0.08 + j.y * 0.85);
               O < 0.25
                 ? ((s.fillStyle = "rgba(240,245,250,.8)"),
                   s.fillRect(B, $ - O * 40, 4, 1.5))
-                : Math.sin(T * 4 + j.p * 3) > 0.97 &&
+                : Math.sin(v * 4 + j.p * 3) > 0.97 &&
                   ((s.fillStyle = "rgba(255,255,255,.7)"),
                   s.fillRect(B, $, 2, 2));
             }
@@ -86916,11 +86914,11 @@ function Z2({ on: e, idx: t, whale: o, wave: a, tint: n }) {
             break;
           case "bottles":
             for (const j of u.bot) {
-              const O = j.x * f + Math.sin(T * 0.4 + j.p) * 10,
-                B = b(0.1 + j.y * 0.8) + Math.sin(T * 1.5 + j.p) * 3;
+              const O = j.x * f + Math.sin(v * 0.4 + j.p) * 10,
+                B = b(0.1 + j.y * 0.8) + Math.sin(v * 1.5 + j.p) * 3;
               (s.save(),
                 s.translate(O, B),
-                s.rotate(Math.sin(T + j.p) * 0.4),
+                s.rotate(Math.sin(v + j.p) * 0.4),
                 (s.fillStyle = "rgba(150,200,190,.45)"),
                 s.fillRect(-3, -9, 6, 12),
                 s.fillRect(-1.5, -13, 3, 4),
@@ -86930,7 +86928,7 @@ function Z2({ on: e, idx: t, whale: o, wave: a, tint: n }) {
             }
             break;
           case "tide": {
-            const j = (T % 10) / 10;
+            const j = (v % 10) / 10;
             ((s.fillStyle = `rgba(180,210,230,${0.05 * (1 - j)})`),
               s.fillRect(0, R, f * j, y - R));
             break;
@@ -86938,7 +86936,7 @@ function Z2({ on: e, idx: t, whale: o, wave: a, tint: n }) {
           case "door": {
             const j = f * 0.62,
               O = b(0.18),
-              B = Math.sin(T * 0.8) * 2;
+              B = Math.sin(v * 0.8) * 2;
             ((s.fillStyle = "rgba(30,38,33,.85)"),
               s.fillRect(j - 22, O - 80 + B, 44, 80),
               (s.fillStyle = "rgba(200,190,150,.6)"),
@@ -86949,7 +86947,7 @@ function Z2({ on: e, idx: t, whale: o, wave: a, tint: n }) {
           }
           case "wind":
             for (let j = 0; j < 14; j++) {
-              const O = ((T * 0.9 + j * 0.37) % 3) / 3,
+              const O = ((v * 0.9 + j * 0.37) % 3) / 3,
                 B = y * (0.1 + ((j * 53) % 80) / 100);
               ((s.strokeStyle = `rgba(220,220,230,${0.1 * Math.sin(O * Math.PI)})`),
                 s.beginPath(),
@@ -86960,7 +86958,7 @@ function Z2({ on: e, idx: t, whale: o, wave: a, tint: n }) {
             break;
           case "prints":
             for (const j of u.prints) {
-              const O = (T * 0.5 + j.p) % 8;
+              const O = (v * 0.5 + j.p) % 8;
               O < 2 &&
                 ((s.strokeStyle = `rgba(220,170,240,${0.35 * (1 - O / 2)})`),
                 s.beginPath(),
@@ -86973,7 +86971,7 @@ function Z2({ on: e, idx: t, whale: o, wave: a, tint: n }) {
           for (let j = 0; j < 5; j++) {
             const O = y * (0.25 + j * 0.13),
               B =
-                ((((T * 8 * (j % 2 ? 1 : -1) + j * 200) % (f + 400)) +
+                ((((v * 8 * (j % 2 ? 1 : -1) + j * 200) % (f + 400)) +
                   (f + 400)) %
                   (f + 400)) -
                 200,
@@ -86989,11 +86987,11 @@ function Z2({ on: e, idx: t, whale: o, wave: a, tint: n }) {
         const I = f * 0.5,
           A =
             y * 0.8 +
-            Math.sin(T * 1.1) * 3 * (1 + c.wave * 3) +
+            Math.sin(v * 1.1) * 3 * (1 + c.wave * 3) +
             c.level * y * 0.06 +
             c.sink * y * 0.05,
           S =
-            Math.sin(T * 0.9) * 0.03 * (1 + c.wave * 4) +
+            Math.sin(v * 0.9) * 0.03 * (1 + c.wave * 4) +
             c.wave * 0.09 +
             c.sink * 0.12,
           F = () => {
@@ -87050,10 +87048,10 @@ function Z2({ on: e, idx: t, whale: o, wave: a, tint: n }) {
           ((j.y -= j.v * 0.0015),
             j.y < 0 && (j.y = 1),
             (s.fillStyle = `rgba(255,255,255,${0.08 * j.s})`),
-            s.fillRect(j.x * f + Math.sin(T + j.y * 9) * 6, j.y * y, j.s, j.s));
-        (e_(s, c, f, y),
+            s.fillRect(j.x * f + Math.sin(v + j.y * 9) * 6, j.y * y, j.s, j.s));
+        (o_(s, c, f, y),
           c.heat > 0 &&
-            ((s.fillStyle = `rgba(255,80,40,${c.heat * 0.12 * (1 + Math.sin(T * 9) * 0.3)})`),
+            ((s.fillStyle = `rgba(255,80,40,${c.heat * 0.12 * (1 + Math.sin(v * 9) * 0.3)})`),
             s.fillRect(0, 0, f, y)),
           c.sink > 0 &&
             ((s.fillStyle = `rgba(0,0,0,${c.sink * 0.7})`),
@@ -87074,10 +87072,10 @@ function Z2({ on: e, idx: t, whale: o, wave: a, tint: n }) {
           K.addColorStop(1, "rgba(0,0,0,.6)"),
           (s.fillStyle = K),
           s.fillRect(0, 0, f, y),
-          (u.raf = requestAnimationFrame(k)));
+          (u.raf = requestAnimationFrame(x)));
       };
       return (
-        (u.raf = requestAnimationFrame(k)),
+        (u.raf = requestAnimationFrame(x)),
         () => {
           (cancelAnimationFrame(u.raf),
             window.removeEventListener("resize", g),
@@ -87088,7 +87086,7 @@ function Z2({ on: e, idx: t, whale: o, wave: a, tint: n }) {
     d.jsx("canvas", { ref: r, className: "warpfx lakefx" })
   );
 }
-function e_(e, t, o, a) {
+function o_(e, t, o, a) {
   if (!t.whale) return;
   const n = (performance.now() - t.wt) / 1e3,
     r = a * 0.42;
@@ -87164,7 +87162,7 @@ function e_(e, t, o, a) {
     n > 13 && ((t.whale = null), (t.heat = 0), (t.level = 0));
   }
 }
-function t_({ life: e, onShowResult: t, hasSummary: o }) {
+function a_({ life: e, onShowResult: t, hasSummary: o }) {
   const {
       view: a,
       progress: n,
@@ -87178,7 +87176,7 @@ function t_({ life: e, onShowResult: t, hasSummary: o }) {
     y = f && f.kind === "minor",
     g = (J) =>
       J === "bl_m_last" || J === "kk_bl_last" || /^bl_d_/.test(J || ""),
-    k =
+    x =
       !!f &&
       f.kind === "major" &&
       !s &&
@@ -87187,20 +87185,20 @@ function t_({ life: e, onShowResult: t, hasSummary: o }) {
         !!f.lake ||
         /^rc_hatch/.test(f.eventId || "") ||
         g(f.eventId)),
-    x = f && f.dr === "nm6" ? g_ : w_,
-    T = f ? `${f.eventId}|${f.text}|${a.log.length}` : "",
+    k = f && f.dr === "nm6" ? y_ : m_,
+    v = f ? `${f.eventId}|${f.text}|${a.log.length}` : "",
     [Y, c] = N.useState(!0),
     [m, w] = N.useState(!1);
   N.useLayoutEffect(() => {
-    if ((w(!1), !k)) {
+    if ((w(!1), !x)) {
       c(!0);
       return;
     }
     c(!1);
-    const J = setTimeout(() => c(!0), x);
+    const J = setTimeout(() => c(!0), k);
     return () => clearTimeout(J);
-  }, [T, k]);
-  const v = !!f && f.kind === "major" && !s && Y && !m,
+  }, [v, x]);
+  const T = !!f && f.kind === "major" && !s && Y && !m,
     _ = (a.dead && a.dead.hold) || 0,
     [C, R] = N.useState(!_);
   (N.useEffect(() => {
@@ -87217,8 +87215,8 @@ function t_({ life: e, onShowResult: t, hasSummary: o }) {
   }, [!!a.dead, _]),
     N.useEffect(() => {
       const J = (pe) => {
-        const pd = pe.target && pe.target.tagName;
-        if (pd === "TEXTAREA" || pd === "INPUT") return;
+        const bd = pe.target && pe.target.tagName;
+        if (bd === "TEXTAREA" || bd === "INPUT") return;
         if (pe.code === "Space") {
           (pe.preventDefault(),
             !a.dead && (!f || f.kind === "minor") && e.togglePause());
@@ -87232,10 +87230,10 @@ function t_({ life: e, onShowResult: t, hasSummary: o }) {
           (pe.key === "]" || pe.key === "=" || pe.key === "+") &&
             sr < ln.length - 1 &&
             e.setSpeed(ln[sr + 1]),
-          f && (f.kind === "minor" || v) && !s)
+          f && (f.kind === "minor" || T) && !s)
         ) {
-          const Xi = parseInt(pe.key, 10);
-          (Xi >= 1 && Xi <= f.choices.length && e.choose(Xi - 1),
+          const Qi = parseInt(pe.key, 10);
+          (Qi >= 1 && Qi <= f.choices.length && e.choose(Qi - 1),
             f.kind === "minor" &&
               (pe.key === "0" || pe.key === "Escape") &&
               e.choose(-1));
@@ -87289,11 +87287,11 @@ function t_({ life: e, onShowResult: t, hasSummary: o }) {
     U = a.lake ? a.lake.route[a.lake.i] : j >= 0 ? a.log[j].lake : null,
     ke = [...O].reverse().find((J) => /^whale_/.test(J.scene || "")),
     wt = ke ? { id: ke.id, kind: ke.scene.slice(6) } : null;
-  let io = null;
+  let so = null;
   for (let J = a.log.length - 1; J > I; J--) {
     const pe = a.log[J];
     if (pe.scene === "hpflash" || pe.scene === "hollow") {
-      io = { id: pe.id, big: pe.scene === "hollow" };
+      so = { id: pe.id, big: pe.scene === "hollow" };
       break;
     }
   }
@@ -87309,7 +87307,7 @@ function t_({ life: e, onShowResult: t, hasSummary: o }) {
       d.jsx("div", {
         className: `scene scene-warp${G ? " on" : ""}`,
         "aria-hidden": "true",
-        children: d.jsx(__, { on: G, down: b }),
+        children: d.jsx(A_, { on: G, down: b }),
       }),
       d.jsx("div", {
         className: `scene scene-warpred${b ? " on" : ""}`,
@@ -87318,7 +87316,7 @@ function t_({ life: e, onShowResult: t, hasSummary: o }) {
       d.jsx("div", {
         className: `scene scene-lake${$ ? " on" : ""}`,
         "aria-hidden": "true",
-        children: d.jsx(Z2, {
+        children: d.jsx(t_, {
           on: $,
           idx: U,
           whale: wt,
@@ -87329,32 +87327,32 @@ function t_({ life: e, onShowResult: t, hasSummary: o }) {
       d.jsx("div", {
         className: `scene scene-kong${A ? " on" : ""}`,
         "aria-hidden": "true",
-        children: d.jsx(x_, { on: A }),
+        children: d.jsx(T_, { on: A }),
       }),
       d.jsx("div", {
         className: `scene scene-star${No ? " on" : ""}`,
         "aria-hidden": "true",
-        children: d.jsx(k_, { on: No }),
+        children: d.jsx(v_, { on: No }),
       }),
       d.jsx("div", {
         className: `scene scene-blade${S ? " on" : ""}${S === "distort" ? " red" : ""}`,
         "aria-hidden": "true",
-        children: d.jsx(v_, { phase: S }),
+        children: d.jsx(j_, { phase: S }),
       }),
-      io &&
+      so &&
         d.jsx(
           "div",
           {
-            className: `kx-flash${io.big ? " big" : ""}`,
+            className: `kx-flash${so.big ? " big" : ""}`,
             "aria-hidden": "true",
           },
-          io.id,
+          so.id,
         ),
       d.jsx("div", {
         className: `scene scene-kxgray${Wt ? " on" : ""}`,
         "aria-hidden": "true",
       }),
-      d.jsx(p_, {
+      d.jsx(k_, {
         on: D,
         blows: F,
         text: F
@@ -87366,19 +87364,20 @@ function t_({ life: e, onShowResult: t, hasSummary: o }) {
             ).text
           : null,
       }),
-      d.jsx(o_, { life: e, view: a, minor: y }),
+      d.jsx(n_, { life: e, view: a, minor: y }),
       d.jsxs("div", {
         className: "layout",
         children: [
-          d.jsx(a_, { view: a, region: u, kong: A }),
+          d.jsx(r_, { view: a, region: u, kong: A }),
           d.jsxs("main", {
             className: "stage",
             children: [
-              d.jsx(n_, { log: a.log, padded: (y && !s) || k }),
+              d.jsx(i_, { log: a.log, padded: (y && !s) || x }),
               y &&
                 !s &&
-                d.jsx(i_, {
+                d.jsx(l_, {
                   prompt: f,
+                  stats: a.stats,
                   countdown: r,
                   onChoose: e.choose,
                   paused: l,
@@ -87387,13 +87386,16 @@ function t_({ life: e, onShowResult: t, hasSummary: o }) {
           }),
         ],
       }),
-      v &&
-        d.jsx(s_, {
+      T &&
+        d.jsx(h_, {
           prompt: f,
+          stats: a.stats,
           onChoose: e.choose,
-          onPeek: k ? () => w(!0) : null,
+          onPeek: () => w(!0),
         }),
-      k &&
+      f &&
+        f.kind === "major" &&
+        !s &&
         Y &&
         m &&
         d.jsx("button", {
@@ -87401,7 +87403,7 @@ function t_({ life: e, onShowResult: t, hasSummary: o }) {
           onClick: () => w(!1),
           children: h("선택지 다시 보기", "Show choices", "選択肢に戻る"),
         }),
-      k &&
+      x &&
         !Y &&
         d.jsx("div", {
           className: "scene-wait",
@@ -87411,30 +87413,30 @@ function t_({ life: e, onShowResult: t, hasSummary: o }) {
       f &&
         f.kind === "reflect" &&
         !s &&
-        d.jsx(h_, { prompt: f, onSubmit: e.submitReflection }),
+        d.jsx(u_, { prompt: f, onSubmit: e.submitReflection }),
       f &&
         f.kind === "color" &&
         !s &&
-        d.jsx(d_, { prompt: f, onSubmit: e.submitReflection }),
+        d.jsx(c_, { prompt: f, onSubmit: e.submitReflection }),
       f &&
         f.kind === "name" &&
         !s &&
-        d.jsx(c_, { prompt: f, onSubmit: e.submitReflection }),
+        d.jsx(w_, { prompt: f, onSubmit: e.submitReflection }),
       a.dead &&
         C &&
         !ee &&
-        d.jsx(f_, {
+        d.jsx(g_, {
           dead: a.dead,
           ready: o || !!a.dead.voice,
           onNext: () => (a.dead.voice ? K(!0) : t()),
         }),
-      a.dead && ee && d.jsx(y_, { onYes: e.acceptVoice }),
+      a.dead && ee && d.jsx(b_, { onYes: e.acceptVoice }),
     ],
   });
 }
-function o_({ life: e, view: t, minor: o }) {
+function n_({ life: e, view: t, minor: o }) {
   const { progress: a, speed: n, paused: r, auto: i } = e,
-    l = Aw[Math.min(3, Math.floor(a * 4))],
+    l = Yw[Math.min(3, Math.floor(a * 4))],
     s = t.prompt && t.prompt.kind !== "minor" && !i,
     [u, f] = N.useState(null),
     [y, g] = N.useState(() => {
@@ -87444,12 +87446,12 @@ function o_({ life: e, view: t, minor: o }) {
         return !1;
       }
     }),
-    k = () => {
-      g((x) => {
+    x = () => {
+      g((k) => {
         try {
-          localStorage.setItem("cbl.ui.controlsFolded", x ? "0" : "1");
+          localStorage.setItem("cbl.ui.controlsFolded", k ? "0" : "1");
         } catch {}
-        return !x;
+        return !k;
       });
     };
   return d.jsxs("header", {
@@ -87459,7 +87461,7 @@ function o_({ life: e, view: t, minor: o }) {
         className: "age",
         children: [
           t.warp
-            ? d.jsx(b_, { down: !!t.warp.down })
+            ? d.jsx(x_, { down: !!t.warp.down })
             : d.jsx("b", { children: t.age }),
           d.jsx("span", { children: h("세", "yrs", "歳") }),
           d.jsx("em", { className: "season", children: l }),
@@ -87477,7 +87479,7 @@ function o_({ life: e, view: t, minor: o }) {
       }),
       d.jsxs("button", {
         className: "fold-toggle",
-        onClick: k,
+        onClick: x,
         "aria-expanded": !y,
         "aria-label": h(
           "조작 메뉴 접기/펼치기",
@@ -87504,15 +87506,15 @@ function o_({ life: e, view: t, minor: o }) {
             className: "speeds",
             role: "group",
             "aria-label": h("배속", "Speed", "速度"),
-            children: ln.map((x) =>
+            children: ln.map((k) =>
               d.jsxs(
                 "button",
                 {
-                  className: x === n ? "on" : "",
-                  onClick: () => e.setSpeed(x),
-                  children: ["x", x],
+                  className: k === n ? "on" : "",
+                  onClick: () => e.setSpeed(k),
+                  children: ["x", k],
                 },
-                x,
+                k,
               ),
             ),
           }),
@@ -87524,51 +87526,111 @@ function o_({ life: e, view: t, minor: o }) {
               ? h("계속", "Resume", "再開")
               : h("일시정지", "Pause", "一時停止"),
           }),
-          d.jsx("button", {
-            className: `btn small ${i ? "on" : ""}`,
-            onClick: e.toggleAuto,
-            disabled: !!t.dead,
-            title: h(
-              "선택을 자동으로 결정합니다",
-              "Make choices automatically",
-              "選択を自動で決定します",
-            ),
-            children: h("자동 결정", "Auto-choose", "自動決定"),
-          }),
-          !t.dead &&
-            d.jsx("button", {
-              className: "btn small ghost",
-              title: h(
-                "지금 자리까지 저장하고 처음 화면으로 갑니다. 「이어서 살기」로 돌아올 수 있습니다",
-                'Save your place and go to the start screen. Come back with "Continue"',
-                "今の位置まで保存して最初の画面へ戻ります。「続きから生きる」で戻れます",
-              ),
-              onClick: e.saveAndQuit,
-              children: h("저장 후 나가기", "Save & quit", "保存して戻る"),
-            }),
-          d.jsx("button", {
-            className: "btn small ghost",
-            onClick: () => {
-              t.dead ? e.abandon() : f("quit");
-            },
-            children: t.dead
-              ? h("나가기", "Quit", "やめる")
-              : h("포기하기", "Give up", "諦める"),
-          }),
-          d.jsx("button", {
-            className: "btn small ghost",
-            title: h(
-              "같은 이름·성별로, 무작위 시드의 새 삶을 바로 시작합니다",
-              "Start a new life right away with the same name and gender and a random seed",
-              "同じ名前・性別で、ランダムシードの新しい人生をすぐ始めます",
-            ),
-            onClick: () => {
-              t.dead ? e.restart() : f("restart");
-            },
-            children: h("재시작", "Restart", "リスタート"),
+          d.jsxs("div", {
+            className: "ctl-actions",
+            role: "group",
+            "aria-label": h("조작", "Actions", "操作"),
+            children: [
+              d.jsxs("button", {
+                className: `btn small ${i ? "on" : ""}`,
+                onClick: e.toggleAuto,
+                disabled: !!t.dead,
+                title: h(
+                  "선택을 자동으로 결정합니다",
+                  "Make choices automatically",
+                  "選択を自動で決めます",
+                ),
+                children: [
+                  d.jsx(Ir, { k: "auto" }),
+                  d.jsx("span", {
+                    className: "bt",
+                    children: h("자동 결정", "Auto-choose", "自動決定"),
+                  }),
+                  d.jsx("span", {
+                    className: "bs",
+                    children: h("자동", "Auto", "自動"),
+                  }),
+                ],
+              }),
+              !t.dead &&
+                d.jsxs("button", {
+                  className: "btn small ghost",
+                  title: h(
+                    "지금 자리까지 저장하고 처음 화면으로 갑니다. 「이어서 살기」로 돌아올 수 있습니다",
+                    'Save your place and go to the start screen. Come back with "Continue"',
+                    "今の位置まで保存して最初の画面へ戻ります。「続きから生きる」で戻れます",
+                  ),
+                  onClick: e.saveAndQuit,
+                  children: [
+                    d.jsx(Ir, { k: "save" }),
+                    d.jsx("span", {
+                      className: "bt",
+                      children: h(
+                        "저장 후 나가기",
+                        "Save & quit",
+                        "保存して戻る",
+                      ),
+                    }),
+                    d.jsx("span", {
+                      className: "bs",
+                      children: h("저장", "Save", "保存"),
+                    }),
+                  ],
+                }),
+              d.jsxs("button", {
+                className: "btn small ghost",
+                title: t.dead
+                  ? h("처음 화면으로", "Back to the start", "最初の画面へ")
+                  : h(
+                      "이 삶을 그만두고 처음으로 (저장 삭제)",
+                      "Give up this life and return to the start (save deleted)",
+                      "この人生をやめて最初へ（保存は消えます）",
+                    ),
+                onClick: () => {
+                  t.dead ? e.abandon() : f("quit");
+                },
+                children: [
+                  d.jsx(Ir, { k: "quit" }),
+                  d.jsx("span", {
+                    className: "bt",
+                    children: t.dead
+                      ? h("나가기", "Quit", "やめる")
+                      : h("포기하기", "Give up", "諦める"),
+                  }),
+                  d.jsx("span", {
+                    className: "bs",
+                    children: t.dead
+                      ? h("나가기", "Quit", "やめる")
+                      : h("포기", "Give up", "諦める"),
+                  }),
+                ],
+              }),
+              d.jsxs("button", {
+                className: "btn small ghost",
+                title: h(
+                  "같은 이름·성별로, 무작위 시드의 새 삶을 바로 시작합니다",
+                  "Start a new life right away with the same name and gender and a random seed",
+                  "同じ名前・性別で、ランダムシードの新しい人生をすぐ始めます",
+                ),
+                onClick: () => {
+                  t.dead ? e.restart() : f("restart");
+                },
+                children: [
+                  d.jsx(Ir, { k: "restart" }),
+                  d.jsx("span", {
+                    className: "bt",
+                    children: h("재시작", "Restart", "リスタート"),
+                  }),
+                  d.jsx("span", {
+                    className: "bs",
+                    children: h("재시작", "Restart", "再開"),
+                  }),
+                ],
+              }),
+            ],
           }),
           u === "quit" &&
-            d.jsx(Gl, {
+            d.jsx(Kl, {
               danger: !0,
               text: h(
                 "이 삶을 여기서 그만두고 처음으로 돌아갈까요? 저장은 남지 않습니다.",
@@ -87582,7 +87644,7 @@ function o_({ life: e, view: t, minor: o }) {
               onCancel: () => f(null),
             }),
           u === "restart" &&
-            d.jsx(Gl, {
+            d.jsx(Kl, {
               danger: !0,
               text: h(
                 "이 삶을 여기서 그만두고 새로 태어날까요? 저장은 남지 않습니다.",
@@ -87620,9 +87682,47 @@ function o_({ life: e, view: t, minor: o }) {
     ],
   });
 }
-function a_({ view: e, region: t, kong: o }) {
-  const a = e.flags.map((l) => Dh(l, e)).filter(Boolean),
-    n = Hh.includes(e.work || e.job) || e.flags.includes("E.G.O개화"),
+function Ir({ k: e }) {
+  const t = {
+    auto: d.jsx("path", { d: "M5 4l12 8-12 8V4z" }),
+    save: d.jsxs(d.Fragment, {
+      children: [
+        d.jsx("path", { d: "M4 4h12l4 4v12H4z" }),
+        d.jsx("path", { d: "M8 4v6h8V4" }),
+        d.jsx("path", { d: "M8 20v-6h8v6" }),
+      ],
+    }),
+    quit: d.jsxs(d.Fragment, {
+      children: [
+        d.jsx("path", { d: "M10 4H5v16h5" }),
+        d.jsx("path", { d: "M14 8l4 4-4 4" }),
+        d.jsx("path", { d: "M9 12h9" }),
+      ],
+    }),
+    restart: d.jsxs(d.Fragment, {
+      children: [
+        d.jsx("path", { d: "M20 12a8 8 0 1 1-2.3-5.7" }),
+        d.jsx("path", { d: "M20 4v5h-5" }),
+      ],
+    }),
+  };
+  return d.jsx("svg", {
+    className: "ico",
+    width: "16",
+    height: "16",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.8",
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    "aria-hidden": "true",
+    children: t[e],
+  });
+}
+function r_({ view: e, region: t, kong: o }) {
+  const a = e.flags.map((l) => qh(l, e)).filter(Boolean),
+    n = Dh.includes(e.work || e.job) || e.flags.includes("E.G.O개화"),
     [r, i] = N.useState(!1);
   return d.jsxs("aside", {
     className: "side",
@@ -87634,7 +87734,7 @@ function a_({ view: e, region: t, kong: o }) {
           d.jsxs("p", {
             className: "dim",
             children: [
-              bp[e.gender],
+              xp[e.gender],
               e.family && Fe[e.family] ? ` · ${Fe[e.family].label}` : "",
             ],
           }),
@@ -87713,15 +87813,15 @@ function a_({ view: e, region: t, kong: o }) {
                         className: "pinky-star",
                         children: Un(e),
                       }),
-                      El(e) ? ` (${El(e)})` : "",
+                      Bl(e) ? ` (${Bl(e)})` : "",
                     ],
                   })
                 : e.flags.includes("후보줄")
                   ? d.jsx("span", {
                       className: `cand-strike${o ? " slow" : ""}`,
-                      children: ve(e),
+                      children: Te(e),
                     })
-                  : ve(e) || h("아직 없음", "None yet", "まだなし"),
+                  : Te(e) || h("아직 없음", "None yet", "まだなし"),
               n &&
                 d.jsx("em", {
                   className: "badge rare",
@@ -87735,7 +87835,7 @@ function a_({ view: e, region: t, kong: o }) {
               children: [
                 h("검", "Sword", "剣"),
                 " · ",
-                d.jsx("b", { children: ad(e) }),
+                d.jsx("b", { children: nd(e) }),
               ],
             }),
           e.org &&
@@ -87743,7 +87843,7 @@ function a_({ view: e, region: t, kong: o }) {
               className: "org dim",
               children: [h("소속", "Affiliation", "所属"), " · ", e.org.name],
             }),
-          e.dr && d.jsx(m_, { dr: e.dr }),
+          e.dr && d.jsx(p_, { dr: e.dr }),
           !e.dr &&
             e.job === "해결사" &&
             e.grade > 1 &&
@@ -87798,14 +87898,14 @@ function a_({ view: e, region: t, kong: o }) {
                     d.jsx("span", {
                       children: h("승급 공적", "Promotion merit", "昇級功績"),
                     }),
-                    d.jsxs("b", { children: [Math.floor(Ku(e)), "/", ja(e)] }),
+                    d.jsxs("b", { children: [Math.floor(zu(e)), "/", ja(e)] }),
                   ],
                 }),
                 d.jsx("div", {
                   className: "bar",
                   children: d.jsx("i", {
                     style: {
-                      width: `${Math.min(100, (Ku(e) / ja(e)) * 100)}%`,
+                      width: `${Math.min(100, (zu(e) / ja(e)) * 100)}%`,
                     },
                   }),
                 }),
@@ -87849,7 +87949,7 @@ function a_({ view: e, region: t, kong: o }) {
               ],
             }),
           !e.dr &&
-            oo(e) &&
+            ao(e) &&
             (e.officeRank || 1) < 6 &&
             d.jsxs("div", {
               className: "merit",
@@ -87885,7 +87985,7 @@ function a_({ view: e, region: t, kong: o }) {
                 d.jsx("div", {
                   className: "warn-dots",
                   "aria-label": h("경고", "Warnings", "警告"),
-                  children: Array.from({ length: tg }, (l, s) =>
+                  children: Array.from({ length: og }, (l, s) =>
                     d.jsx("i", { className: s < (e.warn || 0) ? "on" : "" }, s),
                   ),
                 }),
@@ -87911,7 +88011,7 @@ function a_({ view: e, region: t, kong: o }) {
                   d.jsxs("div", {
                     className: "stat-head",
                     children: [
-                      d.jsx("span", { children: st[`heir_${l}`] }),
+                      d.jsx("span", { children: Je[`heir_${l}`] }),
                       d.jsx("b", { children: e.heir[l] }),
                     ],
                   }),
@@ -87929,7 +88029,7 @@ function a_({ view: e, region: t, kong: o }) {
         }),
       d.jsx("section", {
         className: "card stats",
-        children: Yo.map((l) =>
+        children: oo.map((l) =>
           d.jsxs(
             "div",
             {
@@ -87940,7 +88040,7 @@ function a_({ view: e, region: t, kong: o }) {
                   children: [
                     d.jsxs("span", {
                       children: [
-                        st[l],
+                        Je[l],
                         l === "health" &&
                           e.stats.health < 20 &&
                           d.jsx("em", {
@@ -87993,7 +88093,7 @@ function a_({ view: e, region: t, kong: o }) {
                   children: [
                     d.jsxs("span", {
                       children: [
-                        st.thirst,
+                        Je.thirst,
                         e.bf.thirst >= 85 &&
                           d.jsx("em", {
                             className: "crit",
@@ -88060,39 +88160,39 @@ function a_({ view: e, region: t, kong: o }) {
     ],
   });
 }
-function n_({ log: e, padded: t }) {
+function i_({ log: e, padded: t }) {
   const o = N.useRef(null),
     a = N.useRef(!0),
     [n, r] = N.useState(!1),
     i = N.useRef(e.length),
     [l, s] = N.useState(!1);
   N.useEffect(() => {
-    const k = o.current;
-    (k && a.current && (k.scrollTop = k.scrollHeight),
+    const x = o.current;
+    (x && a.current && (x.scrollTop = x.scrollHeight),
       !a.current && e.length > i.current && s(!0),
       a.current && (i.current = e.length));
   }, [e.length, t]);
   const u = () => {
-      const k = o.current;
+      const x = o.current;
       ((a.current = !0),
         (i.current = e.length),
         r(!1),
         s(!1),
-        k && (k.scrollTop = k.scrollHeight));
+        x && (x.scrollTop = x.scrollHeight));
     },
     f = N.useRef(0),
     y = N.useRef(0),
     g = () => {
-      const k = o.current,
-        T = !(k.scrollHeight < y.current) && k.scrollTop < f.current - 2;
-      ((f.current = k.scrollTop),
-        (y.current = k.scrollHeight),
-        T
+      const x = o.current,
+        v = !(x.scrollHeight < y.current) && x.scrollTop < f.current - 2;
+      ((f.current = x.scrollTop),
+        (y.current = x.scrollHeight),
+        v
           ? (a.current = !1)
-          : k.scrollHeight - k.scrollTop - k.clientHeight < 60 &&
+          : x.scrollHeight - x.scrollTop - x.clientHeight < 60 &&
             ((a.current = !0), (i.current = e.length)));
       const Y =
-        !a.current && k.scrollHeight - k.scrollTop - k.clientHeight > 160;
+        !a.current && x.scrollHeight - x.scrollTop - x.clientHeight > 160;
       (Y !== n && r(Y), !Y && l && s(!1));
     };
   return d.jsxs(d.Fragment, {
@@ -88101,7 +88201,7 @@ function n_({ log: e, padded: t }) {
         className: `log ${t ? "padded" : ""}`,
         ref: o,
         onScroll: g,
-        children: e.map((k) => d.jsx(r_, { e: k }, k.id)),
+        children: e.map((x) => d.jsx(s_, { e: x }, x.id)),
       }),
       n &&
         d.jsx("button", {
@@ -88114,7 +88214,7 @@ function n_({ log: e, padded: t }) {
     ],
   });
 }
-function r_({ e }) {
+function s_({ e }) {
   if (e.kind === "lakesep")
     return d.jsx("div", {
       className: "yearline lakesep",
@@ -88219,7 +88319,7 @@ function r_({ e }) {
                 className: (a === "thirst" || a === "warn" ? n < 0 : n > 0)
                   ? "up"
                   : "down",
-                children: [st[a], " ", n > 0 ? "+" : "−", Math.abs(n)],
+                children: [Je[a], " ", n > 0 ? "+" : "−", Math.abs(n)],
               },
               a,
             ),
@@ -88228,48 +88328,72 @@ function r_({ e }) {
     ],
   });
 }
-function i_({ prompt: e, countdown: t, onChoose: o, paused: a }) {
+function $g({ stats: e }) {
+  if (!e) return null;
+  const t = (o) => (o < 30 ? "low" : o < 40 ? "warn" : "");
+  return d.jsx("div", {
+    className: "stat-strip",
+    "aria-label": h("능력치", "Stats", "能力値"),
+    children: oo.map((o) => {
+      const a = Math.max(0, Math.min(100, e[o]));
+      return d.jsxs(
+        "span",
+        {
+          className: `ss ${t(a)}`,
+          children: [
+            d.jsx("em", { children: Je[o] }),
+            d.jsx("b", { children: Math.round(e[o]) }),
+            d.jsx("i", { children: d.jsx("u", { style: { width: `${a}%` } }) }),
+          ],
+        },
+        o,
+      );
+    }),
+  });
+}
+function l_({ prompt: e, stats: t, countdown: o, onChoose: a, paused: n }) {
   return d.jsxs("div", {
     className: `minor ${e.rare ? "rare" : ""}`,
     role: "dialog",
     "aria-label": h("작은 선택", "Minor choice", "小さな選択"),
     children: [
       d.jsx("div", { className: "minor-text", children: e.text }),
+      d.jsx($g, { stats: t }),
       d.jsxs("div", {
         className: "choices",
         children: [
-          e.choices.map((n, r) =>
+          e.choices.map((r, i) =>
             d.jsxs(
               "button",
               {
-                className: `choice ${n.locked ? "locked" : ""}`,
-                disabled: !!n.locked,
-                onClick: () => o(r),
+                className: `choice ${r.locked ? "locked" : ""}`,
+                disabled: !!r.locked,
+                onClick: () => a(i),
                 children: [
-                  d.jsx("kbd", { children: r + 1 }),
-                  n.label,
-                  n.locked &&
-                    d.jsx("em", { className: "lock", children: n.locked }),
+                  d.jsx("kbd", { children: i + 1 }),
+                  r.label,
+                  r.locked &&
+                    d.jsx("em", { className: "lock", children: r.locked }),
                 ],
               },
-              r,
+              i,
             ),
           ),
           d.jsxs("button", {
             className: "choice ghost",
-            onClick: () => o(-1),
+            onClick: () => a(-1),
             children: [d.jsx("kbd", { children: "0" }), e.ignoreLabel],
           }),
         ],
       }),
       d.jsx("div", {
-        className: `countdown ${a ? "paused" : ""}`,
-        children: d.jsx("i", { style: { width: `${t * 100}%` } }),
+        className: `countdown ${n ? "paused" : ""}`,
+        children: d.jsx("i", { style: { width: `${o * 100}%` } }),
       }),
     ],
   });
 }
-function s_({ prompt: e, onChoose: t, onPeek: o }) {
+function h_({ prompt: e, stats: t, onChoose: o, onPeek: a }) {
   return d.jsx("div", {
     className: `overlay${e.warp ? ` warp${e.warp === "down" ? " down" : ""}` : ""}${e.eventId === "bl_m_last" || e.eventId === "kk_bl_last" || /^bl_d_/.test(e.eventId || "") || e.dr ? " blade" : ""}${e.dr === "nm6" ? " hush" : ""}${e.lake ? " lake" : ""}`,
     children: d.jsxs("div", {
@@ -88324,70 +88448,71 @@ function s_({ prompt: e, onChoose: t, onPeek: o }) {
               className: "modal-text hush-text",
               children: String(e.text)
                 .split(/\n\n/)
-                .map((a, n) =>
+                .map((n, r) =>
                   d.jsx(
                     "p",
                     {
-                      className: n === 1 ? "tremble" : "",
-                      style: { animationDelay: `${0.6 + n * 2.1}s` },
+                      className: r === 1 ? "tremble" : "",
+                      style: { animationDelay: `${0.6 + r * 2.1}s` },
                       children: d.jsx("span", {
-                        style: { animationDelay: `${0.6 + n * 2.1}s` },
-                        children: a,
+                        style: { animationDelay: `${0.6 + r * 2.1}s` },
+                        children: n,
                       }),
                     },
-                    n,
+                    r,
                   ),
                 ),
             })
           : d.jsx("p", { className: "modal-text", children: e.text }),
+        e.dr !== "nm6" && e.dr !== "blind" && d.jsx($g, { stats: t }),
         d.jsx("div", {
           className: "choices",
-          children: e.choices.map((a, n) =>
-            a.odds
+          children: e.choices.map((n, r) =>
+            n.odds
               ? d.jsxs(
                   "button",
                   {
                     className: "choice req",
-                    onClick: () => t(n),
+                    onClick: () => o(r),
                     children: [
                       d.jsxs("span", {
                         className: "c-top",
                         children: [
-                          d.jsx("kbd", { children: n + 1 }),
-                          a.label,
-                          a.pay &&
+                          d.jsx("kbd", { children: r + 1 }),
+                          n.label,
+                          n.pay &&
                             d.jsx("span", {
                               className: "c-pay",
-                              children: a.pay,
+                              children: n.pay,
                             }),
                         ],
                       }),
-                      d.jsx(l_, { o: a.odds }),
+                      d.jsx(d_, { o: n.odds }),
                     ],
                   },
-                  n,
+                  r,
                 )
               : d.jsxs(
                   "button",
                   {
-                    className: `choice ${a.locked ? "locked" : ""}`,
-                    disabled: !!a.locked,
-                    onClick: () => t(n),
+                    className: `choice ${n.locked ? "locked" : ""}`,
+                    disabled: !!n.locked,
+                    onClick: () => o(r),
                     children: [
-                      d.jsx("kbd", { children: n + 1 }),
-                      a.label,
-                      a.locked &&
-                        d.jsx("em", { className: "lock", children: a.locked }),
+                      d.jsx("kbd", { children: r + 1 }),
+                      n.label,
+                      n.locked &&
+                        d.jsx("em", { className: "lock", children: n.locked }),
                     ],
                   },
-                  n,
+                  r,
                 ),
           ),
         }),
-        o &&
+        a &&
           d.jsx("button", {
             className: "peek",
-            onClick: o,
+            onClick: a,
             children: h(
               "잠깐 창 내리기",
               "Hide for a moment",
@@ -88398,7 +88523,7 @@ function s_({ prompt: e, onChoose: t, onPeek: o }) {
     }),
   });
 }
-function l_({ o: e }) {
+function d_({ o: e }) {
   return d.jsxs(d.Fragment, {
     children: [
       d.jsxs("span", {
@@ -88449,7 +88574,7 @@ function l_({ o: e }) {
     ],
   });
 }
-function h_({ prompt: e, onSubmit: t }) {
+function u_({ prompt: e, onSubmit: t }) {
   const [o, a] = N.useState("");
   return d.jsx("div", {
     className: "overlay",
@@ -88493,7 +88618,7 @@ function h_({ prompt: e, onSubmit: t }) {
     }),
   });
 }
-function d_({ prompt: e, onSubmit: t }) {
+function c_({ prompt: e, onSubmit: t }) {
   const [o, a] = N.useState(""),
     n = o.trim();
   return d.jsx("div", {
@@ -88555,8 +88680,8 @@ function d_({ prompt: e, onSubmit: t }) {
     }),
   });
 }
-const u_ = 12500;
-function c_({ prompt: e, onSubmit: t }) {
+const f_ = 12500;
+function w_({ prompt: e, onSubmit: t }) {
   const [o, a] = N.useState(""),
     n = o.trim(),
     r = e.field === "ego",
@@ -88564,11 +88689,11 @@ function c_({ prompt: e, onSubmit: t }) {
     l = e.field === "child",
     s = e.field === "partner",
     u = l || s,
-    [f, y] = N.useState(!i || no());
+    [f, y] = N.useState(!i || ro());
   return (
     N.useEffect(() => {
       if (f) return;
-      const g = setTimeout(() => y(!0), u_);
+      const g = setTimeout(() => y(!0), f_);
       return () => clearTimeout(g);
     }, [f]),
     f
@@ -88681,7 +88806,7 @@ function c_({ prompt: e, onSubmit: t }) {
       : null
   );
 }
-function f_({ dead: e, ready: t, onNext: o }) {
+function g_({ dead: e, ready: t, onNext: o }) {
   return d.jsx("div", {
     className: "overlay death",
     children: d.jsxs("div", {
@@ -88707,7 +88832,7 @@ function f_({ dead: e, ready: t, onNext: o }) {
                 d.jsx("span", { children: h("세", "yrs", "歳") }),
               ],
             }),
-        d.jsx("p", { className: "death-cause", children: Nw(e.cause) }),
+        d.jsx("p", { className: "death-cause", children: Ow(e.cause) }),
         d.jsx("p", { className: "modal-text", children: e.text }),
         d.jsx("div", {
           className: "choices row",
@@ -88726,9 +88851,9 @@ function f_({ dead: e, ready: t, onNext: o }) {
     }),
   });
 }
-const w_ = 1800,
-  g_ = 7e3;
-function m_({ dr: e }) {
+const m_ = 1800,
+  y_ = 7e3;
+function p_({ dr: e }) {
   const t = (mt().orgs && mt().orgs.tiers) || [];
   return d.jsxs("div", {
     className: "dr-card",
@@ -88779,7 +88904,7 @@ function m_({ dr: e }) {
     ],
   });
 }
-function y_({ onYes: e }) {
+function b_({ onYes: e }) {
   const t = N.useRef(null),
     [o, a] = N.useState(!1),
     [n, r] = N.useState(!1);
@@ -88787,32 +88912,32 @@ function y_({ onYes: e }) {
     N.useEffect(() => {
       const i = t.current;
       if (!i) return;
-      const l = no(),
+      const l = ro(),
         s = [],
         u = window.innerWidth,
         f = window.innerHeight,
         y = l ? 24 : u < 600 ? 70 : 140;
       let g = 0;
-      const k = () => {
+      const x = () => {
         if (g++ >= y || !t.current) return;
-        const x = document.createElement("span");
-        ((x.className = "vw"),
-          (x.textContent = h(
+        const k = document.createElement("span");
+        ((k.className = "vw"),
+          (k.textContent = h(
             "내 목소리가 들려?",
             "Can you hear my voice?",
             "わたしの声が聞こえる？",
           )),
-          (x.style.fontSize = `${12 + Math.random() * (u < 600 ? 22 : 34)}px`),
-          (x.style.left = `${Math.random() * (u + 120) - 120}px`),
-          (x.style.top = `${Math.random() * (f + 20) - 20}px`),
-          x.style.setProperty("--o", (0.12 + Math.random() * 0.5).toFixed(2)),
-          i.appendChild(x),
-          requestAnimationFrame(() => x.classList.add("on")),
-          s.push(setTimeout(k, l ? 60 : Math.max(18, 120 - g * 1.1))));
+          (k.style.fontSize = `${12 + Math.random() * (u < 600 ? 22 : 34)}px`),
+          (k.style.left = `${Math.random() * (u + 120) - 120}px`),
+          (k.style.top = `${Math.random() * (f + 20) - 20}px`),
+          k.style.setProperty("--o", (0.12 + Math.random() * 0.5).toFixed(2)),
+          i.appendChild(k),
+          requestAnimationFrame(() => k.classList.add("on")),
+          s.push(setTimeout(x, l ? 60 : Math.max(18, 120 - g * 1.1))));
       };
       return (
         s.push(setTimeout(() => r(!0), 1600)),
-        s.push(setTimeout(k, 2600)),
+        s.push(setTimeout(x, 2600)),
         s.push(setTimeout(() => a(!0), 7600)),
         () => s.forEach(clearTimeout)
       );
@@ -88842,7 +88967,7 @@ function y_({ onYes: e }) {
     })
   );
 }
-function p_({ on: e, blows: t, text: o }) {
+function k_({ on: e, blows: t, text: o }) {
   const a = N.useRef(null),
     [n, r] = N.useState(!1),
     [i, l] = N.useState(0);
@@ -88851,11 +88976,11 @@ function p_({ on: e, blows: t, text: o }) {
       if (!e) return;
       const s = a.current;
       if (!s) return;
-      const u = no(),
+      const u = ro(),
         f = (s.width = window.innerWidth),
         y = (s.height = window.innerHeight),
         g = s.getContext("2d"),
-        k = u
+        x = u
           ? []
           : Array.from({ length: f < 600 ? 40 : 90 }, () => ({
               x: Math.random() * f,
@@ -88865,28 +88990,28 @@ function p_({ on: e, blows: t, text: o }) {
               r: 0.6 + Math.random() * 1.4,
               a: 0.15 + Math.random() * 0.35,
             })),
-        x = performance.now();
-      let T = 0;
+        k = performance.now();
+      let v = 0;
       const Y = (c) => {
-        const m = Math.max(0, 1 - (c - x) / 6500);
+        const m = Math.max(0, 1 - (c - k) / 6500);
         g.clearRect(0, 0, f, y);
-        for (const w of k)
+        for (const w of x)
           ((w.x += w.vx * m),
             (w.y += w.vy * m),
             (g.fillStyle = `rgba(220,220,225,${w.a * (0.35 + 0.65 * (1 - m))})`),
             g.beginPath(),
             g.arc(w.x, w.y, w.r, 0, 7),
             g.fill());
-        T = requestAnimationFrame(Y);
+        v = requestAnimationFrame(Y);
       };
-      return ((T = requestAnimationFrame(Y)), () => cancelAnimationFrame(T));
+      return ((v = requestAnimationFrame(Y)), () => cancelAnimationFrame(v));
     }, [e]),
     N.useEffect(() => {
       if (!t) {
         r(!1);
         return;
       }
-      const s = no(),
+      const s = ro(),
         u = [];
       if (s)
         return (
@@ -88946,18 +89071,18 @@ function p_({ on: e, blows: t, text: o }) {
       : null
   );
 }
-const no = () => {
+const ro = () => {
   try {
     return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   } catch {
     return !1;
   }
 };
-function b_({ down: e }) {
+function x_({ down: e }) {
   const [t, o] = N.useState("????");
   return (
     N.useEffect(() => {
-      if (e || no()) {
+      if (e || ro()) {
         o("????");
         return;
       }
@@ -88970,7 +89095,7 @@ function b_({ down: e }) {
     d.jsx("b", { className: `glitch${e ? " dead" : ""}`, children: t })
   );
 }
-function k_({ on: e }) {
+function v_({ on: e }) {
   const t = N.useRef(null),
     o = N.useRef({ a: 0, target: 0, raf: 0, dots: null, falls: [], bigAt: 0 });
   return (
@@ -88979,7 +89104,7 @@ function k_({ on: e }) {
       ((a.target = e ? 1 : 0), e && (a.bigAt = performance.now() + 4200));
     }, [e]),
     N.useEffect(() => {
-      if (no()) return;
+      if (ro()) return;
       const a = t.current;
       if (!a) return;
       const n = a.getContext("2d");
@@ -89033,10 +89158,10 @@ function k_({ on: e }) {
           }
           for (const g of r.falls) {
             ((g.x += g.vx), (g.y += g.vy), (g.life -= g.big ? 0.004 : 0.008));
-            const k = Math.hypot(g.vx, g.vy),
-              x = g.x - (g.vx / k) * g.len,
-              T = g.y - (g.vy / k) * g.len,
-              Y = n.createLinearGradient(g.x, g.y, x, T);
+            const x = Math.hypot(g.vx, g.vy),
+              k = g.x - (g.vx / x) * g.len,
+              v = g.y - (g.vy / x) * g.len,
+              Y = n.createLinearGradient(g.x, g.y, k, v);
             (Y.addColorStop(0, `rgba(255,248,220,${0.95 * g.life * r.a})`),
               Y.addColorStop(0.3, `rgba(170,195,255,${0.45 * g.life * r.a})`),
               Y.addColorStop(1, "rgba(120,150,255,0)"),
@@ -89045,7 +89170,7 @@ function k_({ on: e }) {
               (n.lineCap = "round"),
               n.beginPath(),
               n.moveTo(g.x, g.y),
-              n.lineTo(x, T),
+              n.lineTo(k, v),
               n.stroke(),
               g.big &&
                 ((n.fillStyle = `rgba(255,250,230,${g.life * r.a})`),
@@ -89072,7 +89197,7 @@ function k_({ on: e }) {
     d.jsx("canvas", { ref: t, className: "warpfx" })
   );
 }
-function x_({ on: e }) {
+function T_({ on: e }) {
   const t = N.useRef(null),
     o = N.useRef({ a: 0, target: 0, raf: 0, ps: null });
   return (
@@ -89080,7 +89205,7 @@ function x_({ on: e }) {
       o.current.target = e ? 1 : 0;
     }, [e]),
     N.useEffect(() => {
-      if (no()) return;
+      if (ro()) return;
       const a = t.current;
       if (!a) return;
       const n = a.getContext("2d");
@@ -89111,10 +89236,10 @@ function x_({ on: e }) {
               f.y < -0.02 && ((f.y = 1.02), (f.x = Math.random())));
             const y = (f.x + Math.sin(f.d) * 0.01) * s,
               g = f.y * u,
-              k = n.createRadialGradient(y, g, 0, y, g, f.r * 4);
-            (k.addColorStop(0, `rgba(214,140,120,${0.32 * r.a})`),
-              k.addColorStop(1, "rgba(214,140,120,0)"),
-              (n.fillStyle = k),
+              x = n.createRadialGradient(y, g, 0, y, g, f.r * 4);
+            (x.addColorStop(0, `rgba(214,140,120,${0.32 * r.a})`),
+              x.addColorStop(1, "rgba(214,140,120,0)"),
+              (n.fillStyle = x),
               n.beginPath(),
               n.arc(y, g, f.r * 4, 0, 6.28),
               n.fill());
@@ -89132,7 +89257,7 @@ function x_({ on: e }) {
     d.jsx("canvas", { ref: t, className: "warpfx" })
   );
 }
-const T_ = {
+const __ = {
     fight: {
       rest: [350, 1e3],
       burst: [2, 5],
@@ -89171,7 +89296,7 @@ const T_ = {
     },
   },
   xe = (e, t) => e + Math.random() * (t - e);
-function v_({ phase: e }) {
+function j_({ phase: e }) {
   const t = N.useRef(null),
     o = N.useRef({
       phase: null,
@@ -89194,7 +89319,7 @@ function v_({ phase: e }) {
         e !== "bloom" && (a.bloomed = !1));
     }, [e]),
     N.useEffect(() => {
-      if (no()) return;
+      if (ro()) return;
       const a = t.current;
       if (!a) return;
       const n = a.getContext("2d");
@@ -89203,91 +89328,91 @@ function v_({ phase: e }) {
       let i = 0,
         l = 0;
       const s = () => {
-        const x = window.devicePixelRatio || 1;
+        const k = window.devicePixelRatio || 1;
         ((i = window.innerWidth),
           (l = window.innerHeight),
-          (a.width = i * x),
-          (a.height = l * x),
-          n.setTransform(x, 0, 0, x, 0, 0));
+          (a.width = i * k),
+          (a.height = l * k),
+          n.setTransform(k, 0, 0, k, 0, 0));
       };
       (s(), window.addEventListener("resize", s));
       const u = () => {
-          const x = document.querySelector(".stage");
-          if (!x) return [i / 2, l * 0.15];
-          const T = x.getBoundingClientRect();
-          return [T.left + T.width / 2, T.top + Math.min(T.height * 0.22, 170)];
+          const k = document.querySelector(".stage");
+          if (!k) return [i / 2, l * 0.15];
+          const v = k.getBoundingClientRect();
+          return [v.left + v.width / 2, v.top + Math.min(v.height * 0.22, 170)];
         },
-        f = (x, T) => {
+        f = (k, v) => {
           const [Y, c] = u(),
-            m = xe(x.len[0], x.len[1]) * Math.min(i, l) * (T ? 1.6 : 1),
-            w = T ? Y : xe(i * 0.12, i * 0.88),
-            v = T ? c : xe(l * 0.12, l * 0.88);
-          (T && (r.eye = { x: Y, y: c, t: -380, life: 3600 }),
+            m = xe(k.len[0], k.len[1]) * Math.min(i, l) * (v ? 1.6 : 1),
+            w = v ? Y : xe(i * 0.12, i * 0.88),
+            T = v ? c : xe(l * 0.12, l * 0.88);
+          (v && (r.eye = { x: Y, y: c, t: -380, life: 3600 }),
             r.slashes.push({
               cx: w,
-              cy: v,
+              cy: T,
               L: m,
-              ang: T ? -0.32 : xe(0, Math.PI),
-              bend: T ? 0.06 : xe(-0.35, 0.35),
+              ang: v ? -0.32 : xe(0, Math.PI),
+              bend: v ? 0.06 : xe(-0.35, 0.35),
               t: 0,
-              dur: T ? 520 : xe(110, 200),
-              life: T ? 2600 : xe(380, 700),
-              col: x.col,
-              w: T ? 3.2 : xe(1.2, 2.4),
+              dur: v ? 520 : xe(110, 200),
+              life: v ? 2600 : xe(380, 700),
+              col: k.col,
+              w: v ? 3.2 : xe(1.2, 2.4),
             }));
           const _ = r.slashes[r.slashes.length - 2];
           if (
-            T ||
-            (_ && Math.hypot(_.cx - w, _.cy - v) < Math.min(i, l) * 0.35) ||
+            v ||
+            (_ && Math.hypot(_.cx - w, _.cy - T) < Math.min(i, l) * 0.35) ||
             Math.random() < 0.45
           ) {
-            const C = T ? 60 : Math.floor(xe(8, 18)),
-              R = T || !_ ? w : (_.cx + w) / 2,
-              W = T || !_ ? v : (_.cy + v) / 2;
+            const C = v ? 60 : Math.floor(xe(8, 18)),
+              R = v || !_ ? w : (_.cx + w) / 2,
+              W = v || !_ ? T : (_.cy + T) / 2;
             for (let G = 0; G < C; G++) {
               const b = xe(0, Math.PI * 2),
-                I = xe(0.06, T ? 0.5 : 0.32);
+                I = xe(0.06, v ? 0.5 : 0.32);
               r.sparks.push({
                 x: R,
                 y: W,
                 vx: Math.cos(b) * I,
                 vy: Math.sin(b) * I - 0.04,
                 t: 0,
-                life: xe(260, T ? 1400 : 620),
-                col: x.spark,
+                life: xe(260, v ? 1400 : 620),
+                col: k.spark,
               });
             }
-            r.flash = Math.max(r.flash, x.flash);
+            r.flash = Math.max(r.flash, k.flash);
           }
         };
       let y = performance.now(),
         g = 0;
-      const k = (x) => {
-        const T = Math.min(50, x - y);
-        ((y = x), n.clearRect(0, 0, i, l));
-        const Y = T_[r.phase];
+      const x = (k) => {
+        const v = Math.min(50, k - y);
+        ((y = k), n.clearRect(0, 0, i, l));
+        const Y = __[r.phase];
         (Y &&
-          x >= r.next &&
+          k >= r.next &&
           !(r.phase === "bloom" && r.bloomed) &&
           (r.left <= 0 && (r.left = Math.round(xe(Y.burst[0], Y.burst[1]))),
           f(Y, r.phase === "bloom"),
           r.phase === "bloom" && (r.bloomed = !0),
           r.left--,
           (r.next =
-            x +
+            k +
             (r.left > 0 ? xe(Y.gap[0], Y.gap[1]) : xe(Y.rest[0], Y.rest[1])))),
           r.phase === "bloom" &&
             r.bloomed &&
             !r.eye &&
             !r.slashes.length &&
-            ((r.phase = "calm"), (r.next = x + 1500)),
+            ((r.phase = "calm"), (r.next = k + 1500)),
           (n.globalCompositeOperation = "lighter"));
         for (const c of r.slashes) {
-          c.t += T;
+          c.t += v;
           const m = Math.min(1, c.t / c.dur),
             w = Math.max(0, 1 - Math.max(0, c.t - c.dur) / (c.life - c.dur)),
-            v = -0.5 + m,
-            _ = Math.max(-0.5, v - 0.55),
+            T = -0.5 + m,
+            _ = Math.max(-0.5, T - 0.55),
             C = (D) => {
               const ee = D * c.L,
                 K = Math.sin((D + 0.5) * Math.PI) * c.bend * c.L * 0.5;
@@ -89296,7 +89421,7 @@ function v_({ phase: e }) {
                 c.cy + Math.sin(c.ang) * ee + Math.cos(c.ang) * K,
               ];
             },
-            [R, W] = C(v),
+            [R, W] = C(T),
             [G, b] = C(_),
             [I, A, S] = c.col,
             F = n.createLinearGradient(G, b, R, W);
@@ -89308,7 +89433,7 @@ function v_({ phase: e }) {
             (n.lineCap = "round"),
             n.beginPath());
           for (let D = 0; D <= 16; D++) {
-            const [ee, K] = C(_ + (v - _) * (D / 16));
+            const [ee, K] = C(_ + (T - _) * (D / 16));
             D ? n.lineTo(ee, K) : n.moveTo(ee, K);
           }
           (n.stroke(),
@@ -89318,10 +89443,10 @@ function v_({ phase: e }) {
         }
         r.slashes = r.slashes.filter((c) => c.t < c.life);
         for (const c of r.sparks) {
-          ((c.t += T),
-            (c.x += c.vx * T),
-            (c.y += c.vy * T),
-            (c.vy += 6e-4 * T),
+          ((c.t += v),
+            (c.x += c.vx * v),
+            (c.y += c.vy * v),
+            (c.vy += 6e-4 * v),
             (c.vx *= 0.985),
             (c.vy *= 0.985));
           const m = Math.max(0, 1 - c.t / c.life);
@@ -89330,12 +89455,12 @@ function v_({ phase: e }) {
         }
         if (((r.sparks = r.sparks.filter((c) => c.t < c.life)), r.eye)) {
           const c = r.eye;
-          if (((c.t += T), c.t > c.life)) r.eye = null;
+          if (((c.t += v), c.t > c.life)) r.eye = null;
           else if (c.t > 0) {
             const m = Math.max(40, Math.min(i, l) * 0.06),
               w = Math.min(1, c.t / 900) ** 0.6,
-              v = c.t < c.life - 900 ? 1 : (c.life - c.t) / 900,
-              _ = Math.min(1, c.t / 500) * v,
+              T = c.t < c.life - 900 ? 1 : (c.life - c.t) / 900,
+              _ = Math.min(1, c.t / 500) * T,
               C = m * 0.9 * (0.4 + 0.6 * w),
               R = n.createRadialGradient(c.x, c.y, 0, c.x, c.y, C * 1.6);
             (R.addColorStop(0, `rgba(235,248,255,${0.9 * _})`),
@@ -89359,7 +89484,7 @@ function v_({ phase: e }) {
               n.ellipse(c.x, c.y, C * 0.07, C * 0.5 * w, 0, 0, 6.283),
               n.fill(),
               (n.globalCompositeOperation = "lighter"),
-              v > 0.3 &&
+              T > 0.3 &&
                 Math.random() < 0.55 &&
                 r.wisps.push({
                   x: c.x + xe(-m * 0.5, m * 0.5),
@@ -89373,9 +89498,9 @@ function v_({ phase: e }) {
           }
         }
         for (const c of r.wisps) {
-          ((c.t += T),
-            (c.y -= c.vy * T),
-            (c.x += c.vx * T + Math.sin(c.t / 120) * 0.15));
+          ((c.t += v),
+            (c.y -= c.vy * v),
+            (c.x += c.vx * v + Math.sin(c.t / 120) * 0.15));
           const m = Math.max(0, 1 - c.t / c.life),
             w = n.createRadialGradient(c.x, c.y, 0, c.x, c.y, c.r * 3);
           (w.addColorStop(0, `rgba(150,215,255,${0.55 * m})`),
@@ -89392,10 +89517,10 @@ function v_({ phase: e }) {
             n.fillRect(0, 0, i, l)),
           (r.flash *= 0.86),
           (n.globalCompositeOperation = "source-over"),
-          (g = requestAnimationFrame(k)));
+          (g = requestAnimationFrame(x)));
       };
       return (
-        (g = requestAnimationFrame(k)),
+        (g = requestAnimationFrame(x)),
         () => {
           (cancelAnimationFrame(g), window.removeEventListener("resize", s));
         }
@@ -89404,7 +89529,7 @@ function v_({ phase: e }) {
     d.jsx("canvas", { ref: t, className: "warpfx" })
   );
 }
-function __({ on: e, down: t }) {
+function A_({ on: e, down: t }) {
   const o = N.useRef(null),
     a = N.useRef({ speed: 0, target: 0, down: !1, raf: 0, layers: null });
   return (
@@ -89413,7 +89538,7 @@ function __({ on: e, down: t }) {
       ((n.target = e ? (t ? 1.2 : 6) : 0), (n.down = t));
     }, [e, t]),
     N.useEffect(() => {
-      if (no()) return;
+      if (ro()) return;
       const n = o.current;
       if (!n) return;
       const r = n.getContext("2d");
@@ -89438,20 +89563,20 @@ function __({ on: e, down: t }) {
         if ((r.clearRect(0, 0, u, f), i.speed > 0.01)) {
           const y = i.down ? "220,70,70" : "150,205,255",
             g = i.down ? "255,150,150" : "200,230,255";
-          for (const k of i.layers) {
-            k.off = (k.off + k.v * i.speed) % k.gap;
-            const x = f * k.h[0],
-              T = f * k.h[1],
-              Y = k.w + k.v * i.speed * 0.9;
-            for (let c = u + k.gap - k.off; c > -k.gap; c -= k.gap) {
+          for (const x of i.layers) {
+            x.off = (x.off + x.v * i.speed) % x.gap;
+            const k = f * x.h[0],
+              v = f * x.h[1],
+              Y = x.w + x.v * i.speed * 0.9;
+            for (let c = u + x.gap - x.off; c > -x.gap; c -= x.gap) {
               const m = r.createLinearGradient(c, 0, c + Y, 0);
-              (m.addColorStop(0, `rgba(${y},${k.a})`),
+              (m.addColorStop(0, `rgba(${y},${x.a})`),
                 m.addColorStop(1, `rgba(${y},0)`),
                 (r.fillStyle = m),
-                r.fillRect(c, x, Y, T - x),
-                k.core &&
-                  ((r.fillStyle = `rgba(${g},${k.a * 0.6})`),
-                  r.fillRect(c, x, k.w * 0.35, T - x)));
+                r.fillRect(c, k, Y, v - k),
+                x.core &&
+                  ((r.fillStyle = `rgba(${g},${x.a * 0.6})`),
+                  r.fillRect(c, k, x.w * 0.35, v - k)));
             }
           }
           ((r.fillStyle = `rgba(${y},${Math.min(0.12, i.speed / 80)})`),
@@ -89471,7 +89596,7 @@ function __({ on: e, down: t }) {
   );
 }
 const Yt = 1080,
-  nt = 84,
+  rt = 84,
   he = {
     bg: "#0b0c10",
     panel: "#14161d",
@@ -89489,7 +89614,7 @@ const Yt = 1080,
       rep: "#c97a96",
     },
   },
-  j_ = {
+  Y_ = {
     common: "#a8a69f",
     uncommon: "#7fc28f",
     rare: "#6ea8e8",
@@ -89498,22 +89623,22 @@ const Yt = 1080,
     myth: "#ff5d73",
     miracle: "#5fe3d0",
   },
-  md =
-    "'Noto Serif KR', 'Nanum Myeongjo', 'Apple SD Gothic Neo', 'Malgun Gothic', serif",
   yd =
+    "'Noto Serif KR', 'Nanum Myeongjo', 'Apple SD Gothic Neo', 'Malgun Gothic', serif",
+  pd =
     "'Pretendard', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif",
-  A_ =
-    "'Noto Serif JP', 'Hiragino Mincho ProN', 'Yu Mincho', 'YuMincho', " + md,
-  Y_ =
+  S_ =
+    "'Noto Serif JP', 'Hiragino Mincho ProN', 'Yu Mincho', 'YuMincho', " + yd,
+  R_ =
     "'Noto Sans JP', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Meiryo', " +
-    yd;
-let Bo = md,
-  Re = yd;
-function S_() {
+    pd;
+let Bo = yd,
+  Re = pd;
+function C_() {
   const e = Pe() === "ja";
-  ((Bo = e ? A_ : md), (Re = e ? Y_ : yd));
+  ((Bo = e ? S_ : yd), (Re = e ? R_ : pd));
 }
-function sc(e, t, o) {
+function lc(e, t, o) {
   const a = [];
   let n = "";
   for (const r of Pe() === "ja" ? [...t] : t.split(/(\s+)/)) {
@@ -89542,12 +89667,12 @@ function on(e, t, o, a, n, r) {
     e.arcTo(t, o, t + a, o, r),
     e.closePath());
 }
-function lc(e, t, o) {
-  const a = Yt - nt * 2;
-  let n = nt;
-  const r = (c, m, w, v, _ = "left") => {
+function hc(e, t, o) {
+  const a = Yt - rt * 2;
+  let n = rt;
+  const r = (c, m, w, T, _ = "left") => {
     o &&
-      ((e.font = m), (e.fillStyle = w), (e.textAlign = _), e.fillText(c, v, n));
+      ((e.font = m), (e.fillStyle = w), (e.textAlign = _), e.fillText(c, T, n));
   };
   ((n += 26),
     r(
@@ -89573,8 +89698,8 @@ function lc(e, t, o) {
       m = e.measureText(c).width;
     e.font = `400 44px ${Re}`;
     const w = t.undying ? "" : h("세", "yrs", "歳") + (t.alive ? " —" : ""),
-      v = e.measureText(w).width,
-      _ = Yt / 2 - (m + 12 + v) / 2;
+      T = e.measureText(w).width,
+      _ = Yt / 2 - (m + 12 + T) / 2;
     ((e.textAlign = "left"),
       (e.font = `700 150px ${Bo}`),
       (e.fillStyle = he.text),
@@ -89586,7 +89711,7 @@ function lc(e, t, o) {
   ((n += 62),
     r(t.cause, `600 34px ${Re}`, he.bad, Yt / 2, "center"),
     (e.font = `400 30px ${Bo}`));
-  const l = sc(e, `“${t.obituary}”`, a - 40);
+  const l = lc(e, `“${t.obituary}”`, a - 40);
   n += 26;
   for (const c of l)
     ((n += 46), r(c, `400 30px ${Bo}`, he.text, Yt / 2, "center"));
@@ -89624,11 +89749,11 @@ function lc(e, t, o) {
   const f = 16,
     y = s.length,
     g = (a - f * (y - 1)) / y,
-    k = 118;
+    x = 118;
   (s.forEach(([c, m], w) => {
-    const v = nt + w * (g + f);
+    const T = rt + w * (g + f);
     if (o) {
-      (on(e, v, n, g, k, 16),
+      (on(e, T, n, g, x, 16),
         (e.fillStyle = he.panel),
         e.fill(),
         (e.strokeStyle = he.border),
@@ -89637,7 +89762,7 @@ function lc(e, t, o) {
         (e.textAlign = "center"),
         (e.font = `400 22px ${Re}`),
         (e.fillStyle = he.dim),
-        e.fillText(c, v + g / 2, n + 42));
+        e.fillText(c, T + g / 2, n + 42));
       let _ = 32;
       for (
         e.font = `700 ${_}px ${Re}`;
@@ -89650,49 +89775,49 @@ function lc(e, t, o) {
             ? he.good
             : he.bad
           : he.text),
-        e.fillText(m, v + g / 2, n + 90));
+        e.fillText(m, T + g / 2, n + 90));
     }
   }),
-    (n += k));
-  const x = (t.records || []).slice(0, 6);
-  if (x.length) {
+    (n += x));
+  const k = (t.records || []).slice(0, 6);
+  if (k.length) {
     n += 40;
     const c = 54;
-    (x.forEach((m, w) => {
-      const v = n + w * (c + 10),
-        _ = j_[m.tier] || he.text;
+    (k.forEach((m, w) => {
+      const T = n + w * (c + 10),
+        _ = Y_[m.tier] || he.text;
       o &&
-        (on(e, nt, v, a, c, 10),
+        (on(e, rt, T, a, c, 10),
         (e.fillStyle = he.panel),
         e.fill(),
         (e.fillStyle = _),
-        e.fillRect(nt, v + 8, 4, c - 16),
+        e.fillRect(rt, T + 8, 4, c - 16),
         (e.textAlign = "left"),
         (e.font = `700 26px ${Re}`),
-        e.fillText(m.label, nt + 24, v + 36),
+        e.fillText(m.label, rt + 24, T + 36),
         (e.textAlign = "right"),
         (e.font = `500 21px ${Re}`),
-        e.fillText(m.tierLabel, nt + a - 20, v + 35));
+        e.fillText(m.tierLabel, rt + a - 20, T + 35));
     }),
-      (n += x.length * (c + 10) - 10));
+      (n += k.length * (c + 10) - 10));
   }
-  const T = (t.story || []).join(h(" ", " ", ""));
-  if (T) {
+  const v = (t.story || []).join(h(" ", " ", ""));
+  if (v) {
     e.font = `400 30px ${Bo}`;
-    const c = sc(e, T, a - 64),
+    const c = lc(e, v, a - 64),
       m = n + 44,
       w = 70 + c.length * 50 + 20;
     (o &&
-      (on(e, nt, m, a, w, 18),
+      (on(e, rt, m, a, w, 18),
       (e.fillStyle = he.panel),
       e.fill(),
       (e.strokeStyle = he.border),
       (e.lineWidth = 2),
       e.stroke()),
       (n = m + 50),
-      r(h("일대기", "Life story", "生涯"), `600 24px ${Re}`, he.dim, nt + 32),
+      r(h("일대기", "Life story", "生涯"), `600 24px ${Re}`, he.dim, rt + 32),
       (n += 12));
-    for (const v of c) ((n += 50), r(v, `400 30px ${Bo}`, he.text, nt + 32));
+    for (const T of c) ((n += 50), r(T, `400 30px ${Bo}`, he.text, rt + 32));
     n = m + w;
   }
   ((n += 54),
@@ -89700,21 +89825,21 @@ function lc(e, t, o) {
       h("마지막 상태", "Final state", "最後の状態"),
       `600 24px ${Re}`,
       he.dim,
-      nt,
+      rt,
     ));
   const Y = (a - 40) / 2;
   return (
-    Yo.forEach((c, m) => {
+    oo.forEach((c, m) => {
       const w = m % 2,
-        v = Math.floor(m / 2),
-        _ = nt + w * (Y + 40),
-        C = n + 40 + v * 70,
+        T = Math.floor(m / 2),
+        _ = rt + w * (Y + 40),
+        C = n + 40 + T * 70,
         R = Math.round(t.stats[c]);
       o &&
         ((e.textAlign = "left"),
         (e.font = `400 24px ${Re}`),
         (e.fillStyle = he.text),
-        e.fillText(st[c], _, C),
+        e.fillText(Je[c], _, C),
         (e.textAlign = "right"),
         (e.font = `700 24px ${Re}`),
         e.fillText(String(R), _ + Y, C),
@@ -89726,7 +89851,7 @@ function lc(e, t, o) {
           (e.fillStyle = he.stat[c]),
           e.fill()));
     }),
-    (n += 40 + Math.ceil(Yo.length / 2) * 70),
+    (n += 40 + Math.ceil(oo.length / 2) * 70),
     (n += 50),
     r(
       `${h("시드", "Seed", "シード")} · ${t.seed}`,
@@ -89735,26 +89860,26 @@ function lc(e, t, o) {
       Yt / 2,
       "center",
     ),
-    Kl() &&
+    zl() &&
       ((n += 34),
       r(
-        Kl().replace(/^https?:\/\//, ""),
+        zl().replace(/^https?:\/\//, ""),
         `400 22px ${Re}`,
         he.dim,
         Yt / 2,
         "center",
       )),
-    (n += nt - 20),
+    (n += rt - 20),
     n
   );
 }
-async function R_(e) {
-  if ((S_(), document.fonts && document.fonts.ready))
+async function I_(e) {
+  if ((C_(), document.fonts && document.fonts.ready))
     try {
       await document.fonts.ready;
     } catch {}
   const t = document.createElement("canvas").getContext("2d"),
-    o = Math.ceil(lc(t, e, !1)),
+    o = Math.ceil(hc(t, e, !1)),
     a = document.createElement("canvas");
   ((a.width = Yt), (a.height = o));
   const n = a.getContext("2d");
@@ -89766,11 +89891,11 @@ async function R_(e) {
     (n.fillStyle = r),
     n.fillRect(0, 0, Yt, 420),
     (n.textBaseline = "alphabetic"),
-    lc(n, e, !0),
+    hc(n, e, !0),
     a
   );
 }
-function Kl() {
+function zl() {
   try {
     const e = window.location.origin;
     return /^https?:/.test(e) ? e : "";
@@ -89778,12 +89903,12 @@ function Kl() {
     return "";
   }
 }
-const Ur = (e) => `city-born-${e.age}.png`;
-async function C_(e) {
-  const t = await R_(e);
+const Jr = (e) => `city-born-${e.age}.png`;
+async function N_(e) {
+  const t = await I_(e);
   return await new Promise((a) => t.toBlob(a, "image/png"));
 }
-function zl(e, t) {
+function Ul(e, t) {
   const o = URL.createObjectURL(e),
     a = document.createElement("a");
   return (
@@ -89796,20 +89921,20 @@ function zl(e, t) {
     !0
   );
 }
-async function I_(e, t) {
-  const o = Kl(),
+async function O_(e, t) {
+  const o = zl(),
     a = h(
       "도시의 한 사람으로 태어나",
       "Born as an Individual in the City",
       "都市の一人として生まれ、",
     ),
-    n = `${Og(t)}${
+    n = `${Wg(t)}${
       o
         ? `
 ${o}`
         : ""
     }`,
-    r = typeof File < "u" ? new File([e], Ur(t), { type: "image/png" }) : null;
+    r = typeof File < "u" ? new File([e], Jr(t), { type: "image/png" }) : null;
   if (navigator.share) {
     if (r && navigator.canShare && navigator.canShare({ files: [r] }))
       try {
@@ -89828,7 +89953,7 @@ ${o}`
     try {
       return (
         await navigator.share({ title: a, text: n, ...(o ? { url: o } : {}) }),
-        zl(e, Ur(t)),
+        Ul(e, Jr(t)),
         "link-only"
       );
     } catch (i) {
@@ -89852,30 +89977,30 @@ ${o}`
       );
   } catch {}
   try {
-    return (await navigator.clipboard.writeText(n), zl(e, Ur(t)), "link-only");
+    return (await navigator.clipboard.writeText(n), Ul(e, Jr(t)), "link-only");
   } catch {
     return "fail";
   }
 }
-function N_({ summary: e, onAgain: t, onHome: o }) {
+function W_({ summary: e, onAgain: t, onHome: o }) {
   const [a, n] = N.useState(null),
     [r, i] = N.useState(!1),
     l = Math.round(e.diff),
-    s = e.flags.map((w) => Dh(w, e)).filter(Boolean),
+    s = e.flags.map((w) => qh(w, e)).filter(Boolean),
     [u, f] = N.useState(null),
     [y, g] = N.useState(null),
-    k = (w) => {
+    x = (w) => {
       (g(w), setTimeout(() => g(null), 2200));
     },
-    x = async () => {
+    k = async () => {
       f("loading");
       try {
-        const w = await C_(e);
+        const w = await N_(e);
         if (!w) throw new Error("no blob");
         f({ blob: w, url: URL.createObjectURL(w) });
       } catch {
         (f(null),
-          k(
+          x(
             h(
               "이미지를 만들지 못했습니다",
               "Couldn't create the image",
@@ -89884,22 +90009,22 @@ function N_({ summary: e, onAgain: t, onHome: o }) {
           ));
       }
     },
-    T = () => {
+    v = () => {
       (u && u.url && URL.revokeObjectURL(u.url), f(null));
     };
   N.useEffect(() => () => u && u.url && URL.revokeObjectURL(u.url), [u]);
   const Y = () => {
       !u ||
         !u.blob ||
-        (zl(u.blob, Ur(e)), k(h("저장했습니다", "Saved", "保存しました")));
+        (Ul(u.blob, Jr(e)), x(h("저장했습니다", "Saved", "保存しました")));
     },
     c = async () => {
       if (!u || !u.blob) return;
-      const w = await I_(u.blob, e);
+      const w = await O_(u.blob, e);
       w === "shared"
-        ? k(h("공유했습니다", "Shared", "共有しました"))
+        ? x(h("공유했습니다", "Shared", "共有しました"))
         : w === "link-only"
-          ? k(
+          ? x(
               h(
                 "주소를 공유하고 이미지는 따로 저장했습니다",
                 "Shared the link and saved the image separately",
@@ -89907,7 +90032,7 @@ function N_({ summary: e, onAgain: t, onHome: o }) {
               ),
             )
           : w === "copied"
-            ? k(
+            ? x(
                 h(
                   "이미지와 주소를 클립보드에 복사했습니다",
                   "Copied the image and link to the clipboard",
@@ -89915,7 +90040,7 @@ function N_({ summary: e, onAgain: t, onHome: o }) {
                 ),
               )
             : w === "fail" &&
-              k(
+              x(
                 h(
                   "공유에 실패했습니다",
                   "Sharing failed",
@@ -89924,7 +90049,7 @@ function N_({ summary: e, onAgain: t, onHome: o }) {
               );
     },
     m = async () => {
-      const w = await Qn(H2(e));
+      const w = await Qn(q2(e));
       (n(
         w
           ? h("복사했습니다", "Copied", "コピーしました")
@@ -90072,9 +90197,9 @@ function N_({ summary: e, onAgain: t, onHome: o }) {
                       d.jsx("span", {
                         className: "rec-new-count",
                         children: h(
-                          `새 기록 ${e.newRecords.filter((w) => e.records.some((v) => v.key === w)).length}개`,
-                          `${e.newRecords.filter((w) => e.records.some((v) => v.key === w)).length} new`,
-                          `新しい記録 ${e.newRecords.filter((w) => e.records.some((v) => v.key === w)).length}件`,
+                          `새 기록 ${e.newRecords.filter((w) => e.records.some((T) => T.key === w)).length}개`,
+                          `${e.newRecords.filter((w) => e.records.some((T) => T.key === w)).length} new`,
+                          `新しい記録 ${e.newRecords.filter((w) => e.records.some((T) => T.key === w)).length}件`,
                         ),
                       }),
                   ],
@@ -90118,7 +90243,7 @@ function N_({ summary: e, onAgain: t, onHome: o }) {
               }),
               d.jsx("div", {
                 className: "stats wide",
-                children: Yo.map((w) =>
+                children: oo.map((w) =>
                   d.jsxs(
                     "div",
                     {
@@ -90127,7 +90252,7 @@ function N_({ summary: e, onAgain: t, onHome: o }) {
                         d.jsxs("div", {
                           className: "stat-head",
                           children: [
-                            d.jsx("span", { children: st[w] }),
+                            d.jsx("span", { children: Je[w] }),
                             d.jsx("b", { children: Math.round(e.stats[w]) }),
                           ],
                         }),
@@ -90161,7 +90286,7 @@ function N_({ summary: e, onAgain: t, onHome: o }) {
                 }),
                 d.jsx("ul", {
                   className: "timeline",
-                  children: e.reflections.map((w, v) =>
+                  children: e.reflections.map((w, T) =>
                     d.jsxs(
                       "li",
                       {
@@ -90176,7 +90301,7 @@ function N_({ summary: e, onAgain: t, onHome: o }) {
                           d.jsx("p", { children: w.text }),
                         ],
                       },
-                      v,
+                      T,
                     ),
                   ),
                 }),
@@ -90210,7 +90335,7 @@ function N_({ summary: e, onAgain: t, onHome: o }) {
               }),
               d.jsx("button", {
                 className: "btn",
-                onClick: x,
+                onClick: k,
                 disabled: u === "loading",
                 children:
                   u === "loading"
@@ -90228,7 +90353,7 @@ function N_({ summary: e, onAgain: t, onHome: o }) {
             className: "dim seed",
             children: [h("시드", "Seed", "シード"), " · ", e.seed],
           }),
-          d.jsx(Pg, {}),
+          d.jsx(Mg, {}),
           d.jsx("p", {
             className: "fan-note",
             children: h(
@@ -90243,7 +90368,7 @@ function N_({ summary: e, onAgain: t, onHome: o }) {
         u.url &&
         d.jsx("div", {
           className: "overlay",
-          onClick: T,
+          onClick: v,
           children: d.jsxs("div", {
             className: "modal img-preview",
             onClick: (w) => w.stopPropagation(),
@@ -90278,7 +90403,7 @@ function N_({ summary: e, onAgain: t, onHome: o }) {
                   }),
                   d.jsx("button", {
                     className: "btn ghost",
-                    onClick: T,
+                    onClick: v,
                     children: h("닫기", "Close", "閉じる"),
                   }),
                 ],
@@ -90289,7 +90414,7 @@ function N_({ summary: e, onAgain: t, onHome: o }) {
         }),
       !u && y && d.jsx("p", { className: "dim img-msg", children: y }),
       r &&
-        d.jsx(Wg, {
+        d.jsx(Eg, {
           info: {
             name: e.name,
             region: e.region.name,
@@ -90304,12 +90429,12 @@ function N_({ summary: e, onAgain: t, onHome: o }) {
     ],
   });
 }
-function O_() {
-  const e = $2(),
+function E_() {
+  const e = D2(),
     [t, o] = N.useState(!1),
     { view: a, summary: n } = e,
     [r, i] = N.useState(Pe());
-  (N.useEffect(() => ((document.documentElement.lang = Pe()), wp(i)), []),
+  (N.useEffect(() => ((document.documentElement.lang = Pe()), mp(i)), []),
     N.useEffect(() => {
       document.title = h(
         "도시의 한 사람으로 태어나",
@@ -90347,7 +90472,7 @@ function O_() {
   const l = N.useMemo(() => {
     if (!n || !a || !a.dead) return n;
     try {
-      return { ...Sg(a, mt()), newRecords: n.newRecords };
+      return { ...Rg(a, mt()), newRecords: n.newRecords };
     } catch {
       return n;
     }
@@ -90359,7 +90484,7 @@ function O_() {
     a
       ? a.dead && n && t
         ? d.jsx(
-            N_,
+            W_,
             {
               summary: l,
               onAgain: () => {
@@ -90369,9 +90494,9 @@ function O_() {
             },
             r,
           )
-        : d.jsx(t_, { life: e, onShowResult: () => o(!0), hasSummary: !!n })
+        : d.jsx(a_, { life: e, onShowResult: () => o(!0), hasSummary: !!n })
       : d.jsx(
-          V2,
+          Q2,
           {
             onStart: (s) => {
               (o(!1), e.start(s));
@@ -90384,9 +90509,9 @@ function O_() {
         )
   );
 }
-K2();
+U2();
 Tw(document.getElementById("root")).render(
-  d.jsx(om.StrictMode, { children: d.jsx(O_, {}) }),
+  d.jsx(nm.StrictMode, { children: d.jsx(E_, {}) }),
 );
 "serviceWorker" in navigator &&
   window.addEventListener("load", () => {

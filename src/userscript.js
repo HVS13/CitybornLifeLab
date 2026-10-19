@@ -20,9 +20,10 @@ label{display:block}.row{display:flex;gap:7px;align-items:end;margin:8px 0}.row>
 <div class="row"><label>Minimum age<input id="min-age" type="number" min="0" max="10000" step="1" placeholder="Any"></label><label>Ending<select id="ending"><option value="any">Any ending</option><option value="alive">Alive ending only</option></select></label></div>
 <div class="row"><button id="copyStats" class="link">Use this life's stats</button><button id="copyTraits" class="link">Use this life's traits</button></div>
 <div id="selectedGoals" class="chips"></div>
-<details id="goalPicker"><summary>Traits & achievements (<span id="selected">0</span>)</summary><p class="hint">Check what you want. Use Avoid to rule out a trait at the ending.</p>
+<details id="goalPicker"><summary>Browse traits & achievements · <span id="selected">0</span> selected</summary><p id="catalogSize" class="hint"></p><p class="hint">Browse the full list below, or search by name, ID, or achievement requirement. Check traits you want at the ending; use Avoid to exclude them. Achievements show the game's unlock hints.</p>
+<label>Show<select id="goalKind"><option value="all">All traits & achievements</option><option value="trait">Traits</option><option value="achievement">Achievements</option></select></label>
 <input id="filter" type="search" placeholder="Search a trait, achievement, or ID" aria-label="Filter goals">
-<div class="row"><label><input id="onlySelected" type="checkbox">Selected only</label><button id="clear" class="link">Clear selections</button></div><small id="goalCount" role="status"></small><div id="goals"></div></details>
+<div class="row"><label><input id="onlySelected" type="checkbox">Selected only</label><button id="clear" class="link">Clear selections</button></div><small id="goalCount" role="status"></small><div id="goals" role="group" aria-label="Available traits and achievements"></div></details>
 <details id="startSettings"><summary>Starting settings & search effort</summary>
 <div class="row"><label>Name<input id="name" type="text" maxlength="12" placeholder="Seeded name"></label><label>Gender<select id="gender"><option value="m">Male</option><option value="f">Female</option></select></label></div>
 <label>Specific seed (optional)<input id="seed" type="text" placeholder="Leave blank for random seeds"></label>
@@ -101,8 +102,8 @@ function goalLabel(g){
   return catalog.find(c=>c.key===g)?.name||g;
 }
 function filterGoals(){
-  const q=$('filter').value.trim().toLowerCase();let shown=0;
-  for(const el of $('goals').children){el.hidden=!el.textContent.toLowerCase().includes(q)||($('onlySelected').checked&&!el.querySelector('input:checked'));if(!el.hidden)shown++;}
+  const q=$('filter').value.trim().toLowerCase(),kind=$('goalKind').value;let shown=0;
+  for(const el of $('goals').children){el.hidden=(kind!=='all'&&el.dataset.kind!==kind)||!el.textContent.toLowerCase().includes(q)||($('onlySelected').checked&&!el.querySelector('input:checked'));if(!el.hidden)shown++;}
   $('goalCount').textContent=shown?`${shown} of ${catalog.length} goals shown`:'No matching goals. Change the search or turn off Selected only.';
 }
 function syncGoals(){
@@ -274,7 +275,7 @@ $('resume').onclick=async()=>{
 $('goHome').onclick=()=>{const b=bridge();if(b.life){C.finished(b.runtime.state)?b.life.abandon():b.life.saveAndQuit();}else b.onHome?.();renderPlay();};
 $('copyStats').onclick=()=>{const s=bridge().runtime?.state;if(!s)return;for(const [key,value] of Object.entries(C.displayStats(s)))$('min-'+key).value=value;savePreferences();say('Stats copied as minimum ending targets. You can adjust each value.');};
 $('copyTraits').onclick=()=>{const s=bridge().runtime?.state;if(!s)return;for(const key of s.flags)if(catalog.some(c=>c.key==='flag:'+key)){chosen.delete('avoid:'+key);chosen.add('flag:'+key);}syncGoals();savePreferences();say('This life’s listed traits were added as ending requirements.');};
-$('filter').oninput=filterGoals;$('onlySelected').onchange=filterGoals;$('clear').onclick=()=>{chosen.clear();syncGoals();savePreferences();};
+$('filter').oninput=filterGoals;$('goalKind').onchange=filterGoals;$('onlySelected').onchange=filterGoals;$('clear').onclick=()=>{chosen.clear();syncGoals();savePreferences();};
 for(const id of ['name','gender','seed','count','effort','speed','ending','min-age',...Object.keys(C.statNames).map(k=>'min-'+k)])$(id).oninput=()=>{savePreferences();controls();if(id==='speed'&&auto)bridge().life?.setSpeed(Number($('speed').value));};
 $('import').onclick=()=>$('file').click();$('file').onchange=async()=>{const file=$('file').files[0];$('file').value='';if(file)try{await importRoute(JSON.parse(await file.text()));}catch(e){say('Could not read route: '+e.message);}};
 $('export').onclick=()=>{if(!selected)return;const url=URL.createObjectURL(new Blob([JSON.stringify(selected,null,2)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=`cityborn-${selected.seed}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
@@ -290,19 +291,24 @@ new ResizeObserver(()=>{if(position)movePanel(position.x,position.y);}).observe(
 shadow.addEventListener('keydown',e=>e.stopPropagation());
 document.addEventListener('pointerdown',e=>{if(!e.composedPath().includes(host)){if(auto)stopFollowing(false,'Stopped by manual game interaction.');if(job?.kind==='plan')cancel('Planning cancelled by manual game interaction.');}},true);
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(job)cancel();if(auto)stopFollowing(false,'Following stopped.');}else if(!e.composedPath().includes(host)&&auto)stopFollowing(false,'Stopped by manual keyboard input.');},true);
-controls();renderLibrary();
-if(!supported)say('The game has updated. Update this companion before searching or following routes.');
-else try{
-  makeWorker();request('catalog').then(data=>{
-    catalog=[...data.records.map(r=>({key:'record:'+r.key,name:r.label[lang()]||r.label.en,hint:r.hint[lang()]||r.hint.en})),...data.flags.map(([key,name])=>({key:'flag:'+key,name,hint:'Required at the ending.',trait:key}))];
+function renderCatalogue(){
+    const data=ADVISOR_CATALOG;
+    catalog=[...data.flags[lang()].map(([key,name])=>({key:'flag:'+key,name,hint:'Trait · Required at the ending.',trait:key})),...data.records.map(r=>({key:'record:'+r.key,name:r.label[lang()]||r.label.en,hint:r.hint[lang()]||r.hint.en}))];
+    $('catalogSize').textContent=`${data.flags[lang()].length} traits and ${data.records.length} achievements from the inspected game. The number selected is your targets, not the available total.`;
     const valid=new Set(catalog.flatMap(c=>[c.key,...(c.trait?['avoid:'+c.trait]:[])]));chosen=new Set([...chosen].filter(g=>valid.has(g)));
     for(const c of catalog){
-      const el=document.createElement('div');el.className='goal';const label=document.createElement('label'),input=document.createElement('input'),hint=document.createElement('small');input.type='checkbox';input.value=c.key;label.append(input,document.createTextNode(c.name+' ['+c.key.split(':')[1]+']'));hint.textContent=c.hint;el.append(label,hint);
+      const el=document.createElement('div');el.className='goal';el.dataset.kind=c.trait?'trait':'achievement';const label=document.createElement('label'),input=document.createElement('input'),hint=document.createElement('small');input.type='checkbox';input.value=c.key;label.append(input,document.createTextNode(c.name+' ['+c.key.split(':')[1]+']'));hint.textContent=c.hint;el.append(label,hint);
       input.onchange=()=>{input.checked?chosen.add(c.key):chosen.delete(c.key);if(input.checked&&c.trait)chosen.delete('avoid:'+c.trait);syncGoals();savePreferences();};
       if(c.trait){const avoidLabel=document.createElement('label'),avoid=document.createElement('input');avoidLabel.className='avoid';avoid.type='checkbox';avoid.value='avoid:'+c.trait;avoidLabel.append(avoid,document.createTextNode('Avoid'));avoid.onchange=()=>{avoid.checked?chosen.add(avoid.value):chosen.delete(avoid.value);if(avoid.checked)chosen.delete(c.key);syncGoals();savePreferences();};el.prepend(avoidLabel);}
       $('goals').append(el);
     }
-    ready=true;syncGoals();renderLibrary();controls();say('Ready. Set your ending targets, then find a life.');
+    syncGoals();
+}
+renderCatalogue();controls();renderLibrary();
+if(!supported)say('The game has updated. You can browse the inspected catalogue, but update this companion before searching or following routes.');
+else try{
+  makeWorker();request('catalog').then(()=>{
+    ready=true;renderLibrary();controls();say('Ready. Set your ending targets, then find a life.');
     const old=read('cityborn.advisor.route.v2'),usingLegacy=!stored.active?.file&&!stored.selected,restore=stored.active?.file||stored.selected||old?.found;
     if(restore)importRoute(restore,stored.active||(usingLegacy&&old?.active?{index:old.index||0}:null),true);
   }).catch(e=>say('Could not load companion: '+e.message));

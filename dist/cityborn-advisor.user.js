@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Cityborn Life Advisor
 // @namespace    https://github.com/HVS13/CitybornLifeLab
-// @version      2.0.0
+// @version      2.0.1
 // @description  Find and replay lives by final stats, traits and achievements, or plan the rest of your current life.
 // @homepageURL  https://github.com/HVS13/CitybornLifeLab
 // @supportURL   https://github.com/HVS13/CitybornLifeLab/issues
@@ -15,33 +15,33 @@
 
 (() => {
 "use strict";
-function nativeEngine(){const vw = "cbl.lang",
-  _w = ["ko", "en", "ja"];
+function nativeEngine(){const _w = "cbl.lang",
+  jw = ["ko", "en", "ja"];
 let Xt = "ko";
 if (typeof window < "u")
   try {
-    const e = window.localStorage.getItem(vw),
+    const e = window.localStorage.getItem(_w),
       t = (window.navigator && window.navigator.language) || "ko";
-    _w.includes(e)
+    jw.includes(e)
       ? (Xt = e)
       : /^ja/i.test(t)
         ? (Xt = "ja")
         : /^ko/i.test(t) || (Xt = "en");
   } catch {}
-const Sl = new Set(),
+const Rl = new Set(),
   Pe = () => Xt;
-function _s(e) {
-  if (_w.includes(e)) {
+function js(e) {
+  if (jw.includes(e)) {
     Xt = e;
     try {
-      window.localStorage.setItem(vw, e);
+      window.localStorage.setItem(_w, e);
     } catch {}
     typeof document < "u" && (document.documentElement.lang = e);
-    for (const t of Sl) t(e);
+    for (const t of Rl) t(e);
   }
 }
-function wp(e) {
-  return (Sl.add(e), () => Sl.delete(e));
+function mp(e) {
+  return (Rl.add(e), () => Rl.delete(e));
 }
 const h = (e, t, o) => (Xt === "en" ? t : Xt === "ja" ? (o ?? t) : e),
   jr = (e) => e[Xt] || e.ko;
@@ -69,12 +69,12 @@ function qt(e) {
     },
   });
 }
-const gp = 6e4,
+const yp = 6e4,
   ln = [1, 2, 4, 8, 16, 32],
-  jw = 1e4,
-  Rl = 110,
-  Yo = ["health", "sanity", "wealth", "network", "rep"],
-  st = Dt({
+  Aw = 1e4,
+  Cl = 110,
+  oo = ["health", "sanity", "wealth", "network", "rep"],
+  Je = Dt({
     ko: {
       health: "건강",
       sanity: "정신력",
@@ -115,13 +115,13 @@ const gp = 6e4,
       heir_in: "仁",
     },
   }),
-  Aw = qt({
+  Yw = qt({
     ko: ["봄", "여름", "가을", "겨울"],
     en: ["Spring", "Summer", "Autumn", "Winter"],
     ja: ["春", "夏", "秋", "冬"],
   }),
-  js = {},
-  mp = {
+  As = {},
+  pp = {
     none: 2.4,
     "날개 직원": 5,
     손가락: 6.5,
@@ -143,7 +143,7 @@ const gp = 6e4,
     가주: 9,
     군주: 9,
   },
-  Hh = [
+  Dh = [
     "손가락",
     "협회 직원",
     "흑수",
@@ -156,8 +156,8 @@ const gp = 6e4,
     "검계",
     "흑운회",
   ],
-  yp = ["E.G.O개화", "특색", "유물", "혈귀"],
-  pp = Dt({
+  bp = ["E.G.O개화", "특색", "유물", "혈귀"],
+  kp = Dt({
     ko: {
       고아: "고아",
       부유한집: "부유한 집에서 태어남",
@@ -315,8 +315,8 @@ const gp = 6e4,
       잘린손: "手を一つ失った",
     },
   });
-function Dh(e, t = {}) {
-  const o = pp[e];
+function qh(e, t = {}) {
+  const o = kp[e];
   return (
     o &&
     (e === "E.G.O개화" && t.egoName
@@ -326,7 +326,7 @@ function Dh(e, t = {}) {
         : o)
   );
 }
-const bi = Dt({
+const ki = Dt({
     ko: {
       m: [
         "도윤",
@@ -430,7 +430,7 @@ const bi = Dt({
       ],
     },
   }),
-  bp = Dt({
+  xp = Dt({
     ko: { m: "남성", f: "여성" },
     en: { m: "Male", f: "Female" },
     ja: { m: "男性", f: "女性" },
@@ -502,27 +502,27 @@ const bi = Dt({
       { label: "両親なし", birth: "" },
     ),
   };
-function Cl(e, t, o) {
+function Il(e, t, o) {
   const a = (e || "").charCodeAt((e || "").length - 1);
   return a >= 44032 && a <= 55203 ? ((a - 44032) % 28 ? t : o) : t;
 }
-function va(e) {
+function Ta(e) {
   const t = (e || "").charCodeAt((e || "").length - 1);
   return t >= 44032 && t <= 55203 ? ((t - 44032) % 28 ? "이라" : "라") : "이라";
 }
-const Xe = Dt({
+const Qe = Dt({
   ko: { 엄지: "엄지", 검지: "검지", 중지: "중지", 약지: "약지" },
   en: { 엄지: "Thumb", 검지: "Index", 중지: "Middle", 약지: "Ring" },
   ja: { 엄지: "親指", 검지: "人差し指", 중지: "中指", 약지: "薬指" },
 });
-function qh(e) {
+function Gh(e) {
   let t = 2166136261;
   const o = String(e);
   for (let a = 0; a < o.length; a++)
     ((t ^= o.charCodeAt(a)), (t = Math.imul(t, 16777619)));
   return t >>> 0;
 }
-function kp() {
+function vp() {
   return String(Math.floor(Math.random() * 4294967296));
 }
 function oe(e) {
@@ -568,7 +568,7 @@ function oe(e) {
   };
   return t;
 }
-function xp(e) {
+function Tp(e) {
   const t = [];
   for (const o of e || [])
     if (o.kind === "birth")
@@ -590,7 +590,7 @@ function xp(e) {
     }
   return t;
 }
-function Yw(e) {
+function Sw(e) {
   const t = [];
   for (const o of e || []) {
     const a = t[t.length - 1];
@@ -598,9 +598,9 @@ function Yw(e) {
   }
   return t;
 }
-const Sw = (e) => h(`${e}세`, `Age ${e}`, `${e}歳`),
-  Rw = () => h("흘려보냈다", "Let it pass", "やり過ごした");
-function Cw(e, t) {
+const Rw = (e) => h(`${e}세`, `Age ${e}`, `${e}歳`),
+  Cw = () => h("흘려보냈다", "Let it pass", "やり過ごした");
+function Iw(e, t) {
   const o = [];
   o.push(
     h(
@@ -616,11 +616,11 @@ function Cw(e, t) {
   (o.push(a),
     e.job && o.push(`${h("직업", "Occupation", "職業")}: ${e.job}`),
     e.seed && o.push(`${h("시드", "Seed", "シード")}: ${e.seed}`));
-  for (const n of Yw(t)) {
-    o.push("", `── ${Sw(n.age)} ──`);
+  for (const n of Sw(t)) {
+    o.push("", `── ${Rw(n.age)} ──`);
     for (const r of n.items)
       r.k === "r"
-        ? (o.push(`  ▸ ${r.x ? Rw() : r.c || ""}`.replace(/▸ $/, "▸")),
+        ? (o.push(`  ▸ ${r.x ? Cw() : r.c || ""}`.replace(/▸ $/, "▸")),
           o.push(`    ${r.t}`),
           r.j && o.push(`    (${r.j})`))
         : o.push(`${r.s ? `[${r.s}] ` : ""}${r.t}`);
@@ -628,28 +628,28 @@ function Cw(e, t) {
   return o.join(`
 `);
 }
-function Tp(e) {
+function _p(e) {
   const t = String(e.seed || "")
     .replace(/[^0-9A-Za-z_-]+/g, "")
     .slice(0, 16);
   return `city-born-${e.age}${t ? `-${t}` : ""}.txt`;
 }
-function vp(e, t) {
-  const o = new Blob(["\uFEFF" + Cw(e, t)], {
+function jp(e, t) {
+  const o = new Blob(["\uFEFF" + Iw(e, t)], {
       type: "text/plain;charset=utf-8",
     }),
     a = URL.createObjectURL(o),
     n = document.createElement("a");
   ((n.href = a),
-    (n.download = Tp(e)),
+    (n.download = _p(e)),
     document.body.appendChild(n),
     n.click(),
     n.remove(),
     setTimeout(() => URL.revokeObjectURL(a), 2e3));
 }
-const _p = 0.085;
-function Iw(e, t, o) {
-  let a = o * Math.exp(_p * t);
+const Ap = 0.085;
+function Nw(e, t, o) {
+  let a = o * Math.exp(Ap * t);
   return (
     t === 0
       ? (a += e.infantMort)
@@ -659,37 +659,37 @@ function Iw(e, t, o) {
     a
   );
 }
-function Su(e, t) {
+function Ru(e, t) {
   let o = 1,
     a = 0;
-  for (let n = 0; n < Rl; n++) {
-    const r = 1 - Math.exp(-Iw(e, n, t)),
+  for (let n = 0; n < Cl; n++) {
+    const r = 1 - Math.exp(-Nw(e, n, t)),
       i = o * r;
     ((a += i * n), (o -= i));
   }
-  return ((a += o * Rl), a);
+  return ((a += o * Cl), a);
 }
-const As = new Map();
-function jp(e) {
-  if (As.has(e.id)) return As.get(e.id);
+const Ys = new Map();
+function Yp(e) {
+  if (Ys.has(e.id)) return Ys.get(e.id);
   const t = e.lifeExp + (e.calib || 0);
   let o = 0,
     a = 0.2,
     n;
-  if (Su(e, 0) <= t) n = 0;
+  if (Ru(e, 0) <= t) n = 0;
   else {
     for (let r = 0; r < 60; r++) {
       const i = (o + a) / 2;
-      Su(e, i) > t ? (o = i) : (a = i);
+      Ru(e, i) > t ? (o = i) : (a = i);
     }
     n = (o + a) / 2;
   }
-  return (As.set(e.id, n), n);
+  return (Ys.set(e.id, n), n);
 }
-function Ap(e, t) {
-  return Iw(e, t, jp(e));
+function Sp(e, t) {
+  return Nw(e, t, Yp(e));
 }
-function Yp(e, t, o = 0) {
+function Rp(e, t, o = 0) {
   const a = e.age,
     n = e.stats,
     r = 0.5 + t.orgPressure * 0.35 + (10 - t.safety) * 0.35,
@@ -867,7 +867,7 @@ const $a = {
       "It was a morning they never woke from.",
     ],
   },
-  Sp = {
+  Cp = {
     사고: [
       "날개 시설의 폭발이 구역 하나를 삼켰다. 그 많은 싸움을 넘긴 사람도 하늘이 무너지는 것은 막지 못했다.",
       "도시가 보낸 것은 적이 아니라 우연이었다. 누구도 그것이 끝이 될 줄 몰랐다.",
@@ -893,7 +893,7 @@ const $a = {
       "무기를 벽에 걸어 둔 채 침대 위에서 눈을 감았다. 이 일을 하는 사람에게는 드문 끝이다.",
     ],
   },
-  Rp = {
+  Ip = {
     사고: [
       "의뢰를 마치고 돌아오던 길이었다. 그날따라 운이 없었다.",
       "현장을 정리하다 무너진 잔해 아래 깔렸다.",
@@ -904,7 +904,7 @@ const $a = {
     ],
     부상: ["일에서 얻은 상처가 끝내 아물지 않았다."],
   },
-  Cp = {
+  Np = {
     사고: [
       "An explosion at a Wing facility swallowed an entire district. Even someone who had survived so many fights could not stop the sky from falling.",
       "What the City sent was not an enemy but chance. No one knew it would be the end.",
@@ -932,7 +932,7 @@ const $a = {
       "They closed their eyes in bed, their weapon hung on the wall. A rare ending for someone in this line of work.",
     ],
   },
-  Ip = {
+  Op = {
     사고: [
       "They were on their way back from a job. Their luck simply ran out that day.",
       "They were buried under collapsing debris while clearing a site.",
@@ -943,7 +943,7 @@ const $a = {
     ],
     부상: ["A wound from the job never healed."],
   },
-  Np = {
+  Wp = {
     사고: [
       "翼の施設の爆発が、区ひとつを呑み込んだ。あれほどの戦いをくぐり抜けた者でも、空が落ちてくるのは止められなかった。",
       "都市が寄越したのは敵ではなく、偶然だった。それが最期になるとは、誰も思わなかった。",
@@ -969,7 +969,7 @@ const $a = {
       "武器を壁に掛けたまま、ベッドの上で目を閉じた。この仕事をする者には珍しい最期だ。",
     ],
   },
-  Op = {
+  Ep = {
     사고: [
       "依頼を終えて帰る途中だった。その日に限って運がなかった。",
       "現場を片付けている最中、崩れた瓦礫の下敷きになった。",
@@ -980,7 +980,7 @@ const $a = {
     ],
     부상: ["仕事で負った傷が、ついに癒えなかった。"],
   },
-  Wp = {
+  Bp = {
     노화: "Old age",
     질병: "Illness",
     "영유아 질병": "Infant illness",
@@ -1071,7 +1071,7 @@ const $a = {
       "目覚めることのない朝だった。",
     ],
   },
-  Ep = {
+  Fp = {
     노화: "老衰",
     질병: "病死",
     "영유아 질병": "乳幼児の病気",
@@ -1198,15 +1198,15 @@ Object.assign(Da, {
   ],
   "부화장 경쟁": ["孵化場で残れなかった。同じ顔のひとりが代わりに残った。"],
 });
-const Nw = (e) => {
+const Ow = (e) => {
   const t = Pe();
-  return t === "en" ? Wp[e] || e : (t === "ja" && Ep[e]) || e;
+  return t === "en" ? Bp[e] || e : (t === "ja" && Fp[e]) || e;
 };
-function Bp(e, t, o = 0) {
+function Lp(e, t, o = 0) {
   const a = Pe(),
     n = a === "en" ? Ha : a === "ja" ? Da : $a,
-    r = a === "en" ? Cp : a === "ja" ? Np : Sp,
-    i = a === "en" ? Ip : a === "ja" ? Op : Rp;
+    r = a === "en" ? Np : a === "ja" ? Wp : Cp,
+    i = a === "en" ? Op : a === "ja" ? Ep : Ip;
   if (o >= 3 && r[e]) return t.pick(r[e]);
   if (o === 2 && i[e]) return t.pick(i[e]);
   const l = n[e] || n.노화;
@@ -1399,8 +1399,8 @@ const qn = [
     ["지적성", "地賊星", "Dizei Star", "ちぞくせい"],
     ["지구성", "地狗星", "Digou Star", "ちくせい"],
   ],
-  Ow = 36;
-function Gh(e, t) {
+  Ww = 36;
+function Kh(e, t) {
   if (!e.pinky) return null;
   const o = qn[e.pinky.star];
   if (!o) return null;
@@ -1411,7 +1411,7 @@ function Gh(e, t) {
       ? `生まれたとき、${o[1]}（${o[3]}）の名を受けた。剣の名は「${a || `${o[1]}刀`}」。`
       : `태어날 때 ${o[0]}(${o[1]})의 이름을 받았다. 검의 이름은 ${a || `${o[0]}도`}.`;
 }
-const Fp = [
+const Pp = [
     "떠돌이",
     "정체공개",
     "정체들킴",
@@ -1425,18 +1425,18 @@ const Fp = [
     "환상체생존",
     "숭배",
   ],
-  Kh = (e) => ((e.log || []).find((t) => t.kind === "year") || { age: 0 }).age;
+  zh = (e) => ((e.log || []).find((t) => t.kind === "year") || { age: 0 }).age;
 function ie(e, t) {
   (e.story || (e.story = []), e.story.push({ age: e.age, ...t }));
 }
-function Ww(e, t) {
+function Ew(e, t) {
   for (const o of t || [])
-    Fp.includes(o) &&
+    Pp.includes(o) &&
       ((e.story || []).some((a) => a.k === "flag" && a.flag === o) ||
         ie(e, { k: "flag", flag: o }));
 }
-const Lp = ["사원", "대리", "과장", "부장", "이사", "대표"],
-  Pp = [
+const Mp = ["사원", "대리", "과장", "부장", "이사", "대표"],
+  $p = [
     "Staff",
     "Assistant Manager",
     "Manager",
@@ -1444,8 +1444,8 @@ const Lp = ["사원", "대리", "과장", "부장", "이사", "대표"],
     "Director",
     "CEO",
   ],
-  Mp = ["社員", "代理", "課長", "部長", "理事", "代表"];
-function zh(e, t) {
+  Hp = ["社員", "代理", "課長", "部長", "理事", "代表"];
+function Uh(e, t) {
   let o = 0;
   for (let a = t + 1; a < e.length; a++) {
     const n = e[a];
@@ -1454,7 +1454,7 @@ function zh(e, t) {
   }
   return o;
 }
-const Ru = {
+const Cu = {
     "날개 직원": "날개의 사원이 되었다",
     "협회 직원": "사원으로 협회에 들어갔다",
     흑수: "환을 삼키고 흑수가 되었다",
@@ -1465,7 +1465,7 @@ const Ru = {
     "4무리": "R사 4무리에 들어갔다",
     권속: "혈귀에게 물려 가문의 권속이 되었다",
   },
-  Cu = {
+  Iu = {
     가정: "가정을 꾸렸다",
     아이: "아이를 얻었다",
     "E.G.O개화": "E.G.O를 개화했다",
@@ -1479,7 +1479,7 @@ const Ru = {
     정체공개: "몸담은 곳에 혈귀임을 밝혔다",
     정체들킴: "숨겨 온 정체를 몸담은 곳에 들켰다",
   },
-  $p = {
+  Dp = {
     노화: "늙어 조용히 눈을 감았다",
     질병: "병으로 세상을 떠났다",
     "영유아 질병": "걸음마도 떼기 전에 병으로 떠났다",
@@ -1508,7 +1508,7 @@ const Ru = {
     메마름: "인격과 이성이 메마른 채 시키는 일만 하며 남았다",
     "앰플 부패": "어긋난 앰플에 몸이 녹아 죽었다",
   },
-  Iu = {
+  Nu = {
     ko: ["뜬소문", "도시 괴담", "도시 전설", "도시 질병", "도시 악몽"],
     en: [
       "Canard",
@@ -1519,10 +1519,10 @@ const Ru = {
     ],
     ja: ["あらぬ噂", "都市怪談", "都市伝説", "都市疾病", "都市悪夢"],
   };
-function Uh(e, t) {
+function Jh(e, t) {
   const o = e.dr;
   if (!o) return null;
-  const a = Iu[t][o.grade] || Iu[t][0],
+  const a = Nu[t][o.grade] || Nu[t][0],
     n = {
       ko: `${o.since}세에 뒤틀려 ${a} 등급의 뒤틀림이 되었다.`,
       en: `At ${o.since}, you Distorted and were designated a Distortion rated ${a}.`,
@@ -1552,7 +1552,7 @@ function Uh(e, t) {
     }[o.end];
   return { line: n, phrase: r ? r[t] : null };
 }
-const Hp = {
+const qp = {
   ko: {
     marlin: "모든 것을 꿰뚫는 청새치 고래",
     pallid: "모든 것을 집어삼키는 창백한 고래",
@@ -1569,7 +1569,7 @@ const Hp = {
     crimson: "すべてを枯らす真紅の鯨",
   },
 };
-function Jh(e, t) {
+function Vh(e, t) {
   const o = e.lakeRec,
     a = [];
   if (
@@ -1591,10 +1591,10 @@ function Jh(e, t) {
           )),
     e.lakeWhale)
   ) {
-    const r = Hp[t][e.lakeWhale];
+    const r = qp[t][e.lakeWhale];
     a.push(
       {
-        ko: `대호수에서 ${r}${Dr(r, "이", "가")} 지나가는 것을 보았다.`,
+        ko: `대호수에서 ${r}${qr(r, "이", "가")} 지나가는 것을 보았다.`,
         en: `On the Great Lake, you saw ${r} pass by.`,
         ja: `大湖で、${r}が通り過ぎるのを見た。`,
       }[t],
@@ -1610,16 +1610,16 @@ function Jh(e, t) {
       : null;
   return { lines: a, phrase: n };
 }
-function Dr(e, t, o) {
+function qr(e, t, o) {
   const a = e.charCodeAt(e.length - 1);
   return a < 44032 || a > 55203 ? o : (a - 44032) % 28 ? t : o;
 }
-const Dp = {
+const Gp = {
   ko: ["뜬소문", "도시 괴담", "도시 전설", "도시 질병"],
   en: ["Canard", "Urban Myth", "Urban Legend", "Urban Plague"],
   ja: ["あらぬ噂", "都市怪談", "都市伝説", "都市疾病"],
 };
-function Vh(e, t) {
+function Xh(e, t) {
   const o = (i, l, s) => (t === "en" ? l : t === "ja" ? s : i),
     a = e.bld,
     n = a.hunterName || o("해결사들", "the Fixers", "フィクサーたち"),
@@ -1648,7 +1648,7 @@ function Vh(e, t) {
         `フィクサーたちに倒れた${r}`,
       );
 }
-function Xh(e, t) {
+function Qh(e, t) {
   const o = e.kx;
   if (!o || !o.hp)
     return o && o.dreamer
@@ -1680,7 +1680,7 @@ function Xh(e, t) {
     n
   );
 }
-function Qh(e, t) {
+function Zh(e, t) {
   const o = e.nh;
   if (!o) return [];
   const a = [];
@@ -1704,7 +1704,7 @@ function Qh(e, t) {
     a
   );
 }
-function qp(e, t, o, a) {
+function Kp(e, t, o, a) {
   const n = t[o],
     r = e.kk || {};
   if (n.k === "job" && n.job === "흑운회") {
@@ -1785,10 +1785,10 @@ function qp(e, t, o, a) {
           : []
       : null;
 }
-function Zh(e, t, o, a) {
+function ed(e, t, o, a) {
   const n = t[o],
     r = (l, s, u) => (a === "en" ? s : a === "ja" ? u : l),
-    i = qp(e, t, o, r);
+    i = Kp(e, t, o, r);
   if (i) return i;
   if (n.k === "blre")
     return [
@@ -1812,7 +1812,7 @@ function Zh(e, t, o, a) {
             "最も長くそばにいた古参を",
           ),
       u = e.dead ? e.dead.age : e.age,
-      f = Dp[a][Math.max(0, Math.min(3, l.threat || 0))],
+      f = Gp[a][Math.max(0, Math.min(3, l.threat || 0))],
       y = Math.max(0, u - l.since),
       g = [
         r(
@@ -1884,12 +1884,12 @@ function Zh(e, t, o, a) {
         ]
     : null;
 }
-function Gp(e, t) {
-  const o = Up(e, t);
-  return zp(e, o);
-}
-const Kp = ["가주 심사 낙방", "영생", "군주의 자리"];
 function zp(e, t) {
+  const o = Vp(e, t);
+  return Jp(e, o);
+}
+const Up = ["가주 심사 낙방", "영생", "군주의 자리"];
+function Jp(e, t) {
   if (!e.heir) return t;
   const o = e.dead,
     a = (r, i, l) => (Pe() === "en" ? i : Pe() === "ja" ? l : r),
@@ -1910,35 +1910,35 @@ function zp(e, t) {
         "31歳、家主審査に出なかった。某種の契約によって黒獣十二獣を率い、鉄檻寺の家主承継の儀式に踏み込んだ。その日から自らを君主と呼ばせ、鴻園は長くその統治の下にあった。",
       ),
     }[o && o.cause];
-  return !n || !o.alive || !Kp.includes(o.cause) ? t : [...t.slice(0, -1), n];
+  return !n || !o.alive || !Up.includes(o.cause) ? t : [...t.slice(0, -1), n];
 }
-function Up(e, t) {
-  if (Pe() === "en") return Xp(e, t);
-  if (Pe() === "ja") return Zp(e, t);
+function Vp(e, t) {
+  if (Pe() === "en") return Zp(e, t);
+  if (Pe() === "ja") return tb(e, t);
   const o = e.story || [],
     a = [],
     n = `${t.ward ? `${t.ward}구 ` : ""}${t.name}`;
   (e.flags.includes("복제")
-    ? a.push(`${n}의 부화장에서 ${Kh(e)}세의 몸으로 만들어졌다.`)
+    ? a.push(`${n}의 부화장에서 ${zh(e)}세의 몸으로 만들어졌다.`)
     : e.family === "none"
       ? a.push(`${n}에서 부모 없이 태어났다.`)
       : t.id === "outskirts"
         ? a.push(`외곽의 ${(Fe[e.family] || Fe.normal).label}에서 태어났다.`)
         : a.push(`${n}의 ${(Fe[e.family] || Fe.normal).label}에서 태어났다.`),
-    e.pinky && a.push(Gh(e, "ko")));
+    e.pinky && a.push(Kh(e, "ko")));
   let r = 0,
     i = -1;
   const l = new Set(),
-    s = (k) => (k === i ? "" : ((i = k), `${k}세에 `));
+    s = (x) => (x === i ? "" : ((i = x), `${x}세에 `));
   for (; r < o.length;) {
-    const k = o[r],
-      x = Zh(e, o, r, "ko");
-    if (x) {
-      (a.push(...x), r++);
+    const x = o[r],
+      k = ed(e, o, r, "ko");
+    if (k) {
+      (a.push(...k), r++);
       continue;
     }
-    if (k.k === "job" && k.job === "해결사") {
-      let T = k.grade || 9;
+    if (x.k === "job" && x.job === "해결사") {
+      let v = x.grade || 9;
       const Y = [];
       let c = r + 1;
       for (
@@ -1948,88 +1948,88 @@ function Up(e, t) {
         o[c].k !== "quit" &&
         o[c].k !== "finger";
       )
-        (o[c].k === "grade" && (T = Math.min(T, o[c].grade)),
+        (o[c].k === "grade" && (v = Math.min(v, o[c].grade)),
           o[c].k === "org" && !Y.includes(o[c].name) && Y.push(o[c].name),
           c++);
-      const m = k.grade || 9;
+      const m = x.grade || 9;
       let w = "";
       (Y.length === 1 && (w = `${Y[0]}에 몸담았다`),
         Y.length > 1 &&
-          (w = `${Y.slice(0, -1).join(", ")}${Dr(Y[Y.length - 2], "을", "를")} 거쳐 ${Y[Y.length - 1]}에 몸담았다`),
-        T < m
+          (w = `${Y.slice(0, -1).join(", ")}${qr(Y[Y.length - 2], "을", "를")} 거쳐 ${Y[Y.length - 1]}에 몸담았다`),
+        v < m
           ? a.push(
-              `${s(k.age)}${m}급 해결사로 일을 시작해 ${T}급까지 올랐${w ? `고, ${w}` : "다"}.`,
+              `${s(x.age)}${m}급 해결사로 일을 시작해 ${v}급까지 올랐${w ? `고, ${w}` : "다"}.`,
             )
           : a.push(
-              `${s(k.age)}${m}급 해결사가 되었지만 끝내 급수를 올리지 못했다.${w ? ` ${w}.` : ""}`,
+              `${s(x.age)}${m}급 해결사가 되었지만 끝내 급수를 올리지 못했다.${w ? ` ${w}.` : ""}`,
             ),
         (r = c));
       continue;
     }
-    if (k.k === "finger") {
-      let T = k.rankName,
+    if (x.k === "finger") {
+      let v = x.rankName,
         Y = r + 1;
       for (; Y < o.length && o[Y].k !== "quit" && o[Y].k !== "job";)
-        (o[Y].k === "frank" && (T = o[Y].rankName), Y++);
+        (o[Y].k === "frank" && (v = o[Y].rankName), Y++);
       const c = a.length > 1 ? "그러다 " : "";
       (a.push(
-        T && T !== k.rankName
-          ? `${c}${s(k.age)}${k.finger}에 합류해 ${T}까지 올랐다.`
-          : `${c}${s(k.age)}${k.finger}에 합류해 ${k.rankName}${Dr(k.rankName, "으로", "로")} 살았다.`,
+        v && v !== x.rankName
+          ? `${c}${s(x.age)}${x.finger}에 합류해 ${v}까지 올랐다.`
+          : `${c}${s(x.age)}${x.finger}에 합류해 ${x.rankName}${qr(x.rankName, "으로", "로")} 살았다.`,
       ),
         (r = Y));
       continue;
     }
-    if (k.k === "quit") {
-      (k.finger === "약지"
-        ? a.push(`${s(k.age)}약지를 떠났다.`)
-        : k.finger
-          ? a.push(`${k.finger}를 떠난 뒤로는 손가락들에게 쫓기는 삶을 살았다.`)
-          : k.job === "해결사" && a.push(`${s(k.age)}해결사 일을 그만두었다.`),
+    if (x.k === "quit") {
+      (x.finger === "약지"
+        ? a.push(`${s(x.age)}약지를 떠났다.`)
+        : x.finger
+          ? a.push(`${x.finger}를 떠난 뒤로는 손가락들에게 쫓기는 삶을 살았다.`)
+          : x.job === "해결사" && a.push(`${s(x.age)}해결사 일을 그만두었다.`),
         r++);
       continue;
     }
-    if (k.k === "job" && Ru[k.job]) {
-      const T = o
+    if (x.k === "job" && Cu[x.job]) {
+      const v = o
         .slice(r + 1)
         .find((c) => c.k === "job" || c.k === "quit" || c.k === "finger");
       if (
-        (T ? T.age : e.dead ? e.dead.age : e.age) - k.age >= 3 &&
-        !l.has(k.job)
+        (v ? v.age : e.dead ? e.dead.age : e.age) - x.age >= 3 &&
+        !l.has(x.job)
       ) {
-        (l.add(k.job), a.push(`${s(k.age)}${Ru[k.job]}.`));
-        const c = k.job === "날개 직원" ? zh(o, r) : 0;
+        (l.add(x.job), a.push(`${s(x.age)}${Cu[x.job]}.`));
+        const c = x.job === "날개 직원" ? Uh(o, r) : 0;
         c >= 3 &&
           a.push(
             c === 6
               ? "끝내 대표의 자리에 올랐다."
-              : `이후 ${Lp[c - 1]}까지 올랐다.`,
+              : `이후 ${Mp[c - 1]}까지 올랐다.`,
           );
       }
       r++;
       continue;
     }
-    if (k.k === "flag") {
+    if (x.k === "flag") {
       if (
-        k.flag === "가정" &&
+        x.flag === "가정" &&
         o[r + 1] &&
         o[r + 1].k === "flag" &&
         o[r + 1].flag === "아이"
       ) {
-        (a.push(`${s(k.age)}가정을 꾸리고 아이를 얻었다.`), (r += 2));
+        (a.push(`${s(x.age)}가정을 꾸리고 아이를 얻었다.`), (r += 2));
         continue;
       }
-      (k.flag === "특색" && e.colorName
+      (x.flag === "특색" && e.colorName
         ? a.push(
-            `${s(k.age)}'${e.colorName}'${va(e.colorName)}는 특색의 이름을 얻었다.`,
+            `${s(x.age)}'${e.colorName}'${Ta(e.colorName)}는 특색의 이름을 얻었다.`,
           )
-        : k.flag === "E.G.O개화" && e.egoName
-          ? a.push(`${s(k.age)}E.G.O를 개화했다. 이름은 '${e.egoName}'.`)
-          : k.flag === "유물" && e.relicName
+        : x.flag === "E.G.O개화" && e.egoName
+          ? a.push(`${s(x.age)}E.G.O를 개화했다. 이름은 '${e.egoName}'.`)
+          : x.flag === "유물" && e.relicName
             ? a.push(
-                `${s(k.age)}외곽의 폐허에서 유물을 얻었다. 이름은 '${e.relicName}'.`,
+                `${s(x.age)}외곽의 폐허에서 유물을 얻었다. 이름은 '${e.relicName}'.`,
               )
-            : Cu[k.flag] && a.push(`${s(k.age)}${Cu[k.flag]}.`),
+            : Iu[x.flag] && a.push(`${s(x.age)}${Iu[x.flag]}.`),
         r++);
       continue;
     }
@@ -2044,42 +2044,42 @@ function Up(e, t) {
           ? `${u.age}세, 워프 열차에 올라 ${u.cars}칸을 돌파했다.`
           : `${u.age}세, 워프 열차에 올랐지만 첫 칸을 넘지 못했다.`,
     ),
-    a.push(...Xh(e, "ko")),
-    a.push(...Qh(e, "ko")));
-  const f = Jh(e, "ko");
+    a.push(...Qh(e, "ko")),
+    a.push(...Zh(e, "ko")));
+  const f = Vh(e, "ko");
   a.push(...f.lines);
   const y = e.dead,
-    g = Uh(e, "ko");
+    g = Jh(e, "ko");
   if ((g && a.push(g.line), y)) {
-    const k = e.deathContext ? `${e.deathContext} ` : "";
-    let x = y.phrase || $p[y.cause] || "생을 마쳤다";
+    const x = e.deathContext ? `${e.deathContext} ` : "";
+    let k = y.phrase || Dp[y.cause] || "생을 마쳤다";
     if (
       (y.cause === "뒤틀림" &&
         e.flags.includes("검계뒤틀림") &&
-        (x = "마지막 골목에서 목소리에 답해 뒤틀렸다"),
-      y.cause === "해결사의 토벌" && e.bld && (x = Vh(e, "ko")),
-      g && g.phrase && (x = g.phrase),
-      y.cause === "인어가 되었다" && f.phrase && (x = f.phrase),
-      !k && y.cause === "환상체 사고")
+        (k = "마지막 골목에서 목소리에 답해 뒤틀렸다"),
+      y.cause === "해결사의 토벌" && e.bld && (k = Xh(e, "ko")),
+      g && g.phrase && (k = g.phrase),
+      y.cause === "인어가 되었다" && f.phrase && (k = f.phrase),
+      !x && y.cause === "환상체 사고")
     ) {
       const c = [...(e.log || [])]
         .reverse()
         .find((m) => m.kind === "event" && /【(.+?)】/.test(m.text));
       if (c && c.age === y.age) {
         const m = c.text.match(/【(.+?)】/)[1];
-        x = `환상체 '${m}'${Dr(m, "을", "를")} 마주친 끝에 숨을 거뒀다`;
+        k = `환상체 '${m}'${qr(m, "을", "를")} 마주친 끝에 숨을 거뒀다`;
       }
     }
-    const T =
-        e.flags.includes("손가락이탈") && y.cause === "범죄·항쟁" && !k
+    const v =
+        e.flags.includes("손가락이탈") && y.cause === "범죄·항쟁" && !x
           ? "쫓아온 손가락의 손에 "
           : "",
       Y = a.length > 1 ? "그리고 " : "";
-    a.push(`${Y}${y.age}세, ${k}${T}${x}.`);
+    a.push(`${Y}${y.age}세, ${x}${v}${k}.`);
   }
   return a;
 }
-const Nu = {
+const Ou = {
     "날개 직원": "became a Wing employee",
     "협회 직원": "joined an Association as staff",
     흑수: "swallowed the Bolus and became one of the Heishou Pack",
@@ -2090,7 +2090,7 @@ const Nu = {
     "4무리": "joined R Corp.'s 4th Pack",
     권속: "were bitten by a Bloodfiend and became a Kindred of its Family",
   },
-  Ou = {
+  Wu = {
     가정: "started a family",
     아이: "had a child",
     "E.G.O개화": "effloresced their E.G.O",
@@ -2105,7 +2105,7 @@ const Nu = {
     정체공개: "told the people you worked with that you were a Bloodfiend",
     정체들킴: "had the secret you kept found out by the people you worked with",
   },
-  Jp = {
+  Xp = {
     노화: "you quietly closed your eyes in old age",
     질병: "you died of illness",
     "영유아 질병": "you died of illness before you could even walk",
@@ -2136,8 +2136,8 @@ const Nu = {
       "you remained, your self and reason dried up, doing only what you were told",
     "앰플 부패": "a mismatched ampule melted your body",
   },
-  Vp = (e) => e.charAt(0).toUpperCase() + e.slice(1);
-function Xp(e, t) {
+  Qp = (e) => e.charAt(0).toUpperCase() + e.slice(1);
+function Zp(e, t) {
   const o = e.story || [],
     a = [],
     n = `${t.name}${t.ward ? ` (District ${t.ward})` : ""}`,
@@ -2145,32 +2145,32 @@ function Xp(e, t) {
     l = /^[aeiou]/.test(i) ? "an" : "a";
   (e.flags.includes("복제")
     ? a.push(
-        `You were made in the Hatchery of ${n}, in a body recorded as ${Kh(e)} years old.`,
+        `You were made in the Hatchery of ${n}, in a body recorded as ${zh(e)} years old.`,
       )
     : e.family === "none"
       ? a.push(`You were born in ${n} with no parents.`)
       : t.id === "outskirts"
         ? a.push(`You were born into ${l} ${i} family in the Outskirts.`)
         : a.push(`You were born into ${l} ${i} family in ${n}.`),
-    e.pinky && a.push(Gh(e, "en")));
+    e.pinky && a.push(Kh(e, "en")));
   let s = 0,
     u = -1;
   const f = new Set(),
     y = (c) => (c === u ? "" : ((u = c), `At ${c}, `)),
     g = (c, m) => {
       const w = y(c);
-      return w ? `${w}you ${m}` : Vp(`you ${m}`);
+      return w ? `${w}you ${m}` : Qp(`you ${m}`);
     };
   for (; s < o.length;) {
     const c = o[s],
-      m = Zh(e, o, s, "en");
+      m = ed(e, o, s, "en");
     if (m) {
       (a.push(...m), s++);
       continue;
     }
     if (c.k === "job" && c.job === "해결사") {
       let w = c.grade || 9;
-      const v = [];
+      const T = [];
       let _ = s + 1;
       for (
         ;
@@ -2180,13 +2180,13 @@ function Xp(e, t) {
         o[_].k !== "finger";
       )
         (o[_].k === "grade" && (w = Math.min(w, o[_].grade)),
-          o[_].k === "org" && !v.includes(o[_].name) && v.push(o[_].name),
+          o[_].k === "org" && !T.includes(o[_].name) && T.push(o[_].name),
           _++);
       const C = c.grade || 9;
       let R = "";
-      (v.length === 1 && (R = `served with ${v[0]}`),
-        v.length > 1 &&
-          (R = `passed through ${v.slice(0, -1).join(", ")} before settling with ${v[v.length - 1]}`),
+      (T.length === 1 && (R = `served with ${T[0]}`),
+        T.length > 1 &&
+          (R = `passed through ${T.slice(0, -1).join(", ")} before settling with ${T[T.length - 1]}`),
         w < C
           ? a.push(
               `${g(c.age, `started out as a Grade ${C} Fixer and rose to Grade ${w}`)}${R ? `, and ${R}` : ""}.`,
@@ -2199,10 +2199,10 @@ function Xp(e, t) {
     }
     if (c.k === "finger") {
       let w = c.rankName,
-        v = s + 1;
-      for (; v < o.length && o[v].k !== "quit" && o[v].k !== "job";)
-        (o[v].k === "frank" && (w = o[v].rankName), v++);
-      const _ = Xe[c.finger],
+        T = s + 1;
+      for (; T < o.length && o[T].k !== "quit" && o[T].k !== "job";)
+        (o[T].k === "frank" && (w = o[T].rankName), T++);
+      const _ = Qe[c.finger],
         C = a.length > 1 ? "Then, " : "",
         R =
           w && w !== c.rankName
@@ -2210,22 +2210,22 @@ function Xp(e, t) {
             : `joined the ${_} and lived as a ${c.rankName}`,
         W = g(c.age, R);
       (a.push(`${C}${C ? W.charAt(0).toLowerCase() + W.slice(1) : W}.`),
-        (s = v));
+        (s = T));
       continue;
     }
     if (c.k === "quit") {
       (c.finger === "약지"
-        ? a.push(`You left the ${Xe[c.finger]}.`)
+        ? a.push(`You left the ${Qe[c.finger]}.`)
         : c.finger
           ? a.push(
-              `After leaving the ${Xe[c.finger]}, you lived your life hunted by the Fingers.`,
+              `After leaving the ${Qe[c.finger]}, you lived your life hunted by the Fingers.`,
             )
           : c.job === "해결사" &&
             a.push(`${g(c.age, "quit working as a Fixer")}.`),
         s++);
       continue;
     }
-    if (c.k === "job" && Nu[c.job]) {
+    if (c.k === "job" && Ou[c.job]) {
       const w = o
         .slice(s + 1)
         .find((_) => _.k === "job" || _.k === "quit" || _.k === "finger");
@@ -2233,13 +2233,13 @@ function Xp(e, t) {
         (w ? w.age : e.dead ? e.dead.age : e.age) - c.age >= 3 &&
         !f.has(c.job)
       ) {
-        (f.add(c.job), a.push(`${g(c.age, Nu[c.job])}.`));
-        const _ = c.job === "날개 직원" ? zh(o, s) : 0;
+        (f.add(c.job), a.push(`${g(c.age, Ou[c.job])}.`));
+        const _ = c.job === "날개 직원" ? Uh(o, s) : 0;
         _ >= 3 &&
           a.push(
             _ === 6
               ? "In the end, they took the CEO's seat."
-              : `They later rose to ${Pp[_ - 1]}.`,
+              : `They later rose to ${$p[_ - 1]}.`,
           );
       }
       s++;
@@ -2265,57 +2265,57 @@ function Xp(e, t) {
             ? a.push(
                 `${g(c.age, `found a relic in the ruins of the Outskirts, named '${e.relicName}'`)}.`,
               )
-            : Ou[c.flag] && a.push(`${g(c.age, Ou[c.flag])}.`),
+            : Wu[c.flag] && a.push(`${g(c.age, Wu[c.flag])}.`),
         s++);
       continue;
     }
     s++;
   }
-  const k = e.warpRec;
-  (k &&
+  const x = e.warpRec;
+  (x &&
     a.push(
-      k.clear
-        ? `At ${k.age}, you ran the Warp Train to the very end.`
-        : k.cars > 0
-          ? `At ${k.age}, you boarded a Warp Train and cleared ${k.cars} car${k.cars === 1 ? "" : "s"}.`
-          : `At ${k.age}, you boarded a Warp Train but could not get past the first car.`,
+      x.clear
+        ? `At ${x.age}, you ran the Warp Train to the very end.`
+        : x.cars > 0
+          ? `At ${x.age}, you boarded a Warp Train and cleared ${x.cars} car${x.cars === 1 ? "" : "s"}.`
+          : `At ${x.age}, you boarded a Warp Train but could not get past the first car.`,
     ),
-    a.push(...Xh(e, "en")),
-    a.push(...Qh(e, "en")));
-  const x = Jh(e, "en");
-  a.push(...x.lines);
-  const T = e.dead,
-    Y = Uh(e, "en");
-  if ((Y && a.push(Y.line), T)) {
+    a.push(...Qh(e, "en")),
+    a.push(...Zh(e, "en")));
+  const k = Vh(e, "en");
+  a.push(...k.lines);
+  const v = e.dead,
+    Y = Jh(e, "en");
+  if ((Y && a.push(Y.line), v)) {
     const c = e.deathContext ? ` ${e.deathContext}` : "";
-    let m = T.phrase || Jp[T.cause] || "your life came to an end";
+    let m = v.phrase || Xp[v.cause] || "your life came to an end";
     if (
-      (T.cause === "뒤틀림" &&
+      (v.cause === "뒤틀림" &&
         e.flags.includes("검계뒤틀림") &&
         (m = "you answered the voice in the last alley and Distorted"),
-      T.cause === "해결사의 토벌" && e.bld && (m = Vh(e, "en")),
+      v.cause === "해결사의 토벌" && e.bld && (m = Xh(e, "en")),
       Y && Y.phrase && (m = Y.phrase),
-      T.cause === "인어가 되었다" && x.phrase && (m = x.phrase),
-      !c && T.cause === "환상체 사고")
+      v.cause === "인어가 되었다" && k.phrase && (m = k.phrase),
+      !c && v.cause === "환상체 사고")
     ) {
       const _ = [...(e.log || [])]
         .reverse()
         .find((C) => C.kind === "event" && /【(.+?)】/.test(C.text));
       _ &&
-        _.age === T.age &&
+        _.age === v.age &&
         (m = `you died after encountering the Abnormality '${_.text.match(/【(.+?)】/)[1]}'`);
     }
     c && (m = m.replace(/^you /, "you ") + c);
     const w =
-        e.flags.includes("손가락이탈") && T.cause === "범죄·항쟁" && !c
+        e.flags.includes("손가락이탈") && v.cause === "범죄·항쟁" && !c
           ? ", cut down by the Finger that had hunted you"
           : "",
-      v = a.length > 1 ? "And at " : "At ";
-    a.push(`${v}${T.age}, ${m}${w}.`);
+      T = a.length > 1 ? "And at " : "At ";
+    a.push(`${T}${v.age}, ${m}${w}.`);
   }
   return a;
 }
-const Wu = {
+const Eu = {
     "날개 직원": "翼の社員になった",
     "협회 직원": "職員として協会に入った",
     흑수: "丸を呑んで黒獣となった",
@@ -2326,7 +2326,7 @@ const Wu = {
     "4무리": "R社第4群に入った",
     권속: "血鬼に噛まれ、家門の眷属となった",
   },
-  Eu = {
+  Bu = {
     가정: "家庭を築いた",
     아이: "子どもを授かった",
     "E.G.O개화": "E.G.Oを開花させた",
@@ -2340,7 +2340,7 @@ const Wu = {
     정체공개: "身を置く場所に血鬼であることを明かした",
     정체들킴: "隠してきた正体を身を置く場所に知られた",
   },
-  Qp = {
+  eb = {
     노화: "年老いて静かに目を閉じた",
     질병: "病でこの世を去った",
     "영유아 질병": "歩き始める前に病で旅立った",
@@ -2369,32 +2369,32 @@ const Wu = {
     메마름: "人格と理性が枯れ果て、命じられたことだけをして残った",
     "앰플 부패": "合わないアンプルに体を溶かされて死んだ",
   };
-function Zp(e, t) {
+function tb(e, t) {
   const o = e.story || [],
     a = [],
     n = `${t.name}${t.ward ? `（${t.ward}区）` : ""}`,
     r = (Fe[e.family] || Fe.normal).label;
   (e.flags.includes("복제")
-    ? a.push(`${n}の孵化場で、${Kh(e)}歳の体として作られた。`)
+    ? a.push(`${n}の孵化場で、${zh(e)}歳の体として作られた。`)
     : e.family === "none"
       ? a.push(`${n}で、両親のいないまま生まれた。`)
       : t.id === "outskirts"
         ? a.push(`外郭の${r}に生まれた。`)
         : a.push(`${n}の${r}に生まれた。`),
-    e.pinky && a.push(Gh(e, "ja")));
+    e.pinky && a.push(Kh(e, "ja")));
   let i = 0,
     l = -1;
   const s = new Set(),
-    u = (x) => (x === l ? "" : ((l = x), `${x}歳で`));
+    u = (k) => (k === l ? "" : ((l = k), `${k}歳で`));
   for (; i < o.length;) {
-    const x = o[i],
-      T = Zh(e, o, i, "ja");
-    if (T) {
-      (a.push(...T), i++);
+    const k = o[i],
+      v = ed(e, o, i, "ja");
+    if (v) {
+      (a.push(...v), i++);
       continue;
     }
-    if (x.k === "job" && x.job === "해결사") {
-      let Y = x.grade || 9;
+    if (k.k === "job" && k.job === "해결사") {
+      let Y = k.grade || 9;
       const c = [];
       let m = i + 1;
       for (
@@ -2407,85 +2407,85 @@ function Zp(e, t) {
         (o[m].k === "grade" && (Y = Math.min(Y, o[m].grade)),
           o[m].k === "org" && !c.includes(o[m].name) && c.push(o[m].name),
           m++);
-      const w = x.grade || 9;
-      let v = "";
-      (c.length === 1 && (v = `${c[0]}に身を置いた`),
+      const w = k.grade || 9;
+      let T = "";
+      (c.length === 1 && (T = `${c[0]}に身を置いた`),
         c.length > 1 &&
-          (v = `${c.slice(0, -1).join("、")}を経て${c[c.length - 1]}に身を置いた`),
+          (T = `${c.slice(0, -1).join("、")}を経て${c[c.length - 1]}に身を置いた`),
         Y < w
           ? a.push(
-              `${u(x.age)}${w}級フィクサーとして働き始め、${Y}級まで上り詰めた${v ? `。${v}` : ""}。`,
+              `${u(k.age)}${w}級フィクサーとして働き始め、${Y}級まで上り詰めた${T ? `。${T}` : ""}。`,
             )
           : a.push(
-              `${u(x.age)}${w}級フィクサーになったが、最後まで等級は上がらなかった。${v ? `${v}。` : ""}`,
+              `${u(k.age)}${w}級フィクサーになったが、最後まで等級は上がらなかった。${T ? `${T}。` : ""}`,
             ),
         (i = m));
       continue;
     }
-    if (x.k === "finger") {
-      let Y = x.rankName,
+    if (k.k === "finger") {
+      let Y = k.rankName,
         c = i + 1;
       for (; c < o.length && o[c].k !== "quit" && o[c].k !== "job";)
         (o[c].k === "frank" && (Y = o[c].rankName), c++);
-      const m = Xe[x.finger],
+      const m = Qe[k.finger],
         w = a.length > 1 ? "やがて" : "";
       (a.push(
-        Y && Y !== x.rankName
-          ? `${w}${u(x.age)}${m}に加わり、${Y}まで上り詰めた。`
-          : `${w}${u(x.age)}${m}に加わり、${x.rankName}として生きた。`,
+        Y && Y !== k.rankName
+          ? `${w}${u(k.age)}${m}に加わり、${Y}まで上り詰めた。`
+          : `${w}${u(k.age)}${m}に加わり、${k.rankName}として生きた。`,
       ),
         (i = c));
       continue;
     }
-    if (x.k === "quit") {
-      (x.finger === "약지"
-        ? a.push(`${Xe[x.finger]}を離れた。`)
-        : x.finger
-          ? a.push(`${Xe[x.finger]}を離れてからは、指に追われる人生を送った。`)
-          : x.job === "해결사" &&
-            a.push(`${u(x.age)}フィクサーの仕事を辞めた。`),
+    if (k.k === "quit") {
+      (k.finger === "약지"
+        ? a.push(`${Qe[k.finger]}を離れた。`)
+        : k.finger
+          ? a.push(`${Qe[k.finger]}を離れてからは、指に追われる人生を送った。`)
+          : k.job === "해결사" &&
+            a.push(`${u(k.age)}フィクサーの仕事を辞めた。`),
         i++);
       continue;
     }
-    if (x.k === "job" && Wu[x.job]) {
+    if (k.k === "job" && Eu[k.job]) {
       const Y = o
         .slice(i + 1)
         .find((m) => m.k === "job" || m.k === "quit" || m.k === "finger");
       if (
-        (Y ? Y.age : e.dead ? e.dead.age : e.age) - x.age >= 3 &&
-        !s.has(x.job)
+        (Y ? Y.age : e.dead ? e.dead.age : e.age) - k.age >= 3 &&
+        !s.has(k.job)
       ) {
-        (s.add(x.job), a.push(`${u(x.age)}${Wu[x.job]}。`));
-        const m = x.job === "날개 직원" ? zh(o, i) : 0;
+        (s.add(k.job), a.push(`${u(k.age)}${Eu[k.job]}。`));
+        const m = k.job === "날개 직원" ? Uh(o, i) : 0;
         m >= 3 &&
           a.push(
             m === 6
               ? "ついに代表の座に就いた。"
-              : `のち${Mp[m - 1]}にまで上った。`,
+              : `のち${Hp[m - 1]}にまで上った。`,
           );
       }
       i++;
       continue;
     }
-    if (x.k === "flag") {
+    if (k.k === "flag") {
       if (
-        x.flag === "가정" &&
+        k.flag === "가정" &&
         o[i + 1] &&
         o[i + 1].k === "flag" &&
         o[i + 1].flag === "아이"
       ) {
-        (a.push(`${u(x.age)}家庭を築き、子どもを授かった。`), (i += 2));
+        (a.push(`${u(k.age)}家庭を築き、子どもを授かった。`), (i += 2));
         continue;
       }
-      (x.flag === "특색" && e.colorName
-        ? a.push(`${u(x.age)}「${e.colorName}」という特色の名を得た。`)
-        : x.flag === "E.G.O개화" && e.egoName
-          ? a.push(`${u(x.age)}E.G.Oを開花させた。名は「${e.egoName}」。`)
-          : x.flag === "유물" && e.relicName
+      (k.flag === "특색" && e.colorName
+        ? a.push(`${u(k.age)}「${e.colorName}」という特色の名を得た。`)
+        : k.flag === "E.G.O개화" && e.egoName
+          ? a.push(`${u(k.age)}E.G.Oを開花させた。名は「${e.egoName}」。`)
+          : k.flag === "유물" && e.relicName
             ? a.push(
-                `${u(x.age)}外郭の廃墟で遺物を得た。名は「${e.relicName}」。`,
+                `${u(k.age)}外郭の廃墟で遺物を得た。名は「${e.relicName}」。`,
               )
-            : Eu[x.flag] && a.push(`${u(x.age)}${Eu[x.flag]}。`),
+            : Bu[k.flag] && a.push(`${u(k.age)}${Bu[k.flag]}。`),
         i++);
       continue;
     }
@@ -2500,43 +2500,43 @@ function Zp(e, t) {
           ? `${f.age}歳、ワープ列車に乗り、${f.cars}両を突破した。`
           : `${f.age}歳、ワープ列車に乗ったが、最初の車両を越えられなかった。`,
     ),
-    a.push(...Xh(e, "ja")),
-    a.push(...Qh(e, "ja")));
-  const y = Jh(e, "ja");
+    a.push(...Qh(e, "ja")),
+    a.push(...Zh(e, "ja")));
+  const y = Vh(e, "ja");
   a.push(...y.lines);
   const g = e.dead,
-    k = Uh(e, "ja");
-  if ((k && a.push(k.line), g)) {
-    const x = e.deathContext ? `${e.deathContext}、` : "";
-    let T = g.phrase || Qp[g.cause] || "生涯を終えた";
+    x = Jh(e, "ja");
+  if ((x && a.push(x.line), g)) {
+    const k = e.deathContext ? `${e.deathContext}、` : "";
+    let v = g.phrase || eb[g.cause] || "生涯を終えた";
     if (
       (g.cause === "뒤틀림" &&
         e.flags.includes("검계뒤틀림") &&
-        (T = "最後の路地で声に応え、ねじれた"),
-      g.cause === "해결사의 토벌" && e.bld && (T = Vh(e, "ja")),
-      k && k.phrase && (T = k.phrase),
-      g.cause === "인어가 되었다" && y.phrase && (T = y.phrase),
-      !x && g.cause === "환상체 사고")
+        (v = "最後の路地で声に応え、ねじれた"),
+      g.cause === "해결사의 토벌" && e.bld && (v = Xh(e, "ja")),
+      x && x.phrase && (v = x.phrase),
+      g.cause === "인어가 되었다" && y.phrase && (v = y.phrase),
+      !k && g.cause === "환상체 사고")
     ) {
       const m = [...(e.log || [])]
         .reverse()
         .find((w) => w.kind === "event" && /【(.+?)】/.test(w.text));
       m &&
         m.age === g.age &&
-        (T = `幻想体「${m.text.match(/【(.+?)】/)[1]}」と遭遇した末に息を引き取った`);
+        (v = `幻想体「${m.text.match(/【(.+?)】/)[1]}」と遭遇した末に息を引き取った`);
     }
     const Y =
-        e.flags.includes("손가락이탈") && g.cause === "범죄·항쟁" && !x
+        e.flags.includes("손가락이탈") && g.cause === "범죄·항쟁" && !k
           ? "追ってきた指の手にかかり、"
           : "",
       c = a.length > 1 ? "そして" : "";
-    a.push(`${c}${g.age}歳、${x}${Y}${T}。`);
+    a.push(`${c}${g.age}歳、${k}${Y}${v}。`);
   }
   return a;
 }
-function eb(e) {
+function ob(e) {
   const t = [],
-    o = (w, v) => t.push({ key: w, label: v }),
+    o = (w, T) => t.push({ key: w, label: T }),
     a = e.story || [],
     n = e.log || [],
     r = e.flags || [],
@@ -2714,7 +2714,7 @@ function eb(e) {
     o("fixer", h("해결사가 됨", "Became a Fixer", "フィクサーになった"));
     const w = Math.min(
       9,
-      ...a.filter((v) => v.k === "grade").map((v) => v.grade),
+      ...a.filter((T) => T.k === "grade").map((T) => T.grade),
     );
     w <= 7 &&
       o(
@@ -2757,8 +2757,8 @@ function eb(e) {
       `finger_${s.finger}`,
       h(
         `${s.finger} 입단`,
-        `Joined the ${Xe[s.finger]}`,
-        `${Xe[s.finger]}に入団`,
+        `Joined the ${Qe[s.finger]}`,
+        `${Qe[s.finger]}に入団`,
       ),
     );
     const w = (_) => {
@@ -2769,23 +2769,23 @@ function eb(e) {
       }
       return 1;
     };
-    let v = 1;
-    for (const _ of a) _.k === "frank" && (v = Math.max(v, w(_.rankName)));
-    if (v >= 2) {
-      const _ = gt(s.finger, v, e.gender);
+    let T = 1;
+    for (const _ of a) _.k === "frank" && (T = Math.max(T, w(_.rankName)));
+    if (T >= 2) {
+      const _ = gt(s.finger, T, e.gender);
       o(
-        `frank_${s.finger}_${v}`,
+        `frank_${s.finger}_${T}`,
         h(
           `${s.finger} ${_} 도달`,
-          `Reached ${Xe[s.finger]} ${_}`,
-          `${Xe[s.finger]}の${_}に到達`,
+          `Reached ${Qe[s.finger]} ${_}`,
+          `${Qe[s.finger]}の${_}に到達`,
         ),
       );
     }
   }
   r.includes("손가락이탈") &&
     o("finger_quit", h("손가락을 떠남", "Left the Fingers", "指を離れた"));
-  for (const [w, v, _] of [
+  for (const [w, T, _] of [
     ["날개 직원", "corp", h("날개의 사원", "Wing employee", "翼の社員")],
     [
       "협회 직원",
@@ -2793,7 +2793,7 @@ function eb(e) {
       h("협회 직원", "Association staff", "協会職員"),
     ],
   ])
-    a.some((C) => C.k === "job" && C.job === w) && o(v, _);
+    a.some((C) => C.k === "job" && C.job === w) && o(T, _);
   (r.includes("유물") &&
     o(
       "relic",
@@ -3164,7 +3164,7 @@ function eb(e) {
           "生きたまま物語を結んだ血鬼",
         ),
       );
-      const v = {
+      const T = {
           couple: h("둘이서 오래", "Together, for a long time", "ふたりで長く"),
           smile: h("늦게 온 웃음", "A smile that came late", "遅れてきた笑み"),
           gone: h("늙지 않는 쪽", "The one who does not age", "老いないほう"),
@@ -3190,7 +3190,7 @@ function eb(e) {
           ),
         },
         _ = Ko(e).k;
-      v[_] && o(`bf_epi_${_ === "slept" ? "gone" : _}`, v[_]);
+      T[_] && o(`bf_epi_${_ === "slept" ? "gone" : _}`, T[_]);
     }
     (i &&
       i.cause === "긴 잠" &&
@@ -3199,7 +3199,7 @@ function eb(e) {
         "bf_end_faces",
         h("셀 수 없는 얼굴", "Countless faces", "数えきれない顔"),
       ),
-      a.some((v) => v.k === "flag" && v.flag === "정체공개") &&
+      a.some((T) => T.k === "flag" && T.flag === "정체공개") &&
         o(
           "bf_reveal",
           h(
@@ -3208,7 +3208,7 @@ function eb(e) {
             "所属に正体を明かした血鬼",
           ),
         ),
-      a.some((v) => v.k === "flag" && v.flag === "정체들킴") &&
+      a.some((T) => T.k === "flag" && T.flag === "정체들킴") &&
         o(
           "bf_found",
           h(
@@ -3241,20 +3241,20 @@ function eb(e) {
     i &&
       i.cause === "피주머니" &&
       o("bloodbag", h("피주머니가 됨", "Became a Bloodbag", "血袋になった")));
-  const k = e.kk;
-  k &&
+  const x = e.kk;
+  x &&
     (o("kk_join", h("흑운회", "Kurokumo Clan", "黒雲会")),
-    (k.best || 1) >= 2 &&
+    (x.best || 1) >= 2 &&
       o(
         "kk_captain",
         h("흑운회 부조장", "Kurokumo Clan Captain", "黒雲会 副組長"),
       ),
-    (k.best || 1) >= 3 &&
+    (x.best || 1) >= 3 &&
       o(
         "kk_patriarch",
         h("흑운회 조장", "Kurokumo Clan Patriarch", "黒雲会 組長"),
       ),
-    (k.ink || 0) >= 3 &&
+    (x.ink || 0) >= 3 &&
       o(
         "kk_ink3",
         h("세 겹의 검은 구름", "Three layers of black cloud", "三重の黒い雲"),
@@ -3277,7 +3277,7 @@ function eb(e) {
           "剣契と向かい合って座った者",
         ),
       ),
-    (k.punish || 0) >= 1 &&
+    (x.punish || 0) >= 1 &&
       !(i && i.cause === "흑운회의 처벌") &&
       o(
         "kk_finger",
@@ -3323,12 +3323,12 @@ function eb(e) {
           "剣術を伝えた者",
         ),
       ));
-  const x = e.bl;
-  (x &&
+  const k = e.bl;
+  (k &&
     (o("bl_join", h("검계", "Blade Lineage", "剣契")),
-    (x.best || 1) >= 2 &&
+    (k.best || 1) >= 2 &&
       o("bl_salsu", h("검계 살수", "Blade Lineage Salsu", "剣契 殺手")),
-    (x.best || 1) >= 3 &&
+    (k.best || 1) >= 3 &&
       o("bl_mentor", h("검계 우두머리", "Blade Lineage Mentor", "剣契 頭目")),
     r.includes("칼을들고떠남") &&
       o(
@@ -3514,7 +3514,7 @@ function eb(e) {
         "lament_meet",
         h("그곳에서 만나기를", "May We Meet There", "そこで会えますように"),
       ),
-    ((w) => n.some((v) => v.eventId === w))("t_love") &&
+    ((w) => n.some((T) => T.eventId === w))("t_love") &&
       r.includes("가정") &&
       o(
         "love_first",
@@ -3564,16 +3564,16 @@ const aa = [
   { id: "legend", ko: "전설", en: "Legendary", ja: "伝説", min: 3e-4 },
   { id: "myth", ko: "신화", en: "Mythic", ja: "神話", min: 0 },
 ];
-function tb(e) {
+function ab(e) {
   return e == null
     ? aa[aa.length - 1]
     : aa.find((t) => e >= t.min) || aa[aa.length - 1];
 }
-const ob = { id: "miracle", ko: "기적", en: "Miracle", ja: "奇跡" },
-  vn = aa.concat([ob]),
-  ab = Object.fromEntries(vn.map((e) => [e.id, e])),
-  Bu = Object.fromEntries(vn.map((e, t) => [e.id, t])),
-  Ew = {
+const nb = { id: "miracle", ko: "기적", en: "Miracle", ja: "奇跡" },
+  Tn = aa.concat([nb]),
+  rb = Object.fromEntries(Tn.map((e) => [e.id, e])),
+  Fu = Object.fromEntries(Tn.map((e, t) => [e.id, t])),
+  Bw = {
     born_head: "uncommon",
     born_outskirts: "uncommon",
     orphan: "uncommon",
@@ -3744,25 +3744,25 @@ const ob = { id: "miracle", ko: "기적", en: "Miracle", ja: "奇跡" },
     bl_w_student: "legend",
     bl_w_reform: "legend",
   };
-function nb(e, t) {
+function ib(e, t) {
   return e
     .map((o) => {
       const a = t && t[o.key] != null ? t[o.key] : null,
-        n = ab[Ew[o.key]] || tb(a);
+        n = rb[Bw[o.key]] || ab(a);
       return { ...o, p: a, tier: n.id, tierLabel: h(n.ko, n.en, n.ja) };
     })
-    .sort((o, a) => Bu[a.tier] - Bu[o.tier] || (o.p ?? 0) - (a.p ?? 0));
+    .sort((o, a) => Fu[a.tier] - Fu[o.tier] || (o.p ?? 0) - (a.p ?? 0));
 }
 const q = (e) => ({ o: "ok", k: e }),
   me = (e) => ({ o: "cross", k: e }),
   H = (e) => ({ o: "wave", w: e }),
-  tt = (e, t) => {
+  ot = (e, t) => {
     const o = t.reduce((n, [, r]) => n + r, 0);
     let a = e.next() * o;
     for (const [n, r] of t) if (((a -= r), a < 0)) return n;
     return t[t.length - 1][0];
   },
-  Bw = [
+  Fw = [
     {
       id: "L01",
       max: 3,
@@ -3787,7 +3787,7 @@ const q = (e) => ({ o: "ok", k: e }),
       scene: (e, t, o, a) =>
         a
           ? "fog"
-          : tt(o, [
+          : ot(o, [
               ["empty", 35],
               ["music", 20],
               ["people", 25],
@@ -3835,7 +3835,7 @@ const q = (e) => ({ o: "ok", k: e }),
       scene: (e, t, o, a) =>
         a
           ? "quiet"
-          : tt(o, [
+          : ot(o, [
               ["quiet", 35],
               ["one", 25],
               ["two", 20],
@@ -3899,7 +3899,7 @@ const q = (e) => ({ o: "ok", k: e }),
       scene: (e, t, o, a) =>
         a
           ? "clear"
-          : tt(o, [
+          : ot(o, [
               ["name", 30],
               ["shoulder", 20],
               ["steps", 25],
@@ -3928,7 +3928,7 @@ const q = (e) => ({ o: "ok", k: e }),
       max: 4,
       choices: ["down", "shut", "rope", "wave"],
       scene: (e, t, o) =>
-        tt(o, [
+        ot(o, [
           ["hand", 30],
           ["face", 25],
           ["rope", 20],
@@ -4042,7 +4042,7 @@ const q = (e) => ({ o: "ok", k: e }),
       scene: (e, t, o, a) =>
         a
           ? "calm"
-          : tt(o, [
+          : ot(o, [
               ["mine", 25],
               ["other", 25],
               ["calm", 50],
@@ -4083,7 +4083,7 @@ const q = (e) => ({ o: "ok", k: e }),
           i =
             n > 0 && r <= n
               ? "good"
-              : tt(o, [
+              : ot(o, [
                   ["good", 50],
                   ["broken", 25],
                   ["none", 25],
@@ -4131,7 +4131,7 @@ const q = (e) => ({ o: "ok", k: e }),
             ? "calm"
             : t === 3 && o.chance(0.6)
               ? "path"
-              : tt(o, [
+              : ot(o, [
                   ["fill", 35],
                   ["tide", 65],
                 ]);
@@ -4164,7 +4164,7 @@ const q = (e) => ({ o: "ok", k: e }),
           ? o.chance(0.5)
             ? "knob"
             : "closed"
-          : tt(o, [
+          : ot(o, [
               ["come", 25],
               ["knob", 35],
               ["closed", 40],
@@ -4195,7 +4195,7 @@ const q = (e) => ({ o: "ok", k: e }),
         const n =
           a || (t === 4 && !e.lineSeen)
             ? "line"
-            : tt(o, [
+            : ot(o, [
                 ["line", 35],
                 ["rainbow", 35],
                 ["tilt", 30],
@@ -4217,7 +4217,7 @@ const q = (e) => ({ o: "ok", k: e }),
       scene: (e, t, o, a) =>
         a
           ? "calm"
-          : tt(o, [
+          : ot(o, [
               ["b1", 15],
               ["b2", 15],
               ["b3", 15],
@@ -4267,7 +4267,7 @@ const q = (e) => ({ o: "ok", k: e }),
             ? (a = "quiet")
             : t >= 5
               ? (a = "stop")
-              : (a = tt(o, [
+              : (a = ot(o, [
                   ["laugh", 40],
                   ["stop", 30],
                   ["prints", 20],
@@ -4309,7 +4309,7 @@ const q = (e) => ({ o: "ok", k: e }),
       scene: (e, t, o, a) =>
         a
           ? "dark"
-          : tt(o, [
+          : ot(o, [
               ["ask", 30],
               ["wind", 25],
               ["water", 25],
@@ -4341,7 +4341,7 @@ const q = (e) => ({ o: "ok", k: e }),
       scene: (e, t, o, a) =>
         a
           ? "out"
-          : tt(o, [
+          : ot(o, [
               ["in", 40],
               ["out", 35],
               ["stop", 25],
@@ -4382,27 +4382,27 @@ const q = (e) => ({ o: "ok", k: e }),
       },
     },
   ],
-  Fu = [0, 1, 2, 3, 4, 5, 6, 7],
-  rb = [8, 9, 10, 11, 12, 13, 14],
-  Fw = [15, 16, 17, 18, 19],
-  Lw = (e) => `21-${String(e + 1).padStart(2, "0")}`;
-function ib(e) {
+  Lu = [0, 1, 2, 3, 4, 5, 6, 7],
+  sb = [8, 9, 10, 11, 12, 13, 14],
+  Lw = [15, 16, 17, 18, 19],
+  Pw = (e) => `21-${String(e + 1).padStart(2, "0")}`;
+function lb(e) {
   const t = new Set(),
     o = (n) => {
       const r = n.filter((l) => !t.has(l)),
         i = e.pick(r.length ? r : n);
       return (t.add(i), i);
     },
-    a = [o(Fu), o(Fu)];
-  for (let n = 0; n < 3; n++) a.push(o(e.chance(0.6) ? rb : Fw));
+    a = [o(Lu), o(Lu)];
+  for (let n = 0; n < 3; n++) a.push(o(e.chance(0.6) ? sb : Lw));
   return a;
 }
-const sb = (e, t) => e.choices.filter((o) => !e.visible || e.visible(o, t));
-function lb(e, t, o, a) {
+const hb = (e, t) => e.choices.filter((o) => !e.visible || e.visible(o, t));
+function db(e, t, o, a) {
   const n = e.before ? e.before(t) : null;
   return n ? { wave: n } : { scene: e.scene(t, o, a, o >= e.max) };
 }
-function hb(e, t, o, a, n) {
+function ub(e, t, o, a, n) {
   const r = e.resolve(t, o, a, n);
   if (r.o === "ok") {
     const i = e.endTurn ? e.endTurn(t, n) : null;
@@ -4413,41 +4413,41 @@ function hb(e, t, o, a, n) {
 }
 const P = (e, t = 0, o = 100) => Math.max(t, Math.min(o, e)),
   ht = (e) => Math.round(e * 10) / 10,
-  Lu = new WeakMap();
+  Pu = new WeakMap();
 function z(e, t) {
-  let o = Lu.get(e);
-  return (
-    o || ((o = new Map(e.events.map((a) => [a.id, a]))), Lu.set(e, o)),
-    o.get(t)
-  );
-}
-const Pu = new WeakMap();
-function Pw(e, t) {
   let o = Pu.get(e);
   return (
-    o || ((o = new Map((e.daily || []).map((a) => [a.id, a]))), Pu.set(e, o)),
+    o || ((o = new Map(e.events.map((a) => [a.id, a]))), Pu.set(e, o)),
     o.get(t)
   );
 }
-function ki(e, t) {
+const Mu = new WeakMap();
+function Mw(e, t) {
+  let o = Mu.get(e);
+  return (
+    o || ((o = new Map((e.daily || []).map((a) => [a.id, a]))), Mu.set(e, o)),
+    o.get(t)
+  );
+}
+function xi(e, t) {
   return e.some((o) => o === t.id || (t.tags || []).includes(o));
 }
-const db = {
+const cb = {
     "마침표 사무소": { ko: "총", en: "gun", ja: "銃" },
     "시 협회": { ko: "단검", en: "dagger", ja: "短剣" },
   },
-  ub = { ko: "검", en: "sword", ja: "剣" };
-function cb(e) {
+  fb = { ko: "검", en: "sword", ja: "剣" };
+function wb(e) {
   if (!e) return null;
   if (e.org) return e.org.name;
   const t = e.orgHistory || [];
   return t.length ? t[t.length - 1] : null;
 }
-function fb(e) {
-  const t = db[cb(e)] || ub;
+function gb(e) {
+  const t = cb[wb(e)] || fb;
   return h(t.ko, t.en, t.ja);
 }
-const wb = {
+const mb = {
     "츠바이 협회": { types: ["호위"], p: 0.7 },
     "리우 협회": { types: ["전쟁", "조직 소탕"], p: 0.6 },
     "세븐 협회": { types: ["수색"], p: 0.5 },
@@ -4456,21 +4456,21 @@ const wb = {
     "섕크 협회": { types: ["결투"], p: 0.5 },
     "마침표 사무소": { types: ["조직 소탕"], p: 0.2 },
   },
-  Mu = {
+  $u = {
     "시선 사무소": (e) =>
       e.flags.includes("의체") || e.flags.includes("좋은의체"),
   },
-  xi = (e, t) =>
+  vi = (e, t) =>
     (e.story || []).some((o) => o.k === "job" && o.job === t) || e.job === t,
-  Tt = (e, t, o) =>
+  vt = (e, t, o) =>
     e &&
     e
-      .replaceAll("{무기}", fb(o))
+      .replaceAll("{무기}", gb(o))
       .replaceAll("{지역}", t.name)
       .replaceAll("{구역}", t.sub || t.name)
       .replaceAll(
         "{손가락}",
-        o && o.finger ? Xe[o.finger] : h("손가락", "the Finger", "指"),
+        o && o.finger ? Qe[o.finger] : h("손가락", "the Finger", "指"),
       )
       .replaceAll(
         "{소속}",
@@ -4495,8 +4495,8 @@ const wb = {
               "配偶者は長く患っていた。医者は首を横に振った。",
             ),
       )
-      .replaceAll("{R팀}", ik(o))
-      .replaceAll("{R직급}", sk(o))
+      .replaceAll("{R팀}", lk(o))
+      .replaceAll("{R직급}", hk(o))
       .replaceAll(
         "{상처줄}",
         o && (o.hatchHurt || 0) >= 2
@@ -4521,23 +4521,23 @@ const wb = {
         /\{R:([^|}]*)\|([^|}]*)\|([^}]*)\}/g,
         (a, n, r, i) => ({ 토끼: n, 순록: r, 코뿔소: i })[Kn(o)] ?? n,
       )
-      .replace(/\{(BF_[A-Z]+|윗사람|형님|어버이)\}/g, (a, n) => $x(n, o))
+      .replace(/\{(BF_[A-Z]+|윗사람|형님|어버이)\}/g, (a, n) => Dx(n, o))
       .replace(/\{(해답|칙령\d|결정\d|평판줄|공씨줄|남은사람줄)\}/g, (a, n) =>
-        xb(n, o),
+        Tb(n, o),
       )
       .replace(/\{BL고향:([^|}]*)\|([^}]*)\}/g, (a, n, r) =>
         o && o.regionId === "S" ? n : r,
       )
-      .replace(/\{BL(뜻줄|칼줄)\}/g, (a, n) => Ab(n, o))
+      .replace(/\{BL(뜻줄|칼줄)\}/g, (a, n) => Sb(n, o))
       .replaceAll("{KK번호}", String((o && o.kk && o.kk.seat) || ""))
       .replace(
         /\{(KK직급|KK잉크사유|KK출신):([^|}]*)\|([^}]*)\}/g,
-        (a, n, r, i) => Eb(n, r, i, o),
+        (a, n, r, i) => Fb(n, r, i, o),
       )
       .replace(/\{(BL제자|토벌무기):([^|}]*)\|([^}]*)\}/g, (a, n, r, i) =>
-        Fb(n, r, i, o),
+        Pb(n, r, i, o),
       )
-      .replaceAll("{윗등급}", mb(o))
+      .replaceAll("{윗등급}", pb(o))
       .replace(/\{KX심사:([^|}]*)\|([^}]*)\}/g, (a, n, r) =>
         ((o && o.wingRank) || 1) <= 1 ? n : r,
       )
@@ -4548,11 +4548,11 @@ const wb = {
         o && o.nh && o.nh.rites ? r : n,
       )
       .replace(/\{(연인|배우자|아이)(?::([^|}]*)\|([^}]*))?\}/g, (a, n, r, i) =>
-        gb(n, r, i, o),
+        yb(n, r, i, o),
       )
-      .replaceAll("{토벌}", Gw(o))
-      .replaceAll("{등급}", Lb(o));
-function gb(e, t, o, a) {
+      .replaceAll("{토벌}", Kw(o))
+      .replaceAll("{등급}", Mb(o));
+function yb(e, t, o, a) {
   const r =
     (e === "아이" ? a && a.childName : a && a.partnerName) ||
     (e === "아이"
@@ -4560,9 +4560,9 @@ function gb(e, t, o, a) {
       : e === "연인"
         ? h("연인", "your partner", "恋人")
         : h("배우자", "your spouse", "配偶者"));
-  return t !== void 0 && Pe() === "ko" ? r + Cl(r, t, o) : r;
+  return t !== void 0 && Pe() === "ko" ? r + Il(r, t, o) : r;
 }
-function mb(e) {
+function pb(e) {
   const t = (e && e.wingRank) || 3;
   return t >= 5
     ? h(
@@ -4609,7 +4609,7 @@ const Ot = Dt({
       약지: ["スチューデント", "ドーセント", "マエストロ"],
     },
   }),
-  yb = Dt({
+  bb = Dt({
     ko: {
       "날개 직원": "날개 직원",
       "협회 직원": "협회 직원",
@@ -4641,7 +4641,7 @@ const Ot = Dt({
       "이단 심문관": "N社 異端審問官",
     },
   }),
-  qr = {
+  Gr = {
     흑수: 2,
     시간징수직: 10,
     "정리 요원": 5,
@@ -4649,20 +4649,20 @@ const Ot = Dt({
     적출직: 5,
     "이단 심문관": 3,
   },
-  Mw = ["토끼", "순록", "코뿔소"],
-  ed = Dt({
+  $w = ["토끼", "순록", "코뿔소"],
+  td = Dt({
     ko: { 토끼: "토끼", 순록: "순록", 코뿔소: "코뿔소" },
     en: { 토끼: "Rabbit", 순록: "Reindeer", 코뿔소: "Rhino" },
     ja: { 토끼: "ウサギ", 순록: "トナカイ", 코뿔소: "サイ" },
   }),
-  pb = 0.2,
-  bb = 0.1,
+  kb = 0.2,
+  xb = 0.1,
   hn = 78,
   Ae = (e) => Math.min(15e3, Math.max(4e3, String(e || "").length * 55)),
-  $w = (e) =>
+  Hw = (e) =>
     !!e.heir && ((e.flags.includes("가주후보") && e.age >= 5) || !!e.rule),
-  Gr = (e) => (e.heir && e.heir.kong) || 0;
-function $u(e) {
+  Kr = (e) => (e.heir && e.heir.kong) || 0;
+function Hu(e) {
   const t = e.heir;
   return (
     !!t &&
@@ -4672,11 +4672,11 @@ function $u(e) {
     t.ji + t.yong + t.in >= 60
   );
 }
-function kb(e) {
+function vb(e) {
   const t = e.heir || { ji: 0, yong: 0, in: 0 };
   return t.ji >= t.yong && t.ji >= t.in ? "ji" : t.yong >= t.in ? "yong" : "in";
 }
-function xb(e, t) {
+function Tb(e, t) {
   if (!t || !t.heir) return "";
   if (e === "해답")
     return {
@@ -4695,7 +4695,7 @@ function xb(e, t) {
         "presented, as your answer, the passing of names and shares to the next person.",
         "名と取り分が次の人へと渡っていくことを答えとして出した。",
       ),
-    }[kb(t)];
+    }[vb(t)];
   const o = t.rule || {},
     a = /^(칙령|결정)(\d)$/.exec(e);
   if (a) return (o.lines || [])[Number(a[2]) - 1] || "";
@@ -4761,7 +4761,7 @@ That year, in that section of the archive, names without a line through them rem
   }
   return "";
 }
-const Il = qt({
+const Nl = qt({
     ko: ["검계 조직원", "검계 살수", "검계 우두머리"],
     en: [
       "Blade Lineage Cutthroat",
@@ -4778,9 +4778,9 @@ const Il = qt({
     tick: 0.6,
     income: [4.5, 5.5, 7],
   },
-  Mi = (e) => (e && e.bl) || null,
+  $i = (e) => (e && e.bl) || null,
   qa = (e) => (e && e.job === "검계" && e.bl ? e.bl.rank || 1 : 0);
-function Hw(e) {
+function Dw(e) {
   if (["A", "B", "C", "outskirts"].includes(e.regionId)) return !1;
   const t = e.flags;
   return (
@@ -4790,7 +4790,7 @@ function Hw(e) {
     t.includes("조직입문")
   );
 }
-function Tb(e) {
+function _b(e) {
   return e.bl ||
     e.kk ||
     [
@@ -4807,10 +4807,10 @@ function Tb(e) {
     (e.job === "해결사" && e.grade && e.grade <= 4) ||
     e.flags.includes("가주후보")
     ? !1
-    : Hw(e);
+    : Dw(e);
 }
-function vb(e) {
-  const t = Mi(e);
+function jb(e) {
+  const t = $i(e);
   return (
     !!t &&
     t.rank === 2 &&
@@ -4820,8 +4820,8 @@ function vb(e) {
     e.stats.network >= ma.mentorNet
   );
 }
-function _b(e) {
-  const t = Mi(e),
+function Ab(e) {
+  const t = $i(e),
     o = t ? Math.max(0, t.way || 0) : 0;
   return P(
     0.45 + Math.min(0.25, 0.05 * o) + (e.stats.sanity <= 30 ? 0.15 : 0),
@@ -4829,13 +4829,13 @@ function _b(e) {
     0.95,
   );
 }
-function jb(e) {
+function Yb(e) {
   return e.flags.includes("E.G.O개화")
     ? 0
     : P(0.5 + (e.stats.sanity - 50) * 0.005, 0.25, 0.75);
 }
-function Dw(e) {
-  const t = Mi(e) || { best: 1, cut: 0 },
+function qw(e) {
+  const t = $i(e) || { best: 1, cut: 0 },
     o = t.cut || 0;
   return (t.best || 1) >= 3
     ? o >= 60
@@ -4853,8 +4853,8 @@ function Dw(e) {
         ? 7
         : 8;
 }
-function Ab(e, t) {
-  const o = Mi(t);
+function Sb(e, t) {
+  const o = $i(t);
   return e === "뜻줄"
     ? o && (o.way || 0) >= 3
       ? h(
@@ -4871,7 +4871,7 @@ function Ab(e, t) {
         )
       : "";
 }
-const go = {
+const mo = {
     income: [5.5, 7, 9],
     tribute: 0.2,
     tributeLedger: 0.25,
@@ -4880,7 +4880,7 @@ const go = {
     patStat: 35,
     seatMax: 40,
   },
-  Yb = qt({
+  Rb = qt({
     ko: ["흑운회 와카슈", "흑운회 부조장", "흑운회 조장"],
     en: [
       "Kurokumo Clan Wakashu",
@@ -4897,12 +4897,12 @@ function dn(e) {
   return t === 2 && o && o.seat
     ? h(
         `흑운회 제${o.seat}대 부조장`,
-        `Kurokumo Clan Captain, the ${ig(o.seat)}`,
+        `Kurokumo Clan Captain, the ${sg(o.seat)}`,
         `黒雲会 ${o.seat}代 副組長`,
       )
-    : Yb[t - 1];
+    : Rb[t - 1];
 }
-function Sb(e) {
+function Cb(e) {
   return e.kk ||
     e.bl ||
     [
@@ -4920,33 +4920,33 @@ function Sb(e) {
     (e.job === "해결사" && e.grade && e.grade <= 4) ||
     e.flags.includes("가주후보")
     ? !1
-    : Hw(e);
+    : Dw(e);
 }
-function Rb(e) {
-  return Gt(e) === 1 && qi(e);
+function Ib(e) {
+  return Gt(e) === 1 && Gi(e);
 }
-function Cb(e) {
+function Nb(e) {
   const t = nr(e);
   return (
     Gt(e) === 2 &&
-    e.age - (t.rankAt ?? e.age) >= go.patYears &&
-    qi(e) &&
-    e.stats.rep >= go.patStat &&
-    e.stats.network >= go.patStat
+    e.age - (t.rankAt ?? e.age) >= mo.patYears &&
+    Gi(e) &&
+    e.stats.rep >= mo.patStat &&
+    e.stats.network >= mo.patStat
   );
 }
-function Ib(e) {
+function Ob(e) {
   const t = nr(e);
   return !!t && !!t.inkWhy && e.age - t.inkWhy.age <= 1;
 }
-function Nb(e) {
+function Wb(e) {
   const t = nr(e),
     o = Gt(e) || 1,
-    a = t ? Math.min(1, Math.max(0, -(t.way || 0)) * go.wayIncome) : 0,
-    n = e.flags.includes("흑운회장부") ? go.tributeLedger : go.tribute;
-  return (go.income[o - 1] + a) * (1 - n);
+    a = t ? Math.min(1, Math.max(0, -(t.way || 0)) * mo.wayIncome) : 0,
+    n = e.flags.includes("흑운회장부") ? mo.tributeLedger : mo.tribute;
+  return (mo.income[o - 1] + a) * (1 - n);
 }
-function Ob(e) {
+function Eb(e) {
   if (e.job === "흑운회" && e.kk) {
     const t = e.kk,
       o = (t.ink || 0) >= 3 ? 6 : (t.ink || 0) >= 2 ? 3 : 0,
@@ -4962,9 +4962,9 @@ function Ob(e) {
   }
   return 0;
 }
-function Wb(e, t) {
+function Bb(e, t) {
   if (!e.some((n) => n.skillSave)) return e;
-  const o = Ob(t);
+  const o = Eb(t);
   if (!o) return e;
   const a = e.map((n) => ({ ...n }));
   for (const n of a) {
@@ -4978,7 +4978,7 @@ function Wb(e, t) {
   }
   return a;
 }
-function Eb(e, t, o, a) {
+function Fb(e, t, o, a) {
   const n = nr(a);
   return e === "KK직급"
     ? Gt(a) >= 3
@@ -4993,21 +4993,21 @@ function Eb(e, t, o, a) {
         : t;
 }
 const So = (e) => !!e.bld && !e.dead,
-  qw = [2, 0, 3, 4],
-  Bb = 4;
-function Fb(e, t, o, a) {
+  Gw = [2, 0, 3, 4],
+  Lb = 4;
+function Pb(e, t, o, a) {
   const n = a && (a.dr || a.bld);
   return e === "BL제자"
     ? a && a.flags.includes("아낀제자")
       ? t
       : o
     : e === "토벌무기"
-      ? n && n.hunter && n.hunter.type === "office" && n.hunter.idx === Bb
+      ? n && n.hunter && n.hunter.type === "office" && n.hunter.idx === Lb
         ? t
         : o
       : t;
 }
-function Gw(e) {
+function Kw(e) {
   const t = e && (e.dr || e.bld);
   if (t && t.hunter && t.hunter.type === "nm") return re("hunterNm");
   if (!t || !t.hunter || !X)
@@ -5015,7 +5015,7 @@ function Gw(e) {
   const o = (X.orgs[t.hunter.type] || [])[t.hunter.idx];
   return o ? o.name : h("해결사들", "the Fixers", "フィクサーたち");
 }
-function Lb(e) {
+function Mb(e) {
   if (e && e.dr)
     return X && X.orgs && X.orgs.tiers ? X.orgs.tiers[e.dr.grade] : "";
   const t = e && e.bld,
@@ -5036,9 +5036,9 @@ const _a = {
     blindP: 0.2,
   },
   Ho = (e) => !!e.dr && !e.dead,
-  Pb = () => (X && z(X, "dr_lines")) || null;
-function it(e) {
-  let t = Pb();
+  $b = () => (X && z(X, "dr_lines")) || null;
+function st(e) {
+  let t = $b();
   for (const o of e.split(".")) {
     if (!t) return null;
     t = t[o];
@@ -5046,7 +5046,7 @@ function it(e) {
   return t;
 }
 function re(e) {
-  const t = it(e);
+  const t = st(e);
   return (t && t.text) || "";
 }
 function Ft(e, t, o) {
@@ -5065,8 +5065,8 @@ function Ft(e, t, o) {
   const l = oe(e).pick(i);
   return (r.push(l), (a.used[t] = r), l);
 }
-const Mb = (e) => (e.dr.grade >= 4 ? "nm" : e.dr.grade >= 2 ? "mid" : "low");
-function $b(e) {
+const Hb = (e) => (e.dr.grade >= 4 ? "nm" : e.dr.grade >= 2 ? "mid" : "low");
+function Db(e) {
   return e.bf
     ? "bf"
     : e.job === "해결사"
@@ -5079,32 +5079,32 @@ function $b(e) {
             ? "worker"
             : "other";
 }
-const Hb = qt({
+const qb = qt({
   ko: ["첫 번째", "두 번째", "세 번째", "네 번째", "다섯 번째", "여섯 번째"],
   en: ["first", "second", "third", "fourth", "fifth", "sixth"],
   ja: ["一つ目の", "二つ目の", "三つ目の", "四つ目の", "五つ目の", "六つ目の"],
 });
 function Do(e, t) {
   const o = t.dr;
-  return Tt(e, qe(X, t), t)
-    .replaceAll("{회차}", Hb[Math.max(0, Math.min(5, (o.n || 1) - 1))])
+  return vt(e, qe(X, t), t)
+    .replaceAll("{회차}", qb[Math.max(0, Math.min(5, (o.n || 1) - 1))])
     .replaceAll("{물리친수}", String(o.beat || 0));
 }
-function Db(e, t) {
+function Gb(e, t) {
   X = t;
   const o = e.dead;
   if (!o || !o.voice) return !1;
   const a = oe(e),
     n = e.log[e.log.length - 1];
   (n && n.kind === "death" && e.log.pop(), (e.dead = null));
-  const r = hd(e),
+  const r = dd(e),
     i = Math.round(((r ?? 2) / 2 + a.next() * 4) * 10) / 10,
     l = i < 1.5 ? 0 : i < 3 ? 1 : i < 4.5 ? 2 : i < 7 ? 3 : 4,
     s =
       l >= 4
         ? { type: "nm" }
         : l === 3
-          ? { type: "assoc", idx: a.pick(qw) }
+          ? { type: "assoc", idx: a.pick(Gw) }
           : {
               type: "office",
               idx: a.int(
@@ -5123,7 +5123,7 @@ function Db(e, t) {
     n: 0,
     kills: 0,
     hunter: s,
-    kind: $b(e),
+    kind: Db(e),
     used: {},
     lastProg: -1,
     resJust: !1,
@@ -5150,7 +5150,7 @@ function Db(e, t) {
     !0
   );
 }
-function qb(e) {
+function Kb(e) {
   const t = e.dr,
     a = (t.grade >= 4 ? 6 : 5) - (t.n || 0);
   if (a <= 0) return;
@@ -5170,7 +5170,7 @@ function qb(e) {
       }),
       e.plan.push({ dr: "raid", t: r[l] }));
 }
-function Gb(e, t, o) {
+function zb(e, t, o) {
   const a = e.dr;
   if (!a || e.dead) return !0;
   const n = oe(e);
@@ -5190,10 +5190,10 @@ function Gb(e, t, o) {
         !0
       );
     if (!n.chance(_a.restP)) return !0;
-    const g = [...(it("rest") || [])];
+    const g = [...(st("rest") || [])];
     return (
-      e.bf && g.push(it("restBf")),
-      a.res >= 1 && g.push(it("restRes")),
+      e.bf && g.push(st("restBf")),
+      a.res >= 1 && g.push(st("restRes")),
       L(
         e,
         { kind: "flavor", text: Do(Ft(e, "rest", g), e), tone: "system" },
@@ -5211,15 +5211,15 @@ function Gb(e, t, o) {
     e.flags.includes("가정") &&
     n.chance(_a.blindP)
   )
-    return ((a.blindDone = !0), a.n--, Kb(e, t, o));
+    return ((a.blindDone = !0), a.n--, Ub(e, t, o));
   const i =
       r <= 4 ? "raid" : r === 5 ? (a.grade >= 4 ? "nm5" : "final") : "nm6",
-    l = Mb(e),
-    s = i === "raid" ? Ft(e, `pre.${l}`, it(`pre.${l}`)) : re(`${i}.pre`);
+    l = Hb(e),
+    s = i === "raid" ? Ft(e, `pre.${l}`, st(`pre.${l}`)) : re(`${i}.pre`);
   L(e, { kind: "event", text: Do(s, e), tone: "event" }, o.t);
   let u;
   if (i === "raid") {
-    const g = [Ft(e, `body.${l}`, it(`body.${l}`))];
+    const g = [Ft(e, `body.${l}`, st(`body.${l}`))];
     (a.prog !== a.lastProg && g.push(re(`prog.${Math.min(2, a.prog)}`)),
       a.resJust &&
         a.res >= 1 &&
@@ -5246,7 +5246,7 @@ function Gb(e, t, o) {
     !0
   );
 }
-function Kb(e, t, o) {
+function Ub(e, t, o) {
   const a = z(t, "cm_blind"),
     n = Do(a.text, e);
   return (
@@ -5265,7 +5265,7 @@ function Kb(e, t, o) {
     !0
   );
 }
-const Hu = (e) => P(0.35 + ((e.dr.san || 0) - 30) * 0.005, 0.2, 0.6);
+const Du = (e) => P(0.35 + ((e.dr.san || 0) - 30) * 0.005, 0.2, 0.6);
 function ze(e, t, o, a = {}) {
   const n = Do(t, e);
   L(
@@ -5280,7 +5280,7 @@ function Yr(e, t, o, a, n, r = 5e3) {
   (He(e, a, t, "event", { text: Do(n, e) }),
     e.dead && (e.dead.hold = Ae(i ? i.text : n) + r));
 }
-function Du(e, t, o) {
+function qu(e, t, o) {
   const a = e.dr;
   (ze(e, re("ret.body"), t, { tone: "rare" }),
     ze(
@@ -5299,7 +5299,7 @@ function Du(e, t, o) {
   (He(e, "돌아온 사람", t, "event", { alive: !0, text: n }),
     e.dead && (e.dead.hold = Ae(n) + 3e3));
 }
-function zb(e, t, o, a) {
+function Jb(e, t, o, a) {
   const n = e.dr,
     r = oe(e),
     i = o.t || 0.5;
@@ -5320,7 +5320,7 @@ ${re("turnCommon")}`;
         text: y,
         tone: "rare",
         hold: Math.max(6e3, Ae(y)),
-        job: ve(e),
+        job: Te(e),
       },
       i,
     ),
@@ -5358,7 +5358,7 @@ ${re("turnCommon")}`;
         choice: f,
         scene: "end",
       }),
-      Yr(e, i, "final", "해결사의 토벌", Ft(e, "obit.final", it("obit.final")))
+      Yr(e, i, "final", "해결사의 토벌", Ft(e, "obit.final", st("obit.final")))
     );
   if (o.dr === "nm6")
     return (
@@ -5373,7 +5373,7 @@ ${re("turnCommon")}`;
         i,
         "nm6",
         "분노한 사람의 손",
-        Ft(e, "obit.nm6", it("obit.nm6")),
+        Ft(e, "obit.nm6", st("obit.nm6")),
         9e3,
       )
     );
@@ -5382,14 +5382,14 @@ ${re("turnCommon")}`;
       (n.beat++,
         (n.kills += 1),
         ze(e, re("nm5.fight"), i, { tone: "rare", choice: f }));
-    else if (r.chance(Hu(e))) {
+    else if (r.chance(Du(e))) {
       if (
         (n.res++,
         (n.resJust = !0),
         ze(e, re("nm5.resOk"), i, { tone: "rare", choice: f }),
         n.res >= 3)
       )
-        return Du(e, i, !0);
+        return qu(e, i, !0);
     } else
       ((n.prog = Math.min(_a.progMax - 1, n.prog + 1)),
         ze(e, re("nm5.resFail"), i, { tone: "bad", choice: f }));
@@ -5401,27 +5401,27 @@ ${re("turnCommon")}`;
     r.chance(y)
       ? (n.beat++,
         (n.kills += r.int(1, 3)),
-        ze(e, Ft(e, "win", it("win")), i, { tone: "good", choice: f }))
+        ze(e, Ft(e, "win", st("win")), i, { tone: "good", choice: f }))
       : ((n.prog += 2),
-        ze(e, Ft(e, "lose", it("lose")), i, { tone: "bad", choice: f }));
-  } else if (r.chance(Hu(e))) {
+        ze(e, Ft(e, "lose", st("lose")), i, { tone: "bad", choice: f }));
+  } else if (r.chance(Du(e))) {
     (n.res++, (n.resJust = !0));
     const y = n.res <= 2 ? ` ${re(`resTail.${n.res - 1}`)}` : "";
     if (
-      (ze(e, `${Ft(e, "resOk", it("resOk"))}${y}`, i, {
+      (ze(e, `${Ft(e, "resOk", st("resOk"))}${y}`, i, {
         tone: "rare",
         choice: f,
       }),
       n.res >= 3)
     )
-      return Du(e, i, !1);
+      return qu(e, i, !1);
   } else
     ((n.prog += 1),
-      ze(e, Ft(e, "resFail", it("resFail")), i, { tone: "bad", choice: f }));
+      ze(e, Ft(e, "resFail", st("resFail")), i, { tone: "bad", choice: f }));
   if (n.prog >= _a.progMax) {
     const y = e.log[e.log.length - 1];
     (y && (y.scene = "end"),
-      Yr(e, i, "prog", "해결사의 토벌", Ft(e, "obit.prog", it("obit.prog"))));
+      Yr(e, i, "prog", "해결사의 토벌", Ft(e, "obit.prog", st("obit.prog"))));
   }
 }
 const _n = {
@@ -5435,13 +5435,13 @@ const _n = {
     pirateX: [0.005, 0.002],
   },
 };
-function Ub(e) {
-  const t = oe({ rngState: qh(`${e}:lake`) });
+function Vb(e) {
+  const t = oe({ rngState: Gh(`${e}:lake`) });
   return t.chance(_n.drinkP) ? t.int(16, 60) : null;
 }
-const Jb = () => (X && z(X, "lk_lines")) || null;
-function Kw(e) {
-  let t = Jb();
+const Xb = () => (X && z(X, "lk_lines")) || null;
+function zw(e) {
+  let t = Xb();
   for (const o of e.split(".")) {
     if (t == null) return null;
     t = t[o];
@@ -5449,11 +5449,11 @@ function Kw(e) {
   return t;
 }
 const te = (e) => {
-    const t = Kw(e);
+    const t = zw(e);
     return (t && t.text) || "";
   },
-  qu = (e) => e.regionId === "U";
-function zw(e) {
+  Gu = (e) => e.regionId === "U";
+function Uw(e) {
   return e.dead ||
     e.lake ||
     e.lakeRec ||
@@ -5469,33 +5469,33 @@ function zw(e) {
     ? !1
     : e.age >= 16;
 }
-function Vb(e, t) {
+function Qb(e, t) {
   return e.job === "해결사"
     ? "lk_u_fixer"
-    : oo(e)
+    : ao(e)
       ? "lk_u_work"
       : e.age >= 30 && t.chance(0.4)
         ? "lk_u_ferry"
         : "lk_u_fish";
 }
-function Xb(e, t) {
+function Zb(e, t) {
   const o = [],
-    a = zw(e);
+    a = Uw(e);
   (e.lakeDrinkAt != null &&
     e.age >= e.lakeDrinkAt &&
     (a && e.age === e.lakeDrinkAt && o.push({ id: "lk_drink", lakeEnter: !0 }),
     (e.lakeDrinkAt = null)),
     a &&
-      qu(e) &&
+      Gu(e) &&
       !e.lakeOffered &&
       e.age >= 18 &&
       e.age <= 65 &&
       t.chance(_n.uP) &&
-      o.push({ id: Vb(e, t), lakeEnter: !0 }));
+      o.push({ id: Qb(e, t), lakeEnter: !0 }));
   const n = e.lakeHints || 0;
   if (n < 2 && !e.bf && e.age >= 16) {
     const r = n >= 1 ? 1 : 0,
-      i = qu(e),
+      i = Gu(e),
       l = !!e.lakeRec && !e.lakeRec.dead;
     (i || l) &&
       (t.chance(_n.hint[i ? "sailor" : "sailorX"][r])
@@ -5531,7 +5531,7 @@ function Gn(e, t) {
       : t.flags.includes("고아")
         ? h("오래전 동료", "an old comrade", "昔の仲間")
         : h("어머니", "your mother", "母");
-  let i = Tt(e, qe(X, t), t)
+  let i = vt(e, qe(X, t), t)
     .replaceAll("{동행}", n)
     .replaceAll("{아는얼굴}", r);
   const l = o && o.st;
@@ -5544,15 +5544,15 @@ function Gn(e, t) {
   }
   return i;
 }
-const $i = (e) => Bw[e.lake.route[e.lake.i]],
-  Hi = (e) => Lw(e.lake.route[e.lake.i]);
-function Qb(e) {
-  const t = $i(e);
+const Hi = (e) => Fw[e.lake.route[e.lake.i]],
+  Di = (e) => Pw(e.lake.route[e.lake.i]);
+function ek(e) {
+  const t = Hi(e);
   return te("common.tag")
-    .replaceAll("{호수}", Hi(e))
+    .replaceAll("{호수}", Di(e))
     .replaceAll("{이름}", te(`lakes.${t.id}.name`));
 }
-function Zb(e, t, o, a) {
+function tk(e, t, o, a) {
   X = t;
   const n = oe(e);
   e.lakeOffered = !0;
@@ -5561,7 +5561,7 @@ function Zb(e, t, o, a) {
     : null;
   ((e.lake = {
     source: a,
-    route: ib(n),
+    route: lb(n),
     i: 0,
     t: 1,
     st: null,
@@ -5573,15 +5573,15 @@ function Zb(e, t, o, a) {
   }),
     e.flags.includes("대호수항해") || e.flags.push("대호수항해"));
   const i = te(a === "drink" ? "common.departDrink" : "common.depart");
-  (L(e, { kind: "flavor", text: i, tone: "system", hold: Ae(i) }, o), Uw(e, o));
+  (L(e, { kind: "flavor", text: i, tone: "system", hold: Ae(i) }, o), Jw(e, o));
 }
-function Uw(e, t) {
+function Jw(e, t) {
   const o = e.lake,
     a = oe(e),
-    n = $i(e);
+    n = Hi(e);
   ((o.t = 1),
     (o.st = n.init ? n.init(a) : {}),
-    L(e, { kind: "lakesep", text: Hi(e), lake: o.route[o.i] }, t),
+    L(e, { kind: "lakesep", text: Di(e), lake: o.route[o.i] }, t),
     L(
       e,
       { kind: "event", text: Gn(te(`lakes.${n.id}.enter`), e), tone: "event" },
@@ -5590,11 +5590,11 @@ function Uw(e, t) {
     o.whale &&
       o.whale.at === o.i &&
       !o.whaleDone &&
-      ((o.whaleDone = !0), tk(e, o.whale.kind, t)),
-    Jw(e, t));
+      ((o.whaleDone = !0), ak(e, o.whale.kind, t)),
+    Vw(e, t));
 }
-const ek = { marlin: "Marlin", pallid: "Pallid", crimson: "Crimson" };
-function tk(e, t, o) {
+const ok = { marlin: "Marlin", pallid: "Pallid", crimson: "Crimson" };
+function ak(e, t, o) {
   ((e.lakeWhale = t), ie(e, { k: "lakeWhale", whale: t }));
   const a =
       t === "marlin"
@@ -5608,7 +5608,7 @@ function tk(e, t, o) {
     ((e.stats[r] = ht(P(l + i, 1, 100))), (n[r] = Math.round(e.stats[r] - l)));
   }
   for (let r = 1; r <= 3; r++) {
-    const i = te(`common.whale${ek[t]}${r}`);
+    const i = te(`common.whale${ok[t]}${r}`);
     L(
       e,
       {
@@ -5623,17 +5623,17 @@ function tk(e, t, o) {
     );
   }
 }
-function Jw(e, t) {
+function Vw(e, t) {
   const o = e.lake,
     a = oe(e),
-    n = $i(e),
-    r = lb(n, o.st, o.t, a);
-  if (r.wave) return Vw(e, n, r.wave, t);
+    n = Hi(e),
+    r = db(n, o.st, o.t, a);
+  if (r.wave) return Xw(e, n, r.wave, t);
   ((o.scene = r.scene),
     o.t > 1 && (e.stats.sanity = ht(P(e.stats.sanity - 1, 1, 100))));
   const i = Gn(te(`lakes.${n.id}.scene.${r.scene}`), e);
   L(e, { kind: "event", text: i, tone: "event" }, t);
-  const l = sb(n, o.st).map((s, u) => ({
+  const l = hb(n, o.st).map((s, u) => ({
     label: Gn(te(`lakes.${n.id}.c.${s}`), e),
     i: u,
     key: s,
@@ -5641,8 +5641,8 @@ function Jw(e, t) {
   e.prompt = {
     kind: "major",
     lake: n.id,
-    lakeNum: Hi(e),
-    tag: Qb(e),
+    lakeNum: Di(e),
+    tag: ek(e),
     eventId: `lk_${n.id}`,
     text: i,
     choices: l,
@@ -5651,15 +5651,15 @@ function Jw(e, t) {
     t,
   };
 }
-function ok(e, t, o, a) {
+function nk(e, t, o, a) {
   const n = e.lake;
   if (!n) return;
   const r = o.t || 0.5,
-    i = $i(e);
+    i = Hi(e);
   let l = a;
   (l == null || l < 0 || !o.choices[l]) && (l = 0);
   const s = o.choices[l],
-    u = hb(i, n.st, s.key, n.scene, n.t);
+    u = ub(i, n.st, s.key, n.scene, n.t);
   if ((u.k === "haul" && (n.fished = !0), u.k)) {
     const f = Gn(te(`lakes.${i.id}.r.${u.k}`), e);
     L(
@@ -5673,18 +5673,18 @@ function ok(e, t, o, a) {
       r,
     );
   }
-  if (u.o === "wave") return Vw(e, i, u.w, r, u.k ? null : s.label);
+  if (u.o === "wave") return Xw(e, i, u.w, r, u.k ? null : s.label);
   if (u.o === "cross")
     return (
-      Fw.includes(n.route[n.i]) && n.deep++,
+      Lw.includes(n.route[n.i]) && n.deep++,
       n.i++,
-      n.i >= n.route.length ? ak(e, r) : Uw(e, r)
+      n.i >= n.route.length ? rk(e, r) : Jw(e, r)
     );
-  (n.t++, Jw(e, r));
+  (n.t++, Vw(e, r));
 }
-function Vw(e, t, o, a, n) {
+function Xw(e, t, o, a, n) {
   const r = e.lake,
-    i = Hi(e),
+    i = Di(e),
     l = te(`lakes.${t.id}.w.${o}`) || te("common.stay"),
     s = Gn(l, e);
   L(
@@ -5723,15 +5723,15 @@ function Vw(e, t, o, a, n) {
     (e.lake = null));
   const y = e.name || "",
     g = y.charCodeAt(y.length - 1),
-    k = g >= 44032 && g <= 55203 && (g - 44032) % 28 === 0 ? "는" : "은",
-    x = te("common.obit")
-      .replaceAll("{이름}은", y + k)
+    x = g >= 44032 && g <= 55203 && (g - 44032) % 28 === 0 ? "는" : "은",
+    k = te("common.obit")
+      .replaceAll("{이름}은", y + x)
       .replaceAll("{이름}", y)
       .replaceAll("{호수}", i);
-  (He(e, "인어가 되었다", a, "event", { text: x }),
+  (He(e, "인어가 되었다", a, "event", { text: k }),
     e.dead && (e.dead.hold = Ae(f) + 4e3));
 }
-function ak(e, t) {
+function rk(e, t) {
   const o = e.lake,
     a = te("common.arrive");
   (L(
@@ -5767,13 +5767,13 @@ function ak(e, t) {
         te(o.source === "u_fixer" ? "common.r_fixerReq" : "common.r_fixer"),
       ))
     : e.job === "손가락"
-      ? (jn(e, 6), l.push(Tt(te("common.r_finger"), qe(X, e), e)))
+      ? (jn(e, 6), l.push(vt(te("common.r_finger"), qe(X, e), e)))
       : we(e)
         ? e.work === "4무리"
           ? (i("rep", 5), l.push(te("common.r_rcorp")))
           : (jn(e, 6), l.push(te("common.r_wing")))
-        : oo(e)
-          ? (od(e, 6), l.push(te("common.r_office")))
+        : ao(e)
+          ? (ad(e, 6), l.push(te("common.r_office")))
           : e.job === "검계" && e.bl
             ? ((e.bl.cut = (e.bl.cut || 0) + 3), l.push(te("common.r_blade")))
             : e.job === "떠돌이 검객" && e.bl
@@ -5782,7 +5782,7 @@ function ak(e, t) {
               : e.job === "흑운회" && (jn(e, 6), l.push(te("common.r_kuro"))),
     o.fished && (i("wealth", 6), l.push(te("common.r_fish"))),
     o.source === "drink" && (i("wealth", 10), l.push(te("common.r_drink"))));
-  for (const u of Yo) n[u] = ht(P(n[u]));
+  for (const u of oo) n[u] = ht(P(n[u]));
   const s = l.join(" ");
   (L(
     e,
@@ -5806,16 +5806,16 @@ function ak(e, t) {
     ie(e, { k: "lake", age: o.age, crossed: !0, deep: o.deep }),
     (e.lake = null));
 }
-function nk(e, t, o) {
+function ik(e, t, o) {
   const a = oe(e),
     n = [];
-  Bw.forEach((u, f) =>
-    (Kw(`lakes.${u.id}.hint`) || []).forEach((y) => n.push({ li: f, h: y })),
+  Fw.forEach((u, f) =>
+    (zw(`lakes.${u.id}.hint`) || []).forEach((y) => n.push({ li: f, h: y })),
   );
   const r = a.pick(n);
   if (!r) return;
   e.lakeHints = (e.lakeHints || 0) + 1;
-  const i = Lw(r.li),
+  const i = Pw(r.li),
     l = (r.h[t === "pirate" ? "p" : "s"] || {}).text || "",
     s = te(t === "pirate" ? "common.hintPirate" : "common.hintSailor")
       .replaceAll("{호수}", i)
@@ -5833,15 +5833,15 @@ function nk(e, t, o) {
       o,
     ));
 }
-function rk(e) {
+function sk(e) {
   const t = e.prompt;
   return oe(e).int(0, Math.max(0, t.choices.length - 1));
 }
 const Kn = (e) => (e && (e.branch || e.cloneTeam)) || "토끼";
-function ik(e) {
-  return ed[Kn(e)] || Kn(e);
+function lk(e) {
+  return td[Kn(e)] || Kn(e);
 }
-function sk(e) {
+function hk(e) {
   const t = e && (e.work === "4무리" ? e.wingRank : e.cloneRank);
   return t >= 3
     ? h("사령관", "Commander", "司令官")
@@ -5849,14 +5849,14 @@ function sk(e) {
       ? h("대장", "Team Leader", "隊長")
       : h("대원", "Member", "隊員");
 }
-const lk = Dt({
+const dk = Dt({
   ko: { 묘: "묘", 오: "오", 사: "사", 유: "유", 미: "미" },
   en: { 묘: "Mao", 오: "Wu", 사: "Si", 유: "You", 미: "Wei" },
   ja: { 묘: "卯", 오: "午", 사: "巳", 유: "酉", 미: "未" },
 });
 function un(e, t, o) {
   if (e === "흑수") {
-    const a = lk[o] || o || "";
+    const a = dk[o] || o || "";
     return t >= 2
       ? h(
           `흑수 - ${a} 필두`,
@@ -5906,7 +5906,7 @@ function un(e, t, o) {
         "R Corp. 4th Pack Commander",
         "R社 第4群 司令官",
       );
-    const a = ed[o] || o || "";
+    const a = td[o] || o || "";
     return t >= 2
       ? h(
           `R사 4무리 - ${a}팀 대장`,
@@ -5921,7 +5921,7 @@ function un(e, t, o) {
   }
   return "";
 }
-function hk(e) {
+function uk(e) {
   const t = e.wingRank || 1;
   return e.work === "흑수"
     ? t >= 2
@@ -5957,7 +5957,7 @@ function hk(e) {
                 : 1
             : 0;
 }
-const we = (e) => e.job === "사원" && !!qr[e.work],
+const we = (e) => e.job === "사원" && !!Gr[e.work],
   Pt = {
     heal: 40,
     drain: 1.5,
@@ -5969,17 +5969,17 @@ const we = (e) => e.job === "사원" && !!qr[e.work],
     hpChoiceP: 0.7,
     hpMiss: 30,
   },
-  Je = (e) => we(e) && e.work === "적출직",
-  Xw = (e) => e.kx || (e.kx = { hp: 0, fit: 0, tube: !1, ideal: !1 }),
-  dk = (e) => (e.kx && e.kx.ideal ? 10 : 20);
+  Ve = (e) => we(e) && e.work === "적출직",
+  Qw = (e) => e.kx || (e.kx = { hp: 0, fit: 0, tube: !1, ideal: !1 }),
+  ck = (e) => (e.kx && e.kx.ideal ? 10 : 20);
 function Wa(e) {
-  return !e || !e.kx ? 100 : Math.max(0, 100 - dk(e) * (e.kx.hp || 0));
+  return !e || !e.kx ? 100 : Math.max(0, 100 - ck(e) * (e.kx.hp || 0));
 }
-function td(e) {
+function od(e) {
   e.kx && e.stats.sanity > Wa(e) && (e.stats.sanity = Wa(e));
 }
-const uk = new Set(["x_ego_edge"]),
-  ck = new Set([
+const fk = new Set(["x_ego_edge"]),
+  wk = new Set([
     "a_marriage",
     "a_child_born",
     "x_burglary",
@@ -5988,14 +5988,14 @@ const uk = new Set(["x_ego_edge"]),
     "x_care_old",
     "x_inquisition",
   ]);
-function fk(e, t) {
-  return Je(t)
-    ? uk.has(e.id)
+function gk(e, t) {
+  return Ve(t)
+    ? fk.has(e.id)
       ? !0
-      : !!(t.kx && t.kx.tube && ck.has(e.id))
+      : !!(t.kx && t.kx.tube && wk.has(e.id))
     : !1;
 }
-function wk(e, t) {
+function mk(e, t) {
   const o = t.kx;
   return !(
     (e.kxIdeal != null && !!(o && o.ideal) !== e.kxIdeal) ||
@@ -6005,9 +6005,9 @@ function wk(e, t) {
     (e.kxTube && !(o && o.tube))
   );
 }
-function Qw(e, t, o) {
+function Zw(e, t, o) {
   const a = oe(e),
-    n = Xw(e),
+    n = Qw(e),
     r = z(t, "kx_hp_bullet");
   L(e, { kind: "event", text: r.text, tone: "event" }, o);
   const i = n.ideal
@@ -6022,14 +6022,14 @@ function Qw(e, t, o) {
   n.hp = (n.hp || 0) + 1;
   const l = e.stats,
     s = { health: l.health, sanity: l.sanity };
-  ((l.health = P(Math.max(0, l.health) + Pt.heal)), td(e));
+  ((l.health = P(Math.max(0, l.health) + Pt.heal)), od(e));
   const u = {};
   for (const g of ["health", "sanity"]) {
-    const k = Math.round(l[g] - s[g]);
-    k && (u[g] = k);
+    const x = Math.round(l[g] - s[g]);
+    x && (u[g] = x);
   }
   if (Wa(e) <= 0) {
-    gk(e, t, o, u);
+    yk(e, t, o, u);
     return;
   }
   const f = n.ideal ? (n.hp % 2 === 0 ? n.hp / 2 - 1 : -1) : n.hp - 1,
@@ -6046,18 +6046,18 @@ function Qw(e, t, o) {
     o,
   );
 }
-function gk(e, t, o, a) {
+function yk(e, t, o, a) {
   const n = z(t, "kx_end_hollow"),
     r = e.kx,
     i = qe(t, e),
     l = e.wingRank || 1;
   let s = 0;
   const u = (y, g = {}) => {
-    const k = Ae(y);
-    ((s += k),
+    const x = Ae(y);
+    ((s += x),
       L(
         e,
-        { kind: "result", text: y, tone: "normal", keep: !0, hold: k, ...g },
+        { kind: "result", text: y, tone: "normal", keep: !0, hold: x, ...g },
         o,
       ));
   };
@@ -6071,7 +6071,7 @@ function gk(e, t, o, a) {
     e.flags.includes("가정") || e.flags.includes("아이"))
   ) {
     let y = n.family.text;
-    (e.flags.includes("선반의그림") && (y += ` ${Tt(n.shelf.text, i, e)}`),
+    (e.flags.includes("선반의그림") && (y += ` ${vt(n.shelf.text, i, e)}`),
       u(y));
   }
   r.end = "hollow";
@@ -6079,7 +6079,7 @@ function gk(e, t, o, a) {
   (He(e, "메마름", o, "event", { text: f, alive: !0 }),
     e.dead && (e.dead.hold = Math.min(3e4, s + Ae(f) + 3e3)));
 }
-const Nl = {
+const Ol = {
   시간징수직: () => [
     h(
       "이 장면은 처음이 아니다. 시계는 그 횟수까지 세어 두었다.",
@@ -6126,7 +6126,7 @@ const Nl = {
           ),
         ],
 };
-Nl["이단 심문관"] = () => [
+Ol["이단 심문관"] = () => [
   h(
     "같은 문, 같은 망치 소리. 다른 이름.",
     "The same door, the same sound of the hammer. A different name.",
@@ -6150,12 +6150,12 @@ const Be = {
     riteEvery: 5,
   },
   Ht = (e) => we(e) && e.work === "이단 심문관",
-  Di = (e) =>
+  qi = (e) =>
     e.nh || (e.nh = { faith: Be.start, since: e.age, rites: 0, ate: 0 }),
-  Ol = (e) => (e >= Be.hi ? 1 : e < Be.lo ? -1 : 0);
-function Zw(e, t) {
+  Wl = (e) => (e >= Be.hi ? 1 : e < Be.lo ? -1 : 0);
+function eg(e, t) {
   if (!Ht(e) || !e.nh) return 1;
-  const o = Ol(e.nh.faith);
+  const o = Wl(e.nh.faith);
   return t === "merit"
     ? o > 0
       ? Be.hiMerit
@@ -6168,14 +6168,14 @@ function Zw(e, t) {
         ? Be.loDrain
         : 1;
 }
-function mk(e, t, o, a) {
+function pk(e, t, o, a) {
   if (!t || !Ht(e)) return;
-  const n = Di(e),
-    r = Ol(n.faith);
+  const n = qi(e),
+    r = Wl(n.faith);
   ((n.faith = P(n.faith + t, 0, 100)),
     n.faith >= 100 && (n.peak = !0),
     n.faith <= 0 && (n.empty = !0));
-  const i = Ol(n.faith);
+  const i = Wl(n.faith);
   if (i !== r && i !== 0 && o) {
     const l = z(o, "nh_lines");
     L(
@@ -6189,42 +6189,42 @@ function mk(e, t, o, a) {
     );
   }
 }
-const yk = ["의체", "좋은의체", "전투의체", "강화시술"];
-function pk(e) {
+const bk = ["의체", "좋은의체", "전투의체", "강화시술"];
+function kk(e) {
   return [e, ...(e.outcomes || [])].some(
-    (t) => t.prosthetic > 0 || (t.flagsAdd || []).some((o) => yk.includes(o)),
+    (t) => t.prosthetic > 0 || (t.flagsAdd || []).some((o) => bk.includes(o)),
   );
 }
-const bk = new Set([
+const xk = new Set([
   "x_care_young",
   "x_care_mid",
   "x_care_old",
   "x_inquisition",
 ]);
-function kk(e, t) {
+function vk(e, t) {
   if (
     (e.noPros && ((t.prosthetics || 0) > 0 || t.flags.includes("강화시술"))) ||
-    (Ht(t) && bk.has(e.id))
+    (Ht(t) && xk.has(e.id))
   )
     return !1;
   if (e.nhRite) {
     if (!Ht(t)) return !1;
-    const o = Di(t),
+    const o = qi(t),
       a = t.age - o.since;
     if (a < Be.riteEvery || a % Be.riteEvery !== 0 || o.riteAge === t.age)
       return !1;
   }
   return !0;
 }
-function xk(e, t, o) {
+function Tk(e, t, o) {
   if (!o || !e.evN || (e.evN[o] || 0) < 3) return null;
   const a = z(t, o);
   if (!a || a.rankGate || !a.repeat || !a.jobs) return null;
-  const n = a.jobs.find((r) => Nl[r]);
-  return n ? oe(e).pick(Nl[n](e)) : null;
+  const n = a.jobs.find((r) => Ol[r]);
+  return n ? oe(e).pick(Ol[n](e)) : null;
 }
-const oo = (e) => e.job === "사원" && e.work === "날개 직원",
-  zn = (e) => (oo(e) ? e.officeRank || 1 : 0),
+const ao = (e) => e.job === "사원" && e.work === "날개 직원",
+  zn = (e) => (ao(e) ? e.officeRank || 1 : 0),
   cn = qt({
     ko: ["사원", "대리", "과장", "부장", "이사", "대표"],
     en: [
@@ -6237,12 +6237,12 @@ const oo = (e) => e.job === "사원" && e.work === "날개 직원",
     ],
     ja: ["社員", "代理", "課長", "部長", "理事", "代表"],
   }),
-  eg = ["A", "B", "C", "H"],
-  Tk = [5, 15, 36, 62, 60],
-  tg = 3;
+  tg = ["A", "B", "C", "H"],
+  _k = [5, 15, 36, 62, 60],
+  og = 3;
 function Ea(e, t) {
   const o = P(t || zn(e) || 1, 1, 5);
-  let a = Tk[o - 1];
+  let a = _k[o - 1];
   return (
     e.stats.rep >= 50 && (a *= 0.85),
     e.stats.network >= 50 && (a *= 0.9),
@@ -6253,14 +6253,14 @@ function Ea(e, t) {
     Math.max(1, Math.round(a))
   );
 }
-function vk(e) {
+function jk(e) {
   const t = X ? qe(X, e) : null,
     o = t ? t.name : "",
     a = cn[(e.officeRank || 1) - 1];
   return o ? `${o} ${a}` : a;
 }
-function _k(e) {
-  return zn(e) !== 5 || eg.includes(e.regionId)
+function Ak(e) {
+  return zn(e) !== 5 || tg.includes(e.regionId)
     ? !1
     : (e.perf || 0) >= Ea(e, 5) &&
         e.age - (e.dirSince ?? e.age) >= 8 &&
@@ -6268,7 +6268,7 @@ function _k(e) {
         e.stats.rep >= 50 &&
         e.stats.network >= 50;
 }
-function od(e, t) {
+function ad(e, t) {
   const o = 1 + 0.4 * ((e.officeRank || 1) - 1),
     a = e.perf || 0;
   return (
@@ -6276,13 +6276,13 @@ function od(e, t) {
     Math.round(e.perf - a)
   );
 }
-function jk(e) {
-  oo(e) &&
+function Yk(e) {
+  ao(e) &&
     (e.officeRank == null &&
       ((e.officeRank = 1), (e.perf = e.perf || 0), (e.warn = e.warn || 0)),
-    e.officeRank <= 3 && od(e, 1 / (1 + 0.4 * (e.officeRank - 1))));
+    e.officeRank <= 3 && ad(e, 1 / (1 + 0.4 * (e.officeRank - 1))));
 }
-const Wl = {
+const El = {
     엄지: [12, 120, 70],
     검지: [11, 28],
     중지: [1, 2, 85],
@@ -6294,25 +6294,25 @@ const Wl = {
     "이단 심문관": [30, 44],
     흑운회: [24, 36],
   },
-  Ak = 1,
-  Yk = 2,
-  Sk = 0.6,
-  Rk = 0.05,
-  og = (e) => (e && e.pinky ? qn[e.pinky.star] : null),
-  ag = (e) => (e && e.pinky ? (e.pinky.star < Ow ? 1 : 2) : 0),
-  ao = (e, t, o) => {
-    const a = ag(e);
+  Sk = 1,
+  Rk = 2,
+  Ck = 0.6,
+  Ik = 0.05,
+  ag = (e) => (e && e.pinky ? qn[e.pinky.star] : null),
+  ng = (e) => (e && e.pinky ? (e.pinky.star < Ww ? 1 : 2) : 0),
+  no = (e, t, o) => {
+    const a = ng(e);
     return a === 1 ? t : a === 2 ? o : 1;
   };
 function Un(e) {
-  const t = og(e);
+  const t = ag(e);
   return t ? h(t[0], t[2], t[1]) : "";
 }
-function ad(e) {
-  const t = og(e);
+function nd(e) {
+  const t = ag(e);
   return t ? e.pinky.blade || h(`${t[0]}도`, `${t[2]} Blade`, `${t[1]}刀`) : "";
 }
-const Ck = [
+const Nk = [
   "R사 4무리 ",
   "T사 ",
   "W사 ",
@@ -6325,9 +6325,9 @@ const Ck = [
   "剣契 ",
   "黒雲会 ",
 ];
-function El(e) {
+function Bl(e) {
   if (e.job === "손가락" && e.finger)
-    return `${Xe[e.finger]} - ${gt(e.finger, e.fingerRank, e.gender)}`;
+    return `${Qe[e.finger]} - ${gt(e.finger, e.fingerRank, e.gender)}`;
   if (e.job === "해결사" && e.flags.includes("특색")) {
     const o = e.colorName || h("특색", "Color", "特色");
     return h(`해결사 - ${o}`, `Fixer - ${o}`, `フィクサー - ${o}`);
@@ -6338,59 +6338,59 @@ function El(e) {
       `Fixer - Grade ${e.grade}`,
       `フィクサー - ${e.grade}級`,
     );
-  const t = ve(e);
+  const t = Te(e);
   if (!t) return "";
   if (t.includes(" - ")) return t;
   if (we(e) || e.job === "검계" || e.job === "흑운회") {
-    const o = Ck.find((a) => t.startsWith(a) && t.length > a.length);
+    const o = Nk.find((a) => t.startsWith(a) && t.length > a.length);
     if (o) return `${o.trim()} - ${t.slice(o.length)}`;
   }
   return t;
 }
-function Ik(e) {
-  if (!e.pinky) return ve(e);
-  const t = El(e);
+function Ok(e) {
+  if (!e.pinky) return Te(e);
+  const t = Bl(e);
   return t ? `${Un(e)} (${t})` : Un(e);
 }
-const Ys = new WeakMap();
-function Nk(e, t) {
+const Ss = new WeakMap();
+function Wk(e, t) {
   return t.pinky
     ? e.bf === "none" ||
       e.id === "bf_bitten" ||
       e.id.startsWith("bf_child_distort")
       ? !0
-      : (Ys.has(e) || Ys.set(e, JSON.stringify(e).includes('"bfTurn"')),
-        Ys.get(e))
+      : (Ss.has(e) || Ss.set(e, JSON.stringify(e).includes('"bfTurn"')),
+        Ss.get(e))
     : !1;
 }
-const Bl = (e) =>
+const Fl = (e) =>
     e && e.job === "사원" && (e.work || "날개 직원") === "날개 직원",
-  Ok = (e) =>
-    Bl(e) || (!!e.outcomes && e.outcomes.length > 0 && e.outcomes.every(Bl)),
-  Gu = (e) => !!(e && (e.flagsAdd || []).includes("유물")),
-  Wk = (e) => Gu(e) || (e.outcomes || []).some(Gu),
-  Ek = new Set([
+  Ek = (e) =>
+    Fl(e) || (!!e.outcomes && e.outcomes.length > 0 && e.outcomes.every(Fl)),
+  Ku = (e) => !!(e && (e.flagsAdd || []).includes("유물")),
+  Bk = (e) => Ku(e) || (e.outcomes || []).some(Ku),
+  Fk = new Set([
     "bl_mentor_named",
     "kk_seat_open",
     "kk_patriarch_open",
     "rc_captain_named",
     "rc_cmdr_named",
   ]);
-function Bk(e) {
-  const t = oe({ rngState: qh(`${e}:pinky`) });
-  return t.chance(Rk) ? t.int(0, qn.length - 1) : null;
+function Lk(e) {
+  const t = oe({ rngState: Gh(`${e}:pinky`) });
+  return t.chance(Ik) ? t.int(0, qn.length - 1) : null;
 }
-const Fk = 0.25;
+const Pk = 0.25;
 function Ba(e) {
-  return e.job === "손가락" && e.finger && Wl[e.finger]
+  return e.job === "손가락" && e.finger && El[e.finger]
     ? e.finger
-    : we(e) && Wl[e.work]
+    : we(e) && El[e.work]
       ? e.work
       : e.job === "흑운회" && e.kk && (e.kk.rank || 1) < 3
         ? `흑운회:${e.kk.rank || 1}`
         : null;
 }
-const Lk = (e) =>
+const Mk = (e) =>
   e.job === "손가락"
     ? e.fingerRank || 1
     : e.job === "흑운회" && e.kk
@@ -6399,7 +6399,7 @@ const Lk = (e) =>
 function ja(e) {
   const t = Ba(e);
   if (!t) return 0;
-  const o = Wl[t.split(":")[0]][Lk(e) - 1];
+  const o = El[t.split(":")[0]][Mk(e) - 1];
   if (o == null) return 0;
   let a = o;
   const n = e.flags.includes("유물");
@@ -6408,11 +6408,11 @@ function ja(e) {
     e.stats.rep >= 50 && (a *= 0.9),
     e.flags.includes("좋은의체") && (a *= 0.97),
     e.flags.includes("강화시술") && (a *= 0.93),
-    (a *= ao(e, 0.8, 0.9)),
+    (a *= no(e, 0.8, 0.9)),
     Math.max(1, Math.round(a))
   );
 }
-function ng(e) {
+function rg(e) {
   const t = Ba(e);
   return (
     (e.rmeritKey || null) !== t && ((e.rmeritKey = t), (e.rmerit = 0)),
@@ -6420,8 +6420,8 @@ function ng(e) {
   );
 }
 function jn(e, t) {
-  if (!ng(e) || !t) return;
-  t > 0 && (t *= Zw(e, "merit"));
+  if (!rg(e) || !t) return;
+  t > 0 && (t *= eg(e, "merit"));
   const o = ja(e);
   o &&
     (e.rmerit = Math.max(
@@ -6429,18 +6429,18 @@ function jn(e, t) {
       Math.min(o, Math.round(((e.rmerit || 0) + t) * 10) / 10),
     ));
 }
-function qi(e) {
-  if (!ng(e)) return !1;
+function Gi(e) {
+  if (!rg(e)) return !1;
   const t = ja(e);
   return !!t && (e.rmerit || 0) >= t;
 }
-function Ku(e) {
+function zu(e) {
   return ((e.rmeritKey || null) === Ba(e) && e.rmerit) || 0;
 }
-function Pk(e) {
+function $k(e) {
   jn(e, 1);
 }
-function Mk(e, t) {
+function Hk(e, t) {
   const o = (e.pastPower || 0) - 1;
   return t === "시간징수직"
     ? o >= 3
@@ -6460,7 +6460,7 @@ function Mk(e, t) {
             : 1
       : 1;
 }
-function $k(e) {
+function Dk(e) {
   const t = (e.wingRank || 1) - 1,
     o = e.flags.includes("유물"),
     a = e.flags.includes("E.G.O개화");
@@ -6470,7 +6470,7 @@ function $k(e) {
     (a ? 2 : o ? 1.6 : 1) / (1 + n * t * t)
   );
 }
-const Hk = Dt({
+const qk = Dt({
     ko: {},
     en: {
       운반: "Courier",
@@ -6501,7 +6501,7 @@ const Hk = Dt({
       "환상체 토벌": "幻想体討伐",
     },
   }),
-  An = (e) => Hk[e] || e,
+  An = (e) => qk[e] || e,
   ae = {
     birthP: 0.006,
     thirstBase: 12,
@@ -6529,12 +6529,12 @@ const Hk = Dt({
     kinDeepen: 0.06,
     kinDeepenMax: 5,
   },
-  nd = (e) =>
+  rd = (e) =>
     Math.max(ae.bar.floor, 1 - ae.bar.decay * ((e && e.barUses) || 0)),
-  rg = (e) =>
+  ig = (e) =>
     Math.max(ae.pack.floor, 1 - ae.pack.decay * ((e && e.packUses) || 0)),
-  _o = (e) => (e.bf ? e.age - e.bf.since : 0);
-function Ss(e) {
+  jo = (e) => (e.bf ? e.age - e.bf.since : 0);
+function Rs(e) {
   const t = e.bf && e.bf.family;
   return t
     ? t.ward != null
@@ -6546,18 +6546,18 @@ function Ss(e) {
       : h("어느 구의 가문", "a District Family", "ある区の家門")
     : "";
 }
-function Fl(e) {
+function Ll(e) {
   const t = (e.bf && e.bf.gen) || 5,
     o = t === 1 ? h(" · 장로", " · Elder", "・長老") : "";
   return (
     h(
-      `${Ss(e)} 제${t}권속`,
-      `${Ss(e).replace(/^(the|a) /, (a) => a.charAt(0).toUpperCase() + a.slice(1))} · ${ig(t)} Kindred`,
-      `${Ss(e)} 第${t}眷属`,
+      `${Rs(e)} 제${t}권속`,
+      `${Rs(e).replace(/^(the|a) /, (a) => a.charAt(0).toUpperCase() + a.slice(1))} · ${sg(t)} Kindred`,
+      `${Rs(e)} 第${t}眷属`,
     ) + o
   );
 }
-const ig = (e) =>
+const sg = (e) =>
   e +
   (e % 10 === 1 && e % 100 !== 11
     ? "st"
@@ -6566,17 +6566,17 @@ const ig = (e) =>
       : e % 10 === 3 && e % 100 !== 13
         ? "rd"
         : "th");
-function Dk(e) {
+function Gk(e) {
   return e >= 85 ? 3 : e >= 60 ? 2 : e >= 30 ? 1 : 0;
 }
 function gt(e, t, o) {
   const a = (Ot[e] || [])[(t || 1) - 1];
   return Array.isArray(a) ? (o === "f" ? a[1] : a[0]) : a || "";
 }
-function ve(e) {
+function Te(e) {
   return e.dr
     ? e.dr.end === "return"
-      ? `${ve({ ...e, dr: null }) || h("무직", "Unemployed", "無職")} · ${h("뒤틀렸다 돌아옴", "Returned from Distortion", "ねじれから戻った")}`
+      ? `${Te({ ...e, dr: null }) || h("무직", "Unemployed", "無職")} · ${h("뒤틀렸다 돌아옴", "Returned from Distortion", "ねじれから戻った")}`
       : h("이름 없는 뒤틀림", "Nameless Distortion", "名もなきねじれ")
     : e.job === "가주"
       ? h("가주", "Family Hierarch", "家主")
@@ -6593,11 +6593,11 @@ function ve(e) {
                   `${e.grade}級フィクサー`,
                 )
               : e.job === "손가락" && e.finger
-                ? `${Xe[e.finger]} ${gt(e.finger, e.fingerRank, e.gender)}`.trim()
+                ? `${Qe[e.finger]} ${gt(e.finger, e.fingerRank, e.gender)}`.trim()
                 : we(e)
                   ? un(e.work, e.wingRank || 1, e.branch)
                   : e.job === "검계"
-                    ? Il[(qa(e) || 1) - 1]
+                    ? Nl[(qa(e) || 1) - 1]
                     : e.job === "흑운회"
                       ? dn(e)
                       : e.job === "도장 사범"
@@ -6615,11 +6615,11 @@ function ve(e) {
                                 "放浪の剣客",
                               )
                             : e.job === "권속"
-                              ? Fl(e)
-                              : oo(e)
-                                ? vk(e)
+                              ? Ll(e)
+                              : ao(e)
+                                ? jk(e)
                                 : e.job === "사원" && e.work
-                                  ? h(`사원 - ${e.work}`, yb[e.work] || e.work)
+                                  ? h(`사원 - ${e.work}`, bb[e.work] || e.work)
                                   : e.job === "해결사"
                                     ? h("해결사", "Fixer", "フィクサー")
                                     : e.job === "손가락"
@@ -6631,7 +6631,7 @@ function Jn(e, t) {
     ? !0
     : !!(t.job === "사원" && t.work && e.includes(t.work));
 }
-function sg(e, t) {
+function lg(e, t) {
   const [o, a] = e;
   return t.org && o && (o.includes("*") || o.includes(t.org.name))
     ? !0
@@ -6641,26 +6641,26 @@ function qe(e, t) {
   return e.regions.find((o) => o.id === t.regionId);
 }
 const qo = (e) => Array.isArray(e.choices) && e.choices.length > 0;
-function qk(e) {
-  return Aw[Math.min(3, Math.floor(e * 4))];
+function Kk(e) {
+  return Yw[Math.min(3, Math.floor(e * 4))];
 }
 function L(e, t, o) {
-  e.log.push({ id: e.log.length, age: e.age, season: qk(o), ...t });
+  e.log.push({ id: e.log.length, age: e.age, season: Kk(o), ...t });
 }
-function Gk(e) {
+function zk(e) {
   const t = Object.entries(e).reduce(
     (o, [a, n]) => o + (a === "thirst" ? -n / 4 : n),
     0,
   );
   return t >= 4 ? "good" : t <= -4 ? "bad" : "normal";
 }
-function zu(e, t = {}) {
+function Uu(e, t = {}) {
   X = e;
-  const o = t.seed ? String(t.seed) : kp(),
+  const o = t.seed ? String(t.seed) : vp(),
     a = {
       v: 7,
       seed: o,
-      rngState: qh(o),
+      rngState: Gh(o),
       name: "",
       gender: "m",
       regionId: null,
@@ -6695,7 +6695,7 @@ function zu(e, t = {}) {
       : n.chance(0.5)
         ? "f"
         : "m"),
-    (a.name = (t.name || "").trim().slice(0, 12) || n.pick(bi[a.gender])));
+    (a.name = (t.name || "").trim().slice(0, 12) || n.pick(ki[a.gender])));
   const r = t.regionId
     ? e.regions.find((u) => u.id === t.regionId)
     : n.weighted(e.regions, (u) => u.birthWeight);
@@ -6708,11 +6708,11 @@ function zu(e, t = {}) {
       network: P(15 + r.orgPressure + n.int(-5, 5)),
       rep: P(20 + n.int(-5, 5)),
     }),
-    r.id === "R" && n.chance(pb))
+    r.id === "R" && n.chance(kb))
   )
-    return Kk(a, e, r, n);
+    return Uk(a, e, r, n);
   (r.tags || []).includes("top") && a.flags.push("상층");
-  const i = r.id === "H" && (t.heir || n.chance(bb));
+  const i = r.id === "H" && (t.heir || n.chance(xb));
   i
     ? (a.flags.push("가주후보"), (a.heir = { ji: 0, yong: 0, in: 0, kong: 0 }))
     : n.chance(ae.birthP) && a.flags.push("피의기색");
@@ -6746,13 +6746,13 @@ function zu(e, t = {}) {
     },
     0,
   ),
-    (a.lakeDrinkAt = Ub(o)));
+    (a.lakeDrinkAt = Vb(o)));
   const s =
     t.pinky != null
       ? t.pinky
       : i || a.flags.includes("피의기색")
         ? null
-        : Bk(o);
+        : Lk(o);
   if (s != null && s !== !1) {
     ((a.pinky = {
       star: Math.max(0, Math.min(qn.length - 1, Number(s) || 0)),
@@ -6772,7 +6772,7 @@ function zu(e, t = {}) {
         ),
         name: h(u[0], u[2], u[1]),
         sub: h(u[1], u[1], u[3]),
-        heaven: a.pinky.star < Ow,
+        heaven: a.pinky.star < Ww,
         tone: "rare",
       },
       0,
@@ -6793,15 +6793,15 @@ function zu(e, t = {}) {
   }
   return (
     L(a, { kind: "year", text: h("0세", "Age 0", "0歳") }, 0),
-    sd(a, e),
+    ld(a, e),
     a
   );
 }
-function Kk(e, t, o, a) {
+function Uk(e, t, o, a) {
   ((e.age = a.int(20, 30)),
     (e.family = "none"),
     e.flags.push("복제", "고아", "부화장"),
-    (e.cloneTeam = a.pick(Mw)),
+    (e.cloneTeam = a.pick($w)),
     (e.cloneRank = a.chance(0.1) ? 2 : 1),
     (e.hatchHurt = 0),
     (e.cloneYear = e.age),
@@ -6829,7 +6829,7 @@ function Kk(e, t, o, a) {
         "鎧の重さも、ハンマーを振り下ろす順番も。",
       ),
     }[e.cloneTeam],
-    r = ed[e.cloneTeam],
+    r = td[e.cloneTeam],
     i =
       e.cloneRank >= 2
         ? h("대장", "Team Leader", "隊長")
@@ -6876,15 +6876,15 @@ The door opens.`,
       { kind: "year", text: h(`${e.age}세`, `Age ${e.age}`, `${e.age}歳`) },
       0,
     ),
-    sd(e, t),
+    ld(e, t),
     e
   );
 }
-const Uu = new WeakMap();
-function lg(e, t) {
+const Ju = new WeakMap();
+function hg(e, t) {
   if (!e) return !1;
-  let o = Uu.get(e);
-  if ((o || Uu.set(e, (o = {})), o[t] == null)) {
+  let o = Ju.get(e);
+  if ((o || Ju.set(e, (o = {})), o[t] == null)) {
     const a = (n) => !!n && (n.flagsAdd || []).includes(t);
     o[t] =
       a(e) ||
@@ -6893,36 +6893,36 @@ function lg(e, t) {
   }
   return o[t];
 }
-const hg = (e) => lg(e, "가정"),
-  zk = (e) => lg(e, "연인");
-function Uk(e) {
+const dg = (e) => hg(e, "가정"),
+  Jk = (e) => hg(e, "연인");
+function Vk(e) {
   (e.flags.includes("결혼불가") || e.flags.push("결혼불가"),
     (e.flags = e.flags.filter((t) => t !== "연인")));
 }
-function dg(e) {
-  return oe(e).pick(bi[e.gender === "f" ? "m" : "f"]);
+function ug(e) {
+  return oe(e).pick(ki[e.gender === "f" ? "m" : "f"]);
 }
-const Jk = (e) =>
+const Xk = (e) =>
   e.flags.includes("아이") && e.childBorn != null ? e.age - e.childBorn : null;
 function Aa(e, t, o) {
   if (
     (e.offer && (t.job === "검계" || t.job === "흑운회")) ||
-    Nk(e, t) ||
-    fk(e, t) ||
-    !wk(e, t) ||
-    !kk(e, t)
+    Wk(e, t) ||
+    gk(e, t) ||
+    !mk(e, t) ||
+    !vk(e, t)
   )
     return !1;
-  if (hg(e)) {
+  if (dg(e)) {
     if (
       t.flags.includes("결혼불가") ||
       Ht(t) ||
       (t.flags.includes("연인") && !(e.requires && e.requires.includes("연인")))
     )
       return !1;
-  } else if (zk(e) && t.flags.includes("결혼불가")) return !1;
+  } else if (Jk(e) && t.flags.includes("결혼불가")) return !1;
   if (e.childAge) {
-    const r = Jk(t);
+    const r = Xk(t);
     if (r != null && (r < e.childAge[0] || r > e.childAge[1])) return !1;
   }
   if (e.wingRankEven && (t.wingRank || 1) % 2) return !1;
@@ -6932,8 +6932,8 @@ function Aa(e, t, o) {
     (e.age && (a < e.age[0] || a > e.age[1])) ||
     (e.ageEvery &&
       (a < e.ageEvery[0] || (a - e.ageEvery[0]) % e.ageEvery[1] !== 0)) ||
-    (e.regions && !ki(e.regions, o)) ||
-    (e.notRegions && ki(e.notRegions, o)) ||
+    (e.regions && !xi(e.regions, o)) ||
+    (e.notRegions && xi(e.notRegions, o)) ||
     (!e.repeat && t.used.includes(e.id)) ||
     (e.cooldown &&
       t.last &&
@@ -6945,10 +6945,10 @@ function Aa(e, t, o) {
     (e.notJobs && Jn(e.notJobs, t)) ||
     (e.noJob && t.job) ||
     (e.orgName && !(t.org && e.orgName.includes(t.org.name))) ||
-    (e.everJob && !xi(t, e.everJob)) ||
-    (e.neverJob && xi(t, e.neverJob)) ||
+    (e.everJob && !vi(t, e.everJob)) ||
+    (e.neverJob && vi(t, e.neverJob)) ||
     (e.prosMin && (t.prosthetics || 0) < e.prosMin) ||
-    (e.orgOrJobs && !sg(e.orgOrJobs, t))
+    (e.orgOrJobs && !lg(e.orgOrJobs, t))
   )
     return !1;
   if (e.afterLast) {
@@ -6959,7 +6959,7 @@ function Aa(e, t, o) {
       );
     if (!(a - l >= i)) return !1;
   }
-  if (!rd(e.power, t) || !Qk(e.presence, t) || (e.ego && !wg(t))) return !1;
+  if (!id(e.power, t) || !ex(e.presence, t) || (e.ego && !gg(t))) return !1;
   const n = e.bf && e.bf !== "none" && !!t.bf;
   if (
     (t.job === "손가락" && !e.finger && !e.anyone && !n) ||
@@ -6969,16 +6969,16 @@ function Aa(e, t, o) {
       !n &&
       !(e.jobs && e.jobs.includes(t.work))) ||
     (t.job === "검계" && !e.bl && !e.anyone && !e.wingOk && !n) ||
-    (e.blEntry && !Tb(t)) ||
+    (e.blEntry && !_b(t)) ||
     (e.blRank && !Z(qa(t), e.blRank)) ||
     (e.blCutAt && !(t.bl && Z(t.bl.cut || 0, e.blCutAt))) ||
     (e.blWayAt && !(t.bl && Z(t.bl.way || 0, e.blWayAt))) ||
     (e.blYearsAt && !(t.bl && Z(a - (t.bl.since ?? a), e.blYearsAt))) ||
     (e.blBestAt && !(t.bl && Z(t.bl.best || 1, e.blBestAt))) ||
     (e.blEver && !t.bl) ||
-    (e.blMentorReady && !vb(t)) ||
+    (e.blMentorReady && !jb(t)) ||
     (t.job === "흑운회" && !e.kk && !e.anyone && !e.wingOk && !n) ||
-    (e.kkEntry && !Sb(t)) ||
+    (e.kkEntry && !Cb(t)) ||
     (e.kkRank && !Z(Gt(t), e.kkRank)) ||
     (e.kkEver && !t.kk) ||
     (e.kkYearsAt && !(t.kk && Z(a - (t.kk.since ?? a), e.kkYearsAt))) ||
@@ -6988,15 +6988,15 @@ function Aa(e, t, o) {
     (e.kkInkAt && !(t.kk && Z(t.kk.ink || 0, e.kkInkAt))) ||
     (e.kkDueAt && !(t.kk && Z(t.kk.due || 0, e.kkDueAt))) ||
     (e.kkBestAt && !(t.kk && Z(t.kk.best || 1, e.kkBestAt))) ||
-    (e.kkSeatReady && !Rb(t)) ||
-    (e.kkPatReady && !Cb(t)) ||
-    (e.kkInkReason && !Ib(t)) ||
+    (e.kkSeatReady && !Ib(t)) ||
+    (e.kkPatReady && !Nb(t)) ||
+    (e.kkInkReason && !Ob(t)) ||
     (e.bld && !So(t)) ||
     (So(t) && !e.bld) ||
     Ho(t) ||
     (e.bldRemAt && !(t.bld && Z(t.bld.rem || 0, e.bldRemAt))) ||
     (e.bldThreatAt && !(t.bld && Z(t.bld.threat || 0, e.bldThreatAt))) ||
-    (e.notExec && vx(t)) ||
+    (e.notExec && jx(t)) ||
     (e.exec && zn(t) < 5)
   )
     return !1;
@@ -7010,11 +7010,11 @@ function Aa(e, t, o) {
     (e.perfLow && !((t.perf || 0) < Ea(t) * 0.3)) ||
     (e.warnAt && !Z(t.warn || 0, e.warnAt)) ||
     (e.warnQuiet && !(a - (t.warnLast ?? -99) >= e.warnQuiet)) ||
-    (e.ceoReady && !_k(t)) ||
-    (e.rankGate && !qi(t)) ||
-    (e.heirKong && !(Gr(t) >= e.heirKong)) ||
-    (e.heirHead && !(Gr(t) < 3 && $u(t))) ||
-    (e.heirFail && !(Gr(t) < 3 && !$u(t)))
+    (e.ceoReady && !Ak(t)) ||
+    (e.rankGate && !Gi(t)) ||
+    (e.heirKong && !(Kr(t) >= e.heirKong)) ||
+    (e.heirHead && !(Kr(t) < 3 && Hu(t))) ||
+    (e.heirFail && !(Kr(t) < 3 && !Hu(t)))
   )
     return !1;
   if (e.wingRank) {
@@ -7025,15 +7025,15 @@ function Aa(e, t, o) {
   return (e.branch && !(we(t) && e.branch.includes(t.branch))) ||
     (e.rOverAt && !Z(t.rOver || 0, e.rOverAt)) ||
     (e.rMisAt && !Z(t.rMis || 0, e.rMisAt)) ||
-    (e.org && !fg(e.org, t)) ||
-    !id(e, t) ||
-    !ug(e, t) ||
+    (e.org && !wg(e.org, t)) ||
+    !sd(e, t) ||
+    !cg(e, t) ||
     (t.bf && e.age && e.age[0] >= 55 && !e.bf && !e.bfOk)
     ? !1
-    : cg(e, t, o);
+    : fg(e, t, o);
 }
 const Z = (e, t) => !t || (e >= t[0] && e <= t[1]);
-function ug(e, t) {
+function cg(e, t) {
   const o = t.bf;
   if (e.bf) {
     if (e.bf === "none") {
@@ -7046,7 +7046,7 @@ function ug(e, t) {
     (Array.isArray(e.heat) && !(o && Z(o.heat, e.heat))) ||
     (e.bfYears && !(o && Z(t.age - o.since, e.bfYears))) ||
     (e.kinSlot && !(o && o.made < 2)) ||
-    (e.hasKin && !(o && cd(t) > 0)) ||
+    (e.hasKin && !(o && fd(t) > 0)) ||
     (e.barStreak && !(o && Z(o.barStreak, e.barStreak))) ||
     (e.barUses && !(o && Z(o.barUses || 0, e.barUses))) ||
     (e.neverBit && !(o && o.bites === 0)) ||
@@ -7059,14 +7059,14 @@ function ug(e, t) {
     (e.life && !(o && e.life.includes(Ko(t).k))) ||
     (e.lifeSub && !(o && e.lifeSub.includes(Ko(t).sub))) ||
     (e.lifeNot && o && e.lifeNot.includes(Ko(t).k)) ||
-    (e.bfActive && !(o && Hl(t))) ||
-    (e.bfRetired && !(o && !Hl(t))) ||
-    (e.outlive && !(o && Fx(t))) ||
-    (e.revealOk && !(o && Lx(t))) ||
+    (e.bfActive && !(o && Dl(t))) ||
+    (e.bfRetired && !(o && !Dl(t))) ||
+    (e.outlive && !(o && Px(t))) ||
+    (e.revealOk && !(o && Mx(t))) ||
     (e.revealAt && !(o && o.revealOrg && o.revealOrg === Fa(t)))
   );
 }
-function cg(e, t, o) {
+function fg(e, t, o) {
   if (e.needs)
     for (const [a, [n, r]] of Object.entries(e.needs)) {
       const i = t.stats[a];
@@ -7083,13 +7083,13 @@ function cg(e, t, o) {
   }
   return !0;
 }
-function fg(e, t) {
+function wg(e, t) {
   const o = t.org;
   return e === "none" ? !o : e === "any" ? !!o : !!o && o.type === e;
 }
-const Vk = { 엄지: 2, 검지: 2, 중지: 3, 약지: 2 },
-  Xk = { 엄지: !0 };
-function Gi(e) {
+const Qk = { 엄지: 2, 검지: 2, 중지: 3, 약지: 2 },
+  Zk = { 엄지: !0 };
+function Ki(e) {
   let t = 0;
   if (e.job === "해결사" && e.grade)
     e.flags.includes("특색") || e.grade <= 1
@@ -7105,7 +7105,7 @@ function Gi(e) {
     t = a >= o ? 4 : a >= o - 1 ? 3 : a >= 2 ? 2 : 1;
   } else
     we(e)
-      ? (t = hk(e))
+      ? (t = uk(e))
       : e.job === "검계"
         ? (t = qa(e))
         : e.job === "흑운회"
@@ -7114,20 +7114,20 @@ function Gi(e) {
   return (e.flags.includes("E.G.O개화") && (t = Math.max(t, 3)), t);
 }
 function Vn(e) {
-  return Math.max(Gi(e), Math.max(0, (e.pastPower || 0) - 1));
+  return Math.max(Ki(e), Math.max(0, (e.pastPower || 0) - 1));
 }
-const Qk = (e, t) => !e || (Vn(t) >= e[0] && Vn(t) <= e[1]),
-  rd = (e, t) => !e || (Vn(t) >= e[0] && Vn(t) <= e[1]);
-function wg(e) {
+const ex = (e, t) => !e || (Vn(t) >= e[0] && Vn(t) <= e[1]),
+  id = (e, t) => !e || (Vn(t) >= e[0] && Vn(t) <= e[1]);
+function gg(e) {
   return e.flags.includes("E.G.O개화")
     ? !1
     : e.job === "해결사"
       ? !!e.grade && e.grade <= 3
       : e.job === "손가락" && e.finger
-        ? (e.fingerRank || 1) >= (Vk[e.finger] || 2)
+        ? (e.fingerRank || 1) >= (Qk[e.finger] || 2)
         : !1;
 }
-function id(e, t) {
+function sd(e, t) {
   if (
     e.finger &&
     !(Array.isArray(e.finger) ? e.finger : [e.finger]).includes(t.finger)
@@ -7139,18 +7139,18 @@ function id(e, t) {
   }
   return !0;
 }
-function Zk(e, t, o) {
+function tx(e, t, o) {
   return !(
-    (t.pinky && Ok(e)) ||
+    (t.pinky && Ek(e)) ||
     (e.requires && !e.requires.every((a) => t.flags.includes(a))) ||
     (e.forbids && e.forbids.some((a) => t.flags.includes(a))) ||
     (e.jobs && !Jn(e.jobs, t)) ||
     (e.notJobs && Jn(e.notJobs, t)) ||
-    !rd(e.power, t) ||
-    (e.ego && !wg(t)) ||
-    (e.org && !fg(e.org, t)) ||
+    !id(e.power, t) ||
+    (e.ego && !gg(t)) ||
+    (e.org && !wg(e.org, t)) ||
     (e.orgName && !(t.org && e.orgName.includes(t.org.name))) ||
-    (e.orgOrJobs && !sg(e.orgOrJobs, t)) ||
+    (e.orgOrJobs && !lg(e.orgOrJobs, t)) ||
     (e.branch && !(we(t) && e.branch.includes(t.branch))) ||
     (e.wingRank &&
       !(
@@ -7158,10 +7158,10 @@ function Zk(e, t, o) {
         (t.wingRank || 1) >= e.wingRank[0] &&
         (t.wingRank || 1) <= e.wingRank[1]
       )) ||
-    (e.everJob && !xi(t, e.everJob)) ||
-    (e.neverJob && xi(t, e.neverJob)) ||
-    (e.regions && !ki(e.regions, o)) ||
-    (e.notRegions && ki(e.notRegions, o)) ||
+    (e.everJob && !vi(t, e.everJob)) ||
+    (e.neverJob && vi(t, e.neverJob)) ||
+    (e.regions && !xi(e.regions, o)) ||
+    (e.notRegions && xi(e.notRegions, o)) ||
     (e.blScar &&
       !(
         t.job === "해결사" ||
@@ -7172,15 +7172,15 @@ function Zk(e, t, o) {
     (e.kkBestAt && !(t.kk && Z(t.kk.best || 1, e.kkBestAt))) ||
     (e.kkWayAt && !(t.kk && Z(t.kk.way || 0, e.kkWayAt))) ||
     (e.bldRemAt && !(t.bld && Z(t.bld.rem || 0, e.bldRemAt))) ||
-    !id(e, t) ||
-    !ug(e, t) ||
+    !sd(e, t) ||
+    !cg(e, t) ||
     (e.age && !Z(t.age, e.age)) ||
-    (e.heirKong && !(Gr(t) >= e.heirKong)) ||
-    (e.rneeds && !cg({ rneeds: e.rneeds }, t, o)) ||
-    ((Ht(t) || t.flags.includes("시술금지서약")) && pk(e))
+    (e.heirKong && !(Kr(t) >= e.heirKong)) ||
+    (e.rneeds && !fg({ rneeds: e.rneeds }, t, o)) ||
+    ((Ht(t) || t.flags.includes("시술금지서약")) && kk(e))
   );
 }
-function Ll(e, t) {
+function Pl(e, t) {
   if (
     (e.needs &&
       e.orGrade &&
@@ -7207,15 +7207,15 @@ function Ll(e, t) {
       const r = t.stats[o];
       if (r < a)
         return h(
-          `${st[o]} ${a} 이상 필요`,
-          `Requires ${st[o]} ${a}+`,
-          `${st[o]} ${a}以上が必要`,
+          `${Je[o]} ${a} 이상 필요`,
+          `Requires ${Je[o]} ${a}+`,
+          `${Je[o]} ${a}以上が必要`,
         );
       if (r > n)
         return h(
-          `${st[o]} ${n} 이하일 때만`,
-          `Only with ${st[o]} ${n} or less`,
-          `${st[o]} ${n}以下のときのみ`,
+          `${Je[o]} ${n} 이하일 때만`,
+          `Only with ${Je[o]} ${n} or less`,
+          `${Je[o]} ${n}以下のときのみ`,
         );
     }
   if (e.grade) {
@@ -7229,22 +7229,22 @@ function Ll(e, t) {
   }
   return null;
 }
-function gg(e, t) {
+function mg(e, t) {
   return e.bias
     ? e.bias.startsWith("!")
       ? 0.3 + (10 - t[e.bias.slice(1)]) / 5
       : 0.3 + t[e.bias] / 5
     : 1;
 }
-function Rs(e, t) {
-  const o = (e.weight ?? 1) * (e.rankGate ? Ak : 1);
-  return e.chance == null ? o * gg(e, t) : o;
+function Cs(e, t) {
+  const o = (e.weight ?? 1) * (e.rankGate ? Sk : 1);
+  return e.chance == null ? o * mg(e, t) : o;
 }
-function ex(e, t, o, a) {
+function ox(e, t, o, a) {
   if (e.chance == null) return !0;
-  let n = e.chance * gg(e, t);
-  (e.rankGate && (n = Math.min(1, n * Yk)),
-    (e.rankGate || Ek.has(e.id)) && (n = Math.min(1, n * ao(a, 1.2, 1.1))),
+  let n = e.chance * mg(e, t);
+  (e.rankGate && (n = Math.min(1, n * Rk)),
+    (e.rankGate || Fk.has(e.id)) && (n = Math.min(1, n * no(a, 1.2, 1.1))),
     e.prosScale && (n *= Math.min(a.prosthetics || 0, 6)),
     e.regionMult &&
       e.regionMult[a.regionId] &&
@@ -7253,13 +7253,13 @@ function ex(e, t, o, a) {
     a.flags.includes(r) && (n *= i);
   return (e.noJobMult && !a.job && (n *= e.noJobMult), o.chance(n));
 }
-function tx(e, t) {
+function ax(e, t) {
   if (e <= 4) return t.chance(0.6) ? 1 : 0;
   const o = t.next();
   return o < 0.15 ? 0 : o < 0.55 ? 1 : o < 0.87 ? 2 : 3;
 }
-function sd(e, t) {
-  var v;
+function ld(e, t) {
+  var T;
   X = t;
   const o = oe(e),
     a = qe(t, e);
@@ -7268,17 +7268,17 @@ function sd(e, t) {
     return;
   }
   if (
-    (js[e.age] &&
+    (As[e.age] &&
       !e.reflections.some((_) => _.age === e.age) &&
       (e.prompt = {
         kind: "reflect",
         age: e.age,
-        question: js[e.age],
-        text: js[e.age],
+        question: As[e.age],
+        text: As[e.age],
         choices: [],
         t: 0,
       }),
-    $w(e))
+    Hw(e))
   ) {
     const _ = t.events.filter((C) => C.heir && Aa(C, e, a));
     _.length && _[0].forceGroup === "hh31"
@@ -7287,26 +7287,26 @@ function sd(e, t) {
     return;
   }
   if (Ho(e)) {
-    qb(e);
+    Kb(e);
     return;
   }
   if (So(e)) {
-    ox(e, t, a, o);
+    nx(e, t, a, o);
     return;
   }
-  (jk(e), Pk(e));
-  const n = t.events.filter((_) => Aa(_, e, a) && ex(_, a, o, e)),
+  (Yk(e), $k(e));
+  const n = t.events.filter((_) => Aa(_, e, a) && ox(_, a, o, e)),
     r = n.filter((_) => _.must && e.age >= _.age[1]).slice(0, 1),
     i = {};
   for (const _ of n)
     _.force &&
       !r.includes(_) &&
-      (i[(v = _.forceGroup || _.id)] ?? (i[v] = [])).push(_);
+      (i[(T = _.forceGroup || _.id)] ?? (i[T] = [])).push(_);
   for (const _ of Object.values(i)) r.push(o.pick(_));
   const l = r.some((_) => _.forceGroup === "bf_feed") ? 1 : 0;
   let s = 0,
     u = null;
-  if (oo(e) && o.chance(0.9)) {
+  if (ao(e) && o.chance(0.9)) {
     const _ = n.filter(
       (C) =>
         C.office &&
@@ -7314,44 +7314,44 @@ function sd(e, t) {
         !r.includes(C) &&
         !(C.major && r.some((R) => R.major)),
     );
-    ((u = o.weighted(_, (C) => Rs(C, a))), u && (r.push(u), (s = 1)));
+    ((u = o.weighted(_, (C) => Cs(C, a))), u && (r.push(u), (s = 1)));
   }
   let f = 0;
   if (
-    qi(e) &&
+    Gi(e) &&
     !r.some((_) => _.major) &&
-    o.chance(Math.min(1, Sk * ao(e, 1.2, 1.1)))
+    o.chance(Math.min(1, Ck * no(e, 1.2, 1.1)))
   ) {
     const _ = o.weighted(
       n.filter((C) => C.rankGate && !r.includes(C)),
-      (C) => Rs(C, a),
+      (C) => Cs(C, a),
     );
     _ && (r.push(_), (f = 1));
   }
-  let y = Math.max(tx(e.age, o) + l + s + f, r.length),
+  let y = Math.max(ax(e.age, o) + l + s + f, r.length),
     g = r.filter((_) => _.major).length,
-    k = r.filter(qo).length;
+    x = r.filter(qo).length;
   for (; r.length < y;) {
     const _ = n.filter(
         (R) =>
           !r.includes(R) &&
           !(R.major && g >= 1) &&
-          !(qo(R) && k >= 2) &&
-          !(R.office && oo(e)),
+          !(qo(R) && x >= 2) &&
+          !(R.office && ao(e)),
       ),
-      C = o.weighted(_, (R) => Rs(R, a));
+      C = o.weighted(_, (R) => Cs(R, a));
     if (!C) break;
-    (r.push(C), C.major && g++, qo(C) && k++);
+    (r.push(C), C.major && g++, qo(C) && x++);
   }
-  let x = 0;
+  let k = 0;
   e.job === "해결사" &&
     t.requests &&
     e.age >= 16 &&
-    (x = (o.chance(0.85) ? 1 : 0) + (e.org && o.chance(0.45) ? 1 : 0));
-  const T = Tg(e) && o.chance(Yx(e.age)),
-    Y = e.bf ? qx(e, o, r) : [],
-    c = Xb(e, o);
-  if (r.length === 0 && x === 0 && !T && !Y.length && !c.length) {
+    (k = (o.chance(0.85) ? 1 : 0) + (e.org && o.chance(0.45) ? 1 : 0));
+  const v = Tg(e) && o.chance(Rx(e.age)),
+    Y = e.bf ? Kx(e, o, r) : [],
+    c = Zb(e, o);
+  if (r.length === 0 && k === 0 && !v && !Y.length && !c.length) {
     const _ = e.recentDaily || [],
       C = (t.daily || []).filter((W) => Aa(W, e, a) && !_.includes(W.id)),
       R = o.weighted(C, (W) => (W.regions ? 2.2 : 1) * (W.weight ?? 1));
@@ -7366,12 +7366,12 @@ function sd(e, t) {
   }
   const m = [
     ...r.map((_) => ({ id: _.id })),
-    ...Array.from({ length: x }, () => ({ id: "request", req: !0 })),
+    ...Array.from({ length: k }, () => ({ id: "request", req: !0 })),
   ];
-  (T && m.push({ id: xg(e), warpEnter: !0 }),
+  (v && m.push({ id: vg(e), warpEnter: !0 }),
     e.fingerLeave &&
       e.age >= e.fingerLeave.at &&
-      (vg(e) && m.push({ id: "f_finger_leave", fingerLeave: !0 }),
+      (_g(e) && m.push({ id: "f_finger_leave", fingerLeave: !0 }),
       (e.fingerLeave = null)),
     m.push(...Y, ...c));
   const w = o.shuffle(m);
@@ -7380,8 +7380,8 @@ function sd(e, t) {
     e.plan.push({ ..._, t: Math.round(R * 1e3) / 1e3 });
   });
 }
-const Ju = { huntLegend: 0.25, maxYears: 5 };
-function ox(e, t, o, a) {
+const Vu = { huntLegend: 0.25, maxYears: 5 };
+function nx(e, t, o, a) {
   const n = e.bld,
     r = e.age - n.since;
   let i = !1;
@@ -7390,14 +7390,14 @@ function ox(e, t, o, a) {
       ? (n.noHunt = !1)
       : (n.huntNext ||
           (n.threat || 0) >= 3 ||
-          r >= Ju.maxYears ||
-          ((n.threat || 0) >= 2 && a.chance(Ju.huntLegend))) &&
+          r >= Vu.maxYears ||
+          ((n.threat || 0) >= 2 && a.chance(Vu.huntLegend))) &&
         (i = !0),
     i)
   ) {
     ((n.hunter =
       (n.threat || 0) >= 3
-        ? { type: "assoc", idx: a.pick(qw) }
+        ? { type: "assoc", idx: a.pick(Gw) }
         : {
             type: "office",
             idx: a.int(0, Math.max(0, (t.orgs.office || []).length - 1)),
@@ -7415,7 +7415,7 @@ function ox(e, t, o, a) {
       (e.last.bl_d_pass = e.age),
       e.plan.push({ id: "bl_d_pass", chain: !0, t: 0.4 }));
 }
-const ld = 0.55,
+const hd = 0.55,
   Ga = [0.5, 1.5, 3, 4.5, 6.5, 8.5];
 function rr(e) {
   let t = 10 - (e.grade || 9);
@@ -7428,7 +7428,7 @@ function rr(e) {
     t
   );
 }
-function mg(e) {
+function yg(e) {
   const t = rr(e);
   let o = 0;
   return (
@@ -7438,22 +7438,22 @@ function mg(e) {
     o
   );
 }
-function Vu(e, t, o) {
+function Xu(e, t, o) {
   const a = Ga[t] - rr(e);
-  let n = 0.025 * Math.pow(1.85, a) * ld;
+  let n = 0.025 * Math.pow(1.85, a) * hd;
   return (
     (n *= o === "bold" ? 1.3 : 0.45),
     e.org && (n *= 0.85),
     (n *= P(1 + (50 - e.stats.health) / 150, 0.7, 1.5)),
     (n *= 1.15 - e.stats.network * 0.006),
     e.bf && e.bf.vigor && (n *= 0.75),
-    (n *= ao(e, 0.8, 0.9)),
+    (n *= no(e, 0.8, 0.9)),
     P(n, 0.005, 0.92)
   );
 }
-function Pl(e, t, o) {
+function Ml(e, t, o) {
   const a = Ga[t] - rr(e),
-    n = (e.bf && e.bf.vigor ? 0.1 : 0) + (ao(e, 1.08, 1.04) - 1);
+    n = (e.bf && e.bf.vigor ? 0.1 : 0) + (no(e, 1.08, 1.04) - 1);
   return o === "bold"
     ? P(0.68 - 0.12 * a + n, 0.12, 0.95)
     : P(0.82 - 0.12 * a + n, 0.2, 0.97);
@@ -7468,11 +7468,11 @@ function Go(e) {
     e.stats.rep >= 50 && (o *= 0.85),
     e.flags.includes("좋은의체") && (o *= 0.97),
     e.flags.includes("강화시술") && (o *= 0.93),
-    (o *= ao(e, 0.8, 0.9)),
+    (o *= no(e, 0.8, 0.9)),
     Math.max(1, Math.round(o))
   );
 }
-function ax(e, t, o) {
+function rx(e, t, o) {
   const a = Ga[t] - rr(e),
     n = P(1 + a * 0.35, 0.4, 2.5);
   return Math.max(
@@ -7485,10 +7485,10 @@ function ax(e, t, o) {
     ),
   );
 }
-const nx = [3, 5, 8, 13, 20, 32, 50],
-  rx = [2, 3, 5, 8, 12, 18, 26];
-function ix(e, t, o) {
-  const a = mg(e),
+const ix = [3, 5, 8, 13, 20, 32, 50],
+  sx = [2, 3, 5, 8, 12, 18, 26];
+function lx(e, t, o) {
+  const a = yg(e),
     n = o.weighted(
       [
         [-1, 18],
@@ -7497,47 +7497,47 @@ function ix(e, t, o) {
         [2, 9],
         [3, 3],
       ],
-      (T) => T[1],
+      (v) => v[1],
     )[0],
     r = e.org && e.org.type === "assoc" && o.chance(0.35) ? 1 : 0,
     i = P(a + n + r, 0, Ga.length - 1),
     l = e.org ? e.org.name : null,
-    s = t.requests.filter((T) => !T.org || T.org === l);
-  let u = s.filter((T) => i >= T.tiers[0] && i <= T.tiers[1]);
-  u.length || (u = s.filter((T) => T.tiers[1] >= i - 1 && T.tiers[0] <= i + 1));
+    s = t.requests.filter((v) => !v.org || v.org === l);
+  let u = s.filter((v) => i >= v.tiers[0] && i <= v.tiers[1]);
+  u.length || (u = s.filter((v) => v.tiers[1] >= i - 1 && v.tiers[0] <= i + 1));
   const f = e.recentReq || [],
-    y = u.filter((T) => !f.includes(T.id));
+    y = u.filter((v) => !f.includes(v.id));
   let g = y.length ? y : u;
-  const k = wb[l];
-  if (k && o.chance(k.p)) {
-    const T = s.filter((m) => k.types.includes(m.type));
-    let Y = T.filter((m) => m.tiers[0] <= i + 1 && m.tiers[1] >= i - 1);
+  const x = mb[l];
+  if (x && o.chance(x.p)) {
+    const v = s.filter((m) => x.types.includes(m.type));
+    let Y = v.filter((m) => m.tiers[0] <= i + 1 && m.tiers[1] >= i - 1);
     if (!Y.length) {
-      const m = (v) =>
-          Math.min(Math.abs(v.tiers[0] - i), Math.abs(v.tiers[1] - i)),
-        w = Math.min(...T.map(m));
-      Y = T.filter((v) => m(v) === w);
+      const m = (T) =>
+          Math.min(Math.abs(T.tiers[0] - i), Math.abs(T.tiers[1] - i)),
+        w = Math.min(...v.map(m));
+      Y = v.filter((T) => m(T) === w);
     }
     const c = Y.filter((m) => !f.includes(m.id));
     Y.length && (g = c.length ? c : Y);
   }
-  const x = o.pick(g);
-  return ((e.recentReq = [...f, x.id].slice(-8)), { tpl: x.id, tier: i });
+  const k = o.pick(g);
+  return ((e.recentReq = [...f, k.id].slice(-8)), { tpl: k.id, tier: i });
 }
-function Xu(e, t) {
+function Qu(e, t) {
   const o = e < 0.01 ? 0 : Math.round(e * 100),
     a = Math.round((1 - e) * t * 100);
   return { ok: a, fail: Math.max(0, 100 - a - o), die: o, tiny: e < 0.01 };
 }
-function sx(e, t, o, a) {
-  const n = ix(e, t, o),
-    r = t.requests.find((x) => x.id === n.tpl);
+function hx(e, t, o, a) {
+  const n = lx(e, t, o),
+    r = t.requests.find((k) => k.id === n.tpl);
   if (r.text.includes("{환상체}")) {
-    const T = (t.orgs.abnormal || []).filter(
+    const v = (t.orgs.abnormal || []).filter(
       (Y) => n.tier >= Y.tiers[0] && n.tier <= Y.tiers[1] && (!Y.aleph || !1),
     );
     n.abn = (
-      o.pick(T.length ? T : t.orgs.abnormal) || {
+      o.pick(v.length ? v : t.orgs.abnormal) || {
         name: h("환상체", "an Abnormality", "幻想体"),
       }
     ).name;
@@ -7550,8 +7550,8 @@ function sx(e, t, o, a) {
       ),
     },
     l = t.orgs.tiers[n.tier],
-    s = Vu(e, n.tier, "bold"),
-    u = Vu(e, n.tier, "care"),
+    s = Xu(e, n.tier, "bold"),
+    u = Xu(e, n.tier, "care"),
     f = e.org ? e.org.name : h("개인", "Freelance", "個人"),
     y = `${i.text}`;
   L(
@@ -7568,8 +7568,8 @@ function sx(e, t, o, a) {
     },
     a,
   );
-  const g = t.orgs.tiers[mg(e)],
-    k =
+  const g = t.orgs.tiers[yg(e)],
+    x =
       e.grade > 1
         ? h(
             ` · 승급 공적 ${e.merit || 0}/${Go(e)}`,
@@ -7583,21 +7583,21 @@ function sx(e, t, o, a) {
     text: y,
     badge: `${l} · ${An(i.type)}`,
     sub: h(
-      `${f} · ${ve(e)} (적정 등급: ${g})${k}`,
-      `${f} · ${ve(e)} (suited for: ${g})${k}`,
-      `${f} · ${ve(e)} (適正等級: ${g})${k}`,
+      `${f} · ${Te(e)} (적정 등급: ${g})${x}`,
+      `${f} · ${Te(e)} (suited for: ${g})${x}`,
+      `${f} · ${Te(e)} (適正等級: ${g})${x}`,
     ),
     choices: [
       {
         label: h("정면으로 해치운다", "Go in head-on", "正面から片付ける"),
         pay: h("보수 많음", "higher pay", "報酬多め"),
-        odds: Xu(s, Pl(e, n.tier, "bold")),
+        odds: Qu(s, Ml(e, n.tier, "bold")),
         i: 0,
       },
       {
         label: h("신중하게 처리한다", "Handle it carefully", "慎重に処理する"),
         pay: h("보수 적음", "lower pay", "報酬少なめ"),
-        odds: Xu(u, Pl(e, n.tier, "care")),
+        odds: Qu(u, Ml(e, n.tier, "care")),
         i: 1,
       },
       {
@@ -7610,7 +7610,7 @@ function sx(e, t, o, a) {
     rare: n.tier >= 5,
   };
 }
-function lx(e, t, o, a, n) {
+function dx(e, t, o, a, n) {
   const r = oe(e),
     i = o.req,
     l = t.requests.find((c) => c.id === i.tpl);
@@ -7641,9 +7641,9 @@ function lx(e, t, o, a, n) {
       const c = z(t, "bf_bitten");
       bt(e, t, c, o.t, { ...u, kind: "result" });
     },
-    k = l.bite && !e.bf && !e.pinky && z(t, "bf_bitten");
+    x = l.bite && !e.bf && !e.pinky && z(t, "bf_bitten");
   if (r.chance(y)) {
-    if (k && r.chance(0.3)) return g();
+    if (x && r.chance(0.3)) return g();
     ((e.deathContext = h(
       `${t.orgs.tiers[i.tier]} 등급의 ${i.abn ? `'${i.abn}' ` : ""}${l.type} 의뢰 도중`,
       `during a ${t.orgs.tiers[i.tier]} ${An(l.type)} request${i.abn ? ` against '${i.abn}'` : ""}`,
@@ -7652,40 +7652,40 @@ function lx(e, t, o, a, n) {
       bt(e, t, { text: l.death, death: l.cause }, o.t, u));
     return;
   }
-  const x = i.tier;
-  Ga[x] - rr(e);
-  const T =
+  const k = i.tier;
+  Ga[k] - rr(e);
+  const v =
       (f === "bold" ? 1.5 : 0.7) *
       (e.org ? (e.org.type === "assoc" ? 1.2 : 1) : 0.85),
-    Y = l.type === "뒤틀림" || l.type.includes("환상체") || x >= 5;
-  if (r.chance(Pl(e, x, f))) {
+    Y = l.type === "뒤틀림" || l.type.includes("환상체") || k >= 5;
+  if (r.chance(Ml(e, k, f))) {
     let c = 0;
     if (e.grade > 1) {
-      e.merit = (e.merit || 0) + ax(e, x, f);
+      e.merit = (e.merit || 0) + rx(e, k, f);
       const w = Go(e);
       e.merit >= w && ((e.merit -= w), (c = 1));
     }
     const m = {
       text: r.pick(l.ok),
       effects: {
-        wealth: Math.round(nx[x] * T),
-        rep: Math.round(rx[x] * (f === "bold" ? 1.3 : 0.8)),
-        health: f === "bold" ? -Math.round(1 + x * 0.6) : 0,
-        sanity: Y ? -Math.round(1 + x * 0.45) : 0,
+        wealth: Math.round(ix[k] * v),
+        rep: Math.round(sx[k] * (f === "bold" ? 1.3 : 0.8)),
+        health: f === "bold" ? -Math.round(1 + k * 0.6) : 0,
+        sanity: Y ? -Math.round(1 + k * 0.45) : 0,
       },
       gradeUp: c,
     };
-    (x >= 5 && r.chance(0.3) && (m.flagsAdd = ["환상체생존"]),
-      (e.bestReq = Math.max(e.bestReq ?? -1, x)),
+    (k >= 5 && r.chance(0.3) && (m.flagsAdd = ["환상체생존"]),
+      (e.bestReq = Math.max(e.bestReq ?? -1, k)),
       bt(e, t, m, o.t, u));
   } else {
-    if (k && r.chance(0.06)) return g();
+    if (x && r.chance(0.06)) return g();
     const c = {
       text: r.pick(l.fail),
       effects: {
-        health: -Math.round(5 + x * 1.3),
-        sanity: -Math.round(3 + x * 0.7),
-        rep: -Math.max(1, x),
+        health: -Math.round(5 + k * 1.3),
+        sanity: -Math.round(3 + k * 0.7),
+        rep: -Math.max(1, k),
       },
     };
     bt(e, t, c, o.t, u);
@@ -7695,11 +7695,11 @@ function Eo(e, t, o, a) {
   const n = qe(t, e),
     r = [];
   (o.choices.forEach((l, s) => {
-    if (!Zk(l, e, n)) return;
-    const u = Ll(l, e),
+    if (!tx(l, e, n)) return;
+    const u = Pl(l, e),
       f = l.dream && [].concat(l.dream).some((g) => e.flags.includes(g)),
       y =
-        Tt(l.label, n, e) +
+        vt(l.label, n, e) +
         (f ? h(" (어릴 적 꿈)", " (childhood dream)", "（幼い頃の夢）") : "");
     r.push(
       u
@@ -7708,8 +7708,8 @@ function Eo(e, t, o, a) {
     );
   }),
     r.some((l) => !l.locked) ||
-      r.push({ label: Tt(o.choices[0].label, n, e), i: 0 }));
-  const i = Tt(o.text, n, e);
+      r.push({ label: vt(o.choices[0].label, n, e), i: 0 }));
+  const i = vt(o.text, n, e);
   (L(e, { kind: "event", text: i, tone: o.rare ? "rare" : "event" }, a),
     (e.prompt = {
       kind: o.major ? "major" : "minor",
@@ -7719,18 +7719,18 @@ function Eo(e, t, o, a) {
       ignoreLabel: o.major
         ? null
         : o.ignoreLabel || h("흘려보낸다", "Let it pass", "やり過ごす"),
-      remainingMs: o.major ? null : jw,
+      remainingMs: o.major ? null : Aw,
       t: a,
       rare: !!o.rare,
     }));
 }
-function hx(e, t) {
+function ux(e, t) {
   X = t;
   const o = e.plan[e.cursor];
   if (!o) return !1;
   e.cursor++;
   const a = qe(t, e);
-  if (o.dr) return Gb(e, t, o);
+  if (o.dr) return zb(e, t, o);
   if (o.banner) {
     const r = h(
       "가주 심사가 시작되었다.",
@@ -7750,9 +7750,9 @@ function hx(e, t) {
       !0
     );
   }
-  if (o.req) return (e.job !== "해결사" || sx(e, t, oe(e), o.t), !0);
+  if (o.req) return (e.job !== "해결사" || hx(e, t, oe(e), o.t), !0);
   if (o.daily) {
-    const r = Pw(t, o.id);
+    const r = Mw(t, o.id);
     return r
       ? (Aa(r, e, a) &&
           bt(e, t, r, o.t, { kind: "daily", tone: "daily", eventId: r.id }),
@@ -7765,7 +7765,7 @@ function hx(e, t) {
       !r ||
         !e.bf ||
         e.dead ||
-        (r.id === "bf_hunt" && Hx(e),
+        (r.id === "bf_hunt" && qx(e),
         e.last || (e.last = {}),
         (e.last[r.id] = e.age),
         qo(r)
@@ -7779,7 +7779,7 @@ function hx(e, t) {
     return (
       !r ||
         e.dead ||
-        !vg(e) ||
+        !_g(e) ||
         (e.last || (e.last = {}), (e.last[r.id] = e.age), Eo(e, t, r, o.t)),
       !0
     );
@@ -7788,7 +7788,7 @@ function hx(e, t) {
     const r = z(t, o.id);
     if (!r || e.dead || e.prompt) return !0;
     if (o.lakeEnter) {
-      if (!zw(e)) return !0;
+      if (!Uw(e)) return !0;
       o.id !== "lk_drink" && (e.lakeOffered = !0);
     }
     return (
@@ -7803,7 +7803,7 @@ function hx(e, t) {
     return (
       !r ||
         !Tg(e) ||
-        xg(e) !== r.id ||
+        vg(e) !== r.id ||
         (e.last || (e.last = {}), (e.last[r.id] = e.age), Eo(e, t, r, o.t)),
       !0
     );
@@ -7815,7 +7815,7 @@ function hx(e, t) {
     const r = oe(e),
       i = (t.orgs[n.offer] || []).filter(
         (s) =>
-          (!e.org || s.name !== e.org.name) && (!Mu[s.name] || Mu[s.name](e)),
+          (!e.org || s.name !== e.org.name) && (!$u[s.name] || $u[s.name](e)),
       ),
       l = r.pick(i);
     e.offer = l ? { type: n.offer, name: l.name } : null;
@@ -7835,7 +7835,7 @@ function hx(e, t) {
     !0
   );
 }
-function dx(e) {
+function cx(e) {
   const t = 9 - (e.grade || 9),
     o =
       (e.flags.includes("좋은의체") ? 1.05 : 1) *
@@ -7847,7 +7847,7 @@ function dx(e) {
       ? (1.7 * o) / (1 + 0.015 * t * t)
       : o / (1 + 0.06 * t * t);
 }
-function Qu(e) {
+function Zu(e) {
   const t = (e.fingerRank || 1) - 1,
     o =
       (e.flags.includes("좋은의체") ? 1.05 : 1) *
@@ -7859,18 +7859,18 @@ function Qu(e) {
       ? (1.7 * o) / (1 + 0.6 * t * t)
       : o / (1 + 3 * t * t);
 }
-function Ml(e) {
+function $l(e) {
   const t =
     e.job === "해결사" ||
     e.job === "손가락" ||
     e.job === "검계" ||
     e.job === "흑운회" ||
     we(e)
-      ? Gi(e)
+      ? Ki(e)
       : 0;
   e.pastPower = Math.max(e.pastPower || 0, t);
 }
-function ux(e, t, o) {
+function fx(e, t, o) {
   const a = oe(e),
     n = qe(t, e);
   e.bf ||
@@ -7894,12 +7894,12 @@ function ux(e, t, o) {
   if (o === "stray")
     return (
       e.flags.includes("떠돌이") || e.flags.push("떠돌이"),
-      Ww(e, ["떠돌이"]),
+      Ew(e, ["떠돌이"]),
       null
     );
   if (
-    (Ml(e),
-    e.job === "해결사" && $l(e),
+    ($l(e),
+    e.job === "해결사" && Hl(e),
     e.org && (e.orgHistory.push(e.org.name), (e.org = null)),
     e.finger)
   )
@@ -7922,17 +7922,17 @@ function ux(e, t, o) {
     (e.wingRank = null),
     (e.branch = null),
     ie(e, { k: "job", job: "권속" }),
-    ve(e)
+    Te(e)
   );
 }
-function $l(e) {
+function Hl(e) {
   e.flags = e.flags.filter((t) => t !== "특색");
 }
-function cx(e) {
+function wx(e) {
   const t = (e.pastPower || 0) - 1;
   return t >= 3 ? 3 : t === 2 ? 5 : t === 1 ? 8 : 9;
 }
-function fx(e, t) {
+function gx(e, t) {
   const o = Ot[e].length;
   return t >= 6
     ? 1
@@ -7942,25 +7942,25 @@ function fx(e, t) {
         ? Math.min(o, e === "중지" ? 3 : 2)
         : Math.max(1, o - 1);
 }
-function wx(e, t) {
+function mx(e, t) {
   const o = Ot[t].length,
     a = (e.pastPower || 0) - 1;
   return a >= 3 ? Math.max(1, o - 1) : a === 2 ? Math.min(2, o - 1) : 1;
 }
-const gx = (e) =>
+const yx = (e) =>
   e.job === "해결사" && !!e.grade && (e.flags.includes("특색") || e.grade <= 3);
-function mx(e, t) {
+function px(e, t) {
   if (
-    (t.pinky && Bl(e)) ||
-    (e.fingerRank && !id({ fingerRank: e.fingerRank }, t)) ||
-    (e.top3 != null && e.top3 !== gx(t)) ||
-    (e.death === "뒤틀림" && Je(t)) ||
+    (t.pinky && Fl(e)) ||
+    (e.fingerRank && !sd({ fingerRank: e.fingerRank }, t)) ||
+    (e.top3 != null && e.top3 !== yx(t)) ||
+    (e.death === "뒤틀림" && Ve(t)) ||
     (e.kxFitAt && !Z((t.kx && t.kx.fit) || 0, e.kxFitAt))
   )
     return 0;
   if (e.exact) return e.w ?? 1;
   if (e.blDistort != null) {
-    const a = _b(t);
+    const a = Ab(t);
     return e.blDistort ? a * 100 : (1 - a) * 50;
   }
   if (e.hatch) {
@@ -7975,7 +7975,7 @@ function mx(e, t) {
   }
   let o = e.w ?? 1;
   if (
-    (e.death && (o *= ld),
+    (e.death && (o *= hd),
     e.death &&
       t.bf &&
       t.bf.vigor &&
@@ -7983,14 +7983,14 @@ function mx(e, t) {
       (o *= 0.75),
     e.death &&
       (we(t) || t.job === "손가락" || t.job === "검계" || t.job === "흑운회") &&
-      (o *= ao(t, 0.8, 0.9)),
+      (o *= no(t, 0.8, 0.9)),
     (e.fingerUp > 0 || e.wingUp > 0 || e.kkUp || e.blUp || e.gradeUp > 0) &&
-      (o *= ao(t, 1.15, 1.07)),
-    e.gradeUp > 0 && t.job === "해결사" && (o *= dx(t)),
-    e.fingerUp > 0 && t.finger && !e.topRank && !Ba(t) && (o *= Qu(t)),
-    e.rmerit > 0 && t.finger && (o *= Qu(t)),
-    e.wingUp > 0 && we(t) && !Ba(t) && (o *= $k(t)),
-    !rd(e.power, t))
+      (o *= no(t, 1.15, 1.07)),
+    e.gradeUp > 0 && t.job === "해결사" && (o *= cx(t)),
+    e.fingerUp > 0 && t.finger && !e.topRank && !Ba(t) && (o *= Zu(t)),
+    e.rmerit > 0 && t.finger && (o *= Zu(t)),
+    e.wingUp > 0 && we(t) && !Ba(t) && (o *= Dk(t)),
+    !id(e.power, t))
   )
     return 0;
   for (const a of e.wPower || []) {
@@ -8008,16 +8008,16 @@ function mx(e, t) {
   }
   return o;
 }
-function yg(e) {
+function pg(e) {
   return e >= 20
     ? 0
     : e <= 0
       ? 1
       : Math.min(1, 0.015 * Math.pow(2, (20 - e) / 3.2));
 }
-function yx(e, t, o) {
+function bx(e, t, o) {
   if (!e.bf || e.bf.kind !== "stray" || !o.eventId) return 1;
-  const a = z(t, o.eventId) || Pw(t, o.eventId);
+  const a = z(t, o.eventId) || Mw(t, o.eventId);
   return !a || !a.bf || a.bf === "none" || a.forceGroup || a.noBoost ? 1 : 2;
 }
 function bt(e, t, o, a, n = {}) {
@@ -8031,7 +8031,7 @@ function bt(e, t, o, a, n = {}) {
   }
   if (
     (e.pinky &&
-      Wk(i) &&
+      Bk(i) &&
       (i = {
         text: h(
           "당신은 이미 한 자루를 보유하고 있다.",
@@ -8041,21 +8041,21 @@ function bt(e, t, o, a, n = {}) {
       }),
     i.outcomes)
   ) {
-    const b = Wb(i.outcomes, e);
-    i = r.weighted(b, (I) => mx(I, e)) || b[0];
+    const b = Bb(i.outcomes, e);
+    i = r.weighted(b, (I) => px(I, e)) || b[0];
   }
   i.bloomAlt &&
     (i.death === "뒤틀림" || i.bldStart) &&
-    r.chance(jb(e)) &&
+    r.chance(Yb(e)) &&
     (i = i.bloomAlt);
   const l = e.job,
     s = {},
-    u = yx(e, t, n),
+    u = bx(e, t, n),
     f =
-      Je(e) && n.eventId && n.eventId.startsWith("kx")
+      Ve(e) && n.eventId && n.eventId.startsWith("kx")
         ? Pt.drain
         : Ht(e) && n.eventId && n.eventId.startsWith("nh_")
-          ? Zw(e, "drain")
+          ? eg(e, "drain")
           : 1;
   if (i.effects)
     for (const [b, I] of Object.entries(i.effects)) {
@@ -8065,7 +8065,7 @@ function bt(e, t, o, a, n = {}) {
       const F = Math.round(e.stats[b] - A);
       F && (s[b] = F);
     }
-  if (i.kxHp && Je(e) && e.stats.health > 0) {
+  if (i.kxHp && Ve(e) && e.stats.health > 0) {
     const b = e.stats.health;
     ((e.stats.health = r.chance(Pt.hpChoiceP) ? 0 : Math.max(0, b - Pt.hpMiss)),
       (s.health = (s.health || 0) + Math.round(e.stats.health - b)));
@@ -8077,13 +8077,13 @@ function bt(e, t, o, a, n = {}) {
       (e.kx.fit = P((e.kx.fit || 0) + i.kxFit, 0, 5)),
     n.eventId === "nh_canned_rite" && Ht(e))
   ) {
-    const b = Di(e);
+    const b = qi(e);
     ((b.rites = (b.rites || 0) + 1),
       (b.riteAge = e.age),
       (i.nhFaith || 0) > 0 && (b.ate = (b.ate || 0) + 1));
   }
-  (typeof i.nhFaith == "number" && mk(e, i.nhFaith, t, a),
-    Ww(
+  (typeof i.nhFaith == "number" && pk(e, i.nhFaith, t, a),
+    Ew(
       e,
       (i.flagsAdd || []).filter((b) => !e.flags.includes(b)),
     ),
@@ -8101,10 +8101,10 @@ function bt(e, t, o, a, n = {}) {
   if (!i.death) {
     const b = n.eventId ? z(t, n.eventId) : null;
     (b &&
-      hg(b) &&
+      dg(b) &&
       ((i.flagsAdd || []).includes("가정")
         ? e.partnerName || (g = "spouse")
-        : e.flags.includes("가정") || Uk(e)),
+        : e.flags.includes("가정") || Vk(e)),
       (i.flagsAdd || []).includes("연인") && !e.partnerName && (g = "lover"));
   }
   if (Ba(e)) {
@@ -8150,10 +8150,10 @@ function bt(e, t, o, a, n = {}) {
         (b) => !["의체", "좋은의체", "전투의체", "최고급의체"].includes(b),
       )));
   }
-  let k = null;
-  i.bfTurn && (k = ux(e, t, i.bfTurn));
-  const x = [];
-  let T = null;
+  let x = null;
+  i.bfTurn && (x = fx(e, t, i.bfTurn));
+  const k = [];
+  let v = null;
   if (e.bf) {
     const b = e.bf;
     let I = typeof i.thirst == "number" ? i.thirst * u : null;
@@ -8162,12 +8162,12 @@ function bt(e, t, o, a, n = {}) {
       i.tithe && (b.tithe = !0),
       i.pack &&
         I < 0 &&
-        ((I *= rg(b)),
+        ((I *= ig(b)),
         (b.packUses = (b.packUses || 0) + (i.feedPack ? 2 : 1)),
         i.feedPack &&
           r.chance(ae.pack.spoil) &&
           ((I /= 2),
-          x.push(
+          k.push(
             h(
               " 차갑고 비렸다. 반쯤 상해 있었다.",
               " It was cold and rank. Half of it had gone bad.",
@@ -8176,7 +8176,7 @@ function bt(e, t, o, a, n = {}) {
           ))),
       i.barUse &&
         I < 0 &&
-        ((I *= nd(b)), (b.barUses = (b.barUses || 0) + (i.feedBar ? 2 : 1))),
+        ((I *= rd(b)), (b.barUses = (b.barUses || 0) + (i.feedBar ? 2 : 1))),
       i.feedRation &&
         ((b.rations = (b.rations || 0) + 1),
         b.tithe && I < 0 && ((I *= 1.5), (b.tithe = !1))),
@@ -8208,7 +8208,7 @@ function bt(e, t, o, a, n = {}) {
       const K = Math.round(e.stats.wealth - ee);
       (K && (s.wealth = (s.wealth || 0) + K),
         (b.heat += i.bagBite ? 2 : ae.biteHeat + (F === 2 ? ae.richHeat : 0)),
-        x.push(
+        k.push(
           [
             h(
               " 주머니에는 아무것도 없었다.",
@@ -8228,7 +8228,7 @@ function bt(e, t, o, a, n = {}) {
           ][F],
         ),
         (b.wither || 0) >= 2 &&
-          x.push(
+          k.push(
             h(
               " 거울 속 얼굴이 돌아왔다.",
               " The face in the mirror came back.",
@@ -8240,12 +8240,12 @@ function bt(e, t, o, a, n = {}) {
         i.feedBite &&
           e.age >= 16 &&
           ((b.bagsMade || 0) < 3 || b.made < 2) &&
-          (T = "bf_bag_make"));
+          (v = "bf_bag_make"));
     }
     (i.barUse && (b.barUsed = e.age),
       i.barShort && (b.barShort = e.age + 1),
       i.kinMake && (b.made = Math.min(2, b.made + 1)),
-      i.kinLose && cd(e) > 0 && (b.lost = Math.min(b.made, b.lost + 1)),
+      i.kinLose && fd(e) > 0 && (b.lost = Math.min(b.made, b.lost + 1)),
       i.bagMake &&
         ((b.bags ?? (b.bags = [])).push(e.age + r.int(6, 10)),
         (b.bagsMade = (b.bagsMade || 0) + 1)),
@@ -8287,7 +8287,7 @@ function bt(e, t, o, a, n = {}) {
       (typeof i.tyr == "number" && (e.rule.tyr += i.tyr),
       typeof i.human == "number" &&
         (e.rule.human = Math.max(0, e.rule.human + i.human)),
-      i.ruleLine && e.rule.lines.push(Tt(i.ruleLine, qe(t, e), e))),
+      i.ruleLine && e.rule.lines.push(vt(i.ruleLine, qe(t, e), e))),
     e.job === "해결사" &&
       e.flags.includes("특색") &&
       e.grade &&
@@ -8296,19 +8296,19 @@ function bt(e, t, o, a, n = {}) {
   const c = qe(t, e);
   let m = n.tone,
     w = null,
-    v = null;
+    T = null;
   const _ = [];
-  (x.length && _.push((b) => b + x.join("")),
-    (i.joinFinger || i.job || i.clearJob) && Ml(e),
+  (k.length && _.push((b) => b + k.join("")),
+    (i.joinFinger || i.job || i.clearJob) && $l(e),
     (i.blFixer || l === "떠돌이 검객") &&
       i.job === "해결사" &&
       e.job !== "해결사" &&
-      (e.grade = Dw(e)));
+      (e.grade = qw(e)));
   const C =
     i.wingRetire && we(e) ? { 1: 5, 2: 3, 3: 1 }[e.wingRank || 1] || 5 : null;
   if (i.joinFinger) {
     const b =
-      i.gradeRank && e.grade ? fx(i.joinFinger, e.grade) : wx(e, i.joinFinger);
+      i.gradeRank && e.grade ? gx(i.joinFinger, e.grade) : mx(e, i.joinFinger);
     if (
       ((e.job = "손가락"),
       (e.work = null),
@@ -8321,7 +8321,7 @@ function bt(e, t, o, a, n = {}) {
         finger: e.finger,
         rankName: gt(e.finger, 1, e.gender),
       }),
-      Ax(e, r),
+      Sx(e, r),
       b > 1)
     ) {
       ie(e, { k: "frank", rankName: gt(e.finger, b, e.gender) });
@@ -8338,11 +8338,11 @@ function bt(e, t, o, a, n = {}) {
             ),
         ));
     }
-    ((w = ve(e)), (m = "rare"));
+    ((w = Te(e)), (m = "rare"));
   } else if (i.job) {
     const b = i.job === "사원" ? i.work || "날개 직원" : null,
-      I = i.job === "해결사" && !e.grade ? C || cx(e) : null;
-    (e.job === "해결사" && i.job !== "해결사" && $l(e),
+      I = i.job === "해결사" && !e.grade ? C || wx(e) : null;
+    (e.job === "해결사" && i.job !== "해결사" && Hl(e),
       (i.job !== e.job || b !== e.work) &&
         ie(e, {
           k: "job",
@@ -8366,15 +8366,15 @@ function bt(e, t, o, a, n = {}) {
       b === "이단 심문관" &&
         A !== b &&
         (e.nh = { faith: Be.start, since: e.age, rites: 0, ate: 0, best: 1 }),
-      qr[b] && A !== b)
+      Gr[b] && A !== b)
     ) {
-      ((e.wingRank = b === "4무리" && e.cloneRank ? e.cloneRank : Mk(e, b)),
+      ((e.wingRank = b === "4무리" && e.cloneRank ? e.cloneRank : Hk(e, b)),
         (e.wingBest = Math.max(e.wingBest || 0, e.wingRank)),
         (e.branch =
           b === "흑수"
             ? i.branch || oe(e).pick(["묘", "오", "사", "유", "미"])
             : b === "4무리"
-              ? i.branch || e.cloneTeam || oe(e).pick(Mw)
+              ? i.branch || e.cloneTeam || oe(e).pick($w)
               : null));
       const S = b === "4무리" && !!e.cloneRank;
       (b === "4무리" && ((e.rOver = 0), (e.rMis = 0), (e.cloneRank = null)),
@@ -8392,7 +8392,7 @@ function bt(e, t, o, a, n = {}) {
                 ),
             )),
         (m = "rare"));
-    } else qr[b] || ((e.wingRank = null), (e.branch = null));
+    } else Gr[b] || ((e.wingRank = null), (e.branch = null));
     if (i.job === "해결사" && !e.grade && ((e.grade = I || 9), e.grade < 9)) {
       ie(e, { k: "grade", grade: e.grade });
       const S = e.grade;
@@ -8411,11 +8411,11 @@ function bt(e, t, o, a, n = {}) {
             ),
         ));
     }
-    ((w = ve(e)),
+    ((w = Te(e)),
       i.job !== "해결사" && (e.grade = null),
       (e.finger = null),
       (e.fingerRank = null),
-      Hh.includes(b || i.job) && (m = "rare"));
+      Dh.includes(b || i.job) && (m = "rare"));
   }
   if (
     (i.joinOffer &&
@@ -8434,11 +8434,11 @@ function bt(e, t, o, a, n = {}) {
     i.clearJob && e.job)
   ) {
     if (
-      (e.job === "해결사" && $l(e),
+      (e.job === "해결사" && Hl(e),
       (e.wingRank = null),
       (e.branch = null),
       ie(e, { k: "quit", job: e.work || e.job, finger: e.finger }),
-      (e.lastJob = ve(e)),
+      (e.lastJob = Te(e)),
       e.org && (e.orgHistory.push(e.org.name), (e.org = null)),
       e.finger)
     )
@@ -8455,11 +8455,11 @@ function bt(e, t, o, a, n = {}) {
     e.finger &&
     !i.fingerUp &&
     (e.fingerRank || 1) < Ot[e.finger].length - 1 &&
-    r.chance(Fk);
+    r.chance(Pk);
   if ((i.fingerUp || R) && e.finger) {
     const b = e.fingerRank || 1,
       I = Ot[e.finger].length,
-      A = Xk[e.finger] && !i.topRank ? I - 1 : I,
+      A = Zk[e.finger] && !i.topRank ? I - 1 : I,
       S = e.rmerit || 0;
     ((e.fingerRank = P(b + (i.fingerUp || 1), 1, Math.max(A, b))),
       e.fingerRank !== b &&
@@ -8475,13 +8475,13 @@ function bt(e, t, o, a, n = {}) {
               ),
           ),
         ie(e, { k: "frank", rankName: gt(e.finger, e.fingerRank, e.gender) }),
-        (v = `${gt(e.finger, b, e.gender)} → ${gt(e.finger, e.fingerRank, e.gender)}`),
+        (T = `${gt(e.finger, b, e.gender)} → ${gt(e.finger, e.fingerRank, e.gender)}`),
         (m = "rare")));
   }
   if (i.wingUp && we(e)) {
     const b = e.wingRank || 1;
     if (
-      ((e.wingRank = P(b + i.wingUp, 1, qr[e.work])),
+      ((e.wingRank = P(b + i.wingUp, 1, Gr[e.work])),
       Ht(e) && e.nh && (e.nh.best = Math.max(e.nh.best || 1, e.wingRank)),
       (e.wingBest = Math.max(e.wingBest || 0, e.wingRank)),
       e.wingRank !== b)
@@ -8490,7 +8490,7 @@ function bt(e, t, o, a, n = {}) {
         ((e.rmerit = 0),
         e.work === "적출직" && e.wingRank >= 3 && !(e.kx && e.kx.tube))
       ) {
-        const A = Xw(e);
+        const A = Qw(e);
         if (
           ((A.tube = !0),
           (A.fit = Math.max(A.fit || 0, 2)),
@@ -8503,7 +8503,7 @@ function bt(e, t, o, a, n = {}) {
       }
       const I = un(e.work, e.wingRank, e.branch);
       (ie(e, { k: "wrank", name: I }),
-        (v = `${un(e.work, b, e.branch)} → ${I}`),
+        (T = `${un(e.work, b, e.branch)} → ${I}`),
         (m = "rare"));
     }
   }
@@ -8512,7 +8512,7 @@ function bt(e, t, o, a, n = {}) {
     ((e.grade = P(b - i.gradeUp, 1, 9)),
       e.grade !== b &&
         ((e.merit = Math.min(e.merit || 0, Math.floor(Go(e) / 2))),
-        (v = h(
+        (T = h(
           `${b}급 → ${e.grade}급`,
           `Grade ${b} → Grade ${e.grade}`,
           `${b}級 → ${e.grade}級`,
@@ -8521,16 +8521,16 @@ function bt(e, t, o, a, n = {}) {
       e.grade <= 3 && e.grade < b && (m = "rare"));
   }
   if (i.genUp && e.bf && e.bf.kind === "kin") {
-    const b = Fl(e);
+    const b = Ll(e);
     ((e.bf.gen = Math.max(1, e.bf.gen - i.genUp)),
       (e.bf.rankAt = e.age),
       (e.bf.favor = 0),
       (e.bf.bestGen = Math.min(e.bf.bestGen || 99, e.bf.gen)));
-    const I = Fl(e);
+    const I = Ll(e);
     I !== b &&
-      ((v = `${b} → ${I}`), ie(e, { k: "kgen", gen: e.bf.gen }), (m = "rare"));
+      ((T = `${b} → ${I}`), ie(e, { k: "kgen", gen: e.bf.gen }), (m = "rare"));
   }
-  if (oo(e)) {
+  if (ao(e)) {
     if (
       (e.officeRank == null &&
         ((e.officeRank = 1), (e.perf = e.perf || 0), (e.warn = e.warn || 0)),
@@ -8539,20 +8539,20 @@ function bt(e, t, o, a, n = {}) {
       const b = -Math.round(e.perf || 0);
       ((e.perf = 0), (e.warn = 0), b && (s.perf = b));
     } else if (typeof i.perf == "number" && i.perf) {
-      const b = od(e, i.perf);
+      const b = ad(e, i.perf);
       b && (s.perf = b);
     }
     if (typeof i.warn == "number" && i.warn) {
       const b = e.warn || 0;
-      ((e.warn = P(b + i.warn, 0, tg)),
+      ((e.warn = P(b + i.warn, 0, og)),
         e.warn !== b &&
           ((s.warn = e.warn - b), i.warn > 0 && (e.warnLast = e.age)));
     }
     if ((i.warnSet != null && (e.warn = i.warnSet), i.officeUp)) {
       const b = e.officeRank || 1,
-        I = P(b + 1, 1, eg.includes(e.regionId) ? 5 : 6);
+        I = P(b + 1, 1, tg.includes(e.regionId) ? 5 : 6);
       I !== b &&
-        ((v = `${cn[b - 1]} → ${cn[I - 1]}`),
+        ((T = `${cn[b - 1]} → ${cn[I - 1]}`),
         (e.officeRank = I),
         (e.officeBest = Math.max(e.officeBest || 1, I)),
         I === 5 && (e.dirSince = e.age),
@@ -8565,7 +8565,7 @@ function bt(e, t, o, a, n = {}) {
       const b = e.officeRank || 1,
         I = P(b - 1, 1, 6);
       I !== b &&
-        ((v = `${cn[b - 1]} → ${cn[I - 1]}`),
+        ((T = `${cn[b - 1]} → ${cn[I - 1]}`),
         (e.officeRank = I),
         (e.perf = 0),
         (e.warn = 0),
@@ -8601,7 +8601,7 @@ function bt(e, t, o, a, n = {}) {
         b.rank !== I &&
           ((b.best = Math.max(b.best || 1, b.rank)),
           (b.rankAt = e.age),
-          (v = `${Il[I - 1]} → ${Il[b.rank - 1]}`),
+          (T = `${Nl[I - 1]} → ${Nl[b.rank - 1]}`),
           ie(e, { k: "blrank", rank: b.rank }),
           (m = "rare")));
     }
@@ -8615,7 +8615,7 @@ function bt(e, t, o, a, n = {}) {
       (b.rankAt = e.age),
       (b.since = e.age),
       ie(e, { k: "blre" }),
-      (w = ve(e)),
+      (w = Te(e)),
       (m = "rare"));
   }
   if (
@@ -8648,9 +8648,9 @@ function bt(e, t, o, a, n = {}) {
       ((b.rank = 2),
         (b.best = Math.max(b.best || 1, 2)),
         (b.rankAt = e.age),
-        (b.seat = r.int(1, go.seatMax)),
+        (b.seat = r.int(1, mo.seatMax)),
         (e.rmerit = 0),
-        (v = `${I} → ${dn(e)}`),
+        (T = `${I} → ${dn(e)}`),
         ie(e, { k: "kkrank", rank: 2, seat: b.seat }),
         (m = "rare"));
     }
@@ -8660,7 +8660,7 @@ function bt(e, t, o, a, n = {}) {
         (b.best = 3),
         (b.rankAt = e.age),
         (e.rmerit = 0),
-        (v = `${I} → ${dn(e)}`),
+        (T = `${I} → ${dn(e)}`),
         ie(e, { k: "kkrank", rank: 3 }),
         (m = "rare"));
     }
@@ -8668,7 +8668,7 @@ function bt(e, t, o, a, n = {}) {
   if (
     (i.bldStart &&
       !e.bld &&
-      (Ml(e),
+      ($l(e),
       e.org && (e.orgHistory.push(e.org.name), (e.org = null)),
       (e.bld = {
         since: e.age,
@@ -8683,7 +8683,7 @@ function bt(e, t, o, a, n = {}) {
       (e.work = null),
       (e.grade = null),
       ie(e, { k: "bld" }),
-      (w = ve(e)),
+      (w = Te(e)),
       (m = "rare")),
     e.bld)
   ) {
@@ -8695,12 +8695,12 @@ function bt(e, t, o, a, n = {}) {
       i.bldNoHunt && (b.noHunt = !0),
       i.bldHuntNext && (b.huntNext = !0));
   }
-  (k && ((w = k), (m = "rare")),
-    (i.flagsAdd || []).some((b) => yp.includes(b)) && (m = "rare"),
-    m || (m = Gk(s)));
-  const W = xk(e, t, n.eventId);
-  (W && _.push((b) => `${b} ${W}`), td(e));
-  const G = _.reduce((b, I) => I(b), Tt(i.text, c, e));
+  (x && ((w = x), (m = "rare")),
+    (i.flagsAdd || []).some((b) => bp.includes(b)) && (m = "rare"),
+    m || (m = zk(s)));
+  const W = Tk(e, t, n.eventId);
+  (W && _.push((b) => `${b} ${W}`), od(e));
+  const G = _.reduce((b, I) => I(b), vt(i.text, c, e));
   if (
     (L(
       e,
@@ -8709,7 +8709,7 @@ function bt(e, t, o, a, n = {}) {
         text: G,
         delta: s,
         job: w,
-        grade: v,
+        grade: T,
         tone: m,
         auto: !!n.auto,
         timeout: !!n.timeout,
@@ -8742,7 +8742,7 @@ function bt(e, t, o, a, n = {}) {
         choices: [],
         t: a,
       })),
-    kg(e, a),
+    xg(e, a),
     i.nameChild && !e.dead && !e.prompt
       ? (e.prompt = {
           kind: "name",
@@ -8759,16 +8759,16 @@ function bt(e, t, o, a, n = {}) {
         })
       : i.nameChildRandom &&
         !e.dead &&
-        ((e.childName = pg(e)),
+        ((e.childName = bg(e)),
         L(
           e,
-          { kind: "result", text: bg(e.childName, !0), tone: "rare" },
+          { kind: "result", text: kg(e.childName, !0), tone: "rare" },
           Math.min(0.99, a + 0.01),
         )),
     g &&
       !e.dead &&
       (e.prompt
-        ? (e.partnerName = dg(e))
+        ? (e.partnerName = ug(e))
         : (e.prompt = {
             kind: "name",
             field: "partner",
@@ -8830,9 +8830,9 @@ function bt(e, t, o, a, n = {}) {
     )
       return;
   }
-  if (!(Je(e) && e.stats.health <= 0 && (Qw(e, t, a), e.dead))) {
-    if (s.health < 0 && !So(e) && !Je(e)) {
-      const b = yg(e.stats.health);
+  if (!(Ve(e) && e.stats.health <= 0 && (Zw(e, t, a), e.dead))) {
+    if (s.health < 0 && !So(e) && !Ve(e)) {
+      const b = pg(e.stats.health);
       if (
         b > 0 &&
         r.chance(b) &&
@@ -8852,7 +8852,7 @@ function bt(e, t, o, a, n = {}) {
       const b = 1.15 - e.stats.network * 0.006,
         I = P(1 + (50 - e.stats.health) / 100, 0.5, 2) * b;
       for (const [A, S] of Object.entries(i.risk))
-        if (r.chance(S * I * ld) && He(e, A, a)) return;
+        if (r.chance(S * I * hd) && He(e, A, a)) return;
     }
     if (i.next && i.nextLater && !e.dead && !e.prompt) {
       const b = z(t, i.next);
@@ -8865,9 +8865,9 @@ function bt(e, t, o, a, n = {}) {
           chain: !0,
           t: Math.min(0.98, a + 0.03),
         }));
-    } else if ((i.next || T) && !e.dead && !e.prompt) {
+    } else if ((i.next || v) && !e.dead && !e.prompt) {
       const I = []
-        .concat(i.next || T)
+        .concat(i.next || v)
         .map((A) => z(t, A))
         .find((A) => A && (!A.branch || A.branch.includes(Kn(e))));
       I &&
@@ -8881,17 +8881,17 @@ function bt(e, t, o, a, n = {}) {
               eventId: I.id,
             }));
     }
-    (i.warpStart && !e.dead && !e.prompt && Rx(e, t, a),
-      i.lakeHint && !e.dead && nk(e, i.lakeHint, a),
-      i.lakeStart && !e.dead && !e.prompt && Zb(e, t, a, i.lakeStart));
+    (i.warpStart && !e.dead && !e.prompt && Ix(e, t, a),
+      i.lakeHint && !e.dead && ik(e, i.lakeHint, a),
+      i.lakeStart && !e.dead && !e.prompt && tk(e, t, a, i.lakeStart));
   }
 }
-function px(e) {
-  return e.flags.includes("E.G.O개화") || Je(e)
+function kx(e) {
+  return e.flags.includes("E.G.O개화") || Ve(e)
     ? 0
     : P((e.stats.sanity - 30) * 0.0015, 0, 0.08);
 }
-const bx = qt({
+const xx = qt({
   ko: [
     "몸이 속삭임이 원하는 모양으로 비틀리려던 순간, 끝내 놓지 않은 것이 있었다. 뒤틀림이 되어야 했던 마음이 형태를 얻었다. E.G.O가 개화했다.",
     "뼈가 다른 모양을 기억해 내던 그때, 당신은 자신이 무엇을 원하는지 똑바로 보았다. 마음은 괴물이 되는 대신 무기가 되었다. E.G.O가 개화했다.",
@@ -8905,23 +8905,23 @@ const bx = qt({
     "骨が別の形を思い出しかけたその時、あなたは自分が何を望んでいるのかをまっすぐに見た。心は怪物になる代わりに武器になった。E.G.Oが開花した。",
   ],
 });
-function pg(e) {
-  return oe(e).pick([...bi.m, ...bi.f]);
+function bg(e) {
+  return oe(e).pick([...ki.m, ...ki.f]);
 }
-function bg(e, t) {
+function kg(e, t) {
   return t
     ? h(
-        `아이는 '${e}'${va(e)}는 이름으로 자라났다.`,
+        `아이는 '${e}'${Ta(e)}는 이름으로 자라났다.`,
         `The child grew up as '${e}'.`,
         `子は「${e}」という名で育った。`,
       )
     : h(
-        `아이에게 '${e}'${va(e)}는 이름을 지어 주었다.`,
+        `아이에게 '${e}'${Ta(e)}는 이름을 지어 주었다.`,
         `You named the child '${e}'.`,
         `子には「${e}」という名を付けた。`,
       );
 }
-function kg(e, t) {
+function xg(e, t) {
   if (e.prompt || e.dead) return;
   const o = (a) => e.flags.includes(a);
   if (o("E.G.O개화") && !e.egoAsked) {
@@ -8958,7 +8958,7 @@ function kg(e, t) {
       t,
     }));
 }
-const kx = [
+const vx = [
   "노화",
   "시듦",
   "긴 잠",
@@ -8969,11 +8969,11 @@ const kx = [
   "해결사의 토벌",
   "분노한 사람의 손",
 ];
-function xx(e, t, o, a) {
+function Tx(e, t, o, a) {
   if (
     !e.flags.includes("K사앰플") ||
     a.alive ||
-    kx.includes(t) ||
+    vx.includes(t) ||
     e.heir ||
     e.rule ||
     Ho(e) ||
@@ -9006,7 +9006,7 @@ function xx(e, t, o, a) {
 }
 function He(e, t, o, a = "event", n = {}) {
   const r = oe(e);
-  if (t === "뒤틀림" && Je(e) && X)
+  if (t === "뒤틀림" && Ve(e) && X)
     return (
       L(
         e,
@@ -9019,7 +9019,7 @@ function He(e, t, o, a = "event", n = {}) {
       ),
       !1
     );
-  if (t === "뒤틀림" && !n.noBloom && r.chance(px(e)))
+  if (t === "뒤틀림" && !n.noBloom && r.chance(kx(e)))
     return (
       e.flags.push("E.G.O개화"),
       ie(e, { k: "flag", flag: "E.G.O개화" }),
@@ -9028,19 +9028,19 @@ function He(e, t, o, a = "event", n = {}) {
         e,
         {
           kind: "result",
-          text: r.pick(bx),
+          text: r.pick(xx),
           tone: "rare",
           delta: { sanity: -6 },
         },
         o,
       ),
-      kg(e, o),
+      xg(e, o),
       !1
     );
-  if (xx(e, t, o, n)) return !1;
+  if (Tx(e, t, o, n)) return !1;
   let i = t;
   i === "질병" && e.age <= 4 && (i = "영유아 질병");
-  let l = n.text || Bp(i, r, Gi(e));
+  let l = n.text || Lp(i, r, Ki(e));
   if (
     (i === "뒤틀림" &&
       !n.text &&
@@ -9065,7 +9065,7 @@ function He(e, t, o, a = "event", n = {}) {
           "路地の奥から何が来たのか、最後まで見えなかった。",
         ),
       ])),
-    e.bld && (e.bld.hunterName = Gw(e)),
+    e.bld && (e.bld.hunterName = Kw(e)),
     i === "해결사의 토벌" &&
       !n.text &&
       (l = e.flags.includes("칼을내려놓은뒤틀림")
@@ -9083,9 +9083,9 @@ function He(e, t, o, a = "event", n = {}) {
       !n.text &&
       (i === "혈귀 사냥" || i === "시듦") &&
       (l = fn(e, i === "시듦" ? "wither" : "hunt") || l),
-    e.bf && Bx.includes(i))
+    e.bf && Lx.includes(i))
   ) {
-    const y = Px(e);
+    const y = $x(e);
     y && (l = `${l} ${y}`);
   }
   e.kx &&
@@ -9103,7 +9103,7 @@ function He(e, t, o, a = "event", n = {}) {
     text: l,
     source: a,
     alive: !!n.alive,
-    phrase: e.bf ? Mx(e, i) : null,
+    phrase: e.bf ? Hx(e, i) : null,
     hold: e.heir && n.alive ? Ae(l) : u,
   }),
     i === "뒤틀림" &&
@@ -9125,7 +9125,7 @@ function He(e, t, o, a = "event", n = {}) {
     !0
   );
 }
-function hd(e) {
+function dd(e) {
   let t = null;
   const o = e.flags;
   if (e.job === "해결사" && e.grade) t = 10 - e.grade;
@@ -9150,16 +9150,16 @@ function hd(e) {
               : e.work === "이단 심문관" && (t = [3, 6, 8][Math.min(a, 3) - 1]);
   } else
     e.job === "검계" && e.bl
-      ? (t = [3, 6, 8][Math.min(3, qa(e) || 1) - 1] + Zu(e))
+      ? (t = [3, 6, 8][Math.min(3, qa(e) || 1) - 1] + ec(e))
       : e.job === "흑운회" && e.kk
-        ? (t = [3, 6, 8][Math.min(3, Gt(e) || 1) - 1] + Zu(e))
-        : e.job === "떠돌이 검객" && (t = 10 - Dw(e));
+        ? (t = [3, 6, 8][Math.min(3, Gt(e) || 1) - 1] + ec(e))
+        : e.job === "떠돌이 검객" && (t = 10 - qw(e));
   if (t == null) return null;
   (o.includes("특색") && (t += 1),
     o.includes("E.G.O개화") && (t += 2),
     o.includes("유물") && (t += 1),
     e.bf && (t += 1),
-    (t += ao(e, 2, 1.5) - 1));
+    (t += no(e, 2, 1.5) - 1));
   for (const a of ["강화시술", "전투의체", "고급장비"])
     o.includes(a) && (t += 0.5);
   return (
@@ -9169,7 +9169,7 @@ function hd(e) {
     t
   );
 }
-const Ki = [
+const zi = [
     { E: 3, kind: "person" },
     { E: 4.5, kind: "person" },
     { E: 5.5, kind: "person" },
@@ -9179,8 +9179,8 @@ const Ki = [
     { E: 8.5, kind: "thing", mindHalf: !0 },
     { E: 11.5, kind: "person", noRed: !0 },
   ],
-  Tx = Ki.length;
-function zi(e) {
+  _x = zi.length;
+function Ui(e) {
   return e.job === "해결사" && e.grade
     ? "fixer"
     : e.job === "손가락" && e.finger
@@ -9206,7 +9206,7 @@ function zi(e) {
               ? "wanderer"
               : null;
 }
-function Zu(e) {
+function ec(e) {
   if (e.job === "검계" && e.bl) {
     const t = e.bl.cut || 0;
     return Math.min(
@@ -9224,8 +9224,8 @@ function Zu(e) {
   }
   return 0;
 }
-function xg(e) {
-  const t = zi(e);
+function vg(e) {
+  const t = Ui(e);
   return t === "kcorp" && (e.wingRank || 1) < 3
     ? "wt_enter_kcorp_low"
     : t === "fixer" && e.flags.includes("특색")
@@ -9238,10 +9238,10 @@ function Tg(e) {
     !e.warp &&
     !e.flags.includes("워프열차") &&
     !e.flags.includes("부화장") &&
-    !!zi(e)
+    !!Ui(e)
   );
 }
-const ec = {
+const tc = {
   흑수: 2,
   시간징수직: 10,
   "정리 요원": 5,
@@ -9249,38 +9249,38 @@ const ec = {
   적출직: 5,
   "이단 심문관": 3,
 };
-function vx(e) {
+function jx(e) {
   return zn(e) >= 5 ||
     (e.job === "해결사" &&
       (e.flags.includes("특색") || (e.grade && e.grade <= 2))) ||
     (e.job === "손가락" &&
       e.finger &&
       (e.fingerRank || 1) >= Ot[e.finger].length) ||
-    (we(e) && ec[e.work] && (e.wingRank || 1) >= ec[e.work]) ||
+    (we(e) && tc[e.work] && (e.wingRank || 1) >= tc[e.work]) ||
     qa(e) >= 3 ||
     Gt(e) >= 3
     ? !0
     : e.job === "가주" || e.job === "군주";
 }
-const _x = 0.3,
-  jx = { 엄지: 1, 검지: 1, 중지: 4, 약지: 3 },
-  vg = (e) =>
+const Ax = 0.3,
+  Yx = { 엄지: 1, 검지: 1, 중지: 4, 약지: 3 },
+  _g = (e) =>
     e.job === "손가락" &&
     !!e.finger &&
-    (e.fingerRank || 1) <= (jx[e.finger] || 0);
-function Ax(e, t) {
-  if (e.fingerLeaveRolled || ((e.fingerLeaveRolled = !0), !t.chance(_x)))
+    (e.fingerRank || 1) <= (Yx[e.finger] || 0);
+function Sx(e, t) {
+  if (e.fingerLeaveRolled || ((e.fingerLeaveRolled = !0), !t.chance(Ax)))
     return;
   const o = e.finger === "엄지" || e.finger === "검지",
     a = Math.min(65, e.age + (o ? t.int(1, 4) : t.int(2, 25)));
   e.fingerLeave = { at: Math.max(e.age + 1, a) };
 }
-function Yx(e) {
+function Rx(e) {
   return e < 25 ? 0 : e >= 50 ? 1 : 0.005 + (e - 25) * 0.006;
 }
-function _g(e, t) {
+function jg(e, t) {
   const o = z(t, "wt_common").labels,
-    a = zi(e);
+    a = Ui(e);
   if (a === "fixer")
     return {
       label: (e.flags.includes("특색") ? o.color : o.fixer).label,
@@ -9306,7 +9306,7 @@ function _g(e, t) {
       ? { label: o.코뿔소.label, bonus: 1.5, h: 5 }
       : { label: o.토끼.label, bonus: 1 };
 }
-const Sx = [
+const Cx = [
     { bonus: -0.5, half: !0 },
     { bonus: 1, h: 5 },
     { bonus: 0, link: !0 },
@@ -9316,7 +9316,7 @@ const Sx = [
     { bonus: 1, s: 6 },
     { bonus: 3, h: 20, s: 20 },
   ],
-  jg = () => h("????세", "Age ????", "????歳");
+  Ag = () => h("????세", "Age ????", "????歳");
 function ir(e, t, o, a, n, r) {
   const i = o === "fight" ? e.warp.car : o === "rest" ? e.warp.cleared : null;
   e.prompt = {
@@ -9329,13 +9329,13 @@ function ir(e, t, o, a, n, r) {
     t: r,
   };
 }
-function Rx(e, t, o) {
+function Ix(e, t, o) {
   ((e.warp = {
     car: 1,
     red: 0,
     link: 0,
     cleared: 0,
-    cp: (hd(e) ?? 1) + (e.bf && e.bf.vigor ? 0.5 : 0) + (e.warpBonus || 0),
+    cp: (dd(e) ?? 1) + (e.bf && e.bf.vigor ? 0.5 : 0) + (e.warpBonus || 0),
     age: e.age,
     down: !1,
     snapshot: {
@@ -9344,13 +9344,13 @@ function Rx(e, t, o) {
     },
   }),
     (e.warpBonus = 0),
-    Kr(e, t, o, !1));
+    zr(e, t, o, !1));
 }
-const Cx = 0.1;
-function Ix(e, t, o) {
+const Nx = 0.1;
+function Ox(e, t, o) {
   const a = z(t, "cm_warp_portal");
   ((e.warp.portalDone = !0),
-    L(e, { kind: "warpsep", text: jg() }, o),
+    L(e, { kind: "warpsep", text: Ag() }, o),
     L(e, { kind: "event", text: a.text, tone: "event" }, o),
     ir(
       e,
@@ -9361,7 +9361,7 @@ function Ix(e, t, o) {
       o,
     ));
 }
-function Kr(e, t, o, a) {
+function zr(e, t, o, a) {
   const n = e.warp,
     r = z(t, `wt_car_${n.car}`),
     i = qe(t, e);
@@ -9369,20 +9369,20 @@ function Kr(e, t, o, a) {
   let l;
   if (a) {
     const f = z(t, "wt_common").retry;
-    l = (Ki[n.car - 1].kind === "thing" ? f.thing : f.person).text;
+    l = (zi[n.car - 1].kind === "thing" ? f.thing : f.person).text;
   } else {
-    L(e, { kind: "warpsep", text: jg() }, o);
+    L(e, { kind: "warpsep", text: Ag() }, o);
     const f = [],
       y = r.lines || {};
     (n.car === 6 &&
       n.linkSet &&
       f.push((n.link > 0 ? y.linkWin : y.linkLose).text),
       e.bf && y.bf && f.push(y.bf.text),
-      (l = [Tt(r.text, i, e), ...f].join(" ")));
+      (l = [vt(r.text, i, e), ...f].join(" ")));
   }
   L(e, { kind: "event", text: l, tone: "event" }, o);
   const s = z(t, "wt_common").labels.front.label,
-    u = _g(e, t);
+    u = jg(e, t);
   ir(
     e,
     r,
@@ -9396,16 +9396,16 @@ function Kr(e, t, o, a) {
     o,
   );
 }
-function tc(e, t, o, a) {
+function oc(e, t, o, a) {
   const n = z(t, "wt_rest"),
     r = n.text.replaceAll("{칸}", String(e.warp.cleared));
   a && L(e, { kind: "event", text: r, tone: "event" }, o);
   const i = n.choices.map((l, s) => {
     const u =
       s === 0
-        ? Ll({ needs: { sanity: [13, 100] } }, e)
+        ? Pl({ needs: { sanity: [13, 100] } }, e)
         : s === 1
-          ? Ll({ needs: { health: [11, 100] } }, e)
+          ? Pl({ needs: { health: [11, 100] } }, e)
           : null;
     return u ? { label: l.label, i: s, locked: u } : { label: l.label, i: s };
   });
@@ -9417,12 +9417,12 @@ function Sr(e, t, o) {
     L(e, { kind: "event", text: a.text, tone: "warpdown" }, o),
     ir(e, a, "down", a.text, [{ label: a.choices[0].label, i: 0 }], o));
 }
-function Nx(e, t, o) {
+function Wx(e, t, o) {
   const a = z(t, "wt_clear");
   (L(e, { kind: "event", text: a.text, tone: "rare" }, o),
     ir(e, a, "clear", a.text, [{ label: a.choices[0].label, i: 0 }], o));
 }
-function ot(e, t, o, a) {
+function at(e, t, o, a) {
   if (!a) return;
   const n = e.stats[o];
   e.stats[o] = ht(P(n + a));
@@ -9430,7 +9430,7 @@ function ot(e, t, o, a) {
   r && (t[o] = (t[o] || 0) + r);
 }
 const Rr = (e) => e.stats.health <= 0 || e.stats.sanity <= 0;
-function Ox(e, t, o, a) {
+function Ex(e, t, o, a) {
   const n = e.warp,
     r = z(t, o.eventId);
   ((e.stats = { ...n.snapshot.stats }), (e.flags = [...n.snapshot.flags]));
@@ -9450,7 +9450,7 @@ function Ox(e, t, o, a) {
       o.t,
     ));
 }
-function Wx(e, t, o, a, n) {
+function Bx(e, t, o, a, n) {
   const r = oe(e),
     i = e.warp,
     l = o.t;
@@ -9465,7 +9465,7 @@ function Wx(e, t, o, a, n) {
     y = !!n.auto;
   if (!i) return;
   if (o.warp === "down" || o.warp === "clear") {
-    Ox(e, t, o, f);
+    Ex(e, t, o, f);
     return;
   }
   if (o.warp === "portal") {
@@ -9487,7 +9487,7 @@ function Wx(e, t, o, a, n) {
         ),
         i.car++,
         (i.red = 0),
-        Kr(e, t, l, !1)
+        zr(e, t, l, !1)
       );
     ((e.stats = { ...i.snapshot.stats }),
       (e.flags = [...i.snapshot.flags]),
@@ -9515,7 +9515,7 @@ function Wx(e, t, o, a, n) {
     const b = z(t, "wt_rest"),
       I = {};
     return u.i === 2
-      ? (ot(e, I, "sanity", -4),
+      ? (at(e, I, "sanity", -4),
         L(
           e,
           {
@@ -9533,13 +9533,13 @@ function Wx(e, t, o, a, n) {
           ? Sr(e, t, l)
           : i.car === 2 &&
               !i.portalDone &&
-              zi(e) === "wcorp" &&
-              ((i.portalDone = !0), r.chance(Cx))
-            ? Ix(e, t, l)
-            : (i.car++, (i.red = 0), Kr(e, t, l, !1)))
+              Ui(e) === "wcorp" &&
+              ((i.portalDone = !0), r.chance(Nx))
+            ? Ox(e, t, l)
+            : (i.car++, (i.red = 0), zr(e, t, l, !1)))
       : (u.i === 0
-          ? (ot(e, I, "health", 8), ot(e, I, "sanity", -12))
-          : (ot(e, I, "sanity", 6), ot(e, I, "health", -10)),
+          ? (at(e, I, "health", 8), at(e, I, "sanity", -12))
+          : (at(e, I, "sanity", 6), at(e, I, "health", -10)),
         L(
           e,
           {
@@ -9553,37 +9553,37 @@ function Wx(e, t, o, a, n) {
           },
           l,
         ),
-        Rr(e) ? Sr(e, t, l) : tc(e, t, l, !1));
+        Rr(e) ? Sr(e, t, l) : oc(e, t, l, !1));
   }
-  const g = Ki[i.car - 1],
-    k = z(t, `wt_car_${i.car}`),
-    x = {};
-  let T = 1,
+  const g = zi[i.car - 1],
+    x = z(t, `wt_car_${i.car}`),
+    k = {};
+  let v = 1,
     Y = null;
   const c = [];
   if (u.i === 1) {
-    const b = _g(e, t);
-    ((T = b.bonus),
-      ot(e, x, "sanity", -(b.s || 0)),
-      ot(e, x, "health", -(b.h || 0)),
-      b.heal && ot(e, x, "health", b.heal),
+    const b = jg(e, t);
+    ((v = b.bonus),
+      at(e, k, "sanity", -(b.s || 0)),
+      at(e, k, "health", -(b.h || 0)),
+      b.heal && at(e, k, "health", b.heal),
       b.discharge &&
         r.chance(0.3) &&
-        (ot(e, x, "health", -10), c.push(z(t, "wt_common").discharge.text)));
+        (at(e, k, "health", -10), c.push(z(t, "wt_common").discharge.text)));
   } else
     u.i === 2 &&
-      ((Y = Sx[i.car - 1]),
-      (T = Y.bonus),
-      ot(e, x, "sanity", -(Y.s || 0)),
-      ot(e, x, "health", -(Y.h || 0)));
+      ((Y = Cx[i.car - 1]),
+      (v = Y.bonus),
+      at(e, k, "sanity", -(Y.s || 0)),
+      at(e, k, "health", -(Y.h || 0)));
   if (Rr(e))
     return (
       L(
         e,
         {
           kind: "result",
-          text: c.join(" ") || k.res.lose.text,
-          delta: x,
+          text: c.join(" ") || x.res.lose.text,
+          delta: k,
           tone: "bad",
           choice: f,
           auto: y,
@@ -9595,8 +9595,8 @@ function Wx(e, t, o, a, n) {
     );
   const m = (r.next() * 2 - 1) * (g.jit || 1),
     w = g.E - (g.noRed ? 0 : i.red) - (i.car === 6 ? i.link : 0),
-    v = i.cp + T - (w + m),
-    _ = v >= 1 ? "big" : v >= 0 ? "win" : v >= -1.5 ? "hold" : "lose",
+    T = i.cp + v - (w + m),
+    _ = T >= 1 ? "big" : T >= 0 ? "win" : T >= -1.5 ? "hold" : "lose",
     C = _ === "big" || _ === "win";
   let R = { big: 3, win: 8, hold: 15, lose: 25 }[_],
     W = { big: 0, win: 0, hold: 6, lose: 8 }[_];
@@ -9606,16 +9606,16 @@ function Wx(e, t, o, a, n) {
     g.failMindX2 && !C && (W *= 2),
     g.mindHalf && ((W += R / 2), (R /= 2)),
     Y && Y.link && ((i.link = C ? 0.5 : -0.5), (i.linkSet = !0)),
-    ot(e, x, "health", -Math.round(R)),
-    ot(e, x, "sanity", -Math.round(W)));
-  const G = [...c, k.res[_].text].join(" ");
+    at(e, k, "health", -Math.round(R)),
+    at(e, k, "sanity", -Math.round(W)));
+  const G = [...c, x.res[_].text].join(" ");
   return (
     L(
       e,
       {
         kind: "result",
         text: G,
-        delta: x,
+        delta: k,
         tone: C ? "good" : "bad",
         choice: f,
         auto: y,
@@ -9626,11 +9626,11 @@ function Wx(e, t, o, a, n) {
     Rr(e)
       ? Sr(e, t, l)
       : C
-        ? ((i.cleared = i.car), i.car >= Tx ? Nx(e, t, l) : tc(e, t, l, !0))
-        : (g.noRed || i.red++, Kr(e, t, l, !0))
+        ? ((i.cleared = i.car), i.car >= _x ? Wx(e, t, l) : oc(e, t, l, !0))
+        : (g.noRed || i.red++, zr(e, t, l, !0))
   );
 }
-function Ex(e) {
+function Fx(e) {
   const t = e.prompt,
     o = e.warp;
   if (!o || t.warp === "down" || t.warp === "clear" || t.warp === "portal")
@@ -9644,12 +9644,12 @@ function Ex(e) {
         ? 1
         : 2;
   }
-  const n = Ki[o.car - 1],
+  const n = zi[o.car - 1],
     r = n.E - (n.noRed ? 0 : o.red) - (o.car === 6 ? o.link : 0);
   return o.cp + 1 - r >= 0.5 || a.sanity <= 12 ? 0 : 1;
 }
 let X = null;
-function dd(e, t) {
+function ud(e, t) {
   let o = X && z(X, e);
   for (const a of t.split(".")) {
     if (!o) return "";
@@ -9657,22 +9657,22 @@ function dd(e, t) {
   }
   return (o && o.text) || "";
 }
-const $e = (e) => dd("bf_end_lines", e),
-  Bx = ["긴 잠", "세월", "이야기의 끝", "혈귀 사냥", "시듦"];
-function Hl(e) {
+const $e = (e) => ud("bf_end_lines", e),
+  Lx = ["긴 잠", "세월", "이야기의 끝", "혈귀 사냥", "시듦"];
+function Dl(e) {
   return !!(e.org || e.job === "해결사" || e.job === "손가락" || we(e));
 }
-function ud(e) {
-  return e.bf && _o(e) >= ae.compressAfter ? 10 : 1;
+function cd(e) {
+  return e.bf && jo(e) >= ae.compressAfter ? 10 : 1;
 }
-function Fx(e) {
+function Px(e) {
   const t = e.bf,
     o = t.outlives || 0;
-  return _o(e) < 60 || o >= 2
+  return jo(e) < 60 || o >= 2
     ? !1
     : o === 0 || e.age - (t.lastOutlive ?? 0) >= 50;
 }
-function cd(e) {
+function fd(e) {
   const t = e.bf;
   return t
     ? Math.max(
@@ -9692,7 +9692,7 @@ function Ko(e) {
   if (o("쓸쓸한배우자")) return { k: "smile" };
   if (o("배우자권속")) return { k: "couple" };
   if (t.kind === "kin" && t.gen === 1) return { k: "elder" };
-  if (t.bites === 0 && _o(e) >= 20) {
+  if (t.bites === 0 && jo(e) >= 20) {
     const n = t.barUses || 0,
       r = t.packUses || 0,
       i = t.rations || 0;
@@ -9705,7 +9705,7 @@ function Ko(e) {
     return { k: "hunter" };
   if (t.bites >= 30) return { k: "faces", sub: "a" };
   if ((t.frenzies || 0) >= 3) return { k: "faces", sub: "b" };
-  const a = cd(e);
+  const a = fd(e);
   return t.kind === "stray" && a >= 1
     ? { k: "kin", sub: a >= 2 ? "2" : "1" }
     : (t.bags || []).length
@@ -9738,8 +9738,8 @@ function Fa(e) {
           ? "org"
           : null;
 }
-const Ag = { 엄지: "thumb", 검지: "index", 중지: "middle", 약지: "ring" },
-  oc = {
+const Yg = { 엄지: "thumb", 검지: "index", 중지: "middle", 약지: "ring" },
+  ac = {
     thumb: "th_bf_found",
     index: "in_bf_found",
     middle: "mi_bf_found",
@@ -9748,10 +9748,10 @@ const Ag = { 엄지: "thumb", 검지: "index", 중지: "middle", 약지: "ring" 
     wing: "wg_bf_found",
     org: "og_bf_found",
   };
-function Lx(e) {
+function Mx(e) {
   if (
     e.bf.kind !== "stray" ||
-    _o(e) < 2 ||
+    jo(e) < 2 ||
     ["정체공개", "정체숨김", "정체들킴"].some((a) => e.flags.includes(a))
   )
     return !1;
@@ -9762,7 +9762,7 @@ function Lx(e) {
       (e.fingerRank || 1) >= (Ot[e.finger] || []).length)
   );
 }
-function Px(e) {
+function $x(e) {
   const t = e.bf;
   if (!t) return "";
   const o = (r) => e.flags.includes(r),
@@ -9770,8 +9770,8 @@ function Px(e) {
     n = Fa(e);
   if (n && n.startsWith("finger:")) {
     const r = (e.fingerRank || 1) >= (Ot[e.finger] || []).length;
-    return Tt(
-      $e(`org.${Ag[e.finger]}_${a === "open" && r ? "top" : a}`),
+    return vt(
+      $e(`org.${Yg[e.finger]}_${a === "open" && r ? "top" : a}`),
       {},
       e,
     );
@@ -9779,7 +9779,7 @@ function Px(e) {
   return t.revealOrg && t.revealOrg.startsWith("finger:") && n !== t.revealOrg
     ? $e("org.fingerPast").replaceAll(
         "{손가락}",
-        Xe[t.revealOrg.slice(7)] || "",
+        Qe[t.revealOrg.slice(7)] || "",
       )
     : n === "heishou"
       ? $e("org.heishou")
@@ -9791,7 +9791,7 @@ function Px(e) {
             ? $e("org.fixer")
             : "";
 }
-function Mx(e, t) {
+function Hx(e, t) {
   if (t === "이야기의 끝")
     return h(
       "그 뒤로도 살아갔다",
@@ -9839,7 +9839,7 @@ function Mx(e, t) {
   }
   return null;
 }
-function $x(e, t) {
+function Dx(e, t) {
   const o = t && t.bf;
   if (e === "형님")
     return t && t.gender === "f"
@@ -9863,7 +9863,7 @@ function $x(e, t) {
     return a ? `${a} ` : "";
   }
   return e === "BF_BODY"
-    ? $e(Hl(t) ? "misc.bodyActive" : "misc.bodyRetired")
+    ? $e(Dl(t) ? "misc.bodyActive" : "misc.bodyRetired")
     : e === "BF_SLEEP"
       ? fn(t, "sleep") || $e("misc.sleepBase")
       : e === "BF_EPI"
@@ -9872,14 +9872,14 @@ function $x(e, t) {
           ? fn(t, "live") ||
             $e((o.outlives || 0) >= 2 ? "misc.live2" : "misc.live1")
           : e === "BF_HUNTER"
-            ? dd("bf_hunt", `tiers.t${(o.curHunt && o.curHunt.tier) || 1}`)
-            : e === "BF_BAR" && nd(o) <= ae.bar.floor
+            ? ud("bf_hunt", `tiers.t${(o.curHunt && o.curHunt.tier) || 1}`)
+            : e === "BF_BAR" && rd(o) <= ae.bar.floor
               ? $e("misc.barWeak")
               : "";
 }
-function Yg(e) {
+function Sg(e) {
   const t = e.bf;
-  let o = hd(e) ?? 1;
+  let o = dd(e) ?? 1;
   return (
     e.age >= 65 ? (o += 2) : e.age >= 55 && (o += 1),
     t
@@ -9889,28 +9889,28 @@ function Yg(e) {
           (t.strong || 0) +
           (t.vigor ? 1 : 0) -
           0.5 * (t.wither || 0) +
-          Math.min(1, Math.floor(_o(e) / 50) * 0.25)),
+          Math.min(1, Math.floor(jo(e) / 50) * 0.25)),
         Math.round(o * 100) / 100)
       : o
   );
 }
-const Cs = [
+const Is = [
   [18, 9.5, 4],
   [13, 7, 3],
   [9, 4.5, 2],
   [5, 2, 1],
 ];
-function Hx(e) {
+function qx(e) {
   const t = e.bf,
-    o = t.finalHunt ? Cs[0] : Cs.find(([n]) => t.heat >= n) || Cs[3],
+    o = t.finalHunt ? Is[0] : Is.find(([n]) => t.heat >= n) || Is[3],
     a = t.kind === "stray" ? ae.strayHunter : (7 - (t.gen || 7)) * ae.genHunter;
   t.curHunt = { h: o[1] + a, tier: o[2] };
 }
-function Dx(e, t, o) {
+function Gx(e, t, o) {
   const a = oe(e),
     n = e.bf,
     r = n.curHunt || { h: 2, tier: 1 },
-    i = (c) => dd("bf_hunt", `res.${c}`);
+    i = (c) => ud("bf_hunt", `res.${c}`);
   ((n.lastHunt = e.age),
     (n.hunts ?? (n.hunts = [])).push(r.tier),
     (n.finalHunt = !1));
@@ -9920,44 +9920,44 @@ function Dx(e, t, o) {
   let f = 0,
     y = 0,
     g = 1,
-    k = !1;
+    x = !1;
   if (o.hunt === "flee") {
     if (((y -= 6), s("wealth", -15), s("network", -5), !a.chance(0.3)))
       return { text: i("flee"), effects: l, heat: y };
-    (u.push(i("caught")), (g = 0), (k = !0));
+    (u.push(i("caught")), (g = 0), (x = !0));
   }
   (o.hunt === "surge" &&
-    ((g = 2), (f += 30), s("sanity", -5), (k = !0), u.push(i("surge"))),
+    ((g = 2), (f += 30), s("sanity", -5), (x = !0), u.push(i("surge"))),
     o.hunt === "bag" &&
       ((g = 1.5), (n.bags || []).length && n.bags.pop(), u.push(i("bag"))));
-  const x = Yg(e) + g - (r.h + (a.next() * 2 - 1)),
-    T = (c) => ({
+  const k = Sg(e) + g - (r.h + (a.next() * 2 - 1)),
+    v = (c) => ({
       text: u.join(" "),
       effects: l,
       heat: y,
       ...(f ? { thirst: f } : {}),
       ...c,
     });
-  if (x >= 0)
+  if (k >= 0)
     return (
-      s("health", x >= 1 ? -3 : -10),
-      u.push(i(x >= 1 ? "big" : "win")),
-      T({ next: "bf_hunt_drink" })
+      s("health", k >= 1 ? -3 : -10),
+      u.push(i(k >= 1 ? "big" : "win")),
+      v({ next: "bf_hunt_drink" })
     );
-  if (x >= -1.5) return (s("health", -15), u.push(i("hold")), T({}));
+  if (k >= -1.5) return (s("health", -15), u.push(i("hold")), v({}));
   s("health", -25);
   const Y =
-    (k ? 0.6 : 0.5) *
+    (x ? 0.6 : 0.5) *
     (n.vigor ? 0.7 : 1) *
     (n.kind === "kin" ? ae.kinGuard : ae.strayDie);
   return a.chance(Y)
-    ? (u.push(i("dead")), T({ death: "혈귀 사냥" }))
-    : (u.push(i("lose")), T({}));
+    ? (u.push(i("dead")), v({ death: "혈귀 사냥" }))
+    : (u.push(i("lose")), v({}));
 }
-function qx(e, t, o) {
+function Kx(e, t, o) {
   const a = e.bf,
     n = [],
-    r = ud(e),
+    r = cd(e),
     i = (u) => e.flags.includes(u);
   if (a.lastHunter)
     ((a.lastHunter = !1),
@@ -9994,12 +9994,12 @@ function qx(e, t, o) {
     a.revealOrg === s &&
     t.chance(Math.min(0.12, 0.03 + 0.003 * (a.bites || 0)))
   ) {
-    const u = s.startsWith("finger:") ? Ag[s.slice(7)] : s;
-    oc[u] && n.push({ id: oc[u], bfEng: !0 });
+    const u = s.startsWith("finger:") ? Yg[s.slice(7)] : s;
+    ac[u] && n.push({ id: ac[u], bfEng: !0 });
   }
   return n;
 }
-function Gx(e, t, o) {
+function zx(e, t, o) {
   const a = e.bf;
   if (!a.bags || !a.bags.length) return;
   const n = a.bags.filter((r) => r > e.age);
@@ -10022,7 +10022,7 @@ function Gx(e, t, o) {
       (a.heat += 3),
       L(e, { kind: "result", text: $e("misc.bagHunted"), tone: "bad" }, 0.96)));
 }
-function Kx(e, t, o) {
+function Ux(e, t, o) {
   const a = X && z(X, t.eventId);
   if (!a || !a.choices) return;
   const n = e.bf,
@@ -10038,9 +10038,9 @@ function Kx(e, t, o) {
     }
     return r("feed", "ration") >= 0 && o.chance(0.6)
       ? r("feed", "ration")
-      : r("feed", "pack") >= 0 && rg(n) > 0.5
+      : r("feed", "pack") >= 0 && ig(n) > 0.5
         ? r("feed", "pack")
-        : r("feed", "bar") >= 0 && nd(n) > 0.4
+        : r("feed", "bar") >= 0 && rd(n) > 0.4
           ? r("feed", "bar")
           : r("feed", "bag") >= 0
             ? r("feed", "bag")
@@ -10049,7 +10049,7 @@ function Kx(e, t, o) {
               : -1;
   }
   if (a.id === "bf_hunt") {
-    const i = Yg(e) + 1 - (n.curHunt ? n.curHunt.h : 2);
+    const i = Sg(e) + 1 - (n.curHunt ? n.curHunt.h : 2);
     return i >= 0
       ? r("hunt", "fight")
       : i >= -1.5
@@ -10083,7 +10083,7 @@ function Ti(e, t, o, a = {}) {
   }
   if (n.kind === "color") {
     const f = (a.text || "").trim().slice(0, 16),
-      y = va(f);
+      y = Ta(f);
     ((e.colorName = f || null),
       L(
         e,
@@ -10101,7 +10101,7 @@ function Ti(e, t, o, a = {}) {
                 "もはや都市はあなたの等級を問わない。人々はあなたをただ「特色」と呼ぶ。",
               ),
           tone: "rare",
-          job: ve(e),
+          job: Te(e),
         },
         n.t || 0,
       ));
@@ -10111,7 +10111,7 @@ function Ti(e, t, o, a = {}) {
     const f = (a.text || "").trim().slice(0, 16);
     if (n.field === "star") {
       e.pinky && (e.pinky.blade = f || null);
-      const y = ad(e);
+      const y = nd(e);
       L(
         e,
         {
@@ -10128,16 +10128,16 @@ function Ti(e, t, o, a = {}) {
       return;
     }
     if (n.field === "child") {
-      ((e.childName = f || pg(e)),
+      ((e.childName = f || bg(e)),
         L(
           e,
-          { kind: "result", text: bg(e.childName, !f), tone: "rare" },
+          { kind: "result", text: kg(e.childName, !f), tone: "rare" },
           n.t || 0,
         ));
       return;
     }
     if (n.field === "partner") {
-      e.partnerName = f || dg(e);
+      e.partnerName = f || ug(e);
       const y = e.partnerName;
       L(
         e,
@@ -10145,12 +10145,12 @@ function Ti(e, t, o, a = {}) {
           kind: "result",
           text: n.lover
             ? h(
-                `${y}${Cl(y, "은", "는")} 걸음을 맞추어 주었다.`,
+                `${y}${Il(y, "은", "는")} 걸음을 맞추어 주었다.`,
                 `${y} fell into step with you.`,
                 `${y}は歩調を合わせてくれた。`,
               )
             : h(
-                `${y}${Cl(y, "과", "와")} 한 지붕 아래 살게 되었다.`,
+                `${y}${Il(y, "과", "와")} 한 지붕 아래 살게 되었다.`,
                 `You began to live under one roof with ${y}.`,
                 `${y}と一つ屋根の下で暮らすことになった。`,
               ),
@@ -10169,12 +10169,12 @@ function Ti(e, t, o, a = {}) {
             text:
               n.field === "ego"
                 ? h(
-                    `당신의 E.G.O는 '${f}'${va(f)} 불린다.`,
+                    `당신의 E.G.O는 '${f}'${Ta(f)} 불린다.`,
                     `Your E.G.O is called '${f}'.`,
                     `あなたのE.G.Oは「${f}」と呼ばれる。`,
                   )
                 : h(
-                    `그 유물에는 '${f}'${va(f)}는 이름이 붙었다.`,
+                    `그 유물에는 '${f}'${Ta(f)}는 이름이 붙었다.`,
                     `You named the relic '${f}'.`,
                     `その遺物には「${f}」という名が付いた。`,
                   ),
@@ -10185,21 +10185,21 @@ function Ti(e, t, o, a = {}) {
     return;
   }
   if (n.warp) {
-    Wx(e, t, n, o, a);
+    Bx(e, t, n, o, a);
     return;
   }
   if (n.dr) {
-    zb(e, t, n, o);
+    Jb(e, t, n, o);
     return;
   }
   if (n.lake) {
-    ok(e, t, n, o);
+    nk(e, t, n, o);
     return;
   }
   if (n.req) {
     let f = o;
     ((f == null || f < 0) && (f = 1),
-      lx(e, t, n, f, { auto: !!a.auto, timeout: !!a.timeout }));
+      dx(e, t, n, f, { auto: !!a.auto, timeout: !!a.timeout }));
     return;
   }
   const r = z(t, n.eventId);
@@ -10225,16 +10225,16 @@ function Ti(e, t, o, a = {}) {
     return;
   }
   let s = r.choices[i];
-  const u = Tt(s.label, qe(t, e), e);
-  (s.hunt && e.bf && (s = Dx(e, t, s)),
+  const u = vt(s.label, qe(t, e), e);
+  (s.hunt && e.bf && (s = Gx(e, t, s)),
     bt(e, t, s, n.t, { ...l, kind: "result", choiceLabel: u }));
 }
-function zx(e) {
+function Jx(e) {
   const t = e.prompt;
   if (!t || t.kind === "reflect" || t.kind === "color" || t.kind === "name")
     return -1;
-  if (t.warp) return Ex(e);
-  if (t.lake) return rk(e);
+  if (t.warp) return Fx(e);
+  if (t.lake) return sk(e);
   const o = oe(e);
   if (/^lk_(u_|drink)/.test(t.eventId || "")) return o.chance(0.5) ? 0 : 1;
   if (/^wt_enter_/.test(t.eventId || "")) return o.chance(0.8) ? 0 : 1;
@@ -10254,7 +10254,7 @@ function zx(e) {
           : 1;
   }
   if (e.bf) {
-    const r = Kx(e, t, o);
+    const r = Ux(e, t, o);
     if (r !== void 0) return r;
   }
   if (t.kind === "minor" && o.chance(0.2)) return -1;
@@ -10262,7 +10262,7 @@ function zx(e) {
     n = a.filter((r) => t.choices[r].dream);
   return n.length && o.chance(0.6) ? o.pick(n) : a.length ? o.pick(a) : -1;
 }
-const Ux = qt({
+const Vx = qt({
     ko: [
       "뜻밖의 돈이 들어왔다. 연락이 끊겼던 친척의 유산이었다.",
       "헐값에 사 둔 물건의 값이 갑자기 뛰었다.",
@@ -10285,7 +10285,7 @@ const Ux = qt({
       "住んでいた町が再開発区域に指定され、補償金を受け取った。",
     ],
   }),
-  Jx = qt({
+  Xx = qt({
     ko: [
       "맡겨 둔 돈이 사라졌다. 맡아 준 사람도 함께 사라졌다.",
       "믿고 투자한 가게가 하룻밤 사이 문을 닫았다.",
@@ -10305,26 +10305,26 @@ const Ux = qt({
       "翼の税金が突然上がった。理由は告知されなかった。",
     ],
   });
-function Vx(e) {
+function Qx(e) {
   return e < 90 ? 0 : P(0.15 * Math.pow(1.2, e - 90), 0, 0.95);
 }
-function Xx(e, t) {
+function Zx(e, t) {
   const o = e.stats;
-  let a = Ap(t, e.age);
+  let a = Sp(t, e.age);
   return (
     (a *=
       P(1 + (50 - o.health) / 50, 0.25, 3) *
       P(1 + (30 - o.wealth) / 150, 0.8, 1.4)),
-    o.sanity <= 10 && !Je(e) && (a += 0.06),
+    o.sanity <= 10 && !Ve(e) && (a += 0.06),
     1 - Math.exp(-a)
   );
 }
-function Qx(e) {
+function e0(e) {
   if (!e.bf) return e;
   const t = Math.max(e.bf.since, 20);
   return { ...e, age: Math.min(e.age, t) };
 }
-const Zx = qt({
+const t0 = qt({
     ko: [
       "그 십 년 동안 도시는 바뀌었다. 당신은 그대로였다.",
       "간판이 몇 번 바뀌었다. 당신의 얼굴은 바뀌지 않았다.",
@@ -10341,7 +10341,7 @@ const Zx = qt({
       "十年が過ぎた。鏡はそれを教えてくれなかった。",
     ],
   }),
-  e0 = qt({
+  o0 = qt({
     ko: [
       "손끝이 조금 말랐다.",
       "거울 속 얼굴에서 핏기가 빠졌다.",
@@ -10361,14 +10361,14 @@ const Zx = qt({
       "肌が紙のように薄くなった。",
     ],
   });
-function t0(e, t, o) {
+function a0(e, t, o) {
   const a = e.bf,
     n = e.stats;
   (a.barUsed === e.age || a.barUsed === e.age - 1) && a.bitAge !== e.age
     ? (a.barStreak++, (a.barBest = Math.max(a.barBest, a.barStreak)))
     : (a.bitAge === e.age || (a.barUsed ?? -99) < e.age - 1) &&
       (a.barStreak = 0);
-  const r = Dk(a.thirst);
+  const r = Gk(a.thirst);
   if (
     (r === 1 && (n.sanity -= 2),
     a.vigor &&
@@ -10379,7 +10379,7 @@ function t0(e, t, o) {
         { kind: "result", text: $e("misc.vigorGone"), tone: "system" },
         0.97,
       )),
-    Gx(e, t),
+    zx(e, t),
     a.wither > 0 && (n.sanity -= a.wither),
     a.wither >= 3 && (n.health -= a.wither),
     a.thirst >= 50)
@@ -10392,13 +10392,13 @@ function t0(e, t, o) {
       a.wither >= ae.witherMax)
     )
       return (He(e, "시듦", 0.5 + t.next() * 0.48, "year"), !0);
-    L(e, { kind: "result", text: e0[a.wither - 1], tone: "bad" }, 0.98);
+    L(e, { kind: "result", text: o0[a.wither - 1], tone: "bad" }, 0.98);
   } else r === 0 && a.wither > 0 && ++a.low >= 4 && (a.wither--, (a.low = 0));
   n.health = Math.min(n.health, 100 - a.wither * 12);
-  for (const f of Yo) n[f] = ht(P(n[f]));
+  for (const f of oo) n[f] = ht(P(n[f]));
   const i =
       a.kind === "kin"
-        ? Math.min(ae.kinDeepenMax, 1 + ae.kinDeepen * _o(e))
+        ? Math.min(ae.kinDeepenMax, 1 + ae.kinDeepen * jo(e))
         : 1,
     l = Math.max(0, (a.made || 0) - (a.lost || 0)),
     u =
@@ -10409,23 +10409,23 @@ function t0(e, t, o) {
       i;
   return (
     (a.thirst = ht(P(a.thirst + ae.thirstBase * u))),
-    (a.heat = Math.max(0, a.heat - ae.heatDecay * ud(e))),
-    _o(e) > 0 && _o(e) % 10 === 0 && (a.heat += 1),
+    (a.heat = Math.max(0, a.heat - ae.heatDecay * cd(e))),
+    jo(e) > 0 && jo(e) % 10 === 0 && (a.heat += 1),
     !1
   );
 }
-const ac = { 검지: 1.25, 약지: 0.58 };
-function o0(e, t) {
+const nc = { 검지: 1.25, 약지: 0.58 };
+function n0(e, t) {
   if (((X = t), e.dead)) return;
   const o = oe(e),
     a = qe(t, e),
     n = e.stats,
-    r = $w(e) || So(e) || Ho(e);
+    r = Hw(e) || So(e) || Ho(e);
   if (
     (So(e) &&
       ((e.bld.threat = P((e.bld.threat || 0) + 1, 0, 3)),
       (e.bld.kills = (e.bld.kills || 0) + o.int(2, 5))),
-    Je(e) &&
+    Ve(e) &&
       n.health > 0 &&
       o.chance(Pt.yearHurt[Math.min(5, e.wingRank || 1) - 1]))
   ) {
@@ -10436,7 +10436,7 @@ function o0(e, t) {
       0,
       n.health - o.int(Pt.yearHurtDmg[0], Pt.yearHurtDmg[1]),
     );
-    const k =
+    const x =
       n.health <= 0
         ? f
           ? u.hurtHigh
@@ -10448,7 +10448,7 @@ function o0(e, t) {
       e,
       {
         kind: "flavor",
-        text: k.text,
+        text: x.text,
         tone: "bad",
         delta: { health: Math.round(n.health - y) },
       },
@@ -10456,10 +10456,10 @@ function o0(e, t) {
     );
   }
   if (
-    (Je(e) && n.health <= 0 && (Qw(e, t, 0.5), e.dead)) ||
+    (Ve(e) && n.health <= 0 && (Zw(e, t, 0.5), e.dead)) ||
     (!r &&
-      !Je(e) &&
-      o.chance(yg(n.health)) &&
+      !Ve(e) &&
+      o.chance(pg(n.health)) &&
       He(
         e,
         e.bf
@@ -10474,10 +10474,10 @@ function o0(e, t) {
       ))
   )
     return;
-  const i = Qx(e);
-  if (!r && o.chance(Xx(i, a) * (e.bf ? 0.6 : 1))) {
-    const u = Yp(i, a, Gi(e));
-    (e.bf && (delete u.노화, delete u["영양 결핍"]), Je(e) && delete u.뒤틀림);
+  const i = e0(e);
+  if (!r && o.chance(Zx(i, a) * (e.bf ? 0.6 : 1))) {
+    const u = Rp(i, a, Ki(e));
+    (e.bf && (delete u.노화, delete u["영양 결핍"]), Ve(e) && delete u.뒤틀림);
     const f = Object.entries(u).filter(([, g]) => g > 0),
       y = o.weighted(f, (g) => g[1]);
     if (He(e, y ? y[0] : "질병", 0.5 + o.next() * 0.48, "year")) return;
@@ -10485,7 +10485,7 @@ function o0(e, t) {
   if (
     !r &&
     !e.bf &&
-    o.chance(Vx(e.age)) &&
+    o.chance(Qx(e.age)) &&
     He(e, "노화", 0.5 + o.next() * 0.48, "year")
   )
     return;
@@ -10497,20 +10497,20 @@ function o0(e, t) {
         ((e.job === "검계"
           ? ma.income[(qa(e) || 1) - 1]
           : e.job === "흑운회"
-            ? Nb(e)
-            : (mp[f] ?? 1)) -
+            ? Wb(e)
+            : (pp[f] ?? 1)) -
           3.6) *
           0.6 +
         u,
-      k = (o.next() + o.next() + o.next() - 1.5) * 12;
-    let x = g + k - (n.wealth - 50) * 0.05;
+      x = (o.next() + o.next() + o.next() - 1.5) * 12;
+    let k = g + x - (n.wealth - 50) * 0.05;
     if (e.cloneYear !== e.age && o.chance(0.07)) {
-      const T = o.chance(0.45),
+      const v = o.chance(0.45),
         Y = o.int(15, 40);
-      x += T ? Y : -Y;
-      const c = T ? Ux : Jx,
+      k += v ? Y : -Y;
+      const c = v ? Vx : Xx,
         m = n.wealth;
-      n.wealth = ht(P(n.wealth + x));
+      n.wealth = ht(P(n.wealth + k));
       const w = Math.round(n.wealth - m);
       L(
         e,
@@ -10522,7 +10522,7 @@ function o0(e, t) {
         },
         0.97,
       );
-    } else n.wealth = P(n.wealth + x);
+    } else n.wealth = P(n.wealth + k);
   }
   (e.age >= 18 &&
     e.prosthetics > 0 &&
@@ -10549,24 +10549,24 @@ function o0(e, t) {
         ? (n.sanity += 2.5 + (n.network >= 40 ? 1.5 : 0))
         : n.sanity < 75 && (n.sanity += 1)),
     e.job === "손가락" &&
-      ac[e.finger] &&
+      nc[e.finger] &&
       n.sanity < 70 &&
-      (n.sanity += ac[e.finger]),
+      (n.sanity += nc[e.finger]),
     n.sanity > 75 && (n.sanity -= 0.3),
-    Je(e) && e.kx && e.kx.tube && (e.kx.fit = Math.min(5, (e.kx.fit || 0) + 1)),
+    Ve(e) && e.kx && e.kx.tube && (e.kx.fit = Math.min(5, (e.kx.fit || 0) + 1)),
     Ht(e))
   ) {
-    const u = Di(e);
+    const u = qi(e);
     u.faith < Be.start
       ? (u.faith = Math.min(Be.start, u.faith + Be.drift))
       : u.faith > Be.start &&
         (u.faith = Math.max(Be.start, u.faith - Be.drift));
   }
-  td(e);
-  for (const u of Yo) n[u] = ht(P(n[u]));
-  if (e.bf && !Ho(e) && t0(e, o)) return;
-  const s = e.rule ? 10 : Ho(e) ? 1 : ud(e);
-  if (((e.age += s), e.age >= Rl && !e.bf)) {
+  od(e);
+  for (const u of oo) n[u] = ht(P(n[u]));
+  if (e.bf && !Ho(e) && a0(e, o)) return;
+  const s = e.rule ? 10 : Ho(e) ? 1 : cd(e);
+  if (((e.age += s), e.age >= Cl && !e.bf)) {
     He(e, "노화", 0.9, "year");
     return;
   }
@@ -10590,24 +10590,24 @@ function o0(e, t) {
             "Ten years passed. The ledgers passed through the Family Hierarch's hands all the while.",
             "十年が過ぎた。その間も、帳簿は家主の手を通った。",
           )
-      : o.pick(Zx);
+      : o.pick(t0);
     L(e, { kind: "flavor", text: u, tone: "system" }, 0.01);
   }
-  sd(e, t);
+  ld(e, t);
 }
-function Sg(e, t) {
+function Rg(e, t) {
   X = t;
   const o = qe(t, e),
     a = e.dead,
     n = [];
-  (Hh.includes(e.work || e.job) && n.push(ve(e)),
+  (Dh.includes(e.work || e.job) && n.push(Te(e)),
     e.flags.includes("E.G.O개화") &&
       n.push(h("E.G.O 개화", "Effloresced E.G.O", "E.G.O開花")),
-    e.job === "해결사" && e.grade && e.grade <= 3 && n.push(ve(e)),
+    e.job === "해결사" && e.grade && e.grade <= 3 && n.push(Te(e)),
     e.flags.includes("특색") &&
       n.push(h("특색 해결사", "Color Fixer", "特色フィクサー")));
-  const r = Gp(e, o),
-    i = nb(eb(e), t.rarity),
+  const r = zp(e, o),
+    i = ib(ob(e), t.rarity),
     l = o.avgLife ?? o.lifeExp;
   return {
     seed: e.seed,
@@ -10619,21 +10619,21 @@ function Sg(e, t) {
     age: a.age,
     alive: !!a.alive,
     undying: a.cause === "영생",
-    cause: Nw(a.cause),
+    cause: Ow(a.cause),
     causeKey: a.cause,
     obituary: a.text,
     region: { id: o.id, name: o.name, ward: o.ward, avgLife: l },
     diff: a.age - l,
     jobLord: e.job === "군주",
     job: e.pinky
-      ? !ve(e) && e.lastJob
+      ? !Te(e) && e.lastJob
         ? `${Un(e)} (${h(`전 ${e.lastJob}`, `Former ${e.lastJob}`, `元${e.lastJob}`)})`
-        : Ik(e)
-      : ve(e) ||
+        : Ok(e)
+      : Te(e) ||
         (e.lastJob
           ? h(`전 ${e.lastJob}`, `Former ${e.lastJob}`, `元${e.lastJob}`)
           : null),
-    pinky: e.pinky ? { star: Un(e), blade: ad(e), heaven: ag(e) === 1 } : null,
+    pinky: e.pinky ? { star: Un(e), blade: nd(e), heaven: ng(e) === 1 } : null,
     rare: n,
     stats: { ...e.stats },
     flags: [...e.flags],
@@ -10641,7 +10641,7 @@ function Sg(e, t) {
     relicName: e.relicName || null,
     reflections: e.reflections.filter((s) => s.text),
     story: r,
-    chronicle: xp(e.log),
+    chronicle: Tp(e.log),
     records: i,
     jobTier:
       (
@@ -10653,7 +10653,7 @@ function Sg(e, t) {
       ).tier || null,
   };
 }
-const a0 = [
+const r0 = [
     {
       id: "A",
       name: "A사",
@@ -11328,7 +11328,7 @@ const a0 = [
       avgLife: 36,
     },
   ],
-  n0 = [
+  i0 = [
     {
       text: "특별한 일 없이 한 해가 지나갔다. 같은 길, 같은 얼굴, 같은 하늘.",
       age: [13, 110],
@@ -12006,7 +12006,7 @@ const a0 = [
       age: [150, 99999],
     },
   ],
-  r0 = [
+  s0 = [
     {
       id: "c_fever",
       age: [1, 9],
@@ -12928,7 +12928,7 @@ const a0 = [
       regions: ["outskirts"],
     },
   ],
-  i0 = [
+  l0 = [
     {
       id: "t_school_end",
       age: [13, 16],
@@ -13434,7 +13434,7 @@ const a0 = [
       regions: ["wing"],
     },
   ],
-  s0 = [
+  h0 = [
     {
       id: "a_career_top",
       age: [18, 22],
@@ -13748,7 +13748,7 @@ const a0 = [
       ],
     },
   ],
-  l0 = [
+  d0 = [
     {
       id: "a_marriage",
       age: [22, 55],
@@ -15075,7 +15075,7 @@ const a0 = [
       },
     },
   ],
-  h0 = [
+  u0 = [
     {
       id: "j_corp_overtime_exec",
       age: [20, 80],
@@ -15828,7 +15828,7 @@ const a0 = [
       ],
     },
   ],
-  d0 = [
+  c0 = [
     {
       id: "o_memory",
       age: [60, 95],
@@ -15949,7 +15949,7 @@ const a0 = [
       effects: { rep: 3, sanity: 3, network: 2 },
     },
   ],
-  u0 = [
+  f0 = [
     {
       id: "ff_fantasm_market",
       age: [10, 70],
@@ -17574,7 +17574,7 @@ const a0 = [
       },
     },
   ],
-  c0 = [
+  w0 = [
     {
       id: "x_client_trap",
       grade: [3, 9],
@@ -18022,7 +18022,7 @@ const a0 = [
       },
     },
   ],
-  f0 = [
+  g0 = [
     {
       id: "f_recruit_thumb",
       age: [16, 35],
@@ -18644,7 +18644,7 @@ const a0 = [
       ],
     },
   ],
-  w0 = [
+  m0 = [
     {
       id: "th_drill",
       age: [16, 90],
@@ -19415,7 +19415,7 @@ const a0 = [
       ],
     },
   ],
-  g0 = [
+  y0 = [
     {
       id: "in_shoe",
       age: [16, 70],
@@ -20040,7 +20040,7 @@ const a0 = [
       ],
     },
   ],
-  m0 = [
+  p0 = [
     {
       id: "mi_collect",
       age: [16, 90],
@@ -20703,7 +20703,7 @@ const a0 = [
       ],
     },
   ],
-  y0 = [
+  b0 = [
     {
       id: "ri_submit",
       age: [16, 70],
@@ -21396,7 +21396,7 @@ const a0 = [
       ],
     },
   ],
-  p0 = [
+  k0 = [
     {
       id: "og_office_offer",
       age: [18, 60],
@@ -22438,7 +22438,7 @@ const a0 = [
       ],
     },
   ],
-  b0 = [
+  x0 = [
     {
       id: "ab_nothing_there",
       age: [14, 90],
@@ -23253,7 +23253,7 @@ const a0 = [
       anyone: !0,
     },
   ],
-  k0 = [
+  v0 = [
     {
       id: "wc_checkpoint",
       age: [19, 70],
@@ -24461,7 +24461,7 @@ const a0 = [
       officeRank: [1, 4],
     },
   ],
-  x0 = [
+  T0 = [
     {
       id: "hs_join",
       age: [18, 40],
@@ -29413,7 +29413,7 @@ const a0 = [
       ],
     },
   ],
-  T0 = [
+  _0 = [
     {
       id: "wo_task_stock",
       age: [18, 70],
@@ -31670,7 +31670,7 @@ const a0 = [
       ],
     },
   ],
-  v0 = [
+  j0 = [
     {
       id: "bf_birth_sign",
       age: [0, 0],
@@ -34737,7 +34737,7 @@ const a0 = [
       ],
     },
   ],
-  _0 = [
+  A0 = [
     {
       id: "wt_enter_fixer",
       manual: !0,
@@ -35198,7 +35198,7 @@ const a0 = [
       ],
     },
   ],
-  j0 = [
+  Y0 = [
     {
       id: "hh_05",
       age: [5, 5],
@@ -36614,7 +36614,7 @@ const a0 = [
 {남은사람줄}`,
     },
   ],
-  A0 = [
+  S0 = [
     {
       id: "bl_join",
       age: [18, 35],
@@ -38149,7 +38149,7 @@ const a0 = [
       ],
     },
   ],
-  Y0 = [
+  R0 = [
     {
       id: "kk_join",
       age: [18, 35],
@@ -39669,7 +39669,7 @@ const a0 = [
       ],
     },
   ],
-  S0 = [
+  C0 = [
     {
       id: "dr_lines",
       manual: !0,
@@ -40030,7 +40030,7 @@ const a0 = [
       hunterNm: { text: "협회 연합" },
     },
   ],
-  R0 = [
+  I0 = [
     {
       id: "lk_u_work",
       manual: !0,
@@ -41421,7 +41421,7 @@ const a0 = [
       ],
     },
   ],
-  C0 = [
+  N0 = [
     {
       id: "cm_ring_art",
       age: [12, 22],
@@ -43121,7 +43121,7 @@ const a0 = [
       ],
     },
   ],
-  I0 = [
+  O0 = [
     {
       id: "kx_join",
       age: [18, 40],
@@ -44723,7 +44723,7 @@ const a0 = [
       ],
     },
   ],
-  N0 = [
+  W0 = [
     {
       id: "nh_join",
       age: [18, 40],
@@ -45807,7 +45807,7 @@ const a0 = [
       banned: { text: "이단 심문관은 몸을 바꾸지 않는다." },
     },
   ],
-  O0 = [
+  E0 = [
     {
       id: "rq_delivery",
       type: "단순 업무",
@@ -47008,7 +47008,7 @@ const a0 = [
       death: "장로가 직접 내려왔다.",
     },
   ],
-  W0 = [
+  B0 = [
     "뜬소문",
     "도시 괴담",
     "도시 전설",
@@ -47016,7 +47016,7 @@ const a0 = [
     "도시 악몽",
     "도시의 별",
   ],
-  E0 = [
+  F0 = [
     { name: "윤 사무소" },
     { name: "가로등 사무소" },
     { name: "갈고리 사무소" },
@@ -47029,7 +47029,7 @@ const a0 = [
     { name: "송곳니 사냥 사무소" },
     { name: "솔 사무소" },
   ],
-  B0 = [
+  L0 = [
     {
       name: "하나 협회",
       desc: "해결사 면허 발급과 등급 심사, 특색 지정을 맡는 협회",
@@ -47043,7 +47043,7 @@ const a0 = [
     { name: "디에치 협회", desc: "" },
     { name: "외우피 협회", desc: "거래 중개와 계약을 다루는 협회" },
   ],
-  F0 = [
+  P0 = [
     { name: "불타버린 소녀", tiers: [1, 2] },
     { name: "거미봉오리", tiers: [1, 2] },
     { name: "행복한 테디", tiers: [2, 3] },
@@ -47059,280 +47059,280 @@ const a0 = [
     { name: "푸른 별", tiers: [5, 5], aleph: !0 },
     { name: "종말새", tiers: [5, 5], aleph: !0 },
   ],
-  L0 = { tiers: W0, office: E0, assoc: B0, abnormal: F0 },
-  P0 = 0.494667,
-  M0 = 0.409417,
-  $0 = 0.348833,
-  H0 = 0.303167,
-  D0 = 0.277583,
-  q0 = 0.252667,
-  G0 = 0.22725,
-  K0 = 0.221083,
-  z0 = 0.19425,
-  U0 = 0.191667,
-  J0 = 0.184,
-  V0 = 0.117167,
-  X0 = 0.105917,
-  Q0 = 0.089667,
-  Z0 = 0.07275,
-  e1 = 0.071583,
-  t1 = 0.066667,
-  o1 = 0.05725,
-  a1 = 0.056917,
-  n1 = 0.05575,
-  r1 = 0.05475,
-  i1 = 0.044083,
-  s1 = 0.041083,
-  l1 = 0.039917,
-  h1 = 0.038833,
-  d1 = 0.036667,
-  u1 = 0.033417,
-  c1 = 0.030583,
-  f1 = 0.027917,
-  w1 = 0.027667,
-  g1 = 0.020167,
-  m1 = 0.020167,
-  y1 = 0.016917,
-  p1 = 0.016667,
-  b1 = 0.0165,
-  k1 = 0.013917,
-  x1 = 0.01275,
-  T1 = 0.0115,
-  v1 = 0.010167,
-  _1 = 0.009333,
-  j1 = 0.008833,
-  A1 = 0.008,
-  Y1 = 0.00725,
-  S1 = 0.007083,
-  R1 = 0.006917,
-  C1 = 0.0055,
-  I1 = 0.0055,
+  M0 = { tiers: B0, office: F0, assoc: L0, abnormal: P0 },
+  $0 = 0.494667,
+  H0 = 0.409417,
+  D0 = 0.348833,
+  q0 = 0.303167,
+  G0 = 0.277583,
+  K0 = 0.252667,
+  z0 = 0.22725,
+  U0 = 0.221083,
+  J0 = 0.19425,
+  V0 = 0.191667,
+  X0 = 0.184,
+  Q0 = 0.117167,
+  Z0 = 0.105917,
+  e1 = 0.089667,
+  t1 = 0.07275,
+  o1 = 0.071583,
+  a1 = 0.066667,
+  n1 = 0.05725,
+  r1 = 0.056917,
+  i1 = 0.05575,
+  s1 = 0.05475,
+  l1 = 0.044083,
+  h1 = 0.041083,
+  d1 = 0.039917,
+  u1 = 0.038833,
+  c1 = 0.036667,
+  f1 = 0.033417,
+  w1 = 0.030583,
+  g1 = 0.027917,
+  m1 = 0.027667,
+  y1 = 0.020167,
+  p1 = 0.020167,
+  b1 = 0.016917,
+  k1 = 0.016667,
+  x1 = 0.0165,
+  v1 = 0.013917,
+  T1 = 0.01275,
+  _1 = 0.0115,
+  j1 = 0.010167,
+  A1 = 0.009333,
+  Y1 = 0.008833,
+  S1 = 0.008,
+  R1 = 0.00725,
+  C1 = 0.007083,
+  I1 = 0.006917,
   N1 = 0.0055,
-  O1 = 0.004833,
-  W1 = 0.004583,
-  E1 = 0.00375,
-  B1 = 0.00375,
-  F1 = 0.003583,
-  L1 = 0.003417,
-  P1 = 0.003167,
-  M1 = 0.00275,
-  $1 = 0.00275,
-  H1 = 0.002667,
-  D1 = 0.002667,
-  q1 = 0.0025,
-  G1 = 0.0025,
-  K1 = 0.002417,
-  z1 = 0.002417,
-  U1 = 0.002333,
-  J1 = 0.002167,
-  V1 = 0.002083,
-  X1 = 0.001917,
-  Q1 = 0.001917,
+  O1 = 0.0055,
+  W1 = 0.0055,
+  E1 = 0.004833,
+  B1 = 0.004583,
+  F1 = 0.00375,
+  L1 = 0.00375,
+  P1 = 0.003583,
+  M1 = 0.003417,
+  $1 = 0.003167,
+  H1 = 0.00275,
+  D1 = 0.00275,
+  q1 = 0.002667,
+  G1 = 0.002667,
+  K1 = 0.0025,
+  z1 = 0.0025,
+  U1 = 0.002417,
+  J1 = 0.002417,
+  V1 = 0.002333,
+  X1 = 0.002167,
+  Q1 = 0.002083,
   Z1 = 0.001917,
-  eT = 0.001833,
-  tT = 0.001833,
-  oT = 0.001833,
-  aT = 0.001667,
-  nT = 0.0015,
-  rT = 0.0015,
-  iT = 0.0015,
-  sT = 0.0015,
-  lT = 0.001417,
-  hT = 0.001333,
-  dT = 0.001167,
-  uT = 0.001,
-  cT = 833e-6,
-  fT = 833e-6,
-  wT = 75e-5,
-  gT = 75e-5,
-  mT = 75e-5,
-  yT = 75e-5,
-  pT = 667e-6,
-  bT = 583e-6,
-  kT = 583e-6,
-  xT = 583e-6,
-  TT = 5e-4,
-  vT = 417e-6,
-  _T = 417e-6,
-  jT = 417e-6,
-  AT = 417e-6,
-  YT = 417e-6,
-  ST = 417e-6,
-  RT = 417e-6,
-  CT = 417e-6,
-  IT = 417e-6,
-  NT = 333e-6,
-  OT = 333e-6,
-  WT = 333e-6,
-  ET = 25e-5,
-  BT = 25e-5,
-  FT = 25e-5,
-  LT = 25e-5,
-  PT = 25e-5,
-  MT = 25e-5,
-  $T = 167e-6,
-  HT = 167e-6,
-  DT = 167e-6,
-  qT = 167e-6,
-  GT = 167e-6,
-  KT = 83e-6,
-  zT = 83e-6,
-  UT = 83e-6,
-  JT = 83e-6,
-  VT = 83e-6,
-  XT = 83e-6,
-  QT = 83e-6,
-  ZT = 83e-6,
-  ev = 83e-6,
-  tv = 0.11975,
-  ov = 0.181,
-  av = 0.00575,
-  nv = 0.014,
-  rv = {
-    fixer: P0,
-    fixer_g7: M0,
-    fixer_g6: $0,
-    prosthetic_good: H0,
-    fixer_g5: D0,
-    office: q0,
-    prosthetic: G0,
-    corp: K0,
-    fixer_g4: z0,
-    req_star: U0,
-    age80: J0,
-    assoc: V0,
-    fixer_g3: X0,
-    assoc_staff: Q0,
-    office_dept: Z0,
-    warp_car_6: e1,
-    warp_car_3: t1,
-    born_outskirts: o1,
-    warp_car_5: a1,
-    orphan: n1,
-    warp_car_4: r1,
+  ev = 0.001917,
+  tv = 0.001917,
+  ov = 0.001833,
+  av = 0.001833,
+  nv = 0.001833,
+  rv = 0.001667,
+  iv = 0.0015,
+  sv = 0.0015,
+  lv = 0.0015,
+  hv = 0.0015,
+  dv = 0.001417,
+  uv = 0.001333,
+  cv = 0.001167,
+  fv = 0.001,
+  wv = 833e-6,
+  gv = 833e-6,
+  mv = 75e-5,
+  yv = 75e-5,
+  pv = 75e-5,
+  bv = 75e-5,
+  kv = 667e-6,
+  xv = 583e-6,
+  vv = 583e-6,
+  Tv = 583e-6,
+  _v = 5e-4,
+  jv = 417e-6,
+  Av = 417e-6,
+  Yv = 417e-6,
+  Sv = 417e-6,
+  Rv = 417e-6,
+  Cv = 417e-6,
+  Iv = 417e-6,
+  Nv = 417e-6,
+  Ov = 417e-6,
+  Wv = 333e-6,
+  Ev = 333e-6,
+  Bv = 333e-6,
+  Fv = 25e-5,
+  Lv = 25e-5,
+  Pv = 25e-5,
+  Mv = 25e-5,
+  $v = 25e-5,
+  Hv = 25e-5,
+  Dv = 167e-6,
+  qv = 167e-6,
+  Gv = 167e-6,
+  Kv = 167e-6,
+  zv = 167e-6,
+  Uv = 83e-6,
+  Jv = 83e-6,
+  Vv = 83e-6,
+  Xv = 83e-6,
+  Qv = 83e-6,
+  Zv = 83e-6,
+  eT = 83e-6,
+  tT = 83e-6,
+  oT = 83e-6,
+  aT = 0.11975,
+  nT = 0.181,
+  rT = 0.00575,
+  iT = 0.014,
+  sT = {
+    fixer: $0,
+    fixer_g7: H0,
+    fixer_g6: D0,
+    prosthetic_good: q0,
+    fixer_g5: G0,
+    office: K0,
+    prosthetic: z0,
+    corp: U0,
+    fixer_g4: J0,
+    req_star: V0,
+    age80: X0,
+    assoc: Q0,
+    fixer_g3: Z0,
+    assoc_staff: e1,
+    office_dept: t1,
+    warp_car_6: o1,
+    warp_car_3: a1,
+    born_outskirts: n1,
+    warp_car_5: r1,
+    orphan: i1,
+    warp_car_4: s1,
     finger_엄지: 0.050083,
     finger_중지: 0.048917,
     finger_검지: 0.048417,
     finger_약지: 0.047083,
     frank_중지_2: 0.044417,
-    warp_car_7: i1,
+    warp_car_7: l1,
     frank_약지_2: 0.041083,
-    warp_car_2: s1,
-    aleph_survive: l1,
+    warp_car_2: h1,
+    aleph_survive: d1,
     frank_중지_3: 0.039083,
-    fixer_g2: h1,
+    fixer_g2: u1,
     frank_엄지_2: 0.037,
-    born_head: d1,
-    die_child: u1,
+    born_head: c1,
+    die_child: f1,
     frank_검지_2: 0.033333,
-    pinky_star_earth: c1,
-    office_dir: f1,
-    distorted: w1,
-    ego: g1,
-    kk_join: m1,
-    bl_join: y1,
-    kk_captain: p1,
-    pinky_star_heaven: b1,
-    finger_quit: k1,
-    bl_salsu: x1,
-    warp_car_1: T1,
-    lake_drink: v1,
-    kk_truce: _1,
-    bf_two_kin: j1,
-    fixer_g1: A1,
-    bf_kin: Y1,
+    pinky_star_earth: w1,
+    office_dir: g1,
+    distorted: m1,
+    ego: y1,
+    kk_join: p1,
+    bl_join: b1,
+    kk_captain: k1,
+    pinky_star_heaven: x1,
+    finger_quit: v1,
+    bl_salsu: T1,
+    warp_car_1: _1,
+    lake_drink: j1,
+    kk_truce: A1,
+    bf_two_kin: Y1,
+    fixer_g1: S1,
+    bf_kin: R1,
     frank_엄지_3: 0.007167,
-    kk_retire: S1,
-    r_pack: R1,
+    kk_retire: C1,
+    r_pack: I1,
     frank_약지_3: 0.006167,
     frank_중지_4: 0.005583,
-    bf_stray: C1,
-    color: I1,
-    kk_finger: N1,
+    bf_stray: N1,
+    color: O1,
+    kk_finger: W1,
     frank_검지_3: 0.005083,
-    heir_cand: O1,
-    age100: W1,
-    bloodbag: E1,
-    w_cleanup: B1,
-    library_lost: F1,
-    dist_grade_3: L1,
-    bl_scatter_leave: P1,
-    bf_alive: M1,
-    heir_head: $1,
-    dist_final: H1,
-    library_back: D1,
+    heir_cand: E1,
+    age100: B1,
+    bloodbag: F1,
+    w_cleanup: L1,
+    library_lost: P1,
+    dist_grade_3: M1,
+    bl_scatter_leave: $1,
+    bf_alive: H1,
+    heir_head: D1,
+    dist_final: q1,
+    library_back: G1,
     frank_엄지_4: 0.002583,
-    bf_sleep: q1,
-    lake_hint2: G1,
-    dist_grade_2: K1,
-    heishou: z1,
-    t_collector: U1,
-    kk_patriarch: J1,
-    kk_bl_last: V1,
-    bl_last: X1,
-    heir_fail: Q1,
-    office_ceo: Z1,
-    age200: eT,
-    kk_ink3: tT,
-    warp_clear: oT,
-    bl_mentor: aT,
-    bf_epi_hunter: nT,
-    dist_grade_1: rT,
-    heishou_adept: iT,
-    kk_p_end: sT,
-    n_inquisitor: lT,
-    kk_dojo: hT,
-    bf_300: dT,
-    lament_happy: uT,
-    lament_meet: cT,
-    warp_car_0: fT,
-    apocalypse: wT,
-    n_grosshammer: gT,
-    n_zealot: mT,
-    relic: yT,
-    w_level5: pT,
-    bf_end_hunter_last: bT,
-    bl_w_student: kT,
-    t_class5: xT,
-    bf_nobite: TT,
-    bf_end_faces: vT,
-    bf_end_kin_cup: _T,
-    bf_epi_gone: jT,
-    bf_found: AT,
-    bf_reveal: YT,
-    bl_w_settle: ST,
-    dist_grade_4: RT,
-    lament_wait: CT,
-    rule_human: IT,
-    bl_w_reform: NT,
-    dist_grade_0: OT,
-    kk_d_student: WT,
-    bf_epi_faces: ET,
-    bf_epi_kin: BT,
-    bl_homeland: FT,
-    dist_nm6: LT,
-    dist_return: PT,
-    index_e: MT,
-    bf_end_smile_first: $T,
-    bl_m_retreat: HT,
-    heir_lord: DT,
-    lake_whale_crimson: qT,
-    rule_abolish: GT,
-    bf_end_couple_sleep: KT,
-    bf_end_gone_grave: zT,
-    bf_epi_couple: UT,
-    bf_epi_elder: JT,
-    bf_gen1: VT,
-    lake_whale_marlin: XT,
-    r_commander: QT,
-    rule_kong: ZT,
-    rule_tyrant: ev,
-    love_first: tv,
-    refuse_proposal: ov,
-    widowed: av,
-    unwed_lover: nv,
+    bf_sleep: K1,
+    lake_hint2: z1,
+    dist_grade_2: U1,
+    heishou: J1,
+    t_collector: V1,
+    kk_patriarch: X1,
+    kk_bl_last: Q1,
+    bl_last: Z1,
+    heir_fail: ev,
+    office_ceo: tv,
+    age200: ov,
+    kk_ink3: av,
+    warp_clear: nv,
+    bl_mentor: rv,
+    bf_epi_hunter: iv,
+    dist_grade_1: sv,
+    heishou_adept: lv,
+    kk_p_end: hv,
+    n_inquisitor: dv,
+    kk_dojo: uv,
+    bf_300: cv,
+    lament_happy: fv,
+    lament_meet: wv,
+    warp_car_0: gv,
+    apocalypse: mv,
+    n_grosshammer: yv,
+    n_zealot: pv,
+    relic: bv,
+    w_level5: kv,
+    bf_end_hunter_last: xv,
+    bl_w_student: vv,
+    t_class5: Tv,
+    bf_nobite: _v,
+    bf_end_faces: jv,
+    bf_end_kin_cup: Av,
+    bf_epi_gone: Yv,
+    bf_found: Sv,
+    bf_reveal: Rv,
+    bl_w_settle: Cv,
+    dist_grade_4: Iv,
+    lament_wait: Nv,
+    rule_human: Ov,
+    bl_w_reform: Wv,
+    dist_grade_0: Ev,
+    kk_d_student: Bv,
+    bf_epi_faces: Fv,
+    bf_epi_kin: Lv,
+    bl_homeland: Pv,
+    dist_nm6: Mv,
+    dist_return: $v,
+    index_e: Hv,
+    bf_end_smile_first: Dv,
+    bl_m_retreat: qv,
+    heir_lord: Gv,
+    lake_whale_crimson: Kv,
+    rule_abolish: zv,
+    bf_end_couple_sleep: Uv,
+    bf_end_gone_grave: Jv,
+    bf_epi_couple: Vv,
+    bf_epi_elder: Xv,
+    bf_gen1: Qv,
+    lake_whale_marlin: Zv,
+    r_commander: eT,
+    rule_kong: tT,
+    rule_tyrant: oT,
+    love_first: aT,
+    refuse_proposal: nT,
+    widowed: rT,
+    unwed_lover: iT,
   };
-function iv({
+function lT({
   regions: e,
   events: t,
   daily: o,
@@ -47349,29 +47349,29 @@ function iv({
   const s = o.map((u, f) => ({ id: u.id || `d${f}`, repeat: !0, ...u }));
   return { regions: e, events: i, daily: s, requests: a, orgs: n, rarity: r };
 }
-const sv = new Set(["text", "label", "ignoreLabel", "ruleLine"]),
-  lv = new Set(["verse"]);
-function nc(e, t, o) {
+const hT = new Set(["text", "label", "ignoreLabel", "ruleLine"]),
+  dT = new Set(["verse"]);
+function rc(e, t, o) {
   const a = new Set(),
     n = (g) => {
       if (typeof g != "string" || !/[가-힣]/.test(g)) return g;
-      const k = t[g];
-      return k ?? (a.add(g), g);
+      const x = t[g];
+      return x ?? (a.add(g), g);
     },
     r = (g) => {
       if (Array.isArray(g)) return g.map(r);
       if (g && typeof g == "object") {
-        const k = {};
-        for (const [x, T] of Object.entries(g))
-          k[x] =
-            sv.has(x) && typeof T == "string"
-              ? n(T)
-              : lv.has(x) && Array.isArray(T)
-                ? T.map(n)
-                : typeof T == "object"
-                  ? r(T)
-                  : T;
-        return k;
+        const x = {};
+        for (const [k, v] of Object.entries(g))
+          x[k] =
+            hT.has(k) && typeof v == "string"
+              ? n(v)
+              : dT.has(k) && Array.isArray(v)
+                ? v.map(n)
+                : typeof v == "object"
+                  ? r(v)
+                  : v;
+        return x;
       }
       return g;
     },
@@ -47407,10 +47407,10 @@ function nc(e, t, o) {
     missing: [...a],
   };
 }
-function rc(e) {
+function ic(e) {
   return Object.assign({}, ...e);
 }
-const hv = {
+const uT = {
     "밤새 열이 내리지 않는다. 이마 위의 젖은 천이 금세 미지근해진다.":
       "The fever won't break all night. The wet cloth on your forehead turns lukewarm in no time.",
     "있는 돈을 털어 약을 구한다": "Spend every last coin on medicine",
@@ -47799,7 +47799,7 @@ const hv = {
     "흰 옷의 사람은 웃으며 명함을 남겼다. 명함에는 이름 대신 작은 반지가 그려져 있었다.":
       "The person in white smiled and left a card. Instead of a name, a small ring was drawn on it.",
   },
-  dv = {
+  cT = {
     "학교를 마칠 때가 다가온다. 상급 과정에 가려면 시간과 돈이 든다. 일을 시작하면 당장의 생활이 나아진다.":
       "School is coming to an end. Going on to higher education takes time and money. Starting work would make life easier right now.",
     "상급 과정에 진학한다": "Go on to higher education",
@@ -48101,7 +48101,7 @@ const hv = {
     "흰 옷의 사람은 웃으며 명함을 남겼다. 명함에는 이름 대신 작은 반지가 그려져 있었다.":
       "The person in white smiled and left a card. Instead of a name, a small ring was drawn on it.",
   },
-  uv = {
+  fT = {
     "{지역}의 상층에서 자란 아이에게 열린 길은 많다. 그러나 그 길 모두에 날개의 이름이 붙어 있다.":
       "Many paths are open to a child raised in the upper levels of {지역}. But every one of them bears the Wing's name.",
     "날개의 정규 사원이 된다": "Become a regular employee of the Wing",
@@ -48177,7 +48177,7 @@ const hv = {
     "뒷골목에서 무허가 일을 받으며 버텼다. 몇 년 뒤 9급 해결사 면허를 손에 쥐었다.":
       "You got by in the Backstreets taking unlicensed jobs. A few years later, you held a Grade 9 Fixer license in your hand.",
   },
-  cv = {
+  wT = {
     "함께 산다": "Live together",
     "좁은 방 하나에 두 사람의 짐이 섞였다. 이상하게도 덜 외로웠다.":
       "Two people's belongings mixed together in one small room. Strangely, it felt less lonely.",
@@ -48546,7 +48546,7 @@ const hv = {
     "서로의 거리가 조금씩 멀어졌다. {연인}의 이름은 더 이상 입에 오르지 않았다.":
       "The distance between you grew little by little. {연인}'s name no longer came up.",
   },
-  fv = {
+  gT = {
     "분기 실적 발표를 앞두고 부서 전체가 불을 끄지 못했다. 복도의 시계는 새벽 세 시를 가리킨다. 월급 명세서에는 '성과 보너스'라는 항목이 생겼다.":
       "With the quarterly results announcement coming up, the whole department couldn't turn off the lights. The clock in the hallway reads three in the morning. A new line appeared on your payslip: 'performance bonus.'",
     "승진 심사가 다가온다. 상사는 은근히 말한다. '이번 프로젝트, 책임자 이름에 네 이름을 올려 줄 수도 있어. 대신…'":
@@ -48770,7 +48770,7 @@ const hv = {
     "그 사람은 봉투를 도로 넣었다. 다음 날부터 거스름돈은 챙겨져 있지 않았다.":
       "That person put the envelope back. From the next day, your change was no longer set aside for you.",
   },
-  wv = {
+  mT = {
     "문득 옛날 일이 선명하게 떠올랐다. 첫 월급으로 샀던 낡은 외투, 함께 걷던 사람의 뒷모습. 도시는 그때보다 훨씬 조용해졌다.":
       "Out of nowhere, old memories came back vividly. The worn coat you bought with your first paycheck, the back of someone you used to walk with. The City has grown much quieter since then.",
     "같은 골목에서 오래 살던 이웃이 어느 날 보이지 않는다. 방은 비어 있고, 우편함은 가득 찼다.":
@@ -48807,7 +48807,7 @@ const hv = {
     "{아이}에게 남긴다": "Leave it to {아이}",
     "가족에게 남긴다": "Leave it to your family",
   },
-  gv = {
+  yT = {
     "장 보러 나간 시장 한복판, 생선 좌판 너머의 사람들이 한꺼번에 소리 없이 쓰러진다. 그 뒤에서 무언가가 천천히 몸을 일으킨다. 아무도 경보를 울리지 않았다.":
       "You're in the middle of the market for groceries when the people beyond the fish stall all collapse at once, without a sound. Behind them, something slowly rises. No one has sounded an alarm.",
     "좌판 밑으로 기어 들어가 숨을 죽인다":
@@ -49301,7 +49301,7 @@ const hv = {
     "빗나간 칼날이 구경꾼 쪽으로 날아왔다. 구경꾼들에게 가는 칼을 막다 부상을 입었다.":
       "A stray blade flew toward the onlookers. You were wounded blocking the blade meant for the bystanders.",
   },
-  mv = {
+  pT = {
     "평범한 배달 의뢰였다. 그런데 약속 장소에 도착하자 의뢰인 대신 다른 사무소의 해결사 다섯이 기다리고 있다. 누군가 당신 목에 현상금을 걸었다.":
       "It was an ordinary delivery request. But when you arrive at the meeting point, five Fixers from another Office are waiting instead of the client. Someone has put a bounty on your head.",
     "싸워서 뚫는다": "Fight your way through",
@@ -49442,7 +49442,7 @@ const hv = {
     "봉투는 책상 위에서 며칠을 기다리다 돌아갔다.":
       "The envelope sat on your desk for a few days, then went back.",
   },
-  yv = {
+  bT = {
     "붉은 코트에 중절모를 쓴 사내들이 골목 끝 식당을 통째로 빌렸다. 카포라 불리는 남자가 손짓으로 당신을 부른다. '예의를 아는 얼굴이군. 엄지에서는 위를 공경하는 자에게 빵과 총알이 주어진다.'":
       "Men in red coats and fedoras have rented out an entire restaurant at the end of the alley. A man they call Capo beckons you over. 'You've got the face of someone who knows manners. In the Thumb, bread and bullets are given to those who respect their superiors.'",
     "모자를 벗고 고개를 숙여 예를 갖춘다":
@@ -49620,7 +49620,7 @@ const hv = {
     "대행자는 한참 서 있다가 종이를 접었다. 지령은 수행되지 못했고, 그 책임은 그의 몫이 되었다. 그는 끝까지 칼에 손을 대지 않았다.":
       "The Proxy stood there a long while, then folded the note. The Prescript went unfulfilled, and the responsibility became his. He never once reached for his blade.",
   },
-  pv = {
+  kT = {
     "솔다토의 하루는 막사에서 시작해 막사에서 끝난다. 새벽 점호, 사격 자세, 경례 각도. 같은 솔다토 안에서도 프리모부터 콰르토까지 서열이 있고, 당신은 아직 맨 끝이다.":
       "A Soldato's day starts and ends in the barracks. Dawn roll call, firing stance, the angle of your salute. Even among Soldati there's a pecking order from Primo to Quarto, and you're still at the very bottom.",
     "이를 악물고 훈련을 버틴다": "Grit your teeth and endure the training",
@@ -49871,7 +49871,7 @@ const hv = {
     "이름이 장부에 적혔다. 대신 그날 밤의 식탁은 오래 비어 있지 않았다. 다음 날 아침 누군가 말없이 당신의 어깨를 두드렸다.":
       "Your name was written in the ledger. In exchange, the table that night was not empty for long. The next morning someone tapped your shoulder without a word.",
   },
-  bv = {
+  xT = {
     "검지 인장이 찍힌 쪽지가 문틈에 꽂혀 있다. '오늘 해가 지기 전, 다섯 번째로 마주친 사람의 오른쪽 신발을 가져올 것.'":
       "A note bearing the Index's seal is tucked into the crack of your door. 'Before sunset today, bring the right shoe of the fifth person you meet.'",
     "지령대로 신발을 가져온다": "Bring the shoe as the Prescript says",
@@ -50073,7 +50073,7 @@ const hv = {
     "그 사람은 다른 문을 두드렸다. 그 문이 열렸는지는 알지 못한다.":
       "They knocked on another door. You never learned whether it opened.",
   },
-  kv = {
+  vT = {
     "형님이 오늘 돌 가게 목록을 건넨다. 밀린 돈, 밀린 인사, 밀린 의리. 첫 번째 가게 주인은 당신 얼굴을 보자마자 금고부터 연다. 두 번째 가게는 셔터가 내려져 있다.":
       "Big Brother hands you today's list of shops to make the rounds. Overdue money, overdue respects, overdue loyalty. The first shopkeeper opens the safe the moment he sees your face. The second shop has its shutter down.",
     "셔터를 걷어차고 들어간다": "Kick in the shutter and go inside",
@@ -50270,7 +50270,7 @@ const hv = {
     '가족은 사흘 안에 구역을 떠났다. 문 앞에서 {배우자:이|가} 말했다. "어디로 가든 같이 가는 거야."':
       'Your family left the district within three days. At the door, {배우자} said, "Wherever we go, we go together."',
   },
-  xv = {
+  TT = {
     "작품 제출일. 상급자가 작품을 보고 인정하면 반지가 한 번 더 감긴다. 스튜던트는 한 번, 도슨트는 두 번, 마에스트로는 세 번. 낙제가 쌓이면 다음 재료가 되는 사람도 있다.":
       "Submission day. If a superior sees your work and approves, your ring is wound one more time. Once for a Student, twice for a Docent, three times for a Maestro. Some who pile up failures become the material for the next piece.",
     "몇 달을 매달린 대작을 낸다":
@@ -50493,7 +50493,7 @@ const hv = {
     "작품은 완성되었다. 가장 아름다운 것이 가장 가까이에 있었다는 사실을 당신은 완성된 뒤에야 알았다. {배우자:은|는} 오래 말이 없었다.":
       "The work was finished. Only once it was done did you realize the most beautiful thing had been closest all along. {배우자} was silent for a long time.",
   },
-  Tv = {
+  _T = {
     "{제안}에서 사람을 구한다는 소식이 들어왔다. 혼자 의뢰를 받으면 보수는 전부 내 것이지만, 등 뒤를 맡길 사람이 없다. 사무소에 들어가면 의뢰도 동료도 늘어난다.":
       "Word came that {제안} is hiring. Working solo, every fee is yours, but there's no one to watch your back. Join an Office, and you get more requests and more colleagues.",
     "{제안}에 들어간다": "Join {제안}",
@@ -50792,7 +50792,7 @@ const hv = {
     "그 사람은 책을 한 권 더 꺼내 건넸다. 이번에는 책갈피 자리에 쪽지가 없었다. 도서관에서 마주쳐도 두 사람은 서가만 보았다.":
       "That person took out one more book and handed it over. This time there was no note at the bookmark. Even when you met in the library, the two of you looked only at the shelves.",
   },
-  vv = {
+  jT = {
     "【아무것도 없는】 ALEPH. 도시의 재해다. 구역 전광판에 '재해 경보'가 뜨기도 전에 그것은 이미 사람들 사이에 섞여 있었다. 늘 인사하던 이웃이 골목 끝에서 손을 흔든다. 목소리의 간격이, 웃음의 길이가 조금씩 틀렸다. 얼굴 가장자리가 녹아내리듯 흐물거린다. 이것과 싸울 수 있는 사람은 이 구역에 없다.":
       "【Nothing There】 ALEPH. A disaster of the City. Before the 'Disaster Warning' even appeared on the District billboards, it was already mingling among the people. The neighbor you always greet waves at you from the end of the alley. The pauses in the voice, the length of the laugh, are all slightly off. The edges of the face sag as if melting. No one in this District can fight this.",
     "아무것도 모르는 척 인사하고 지나간다":
@@ -51046,7 +51046,7 @@ const hv = {
       "The child was one step faster. You were caught in the blast, but held on.",
     "아이가 웃는 얼굴로 당신을 안았다.": "The child embraced you with a smile.",
   },
-  _v = {
+  AT = {
     "출근길 둥지 검문소에서 줄이 멈췄다. 앞사람의 출입증이 읽히지 않는다. 뒷골목 쪽에서 온 사람이다. 경비가 당신을 힐끗 본다. 사원증 하나면 보증을 설 수 있다.":
       "On your way to work, the line at the Nest checkpoint has stopped. The ID of the person in front of you won't scan. They're from the Backstreets side. The guard glances at you. With your employee ID, you could vouch for them.",
     "보증을 서 준다": "Vouch for them",
@@ -51380,7 +51380,7 @@ const hv = {
     "연줄 몇 개를 당겼다. 옮기지는 않았지만, 옮길 수 있다는 것을 알았다.":
       "You pulled a few strings. You didn't move, but you learned that you could.",
   },
-  jv = {
+  YT = {
     "대관원 명문가의 사람이 찾아왔다. 당신의 몸이 '쓸 만하다'고 한다. 선인이라 불리는 노인이 환 한 알을 내밀었다. 삼키면 돌아갈 수 없다는 것을 이 구역 사람이라면 모두 안다.":
       "Someone from one of Daguanyuan's great families came to see you. They say your body is 'usable.' An old man called a Xianren held out a single Bolus. Everyone in this District knows that once you swallow it, there is no going back.",
     "환을 삼킨다": "Swallow the Bolus",
@@ -52914,7 +52914,7 @@ const hv = {
     "그 사람은 고개를 숙이고 다음 명을 기다렸다. 뜻을 말하는 일은 그날이 마지막이었다.":
       "That person bowed their head and waited for the next order. Speaking their own will was something they never did again after that day.",
   },
-  Av = {
+  ST = {
     "분기말이다. 창고 장부와 실물이 맞지 않는다. 사흘 안에 대조를 끝내라는 지시가 내려왔다.":
       "It's the end of the quarter. The warehouse ledger doesn't match the actual stock. An order has come down to finish the reconciliation within three days.",
     "장부 순서대로 센다": "Count in ledger order",
@@ -53649,7 +53649,7 @@ const hv = {
     "회사로 가던 길에 발이 느려졌고, 행사장에는 끝난 뒤에야 닿았다. 어느 쪽에서도 환영받지 못했다.":
       "Your steps slowed on the way to the office, and you reached the venue only after it was over. You were welcome in neither place.",
   },
-  Yv = {
+  RT = {
     "갓난아이는 젖을 물고도 오래 울었다. 무엇을 찾는지는 아무도 몰랐다.":
       "The baby cried for a long time, even at the breast. No one knew what it was looking for.",
     "열이 사흘 밤낮 내리지 않았다. 나흘째 아침, 열은 거짓말처럼 내려 있었다. 대신 목이 말랐다. 물로는 가시지 않았다.":
@@ -54700,7 +54700,7 @@ const hv = {
     "{아이:이|가} 자라 당신의 겉나이를 넘었다. 이제는 {아이:이|가} 당신을 걱정한다. {아이:은|는} 이유를 모른다.":
       "{아이} has grown older than you look. Now {아이} worries about you. They do not know why.",
   },
-  Sv = {
+  CT = {
     "W사의 의뢰가 왔다. 운행 중인 워프 열차에 들어가 '도착 전에' 칸을 정리하라는 것이다. 바깥에서는 10초. 안에서는 아무도 모른다.":
       "A request came from W Corp.: board a Warp Train in transit and clear its cars 'before arrival.' Outside, it takes 10 seconds. Inside, no one knows.",
     "의뢰를 받는다": "Accept the request",
@@ -54941,7 +54941,7 @@ const hv = {
       "10 seconds later, the doors opened. Only Cleanup Agents stepped off. On the list, the targets became 'Whereabouts unknown.'",
     "못을 박는다": "Drive the nail in",
   },
-  Rv = {
+  IT = {
     "가문의 어른이 다섯 살이 된 당신을 앞에 앉혔다. 오늘부터 배우는 것은 글이 아니라 사람이라고 했다. 어른이 첫 질문을 던졌다. '저 문 안에는 무엇이 있겠느냐.'":
       "An elder of the family sat you down, five years old now. From today, the elder said, you would learn not letters but people. The first question came. 'What lies behind that door?'",
     "[지] 문틈의 불빛과 발소리를 세어 대답한다":
@@ -55623,7 +55623,7 @@ You paid your respects to the elders at Tiekan Temple. When you climbed the stai
     "철함사의 어르신들은 승계식 날 군주의 손에 모두 죽었다. 그래도 철함사 아래에는 그들이 남긴 것이 있었다. 환의 처방, 오래된 그릇, 이름 없는 방들. 대관원의 몇몇은 그것으로 다시 늙지 않는 길을 찾으려 했다.":
       "The elders of Tiekan Temple had all died by the Lord's hand on the day of the succession ceremony. Still, beneath Tiekan Temple, what they had left behind remained. Bolus prescriptions, old vessels, rooms with no names. A few in Daguanyuan tried to use them to find a way to never grow old again.",
   },
-  Cv = {
+  NT = {
     '비 오는 밤, 골목 끝에 두루마기를 걸친 사람이 서 있었다. 정장 위에 한복, 허리에는 매듭 달린 환도. "갈 곳이 없어 보이는군. 상처는 있소?"':
       'On a rainy night, someone in a durumagi stood at the end of the alley. Hanbok over a suit, a hwando with a knotted cord at the hip. "You look like you have nowhere to go. Do you have scars?"',
     "소매를 걷어 보인다": "Roll up your sleeve and show them",
@@ -56129,7 +56129,7 @@ You paid your respects to the elders at Tiekan Temple. When you climbed the stai
     "그 사람은 골목 끝까지 바래다주었다. 이후로 그 길에서는 마주치지 않았다.":
       "That person walked you to the end of the alley. After that, you never crossed paths on that road again.",
   },
-  Iv = {
+  OT = {
     '구역 사이 길목에서 검은 정장들이 통행료를 걷고 있었다. 낼 돈이 없는 당신을 막아선 사내가 한참 보더니 웃었다. 목덜미까지 검은 구름이 번져 있다. "돈 대신 몸으로 낼 생각 있나. 위에서 시키는 대로만 하면 된다."':
       'Black suits were collecting tolls at the passage between districts. The man who stopped you, with no money to pay, looked at you for a long while and smiled. Black clouds spread all the way up his neck. "Want to pay with your body instead of money? You just do what the people above tell you."',
     "고개를 숙이고 따른다": "Bow your head and follow",
@@ -56615,7 +56615,7 @@ You paid your respects to the elders at Tiekan Temple. When you climbed the stai
     "그 사람은 말없이 자리를 비웠다. 얼마 지나지 않아 도장에서 그 사람을 더 이상 볼 수 없었다.":
       "The person left without a word. Before long, they were no longer to be seen at the dojo.",
   },
-  Nv = {
+  WT = {
     "목소리를 듣는다": "Listen to the voice",
     맞선다: "Stand and fight",
     "목소리를 거스른다": "Defy the voice",
@@ -56850,7 +56850,7 @@ Your breath became human again. Your hands were hands again.`,
       "One person ended what even a Color could not. No one remembered that person's name or face.",
     "협회 연합": "the Association coalition",
   },
-  Ov = {
+  ET = {
     "잔잔한 회색 물 · 서두르는 물": "Still Grey Water · The Hurried Water",
     '물이 회색으로 바뀌었다. 바람이 없다. 선장이 짧게 말했다. "여기선 오래 못 있어. 다들 저어."': `The water turned grey. There is no wind. The captain said, curtly, "We can't stay here long. Everyone, row."`,
     "부표가 한 줄로 늘어서 있다. 부표가 하나씩 뒤로 지나간다.":
@@ -57673,7 +57673,7 @@ You thought you heard seagulls somewhere. This place is far from the sea.`,
       "The pirate shrugged and stepped aside.",
     '누군가 어깨를 툭 친다. 손목에 닻 문신. "대호수 다녀왔지? 표정 보면 알아. 다음 판엔 이거 하나 사 가."': `Someone taps your shoulder. An anchor tattoo on their wrist. "You've been to the Great Lake, right? I can tell from your face. Buy one of these for next time."`,
   },
-  Wv = {
+  BT = {
     "약지의 콘테스트 심사 자리다. 스튜던트들이 저마다 몸과 작품을 내보인다.":
       "It is the judging for a Ring contest. Students show off their bodies and their works.",
     "내 몸으로 예술을 뽐낸다": "Show off art with my own body",
@@ -58139,7 +58139,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     '"조금만 시간을 줘." {배우자:은|는} 오래 당신을 보다가 길을 비켜 주었다. 그 눈이 기한을 세고 있다는 것을 알 수 있었다.':
       '"Give me a little time." {배우자} looked at you for a long while and stepped out of the way. You could tell those eyes were counting down a deadline.',
   },
-  Ev = {
+  FT = {
     "적출직 모집 공고가 사내 게시판에 붙었다. '주 70시간 근무, 앰플 무상 지급.' 아래에 작은 글씨로 한 줄이 더 있다. '교차 적합성 검사 필수.'":
       "A recruitment notice for Excision Staff went up on the company board. '70-hour weeks. Free ampules.' Below it, one more line in small print: 'Cross-compatibility test required.'",
     지원한다: "Apply",
@@ -58683,7 +58683,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "출동하고 돌아올 때마다 편지가 보였다. 맨 아래 한 줄은 외울 수 있었지만, 매번 다시 읽었다.":
       "Every time you came back from a deployment, you saw the letter. You could recite the line at the bottom, but you read it again each time.",
   },
-  Bv = {
+  LT = {
     "사내 게시판 맨 위에 하얀 종이 한 장. '순수한 몸을 찾는다. 불결한 이물을 들이지 않은 몸을.' 지원서에는 이름 칸보다 시술 이력 칸이 먼저 있다. 당신의 칸은 비어 있다.":
       "A single white sheet at the top of the company board. 'Seeking pure bodies. Bodies that have let in no unclean foreign matter.' On the application, the procedure history field comes before the name field. Yours is blank.",
     지원한다: "Apply",
@@ -59014,7 +59014,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "이단 심문관은 몸을 바꾸지 않는다.":
       "Inquisitors do not change their bodies.",
   },
-  Fv = {
+  PT = {
     "특별한 일 없이 한 해가 지나갔다. 같은 길, 같은 얼굴, 같은 하늘.":
       "A year passed with nothing special. The same streets, the same faces, the same sky.",
     "한 해가 조용히 흘렀다. 다행이라는 말이 입에서 나오지 않을 만큼.":
@@ -59304,7 +59304,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "정리 부서 단체 대화방에는 오늘도 좌석 번호만 올라왔다.":
       "Once again today, nothing but seat numbers came up in the Cleanup Department group chat.",
   },
-  Lv = {
+  MT = {
     "봉투 하나를 구역 반대편 사무소까지 운반한다. 내용물은 알 필요가 없다고 했다. 봉투가 생각보다 무겁다.":
       "Carry an envelope to an Office on the other side of the District. You were told you don't need to know what's inside. The envelope is heavier than you expected.",
     "봉투를 노린 쪽이 생각보다 많았다.":
@@ -60144,7 +60144,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "서명은 지켜졌다. 당신은 그것을 보지 못했다.":
       "The signatures were honored. You didn't live to see it.",
   },
-  Pv = {
+  $T = {
     A: {
       name: "A Corp.",
       alias: "the Head",
@@ -60402,7 +60402,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
       sub: "Outside the Wings' protection",
     },
   },
-  Mv = {
+  HT = {
     tiers: [
       "Canard",
       "Urban Myth",
@@ -60456,8 +60456,8 @@ Your spouse looked at your pale face and asked if you were all right.`,
       "거래 중개와 계약을 다루는 협회": "Handles brokering and contracts",
     },
   },
-  $v = { regions: Pv, orgs: Mv },
-  Hv = {
+  DT = { regions: $T, orgs: HT },
+  qT = {
     "밤새 열이 내리지 않는다. 이마 위의 젖은 천이 금세 미지근해진다.":
       "一晩中熱が下がらない。額に載せた濡れ布巾はすぐにぬるくなる。",
     "있는 돈을 털어 약을 구한다": "ありったけの金をはたいて薬を手に入れる",
@@ -60839,7 +60839,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "흰 옷의 사람은 웃으며 명함을 남겼다. 명함에는 이름 대신 작은 반지가 그려져 있었다.":
       "白い服の人は微笑んで名刺を置いていった。名刺には名前の代わりに小さな指輪が描かれていた。",
   },
-  Dv = {
+  GT = {
     "학교를 마칠 때가 다가온다. 상급 과정에 가려면 시간과 돈이 든다. 일을 시작하면 당장의 생활이 나아진다.":
       "学校を終える時期が近づいている。上級課程に進むには時間と金がかかる。働き始めれば、目先の暮らしは楽になる。",
     "상급 과정에 진학한다": "上級課程に進学する",
@@ -61136,7 +61136,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "흰 옷의 사람은 웃으며 명함을 남겼다. 명함에는 이름 대신 작은 반지가 그려져 있었다.":
       "白い服の人は微笑んで名刺を置いていった。名刺には名前の代わりに小さな指輪が描かれていた。",
   },
-  qv = {
+  KT = {
     "{지역}의 상층에서 자란 아이에게 열린 길은 많다. 그러나 그 길 모두에 날개의 이름이 붙어 있다.":
       "{지역}の上層で育った子どもに開かれた道は多い。だが、そのどれにも翼の名がついている。",
     "날개의 정규 사원이 된다": "翼の正社員になる",
@@ -61208,7 +61208,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "뒷골목에서 무허가 일을 받으며 버텼다. 몇 년 뒤 9급 해결사 면허를 손에 쥐었다.":
       "裏路地で無許可の仕事を受けてしのいだ。数年後、9級フィクサーの免許を手にした。",
   },
-  Gv = {
+  zT = {
     "함께 산다": "一緒に暮らす",
     "좁은 방 하나에 두 사람의 짐이 섞였다. 이상하게도 덜 외로웠다.":
       "狭い部屋ひとつに、二人分の荷物が混ざり合った。不思議と、前ほど寂しくなかった。",
@@ -61566,7 +61566,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "서로의 거리가 조금씩 멀어졌다. {연인}의 이름은 더 이상 입에 오르지 않았다.":
       "互いの距離が少しずつ遠のいた。{연인}の名前は、もう口に上らなくなった。",
   },
-  Kv = {
+  UT = {
     "분기 실적 발표를 앞두고 부서 전체가 불을 끄지 못했다. 복도의 시계는 새벽 세 시를 가리킨다. 월급 명세서에는 '성과 보너스'라는 항목이 생겼다.":
       "四半期の業績発表を前に、部署全体が明かりを消せずにいた。廊下の時計は午前三時を指している。給与明細には「成果ボーナス」という項目ができた。",
     "승진 심사가 다가온다. 상사는 은근히 말한다. '이번 프로젝트, 책임자 이름에 네 이름을 올려 줄 수도 있어. 대신…'":
@@ -61781,7 +61781,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "그 사람은 봉투를 도로 넣었다. 다음 날부터 거스름돈은 챙겨져 있지 않았다.":
       "その人は封筒をしまった。翌日から、お釣りは取っておかれなくなった。",
   },
-  zv = {
+  JT = {
     "문득 옛날 일이 선명하게 떠올랐다. 첫 월급으로 샀던 낡은 외투, 함께 걷던 사람의 뒷모습. 도시는 그때보다 훨씬 조용해졌다.":
       "ふと昔のことが鮮明によみがえった。初任給で買った古びた外套、並んで歩いた人の後ろ姿。都市はあの頃よりずっと静かになった。",
     "같은 골목에서 오래 살던 이웃이 어느 날 보이지 않는다. 방은 비어 있고, 우편함은 가득 찼다.":
@@ -61817,7 +61817,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "{아이}에게 남긴다": "{아이}に遺す",
     "가족에게 남긴다": "家族に遺す",
   },
-  Uv = {
+  VT = {
     "장 보러 나간 시장 한복판, 생선 좌판 너머의 사람들이 한꺼번에 소리 없이 쓰러진다. 그 뒤에서 무언가가 천천히 몸을 일으킨다. 아무도 경보를 울리지 않았다.":
       "買い物に出た市場の真ん中で、魚の露店の向こうにいた人々が一斉に音もなく倒れる。その後ろで、何かがゆっくりと身を起こす。誰も警報を鳴らさなかった。",
     "좌판 밑으로 기어 들어가 숨을 죽인다": "露店の下に潜り込んで息を殺す",
@@ -62294,7 +62294,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "빗나간 칼날이 구경꾼 쪽으로 날아왔다. 구경꾼들에게 가는 칼을 막다 부상을 입었다.":
       "逸れた刃が野次馬の方へ飛んできた。野次馬に向かう刃を防ごうとして傷を負った。",
   },
-  Jv = {
+  XT = {
     "평범한 배달 의뢰였다. 그런데 약속 장소에 도착하자 의뢰인 대신 다른 사무소의 해결사 다섯이 기다리고 있다. 누군가 당신 목에 현상금을 걸었다.":
       "ありふれた配達の依頼だった。だが約束の場所に着くと、依頼人の代わりに別の事務所のフィクサーが五人待ち構えている。誰かがあなたの首に懸賞金をかけたのだ。",
     "싸워서 뚫는다": "戦って突破する",
@@ -62432,7 +62432,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "봉투는 책상 위에서 며칠을 기다리다 돌아갔다.":
       "封筒は数日机の上で待ったあと、返っていった。",
   },
-  Vv = {
+  QT = {
     "붉은 코트에 중절모를 쓴 사내들이 골목 끝 식당을 통째로 빌렸다. 카포라 불리는 남자가 손짓으로 당신을 부른다. '예의를 아는 얼굴이군. 엄지에서는 위를 공경하는 자에게 빵과 총알이 주어진다.'":
       "赤いコートに中折れ帽の男たちが、路地の奥の食堂を丸ごと借り切った。カポと呼ばれる男が手招きであなたを呼ぶ。「礼儀を知っている顔だな。親指では、上を敬う者にパンと弾丸が与えられる」",
     "모자를 벗고 고개를 숙여 예를 갖춘다": "帽子を取り、頭を下げて礼を尽くす",
@@ -62608,7 +62608,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "대행자는 한참 서 있다가 종이를 접었다. 지령은 수행되지 못했고, 그 책임은 그의 몫이 되었다. 그는 끝까지 칼에 손을 대지 않았다.":
       "代行者は長いこと立ち尽くしてから紙を畳んだ。指令は遂行されず、その責任は彼が負うことになった。彼は最後まで剣に手をかけなかった。",
   },
-  Xv = {
+  ZT = {
     "솔다토의 하루는 막사에서 시작해 막사에서 끝난다. 새벽 점호, 사격 자세, 경례 각도. 같은 솔다토 안에서도 프리모부터 콰르토까지 서열이 있고, 당신은 아직 맨 끝이다.":
       "ソルダートの一日は兵舎で始まり、兵舎で終わる。明け方の点呼、射撃姿勢、敬礼の角度。同じソルダートの中にもプリモからクァルトまで序列があり、あなたはまだ最下位だ。",
     "이를 악물고 훈련을 버틴다": "歯を食いしばって訓練に耐える",
@@ -62849,7 +62849,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "이름이 장부에 적혔다. 대신 그날 밤의 식탁은 오래 비어 있지 않았다. 다음 날 아침 누군가 말없이 당신의 어깨를 두드렸다.":
       "名前は帳簿に記された。その代わり、その夜の食卓は長く空いたままにはならなかった。翌朝、誰かが黙ってあなたの肩を叩いた。",
   },
-  Qv = {
+  e2 = {
     "검지 인장이 찍힌 쪽지가 문틈에 꽂혀 있다. '오늘 해가 지기 전, 다섯 번째로 마주친 사람의 오른쪽 신발을 가져올 것.'":
       "人差し指の印章が押された紙切れが、扉の隙間に差し込まれている。「今日日が暮れる前に、五番目に出会った者の右の靴を持ってくること」",
     "지령대로 신발을 가져온다": "指令どおりに靴を持ってくる",
@@ -63045,7 +63045,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "그 사람은 다른 문을 두드렸다. 그 문이 열렸는지는 알지 못한다.":
       "その者は別の扉を叩いた。その扉が開いたのかどうかは知らない。",
   },
-  Zv = {
+  t2 = {
     "형님이 오늘 돌 가게 목록을 건넨다. 밀린 돈, 밀린 인사, 밀린 의리. 첫 번째 가게 주인은 당신 얼굴을 보자마자 금고부터 연다. 두 번째 가게는 셔터가 내려져 있다.":
       "兄貴が今日回る店のリストを渡してくる。溜まった金、溜まった挨拶、溜まった義理。一軒目の店の主人は、あなたの顔を見るなり金庫を開ける。二軒目の店はシャッターが下りている。",
     "셔터를 걷어차고 들어간다": "シャッターを蹴破って入る",
@@ -63234,7 +63234,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     '가족은 사흘 안에 구역을 떠났다. 문 앞에서 {배우자:이|가} 말했다. "어디로 가든 같이 가는 거야."':
       "家族は三日以内に区を離れた。戸口で{배우자}が言った。『どこへ行っても、一緒に行くの。』",
   },
-  e2 = {
+  o2 = {
     "작품 제출일. 상급자가 작품을 보고 인정하면 반지가 한 번 더 감긴다. 스튜던트는 한 번, 도슨트는 두 번, 마에스트로는 세 번. 낙제가 쌓이면 다음 재료가 되는 사람도 있다.":
       "作品の提出日。上の者が作品を見て認めれば、指輪がもう一巻き巻かれる。スチューデントは一巻き、ドーセントは二巻き、マエストロは三巻き。落第が重なれば、次の材料になる者もいる。",
     "몇 달을 매달린 대작을 낸다": "何か月もかけた大作を出す",
@@ -63451,7 +63451,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "작품은 완성되었다. 가장 아름다운 것이 가장 가까이에 있었다는 사실을 당신은 완성된 뒤에야 알았다. {배우자:은|는} 오래 말이 없었다.":
       "作品は完成した。いちばん美しいものがいちばん近くにあったと、あなたは完成したあとで知った。{배우자}は長いこと黙っていた。",
   },
-  t2 = {
+  a2 = {
     "{제안}에서 사람을 구한다는 소식이 들어왔다. 혼자 의뢰를 받으면 보수는 전부 내 것이지만, 등 뒤를 맡길 사람이 없다. 사무소에 들어가면 의뢰도 동료도 늘어난다.":
       "{제안}が人を募っているという知らせが入った。ひとりで依頼を受ければ報酬は全部自分のものだが、背中を預けられる人がいない。事務所に入れば、依頼も仲間も増える。",
     "{제안}에 들어간다": "{제안}に入る",
@@ -63748,7 +63748,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "그 사람은 책을 한 권 더 꺼내 건넸다. 이번에는 책갈피 자리에 쪽지가 없었다. 도서관에서 마주쳐도 두 사람은 서가만 보았다.":
       "その人はもう一冊、本を取り出して差し出した。今度は栞の位置にメモがなかった。図書館で顔を合わせても、二人は書架だけを見ていた。",
   },
-  o2 = {
+  n2 = {
     "【아무것도 없는】 ALEPH. 도시의 재해다. 구역 전광판에 '재해 경보'가 뜨기도 전에 그것은 이미 사람들 사이에 섞여 있었다. 늘 인사하던 이웃이 골목 끝에서 손을 흔든다. 목소리의 간격이, 웃음의 길이가 조금씩 틀렸다. 얼굴 가장자리가 녹아내리듯 흐물거린다. 이것과 싸울 수 있는 사람은 이 구역에 없다.":
       "【何もない】 ALEPH。都市の災害だ。区の電光掲示板に「災害警報」が出るより先に、それはすでに人々の間に紛れ込んでいた。いつも挨拶していた隣人が、路地の奥で手を振っている。声の間合いも、笑いの長さも、少しずつずれていた。顔の縁が溶け落ちるようにぐにゃりと崩れている。これと戦える者は、この区にはいない。",
     "아무것도 모르는 척 인사하고 지나간다":
@@ -63997,7 +63997,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
       "子どもの方が一歩速かった。爆発に巻き込まれたが、持ちこたえた。",
     "아이가 웃는 얼굴로 당신을 안았다.": "子どもは笑顔であなたを抱きしめた。",
   },
-  a2 = {
+  r2 = {
     "출근길 둥지 검문소에서 줄이 멈췄다. 앞사람의 출입증이 읽히지 않는다. 뒷골목 쪽에서 온 사람이다. 경비가 당신을 힐끗 본다. 사원증 하나면 보증을 설 수 있다.":
       "出勤途中、巣の検問所で列が止まった。前の人の通行証が読み取れない。裏路地の方から来た人だ。警備員がちらりとあなたを見る。社員証があれば保証人になれる。",
     "보증을 서 준다": "保証人になってやる",
@@ -64319,7 +64319,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "연줄 몇 개를 당겼다. 옮기지는 않았지만, 옮길 수 있다는 것을 알았다.":
       "伝手をいくつか引いてみた。移りはしなかったが、移れることは分かった。",
   },
-  n2 = {
+  i2 = {
     "대관원 명문가의 사람이 찾아왔다. 당신의 몸이 '쓸 만하다'고 한다. 선인이라 불리는 노인이 환 한 알을 내밀었다. 삼키면 돌아갈 수 없다는 것을 이 구역 사람이라면 모두 안다.":
       "大観園の名家の者が訪ねてきた。あなたの体が「使える」という。仙人と呼ばれる老人が丸を一粒差し出した。呑めば後戻りはできないことを、この区の者なら誰もが知っている。",
     "환을 삼킨다": "丸を呑む",
@@ -65835,7 +65835,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "그 사람은 고개를 숙이고 다음 명을 기다렸다. 뜻을 말하는 일은 그날이 마지막이었다.":
       "その人は頭を下げ、次の命を待った。意思を口にすることは、あの日が最後になった。",
   },
-  r2 = {
+  s2 = {
     "분기말이다. 창고 장부와 실물이 맞지 않는다. 사흘 안에 대조를 끝내라는 지시가 내려왔다.":
       "四半期末だ。倉庫の帳簿と実物が合わない。三日以内に照合を終えろという指示が下りてきた。",
     "장부 순서대로 센다": "帳簿の順に数える",
@@ -66533,7 +66533,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "회사로 가던 길에 발이 느려졌고, 행사장에는 끝난 뒤에야 닿았다. 어느 쪽에서도 환영받지 못했다.":
       "会社へ向かう途中で足が鈍り、行事の会場には終わったあとにようやく着いた。どちらでも歓迎されなかった。",
   },
-  i2 = {
+  l2 = {
     "갓난아이는 젖을 물고도 오래 울었다. 무엇을 찾는지는 아무도 몰랐다.":
       "赤子は乳を含んでもなお長く泣いた。何を求めているのか、誰にもわからなかった。",
     "열이 사흘 밤낮 내리지 않았다. 나흘째 아침, 열은 거짓말처럼 내려 있었다. 대신 목이 말랐다. 물로는 가시지 않았다.":
@@ -67564,7 +67564,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "{아이:이|가} 자라 당신의 겉나이를 넘었다. 이제는 {아이:이|가} 당신을 걱정한다. {아이:은|는} 이유를 모른다.":
       "{아이}は育って、あなたの見た目の歳を追い越した。今では{아이}があなたを心配する。{아이}は理由を知らない。",
   },
-  s2 = {
+  h2 = {
     "W사의 의뢰가 왔다. 운행 중인 워프 열차에 들어가 '도착 전에' 칸을 정리하라는 것이다. 바깥에서는 10초. 안에서는 아무도 모른다.":
       "W社から依頼が来た。運行中のワープ列車に入り、「到着前に」車両を整理しろというのだ。外では10秒。中のことは誰にもわからない。",
     "의뢰를 받는다": "依頼を受ける",
@@ -67803,7 +67803,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
       "10秒後に扉が開いた。降りてきたのは整理要員だけだった。浄化対象は名簿の上で「所在不明」になった。",
     "못을 박는다": "釘を打ち込む",
   },
-  l2 = {
+  d2 = {
     "가문의 어른이 다섯 살이 된 당신을 앞에 앉혔다. 오늘부터 배우는 것은 글이 아니라 사람이라고 했다. 어른이 첫 질문을 던졌다. '저 문 안에는 무엇이 있겠느냐.'":
       "家門の大人が、五歳になったあなたを前に座らせた。今日から学ぶのは文字ではなく人だという。大人が最初の問いを投げた。「あの扉の内には何があると思う」",
     "[지] 문틈의 불빛과 발소리를 세어 대답한다":
@@ -68466,7 +68466,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "철함사의 어르신들은 승계식 날 군주의 손에 모두 죽었다. 그래도 철함사 아래에는 그들이 남긴 것이 있었다. 환의 처방, 오래된 그릇, 이름 없는 방들. 대관원의 몇몇은 그것으로 다시 늙지 않는 길을 찾으려 했다.":
       "鉄檻寺の長老たちは、家主承継の儀式の日に君主の手でみな死んだ。それでも鉄檻寺の下には、彼らが遺したものがあった。丸の処方、古い器、名もない部屋。大観園の何人かは、それでふたたび老いない道を探そうとした。",
   },
-  h2 = {
+  u2 = {
     '비 오는 밤, 골목 끝에 두루마기를 걸친 사람이 서 있었다. 정장 위에 한복, 허리에는 매듭 달린 환도. "갈 곳이 없어 보이는군. 상처는 있소?"':
       "雨の夜、路地の突き当たりにトゥルマギを羽織った者が立っていた。スーツの上に韓服、腰には飾り紐の付いた環刀。「行く当てがなさそうだな。傷はあるか」",
     "소매를 걷어 보인다": "袖をまくって見せる",
@@ -68957,7 +68957,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "그 사람은 골목 끝까지 바래다주었다. 이후로 그 길에서는 마주치지 않았다.":
       "その人は路地の端まで送ってくれた。それ以来、その道ですれ違うことはなかった。",
   },
-  d2 = {
+  c2 = {
     '구역 사이 길목에서 검은 정장들이 통행료를 걷고 있었다. 낼 돈이 없는 당신을 막아선 사내가 한참 보더니 웃었다. 목덜미까지 검은 구름이 번져 있다. "돈 대신 몸으로 낼 생각 있나. 위에서 시키는 대로만 하면 된다."':
       "区と区の間の路地で、黒いスーツの者たちが通行料を取っていた。払う金のないあなたを止めた男がしばらく眺めてから笑った。首筋まで黒い雲が広がっている。「金の代わりに体で払う気はあるか。上に言われた通りにやるだけでいい」",
     "고개를 숙이고 따른다": "頭を下げてついていく",
@@ -69426,7 +69426,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "그 사람은 말없이 자리를 비웠다. 얼마 지나지 않아 도장에서 그 사람을 더 이상 볼 수 없었다.":
       "その人は何も言わずに席を外した。ほどなくして、道場でその人の姿を見ることはなくなった。",
   },
-  u2 = {
+  f2 = {
     "목소리를 듣는다": "声を聞く",
     맞선다: "立ち向かう",
     "목소리를 거스른다": "声に逆らう",
@@ -69658,7 +69658,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
       "特色にも終わらせられなかったものを、一人の人間が終わらせた。その人の名も顔も、誰も覚えていなかった。",
     "협회 연합": "協会連合",
   },
-  c2 = {
+  w2 = {
     "잔잔한 회색 물 · 서두르는 물": "静かな灰色の水・急ぐ水",
     '물이 회색으로 바뀌었다. 바람이 없다. 선장이 짧게 말했다. "여기선 오래 못 있어. 다들 저어."':
       "水が灰色に変わった。風はない。船長が短く言った。「ここには長くいられない。皆、漕げ」",
@@ -70455,7 +70455,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     '누군가 어깨를 툭 친다. 손목에 닻 문신. "대호수 다녀왔지? 표정 보면 알아. 다음 판엔 이거 하나 사 가."':
       "誰かが肩をとんと叩く。手首に錨の刺青。「大湖に行ってきただろ? 顔を見りゃ分かる。次のために一つ買っていきな」",
   },
-  f2 = {
+  g2 = {
     "약지의 콘테스트 심사 자리다. 스튜던트들이 저마다 몸과 작품을 내보인다.":
       "薬指のコンテストの審査の場だ。スチューデントたちがそれぞれ自分の体と作品を披露している。",
     "내 몸으로 예술을 뽐낸다": "自分の体で芸術を披露する",
@@ -70919,7 +70919,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     '"조금만 시간을 줘." {배우자:은|는} 오래 당신을 보다가 길을 비켜 주었다. 그 눈이 기한을 세고 있다는 것을 알 수 있었다.':
       "『少しだけ時間をちょうだい。』{배우자}は長くあなたを見てから、道を空けてくれた。その目が期限を数えているのが分かった。",
   },
-  w2 = {
+  m2 = {
     "적출직 모집 공고가 사내 게시판에 붙었다. '주 70시간 근무, 앰플 무상 지급.' 아래에 작은 글씨로 한 줄이 더 있다. '교차 적합성 검사 필수.'":
       "摘出職の募集告知が社内掲示板に貼られた。「週70時間勤務、アンプル無償支給」。その下に小さな字でもう一行ある。「交差適合性検査必須」。",
     지원한다: "応募する",
@@ -71480,7 +71480,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "출동하고 돌아올 때마다 편지가 보였다. 맨 아래 한 줄은 외울 수 있었지만, 매번 다시 읽었다.":
       "出動から戻るたびに手紙が目に入った。いちばん下の一行は暗唱できたが、そのたびに読み返した。",
   },
-  g2 = {
+  y2 = {
     "사내 게시판 맨 위에 하얀 종이 한 장. '순수한 몸을 찾는다. 불결한 이물을 들이지 않은 몸을.' 지원서에는 이름 칸보다 시술 이력 칸이 먼저 있다. 당신의 칸은 비어 있다.":
       "社内掲示板の一番上に白い紙が一枚。「純粋な体を求む。不浄な異物を入れていない体を」。志願書には名前の欄より先に施術歴の欄がある。あなたの欄は空白だ。",
     지원한다: "応募する",
@@ -71810,7 +71810,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
       "説教の文句が耳から滑り落ちる。槌が重い。",
     "이단 심문관은 몸을 바꾸지 않는다.": "異端審問官は体を替えない。",
   },
-  m2 = {
+  p2 = {
     "특별한 일 없이 한 해가 지나갔다. 같은 길, 같은 얼굴, 같은 하늘.":
       "特に何事もなく一年が過ぎた。同じ道、同じ顔、同じ空。",
     "한 해가 조용히 흘렀다. 다행이라는 말이 입에서 나오지 않을 만큼.":
@@ -72099,7 +72099,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "정리 부서 단체 대화방에는 오늘도 좌석 번호만 올라왔다.":
       "整理部門のグループチャットには、今日も座席番号ばかりが上がってきた。",
   },
-  y2 = {
+  b2 = {
     "봉투 하나를 구역 반대편 사무소까지 운반한다. 내용물은 알 필요가 없다고 했다. 봉투가 생각보다 무겁다.":
       "封筒をひとつ、区の反対側の事務所まで運ぶ。中身は知る必要がないと言われた。封筒は思ったより重い。",
     "봉투를 노린 쪽이 생각보다 많았다.": "封筒を狙う者は思ったより多かった。",
@@ -72930,7 +72930,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
     "서명은 지켜졌다. 당신은 그것을 보지 못했다.":
       "署名は守られた。あなたはそれを見ることができなかった。",
   },
-  p2 = {
+  k2 = {
     A: {
       name: "A社",
       alias: "頭",
@@ -73174,7 +73174,7 @@ Your spouse looked at your pale face and asked if you were all right.`,
       sub: "翼の庇護の外",
     },
   },
-  b2 = {
+  x2 = {
     tiers: [
       "あらぬ噂",
       "都市怪談",
@@ -73228,16 +73228,14 @@ Your spouse looked at your pale face and asked if you were all right.`,
       "거래 중개와 계약을 다루는 협회": "取引の仲介と契約を扱う協会",
     },
   },
-  k2 = { regions: p2, orgs: b2 },
-  Is = iv({
-    regions: a0,
-    daily: n0,
-    requests: O0,
-    orgs: L0,
-    rarity: rv,
+  v2 = { regions: k2, orgs: x2 },
+  Ns = lT({
+    regions: r0,
+    daily: i0,
+    requests: E0,
+    orgs: M0,
+    rarity: sT,
     events: [
-      r0,
-      i0,
       s0,
       l0,
       h0,
@@ -73253,8 +73251,8 @@ Your spouse looked at your pale face and asked if you were all right.`,
       b0,
       k0,
       x0,
-      T0,
       v0,
+      T0,
       _0,
       j0,
       A0,
@@ -73264,65 +73262,65 @@ Your spouse looked at your pale face and asked if you were all right.`,
       C0,
       I0,
       N0,
+      O0,
+      W0,
     ],
   });
-let Ns = null,
-  Os = null;
+let Os = null,
+  Ws = null;
 function mt() {
   const e = Pe();
   if (e === "en") {
-    if (!Ns) {
-      const t = rc([
-        hv,
-        dv,
-        uv,
-        cv,
-        fv,
-        wv,
-        gv,
-        mv,
-        yv,
-        pv,
-        bv,
-        kv,
-        xv,
-        Tv,
-        vv,
-        _v,
-        jv,
-        Av,
-        Yv,
-        Sv,
-        Rv,
-        Cv,
-        Iv,
-        Nv,
-        Ov,
-        Wv,
-        Ev,
-        Bv,
-        Fv,
-        Lv,
+    if (!Os) {
+      const t = ic([
+        uT,
+        cT,
+        fT,
+        wT,
+        gT,
+        mT,
+        yT,
+        pT,
+        bT,
+        kT,
+        xT,
+        vT,
+        TT,
+        _T,
+        jT,
+        AT,
+        YT,
+        ST,
+        RT,
+        CT,
+        IT,
+        NT,
+        OT,
+        WT,
+        ET,
+        BT,
+        FT,
+        LT,
+        PT,
+        MT,
       ]);
-      Ns = nc(Is, t, $v);
+      Os = rc(Ns, t, DT);
     }
-    return Ns;
+    return Os;
   }
   if (e === "ja") {
-    if (!Os) {
-      const t = rc([
-        Hv,
-        Dv,
-        qv,
-        Gv,
-        Kv,
-        zv,
-        Uv,
-        Jv,
-        Vv,
-        Xv,
-        Qv,
-        Zv,
+    if (!Ws) {
+      const t = ic([
+        qT,
+        GT,
+        KT,
+        zT,
+        UT,
+        JT,
+        VT,
+        XT,
+        QT,
+        ZT,
         e2,
         t2,
         o2,
@@ -73341,23 +73339,25 @@ function mt() {
         g2,
         m2,
         y2,
+        p2,
+        b2,
       ]);
-      Os = nc(Is, t, k2);
+      Ws = rc(Ns, t, v2);
     }
-    return Os;
+    return Ws;
   }
-  return Is;
+  return Ns;
 }
-const x2 = 250;
-function T2(e, t, o) {
+const T2 = 250;
+function _2(e, t, o) {
   const a = e.state,
     n = { changed: !1, yearEnded: !1 };
   if (!a || a.dead) return n;
-  const r = Math.min(Math.max(o, 0), x2);
+  const r = Math.min(Math.max(o, 0), T2);
   if (
     (a.prompt &&
       (e.auto
-        ? (Ti(a, t, zx(a), { auto: !0 }), (n.changed = !0))
+        ? (Ti(a, t, Jx(a), { auto: !0 }), (n.changed = !0))
         : a.prompt.kind === "minor" &&
           !e.paused &&
           ((a.prompt.remainingMs -= r),
@@ -73367,7 +73367,7 @@ function T2(e, t, o) {
   )
     return n;
   const i = a.prompt ? 1 : e.speed;
-  e.progress += (r * i) / gp;
+  e.progress += (r * i) / yp;
   for (let l = 0; l < 60 && !a.dead; l++) {
     if (a.prompt) {
       const u = a.cursor < a.plan.length ? a.plan[a.cursor].t : 0.999;
@@ -73376,22 +73376,22 @@ function T2(e, t, o) {
     }
     const s = a.plan[a.cursor];
     if (s && e.progress >= s.t) {
-      (hx(a, t), (n.changed = !0));
+      (ux(a, t), (n.changed = !0));
       continue;
     }
     if (e.progress >= 1) {
-      ((e.progress -= 1), o0(a, t), (n.changed = !0), (n.yearEnded = !0));
+      ((e.progress -= 1), n0(a, t), (n.changed = !0), (n.yearEnded = !0));
       continue;
     }
     break;
   }
   return n;
 }
-const fd = "cbl.save.v1",
-  Ui = "cbl.memorial.v1",
-  v2 = 20,
-  _2 = 5;
-function Ji(e) {
+const wd = "cbl.save.v1",
+  Ji = "cbl.memorial.v1",
+  j2 = 20,
+  A2 = 5;
+function Vi(e) {
   try {
     const t = localStorage.getItem(e);
     return t ? JSON.parse(t) : null;
@@ -73404,8 +73404,8 @@ function ea(e, t) {
     localStorage.setItem(e, JSON.stringify(t));
   } catch {}
 }
-function Rg() {
-  const e = Ji(fd);
+function Cg() {
+  const e = Vi(wd);
   return e && e.v === 7 && (!e.dead || e.dead.voice)
     ? (Array.isArray(e.flags) &&
         (e.flags = e.flags.map((t) => (t === "E.G.O.계약" ? "E.G.O개화" : t))),
@@ -73413,31 +73413,31 @@ function Rg() {
     : null;
 }
 function tn(e) {
-  ea(fd, e);
+  ea(wd, e);
 }
-function Ws() {
+function Es() {
   try {
-    localStorage.removeItem(fd);
+    localStorage.removeItem(wd);
   } catch {}
 }
-function Vi() {
-  const e = Ji(Ui);
+function Xi() {
+  const e = Vi(Ji);
   return Array.isArray(e) ? e : [];
 }
-const j2 = 30;
-function Cg(e) {
-  const t = e.filter((r) => r.pinned).slice(0, j2),
-    o = e.filter((r) => !r.pinned).slice(0, v2);
+const Y2 = 30;
+function Ig(e) {
+  const t = e.filter((r) => r.pinned).slice(0, Y2),
+    o = e.filter((r) => !r.pinned).slice(0, j2);
   let a = 0;
   const n = [];
   for (const r of e)
     r.pinned
       ? t.includes(r) && n.push(r)
-      : o.includes(r) && (n.push(a < _2 ? r : { ...r, chronicle: null }), a++);
+      : o.includes(r) && (n.push(a < A2 ? r : { ...r, chronicle: null }), a++);
   return n;
 }
-function A2(e) {
-  const t = Vi();
+function S2(e) {
+  const t = Xi();
   (t.unshift({
     at: Date.now(),
     name: e.name,
@@ -73451,29 +73451,29 @@ function A2(e) {
     seed: e.seed,
     chronicle: e.chronicle || null,
   }),
-    ea(Ui, Cg(t)));
+    ea(Ji, Ig(t)));
 }
-function Y2(e, t) {
-  const o = Vi().map((n) => (n.at === e ? { ...n, pinned: !!t } : n)),
-    a = Cg(o);
-  return (ea(Ui, a), a);
+function R2(e, t) {
+  const o = Xi().map((n) => (n.at === e ? { ...n, pinned: !!t } : n)),
+    a = Ig(o);
+  return (ea(Ji, a), a);
 }
-function S2(e) {
-  const t = Vi().filter((o) => o.at !== e);
-  return (ea(Ui, t), t);
+function C2(e) {
+  const t = Xi().filter((o) => o.at !== e);
+  return (ea(Ji, t), t);
 }
-const Ig = "cityborn.profile";
-function Ng() {
-  return Ji(Ig) || {};
+const Ng = "cityborn.profile";
+function Og() {
+  return Vi(Ng) || {};
 }
-function R2(e) {
-  ea(Ig, e);
+function I2(e) {
+  ea(Ng, e);
 }
-const wd = "cbl.codex.v1",
-  C2 = "cityborn-codex-7f3a";
+const gd = "cbl.codex.v1",
+  N2 = "cityborn-codex-7f3a";
 function Xn(e, t) {
   const o =
-    C2 +
+    N2 +
     JSON.stringify(
       Object.keys(e)
         .sort()
@@ -73486,18 +73486,18 @@ function Xn(e, t) {
   return a.toString(36);
 }
 function Ka() {
-  const e = Ji(wd);
+  const e = Vi(gd);
   return !e || e.v !== 1 || typeof e.got != "object"
     ? { v: 1, got: {}, lives: 0 }
     : e.sig !== Xn(e.got, e.lives || 0)
       ? { v: 1, got: {}, lives: 0 }
       : { v: 1, got: e.got, lives: e.lives || 0 };
 }
-function I2(e) {
+function O2(e) {
   const t = Ka();
   return [...e].filter((o) => !t.got[o]);
 }
-function N2(e, t) {
+function W2(e, t) {
   const o = Ka();
   for (const a of e) {
     const n = o.got[a];
@@ -73516,22 +73516,22 @@ function N2(e, t) {
   }
   return (
     (o.lives += 1),
-    ea(wd, { v: 1, got: o.got, lives: o.lives, sig: Xn(o.got, o.lives) }),
+    ea(gd, { v: 1, got: o.got, lives: o.lives, sig: Xn(o.got, o.lives) }),
     o
   );
 }
-const Dl = "CBL-CODEX-1:";
-function O2(e) {
+const ql = "CBL-CODEX-1:";
+function E2(e) {
   return btoa(unescape(encodeURIComponent(e)));
 }
-function W2(e) {
+function B2(e) {
   return decodeURIComponent(escape(atob(e)));
 }
-function E2() {
+function F2() {
   const e = Ka();
   return Object.keys(e.got).length
-    ? Dl +
-        O2(
+    ? ql +
+        E2(
           JSON.stringify({
             v: 1,
             got: e.got,
@@ -73541,12 +73541,12 @@ function E2() {
         )
     : null;
 }
-function B2(e) {
+function L2(e) {
   const t = String(e || "").trim();
-  if (!t.startsWith(Dl)) return { ok: !1, reason: "format" };
+  if (!t.startsWith(ql)) return { ok: !1, reason: "format" };
   let o;
   try {
-    o = JSON.parse(W2(t.slice(Dl.length)));
+    o = JSON.parse(B2(t.slice(ql.length)));
   } catch {
     return { ok: !1, reason: "format" };
   }
@@ -73569,11 +73569,11 @@ function B2(e) {
   }
   return (
     (a.lives = Math.max(a.lives, o.lives || 0)),
-    ea(wd, { v: 1, got: a.got, lives: a.lives, sig: Xn(a.got, a.lives) }),
+    ea(gd, { v: 1, got: a.got, lives: a.lives, sig: Xn(a.got, a.lives) }),
     { ok: !0, added: n }
   );
 }
-const F2 = [
+const P2 = [
     {
       id: "birth",
       label: () => h("출생·수명", "Birth & lifespan", "出生・寿命"),
@@ -73604,7 +73604,7 @@ const F2 = [
     { id: "city", label: () => h("도시의 일", "City affairs", "都市の出来事") },
   ],
   p = (e, t, o) => ({ ko: e, en: t, ja: o }),
-  L2 = [
+  M2 = [
     [
       "born_head",
       "birth",
@@ -75769,53 +75769,31 @@ const F2 = [
       null,
     ],
   ],
-  gd = L2.map(([e, t, o, a, n]) => ({
+  md = M2.map(([e, t, o, a, n]) => ({
     key: e,
     group: t,
     label: o,
     hint: a,
     implies: n,
-    tier: Ew[e] || "myth",
+    tier: Bw[e] || "myth",
   })),
-  ic = Object.fromEntries(gd.map((e) => [e.key, e]));
-function P2(e) {
+  sc = Object.fromEntries(md.map((e) => [e.key, e]));
+function $2(e) {
   const t = new Set(),
     o = [...e];
   for (; o.length;) {
     const a = o.pop();
-    if (!a || t.has(a) || !ic[a]) continue;
+    if (!a || t.has(a) || !sc[a]) continue;
     t.add(a);
-    const n = ic[a].implies;
+    const n = sc[a].implies;
     n && o.push(n);
   }
   return t;
 }
-function ql(e) {
-  return e === "miracle" || e === "myth"
-    ? "tier"
-    : e === "legend"
-      ? "name"
-      : "open";
-}
-function M2(e) {
-  return {
-    ...e,
-    stats: { ...e.stats },
-    flags: [...e.flags],
-    org: e.org ? { ...e.org } : null,
-    bf: e.bf ? { ...e.bf } : null,
-    warp: e.warp ? { ...e.warp } : null,
-    dr: e.dr ? { ...e.dr } : null,
-    lake: e.lake ? { ...e.lake } : null,
-    log: [...e.log],
-    reflections: [...e.reflections],
-    prompt: e.prompt ? { ...e.prompt } : null,
-  };
-}
 
-return {create:zu,data:mt,choose:Ti,continue:Db,advance:hx,year:o0,records:s=>[...P2(eb(s).map(r=>r.key))],job:ve,cause:Nw,catalog:gd,flags:pp,lang:_s};}
+return {create:Uu,data:mt,choose:Ti,continue:Gb,advance:ux,year:n0,records:s=>[...$2(ob(s).map(r=>r.key))],job:Te,cause:Ow,catalog:md,flags:kp,lang:js};}
 function advisorCommon() {
-  const source = 'index-C_XxXzM6.js';
+  const source = 'index-DNffUPHt.js';
   function normalized(s) {
     const state={...s,prompt:s.prompt?{...s.prompt}:null};
     delete state.savedProgress;
@@ -76021,7 +75999,8 @@ function workerMain(){
   };
 }
 
-const ADVISOR_VERSION="2.0.0";
+const ADVISOR_VERSION="2.0.1";
+const ADVISOR_CATALOG={"records":[{"key":"born_head","group":"birth","label":{"ko":"머리(A~C사)에서 태어남","en":"Born under the Head (A–C Corp.)","ja":"頭（A〜C社）の下に生まれた"},"hint":{"ko":"A사, B사, C사 구역에서 태어났을 때","en":"Be born in the A, B or C Corp. district","ja":"A社・B社・C社の区で生まれたとき"},"implies":null,"tier":"uncommon"},{"key":"born_outskirts","group":"birth","label":{"ko":"외곽에서 태어남","en":"Born in the Outskirts","ja":"外郭で生まれた"},"hint":{"ko":"외곽에서 태어났을 때","en":"Be born in the Outskirts","ja":"外郭で生まれたとき"},"implies":null,"tier":"uncommon"},{"key":"orphan","group":"birth","label":{"ko":"부모 없이 태어남","en":"Born without parents","ja":"両親なしで生まれた"},"hint":{"ko":"부모 없이 태어났을 때","en":"Be born without parents","ja":"両親なしで生まれたとき"},"implies":null,"tier":"uncommon"},{"key":"pinky_star_heaven","group":"birth","label":{"ko":"36천강의 이름","en":"Name of the 36 Tiangang","ja":"三十六天罡の名"},"hint":{"ko":"태어날 때 별의 이름을 받았고, 그 별이 36천강에 들 때","en":"Receive a star's name at birth, and the star is one of the 36 Tiangang","ja":"生まれたときに星の名を受け、それが三十六天罡だったとき"},"implies":null,"tier":"rare"},{"key":"pinky_star_earth","group":"birth","label":{"ko":"72지살의 이름","en":"Name of the 72 Disha","ja":"七十二地煞の名"},"hint":{"ko":"태어날 때 별의 이름을 받았고, 그 별이 72지살에 들 때","en":"Receive a star's name at birth, and the star is one of the 72 Disha","ja":"生まれたときに星の名を受け、それが七十二地煞だったとき"},"implies":null,"tier":"rare"},{"key":"age80","group":"birth","label":{"ko":"80세 넘게 삶","en":"Lived past 80","ja":"80歳を超えて生きた"},"hint":{"ko":"80세를 넘겨 삶을 마쳤을 때","en":"End your life past the age of 80","ja":"80歳を超えて生涯を終えたとき"},"implies":null,"tier":"common"},{"key":"age100","group":"birth","label":{"ko":"100세를 넘겨 삶","en":"Lived past 100","ja":"100歳を超えて生きた"},"hint":{"ko":"100세를 넘겨 삶을 마쳤을 때","en":"End your life past the age of 100","ja":"100歳を超えて生涯を終えたとき"},"implies":"age80","tier":"epic"},{"key":"age200","group":"birth","label":{"ko":"200년을 넘게 삶","en":"Lived past 200","ja":"200年を超えて生きた"},"hint":{"ko":"200세를 넘겨 살았을 때 (혈귀만 닿는다)","en":"Live past 200 (only a Bloodfiend can)","ja":"200歳を超えて生きたとき（血鬼のみ）"},"implies":"age100","tier":"legend"},{"key":"die_child","group":"birth","label":{"ko":"열 살을 넘기지 못함","en":"Died before turning ten","ja":"10歳を迎えられなかった"},"hint":{"ko":"열 살이 되기 전에 삶이 끝났을 때","en":"Your life ends before you turn ten","ja":"十歳になる前に生涯が終わったとき"},"implies":null,"tier":"common"},{"key":"fixer","group":"fixer","label":{"ko":"해결사가 됨","en":"Became a Fixer","ja":"フィクサーになった"},"hint":{"ko":"해결사가 되었을 때","en":"Become a Fixer","ja":"フィクサーになったとき"},"implies":null,"tier":"common"},{"key":"fixer_g7","group":"fixer","label":{"ko":"해결사 7급 도달","en":"Reached Grade 7 Fixer","ja":"7級フィクサーに到達"},"hint":{"ko":"해결사로 7급까지 올랐을 때","en":"Rise to Grade 7 as a Fixer","ja":"フィクサーとして7級まで上がったとき"},"implies":"fixer","tier":"common"},{"key":"fixer_g6","group":"fixer","label":{"ko":"해결사 6급 도달","en":"Reached Grade 6 Fixer","ja":"6級フィクサーに到達"},"hint":{"ko":"해결사로 6급까지 올랐을 때","en":"Rise to Grade 6 as a Fixer","ja":"フィクサーとして6級まで上がったとき"},"implies":"fixer_g7","tier":"common"},{"key":"fixer_g5","group":"fixer","label":{"ko":"해결사 5급 도달","en":"Reached Grade 5 Fixer","ja":"5級フィクサーに到達"},"hint":{"ko":"해결사로 5급까지 올랐을 때","en":"Rise to Grade 5 as a Fixer","ja":"フィクサーとして5級まで上がったとき"},"implies":"fixer_g6","tier":"common"},{"key":"fixer_g4","group":"fixer","label":{"ko":"해결사 4급 도달","en":"Reached Grade 4 Fixer","ja":"4級フィクサーに到達"},"hint":{"ko":"해결사로 4급까지 올랐을 때","en":"Rise to Grade 4 as a Fixer","ja":"フィクサーとして4級まで上がったとき"},"implies":"fixer_g5","tier":"uncommon"},{"key":"fixer_g3","group":"fixer","label":{"ko":"해결사 3급 도달","en":"Reached Grade 3 Fixer","ja":"3級フィクサーに到達"},"hint":{"ko":"해결사로 3급까지 올랐을 때","en":"Rise to Grade 3 as a Fixer","ja":"フィクサーとして3級まで上がったとき"},"implies":"fixer_g4","tier":"uncommon"},{"key":"fixer_g2","group":"fixer","label":{"ko":"해결사 2급 도달","en":"Reached Grade 2 Fixer","ja":"2級フィクサーに到達"},"hint":{"ko":"해결사로 2급까지 올랐을 때","en":"Rise to Grade 2 as a Fixer","ja":"フィクサーとして2級まで上がったとき"},"implies":"fixer_g3","tier":"rare"},{"key":"fixer_g1","group":"fixer","label":{"ko":"해결사 1급 도달","en":"Reached Grade 1 Fixer","ja":"1級フィクサーに到達"},"hint":{"ko":"해결사로 1급까지 올랐을 때","en":"Rise to Grade 1 as a Fixer","ja":"フィクサーとして1級まで上がったとき"},"implies":"fixer_g2","tier":"epic"},{"key":"color","group":"fixer","label":{"ko":"특색의 이름을 얻음","en":"Became a Color","ja":"特色の名を得た"},"hint":{"ko":"해결사 1급에서 특색의 이름을 얻었을 때","en":"Earn the name of a Color as a Grade 1 Fixer","ja":"フィクサー1級で特色の名を得たとき"},"implies":null,"tier":"legend"},{"key":"office","group":"fixer","label":{"ko":"해결사 사무소 소속","en":"Joined a Fixer Office","ja":"フィクサー事務所に所属"},"hint":{"ko":"해결사 사무소에 들어갔을 때","en":"Join a Fixer Office","ja":"フィクサー事務所に入ったとき"},"implies":null,"tier":"common"},{"key":"assoc","group":"fixer","label":{"ko":"협회 소속 해결사","en":"Association Fixer","ja":"協会所属フィクサー"},"hint":{"ko":"해결사로 협회에 들어갔을 때","en":"Join an Association as a Fixer","ja":"フィクサーとして協会に入ったとき"},"implies":null,"tier":"uncommon"},{"key":"req_star","group":"fixer","label":{"ko":"도시의 별 이상 의뢰 완수","en":"Completed a Star of the City request","ja":"都市の星級の依頼を完遂"},"hint":{"ko":"도시의 별 등급 이상의 의뢰를 끝냈을 때","en":"Complete a request rated Star of the City or higher","ja":"都市の星級以上の依頼を終えたとき"},"implies":null,"tier":"uncommon"},{"key":"finger_엄지","group":"finger","label":{"ko":"엄지 입단","en":"Joined the Thumb","ja":"親指に入団"},"hint":{"ko":"엄지에 들어갔을 때","en":"Join the Thumb","ja":"親指に入ったとき"},"implies":null,"tier":"uncommon"},{"key":"frank_엄지_2","group":"finger","label":{"ko":"엄지 카포 도달","en":"Reached Thumb Capo","ja":"親指のカポに到達"},"hint":{"ko":"엄지에서 카포까지 올랐을 때","en":"Rise to Capo in the Thumb","ja":"親指でカポまで上がったとき"},"implies":"finger_엄지","tier":"rare"},{"key":"frank_엄지_3","group":"finger","label":{"ko":"엄지 언더보스 도달","en":"Reached Thumb Sottocapo","ja":"親指のアンダーボスに到達"},"hint":{"ko":"엄지에서 언더보스까지 올랐을 때","en":"Rise to Sottocapo in the Thumb","ja":"親指でアンダーボスまで上がったとき"},"implies":"frank_엄지_2","tier":"epic"},{"key":"frank_엄지_4","group":"finger","label":{"ko":"엄지 대부 도달","en":"Reached Thumb Capo dei Capi","ja":"親指のゴッドファーザーに到達"},"hint":{"ko":"엄지에서 대부까지 올랐을 때","en":"Rise to Capo dei Capi in the Thumb","ja":"親指でゴッドファーザーまで上がったとき"},"implies":"frank_엄지_3","tier":"legend"},{"key":"finger_검지","group":"finger","label":{"ko":"검지 입단","en":"Joined the Index","ja":"人差し指に入団"},"hint":{"ko":"검지에 들어갔을 때","en":"Join the Index","ja":"人差し指に入ったとき"},"implies":null,"tier":"uncommon"},{"key":"frank_검지_2","group":"finger","label":{"ko":"검지 대행자 도달","en":"Reached Index Proxy","ja":"人差し指の代行者に到達"},"hint":{"ko":"검지에서 대행자까지 올랐을 때","en":"Rise to Proxy in the Index","ja":"人差し指で代行者まで上がったとき"},"implies":"finger_검지","tier":"rare"},{"key":"frank_검지_3","group":"finger","label":{"ko":"검지 신탁 대행자 도달","en":"Reached Index Oracle's Proxy","ja":"人差し指の神託代行者に到達"},"hint":{"ko":"검지에서 신탁 대행자까지 올랐을 때","en":"Rise to Oracle's Proxy in the Index","ja":"人差し指で神託代行者まで上がったとき"},"implies":"frank_검지_2","tier":"epic"},{"key":"finger_중지","group":"finger","label":{"ko":"중지 입단","en":"Joined the Middle","ja":"中指に入団"},"hint":{"ko":"중지에 들어갔을 때","en":"Join the Middle","ja":"中指に入ったとき"},"implies":null,"tier":"uncommon"},{"key":"frank_중지_2","group":"finger","label":{"ko":"중지 큰 아우 도달","en":"Reached Middle Young Brother / Sister","ja":"中指の長弟・長妹に到達"},"hint":{"ko":"중지에서 큰 아우까지 올랐을 때","en":"Rise to Young Brother or Sister in the Middle","ja":"中指で長弟・長妹まで上がったとき"},"implies":"finger_중지","tier":"rare"},{"key":"frank_중지_3","group":"finger","label":{"ko":"중지 작은 형님·누님 도달","en":"Reached Middle Big Brother / Sister","ja":"中指の末兄・末姉に到達"},"hint":{"ko":"중지에서 작은 형님·누님까지 올랐을 때","en":"Rise to Big Brother or Sister in the Middle","ja":"中指で末兄・末姉まで上がったとき"},"implies":"frank_중지_2","tier":"rare"},{"key":"frank_중지_4","group":"finger","label":{"ko":"중지 큰 형님·누님 도달","en":"Reached Middle Great Brother / Sister","ja":"中指の長兄・長姉に到達"},"hint":{"ko":"중지에서 큰 형님·누님까지 올랐을 때","en":"Rise to Great Brother or Sister in the Middle","ja":"中指で長兄・長姉まで上がったとき"},"implies":"frank_중지_3","tier":"epic"},{"key":"finger_약지","group":"finger","label":{"ko":"약지 입단","en":"Joined the Ring","ja":"薬指に入団"},"hint":{"ko":"약지에 들어갔을 때","en":"Join the Ring","ja":"薬指に入ったとき"},"implies":null,"tier":"uncommon"},{"key":"frank_약지_2","group":"finger","label":{"ko":"약지 도슨트 도달","en":"Reached Ring Docent","ja":"薬指のドーセントに到達"},"hint":{"ko":"약지에서 도슨트까지 올랐을 때","en":"Rise to Docent in the Ring","ja":"薬指でドーセントまで上がったとき"},"implies":"finger_약지","tier":"rare"},{"key":"frank_약지_3","group":"finger","label":{"ko":"약지 마에스트로 도달","en":"Reached Ring Maestro","ja":"薬指のマエストロに到達"},"hint":{"ko":"약지에서 마에스트로까지 올랐을 때","en":"Rise to Maestro in the Ring","ja":"薬指でマエストロまで上がったとき"},"implies":"frank_약지_2","tier":"epic"},{"key":"finger_quit","group":"finger","label":{"ko":"손가락을 떠남","en":"Left the Fingers","ja":"指を離れた"},"hint":{"ko":"손가락을 떠나 살아남았을 때","en":"Leave the Fingers and live","ja":"指を離れて生き延びたとき"},"implies":null,"tier":"rare"},{"key":"corp","group":"wing","label":{"ko":"날개의 사원","en":"Wing employee","ja":"翼の社員"},"hint":{"ko":"날개의 사무직 사원이 되었을 때","en":"Become an office employee of a Wing","ja":"翼の事務職社員になったとき"},"implies":null,"tier":"common"},{"key":"office_dept","group":"wing","label":{"ko":"날개의 부장에 오름","en":"Rose to Department Head of a Wing","ja":"翼の部長に上りつめた"},"hint":{"ko":"날개 사무직으로 부장까지 올랐을 때","en":"Rise to Department Head in a Wing's offices","ja":"翼の事務職で部長まで上がったとき"},"implies":"corp","tier":"uncommon"},{"key":"office_dir","group":"wing","label":{"ko":"날개의 이사에 오름","en":"Rose to Director of a Wing","ja":"翼の理事に上りつめた"},"hint":{"ko":"날개 사무직으로 이사까지 올랐을 때","en":"Rise to Director in a Wing's offices","ja":"翼の事務職で理事まで上がったとき"},"implies":"office_dept","tier":"rare"},{"key":"office_ceo","group":"wing","label":{"ko":"날개의 대표에 오름","en":"Rose to CEO of a Wing","ja":"翼の代表に上りつめた"},"hint":{"ko":"날개 사무직으로 대표까지 올랐을 때","en":"Rise to CEO of a Wing","ja":"翼の事務職で代表まで上がったとき"},"implies":"office_dir","tier":"epic"},{"key":"assoc_staff","group":"wing","label":{"ko":"협회 직원","en":"Association staff","ja":"協会職員"},"hint":{"ko":"협회 직원이 되었을 때","en":"Become Association staff","ja":"協会職員になったとき"},"implies":null,"tier":"uncommon"},{"key":"heishou","group":"wing","label":{"ko":"흑수가 됨","en":"Joined the Heishou Pack","ja":"黒獣となった"},"hint":{"ko":"흑수에 들어갔을 때","en":"Join the Heishou Pack","ja":"黒獣に入ったとき"},"implies":null,"tier":"rare"},{"key":"heishou_adept","group":"wing","label":{"ko":"흑수의 필두가 됨","en":"Became an Adept of the Heishou Pack","ja":"黒獣の筆頭となった"},"hint":{"ko":"흑수에서 필두까지 올랐을 때","en":"Rise to Adept in the Heishou Pack","ja":"黒獣で筆頭まで上がったとき"},"implies":"heishou","tier":"epic"},{"key":"t_collector","group":"wing","label":{"ko":"T사 시간징수직이 됨","en":"Became T Corp. Collection Staff","ja":"T社の徴収職になった"},"hint":{"ko":"T사 시간징수직이 되었을 때","en":"Become T Corp. Collection Staff","ja":"T社の徴収職になったとき"},"implies":null,"tier":"rare"},{"key":"t_class5","group":"wing","label":{"ko":"T사 5등급 징수직 도달","en":"Reached T Corp. Class 5 Collection Staff","ja":"T社5級徴収職に到達"},"hint":{"ko":"T사 징수직으로 5등급까지 올랐을 때","en":"Rise to Class 5 as T Corp. Collection Staff","ja":"T社の徴収職で5級まで上がったとき"},"implies":"t_collector","tier":"epic"},{"key":"w_cleanup","group":"wing","label":{"ko":"W사 정리 요원이 됨","en":"Became a W Corp. Cleanup Agent","ja":"W社の整理要員になった"},"hint":{"ko":"W사 정리 요원이 되었을 때","en":"Become a W Corp. Cleanup Agent","ja":"W社の整理要員になったとき"},"implies":null,"tier":"rare"},{"key":"w_level5","group":"wing","label":{"ko":"W사 5등급 정리 요원 도달","en":"Reached W Corp. Level 5 Cleanup Agent","ja":"W社5級整理要員に到達"},"hint":{"ko":"W사 정리 요원으로 5등급까지 올랐을 때","en":"Rise to Level 5 as a W Corp. Cleanup Agent","ja":"W社の整理要員で5級まで上がったとき"},"implies":"w_cleanup","tier":"epic"},{"key":"k_excision","group":"wing","label":{"ko":"K사 적출직이 됨","en":"Became K Corp. Excision Staff","ja":"K社の摘出職になった"},"hint":{"ko":"K사 적출직이 되었을 때","en":"Become K Corp. Excision Staff","ja":"K社の摘出職になったとき"},"implies":null,"tier":"rare"},{"key":"k_special","group":"wing","label":{"ko":"K사 특수 적출직 도달","en":"Reached K Corp. Special Excision Staff","ja":"K社特殊摘出職に到達"},"hint":{"ko":"K사 적출직으로 특수 적출 부대까지 올랐을 때","en":"Rise to the Special Excision Unit as K Corp. Excision Staff","ja":"K社の摘出職で特殊摘出部隊まで上がったとき"},"implies":"k_excision","tier":"epic"},{"key":"k_hollow","group":"wing","label":{"ko":"메마른 적출직","en":"Hollowed Excision Staff","ja":"枯れた摘出職"},"hint":{"ko":"HP탄을 맞다 인격이 다 메말랐을 때","en":"When HP bullets have dried up every last bit of your self","ja":"HP弾を受け続け、人格が枯れ果てたとき"},"implies":"k_excision","tier":"rare"},{"key":"k_dreamer","group":"wing","label":{"ko":"꿈을 꾸는 적출직","en":"Excision Staff Who Dreamed","ja":"夢を見る摘出職"},"hint":{"ko":"시험관 안에서도 끝까지 메마르지 않았을 때","en":"When you never dried up, even in the tube","ja":"試験管の中でも最後まで枯れなかったとき"},"implies":"k_excision","tier":"legend"},{"key":"n_inquisitor","group":"wing","label":{"ko":"N사 이단 심문관이 됨","en":"Became an N Corp. Inquisitor","ja":"N社の異端審問官になった"},"hint":{"ko":"N사의 이단 심문관이 되었을 때","en":"Become an N Corp. Inquisitor","ja":"N社の異端審問官になったとき"},"implies":null,"tier":"rare"},{"key":"n_grosshammer","group":"wing","label":{"ko":"N사 큰 망치 도달","en":"Reached N Corp. Großhammer","ja":"N社大槌に到達"},"hint":{"ko":"쥐는 자의 지명으로 큰 망치를 받았을 때","en":"Be named a Großhammer by the One Who Grips","ja":"掴む者の指名で大槌を受け取ったとき"},"implies":"n_inquisitor","tier":"epic"},{"key":"n_zealot","group":"wing","label":{"ko":"신앙심이 가득 찬 망치","en":"A Hammer Full of Faith","ja":"信仰に満ちた槌"},"hint":{"ko":"이단 심문관의 신앙심이 끝까지 찼을 때","en":"Let an Inquisitor’s faith fill all the way","ja":"異端審問官の信仰心が満ちきったとき"},"implies":"n_inquisitor","tier":"rare"},{"key":"n_faithless","group":"wing","label":{"ko":"신앙을 잃은 망치","en":"A Hammer Without Faith","ja":"信仰を失った槌"},"hint":{"ko":"이단 심문관의 신앙심이 바닥까지 떨어졌을 때","en":"Let an Inquisitor’s faith fall all the way to nothing","ja":"異端審問官の信仰心が底まで落ちたとき"},"implies":"n_inquisitor","tier":"rare"},{"key":"r_pack","group":"wing","label":{"ko":"R사 4무리에 들어감","en":"Joined R Corp.'s 4th Pack","ja":"R社第4群に入った"},"hint":{"ko":"R사 4무리에 들어갔을 때","en":"Join R Corp.'s 4th Pack","ja":"R社第4群に入ったとき"},"implies":null,"tier":"rare"},{"key":"r_commander","group":"wing","label":{"ko":"R사 4무리 사령관이 됨","en":"Became Commander of R Corp.'s 4th Pack","ja":"R社第4群の司令官になった"},"hint":{"ko":"R사 4무리에서 사령관까지 올랐을 때","en":"Rise to Commander in R Corp.'s 4th Pack","ja":"R社第4群で司令官まで上がったとき"},"implies":"r_pack","tier":"epic"},{"key":"prosthetic","group":"wing","label":{"ko":"의체 시술을 받음","en":"Underwent prosthetic surgery","ja":"義体手術を受けた"},"hint":{"ko":"의체 시술을 받았을 때","en":"Undergo prosthetic surgery","ja":"義体手術を受けたとき"},"implies":null,"tier":"common"},{"key":"prosthetic_good","group":"wing","label":{"ko":"좋은 의체 시술을 받음","en":"Underwent fine prosthetic surgery","ja":"良質な義体手術を受けた"},"hint":{"ko":"좋은 의체 시술을 받았을 때","en":"Undergo fine prosthetic surgery","ja":"良質な義体手術を受けたとき"},"implies":"prosthetic","tier":"common"},{"key":"relic","group":"wing","label":{"ko":"외곽의 유물을 얻음","en":"Obtained a relic of the Outskirts","ja":"外郭の遺物を手に入れた"},"hint":{"ko":"외곽에서 유물을 손에 넣었을 때","en":"Obtain a relic in the Outskirts","ja":"外郭で遺物を手に入れたとき"},"implies":null,"tier":"epic"},{"key":"distorted","group":"distortion","label":{"ko":"뒤틀려 생을 마침","en":"Ended life as a Distortion","ja":"ねじれて生涯を終えた"},"hint":{"ko":"뒤틀려서 삶이 끝났을 때","en":"Your life ends as a Distortion","ja":"ねじれて生涯が終わったとき"},"implies":null,"tier":"rare"},{"key":"dist_grade_0","group":"distortion","label":{"ko":"뜬소문이 된 뒤틀림","en":"A Distortion rated Canard","ja":"あらぬ噂となったねじれ"},"hint":{"ko":"뒤틀린 뒤 뜬소문 등급으로 남았을 때","en":"Be rated Canard as a Distortion","ja":"ねじれた後、あらぬ噂の等級に留まったとき"},"implies":null,"tier":"rare"},{"key":"dist_grade_1","group":"distortion","label":{"ko":"도시 괴담이 된 뒤틀림","en":"A Distortion rated Urban Myth","ja":"都市怪談となったねじれ"},"hint":{"ko":"뒤틀린 뒤 도시 괴담 등급이 되었을 때","en":"Be rated Urban Myth as a Distortion","ja":"ねじれた後、都市怪談の等級になったとき"},"implies":null,"tier":"rare"},{"key":"dist_grade_2","group":"distortion","label":{"ko":"도시 전설이 된 뒤틀림","en":"A Distortion rated Urban Legend","ja":"都市伝説となったねじれ"},"hint":{"ko":"뒤틀린 뒤 도시 전설 등급이 되었을 때","en":"Be rated Urban Legend as a Distortion","ja":"ねじれた後、都市伝説の等級になったとき"},"implies":null,"tier":"rare"},{"key":"dist_grade_3","group":"distortion","label":{"ko":"도시 질병이 된 뒤틀림","en":"A Distortion rated Urban Plague","ja":"都市疾病となったねじれ"},"hint":{"ko":"뒤틀린 뒤 도시 질병 등급이 되었을 때","en":"Be rated Urban Plague as a Distortion","ja":"ねじれた後、都市疾病の等級になったとき"},"implies":null,"tier":"epic"},{"key":"dist_grade_4","group":"distortion","label":{"ko":"도시 악몽이 된 뒤틀림","en":"A Distortion rated Urban Nightmare","ja":"都市悪夢となったねじれ"},"hint":{"ko":"뒤틀림 레이드에서 도시 악몽 등급을 받았을 때","en":"Be rated Urban Nightmare in a Distortion raid","ja":"ねじれレイドで都市悪夢の等級を受けたとき"},"implies":null,"tier":"legend"},{"key":"dist_final","group":"distortion","label":{"ko":"특색이 온 토벌대","en":"The subjugation team with a Color","ja":"特色が来た討伐隊"},"hint":{"ko":"뒤틀림 레이드 다섯 번째 토벌대, 특색에게 쓰러졌을 때","en":"Fall to a Color in the fifth subjugation of a Distortion raid","ja":"ねじれレイド五度目の討伐隊、特色に倒されたとき"},"implies":null,"tier":"legend"},{"key":"dist_nm6","group":"distortion","label":{"ko":"특색을 죽인 뒤","en":"After killing a Color","ja":"特色を殺した後"},"hint":{"ko":"도시 악몽으로 특색을 죽인 뒤 여섯 번째 사람을 만났을 때","en":"As an Urban Nightmare, kill a Color and meet the sixth one","ja":"都市悪夢として特色を殺し、六人目に出会ったとき"},"implies":null,"tier":"myth"},{"key":"dist_return","group":"distortion","label":{"ko":"원래대로 돌아온 사람","en":"One who came back","ja":"元に戻った人"},"hint":{"ko":"뒤틀림 레이드에서 목소리를 세 번 거슬러 돌아왔을 때","en":"Defy the voice three times in a Distortion raid and come back","ja":"ねじれレイドで声に三度逆らい、戻ってきたとき"},"implies":null,"tier":"legend"},{"key":"ego","group":"abno","label":{"ko":"E.G.O 개화","en":"Effloresced E.G.O","ja":"E.G.O開花"},"hint":{"ko":"뒤틀리려는 순간 E.G.O가 개화했을 때","en":"Your E.G.O effloresces at the moment of Distortion","ja":"ねじれる瞬間にE.G.Oが開花したとき"},"implies":null,"tier":"rare"},{"key":"aleph_survive","group":"abno","label":{"ko":"ALEPH 재해에서 살아남음","en":"Survived an ALEPH disaster","ja":"ALEPHの災害を生き延びた"},"hint":{"ko":"ALEPH급 환상체의 재해에서 살아남았을 때","en":"Survive the disaster of an ALEPH-class Abnormality","ja":"ALEPH級アブノーマリティの災害を生き延びたとき"},"implies":null,"tier":"rare"},{"key":"apocalypse","group":"abno","label":{"ko":"종말새 아래에서 살아남음","en":"Survived beneath the Apocalypse Bird","ja":"終末鳥の下で生き延びた"},"hint":{"ko":"종말새를 만나고도 그해를 살아남았을 때","en":"Meet the Apocalypse Bird and survive the year","ja":"終末鳥に出会い、その年を生き延びたとき"},"implies":null,"tier":"legend"},{"key":"library_lost","group":"abno","label":{"ko":"도서관의 책이 됨","en":"Became a book in the Library","ja":"図書館の本になった"},"hint":{"ko":"도서관의 초대를 받고 돌아오지 못했을 때","en":"Accept the Library's invitation and never return","ja":"図書館の招待を受け、帰れなかったとき"},"implies":null,"tier":"rare"},{"key":"library_back","group":"abno","label":{"ko":"도서관에서 돌아옴","en":"Returned from the Library","ja":"図書館から帰還した"},"hint":{"ko":"도서관에서 돌아왔을 때","en":"Return from the Library","ja":"図書館から帰ってきたとき"},"implies":null,"tier":"epic"},{"key":"warp_car_0","group":"warp","label":{"ko":"워프 열차 0칸 돌파","en":"Cleared 0 Warp Train cars","ja":"ワープ列車0両突破"},"hint":{"ko":"워프 열차에 탔지만 첫 칸을 넘지 못했을 때","en":"Board the Warp Train but fail to clear the first car","ja":"ワープ列車に乗ったが最初の車両を越えられなかったとき"},"implies":null,"tier":"common"},{"key":"warp_car_1","group":"warp","label":{"ko":"워프 열차 1칸 돌파","en":"Cleared 1 Warp Train car","ja":"ワープ列車1両突破"},"hint":{"ko":"워프 열차에서 1칸을 넘었을 때","en":"Clear 1 car of the Warp Train","ja":"ワープ列車で1両を越えたとき"},"implies":"warp_car_0","tier":"common"},{"key":"warp_car_2","group":"warp","label":{"ko":"워프 열차 2칸 돌파","en":"Cleared 2 Warp Train cars","ja":"ワープ列車2両突破"},"hint":{"ko":"워프 열차에서 2칸을 넘었을 때","en":"Clear 2 cars of the Warp Train","ja":"ワープ列車で2両を越えたとき"},"implies":"warp_car_1","tier":"common"},{"key":"warp_car_3","group":"warp","label":{"ko":"워프 열차 3칸 돌파","en":"Cleared 3 Warp Train cars","ja":"ワープ列車3両突破"},"hint":{"ko":"워프 열차에서 3칸을 넘었을 때","en":"Clear 3 cars of the Warp Train","ja":"ワープ列車で3両を越えたとき"},"implies":"warp_car_2","tier":"uncommon"},{"key":"warp_car_4","group":"warp","label":{"ko":"워프 열차 4칸 돌파","en":"Cleared 4 Warp Train cars","ja":"ワープ列車4両突破"},"hint":{"ko":"워프 열차에서 4칸을 넘었을 때","en":"Clear 4 cars of the Warp Train","ja":"ワープ列車で4両を越えたとき"},"implies":"warp_car_3","tier":"uncommon"},{"key":"warp_car_5","group":"warp","label":{"ko":"워프 열차 5칸 돌파","en":"Cleared 5 Warp Train cars","ja":"ワープ列車5両突破"},"hint":{"ko":"워프 열차에서 5칸을 넘었을 때","en":"Clear 5 cars of the Warp Train","ja":"ワープ列車で5両を越えたとき"},"implies":"warp_car_4","tier":"rare"},{"key":"warp_car_6","group":"warp","label":{"ko":"워프 열차 6칸 돌파","en":"Cleared 6 Warp Train cars","ja":"ワープ列車6両突破"},"hint":{"ko":"워프 열차에서 6칸을 넘었을 때","en":"Clear 6 cars of the Warp Train","ja":"ワープ列車で6両を越えたとき"},"implies":"warp_car_5","tier":"rare"},{"key":"warp_car_7","group":"warp","label":{"ko":"워프 열차 7칸 돌파","en":"Cleared 7 Warp Train cars","ja":"ワープ列車7両突破"},"hint":{"ko":"워프 열차에서 7칸을 넘었을 때","en":"Clear 7 cars of the Warp Train","ja":"ワープ列車で7両を越えたとき"},"implies":"warp_car_6","tier":"epic"},{"key":"warp_clear","group":"warp","label":{"ko":"워프 열차 완주","en":"Ran the Warp Train to the end","ja":"ワープ列車を完走"},"hint":{"ko":"워프 열차의 모든 칸을 지나 끝까지 갔을 때","en":"Pass every car of the Warp Train to the end","ja":"ワープ列車のすべての車両を通り抜けたとき"},"implies":"warp_car_7","tier":"legend"},{"key":"lake_drink","group":"lake","label":{"ko":"따여 있던 포도맛 캔","en":"The already-opened grape soda","ja":"開けてあったぶどう味の缶"},"hint":{"ko":"따여 있던 포도맛 캔을 마시고 대호수에 들어갔을 때","en":"Drink the already-opened grape soda and enter the Great Lake","ja":"開けてあったぶどう味の缶を飲み、大湖に入ったとき"},"implies":null,"tier":"rare"},{"key":"lake_hint2","group":"lake","label":{"ko":"법 두 개를 산 삶","en":"Bought two Laws","ja":"法を二つ買った生"},"hint":{"ko":"호수의 법을 평생 두 개 이상 샀을 때","en":"Buy two or more Laws of the lake in one life","ja":"湖の法を生涯に二つ以上買ったとき"},"implies":null,"tier":"epic"},{"key":"lake_cross","group":"lake","label":{"ko":"대호수를 항해한 자","en":"One Who Sailed the Great Lake","ja":"大湖を航海した者"},"hint":{"ko":"대호수 항해를 끝까지 마쳤을 때","en":"Finish a voyage across the Great Lake","ja":"大湖の航海を最後までやり遂げたとき"},"implies":null,"tier":"miracle"},{"key":"lake_deep","group":"lake","label":{"ko":"깊은 물을 셋 지나 닿은 삶","en":"Crossed three deep waters and reached port","ja":"深い水を三つ越えて着いた生"},"hint":{"ko":"대호수에서 깊은 물을 세 번 지나 항구에 닿았을 때","en":"Cross three deep waters on the Great Lake and reach port","ja":"大湖で深い水を三度越えて港に着いたとき"},"implies":null,"tier":"myth"},{"key":"lake_whale_marlin","group":"lake","label":{"ko":"모든 것을 꿰뚫는 청새치 고래를 만난 자","en":"One Who Met the All-Impaling Marlin Whale","ja":"すべてを貫くカジキの鯨に出会った者"},"hint":{"ko":"대호수에서 청새치 고래를 만났을 때","en":"Meet the Marlin Whale on the Great Lake","ja":"大湖でカジキの鯨に出会ったとき"},"implies":null,"tier":"legend"},{"key":"lake_whale_pallid","group":"lake","label":{"ko":"모든 것을 집어삼키는 창백한 고래를 만난 자","en":"One Who Met the All-Consuming Pallid Whale","ja":"すべてを呑み込む蒼白の鯨に出会った者"},"hint":{"ko":"대호수에서 창백한 고래를 만났을 때","en":"Meet the Pallid Whale on the Great Lake","ja":"大湖で蒼白の鯨に出会ったとき"},"implies":null,"tier":"legend"},{"key":"lake_whale_crimson","group":"lake","label":{"ko":"모든 것을 마르게 하는 새빨간 고래를 만난 자","en":"One Who Met the All-Withering Crimson Whale","ja":"すべてを枯らす真紅の鯨に出会った者"},"hint":{"ko":"대호수에서 새빨간 고래를 만났을 때","en":"Meet the Crimson Whale on the Great Lake","ja":"大湖で真紅の鯨に出会ったとき"},"implies":null,"tier":"legend"},{"key":"heir_cand","group":"heir","label":{"ko":"H사의 가주 후보로 자람","en":"Raised as an H Corp. Family Hierarch Candidate","ja":"H社の家主候補として育った"},"hint":{"ko":"H사의 가주 후보로 태어나 자랐을 때","en":"Be born and raised as an H Corp. Family Hierarch Candidate","ja":"H社の家主候補として生まれ育ったとき"},"implies":null,"tier":"rare"},{"key":"heir_fail","group":"heir","label":{"ko":"가주 심사에서 떨어짐","en":"Failed the Family Hierarch Evaluation","ja":"家主審査に落ちた"},"hint":{"ko":"가주 심사에서 떨어졌을 때","en":"Fail the Family Hierarch Evaluation","ja":"家主審査に落ちたとき"},"implies":null,"tier":"rare"},{"key":"heir_head","group":"heir","label":{"ko":"가주","en":"Family Hierarch","ja":"家主"},"hint":{"ko":"가주 심사를 통과해 가주가 되었을 때","en":"Pass the Evaluation and become Family Hierarch","ja":"家主審査を通り、家主になったとき"},"implies":null,"tier":"epic"},{"key":"rule_human","group":"heir","label":{"ko":"선황충을 한 번도 따르지 않음","en":"Never once followed the Xianhuang Worm","ja":"仙皇蟲に一度も従わなかった"},"hint":{"ko":"군주로서 다섯 번의 선택에서 한 번도 선황충을 따르지 않았을 때","en":"As Lord, refuse the Xianhuang Worm in all five choices","ja":"君主として五度の選択で一度も仙皇蟲に従わなかったとき"},"implies":null,"tier":"legend"},{"key":"rule_worm","group":"heir","label":{"ko":"다섯 번 모두 선황충을 따름","en":"Followed the Xianhuang Worm all five times","ja":"五度とも仙皇蟲に従った"},"hint":{"ko":"군주로서 다섯 번의 선택을 모두 선황충에 맡겼을 때","en":"As Lord, follow the Xianhuang Worm in all five choices","ja":"君主として五度の選択をすべて仙皇蟲に委ねたとき"},"implies":null,"tier":"myth"},{"key":"heir_lord","group":"heir","label":{"ko":"군주","en":"Lord","ja":"君主"},"hint":{"ko":"가주가 된 뒤 군주의 자리에 올랐을 때","en":"Become Family Hierarch, then rise to Lord","ja":"家主になった後、君主の座に就いたとき"},"implies":null,"tier":"legend"},{"key":"rule_mercy","group":"heir","label":{"ko":"자비로운 군주로 불림","en":"Called a merciful lord","ja":"慈悲深い君主と呼ばれた"},"hint":{"ko":"군주로서 다스리는 동안 자비로운 쪽을 거듭 택했을 때","en":"As Lord, choose mercy again and again while ruling","ja":"君主として治める間、慈悲深い側を選び続けたとき"},"implies":null,"tier":"myth"},{"key":"rule_tyrant","group":"heir","label":{"ko":"폭군으로 불림","en":"Called a tyrant","ja":"暴君と呼ばれた"},"hint":{"ko":"군주로서 다스리는 동안 가혹한 쪽을 거듭 택했을 때","en":"As Lord, choose cruelty again and again while ruling","ja":"君主として治める間、苛烈な側を選び続けたとき"},"implies":null,"tier":"myth"},{"key":"rule_abolish","group":"heir","label":{"ko":"가주 심사를 없앰","en":"Abolished the Family Hierarch Evaluation","ja":"家主審査を廃止した"},"hint":{"ko":"군주로서 가주 심사를 없앴을 때","en":"As Lord, abolish the Family Hierarch Evaluation","ja":"君主として家主審査を廃止したとき"},"implies":null,"tier":"myth"},{"key":"rule_kong","group":"heir","label":{"ko":"공씨의 이름을 되살림","en":"Restored the name of the Kong family","ja":"孔家の名を取り戻した"},"hint":{"ko":"군주로서 공씨의 이름을 되살렸을 때","en":"As Lord, restore the name of the Kong family","ja":"君主として孔家の名を取り戻したとき"},"implies":null,"tier":"myth"},{"key":"bf_stray","group":"bf","label":{"ko":"혈귀가 됨 (떠돌이)","en":"Became a Bloodfiend (stray)","ja":"血鬼になった（放浪者）"},"hint":{"ko":"가문 없는 떠돌이 혈귀가 되었을 때","en":"Become a stray Bloodfiend with no Family","ja":"家門のない放浪の血鬼になったとき"},"implies":null,"tier":"rare"},{"key":"bf_kin","group":"bf","label":{"ko":"가문의 권속이 됨","en":"Became a Family's Kindred","ja":"家門の眷属になった"},"hint":{"ko":"가문의 권속이 되었을 때","en":"Become a Family's Kindred","ja":"家門の眷属になったとき"},"implies":null,"tier":"rare"},{"key":"bloodbag","group":"bf","label":{"ko":"피주머니가 됨","en":"Became a Bloodbag","ja":"血袋になった"},"hint":{"ko":"혈귀에게 피주머니가 되었을 때","en":"Be made into a Bloodbag by a Bloodfiend","ja":"血鬼に血袋にされたとき"},"implies":null,"tier":"rare"},{"key":"bf_sleep","group":"bf","label":{"ko":"긴 잠에 듦","en":"Went into the long sleep","ja":"長い眠りについた"},"hint":{"ko":"혈귀로 긴 잠에 들었을 때","en":"Go into the long sleep as a Bloodfiend","ja":"血鬼として長い眠りについたとき"},"implies":null,"tier":"rare"},{"key":"bf_alive","group":"bf","label":{"ko":"살아서 이야기를 맺은 혈귀","en":"A Bloodfiend whose story ended alive","ja":"生きたまま物語を結んだ血鬼"},"hint":{"ko":"혈귀로 살아 있는 채 이야기를 맺었을 때","en":"End your story alive, as a Bloodfiend","ja":"血鬼として生きたまま物語を結んだとき"},"implies":null,"tier":"epic"},{"key":"bf_300","group":"bf","label":{"ko":"삼백 년을 살아낸 혈귀","en":"A Bloodfiend who lived three hundred years","ja":"三百年を生き抜いた血鬼"},"hint":{"ko":"혈귀로 300세를 넘겨 살았을 때","en":"Live past 300 as a Bloodfiend","ja":"血鬼として300歳を超えて生きたとき"},"implies":null,"tier":"legend"},{"key":"bf_reveal","group":"bf","label":{"ko":"소속에 정체를 밝힌 혈귀","en":"A Bloodfiend who revealed themselves to their own","ja":"所属に正体を明かした血鬼"},"hint":{"ko":"소속에 스스로 정체를 밝혔을 때","en":"Reveal what you are to your own organization","ja":"所属に自ら正体を明かしたとき"},"implies":null,"tier":"rare"},{"key":"bf_found","group":"bf","label":{"ko":"숨긴 정체를 들킨 혈귀","en":"A Bloodfiend whose secret was found out","ja":"隠した正体を知られた血鬼"},"hint":{"ko":"숨겨 온 정체를 소속에 들켰을 때","en":"Have your secret found out by your organization","ja":"隠してきた正体を所属に知られたとき"},"implies":null,"tier":"rare"},{"key":"bf_nobite","group":"bf","label":{"ko":"열 해 동안 물지 않은 혈귀","en":"A Bloodfiend who went ten years without biting","ja":"十年噛まなかった血鬼"},"hint":{"ko":"혈귀가 된 뒤 열 해 동안 한 번도 물지 않았을 때","en":"Go ten years as a Bloodfiend without biting anyone","ja":"血鬼になって十年、一度も噛まなかったとき"},"implies":null,"tier":"epic"},{"key":"bf_epi_nobite","group":"bf","label":{"ko":"물지 않은 스무 해","en":"Twenty years without a bite","ja":"噛まなかった二十年"},"hint":{"ko":"살아서 끝맺은 혈귀가 스무 해 넘게 아무도 물지 않았을 때","en":"End alive as a Bloodfiend who went twenty years without biting","ja":"生きたまま結んだ血鬼が二十年以上誰も噛まなかったとき"},"implies":"bf_nobite","tier":"myth"},{"key":"bf_two_kin","group":"bf","label":{"ko":"권속 둘을 모두 만듦","en":"Made both of your Kindred","ja":"眷属をふたりとも生み出した"},"hint":{"ko":"권속을 둘 다 만들었을 때","en":"Make both of your Kindred","ja":"眷属をふたりとも生み出したとき"},"implies":null,"tier":"epic"},{"key":"bf_gen1","group":"bf","label":{"ko":"제1권속(장로)에 오름","en":"Rose to First Kindred (Elder)","ja":"第一眷属（長老）に上り詰めた"},"hint":{"ko":"가문의 권속으로 제1권속(장로)까지 올랐을 때","en":"Rise to First Kindred (Elder) in a Family","ja":"家門の眷属として第一眷属（長老）まで上がったとき"},"implies":null,"tier":"legend"},{"key":"bf_bar20","group":"bf","label":{"ko":"혈액바 스무 해 치","en":"Twenty years' worth of Hemobars","ja":"血液バー二十年分"},"hint":{"ko":"혈귀로 혈액바를 스무 해 치 먹었을 때","en":"Live on Hemobars for twenty years as a Bloodfiend","ja":"血鬼として血液バーを二十年分食べたとき"},"implies":null,"tier":"legend"},{"key":"bf_end_hunter_last","group":"bf","label":{"ko":"마지막 사냥꾼을 기다린 혈귀","en":"A Bloodfiend who waited for the last hunter","ja":"最後の狩人を待った血鬼"},"hint":{"ko":"마지막 끝에서 사냥꾼을 기다리는 쪽을 골랐을 때","en":"At the end, choose to wait for the hunter","ja":"最後の終わりで狩人を待つ道を選んだとき"},"implies":null,"tier":"epic"},{"key":"bf_end_couple_sleep","group":"bf","label":{"ko":"둘이 함께 잠든 혈귀","en":"Bloodfiends who slept together","ja":"ふたりで眠った血鬼"},"hint":{"ko":"마지막 끝에서 배우자와 함께 잠드는 쪽을 골랐을 때","en":"At the end, choose to sleep together with your spouse","ja":"最後の終わりで配偶者と共に眠る道を選んだとき"},"implies":null,"tier":"epic"},{"key":"bf_end_smile_first","group":"bf","label":{"ko":"배우자를 먼저 재운 혈귀","en":"A Bloodfiend who let their spouse sleep first","ja":"配偶者を先に眠らせた血鬼"},"hint":{"ko":"마지막 끝에서 배우자를 먼저 재우는 쪽을 골랐을 때","en":"At the end, choose to let your spouse sleep first","ja":"最後の終わりで配偶者を先に眠らせる道を選んだとき"},"implies":null,"tier":"epic"},{"key":"bf_end_gone_grave","group":"bf","label":{"ko":"배우자 곁으로 돌아간 혈귀","en":"A Bloodfiend who returned to their spouse's side","ja":"配偶者のそばへ帰った血鬼"},"hint":{"ko":"배우자를 먼저 보낸 뒤, 그 곁으로 돌아가는 쪽을 골랐을 때","en":"After losing your spouse, choose to return to their side","ja":"配偶者を先に見送った後、そのそばへ帰る道を選んだとき"},"implies":null,"tier":"epic"},{"key":"bf_end_elder_hand","group":"bf","label":{"ko":"자리를 넘기고 잠든 장로","en":"An Elder who handed over the seat and slept","ja":"座を譲って眠った長老"},"hint":{"ko":"장로로서 자리를 넘기고 잠드는 쪽을 골랐을 때","en":"As an Elder, choose to hand over the seat and sleep","ja":"長老として座を譲り眠る道を選んだとき"},"implies":null,"tier":"epic"},{"key":"bf_end_kin_cup","group":"bf","label":{"ko":"권속에게 남긴 잔","en":"A cup left to the Kindred","ja":"眷属に遺した杯"},"hint":{"ko":"권속을 둔 채, 잔을 남기고 가는 쪽을 골랐을 때","en":"With Kindred of your own, choose to leave a cup behind","ja":"眷属を残し、杯を遺して去る道を選んだとき"},"implies":null,"tier":"epic"},{"key":"bf_end_faces","group":"bf","label":{"ko":"셀 수 없는 얼굴","en":"Countless faces","ja":"数えきれない顔"},"hint":{"ko":"서른 명 넘게 물거나 세 번 넘게 광란한 혈귀가 긴 잠에 들었을 때","en":"Go into the long sleep after biting thirty or frenzying three times","ja":"三十人以上噛むか三度以上狂乱した血鬼が長い眠りについたとき"},"implies":null,"tier":"legend"},{"key":"bf_epi_couple","group":"bf","label":{"ko":"둘이서 오래","en":"Together, for a long time","ja":"ふたりで長く"},"hint":{"ko":"배우자를 권속으로 만든 혈귀가 살아서 끝맺었을 때","en":"End alive as a Bloodfiend who made their spouse Kindred","ja":"配偶者を眷属にした血鬼が生きたまま結んだとき"},"implies":null,"tier":"legend"},{"key":"bf_epi_smile","group":"bf","label":{"ko":"늦게 온 웃음","en":"A smile that came late","ja":"遅れてきた笑み"},"hint":{"ko":"뜻을 거슬러 배우자를 문 혈귀가 살아서 끝맺었을 때","en":"End alive after biting a spouse who asked you not to","ja":"意に反して配偶者を噛んだ血鬼が生きたまま結んだとき"},"implies":null,"tier":"legend"},{"key":"bf_epi_gone","group":"bf","label":{"ko":"늙지 않는 쪽","en":"The one who does not age","ja":"老いないほう"},"hint":{"ko":"배우자를 사람으로 떠나보낸 혈귀가 살아서 끝맺었을 때","en":"End alive after letting your spouse leave as a human","ja":"配偶者を人として見送った血鬼が生きたまま結んだとき"},"implies":null,"tier":"legend"},{"key":"bf_epi_elder","group":"bf","label":{"ko":"오래 앉은 장로","en":"The long-seated Elder","ja":"長く座した長老"},"hint":{"ko":"장로(제1권속)가 살아서 끝맺었을 때","en":"End alive as an Elder (First Kindred)","ja":"長老（第一眷属）が生きたまま結んだとき"},"implies":null,"tier":"myth"},{"key":"bf_epi_hunter","group":"bf","label":{"ko":"잠그지 않는 문","en":"The unlocked door","ja":"鍵のない扉"},"hint":{"ko":"사냥꾼을 세 번 넘게 이기고 열 해 동안 사냥이 없던 혈귀가 살아서 끝맺었을 때","en":"End alive after beating hunters three times and ten quiet years","ja":"狩人に三度以上勝ち、十年間狩られなかった血鬼が生きたまま結んだとき"},"implies":null,"tier":"legend"},{"key":"bf_epi_faces","group":"bf","label":{"ko":"밤이 아는 이름","en":"A name the night knows","ja":"夜が知る名"},"hint":{"ko":"서른 명 넘게 물거나 세 번 넘게 광란한 혈귀가 살아서 끝맺었을 때","en":"End alive after biting thirty or frenzying three times","ja":"三十人以上噛むか三度以上狂乱した血鬼が生きたまま結んだとき"},"implies":null,"tier":"legend"},{"key":"bf_epi_kin","group":"bf","label":{"ko":"이름 없는 가문","en":"A nameless Family","ja":"名もなき家門"},"hint":{"ko":"떠돌이 혈귀가 권속을 만들고 살아서 끝맺었을 때","en":"End alive as a stray Bloodfiend who made Kindred","ja":"流れの血鬼が眷属を作り、生きたまま結んだとき"},"implies":null,"tier":"legend"},{"key":"bf_epi_bag","group":"bf","label":{"ko":"떠나지 않는 피주머니","en":"The Bloodbag that never left","ja":"去らない血袋"},"hint":{"ko":"피주머니를 둔 혈귀가 살아서 끝맺었을 때","en":"End alive as a Bloodfiend who kept a Bloodbag","ja":"血袋を持つ血鬼が生きたまま結んだとき"},"implies":null,"tier":"legend"},{"key":"bf_epi_bar","group":"bf","label":{"ko":"혈액바 상자의 탑","en":"A tower of Hemobar boxes","ja":"血液バーの箱の塔"},"hint":{"ko":"혈액바로 스무 해를 버틴 혈귀가 살아서 끝맺었을 때","en":"End alive after twenty years on Hemobars","ja":"血液バーで二十年しのいだ血鬼が生きたまま結んだとき"},"implies":null,"tier":"myth"},{"key":"bl_join","group":"blade","label":{"ko":"검계","en":"Blade Lineage","ja":"剣契"},"hint":{"ko":"검계에 들어갔을 때","en":"Join the Blade Lineage","ja":"剣契に入ったとき"},"implies":null,"tier":"rare"},{"key":"bl_salsu","group":"blade","label":{"ko":"검계 살수","en":"Blade Lineage Salsu","ja":"剣契 殺手"},"hint":{"ko":"검계에서 살수까지 올랐을 때","en":"Rise to Salsu in the Blade Lineage","ja":"剣契で殺手まで上がったとき"},"implies":"bl_join","tier":"epic"},{"key":"bl_mentor","group":"blade","label":{"ko":"검계 우두머리","en":"Blade Lineage Mentor","ja":"剣契 頭目"},"hint":{"ko":"검계에서 우두머리까지 올랐을 때","en":"Rise to Mentor in the Blade Lineage","ja":"剣契で頭目まで上がったとき"},"implies":"bl_salsu","tier":"legend"},{"key":"bl_scatter_leave","group":"blade","label":{"ko":"칼을 들고 떠난 자","en":"One who left with their blade","ja":"刀を手に去った者"},"hint":{"ko":"검계가 흩어질 때 칼을 들고 떠났을 때","en":"Leave with your blade when the Lineage scatters","ja":"剣契が散るとき、刀を手に去ったとき"},"implies":null,"tier":"rare"},{"key":"bl_last","group":"blade","label":{"ko":"마지막 항쟁에서 살아 나온 자","en":"One who survived the last stand","ja":"最後の抗争を生き延びた者"},"hint":{"ko":"마지막 항쟁에서 살아 나왔을 때","en":"Survive the last stand","ja":"最後の抗争を生き延びたとき"},"implies":null,"tier":"epic"},{"key":"bl_homeland","group":"blade","label":{"ko":"19구로 사람을 보낸 우두머리","en":"A Mentor who sent someone to District 19","ja":"19区へ人を送った頭目"},"hint":{"ko":"우두머리로서 19구로 사람을 보냈을 때","en":"As Mentor, send someone to District 19","ja":"頭目として19区へ人を送ったとき"},"implies":null,"tier":"legend"},{"key":"bl_m_retreat","group":"blade","label":{"ko":"칼을 거둔 우두머리","en":"A Mentor who sheathed the blade","ja":"刀を収めた頭目"},"hint":{"ko":"우두머리로서 마지막 항쟁 대신 칼을 거뒀을 때","en":"As Mentor, sheathe the blade instead of the last stand","ja":"頭目として最後の抗争の代わりに刀を収めたとき"},"implies":null,"tier":"legend"},{"key":"bl_m_distort","group":"blade","label":{"ko":"뒤틀린 우두머리","en":"The Distorted Mentor","ja":"ねじれた頭目"},"hint":{"ko":"우두머리가 뒤틀렸을 때","en":"Become Distorted as Mentor","ja":"頭目がねじれたとき"},"implies":null,"tier":"legend"},{"key":"bl_d_plague","group":"blade","label":{"ko":"도시 질병이 된 우두머리","en":"A Mentor rated Urban Plague","ja":"都市疾病となった頭目"},"hint":{"ko":"뒤틀린 우두머리가 도시 질병 등급까지 이르렀을 때","en":"As a Distorted Mentor, reach the Urban Plague rating","ja":"ねじれた頭目が都市疾病の等級に達したとき"},"implies":null,"tier":"myth"},{"key":"bl_d_lay","group":"blade","label":{"ko":"칼을 내려놓은 뒤틀림","en":"A Distortion that laid down the blade","ja":"刀を置いたねじれ"},"hint":{"ko":"뒤틀린 우두머리가 스스로 칼을 내려놓았을 때","en":"As a Distorted Mentor, lay down the blade yourself","ja":"ねじれた頭目が自ら刀を置いたとき"},"implies":null,"tier":"myth"},{"key":"bl_w_settle","group":"blade","label":{"ko":"칼을 내려놓은 검객","en":"A swordsman who laid down the blade","ja":"刀を置いた剣客"},"hint":{"ko":"떠돌이 검객으로 칼을 내려놓고 정착했을 때","en":"As a wandering swordsman, lay down the blade and settle","ja":"放浪の剣客として刀を置き、落ち着いたとき"},"implies":null,"tier":"rare"},{"key":"bl_w_student","group":"blade","label":{"ko":"본국검을 물려준 자","en":"One who passed on Bongukgeom","ja":"本国剣を伝えた者"},"hint":{"ko":"떠돌이 검객으로 아이에게 본국검을 물려주었을 때","en":"As a wandering swordsman, pass Bongukgeom on to a child","ja":"流れの剣客として子に本国剣を伝えたとき"},"implies":null,"tier":"legend"},{"key":"bl_w_reform","group":"blade","label":{"ko":"검계를 다시 세운 자","en":"One who rebuilt the Blade Lineage","ja":"剣契を再興した者"},"hint":{"ko":"떠돌이 검객으로 검계를 다시 세웠을 때","en":"As a wandering swordsman, rebuild the Blade Lineage","ja":"流れの剣客として剣契を再興したとき"},"implies":null,"tier":"legend"},{"key":"kk_join","group":"kuro","label":{"ko":"흑운회","en":"Kurokumo Clan","ja":"黒雲会"},"hint":{"ko":"흑운회에 들어갔을 때","en":"Join the Kurokumo Clan","ja":"黒雲会に入ったとき"},"implies":null,"tier":"rare"},{"key":"kk_captain","group":"kuro","label":{"ko":"흑운회 부조장","en":"Kurokumo Clan Captain","ja":"黒雲会 副組長"},"hint":{"ko":"흑운회에서 부조장까지 올랐을 때","en":"Rise to Captain in the Kurokumo Clan","ja":"黒雲会で副組長まで上がったとき"},"implies":"kk_join","tier":"epic"},{"key":"kk_patriarch","group":"kuro","label":{"ko":"흑운회 조장","en":"Kurokumo Clan Patriarch","ja":"黒雲会 組長"},"hint":{"ko":"흑운회에서 조장까지 올랐을 때","en":"Rise to Patriarch in the Kurokumo Clan","ja":"黒雲会で組長まで上がったとき"},"implies":"kk_captain","tier":"legend"},{"key":"kk_ink3","group":"kuro","label":{"ko":"세 겹의 검은 구름","en":"Three layers of black cloud","ja":"三重の黒い雲"},"hint":{"ko":"검은 구름 문신을 세 겹까지 새겼을 때","en":"Have the black cloud tattoo inked three layers deep","ja":"黒い雲の刺青を三重まで入れたとき"},"implies":null,"tier":"rare"},{"key":"kk_truce","group":"kuro","label":{"ko":"검계와 마주 앉은 자","en":"One who sat across from the Blade Lineage","ja":"剣契と向かい合って座った者"},"hint":{"ko":"흑운회로서 검계와 마주 앉았을 때","en":"Sit across from the Blade Lineage as Kurokumo","ja":"黒雲会として剣契と向かい合って座ったとき"},"implies":null,"tier":"rare"},{"key":"kk_finger","group":"kuro","label":{"ko":"손가락으로 값을 치른 자","en":"One who paid with a finger","ja":"指で代償を払った者"},"hint":{"ko":"손가락 하나로 값을 치르고 살아남았을 때","en":"Pay with a finger and live","ja":"指一本で代償を払い、生き延びたとき"},"implies":null,"tier":"rare"},{"key":"kk_bl_last","group":"kuro","label":{"ko":"검계의 마지막 골목을 본 자","en":"One who saw the Blade Lineage's last alley","ja":"剣契の最後の路地を見た者"},"hint":{"ko":"흑운회로서 검계의 마지막 골목을 보았을 때","en":"As Kurokumo, witness the Blade Lineage's last alley","ja":"黒雲会として剣契の最後の路地を見たとき"},"implies":null,"tier":"epic"},{"key":"kk_retire","group":"kuro","label":{"ko":"칼을 물려준 부조장","en":"A Captain who passed on the blade","ja":"刀を譲った副組長"},"hint":{"ko":"부조장으로서 칼을 물려주고 물러났을 때","en":"As Captain, pass on the blade and step down","ja":"副組長として刀を譲り、退いたとき"},"implies":null,"tier":"rare"},{"key":"kk_p_end","group":"kuro","label":{"ko":"자리를 넘긴 조장","en":"A Patriarch who passed on the seat","ja":"座を譲った組長"},"hint":{"ko":"조장으로서 자리를 넘겼을 때","en":"As Patriarch, pass on the seat","ja":"組長として座を譲ったとき"},"implies":null,"tier":"legend"},{"key":"kk_dojo","group":"kuro","label":{"ko":"도장을 차린 검객","en":"A swordsman who opened a dojo","ja":"道場を開いた剣客"},"hint":{"ko":"물러난 뒤 도장을 차렸을 때","en":"Open a dojo after stepping down","ja":"退いた後、道場を開いたとき"},"implies":null,"tier":"epic"},{"key":"kk_d_student","group":"kuro","label":{"ko":"검술을 물려준 자","en":"One who passed on swordsmanship","ja":"剣術を伝えた者"},"hint":{"ko":"도장을 차린 뒤 아이에게 검술을 물려주었을 때","en":"After opening a dojo, pass swordsmanship on to a child","ja":"道場を開いた後、子に剣術を伝えたとき"},"implies":null,"tier":"legend"},{"key":"index_e","group":"finger","label":{"ko":"e(무리수)","en":"e (the irrational number)","ja":"e（無理数）"},"hint":{"ko":"검지 대행자로서 e를 끝까지 읊으라는 지령을 받았을 때","en":"As an Agent of the Index, receive the order to recite e to the end","ja":"人差し指の代行者として、eを最後まで唱えよという指令を受けたとき"},"implies":null,"tier":"uncommon"},{"key":"ampoule","group":"city","label":{"ko":"K사 앰플","en":"K Corp. Ampoule","ja":"K社アンプル"},"hint":{"ko":"암시장에서 K사 앰플을 샀을 때","en":"Buy a K Corp. Ampoule on the black market","ja":"闇市でK社アンプルを買ったとき"},"implies":null,"tier":"legend"},{"key":"warp_citizen","group":"warp","label":{"ko":"시민칸의 스승","en":"The Teacher of the Citizens' Car","ja":"市民車両の師"},"hint":{"ko":"특색으로 시민 칸에 섞여 워프 열차에 올랐을 때","en":"As a Color, board the Warp Train disguised among the citizens","ja":"特色として市民に紛れてワープ列車に乗ったとき"},"implies":null,"tier":"legend"},{"key":"warp_lost","group":"warp","label":{"ko":"길을 잃음","en":"Lost","ja":"道を見失った"},"hint":{"ko":"워프 열차에서 붉은 상자를 쓰고 길을 잃었을 때","en":"Use the red box on the Warp Train and lose your way","ja":"ワープ列車で赤い箱を使い、道を見失ったとき"},"implies":null,"tier":"legend"},{"key":"blind_kill","group":"distortion","label":{"ko":"알아보지 못한 채 죽인 자","en":"One who killed without knowing who it was","ja":"誰かも分からないまま殺した者"},"hint":{"ko":"눈먼 뒤틀림을 알아보지 못하고 죽였을 때","en":"Kill the blind Distortion without recognizing who it was","ja":"盲目のねじれを見分けられずに殺したとき"},"implies":null,"tier":"myth"},{"key":"blind_love","group":"distortion","label":{"ko":"사랑하는 이에게","en":"To the One I Love","ja":"愛する人へ"},"hint":{"ko":"눈먼 뒤틀림이 누구인지 알아보았을 때","en":"Recognize who the blind Distortion is","ja":"盲目のねじれが誰かを見抜いたとき"},"implies":null,"tier":"myth"},{"key":"nameless","group":"finger","label":{"ko":"無名","en":"Nameless (無名)","ja":"無名"},"hint":{"ko":"검지 대행자로서 지령에 따라 모든 것에서 이름을 버렸을 때","en":"As an Agent of the Index, cast away your name from everything on an order","ja":"人差し指の代行者として、指令に従いあらゆるものから名前を捨てたとき"},"implies":null,"tier":"legend"},{"key":"lament_happy","group":"distortion","label":{"ko":"그곳에서는 행복하기를","en":"May They Be Happy There","ja":"そこでは幸せでありますように"},"hint":{"ko":"뒤틀려 가는 가까운 이를 직접 토벌했을 때","en":"Subjugate a loved one as they twist, by your own hand","ja":"ねじれていく身近な人を自ら討伐したとき"},"implies":null,"tier":"legend"},{"key":"lament_wait","group":"distortion","label":{"ko":"그곳에서 기다려 주기를","en":"May They Wait for Me There","ja":"そこで待っていてくれますように"},"hint":{"ko":"뒤틀려 가는 가까운 이를 두고 도망쳤을 때","en":"Run from a loved one as they twist","ja":"ねじれていく身近な人を置いて逃げたとき"},"implies":null,"tier":"legend"},{"key":"lament_meet","group":"distortion","label":{"ko":"그곳에서 만나기를","en":"May We Meet There","ja":"そこで会えますように"},"hint":{"ko":"뒤틀려 가는 가까운 이를 마주하고 죽었을 때","en":"Face a loved one as they twist, and die","ja":"ねじれていく身近な人と向き合い、死んだとき"},"implies":null,"tier":"legend"},{"key":"lotto","group":"city","label":{"ko":"부","en":"Wealth","ja":"富"},"hint":{"ko":"로또에 당첨되었을 때","en":"Win the lottery","ja":"宝くじに当たったとき"},"implies":null,"tier":"legend"},{"key":"love_first","group":"city","label":{"ko":"첫사랑과 가정을 이룸","en":"Built a home with a first love","ja":"初恋の人と家庭を築いた"},"hint":{"ko":"10대에 생긴 연인과 가정을 이루었을 때","en":"Start a family with the partner you met as a teen","ja":"10代で出会った恋人と家庭を築いたとき"},"implies":null,"tier":"uncommon"},{"key":"refuse_proposal","group":"city","label":{"ko":"청혼을 거절한 삶","en":"A life that turned down a proposal","ja":"プロポーズを断った人生"},"hint":{"ko":"청혼을 거절하고 끝내 혼자 살았을 때","en":"Turn down a proposal and never marry","ja":"プロポーズを断り、結婚しなかったとき"},"implies":null,"tier":"uncommon"},{"key":"widowed","group":"city","label":{"ko":"곁을 지킨 사람을 먼저 보냄","en":"Saw off the one who stayed by my side","ja":"そばにいてくれた人を先に見送った"},"hint":{"ko":"함께 살던 사람을 먼저 떠나보냈을 때","en":"Lose the person you lived with","ja":"共に暮らした人を先に見送ったとき"},"implies":null,"tier":"rare"},{"key":"unwed_lover","group":"city","label":{"ko":"끝내 이루지 못한 사이","en":"A bond that never came to be","ja":"結ばれなかった間柄"},"hint":{"ko":"연인은 있었지만 끝내 함께 살지 못했을 때","en":"Have a lover but never live together","ja":"恋人はいたが、共に暮らせなかったとき"},"implies":null,"tier":"uncommon"},{"key":"office_broken","group":"fixer","label":{"ko":"사무소 깨기","en":"Office Break-In","ja":"事務所破り"},"hint":{"ko":"사무소가 습격당해 지키지 못했을 때","en":"When your Office is attacked and you fail to hold it","ja":"事務所が襲撃され、守りきれなかったとき"},"implies":null,"tier":"uncommon"}],"flags":{"en":[["고아","Orphan"],["부유한집","Born into wealth"],["가난한집","Born into poverty"],["연인","Has a lover"],["가정","Has a family"],["아이","Has a child"],["K사앰플","Carries a K Corp. ampoule"],["가족이같은소속","Child shares your affiliation"],["빚","In debt"],["프로젝트완수","Completed a major project"],["후견","Has a Director's patronage"],["약물중독","Drug dependence"],["조직입문","Ties to a Syndicate"],["환상체목격","Has seen an Abnormality"],["환상체생존","Survived an Abnormality"],["E.G.O개화","Effloresced E.G.O"],["진학","Higher education"],["상층","Upper-class upbringing"],["사원증","Wing employee ID"],["복제","Clone from the Hatchery"],["기억소거","Memories erased on leaving R Corp."],["신분증명","Wing citizen"],["의뢰인","Ties to an Office"],["해결사동경","Admires Fixers"],["날개동경","Admires Wing employees"],["협회동경","Admires the Associations"],["엄지동경","Admires the Thumb"],["검지동경","Admires the Index"],["중지동경","Admires the Middle"],["약지동경","Admires the Ring"],["특색","Color"],["뒤틀림목격","Witnessed a Distortion"],["뒤틀림경계","Came to the brink of Distortion"],["이상한물건","Keeps a strange object"],["숭배","Joined a cult"],["고급장비","Workshop-made gear"],["의체","Backstreets prosthesis"],["좋은의체","Fine prosthesis"],["전투의체","Combat prosthesis"],["강화시술","Underwent augmentation"],["유물","Relic of the Outskirts"],["이단낙인","Branded a heretic by Nagel und Hammer"],["원한","Vengeance tattoo"],["기사의가호","Knight of Despair's blessing"],["혈귀","Bloodfiend"],["떠돌이","A stray with no Family"],["혈액바","Knows where to get Hemobars"],["잘린손가락","Lost a finger"],["잘린팔","Lost an arm"],["잘린손","Lost a hand"]],"ja":[["고아","孤児"],["부유한집","裕福な家に生まれた"],["가난한집","貧しい家に生まれた"],["연인","恋人がいる"],["가정","家庭を築いた"],["아이","子どもがいる"],["K사앰플","K社のアンプルを懐に持つ"],["가족이같은소속","子どもが同じ所属"],["빚","借金がある"],["프로젝트완수","大型プロジェクトをやり遂げた"],["후견","理事の後ろ盾がある"],["약물중독","薬物依存"],["조직입문","組織とつながりがある"],["환상체목격","幻想体を見たことがある"],["환상체생존","幻想体と遭遇して生き延びた"],["E.G.O개화","E.G.O開花"],["진학","上級課程を修めた"],["상층","上層の出身"],["사원증","翼の社員証"],["복제","孵化場出身のクローン"],["기억소거","R社退役時に記憶を消去"],["신분증명","翼の市民"],["의뢰인","事務所とつながりがある"],["해결사동경","フィクサーに憧れている"],["날개동경","翼の社員に憧れている"],["협회동경","協会に憧れている"],["엄지동경","親指に憧れている"],["검지동경","人差し指に憧れている"],["중지동경","中指に憧れている"],["약지동경","薬指に憧れている"],["특색","特色"],["뒤틀림목격","ねじれを目撃した"],["뒤틀림경계","ねじれの一歩手前から戻った"],["이상한물건","奇妙な物を持っている"],["숭배","崇拝の集まりに足を踏み入れた"],["고급장비","工房製の高級装備"],["의체","裏路地の義体"],["좋은의체","良質な義体"],["전투의체","戦闘用義体"],["강화시술","強化施術を受けた"],["유물","外郭の遺物"],["이단낙인","ナーゲルウントハマーの異端の烙印"],["원한","怨恨の刺青"],["기사의가호","絶望の騎士の加護"],["혈귀","血鬼"],["떠돌이","家門を持たない放浪者"],["혈액바","血液バーの入手先を知っている"],["잘린손가락","指を一本失った"],["잘린팔","腕を一本失った"],["잘린손","手を一つ失った"]],"ko":[["고아","고아"],["부유한집","부유한 집에서 태어남"],["가난한집","가난한 집에서 태어남"],["연인","연인이 있음"],["가정","가정을 이룸"],["아이","아이가 있음"],["K사앰플","K사 앰플을 품에 지님"],["가족이같은소속","자식이 같은 소속"],["빚","빚이 있음"],["프로젝트완수","큰 프로젝트를 마침"],["후견","이사의 후견을 받음"],["약물중독","약물 의존"],["조직입문","조직과 연이 닿음"],["환상체목격","환상체를 본 적 있음"],["환상체생존","환상체와 마주치고 살아남음"],["E.G.O개화","E.G.O 개화"],["진학","상급 과정을 거침"],["상층","상층 출신"],["사원증","날개의 사원증"],["복제","부화장 출신 복제인간"],["기억소거","R사 퇴역 때 기억을 지움"],["신분증명","날개 시민"],["의뢰인","사무소에 연이 닿음"],["해결사동경","해결사를 동경함"],["날개동경","날개의 사원을 동경함"],["협회동경","협회를 동경함"],["엄지동경","엄지를 동경함"],["검지동경","검지를 동경함"],["중지동경","중지를 동경함"],["약지동경","약지를 동경함"],["특색","특색"],["뒤틀림목격","뒤틀림을 목격함"],["뒤틀림경계","뒤틀림의 문턱까지 갔다 옴"],["이상한물건","이상한 물건을 간직함"],["숭배","숭배 모임에 발을 들임"],["고급장비","공방제 고급 장비"],["의체","뒷골목 의체"],["좋은의체","좋은 의체"],["전투의체","전투용 의체"],["강화시술","강화 시술을 받음"],["유물","외곽의 유물"],["이단낙인","나겔 운트 하머의 이단 낙인"],["원한","원한 문신"],["기사의가호","절망의 기사의 가호"],["혈귀","혈귀"],["떠돌이","가문 없는 떠돌이"],["혈액바","혈액바를 구할 곳을 앎"],["잘린손가락","손가락 하나를 잃음"],["잘린팔","팔 하나를 잃음"],["잘린손","손 하나를 잃음"]]}};
 if (document.getElementById('cityborn-advisor')) return;
 const C=advisorCommon(),supported=[...document.scripts].some(s=>s.src.endsWith('/assets/'+C.source));
 const host=document.createElement('div');host.id='cityborn-advisor';
@@ -76044,9 +76023,10 @@ label{display:block}.row{display:flex;gap:7px;align-items:end;margin:8px 0}.row>
 <div class="row"><label>Minimum age<input id="min-age" type="number" min="0" max="10000" step="1" placeholder="Any"></label><label>Ending<select id="ending"><option value="any">Any ending</option><option value="alive">Alive ending only</option></select></label></div>
 <div class="row"><button id="copyStats" class="link">Use this life's stats</button><button id="copyTraits" class="link">Use this life's traits</button></div>
 <div id="selectedGoals" class="chips"></div>
-<details id="goalPicker"><summary>Traits & achievements (<span id="selected">0</span>)</summary><p class="hint">Check what you want. Use Avoid to rule out a trait at the ending.</p>
+<details id="goalPicker"><summary>Browse traits & achievements · <span id="selected">0</span> selected</summary><p id="catalogSize" class="hint"></p><p class="hint">Browse the full list below, or search by name, ID, or achievement requirement. Check traits you want at the ending; use Avoid to exclude them. Achievements show the game's unlock hints.</p>
+<label>Show<select id="goalKind"><option value="all">All traits & achievements</option><option value="trait">Traits</option><option value="achievement">Achievements</option></select></label>
 <input id="filter" type="search" placeholder="Search a trait, achievement, or ID" aria-label="Filter goals">
-<div class="row"><label><input id="onlySelected" type="checkbox">Selected only</label><button id="clear" class="link">Clear selections</button></div><small id="goalCount" role="status"></small><div id="goals"></div></details>
+<div class="row"><label><input id="onlySelected" type="checkbox">Selected only</label><button id="clear" class="link">Clear selections</button></div><small id="goalCount" role="status"></small><div id="goals" role="group" aria-label="Available traits and achievements"></div></details>
 <details id="startSettings"><summary>Starting settings & search effort</summary>
 <div class="row"><label>Name<input id="name" type="text" maxlength="12" placeholder="Seeded name"></label><label>Gender<select id="gender"><option value="m">Male</option><option value="f">Female</option></select></label></div>
 <label>Specific seed (optional)<input id="seed" type="text" placeholder="Leave blank for random seeds"></label>
@@ -76125,8 +76105,8 @@ function goalLabel(g){
   return catalog.find(c=>c.key===g)?.name||g;
 }
 function filterGoals(){
-  const q=$('filter').value.trim().toLowerCase();let shown=0;
-  for(const el of $('goals').children){el.hidden=!el.textContent.toLowerCase().includes(q)||($('onlySelected').checked&&!el.querySelector('input:checked'));if(!el.hidden)shown++;}
+  const q=$('filter').value.trim().toLowerCase(),kind=$('goalKind').value;let shown=0;
+  for(const el of $('goals').children){el.hidden=(kind!=='all'&&el.dataset.kind!==kind)||!el.textContent.toLowerCase().includes(q)||($('onlySelected').checked&&!el.querySelector('input:checked'));if(!el.hidden)shown++;}
   $('goalCount').textContent=shown?`${shown} of ${catalog.length} goals shown`:'No matching goals. Change the search or turn off Selected only.';
 }
 function syncGoals(){
@@ -76298,7 +76278,7 @@ $('resume').onclick=async()=>{
 $('goHome').onclick=()=>{const b=bridge();if(b.life){C.finished(b.runtime.state)?b.life.abandon():b.life.saveAndQuit();}else b.onHome?.();renderPlay();};
 $('copyStats').onclick=()=>{const s=bridge().runtime?.state;if(!s)return;for(const [key,value] of Object.entries(C.displayStats(s)))$('min-'+key).value=value;savePreferences();say('Stats copied as minimum ending targets. You can adjust each value.');};
 $('copyTraits').onclick=()=>{const s=bridge().runtime?.state;if(!s)return;for(const key of s.flags)if(catalog.some(c=>c.key==='flag:'+key)){chosen.delete('avoid:'+key);chosen.add('flag:'+key);}syncGoals();savePreferences();say('This life’s listed traits were added as ending requirements.');};
-$('filter').oninput=filterGoals;$('onlySelected').onchange=filterGoals;$('clear').onclick=()=>{chosen.clear();syncGoals();savePreferences();};
+$('filter').oninput=filterGoals;$('goalKind').onchange=filterGoals;$('onlySelected').onchange=filterGoals;$('clear').onclick=()=>{chosen.clear();syncGoals();savePreferences();};
 for(const id of ['name','gender','seed','count','effort','speed','ending','min-age',...Object.keys(C.statNames).map(k=>'min-'+k)])$(id).oninput=()=>{savePreferences();controls();if(id==='speed'&&auto)bridge().life?.setSpeed(Number($('speed').value));};
 $('import').onclick=()=>$('file').click();$('file').onchange=async()=>{const file=$('file').files[0];$('file').value='';if(file)try{await importRoute(JSON.parse(await file.text()));}catch(e){say('Could not read route: '+e.message);}};
 $('export').onclick=()=>{if(!selected)return;const url=URL.createObjectURL(new Blob([JSON.stringify(selected,null,2)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=`cityborn-${selected.seed}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
@@ -76314,19 +76294,24 @@ new ResizeObserver(()=>{if(position)movePanel(position.x,position.y);}).observe(
 shadow.addEventListener('keydown',e=>e.stopPropagation());
 document.addEventListener('pointerdown',e=>{if(!e.composedPath().includes(host)){if(auto)stopFollowing(false,'Stopped by manual game interaction.');if(job?.kind==='plan')cancel('Planning cancelled by manual game interaction.');}},true);
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(job)cancel();if(auto)stopFollowing(false,'Following stopped.');}else if(!e.composedPath().includes(host)&&auto)stopFollowing(false,'Stopped by manual keyboard input.');},true);
-controls();renderLibrary();
-if(!supported)say('The game has updated. Update this companion before searching or following routes.');
-else try{
-  makeWorker();request('catalog').then(data=>{
-    catalog=[...data.records.map(r=>({key:'record:'+r.key,name:r.label[lang()]||r.label.en,hint:r.hint[lang()]||r.hint.en})),...data.flags.map(([key,name])=>({key:'flag:'+key,name,hint:'Required at the ending.',trait:key}))];
+function renderCatalogue(){
+    const data=ADVISOR_CATALOG;
+    catalog=[...data.flags[lang()].map(([key,name])=>({key:'flag:'+key,name,hint:'Trait · Required at the ending.',trait:key})),...data.records.map(r=>({key:'record:'+r.key,name:r.label[lang()]||r.label.en,hint:r.hint[lang()]||r.hint.en}))];
+    $('catalogSize').textContent=`${data.flags[lang()].length} traits and ${data.records.length} achievements from the inspected game. The number selected is your targets, not the available total.`;
     const valid=new Set(catalog.flatMap(c=>[c.key,...(c.trait?['avoid:'+c.trait]:[])]));chosen=new Set([...chosen].filter(g=>valid.has(g)));
     for(const c of catalog){
-      const el=document.createElement('div');el.className='goal';const label=document.createElement('label'),input=document.createElement('input'),hint=document.createElement('small');input.type='checkbox';input.value=c.key;label.append(input,document.createTextNode(c.name+' ['+c.key.split(':')[1]+']'));hint.textContent=c.hint;el.append(label,hint);
+      const el=document.createElement('div');el.className='goal';el.dataset.kind=c.trait?'trait':'achievement';const label=document.createElement('label'),input=document.createElement('input'),hint=document.createElement('small');input.type='checkbox';input.value=c.key;label.append(input,document.createTextNode(c.name+' ['+c.key.split(':')[1]+']'));hint.textContent=c.hint;el.append(label,hint);
       input.onchange=()=>{input.checked?chosen.add(c.key):chosen.delete(c.key);if(input.checked&&c.trait)chosen.delete('avoid:'+c.trait);syncGoals();savePreferences();};
       if(c.trait){const avoidLabel=document.createElement('label'),avoid=document.createElement('input');avoidLabel.className='avoid';avoid.type='checkbox';avoid.value='avoid:'+c.trait;avoidLabel.append(avoid,document.createTextNode('Avoid'));avoid.onchange=()=>{avoid.checked?chosen.add(avoid.value):chosen.delete(avoid.value);if(avoid.checked)chosen.delete(c.key);syncGoals();savePreferences();};el.prepend(avoidLabel);}
       $('goals').append(el);
     }
-    ready=true;syncGoals();renderLibrary();controls();say('Ready. Set your ending targets, then find a life.');
+    syncGoals();
+}
+renderCatalogue();controls();renderLibrary();
+if(!supported)say('The game has updated. You can browse the inspected catalogue, but update this companion before searching or following routes.');
+else try{
+  makeWorker();request('catalog').then(()=>{
+    ready=true;renderLibrary();controls();say('Ready. Set your ending targets, then find a life.');
     const old=read('cityborn.advisor.route.v2'),usingLegacy=!stored.active?.file&&!stored.selected,restore=stored.active?.file||stored.selected||old?.found;
     if(restore)importRoute(restore,stored.active||(usingLegacy&&old?.active?{index:old.index||0}:null),true);
   }).catch(e=>say('Could not load companion: '+e.message));

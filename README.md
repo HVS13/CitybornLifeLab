@@ -8,7 +8,7 @@ Find a life that fits your goals, see its predicted ending, and follow its choic
 
 1. Install [Tampermonkey](https://www.tampermonkey.net/) or a userscript manager supporting page-context scripts and workers.
 2. Open the userscript link above and confirm installation/update. If it opens as text, paste the entire file into a userscript and save. Remove any older separately installed local copy.
-3. Reload the game. The panel should say **Cityborn Life Lab 2.0.0**. The manager's script name remains **Cityborn Life Advisor** so existing installations can update normally.
+3. Reload the game. The panel should say **Cityborn Life Lab 2.0.1**. The manager's script name remains **Cityborn Life Advisor** so existing installations can update normally.
 
 No server, credentials, or npm installation is required to use the script. Calculations and saved routes stay in your browser. Its download/update URLs point to this repository.
 
@@ -21,6 +21,8 @@ No server, credentials, or npm installation is required to use the script. Calcu
 5. Choose a life to open **Play this life**, or save it for later. Search never starts a game automatically. Stop keeps completed candidates, including candidates completed before the current seed's search has finished.
 
 **Use this life's stats/traits** copies values from the current or ended game into new search targets. You can edit them before searching. Editing new targets does not erase an existing route or change what an old result claims to satisfy: every card names its original targets.
+
+**Browse traits & achievements** lists all 50 displayed traits and 169 achievements without a search query. Use **Show** to browse traits, achievements, or both; achievement rows include the game's unlock hints. The selected count describes your targets. The catalogue remains browsable if workers fail or the game updates, while incompatible planning stays disabled. In that case, the catalogue represents the inspected client rather than any uninspected additions.
 
 ## Play this life
 
@@ -52,7 +54,7 @@ Ranking favors the number of fulfilled conditions, progress toward missing numer
 
 Replay fingerprints include stats, flags, quests, history and RNG state; only the minor-choice countdown and saved UI progress are excluded. They detect accidental divergence and are not cryptographic authenticity guarantees. Changing settings, language, or choices can invalidate a route. The native game pauses progress in hidden tabs; the script does not bypass this. Source updates require an updated companion.
 
-The supported client is `index-C_XxXzM6.js`, inspected on 19 October 2026. Its formatted snapshot and hash are retained in `analysis/`. Bundled game logic/text remain attributable to their original authors. This is an unofficial companion inspired by [DotaCaptainLab](https://github.com/HVS13/DotaCaptainLab).
+The supported client is `index-DNffUPHt.js`, inspected on 19 October 2026. Routes from a different client are rejected; search again after a client update. Its formatted snapshot and hash are retained in `analysis/`. Bundled game logic/text remain attributable to their original authors. This is an unofficial companion inspired by [DotaCaptainLab](https://github.com/HVS13/DotaCaptainLab).
 
 ## Build and verification
 

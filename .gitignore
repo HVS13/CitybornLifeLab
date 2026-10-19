@@ -2,3 +2,5 @@
 node_modules/
 analysis/browser.png
 analysis/inspiration-readme.md
+analysis/replay-fixture.json
+analysis/browser-results.json

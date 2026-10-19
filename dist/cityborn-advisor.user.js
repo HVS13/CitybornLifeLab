@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Cityborn Life Advisor
 // @namespace    https://github.com/HVS13/CitybornLifeLab
-// @version      1.0.0
+// @version      1.1.0
 // @description  Native simulation choice advisor, opt-in auto choices, and goal-filtered seed search.
 // @homepageURL  https://github.com/HVS13/CitybornLifeLab
 // @supportURL   https://github.com/HVS13/CitybornLifeLab/issues
@@ -75813,296 +75813,461 @@ function M2(e) {
   };
 }
 
-return {create:zu,data:mt,choose:Ti,advance:hx,year:o0,records:s=>[...P2(eb(s).map(r=>r.key))],catalog:gd,flags:pp,lang:_s};}
+return {create:zu,data:mt,choose:Ti,continue:Db,advance:hx,year:o0,records:s=>[...P2(eb(s).map(r=>r.key))],catalog:gd,flags:pp,lang:_s};}
+function advisorCommon() {
+  const source = 'index-C_XxXzM6.js';
+  function normalized(s) {
+    const state={...s,prompt:s.prompt?{...s.prompt}:null};
+    delete state.savedProgress;
+    if(state.prompt)delete state.prompt.remainingMs;
+    return state;
+  }
+  function signature(s) {
+    // Include all simulation fields. Ignore only the UI clock/save cursor.
+    const text=JSON.stringify(normalized(s),(_,v)=>v && typeof v==='object' && !Array.isArray(v)
+      ? Object.fromEntries(Object.keys(v).sort().map(k=>[k,v[k]])) : v);
+    let a=2166136261,b=5381;
+    for(let i=0;i<text.length;i++) {
+      const c=text.charCodeAt(i);a=Math.imul(a^c,16777619);b=Math.imul(b,33)^c;
+    }
+    return `s2:${(a>>>0).toString(16).padStart(8,'0')}${(b>>>0).toString(16).padStart(8,'0')}`;
+  }
+  function legacySignature(s) {
+    return JSON.stringify([s.seed,s.age,s.rngState,s.cursor,normalized(s).prompt]);
+  }
+  const finished=s=>!!s.dead && !s.dead.voice;
+  const actionable=s=>!!s.prompt || !!s.dead?.voice;
+  const label=(s,i)=>i===-2?'Continue the post-death voice':i===-1?'Continue / leave blank / let pass':s.prompt.choices[i].label;
+  return {source,signature,legacySignature,finished,actionable,label};
+}
+
 function makePlanner(E) {
-  const copy = s => JSON.parse(JSON.stringify(s));
-  const signature = s => {
-    const prompt=s.prompt?{...s.prompt}:null;
-    if(prompt)delete prompt.remainingMs;
-    return JSON.stringify([s.seed,s.age,s.rngState,s.cursor,prompt]);
-  };
-  const choices = s => ['reflect','name','color'].includes(s.prompt?.kind) ? [-1] :
-    (s.prompt?.choices || []).flatMap((c,i)=>c.locked?[]:[i]).concat(s.prompt?.kind==='minor'?[-1]:[]);
-  function targets(s, goals) {
-    const records = new Set(goals.some(g=>g.startsWith('record:')) ? E.records(s) : []);
+  const C=advisorCommon();
+  const copy=s=>JSON.parse(JSON.stringify(s));
+  const profiles={balanced:{years:3,decisions:12,steps:160},deep:{years:10,decisions:40,steps:480},life:{years:Infinity,decisions:600,steps:5000}};
+  function choices(s) {
+    if(s.dead?.voice)return [-2];
+    if(!s.prompt)return [];
+    if(['reflect','name','color'].includes(s.prompt.kind))return [-1];
+    return s.prompt.choices.flatMap((c,i)=>c.locked?[]:[i]).concat(s.prompt.kind==='minor'?[-1]:[]);
+  }
+  function targets(s,goals) {
+    const records=new Set(goals.some(g=>g.startsWith('record:'))?E.records(s):[]);
     return goals.map(g=>g.startsWith('record:')?records.has(g.slice(7)):s.flags.includes(g.slice(5)));
   }
-  function score(s, goals, baseAge = s.age) {
-    const st = s.stats;
-    return targets(s,goals).filter(Boolean).length*1000000 +
-      (s.dead && !s.dead.alive ? -10000 : 0) + (s.age-baseAge)*100 +
-      st.health*2 + st.sanity*1.5 + st.wealth*.6 + st.network*.4 + st.rep*.4 +
-      (s.heir ? (s.heir.ji+s.heir.yong+s.heir.in)*8 : 0) +
-      (s.grade ? (10-s.grade)*15 : 0);
+  function score(s,goals,baseAge=s.age) {
+    const st=s.stats;
+    return targets(s,goals).filter(Boolean).length*1000000+
+      (C.finished(s) && !s.dead.alive?-10000:0)+(s.age-baseAge)*100+
+      st.health*2+st.sanity*1.5+st.wealth*.6+st.network*.4+st.rep*.4+
+      (s.heir?(s.heir.ji+s.heir.yong+s.heir.in)*8:0)+(s.grade?(10-s.grade)*15:0);
   }
-  function apply(s, i) { E.choose(s,E.data(),i,{text:''}); }
+  function apply(s,i) {
+    if(!choices(s).includes(i))throw Error('Route action is unavailable or locked');
+    if(i===-2)E.continue(s,E.data());
+    else E.choose(s,E.data(),i,{text:''});
+  }
   function greedy(s,goals) {
     let best=null;
     for(const i of choices(s)) {
-      const next=copy(s); apply(next,i);
+      const next=copy(s);apply(next,i);
       const value=score(next,goals);
-      if(!best || value>best.value) best={i,value,next};
+      if(!best || value>best.value)best={i,value,next};
     }
-    if(!best) throw Error('No supported unlocked choices');
+    if(!best)throw Error('No supported unlocked choices');
     return best;
   }
   function advance(s) {
-    if(s.cursor<s.plan.length) E.advance(s,E.data());
+    if(s.cursor<s.plan.length)E.advance(s,E.data());
     else E.year(s,E.data());
   }
-  function recommend(s,goals) {
+  function recommend(s,goals,profile='balanced') {
+    const limits=profiles[profile];
+    if(!limits)throw Error('Unknown evaluation depth');
     const rows=[];
     for(const i of choices(s)) {
-      const next=copy(s); apply(next,i);
-      // Equal, deterministic, bounded lookahead for every available action.
-      let steps=0, decisions=0;
-      while(!next.dead && next.age<s.age+3 && steps++<160 && decisions<12) {
-        if(next.prompt) { const g=greedy(next,goals); apply(next,g.i); decisions++; }
+      const next=copy(s);apply(next,i);
+      let steps=0,decisions=0;
+      while(!C.finished(next) && next.age<s.age+limits.years && steps<limits.steps && decisions<limits.decisions) {
+        steps++;
+        if(C.actionable(next)){const g=greedy(next,goals);apply(next,g.i);decisions++;}
         else advance(next);
       }
-      rows.push({i,value:score(next,goals,s.age),age:next.age,dead:!!next.dead,
-        matched:targets(next,goals).filter(Boolean).length,
-        label:i<0?'Continue / leave blank / let pass':s.prompt.choices[i].label});
+      rows.push({i,value:score(next,goals,s.age),age:next.age,dead:C.finished(next),
+        matched:targets(next,goals).filter(Boolean).length,label:C.label(s,i),
+        stats:{...next.stats},steps,decisions,complete:C.finished(next)});
     }
     rows.sort((a,b)=>b.value-a.value);
-    if(!rows.length) throw Error('No supported unlocked choices');
-    return {signature:signature(s),best:rows[0].i,rows};
+    if(!rows.length)throw Error('No supported unlocked choices');
+    return {signature:C.signature(s),best:rows[0].i,rows,profile};
   }
-  function simulate(options,goals) {
+  function simulate(options,goals,profile='balanced',progress=()=>{}) {
     const s=E.create(E.data(),options),birth=copy(s),route=[];
     let steps=0;
-    while(!s.dead && steps++<5000) {
-      if(s.prompt) {
-        const r=recommend(s,goals);
-        route.push({signature:r.signature,i:r.best}); apply(s,r.best);
-      } else advance(s);
+    while(!C.finished(s) && steps++<5000) {
+      if(C.actionable(s)) {
+        const r=recommend(s,goals,profile);
+        route.push({signature:r.signature,i:r.best});apply(s,r.best);
+        if(route.length%10===0)progress(s,route.length);
+      }else advance(s);
     }
-    return {seed:s.seed,options,birth,state:s,route,complete:!!s.dead,matched:targets(s,goals)};
+    return {seed:s.seed,options,birth,state:s,route,profile,complete:C.finished(s),matched:targets(s,goals)};
   }
-  return {copy,signature,choices,targets,score,apply,advance,recommend,simulate};
+  function pack(result,goals,scope,lang) {
+    const s=result.state;
+    return {version:2,source:C.source,seed:s.seed,options:result.options,goals:[...goals],scope,lang,
+      profile:result.profile||'balanced',route:result.route,complete:result.complete,matched:targets(s,goals),
+      terminalSignature:scope==='life' && result.complete?C.signature(s):null,
+      summary:{age:s.age,cause:s.dead?.cause||null,flags:[...s.flags],records:E.records(s),stats:{...s.stats}}};
+  }
+  function validate(file) {
+    if(!file || ![1,2].includes(file.version) || file.source!==C.source)throw Error('Unsupported route file or game version');
+    if(!['en','ko','ja'].includes(file.lang) || !['birth','life'].includes(file.scope))throw Error('Missing route language or search scope');
+    if(!file.options || typeof file.options.seed!=='string' || !file.options.seed || file.options.seed!==file.options.seed.trim() || !['m','f'].includes(file.options.gender) || typeof file.options.name!=='string')throw Error('Invalid seed, name or gender');
+    const allowed=new Set([...E.catalog.map(r=>'record:'+r.key),...Object.keys(E.flags).map(k=>'flag:'+k)]);
+    if(!Array.isArray(file.goals) || !file.goals.length || new Set(file.goals).size!==file.goals.length || file.goals.some(g=>!allowed.has(g)))throw Error('Unknown or duplicate achievement or trait goal');
+    if(!Array.isArray(file.route) || file.route.length>5000 || (file.scope==='birth' && file.route.length))throw Error('Invalid route length');
+    const options={seed:file.options.seed,name:file.options.name,gender:file.options.gender};
+    const s=E.create(E.data(),options),route=[];
+    let cursor=0,steps=0;
+    while(file.scope==='life' && !C.finished(s) && steps++<5000) {
+      if(C.actionable(s)) {
+        const step=file.route[cursor++];
+        if(!step || (step.signature!==C.signature(s) && !(file.version===1 && step.signature===C.legacySignature(s))))throw Error('Route does not match its seeded simulation');
+        route.push({signature:C.signature(s),i:step.i});apply(s,step.i);
+      }else advance(s);
+    }
+    if(cursor!==file.route.length || (file.scope==='life' && !C.finished(s)))throw Error('Route is incomplete');
+    return pack({state:s,options,route,matched:targets(s,file.goals),profile:profiles[file.profile]?file.profile:'balanced',complete:true},file.goals,file.scope,file.lang);
+  }
+  return {copy,signature:C.signature,choices,targets,score,apply,advance,recommend,simulate,pack,validate,profiles};
 }
 
 function workerMain() {
-  const E=nativeEngine(),P=makePlanner(E);
-  self.onmessage=async ({data:m})=>{
+  const E=nativeEngine(),P=makePlanner(E),C=advisorCommon();
+  self.onmessage=({data:m})=>{
     try {
-      E.lang(m.lang || 'en');
-      if(m.type==='catalog') return self.postMessage({id:m.id,result:{records:E.catalog,flags:Object.entries(E.flags)}});
-      if(m.type==='recommend') return self.postMessage({id:m.id,result:P.recommend(m.state,m.goals)});
+      E.lang(m.type==='validate'?m.file?.lang:m.lang||'en');
+      if(m.type==='catalog')return self.postMessage({id:m.id,result:{records:E.catalog,flags:Object.entries(E.flags)}});
+      if(m.type==='validate')return self.postMessage({id:m.id,result:P.validate(m.file)});
+      if(m.type==='check')return self.postMessage({id:m.id,result:{matched:P.targets(m.state,m.goals),signature:C.signature(m.state),complete:C.finished(m.state)}});
+      if(m.type==='recommend')return self.postMessage({id:m.id,result:P.recommend(m.state,m.goals,m.profile)});
       if(m.type==='search') {
         let best=null;
-        const words=new Uint32Array(m.count); crypto.getRandomValues(words);
-        for(let n=0;n<m.count;n++) {
-          const options={...m.options,seed:String(words[n])};
+        const count=Math.max(1,Math.min(500,Math.floor(m.count)||1)),words=new Uint32Array(count);
+        crypto.getRandomValues(words);
+        for(let n=0;n<count;n++) {
+          const options={name:m.options.name,gender:m.options.gender,seed:String(words[n])};
+          const progress=(s,decisions)=>self.postMessage({id:m.id,progress:n,total:count,age:s.age,decisions});
           let result;
           if(m.scope==='birth') {
             const s=E.create(E.data(),options);
-            result={seed:s.seed,options,birth:s,state:s,route:[],complete:true,matched:P.targets(s,m.goals)};
-          } else result=P.simulate(options,m.goals);
-          const matches=result.matched.filter(Boolean).length;
-          if(!best || matches>best.matched.filter(Boolean).length) best=result;
-          self.postMessage({id:m.id,progress:n+1,matches});
-          if(result.complete && result.matched.every(Boolean)) return self.postMessage({id:m.id,result});
+            result={options,state:s,route:[],complete:true,matched:P.targets(s,m.goals)};
+          }else result=P.simulate(options,m.goals,m.profile,progress);
+          const packed=P.pack(result,m.goals,m.scope,m.lang),matches=result.matched.filter(Boolean).length;
+          const improved=result.complete && (!best || matches>best.matched.filter(Boolean).length);
+          if(improved)best=packed;
+          self.postMessage({id:m.id,progress:n+1,total:count,matches,best:improved?best:null});
+          if(result.complete && result.matched.every(Boolean))return self.postMessage({id:m.id,result:packed});
         }
-        self.postMessage({id:m.id,result:null,best:best && {seed:best.seed,matches:best.matched.filter(Boolean).length}});
+        self.postMessage({id:m.id,result:best});
       }
-    } catch(e) { self.postMessage({id:m.id,error:e.stack||String(e)}); }
+    }catch(e){self.postMessage({id:m.id,error:e.message||String(e)});}
   };
 }
 
+const ADVISOR_VERSION="1.1.0";
 if (document.getElementById('cityborn-advisor')) return;
-const supported = [...document.scripts].some(s=>s.src.endsWith('/assets/index-C_XxXzM6.js'));
-const host=document.createElement('div'); host.id='cityborn-advisor';
-const shadow=host.attachShadow({mode:'open'}); document.body.append(host);
+const C=advisorCommon();
+const supported=[...document.scripts].some(s=>s.src.endsWith('/assets/'+C.source));
+const host=document.createElement('div');host.id='cityborn-advisor';
+const shadow=host.attachShadow({mode:'open'});document.body.append(host);
 shadow.innerHTML=`<style>
 :host{position:fixed;right:12px;top:12px;z-index:2147483647;color:#eee;font:13px/1.45 system-ui;max-width:calc(100vw - 24px)}
-*{box-sizing:border-box}section{width:370px;max-width:100%;max-height:88vh;overflow:auto;background:#161a22;border:1px solid #788295;border-radius:10px;padding:12px;box-shadow:0 6px 30px #0009}
-header{display:flex;align-items:center;justify-content:space-between}h3{margin:0}button,input,select{font:inherit;color:inherit;background:#252d3b;border:1px solid #768298;border-radius:4px;padding:6px}button{cursor:pointer}button:disabled{opacity:.45;cursor:default}input[type=text],input[type=search]{width:100%}input[type=checkbox]{margin-right:6px}label{display:block;margin:6px 0}.row{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.row>*{flex:1}small{color:#b9c1d0}#goals{max-height:180px;overflow:auto;border:1px solid #445063;padding:5px}#goals label{font-size:12px}#status{white-space:pre-wrap;margin:8px 0;color:#d7e6ff}#advice{max-height:160px;overflow:auto;white-space:pre-wrap}summary{cursor:pointer;padding:6px 0}#min{flex:0}#badge{display:none}a{color:#a9caff}
+*{box-sizing:border-box}section{width:390px;max-width:100%;max-height:88vh;overflow:auto;background:#161a22;border:1px solid #788295;border-radius:10px;padding:12px;box-shadow:0 6px 30px #0009}
+header{display:flex;align-items:center;justify-content:space-between;cursor:move;touch-action:none}h3{margin:0}button,input,select{font:inherit;color:inherit;background:#252d3b;border:1px solid #768298;border-radius:4px;padding:6px}button{cursor:pointer}button:disabled{opacity:.45;cursor:default}input[type=text],input[type=search],select{max-width:100%;width:100%}input[type=checkbox]{margin-right:6px}label{display:block;margin:6px 0}.row{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.row>*{flex:1;min-width:0}small{color:#b9c1d0}.hint{display:block;color:#aeb8ca;font-size:11px;margin-left:22px}#goals{max-height:180px;overflow:auto;border:1px solid #445063;padding:5px}#goals label{font-size:12px}#status,#found,#warning{white-space:pre-wrap;margin:8px 0;color:#d7e6ff}#warning{color:#efc785}#advice{max-height:200px;overflow:auto;white-space:pre-wrap}summary{cursor:pointer;padding:6px 0}#min{width:auto}#badge{display:none}#file{display:none}
 </style><button id="badge">Life Advisor</button><section id="panel">
-<header><h3>Cityborn Life Advisor</h3><button id="min" aria-label="Minimize">−</button></header>
-<small>Native engine • 3-year / 12-choice lookahead. Best evaluated choice, not a guaranteed optimal life.</small>
+<header id="drag" tabindex="0" aria-label="Move advisor: drag or use arrow keys; Home resets position"><h3>Cityborn Life Advisor <small>${ADVISOR_VERSION}</small></h3><button id="min" aria-label="Minimize">−</button></header>
+<small>Native seeded simulation. Highest evaluated score; no guaranteed optimal life.</small>
+<label>Evaluation depth<select id="profile"><option value="balanced">Balanced · 3 years / 12 future choices</option><option value="deep">Deep · 10 years / 40 future choices</option><option value="life">Life rollout · up to 600 future choices (slow)</option></select></label>
 <div class="row"><button id="advise">Evaluate choices</button><button id="auto">Start Auto</button><button id="stop">Stop</button></div>
-<div id="status" role="status">Loading…</div><div id="advice"></div>
+<div id="status" role="status">Loading…</div><div id="warning"></div><div id="advice"></div><button id="apply" disabled>Apply recommended choice</button>
 <details open><summary>Achievement & trait goals (<span id="selected">0</span>)</summary>
-<small>All selected goals must match. Traits must be present at the checked state. Some goals conflict.</small>
-<input id="filter" type="search" placeholder="Search achievements, traits, or IDs" aria-label="Filter goals"><div id="goals"></div>
+<small>All goals must match. Traits must be present at the checked state. Some goals conflict.</small>
+<input id="filter" type="search" placeholder="Search goals, requirements, or IDs" aria-label="Filter goals">
+<div class="row"><label><input id="onlySelected" type="checkbox">Selected only</label><button id="clear">Clear goals</button></div><div id="goals"></div>
 </details>
-<details open><summary>Filtered random seeds</summary>
+<details open><summary>Filtered random seeds & saved route</summary>
 <div class="row"><label>Check<select id="scope"><option value="birth">At birth (fast)</option><option value="life">At end of simulated life</option></select></label><label>Try seeds<input id="count" type="number" min="1" max="500" value="25" style="width:100%"></label></div>
 <label>Name (blank = seeded name)<input id="name" type="text" maxlength="12"></label>
-<label>Gender <select id="gender"><option value="m">Male</option><option value="f">Female</option></select></label>
+<label>Gender<select id="gender"><option value="m">Male</option><option value="f">Female</option></select></label>
 <button id="search">Find matching seed</button><div id="found"></div>
-<div class="row"><button id="start" disabled>Start found seed</button><button id="export" disabled>Export seed & route</button></div>
-<small>Search stays in a local worker and does not touch your save. Starting requires the game's home screen. Full-life matches include a replayable choice route.</small>
+<div class="row"><button id="start" disabled>Start found seed</button><button id="copy" disabled>Copy seed</button></div>
+<div class="row"><button id="export" disabled>Export route</button><button id="import">Import route</button></div><input id="file" type="file" accept=".json,application/json">
+<small>Goals, settings, and the latest route are saved locally. Auto stays off after reload. Resume the game, then enable Auto to rejoin a saved route. The game's save is separate.</small>
 </details></section>`;
 const $=id=>shadow.getElementById(id);
-let worker,sequence=0,pending=new Map(),auto=false,busy=false,searching=false,found=null,replay=null,pausedByUs=null;
-let latest=null;
-const chosen=new Set();
 const lang=()=>['en','ja','ko'].includes(document.documentElement.lang)?document.documentElement.lang:'en';
 const say=text=>{$('status').textContent=text;};
-const signature=s=>{
-  const prompt=s.prompt?{...s.prompt}:null;
-  if(prompt)delete prompt.remainingMs;
-  return JSON.stringify([s.seed,s.age,s.rngState,s.cursor,prompt]);
-};
+const preferencesKey='cityborn.advisor.preferences.v2',routeKey='cityborn.advisor.route.v2';
+function read(key){try{return JSON.parse(localStorage.getItem(key)||'null');}catch{return null;}}
+function write(key,value){try{value==null?localStorage.removeItem(key):localStorage.setItem(key,JSON.stringify(value));}catch{$('warning').textContent='Local storage is unavailable or full. Export your route before leaving.';}}
+const saved=read(preferencesKey)||{};
+let position=saved.position && Number.isFinite(saved.position.x) && Number.isFinite(saved.position.y)?saved.position:null;
+const chosen=new Set(Array.isArray(saved.goals)?saved.goals:[]);
+let worker=null,sequence=0,pending=new Map(),generation=0,working=null,auto=false,ready=false;
+let found=null,replay=null,latest=null,catalog=[];
+for(const id of ['profile','scope','count','name','gender'])if(saved[id]!=null)$(id).value=saved[id];
+if(!['balanced','deep','life'].includes($('profile').value))$('profile').value='balanced';
+if(!['birth','life'].includes($('scope').value))$('scope').value='birth';
+if(!['m','f'].includes($('gender').value))$('gender').value='m';
+function savePreferences(){write(preferencesKey,{goals:[...chosen],...Object.fromEntries(['profile','scope','count','name','gender'].map(id=>[id,$(id).value])),minimized:$('panel').hidden,position});}
+function saveRoute(){write(routeKey,found?{found,index:replay?.index||0,active:!!replay}:null);}
 function bridge() {
   const root=document.getElementById('root');
   const key=root && Object.keys(root).find(k=>k.startsWith('__reactContainer$'));
-  const internal=key && root[key];
-  const start=internal?.stateNode?.current || internal;
-  const stack=start?[start]:[]; let runtime=null,life=null,home=null;
+  const internal=key && root[key],start=internal?.stateNode?.current||internal;
+  const stack=start?[start]:[];let runtime=null,life=null,home=null;
   while(stack.length) {
-    const f=stack.pop();
-    const props=f.memoizedProps;
-    if(props?.life?.choose) life=props.life;
-    if(typeof props?.onStart==='function' && typeof props?.onResume==='function') home=props;
+    const f=stack.pop(),props=f.memoizedProps;
+    if(props?.life?.choose)life=props.life;
+    if(typeof props?.onStart==='function' && typeof props?.onResume==='function')home=props;
     for(let h=f.memoizedState;h && typeof h==='object';h=h.next) {
       const c=h.memoizedState?.current;
-      if(c && Object.hasOwn(c,'state') && Object.hasOwn(c,'progress') && Object.hasOwn(c,'paused') && Object.hasOwn(c,'speed')) runtime=c;
+      if(c && Object.hasOwn(c,'state') && Object.hasOwn(c,'progress') && Object.hasOwn(c,'paused') && Object.hasOwn(c,'speed'))runtime=c;
     }
-    if(f.sibling) stack.push(f.sibling);
-    if(f.child) stack.push(f.child);
+    if(f.sibling)stack.push(f.sibling);
+    if(f.child)stack.push(f.child);
   }
   return {runtime,life,home};
 }
 function makeWorker() {
-  const code=`${nativeEngine.toString()}\n${makePlanner.toString()}\n(${workerMain.toString()})();`;
+  const code=`${nativeEngine.toString()}\n${advisorCommon.toString()}\n${makePlanner.toString()}\n(${workerMain.toString()})();`;
   const url=URL.createObjectURL(new Blob([code],{type:'text/javascript'}));
-  worker=new Worker(url); URL.revokeObjectURL(url);
+  try{worker=new Worker(url);}finally{URL.revokeObjectURL(url);}
   worker.onmessage=({data:m})=>{
-    const p=pending.get(m.id); if(!p)return;
-    if(m.progress!=null) {say(`Searching ${m.progress}/${$('count').value} seeds; latest matched ${m.matches}/${chosen.size} goals.`);return;}
-    pending.delete(m.id);
-    if(m.error)p.reject(Error(m.error));else p.resolve(m);
+    const p=pending.get(m.id);if(!p)return;
+    if(m.progress!=null){p.progress?.(m);return;}
+    pending.delete(m.id);m.error?p.reject(Error(m.error)):p.resolve(m.result);
   };
-  worker.onerror=e=>{for(const p of pending.values())p.reject(Error(e.message));pending.clear();stop('Worker failed: '+e.message);};
+  worker.onerror=e=>{
+    if(ready)stop('Worker failed: '+e.message);
+    else{for(const p of pending.values())p.reject(Error(e.message));pending.clear();say('Worker failed: '+e.message);}
+  };
 }
-function request(type,args={}) {
+function request(type,args={},progress){
   const id=++sequence;
-  return new Promise((resolve,reject)=>{pending.set(id,{resolve,reject});worker.postMessage({id,type,lang:lang(),...args});});
+  return new Promise((resolve,reject)=>{pending.set(id,{resolve,reject,progress});worker.postMessage({id,type,lang:lang(),...args});});
 }
-function releasePause() {
-  if(pausedByUs) {
-    const b=bridge();
-    if(b.runtime===pausedByUs && b.runtime.paused && b.life) b.life.togglePause();
-    pausedByUs=null;
-  }
+function controls() {
+  for(const id of ['advise','search','import','clear','profile','scope','count','name','gender'])$(id).disabled=!ready || !!working;
+  $('auto').disabled=!ready || (!!working && !auto);
+  $('auto').textContent=auto?'Stop Auto':'Start Auto';
+  $('stop').disabled=!ready;
+  $('apply').disabled=!ready || !!working || !latest;
+  for(const id of ['start','copy','export'])$(id).disabled=!ready || !!working || !found;
 }
+function begin(kind){const job={generation:++generation,kind,paused:null};working=job;controls();return job;}
+const current=job=>working===job && generation===job.generation;
+function releasePause(job){
+  if(!job?.paused)return;
+  const b=bridge();if(b.runtime===job.paused && b.runtime.state===job.pausedState && b.runtime.paused && b.life)b.life.togglePause();
+  job.paused=null;
+}
+function finish(job){if(current(job)){releasePause(job);working=null;controls();}}
 function stop(message='Stopped. Manual control restored.') {
-  auto=false; $('auto').textContent='Start Auto';
-  releasePause();
-  if(pending.size || searching) {
-    worker.terminate();for(const p of pending.values())p.reject(Error('Cancelled'));pending.clear();makeWorker();
+  if(!ready){say('Loading the advisor…');return;}
+  ++generation;auto=false;releasePause(working);working=null;latest=null;
+  if(pending.size){
+    worker.terminate();for(const p of pending.values())p.reject(Error('Cancelled'));pending.clear();
+    if(supported && ready)makeWorker();
   }
-  searching=false;busy=false; $('search').disabled=false;say(message);
+  controls();say(message);
 }
-function invalidate() {
-  stop('Goals changed. Evaluate again or search new seeds.');
-  found=null; replay=null;latest=null;$('found').textContent='';$('start').disabled=true;$('export').disabled=true;
+function filterGoals(){
+  const q=$('filter').value.toLowerCase();
+  for(const el of $('goals').children)el.hidden=!el.textContent.toLowerCase().includes(q)||($('onlySelected').checked && !chosen.has(el.querySelector('input').value));
+}
+function syncGoals(){
   $('selected').textContent=chosen.size;
+  for(const input of $('goals').querySelectorAll('input'))input.checked=chosen.has(input.value);
+  filterGoals();
 }
-async function evaluate(apply=false) {
-  if(busy||searching)return;
+function invalidate(){
+  stop('Goals changed. Evaluate again or search new seeds.');
+  found=null;replay=null;saveRoute();renderFound();syncGoals();savePreferences();
+}
+function renderFound(){
+  if(!found){$('found').textContent='';controls();return;}
+  const n=found.matched.filter(Boolean).length;
+  const missing=found.goals.filter((_,i)=>!found.matched[i]).map(g=>catalog.find(c=>c.key===g)?.label||g);
+  $('found').textContent=`${n===found.goals.length?'Complete match':'Best partial'} • seed ${found.seed}\n${found.scope==='birth'?'At birth':'Life ended'} at age ${found.summary.age} • goals ${n}/${found.goals.length} • ${found.route.length} choices${missing.length?'\nMissing: '+missing.join(', '):''}`;
+  controls();
+}
+function chooseNative(b,i){
+  if(i===-2)b.life.acceptVoice();
+  else if(['reflect','name','color'].includes(b.runtime.state.prompt?.kind))b.life.submitReflection('');
+  else b.life.choose(i);
+}
+function applyAdvice(r){
   const b=bridge(),s=b.runtime?.state;
-  if(!s || s.dead || !s.prompt) {if(!auto)say('Waiting for an active choice.');return;}
-  if(!b.life) {stop('Game controls unavailable. Reload the page.');return;}
-  busy=true;
-  try {
-    if(b.runtime.auto)b.life.toggleAuto();
-    if(!b.runtime.paused) {b.life.togglePause();pausedByUs=b.runtime;}
-    const snap=JSON.parse(JSON.stringify(s)),sig=signature(s);
-    let r;
-    if(replay && replay.index<replay.route.length) {
-      const step=replay.route[replay.index];
-      if(step.signature!==sig) {replay=null;stop('Seed replay diverged (settings, language, or manual choice changed). Evaluate again to continue.');return;}
-      r={signature:sig,best:step.i,rows:[{i:step.i,label:step.i<0?'Continue / leave blank / let pass':s.prompt.choices[step.i]?.label}],replay:true};
-    } else r=(await request('recommend',{state:snap,goals:[...chosen]})).result;
-    const current=bridge();
-    if(current.runtime?.state!==s || signature(s)!==sig) {latest=null;say('Choice changed during evaluation. Evaluate again.');return;}
-    latest=r;
-    $('advice').textContent=r.rows.map((v,i)=>`${i===0?'★':' '} ${v.i+1 || '–'}. ${v.label}${v.age!=null?` → age ${v.age}, ${v.dead?'life ended':'alive'}, goals ${v.matched}/${chosen.size}`:''}`).join('\n');
-    say(r.replay?'Following the matching seed’s verified simulation route.':'Choices ranked using exact seeded outcomes and bounded lookahead.');
-    if(apply && auto) {
-      if(['reflect','name','color'].includes(s.prompt.kind)) current.life.submitReflection('');
-      else current.life.choose(r.best);
-      if(r.replay) replay.index++;
-    }
-  } catch(e) {if(e.message!=='Cancelled')stop('Evaluation failed: '+e.message);}
-  finally {releasePause();busy=false;}
+  if(!b.life || !s || C.signature(s)!==r.signature){latest=null;controls();say('State changed. Evaluate again before applying.');return false;}
+  chooseNative(b,r.best);
+  if(r.replay && replay){replay.index++;saveRoute();}
+  latest=null;controls();return true;
 }
-$('min').onclick=()=>{$('panel').style.display='none';$('badge').style.display='block';};
-$('badge').onclick=()=>{$('panel').style.display='block';$('badge').style.display='none';};
-$('stop').onclick=()=>stop();
-$('advise').onclick=()=>evaluate();
+async function evaluate(apply=false){
+  if(working)return;
+  const b=bridge(),s=b.runtime?.state;
+  if(!s || !C.actionable(s)){if(!auto)say('Waiting for an active choice.');return;}
+  if(!b.life)return stop('Game controls unavailable. Reload the page.');
+  const job=begin('evaluate'),requestedLang=lang();
+  try{
+    if(b.runtime.auto)b.life.toggleAuto();
+    if(!b.runtime.paused){b.life.togglePause();job.paused=b.runtime;job.pausedState=s;}
+    const signature=C.signature(s);let r;
+    if(replay){
+      if(lang()!==found.lang)throw Error('Restore the route’s language before replaying');
+      let step=replay.route[replay.index];
+      if(step?.signature!==signature){
+        const index=replay.route.findIndex(v=>v.signature===signature);
+        if(index<0)throw Error('Replay diverged: live stats, history, event, or random state differ. Start the saved seed again, or clear goals to use fresh advice.');
+        replay.index=index;step=replay.route[index];
+      }
+      r={signature,best:step.i,rows:[{i:step.i,label:C.label(s,step.i)}],replay:true};
+    }else r=await request('recommend',{state:JSON.parse(JSON.stringify(s)),goals:[...chosen],profile:$('profile').value});
+    if(!current(job))return;
+    if(lang()!==requestedLang || bridge().runtime?.state!==s || C.signature(s)!==signature)throw Error('State or language changed during evaluation. Evaluate again.');
+    latest=r;
+    $('advice').textContent=r.rows.map((v,i)=>`${i===0?'★':' '} ${v.i===-2?'Voice':v.i+1||'–'}. ${v.label}${v.age!=null?`\n  Projected age ${v.age} · ${v.dead?'life ended':'still alive'} · goals ${v.matched}/${chosen.size}\n  Health ${Math.round(v.stats.health)} · Sanity ${Math.round(v.stats.sanity)} · Wealth ${Math.round(v.stats.wealth)}`:''}`).join('\n');
+    say(r.replay?`Following saved route · choice ${replay.index+1}/${replay.route.length}.`:`${$('profile').selectedOptions[0].textContent}. Projected trajectories use a greedy follow-up policy; these are not win probabilities.`);
+    if(apply && auto)applyAdvice(r);
+  }catch(e){if(current(job))stop('Evaluation stopped: '+e.message);}
+  finally{finish(job);}
+}
+async function checkEnd(b){
+  if(working)return;
+  auto=false;const job=begin('check');
+  try{
+    const r=await request('check',{state:JSON.parse(JSON.stringify(b.runtime.state)),goals:[...chosen]});
+    if(!current(job))return;
+    const exact=!replay || (replay.index===replay.route.length && r.signature===found.terminalSignature);
+    say(`Life ended. Live goals ${r.matched.filter(Boolean).length}/${chosen.size}. ${replay?(exact?'Full replay matched the saved simulation.':'Replay final state differs from the saved simulation.'):''}`);
+    replay=null;saveRoute();
+  }catch(e){if(current(job))say('Final-state check failed: '+e.message);}
+  finally{finish(job);}
+}
+async function importRoute(file,resume=null){
+  stop('Validating route against the native simulation…');const job=begin('import');
+  try{
+    const result=await request('validate',{file});if(!current(job))return;
+    found=result;chosen.clear();for(const g of result.goals)chosen.add(g);
+    for(const id of ['name','gender'])$(id).value=result.options[id];
+    $('scope').value=result.scope;$('profile').value=result.profile;
+    replay=result.scope==='life' && (resume?.active??true)?{route:result.route,index:resume?.index||0}:null;
+    syncGoals();savePreferences();saveRoute();renderFound();say('Route validated and saved. Start its seed, or resume that life and enable Auto.');
+  }catch(e){if(current(job))say('Route rejected: '+e.message);}
+  finally{finish(job);}
+}
+function movePanel(x,y){
+  const rect=host.getBoundingClientRect();position={x:Math.max(4,Math.min(x,innerWidth-rect.width-4)),y:Math.max(4,Math.min(y,innerHeight-rect.height-4))};
+  host.style.left=position.x+'px';host.style.right='auto';host.style.top=position.y+'px';
+}
+let drag=null;
+$('drag').onpointerdown=e=>{
+  if(e.button!==0 || e.target.closest('button'))return;
+  const rect=host.getBoundingClientRect();drag={x:e.clientX-rect.x,y:e.clientY-rect.y};$('drag').setPointerCapture(e.pointerId);
+};
+$('drag').onpointermove=e=>{if(drag)movePanel(e.clientX-drag.x,e.clientY-drag.y);};
+$('drag').onpointerup=$('drag').onpointercancel=()=>{if(drag){drag=null;savePreferences();}};
+$('drag').onkeydown=e=>{
+  if(e.target.closest('button') || !['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home'].includes(e.key))return;
+  e.preventDefault();e.stopPropagation();const rect=host.getBoundingClientRect(),step=e.shiftKey?64:16;
+  if(e.key==='Home'){position=null;host.style.left='';host.style.right='';host.style.top='';}
+  else movePanel(rect.x+(e.key==='ArrowRight'?step:e.key==='ArrowLeft'?-step:0),rect.y+(e.key==='ArrowDown'?step:e.key==='ArrowUp'?-step:0));
+  savePreferences();
+};
+window.addEventListener('resize',()=>{if(position)movePanel(position.x,position.y);});
+$('min').onclick=()=>{$('panel').hidden=true;$('badge').style.display='block';savePreferences();};
+$('badge').onclick=()=>{$('panel').hidden=false;$('badge').style.display='none';if(position)movePanel(position.x,position.y);savePreferences();};
+if(position)movePanel(position.x,position.y);
+if(saved.minimized)$('min').onclick();
+$('stop').onclick=()=>stop();$('advise').onclick=()=>evaluate();
+$('apply').onclick=()=>{if(latest)applyAdvice(latest);};
 $('auto').onclick=()=>{
   if(auto)return stop();
-  if(searching)return say('Stop the seed search first.');
-  const b=bridge();
-  if(!b.runtime?.state || b.runtime.state.dead)return say('Start or resume a life first.');
+  const b=bridge();if(!b.runtime?.state || C.finished(b.runtime.state))return say('Start or resume a life first.');
   if(b.runtime.auto)b.life.toggleAuto();
-  auto=true;$('auto').textContent='Auto running';say('Auto active for this life. Escape or manual game interaction stops it.');evaluate(true);
+  auto=true;controls();say('Auto active for this life. Escape or manual game interaction stops it.');evaluate(true);
 };
-$('scope').onchange=()=>{$('count').value=$('scope').value==='life'?'5':'25';};
-$('filter').oninput=()=>{
-  const q=$('filter').value.toLowerCase();
-  for(const el of $('goals').children)el.hidden=!el.textContent.toLowerCase().includes(q);
+$('filter').oninput=filterGoals;$('onlySelected').onchange=filterGoals;
+$('clear').onclick=()=>{chosen.clear();invalidate();};
+for(const id of ['profile','scope','count','name','gender'])$(id).onchange=()=>{
+  stop('Settings saved.');if(id==='scope')$('count').value=$('scope').value==='life'?'5':'25';savePreferences();
 };
 $('search').onclick=async()=>{
   if(!chosen.size)return say('Select at least one goal.');
-  stop('Searching seeds…'); found=null;replay=null;$('found').textContent='';$('start').disabled=true;$('export').disabled=true;
-  searching=true;$('search').disabled=true;
-  const goals=[...chosen],scope=$('scope').value;
-  const count=Math.max(1,Math.min(500,Math.floor(Number($('count').value)||25)));$('count').value=count;
-  try {
-    const m=await request('search',{count,goals,scope,options:{name:$('name').value.trim(),gender:$('gender').value}});
-    if(m.result) {
-      found={...m.result,goals,scope,lang:lang()};
-      $('found').textContent=`Seed ${found.seed} • ${found.state.dead?'ended at':'age'} ${found.state.age} • matched ${goals.length}/${goals.length} • ${found.route.length} choices`;
-      $('start').disabled=false;$('export').disabled=false;
-      say('Matching seed found. Start it from the home screen; enable Auto to follow its route.');
-    } else say(`No complete match in ${count} attempts. Best partial: ${m.best?.matches||0}/${goals.length}. Try more seeds, fewer goals, or full-life search for later achievements.`);
-  }catch(e){if(e.message!=='Cancelled')say('Search failed: '+e.message);}
-  finally{searching=false;$('search').disabled=false;}
+  stop('Searching seeds…');found=null;replay=null;saveRoute();renderFound();
+  const job=begin('search'),goals=[...chosen],count=Math.max(1,Math.min(500,Math.floor(Number($('count').value)||25)));
+  $('count').value=count;savePreferences();
+  try{
+    const result=await request('search',{count,goals,scope:$('scope').value,profile:$('profile').value,options:{name:$('name').value.trim(),gender:$('gender').value}},m=>{
+      if(!current(job))return;
+      if(m.best){found=m.best;saveRoute();renderFound();}
+      say(`Searching ${m.progress}/${m.total} seeds${m.age!=null?` · current life age ${m.age} · ${m.decisions} decisions`:''}${m.matches!=null?` · latest goals ${m.matches}/${goals.length}`:''}. Stop keeps the best completed partial result.`);
+    });
+    if(!current(job))return;
+    if(result){found=result;saveRoute();renderFound();}
+    say(found && found.matched.every(Boolean)?'Matching seed found. Start it from the home screen; enable Auto to replay.':`No complete match in ${count} seeds. ${found?'Best completed partial result saved; missing goals are listed below.':'No complete life was found within the simulation limit.'}`);
+  }catch(e){if(current(job))say('Search failed: '+e.message);}
+  finally{finish(job);}
 };
 $('start').onclick=()=>{
   if(!found)return;
-  const b=bridge();
-  if(!b.home)return say('Return to the game’s home screen first. Your current life will not be replaced.');
-  if(lang()!==found.lang)return say('Restore the language used for the seed search first.');
-  replay=found.scope==='life'?{route:found.route,index:0}:null;
-  b.home.onStart(found.options);say(`Started seed ${found.seed}. Enable Auto to follow the matching route.`);
+  const b=bridge();if(!b.home)return say('Return to the game’s home screen first. Your current life will not be replaced.');
+  if(lang()!==found.lang)return say('Restore the language used for this route first.');
+  replay=found.scope==='life'?{route:found.route,index:0}:null;saveRoute();
+  b.home.onStart(found.options);say(`Started seed ${found.seed}. Enable Auto to follow its route. Use native x32 for faster progress.`);
 };
+$('copy').onclick=async()=>{if(found)try{await navigator.clipboard.writeText(found.seed);say('Seed copied.');}catch{say('Copy unavailable. Seed: '+found.seed);}};
 $('export').onclick=()=>{
   if(!found)return;
-  const blob=new Blob([JSON.stringify({version:1,source:'index-C_XxXzM6.js',...found},null,2)],{type:'application/json'});
-  const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`cityborn-${found.seed}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  const url=URL.createObjectURL(new Blob([JSON.stringify(found,null,2)],{type:'application/json'}));
+  const a=document.createElement('a');a.href=url;a.download=`cityborn-${found.seed}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 };
-document.addEventListener('pointerdown',e=>{if(auto && !e.composedPath().includes(host))stop('Auto stopped by manual game interaction.');},true);
+$('import').onclick=()=>$('file').click();
+$('file').onchange=async()=>{
+  const file=$('file').files[0];$('file').value='';if(!file)return;
+  try{await importRoute(JSON.parse(await file.text()));}catch(e){say('Could not read route: '+e.message);}
+};
+document.addEventListener('pointerdown',e=>{if((auto || working?.kind==='evaluate') && !e.composedPath().includes(host))stop('Stopped by manual game interaction.');},true);
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape')stop();
-  else if(auto && !e.composedPath().includes(host))stop('Auto stopped by manual keyboard input.');
+  else if((auto || working?.kind==='evaluate') && !e.composedPath().includes(host))stop('Stopped by manual keyboard input.');
 },true);
-if(!supported) {
-  for(const el of shadow.querySelectorAll('button:not(#min):not(#badge),input,select'))el.disabled=true;
-  say('Game version changed. This script supports index-C_XxXzM6.js only; update the engine before using advice.');
-} else {
-  makeWorker();
-  request('catalog').then(({result:c})=>{
-    const entries=[...c.records.map(r=>({key:'record:'+r.key,label:`Achievement: ${r.label[lang()]||r.label.en} [${r.key}]`,hint:r.hint[lang()]||r.hint.en})),...c.flags.map(([key,label])=>({key:'flag:'+key,label:`Trait: ${label} [${key}]`,hint:'Must be present at the checked state.'}))];
-    for(const item of entries) {
-      const label=document.createElement('label'),input=document.createElement('input');input.type='checkbox';input.value=item.key;
-      input.onchange=()=>{input.checked?chosen.add(item.key):chosen.delete(item.key);invalidate();};
-      label.title=item.hint;label.append(input,document.createTextNode(item.label));$('goals').append(label);
-    }
-    say(`Ready. ${c.records.length} achievements and ${c.flags.length} traits. Select goals or evaluate the current choice.`);
-  }).catch(e=>say('Initialization failed: '+e.message));
-  setInterval(()=>{
-    if(!auto)return;
-    const b=bridge();
-    if(!b.runtime?.state || b.runtime.state.dead) {stop('Life ended. Auto stopped.');return;}
-    evaluate(true);
-  },300);
+controls();
+if(!supported)say('Game version changed. Update the advisor before using it. Supported bundle: '+C.source);
+else {
+  try{
+    makeWorker();
+    request('catalog').then(c=>{
+      catalog=[...c.records.map(r=>({key:'record:'+r.key,label:`Achievement: ${r.label[lang()]||r.label.en} [${r.key}]`,hint:r.hint[lang()]||r.hint.en})),...c.flags.map(([key,label])=>({key:'flag:'+key,label:`Trait: ${label} [${key}]`,hint:'Must be present at the checked state.'}))];
+      const valid=new Set(catalog.map(c=>c.key));for(const g of chosen)if(!valid.has(g))chosen.delete(g);
+      for(const item of catalog){
+        const label=document.createElement('label'),input=document.createElement('input'),hint=document.createElement('small');
+        input.type='checkbox';input.value=item.key;input.onchange=()=>{input.checked?chosen.add(item.key):chosen.delete(item.key);invalidate();};
+        hint.className='hint';hint.textContent=item.hint;label.append(input,document.createTextNode(item.label),hint);$('goals').append(label);
+      }
+      ready=true;syncGoals();controls();say(`Ready. ${c.records.length} achievements and ${c.flags.length} traits.`);
+      const stored=read(routeKey);if(stored?.found)importRoute(stored.found,stored);
+    }).catch(e=>say('Initialization failed: '+e.message));
+    setInterval(()=>{
+      if(!auto || working)return;
+      const b=bridge();if(!b.runtime?.state)return stop('Life closed. Auto stopped.');
+      if(C.finished(b.runtime.state)){checkEnd(b);return;}
+      evaluate(true);
+    },150);
+  }catch(e){say('Could not start the simulation worker: '+e.message);}
 }
 
 })();

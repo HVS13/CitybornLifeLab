@@ -15,4 +15,4 @@ jobs:
       - run: node build.cjs
       - run: git diff --exit-code -- dist analysis/source.json
       - run: node --check dist/cityborn-advisor.user.js
-      - run: node tests/engine.cjs
+      - run: npm test

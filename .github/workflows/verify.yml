@@ -16,3 +16,14 @@ jobs:
       - run: git diff --exit-code -- dist analysis/source.json
       - run: node --check dist/cityborn-advisor.user.js
       - run: npm test
+  filter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:filter

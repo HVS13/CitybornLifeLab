@@ -1,13 +1,14 @@
 {
   "name": "cityborn-life-lab",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "private": true,
   "description": "Native-engine userscript advisor and goal-filtered seed finder for Cityborn Life",
   "scripts": {
     "build": "node build.cjs",
     "check": "node --check dist/cityborn-advisor.user.js",
     "test": "node tests/planner.cjs && node tests/engine.cjs",
-    "test:browser": "node tests/browser.cjs"
+    "test:browser": "node tests/browser.cjs",
+    "test:filter": "node tests/filter-browser.cjs"
   },
   "engines": { "node": ">=22" },
   "devDependencies": { "playwright": "1.62.1" }

@@ -5,7 +5,7 @@ const host=document.createElement('div');host.id='cityborn-advisor';
 const shadow=host.attachShadow({mode:'open'});document.body.append(host);
 shadow.innerHTML=`<style>
 :host{position:fixed;right:12px;top:12px;z-index:2147483647;color:#eee;font:13px/1.45 system-ui;max-width:calc(100vw - 24px)}
-*{box-sizing:border-box}section{width:390px;max-width:100%;max-height:88vh;overflow:auto;background:#161a22;border:1px solid #788295;border-radius:10px;padding:12px;box-shadow:0 6px 30px #0009}
+*{box-sizing:border-box}[hidden]{display:none!important}section{width:390px;max-width:100%;max-height:88vh;overflow:auto;background:#161a22;border:1px solid #788295;border-radius:10px;padding:12px;box-shadow:0 6px 30px #0009}
 header{display:flex;align-items:center;justify-content:space-between;cursor:move;touch-action:none}h3{margin:0}button,input,select{font:inherit;color:inherit;background:#252d3b;border:1px solid #768298;border-radius:4px;padding:6px}button{cursor:pointer}button:disabled{opacity:.45;cursor:default}input[type=text],input[type=search],select{max-width:100%;width:100%}input[type=checkbox]{margin-right:6px}label{display:block;margin:6px 0}.row{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.row>*{flex:1;min-width:0}small{color:#b9c1d0}.hint{display:block;color:#aeb8ca;font-size:11px;margin-left:22px}#goals{max-height:180px;overflow:auto;border:1px solid #445063;padding:5px}#goals label{font-size:12px}#status,#found,#warning{white-space:pre-wrap;margin:8px 0;color:#d7e6ff}#warning{color:#efc785}#advice{max-height:200px;overflow:auto;white-space:pre-wrap}summary{cursor:pointer;padding:6px 0}#min{width:auto}#badge{display:none}#file{display:none}
 </style><button id="badge">Life Advisor</button><section id="panel">
 <header id="drag" tabindex="0" aria-label="Move advisor: drag or use arrow keys; Home resets position"><h3>Cityborn Life Advisor <small>${ADVISOR_VERSION}</small></h3><button id="min" aria-label="Minimize">−</button></header>
@@ -16,7 +16,7 @@ header{display:flex;align-items:center;justify-content:space-between;cursor:move
 <details open><summary>Achievement & trait goals (<span id="selected">0</span>)</summary>
 <small>All goals must match. Traits must be present at the checked state. Some goals conflict.</small>
 <input id="filter" type="search" placeholder="Search goals, requirements, or IDs" aria-label="Filter goals">
-<div class="row"><label><input id="onlySelected" type="checkbox">Selected only</label><button id="clear">Clear goals</button></div><div id="goals"></div>
+<div class="row"><label><input id="onlySelected" type="checkbox">Selected only</label><button id="clear">Clear goals</button></div><small id="goalCount" role="status"></small><div id="goals"></div>
 </details>
 <details open><summary>Filtered random seeds & saved route</summary>
 <div class="row"><label>Check<select id="scope"><option value="birth">At birth (fast)</option><option value="life">At end of simulated life</option></select></label><label>Try seeds<input id="count" type="number" min="1" max="500" value="25" style="width:100%"></label></div>
@@ -106,8 +106,12 @@ function stop(message='Stopped. Manual control restored.') {
   controls();say(message);
 }
 function filterGoals(){
-  const q=$('filter').value.toLowerCase();
-  for(const el of $('goals').children)el.hidden=!el.textContent.toLowerCase().includes(q)||($('onlySelected').checked && !chosen.has(el.querySelector('input').value));
+  const q=$('filter').value.trim().toLowerCase();let shown=0;
+  for(const el of $('goals').children){
+    el.hidden=!el.textContent.toLowerCase().includes(q)||($('onlySelected').checked && !chosen.has(el.querySelector('input').value));
+    if(!el.hidden)shown++;
+  }
+  $('goalCount').textContent=shown?`${shown} of ${catalog.length} goals shown`:`No matching goals. ${$('onlySelected').checked?'Turn off Selected only or change the search.':'Try a different search.'}`;
 }
 function syncGoals(){
   $('selected').textContent=chosen.size;

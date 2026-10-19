@@ -1,5 +1,15 @@
 # Changes
 
+## 2.0.0
+
+- Rebuild the companion around Find a life, Play this life, and Saved lives.
+- Filter on all five displayed final stats, minimum age, alive endings, desired traits/achievements, and avoided traits. Copy targets from the actual current or ended life.
+- Replace the short-horizon seed policy with a bounded search across complete alternative routes. Compare multiple completed outcomes, each showing the targets it was checked against.
+- Plan a continuation from the current state without pretending it can start from birth. Keep draft targets independent of selected and active routes.
+- Add explicit start-from-birth and resume actions, verify native controls before following, and retain completed partial candidates when stopping a search.
+- Save up to eight routes, validate v1/v2 imports, preserve drafts across reload, isolate typed inputs from game shortcuts, and support compact/mobile layouts.
+- Add player-workflow regressions and native replay checks with five final-stat targets.
+
 ## 1.1.1
 
 - Fix goal filtering: the label display rule was overriding the browser's hidden-element styling, leaving nonmatching goals visible.

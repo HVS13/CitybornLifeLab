@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Install Cityborn Life Advisor: native-engine choice advice, opt-in Auto, and achievement-targeted seed search.">
+  <meta name="description" content="Find Cityborn lives by final stats, traits and achievements. Compare endings, plan your current life, and follow verified routes.">
   <title>CitybornLifeLab — Install the advisor</title>
   <style>
     :root{color-scheme:dark;font:16px/1.7 system-ui;background:#10131b;color:#e5eaf2}
@@ -12,28 +12,27 @@
   </style>
 </head>
 <body>
-  <small>UNOFFICIAL GAME COMPANION · VERSION 1.1.1</small>
+  <small>UNOFFICIAL GAME COMPANION · VERSION 2.0.0</small>
   <h1>CitybornLifeLab</h1>
-  <p>Choose with native simulation advice. Find random seeds that match your achievement and trait goals. Let optional Auto follow the evaluated choices.</p>
+  <p>Set the life you want. Compare predicted endings with the final stats, traits and achievements you care about, then choose a route to play.</p>
   <a class="install" href="https://raw.githubusercontent.com/HVS13/CitybornLifeLab/main/dist/cityborn-advisor.user.js">Install Cityborn Life Advisor</a>
   <p><a href="https://github.com/HVS13/CitybornLifeLab">Source & full instructions</a> · <a href="https://project-moon-life.cityborn.workers.dev/">Open the game</a></p>
   <h2>Install</h2>
   <ol>
     <li>Install <a href="https://www.tampermonkey.net/">Tampermonkey</a> from its official browser-store links.</li>
     <li>Click the install button and confirm in the manager. If it opens as text, create a new userscript, paste the entire file, and save. If you installed the earlier local script, remove that copy first.</li>
-    <li>Reload the game and look for the <strong>Cityborn Life Advisor</strong> panel.</li>
+    <li>Reload the game and look for <strong>Cityborn Life Lab 2.0.0</strong>. The manager keeps the original script name for updates.</li>
   </ol>
   <h2>Play toward your goals</h2>
   <ul>
-    <li><strong>Evaluate choices</strong> ranks unlocked options using the game's inspected simulation.</li>
-    <li>Choose <strong>Balanced</strong>, <strong>Deep</strong>, or <strong>Life rollout</strong> evaluation. Apply a recommendation once or let Auto follow it.</li>
-    <li><strong>Start Auto</strong> applies advice for this life. Stop, Escape, or manual game interaction returns control. Use the game's x32 speed for faster progress.</li>
-    <li>Select achievements or traits and search <strong>At birth</strong> for fast starting-condition matches, or <strong>At end of simulated life</strong> for full-life matches.</li>
-    <li>Start a found seed from the game's home screen, then enable Auto to follow its stored route. Full-life searching can take time; begin with 1–5 seeds.</li>
-    <li>Your goals and latest route survive reloads. Export/import routes, copy seeds, and inspect missing goals in explicitly labeled partial results. Imports are checked by replaying their actions in the native engine.</li>
+    <li><strong>Find a life:</strong> choose minimum final Health, Sanity, Wealth, Network and Reputation. Require traits or achievements, avoid unwanted traits, and optionally set a minimum age or alive ending.</li>
+    <li>Search a specific seed or start with 1–3 random seeds. Compare completed endings. Every result lists its original targets; partial results list what failed.</li>
+    <li><strong>Play this life:</strong> start a selected seed, resume saved progress, or plan the rest of your current life. Following checks each live state before choosing.</li>
+    <li><strong>Saved lives:</strong> keep and compare routes, import/export them, and copy seeds. Existing v1/v2 exports remain supported.</li>
+    <li>Copy stats and traits directly from your current or ended life. New search targets do not erase the route you are already playing.</li>
   </ul>
   <h2>Know the limits</h2>
-  <p>Advice uses bounded lookahead, not a proof of the best possible life. Some goals conflict or require later quest prerequisites the search may miss. The script sends no advisor data to a server and does not fabricate achievements. It supports the inspected game bundle and stops on a different version.</p>
+  <p>The planner searches complete alternative routes within a fixed budget. It can miss possible routes, and some goals conflict. Predictions are not guaranteed optimal lives. The script sends no gameplay data to a server and does not fabricate achievements or load route snapshots into your game save. It supports the inspected game bundle and stops on a different version.</p>
   <p><a href="https://github.com/HVS13/CitybornLifeLab/issues">Report a problem</a> · Inspired by <a href="https://github.com/HVS13/DotaCaptainLab">DotaCaptainLab</a></p>
 </body>
 </html>

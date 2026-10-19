@@ -22,5 +22,7 @@ function advisorCommon() {
   const finished=s=>!!s.dead && !s.dead.voice;
   const actionable=s=>!!s.prompt || !!s.dead?.voice;
   const label=(s,i)=>i===-2?'Continue the post-death voice':i===-1?'Continue / leave blank / let pass':s.prompt.choices[i].label;
-  return {source,signature,legacySignature,finished,actionable,label};
+  const statNames={health:'Health',sanity:'Sanity',wealth:'Wealth',network:'Network',rep:'Reputation'};
+  const displayStats=s=>Object.fromEntries(Object.keys(statNames).map(k=>[k,Math.round(s.stats[k])]));
+  return {source,signature,legacySignature,finished,actionable,label,statNames,displayStats};
 }

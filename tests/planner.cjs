@@ -1,18 +1,23 @@
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
-const context={};vm.createContext(context);vm.runInContext(fs.readFileSync('src/common.js','utf8')+'\n'+fs.readFileSync('src/planner.js','utf8')+';globalThis.make=makePlanner;globalThis.C=advisorCommon();',context);
-const initial=()=>({seed:'test',age:0,rngState:1,cursor:0,plan:[],flags:[],log:[],stats:{health:50,sanity:50,wealth:0,network:0,rep:0},prompt:{kind:'major',choices:[{label:'Rich but doomed'},{label:'Stable future'}]}});
-const E={data:()=>({}),records:s=>s.age>=20?['long_life']:[],catalog:[],flags:{},
-  choose(s,d,i){s.bad=i===0;s.stats.wealth=s.bad?100:0;s.prompt=null;},
-  year(s){s.age++;if(s.bad && s.age===5)s.dead={alive:false};else if(s.age===20)s.dead={alive:true};},advance(){throw Error('no planned events');}};
-const P=context.make(E),s=initial(),before=JSON.stringify(s);
-assert.equal(P.recommend(s,[],'balanced').best,0,'short horizon sees the attractive early reward');
-assert.equal(P.recommend(s,[],'deep').best,1,'deeper evaluation detects the later death');
-const lifetime=P.recommend(s,['record:long_life'],'life');
-assert.equal(lifetime.best,1);assert.ok(lifetime.rows[0].complete);assert.equal(lifetime.rows[0].matched,1);
-assert.equal(JSON.stringify(s),before,'all evaluation depths leave source state unchanged');
-const changed=initial();changed.flags.push('new progress');assert.notEqual(P.signature(changed),P.signature(s));
+const ctx={};vm.createContext(ctx);vm.runInContext(fs.readFileSync('src/common.js','utf8')+'\n'+fs.readFileSync('src/planner.js','utf8')+';globalThis.make=makePlanner;globalThis.C=advisorCommon();',ctx);
+const initial=()=>({v:7,seed:'test',age:0,rngState:1,cursor:0,plan:[],flags:[],log:[],story:[],reflections:[],stats:{health:99,sanity:50,wealth:0,network:0,rep:0},prompt:{kind:'major',choices:Array.from({length:5},(_,i)=>({label:'Path '+i}))}});
+const E={data:()=>({regions:[]}),records:()=>[],catalog:[],flags:{Color:'Color'},
+ choose(s,d,i){if(s.stage!==1){s.path=i;s.stage=1;s.stats.wealth=i===4?0:100-i;s.prompt={kind:'major',choices:[{label:'Finish'}]};}else{s.prompt=null;s.stats.health=s.path===4?85:11;if(s.path===4)s.flags.push('Color');}},
+ year(s){s.age=20;s.dead={alive:false};},advance(){throw Error('No scheduled events');}};
+const P=ctx.make(E),s=initial(),before=JSON.stringify(s);
+const quick=P.plan(s,['flag:Color'],'quick'),thorough=P.plan(s,['flag:Color'],'thorough');
+assert.ok(quick.completed.length);assert.ok(thorough.completed.length);
+assert.equal(P.targets(quick.completed[0].state,['flag:Color'])[0],false,'bounded quick search can miss a low-scoring prerequisite');
+assert.equal(P.targets(thorough.completed[0].state,['flag:Color'])[0],true,'alternative paths retain a delayed reward');
+assert.equal(JSON.stringify(s),before,'planning does not consume or mutate live state');
+const terminal=quick.completed[0].state;
+assert.equal(P.targets(terminal,['stat:health:80'])[0],false,'high starting health cannot pass a low final-health check');
+const rounded={...terminal,stats:{health:79.6,sanity:42.6,wealth:99.6,network:97.9,rep:91.5}};
+assert.ok(P.targets(rounded,['stat:health:80','stat:sanity:43','stat:wealth:100','stat:network:98','stat:rep:92']).every(Boolean),'thresholds use the final screen’s displayed rounding');
+assert.equal(P.targets(thorough.completed[0].state,['avoid:Color'])[0],false);
+assert.throws(()=>P.checkGoals(['stat:health:101']),/Unknown/);assert.throws(()=>P.checkGoals(['stat:fake:80']),/Unknown/);
+assert.throws(()=>P.checkGoals(['flag:Color','flag:Color']),/duplicate/);
 const reordered=Object.fromEntries(Object.entries(s).reverse());assert.equal(P.signature(reordered),P.signature(s));
-const limited={...s,dead:{voice:true}};assert.equal(context.C.finished(limited),false);
-const terminal={...initial(),age:20,prompt:null,dead:{alive:true}};
-assert.equal(P.pack({state:terminal,options:{},route:[],complete:true,matched:[false]},['record:long_life'],'life','en').matched[0],true,'export match claims are computed from the supplied goals and state');
-console.log('Planner regressions passed: delayed consequence, terminal goals, purity, full-state identity, and pending voice.');
+const changed=initial();changed.stats.health--;assert.notEqual(P.signature(changed),P.signature(s));
+assert.equal(ctx.C.finished({...s,dead:{voice:true}}),false);
+console.log('Planner regressions passed: alternative routes, final-only stats, displayed rounding, avoid traits, legal conditions, purity, and state identity.');

@@ -5,7 +5,7 @@ const start = source.indexOf('const vw =');
 const end = source.indexOf('function $2()');
 if (start < 0 || end < start) throw Error('Inspected engine boundaries missing');
 const engine = source.slice(start, end);
-const engineExports = `return {create:zu,data:mt,choose:Ti,continue:Db,advance:hx,year:o0,records:s=>[...P2(eb(s).map(r=>r.key))],catalog:gd,flags:pp,lang:_s};`;
+const engineExports = `return {create:zu,data:mt,choose:Ti,continue:Db,advance:hx,year:o0,records:s=>[...P2(eb(s).map(r=>r.key))],job:ve,cause:Nw,catalog:gd,flags:pp,lang:_s};`;
 const factory = `function nativeEngine(){${engine}\n${engineExports}}`;
 const planner = fs.readFileSync('src/planner.js', 'utf8');
 const common = fs.readFileSync('src/common.js', 'utf8');
@@ -15,7 +15,7 @@ const metadata = `// ==UserScript==
 // @name         Cityborn Life Advisor
 // @namespace    https://github.com/HVS13/CitybornLifeLab
 // @version      ${version}
-// @description  Native simulation choice advisor, opt-in auto choices, and goal-filtered seed search.
+// @description  Find and replay lives by final stats, traits and achievements, or plan the rest of your current life.
 // @homepageURL  https://github.com/HVS13/CitybornLifeLab
 // @supportURL   https://github.com/HVS13/CitybornLifeLab/issues
 // @downloadURL  https://raw.githubusercontent.com/HVS13/CitybornLifeLab/main/dist/cityborn-advisor.user.js

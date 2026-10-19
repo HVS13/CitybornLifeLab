@@ -5,20 +5,19 @@ const ctx={console};vm.createContext(ctx);vm.runInContext(core+';globalThis.E=na
 const {E,P}=ctx;
 const opts={seed:'123456',name:'',gender:'m'};
 const initial=E.create(E.data(),opts), original=JSON.stringify(initial);
-const result=P.simulate(opts,[]);
+const result=P.simulate(opts,['stat:wealth:90']);
 assert.ok(result.complete,'bounded full life completes');
 assert.equal(JSON.stringify(initial),original,'simulation does not mutate unrelated state');
 const replay=E.create(E.data(),opts);let cursor=0,steps=0;
-while(!replay.dead && steps++<5000){
-  if(replay.prompt){
+while(!ctx.C.finished(replay) && steps++<5000){
+  if(ctx.C.actionable(replay)){
     const step=result.route[cursor++];assert.equal(P.signature(replay),step.signature,'every replay random state and prompt match');
-    const before=JSON.stringify(replay),advice=P.recommend(replay,[]);
-    assert.equal(JSON.stringify(replay),before,'advice does not consume live randomness');
-    assert.equal(advice.best,step.i,'same policy produces same action');P.apply(replay,step.i);
+    P.apply(replay,step.i);
   }else P.advance(replay);
 }
 assert.equal(JSON.stringify(replay),JSON.stringify(result.state),'full route reproduces complete state');
 assert.equal(cursor,result.route.length);
+assert.equal(P.targets(replay,['stat:wealth:90'])[0],true,'seed plan actually satisfies its final wealth requirement');
 const head=E.create(E.data(),{seed:'x',gender:'m',regionId:'A'});
 assert.equal(P.targets(head,['record:born_head'])[0],true);
 assert.equal(P.targets(head,['flag:absent'])[0],false);
@@ -35,10 +34,10 @@ const v=P.copy(result.birth);v.dead={age:0,cause:'뒤틀림',t:.5,voice:true};v.
 assert.equal(ctx.C.finished(v),false,'post-death voice is not a completed life');
 assert.deepEqual(Array.from(P.choices(v)),[-2]);P.apply(v,-2);
 assert.equal(v.dead,null);assert.equal(v.prompt.eventId,'dr_voice','native voice transition creates continuation');
-const file=P.pack(result,['record:age80'],'life','en');
+const file=P.pack(result,['stat:wealth:90'],'life','en');
 const imported=P.validate({...file,matched:[false],summary:{age:9999}});
 assert.equal(imported.summary.age,result.state.age,'import recomputes summary');
-assert.equal(imported.matched[0],E.records(result.state).includes('age80'),'import recomputes goal claims');
+assert.equal(imported.matched[0],P.targets(result.state,['stat:wealth:90'])[0],'import recomputes stat claims');
 assert.equal(imported.terminalSignature,P.signature(result.state));
 const broken=P.copy(file);broken.route[0].i=999;
 assert.throws(()=>P.validate(broken),/unavailable|locked/);
@@ -46,7 +45,15 @@ assert.throws(()=>P.validate({...file,route:file.route.slice(1)}),/does not matc
 assert.throws(()=>P.validate({...file,source:'unknown.js'}),/Unsupported/);
 assert.throws(()=>P.validate({...file,goals:['record:age80','record:age80']}),/duplicate/);
 assert.throws(()=>P.validate({...file,options:{...file.options,seed:' '+file.seed}}),/Invalid seed/);
+assert.throws(()=>P.validate({...file,goals:['stat:health:101']}),/Unknown/);
+const midpoint=E.create(E.data(),opts);P.advance(midpoint);while(!ctx.C.actionable(midpoint)&&!ctx.C.finished(midpoint))P.advance(midpoint);
+P.apply(midpoint,result.route[0].i);while(!ctx.C.actionable(midpoint)&&!ctx.C.finished(midpoint))P.advance(midpoint);
+const current={...file,origin:'current',startState:midpoint,route:file.route.slice(1)};
+assert.equal(P.validate(current).terminalSignature,file.terminalSignature,'current-life tail validates without pretending it is a birth route');
+const v2={...file,version:2};delete v2.origin;
+assert.equal(P.validate(v2).terminalSignature,file.terminalSignature,'v2 routes remain importable');
 const legacy=P.copy(file),oldState=E.create(E.data(),opts);legacy.version=1;let oldCursor=0;
+legacy.goals=['record:age80'];
 while(!ctx.C.finished(oldState)){
   if(ctx.C.actionable(oldState)){const step=legacy.route[oldCursor++];step.signature=ctx.C.legacySignature(oldState);P.apply(oldState,step.i);}
   else P.advance(oldState);

@@ -1,5 +1,5 @@
 const fs=require('node:fs'),assert=require('node:assert/strict');
-const {launch,open,install,native,status,importFile,E,P,C}=require('./browser-support.cjs');
+const {launch,open,install,native,status,importFile,completeReplay,E,P,C}=require('./browser-support.cjs');
 (async()=>{
   const browser=await launch(),results=[];
   try{
@@ -27,7 +27,7 @@ const {launch,open,install,native,status,importFile,E,P,C}=require('./browser-su
         assert.equal(file.origin,'current');assert.equal(file.goals.filter(g=>g.startsWith('stat:')).length,5);
         assert.equal(P.validate(file).terminalSignature,file.terminalSignature);await ui.locator('#follow').click();
       }
-      await page.waitForFunction(()=>/Life ended\.|Your live state differs|Restore this route/.test(document.querySelector('#cityborn-advisor').shadowRoot.getElementById('playStatus').textContent),null,{timeout:180000});
+      await completeReplay(page);
       const message=await ui.locator('#playStatus').textContent();assert.match(message,/Full replay matched/,message);
       const state=await native(page,'return b.runtime.state;');
       assert.equal(C.signature(state),file.terminalSignature,'entire terminal state matches');

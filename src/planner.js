@@ -81,8 +81,9 @@ function makePlanner(E) {
       for(const node of beam){
         const signature=C.signature(node.state);
         for(const i of choices(node.state)){
-          const child={state:branch(node.state),route:[...node.route,{signature,i}],steps:node.steps+1};
+          const step={signature,i},child={state:branch(node.state),route:[...node.route,step],steps:node.steps+1};
           apply(child.state,i);expanded++;
+          if(C.typing(node.state))step.afterSignature=C.signature(child.state);
           if(settle(child)){child.value=score(child.state,goals);next.push(child);}
         }
       }
@@ -123,7 +124,8 @@ function makePlanner(E) {
       if(C.actionable(s)){
         const step=file.route[cursor++];
         if(!step||(step.signature!==C.signature(s)&&!(file.version===1&&step.signature===C.legacySignature(s))))throw Error('Route does not match its seeded simulation');
-        route.push({signature:C.signature(s),i:step.i});apply(s,step.i);
+        const checked={signature:C.signature(s),i:step.i},typing=C.typing(s);
+        route.push(checked);apply(s,step.i);if(typing)checked.afterSignature=C.signature(s);
       }else advance(s);
     }
     if(cursor!==file.route.length||(file.scope==='life'&&!C.finished(s)))throw Error('Route is incomplete');

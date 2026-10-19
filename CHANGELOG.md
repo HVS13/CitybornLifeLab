@@ -1,5 +1,13 @@
 # Changes
 
+## 2.1.0
+
+- Pause following and native time before all naming and reflection prompts. Never submit them automatically, including through Choose next step.
+- Add Resume after typing: continue the original route when the submitted state matches its prediction; otherwise recalculate the remaining route using the original route's goals and follow it.
+- Persist waiting-for-input state across save, reload, and resume. Keep input pauses paused after resuming a saved life.
+- Update native engine compatibility to game client `index-BXsC1-XS.js`.
+- Test all seven text-entry dialogs, custom names/reflections, waiting across reload, original-goal preservation, and verified full replays with explicit blank submissions.
+
 ## 2.0.2
 
 - Fix a reproduced current-life replay failure after one choice when the page's HTML language differs from the native game language. Use the game's saved language and native browser-language fallback for simulation, validation, and following.

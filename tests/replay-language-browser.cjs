@@ -1,5 +1,5 @@
 const fs=require('node:fs'),assert=require('node:assert/strict');
-const {launch,open,install,native,status,bridgeCode,C}=require('./browser-support.cjs');
+const {launch,open,install,native,status,bridgeCode,completeReplay,C}=require('./browser-support.cjs');
 (async()=>{
   const browser=await launch();
   try{
@@ -22,7 +22,8 @@ const {launch,open,install,native,status,bridgeCode,C}=require('./browser-suppor
     assert.equal(file.startState.age,1,'regression starts at the reported age');
     assert.ok(file.route.length>2,'the test must continue beyond one choice');
     await ui.locator('#follow').click();
-    await ui.locator('#playStatus').filter({hasText:/Life ended|differs|Restore this route/}).waitFor({timeout:240000});
+    const interaction=await completeReplay(page);
+    assert.ok(interaction.entries>0,'full replay covers explicit user submission at typing pauses');
     assert.match(await ui.locator('#playStatus').textContent(),/Full replay matched the predicted ending/);
     const state=await native(page,'return b.runtime.state;');
     assert.equal(C.signature(state),file.terminalSignature);

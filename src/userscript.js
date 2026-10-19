@@ -37,6 +37,7 @@ label{display:block}.row{display:flex;gap:7px;align-items:end;margin:8px 0}.row>
 <div id="playPreview"></div><p id="playStatus" class="notice" role="status">Choose a searched life, import a route, or plan your current life.</p><div id="playNext" class="hint"></div>
 <button id="resume" class="primary" disabled>Resume saved life</button><div class="row"><button id="start" disabled>Start from birth & follow</button><button id="goHome">Save & go home</button></div><p class="hint">Resume keeps your saved progress. Start begins the selected seed again from birth.</p>
 <div class="row"><button id="follow" disabled>Follow route</button><button id="apply" disabled>Choose next step</button></div>
+<p class="hint">Names and reflections are yours to enter. Following pauses before typing prompts. Submit in the game, then Resume after typing. If your entry changes the predicted state, the remaining route is recalculated using this route's targets.</p>
 <div class="row"><label>Following speed<select id="speed"><option value="1">x1</option><option value="4">x4</option><option value="8">x8</option><option value="32" selected>x32</option></select></label><button id="stopAuto" disabled>Pause & stop following</button></div>
 <p class="hint">Following checks the live state before every choice. Manual game interaction stops following. No route edits your game save or grants traits.</p></div>
 <div id="viewSaved" role="tabpanel" hidden><p class="hint">Up to 8 recent saved lives. Selecting one validates it again before play. Export routes you want to keep longer.</p><div id="library"></div></div>
@@ -70,7 +71,7 @@ function savePreferences(){write(prefsKey,{goals:[...chosen],...Object.fromEntri
 function renderDraftHint(){
   $('searchNote').textContent=auto?'Pause following in Play this life before starting a new search.':results.length&&JSON.stringify(draftGoals())!==JSON.stringify(results[0].goals)?'Targets changed. Existing cards still show their original requirements; search again to use the new targets.':'Results are predictions with replayable choices. Nothing starts automatically.';
 }
-function saveLives(){write(libraryKey,{files:library,selected,active:active?{file:active.file,index:active.index}:null});}
+function saveLives(){write(libraryKey,{files:library,selected,active:active?{file:active.file,index:active.index,waitingForTyping:active.waitingForTyping}:null});}
 function bridge(){
   const root=document.getElementById('root'),key=root&&Object.keys(root).find(k=>k.startsWith('__reactContainer$'));
   const internal=key&&root[key],start=internal?.stateNode?.current||internal,stack=start?[start]:[];
@@ -172,7 +173,10 @@ function controls(){
   $('goHome').disabled=busy||auto||(!b.life&&!b.onHome);
   $('goHome').textContent=s&&!C.finished(s)?'Save & go home':'Go to home';
   $('follow').disabled=!ready||busy||auto||!selected||selected.scope!=='life'||!s||C.finished(s)||s.seed!==selected.seed;
+  $('follow').textContent=active?.waitingForTyping?'Resume after typing':'Follow route';
+  if(active?.waitingForTyping&&s&&C.signature(s)===active.waitingForTyping.before)$('follow').disabled=true;
   $('apply').disabled=!ready||busy||auto||!active||!s||!C.actionable(s);
+  $('apply').disabled||=!!active?.waitingForTyping;
   $('stopAuto').disabled=!auto;
   $('search').textContent=$('seed').value.trim()?'Check this seed':'Find matching lives';
   renderDraftHint();
@@ -191,6 +195,12 @@ function stepRoute(){
   if(lang()!==active.file.lang)throw Error('Restore this route’s language, or plan your current life again.');
   const sig=C.signature(s);let step=active.file.route[active.index];
   if(step?.signature!==sig){const index=active.file.route.findIndex(v=>v.signature===sig);if(index<0)throw Error('Your live state differs from this route. Use Plan the rest of this life to make a new plan.');active.index=index;step=active.file.route[index];}
+  if(C.typing(s)){
+    active.waitingForTyping={before:sig,after:step.afterSignature};saveLives();
+    if(b.runtime.auto)b.life.toggleAuto();
+    stopFollowing(true,'Your input is needed: '+(s.prompt.text||s.prompt.question||'name or reflection')+'. Enter it in the game and submit, then click Resume after typing.');
+    return false;
+  }
   const text=C.label(s,step.i);nativeChoose(b,step.i);active.index++;saveLives();$('playStatus').textContent=`${auto?'Following':'Chose'} ${active.index}/${active.file.route.length}: ${text}`;return true;
 }
 function stopFollowing(pause=false,message){
@@ -203,6 +213,12 @@ function follow(){
   if(s.seed!==selected.seed){$('playStatus').textContent='Start the selected seed first, or plan the life you are currently playing.';return;}
   if(lang()!==selected.lang){$('playStatus').textContent='Use the same game language as this route: '+selected.lang;return;}
   active=active?.file===selected?active:{file:selected,index:0};
+  if(active.waitingForTyping){
+    const sig=C.signature(s),waiting=active.waitingForTyping;
+    if(sig===waiting.before){stopFollowing(true,'Your input is needed. Enter and submit your text in the game, then click Resume after typing.');return;}
+    if(sig!==waiting.after){planCurrent({goals:[...active.file.goals],followAfter:true});return;}
+    active.index++;delete active.waitingForTyping;
+  }
   if(b.runtime.auto)b.life.toggleAuto();b.life.setSpeed(Number($('speed').value));if(b.runtime.paused)b.life.togglePause();
   auto=true;saveLives();$('playStatus').textContent='Following this life. Manual game interaction stops following.';controls();
 }
@@ -221,25 +237,29 @@ async function search(){
     say(!goals.length&&results.length?`${results.length} completed outcomes shown. No required conditions were set.`:matches?`${matches} matching outcome${matches===1?'':'s'} shown. Compare the final stats, then choose a life.`:results.length?'No full match in this search. Closest completed lives are shown with missing conditions. Try more seeds, Thorough effort, or fewer conditions.':'No completed life within the route-search limit. Try Quick effort or a different seed.');showResults();
   }catch(e){if(current(task))say('Search failed: '+e.message);}finally{finish(task);}
 }
-async function planCurrent(){
-  if(!validInputs())return;const b=bridge(),s=b.runtime?.state;if(!b.life||!s||C.finished(s))return;
+async function planCurrent({goals=draftGoals(),followAfter=false}={}){
+  if(!followAfter&&!validInputs())return;const b=bridge(),s=b.runtime?.state;if(!b.life||!s||C.finished(s))return;
+  let planned=false;
   const task=begin('plan'),snapshot=JSON.parse(JSON.stringify(s)),signature=C.signature(s),language=lang();
   if(b.runtime.auto)b.life.toggleAuto();if(!b.runtime.paused){b.life.togglePause();task.pause={runtime:b.runtime,state:s};}
-  say('Planning complete outcomes for your current life…');
+  say(followAfter?'Updating the remaining route for your entry…':'Planning complete outcomes for your current life…');
+  if(followAfter)$('playStatus').textContent='Updating the remaining route for your entry…';
   try{
-    const files=await request('plan',{state:snapshot,goals:draftGoals(),effort:$('effort').value},p=>{if(current(task))say(`Planning your life · exploring age ${p.age} · ${p.expanded} branches evaluated.`);});
+    const files=await request('plan',{state:snapshot,goals,effort:$('effort').value},p=>{if(current(task))say(`Planning your life · exploring age ${p.age} · ${p.expanded} branches evaluated.`);});
     if(!current(task))return;if(bridge().runtime?.state!==s||C.signature(s)!==signature||lang()!==language)throw Error('The game changed during planning. Try again.');
     if(!files.length)throw Error('No completed route within this search limit. Try another effort.');
     selected=files[0];active={file:selected,index:0};keep(selected);saveLives();renderPlay();
     task.pause=null; // The explicitly paused review remains paused until Follow.
+    planned=true;
     say('Plan ready. The game is paused for review.');$('playStatus').textContent=`${selected.matched.filter(Boolean).length}/${selected.goals.length} conditions met in the predicted ending. Follow the route or choose one step at a time.`;
-  }catch(e){if(current(task))say('Planning stopped: '+e.message);}finally{finish(task);}
+  }catch(e){if(current(task)){say('Planning stopped: '+e.message);if(followAfter)$('playStatus').textContent='Planning stopped: '+e.message;}}finally{finish(task);}
+  if(planned&&followAfter)follow();
 }
 async function importRoute(file,resume=null,preserveDraft=false){
   if(auto)stopFollowing(false);if(job)cancel();const task=begin('import');say('Validating this route in the game engine…');
   try{
     const result=await request('validate',{file});if(!current(task))return;
-    selected=result;active=resume?{file:result,index:resume.index||0}:null;keep(result);
+    selected=result;active=resume?{file:result,index:resume.index||0,waitingForTyping:resume.waitingForTyping}:null;keep(result);
     if(!preserveDraft){setDraft(result.goals);for(const id of ['name','gender'])$(id).value=result.options[id];}
     savePreferences();saveLives();renderPlay();renderLibrary();
     say('Route validated. Auto-follow is off.');if(!resume)switchView('Play');

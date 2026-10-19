@@ -12,7 +12,8 @@ const replay=E.create(E.data(),opts);let cursor=0,steps=0;
 while(!ctx.C.finished(replay) && steps++<5000){
   if(ctx.C.actionable(replay)){
     const step=result.route[cursor++];assert.equal(P.signature(replay),step.signature,'every replay random state and prompt match');
-    P.apply(replay,step.i);
+    const typing=ctx.C.typing(replay);P.apply(replay,step.i);
+    if(typing)assert.equal(P.signature(replay),step.afterSignature,'typing predictions record the exact state after explicit blank submission');
   }else P.advance(replay);
 }
 assert.equal(JSON.stringify(replay),JSON.stringify(result.state),'full route reproduces complete state');

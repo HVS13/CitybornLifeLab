@@ -8,7 +8,7 @@ Find a life that fits your goals, see its predicted ending, and follow its choic
 
 1. Install [Tampermonkey](https://www.tampermonkey.net/) or a userscript manager supporting page-context scripts and workers.
 2. Open the userscript link above and confirm installation/update. If it opens as text, paste the entire file into a userscript and save. Remove any older separately installed local copy.
-3. Reload the game. The panel should say **Cityborn Life Lab 2.0.1**. The manager's script name remains **Cityborn Life Advisor** so existing installations can update normally.
+3. Reload the game. The panel should say **Cityborn Life Lab 2.0.2**. The manager's script name remains **Cityborn Life Advisor** so existing installations can update normally.
 
 No server, credentials, or npm installation is required to use the script. Calculations and saved routes stay in your browser. Its download/update URLs point to this repository.
 
@@ -54,6 +54,8 @@ Ranking favors the number of fulfilled conditions, progress toward missing numer
 
 Replay fingerprints include stats, flags, quests, history and RNG state; only the minor-choice countdown and saved UI progress are excluded. They detect accidental divergence and are not cryptographic authenticity guarantees. Changing settings, language, or choices can invalidate a route. The native game pauses progress in hidden tabs; the script does not bypass this. Source updates require an updated companion.
 
+The planner reads the game's saved language (or its native browser-language default), rather than the HTML language attribute. Version 2.0.2 fixes a replay failure when those differed: a continuation could match its starting state, then generate subsequent events in the wrong language and stop after one choice. If you have an affected older route, update, reload, and generate a new current-life plan once.
+
 The supported client is `index-DNffUPHt.js`, inspected on 19 October 2026. Routes from a different client are rejected; search again after a client update. Its formatted snapshot and hash are retained in `analysis/`. Bundled game logic/text remain attributable to their original authors. This is an unofficial companion inspired by [DotaCaptainLab](https://github.com/HVS13/DotaCaptainLab).
 
 ## Build and verification
@@ -73,9 +75,10 @@ npm ci
 npx playwright install chromium
 npm run test:filter
 npm run test:player
+npm run test:replay-language
 npm run test:browser
 ```
 
-`test:filter` checks actual rendered filtering. `test:player` exercises the new player workflows against the captured native client without network dependence; set `PLAYER_LIVE=1` to use the live site. `test:browser` checks complete native replays on the live site, including resume and current-life plans with all five stat targets. `FILTER_LIVE=1` runs filter checks live. PowerShell environment syntax is `$env:PLAYER_LIVE = '1'`; use `$env:BROWSER_CHANNEL = 'msedge'` for an installed Edge instead of bundled Chromium.
+`test:filter` checks actual rendered filtering. `test:player` exercises the new player workflows against the captured native client without network dependence; set `PLAYER_LIVE=1` to use the live site. `test:replay-language` checks a complete current-life replay when the page language conflicts with the native language; set `REPLAY_LIVE=1` to run it live. `test:browser` checks complete native replays on the live site, including resume and current-life plans with all five stat targets. `FILTER_LIVE=1` runs filter checks live. PowerShell environment syntax is `$env:PLAYER_LIVE = '1'`; use `$env:BROWSER_CHANNEL = 'msedge'` for an installed Edge instead of bundled Chromium.
 
 Tests cover final-only stat criteria, displayed rounding, alternate paths, unwanted traits, route purity, legal actions, v1/v2 imports, cancellation, draft/route separation, persistence, numeric-shortcut isolation and mobile layout. Full-life browser tests accelerate native rAF timestamps while retaining the native tick cap and transitions. This does not verify userscript-manager installation itself, hidden/frozen tabs, or every rare storyline. GitHub CI rebuilds the script, checks generated files, and runs engine, filter and player-workflow regressions.

@@ -43,7 +43,13 @@ label{display:block}.row{display:flex;gap:7px;align-items:end;margin:8px 0}.row>
 <div class="row libraryTools"><button id="import">Import route</button><button id="export" disabled>Export selected route</button><button id="copy" disabled>Copy selected seed</button></div><input id="file" type="file" accept=".json,application/json">
 </section>`;
 const $=id=>shadow.getElementById(id),say=text=>{$('status').textContent=text;};
-const lang=()=>['en','ja','ko'].includes(document.documentElement.lang)?document.documentElement.lang:'en';
+function lang(){
+  // Match the game's locale selection. The page attribute can be changed
+  // independently of the native engine (for example by page translation).
+  let savedLanguage;try{savedLanguage=localStorage.getItem('cbl.lang');}catch{return 'ko';}
+  if(['en','ja','ko'].includes(savedLanguage))return savedLanguage;
+  const locale=navigator.language||'ko';return /^ja/i.test(locale)?'ja':/^ko/i.test(locale)?'ko':'en';
+}
 const prefsKey='cityborn.lab.preferences.v3',libraryKey='cityborn.lab.lives.v3';
 function read(key){try{return JSON.parse(localStorage.getItem(key)||'null');}catch{return null;}}
 function write(key,value){try{localStorage.setItem(key,JSON.stringify(value));}catch{$('warning').textContent='Local storage is full or unavailable. Export the route you want to keep.';}}
@@ -189,7 +195,7 @@ function stepRoute(){
 }
 function stopFollowing(pause=false,message){
   auto=false;if(pause){const b=bridge();if(b.life&&b.runtime?.state&&!C.finished(b.runtime.state)&&!b.runtime.paused)b.life.togglePause();}
-  if(message)$('playStatus').textContent=message;controls();
+  if(message){$('playStatus').textContent=message;say(message);}controls();
 }
 function follow(){
   const b=bridge(),s=b.runtime?.state;if(!selected||!b.life||!s)return;

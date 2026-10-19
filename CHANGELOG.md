@@ -1,5 +1,11 @@
 # Changes
 
+## 2.0.2
+
+- Fix a reproduced current-life replay failure after one choice when the page's HTML language differs from the native game language. Use the game's saved language and native browser-language fallback for simulation, validation, and following.
+- Show following-stop reasons in the top status as well as below the selected route, replacing stale search messages.
+- Add a full native replay regression from seed `1289324438` at age 1 with an English game and a conflicting Korean page attribute, plus coverage for the browser-language fallback.
+
 ## 2.0.1
 
 - Fix the empty catalogue when the game updates or a simulation worker cannot start. Bundle the inspected catalogue separately so browsing and target selection remain available.

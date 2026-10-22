@@ -1,5 +1,13 @@
 # Changes
 
+## 2.4.0
+
+- Apply the selected preference to intermediate branch scoring, so search pruning reflects the requested stat, lifespan, combat or achievement order. Required goal matches retain priority in completed results.
+- Use native implied achievement milestones and Fixer grade/promotion progress to guide unmet achievement and Color targets. Remove the unrelated flat grade/heir bonuses.
+- Break achievement rarity ties using counts at each native tier, highest first; add a separate achievement-count sort.
+- Add native combat potential for eligible careers, including native age/health adjustments. Keep it separate from the Fixer request rating and label both explicitly. Preserve these differences when deduplicating completed candidates.
+- Naming and crafting remain manual: submit in the game, then explicitly resume.
+
 ## 2.3.0
 
 - Update the inspected native engine to `index-LvXCymKa.js`, including Workshop careers, weapons and new achievements. Browse all 50 displayed traits and 211 achievements.

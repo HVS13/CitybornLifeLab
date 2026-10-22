@@ -2,7 +2,7 @@ const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/st
 const ctx={};vm.createContext(ctx);vm.runInContext(fs.readFileSync('src/common.js','utf8')+'\n'+fs.readFileSync('src/planner.js','utf8')+';globalThis.make=makePlanner;globalThis.C=advisorCommon();',ctx);
 const initial=()=>({v:7,seed:'test',age:0,rngState:1,cursor:0,plan:[],flags:[],log:[],story:[],reflections:[],stats:{health:99,sanity:50,wealth:0,network:0,rep:0},prompt:{kind:'major',choices:Array.from({length:5},(_,i)=>({label:'Path '+i}))}});
 const E={data:()=>({regions:[]}),records:()=>[],catalog:[],flags:{Color:'Color'},
- recordDetails:()=>[],rarityOrder:{},fixerPower:()=>null,promotion:()=>null,
+ recordDetails:()=>[],rarityOrder:{},combatPotential:()=>null,fixerPower:()=>null,promotion:()=>null,
  choose(s,d,i){if(s.stage!==1){s.path=i;s.stage=1;s.stats.wealth=i===4?0:100-i;s.prompt={kind:'major',choices:[{label:'Finish'}]};}else{s.prompt=null;s.stats.health=s.path===4?85:11;if(s.path===4)s.flags.push('Color');}},
  year(s){s.age=20;s.dead={alive:false};},advance(){throw Error('No scheduled events');}};
 const P=ctx.make(E),s=initial(),before=JSON.stringify(s);
@@ -21,4 +21,12 @@ assert.throws(()=>P.checkGoals(['flag:Color','flag:Color']),/duplicate/);
 const reordered=Object.fromEntries(Object.entries(s).reverse());assert.equal(P.signature(reordered),P.signature(s));
 const changed=initial();changed.stats.health--;assert.notEqual(P.signature(changed),P.signature(s));
 assert.equal(ctx.C.finished({...s,dead:{voice:true}}),false);
+const combat=ctx.make({...E,combatPotential:s=>s.path===4?12:1});
+const combatPlan=combat.plan(initial(),['flag:Color'],'quick',()=>{},'potential');
+assert.equal(combatPlan.completed[0].state.path,4,'explicit combat sorting guides pruning before the delayed reward');
+const milestones=ctx.make({...E,catalog:[{key:'entry'},{key:'rank',implies:'entry'},{key:'leader',implies:'rank'}],records:s=>s.milestones||[]});
+const novice={...initial(),milestones:[]},promoted={...initial(),milestones:['entry','rank']};
+assert.ok(milestones.score(promoted,['record:leader'])>milestones.score(novice,['record:leader']),'native implied achievements guide an unmet target');
+assert.ok(P.score({...initial(),job:'해결사',grade:2},['flag:특색'])>P.score({...initial(),job:'해결사',grade:9},['flag:특색']),'Color progress follows Fixer grades');
+assert.equal(P.pack({state:terminal,route:[],options:{}},[],'life','en').summary.comparison.goalProgress,1,'no requirements are fully satisfied for comparison with existing routes');
 console.log('Planner regressions passed: alternative routes, final-only stats, displayed rounding, avoid traits, legal conditions, purity, and state identity.');

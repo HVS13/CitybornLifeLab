@@ -24,6 +24,12 @@ const {launch,open,install,native,status,importFile,bridgeCode,P,C}=require('./b
     await ui.locator('#sort').selectOption('wealth');
     const wealthValues=await cards.evaluateAll(nodes=>nodes.map(n=>Number(n.querySelectorAll('.stats b')[2].textContent)));
     assert.deepEqual(wealthValues,[...wealthValues].sort((a,b)=>b-a),'explicit wealth sorting orders matching results');
+    await ui.locator('#sort').selectOption('achievements');
+    const achievements=await cards.evaluateAll(nodes=>nodes.map(n=>Number(n.textContent.match(/Achievements: (\d+)/)[1])));
+    assert.deepEqual(achievements,[...achievements].sort((a,b)=>b-a),'achievement count orders retained matching outcomes');
+    await ui.locator('#sort').selectOption('potential');
+    const potential=await cards.evaluateAll(nodes=>nodes.map(n=>Number(n.textContent.match(/Native combat potential: ([\d.-]+)/)?.[1]??-1)));
+    assert.deepEqual(potential,[...potential].sort((a,b)=>b-a),'native potential orders eligible careers before unavailable ratings');
     await ui.locator('#sort').selectOption('recommended');
     assert.match(await cards.first().textContent(),/Wealth ≥ 90/);assert.equal(await cards.first().locator('.tag').textContent(),'Match');
     assert.equal(await native(page,'return b.runtime?.state||null;'),null,'search never starts or edits a game life');

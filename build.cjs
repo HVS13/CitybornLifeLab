@@ -6,7 +6,7 @@ const start = source.indexOf('const Gg =');
 const end = source.indexOf('function sd(');
 if (start < 0 || end < start) throw Error('Inspected engine boundaries missing');
 const engine = source.slice(start, end);
-const engineExports = `return {create:(data,options)=>cf(data,{...options,boost:true}),data:Pe,choose:kr,continue:x0,advance:sT,year:ev,records:s=>[...iy(ox(s).map(r=>r.key))],recordDetails:s=>ix(ox(s),Pe().rarity),rarityOrder:ef,fixerPower:s=>s.job==='해결사'&&(!s.dr||s.dr.end==='return')?ti(s):null,promotion:s=>s.dr&&s.dr.end!=='return'?null:s.job==='해결사'&&s.grade>=1&&!s.flags.includes('특색')?{current:s.merit||0,required:ht(s)}:jn(s)?{current:ro(s),required:at(s)}:null,job:be,cause:em,catalog:Nu,flags:gk,lang:Ol};`;
+const engineExports = `return {create:(data,options)=>cf(data,{...options,boost:true}),data:Pe,choose:kr,continue:x0,advance:sT,year:ev,records:s=>[...iy(ox(s).map(r=>r.key))],recordDetails:s=>ix(ox(s),Pe().rarity),rarityOrder:ef,combatPotential:s=>s.dr&&s.dr.end!=='return'?null:uo(s),fixerPower:s=>s.job==='해결사'&&(!s.dr||s.dr.end==='return')?ti(s):null,promotion:s=>s.dr&&s.dr.end!=='return'?null:s.job==='해결사'&&s.grade>=1&&!s.flags.includes('특색')?{current:s.merit||0,required:ht(s)}:jn(s)?{current:ro(s),required:at(s)}:null,job:be,cause:em,catalog:Nu,flags:gk,lang:Ol};`;
 const factory = `function nativeEngine(){${engine}\n${engineExports}}`;
 // Browsing must not depend on worker startup or live-client compatibility.
 const inspected = vm.runInNewContext('('+factory+')()');

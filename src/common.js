@@ -25,7 +25,7 @@ function advisorCommon() {
   const label=(s,i)=>i===-2?'Continue the post-death voice':i===-1?'Continue / leave blank / let pass':s.prompt.choices[i].label;
   const statNames={health:'Health',sanity:'Sanity',wealth:'Wealth',network:'Network',rep:'Reputation'};
   const displayStats=s=>Object.fromEntries(Object.keys(statNames).map(k=>[k,Math.round(s.stats[k])]));
-  const sorts={recommended:'Recommended',age:'Lifespan',health:'Health',sanity:'Sanity',wealth:'Wealth',network:'Network',rep:'Reputation',rarity:'Achievement rarity',power:'Fixer combat rating'};
+  const sorts={recommended:'Recommended',age:'Lifespan',health:'Health',sanity:'Sanity',wealth:'Wealth',network:'Network',rep:'Reputation',rarity:'Achievement rarity',power:'Fixer request rating',potential:'Combat potential (native)',achievements:'Achievement count'};
   function compareLives(a,b,sort='recommended'){
     function values(file){
       const s=file.summary,stats=s.stats,goals=file.goals,met=file.matched.filter(Boolean).length,complete=file.complete&&file.scope==='life';
@@ -36,10 +36,12 @@ function advisorCommon() {
         const age=kind==='age'?Number(key):g==='record:age80'?80:g==='record:age100'?100:0;
         return sum+(age?Math.min(1,s.age/age):0);
       },0)/goals.length:1;
-      const base=[Number(complete&&met===goals.length),Number(complete),goals.length?met/goals.length:1,progress];
+      const base=[Number(complete&&met===goals.length),Number(complete),goals.length?met/goals.length:1,s.comparison?.goalProgress??progress];
       if(sort==='age')base.push(s.age);
       else if(Object.hasOwn(statNames,sort))base.push(stats[sort]);
-      else if(sort==='rarity')base.push(s.comparison?.rarityRank??-1);
+      else if(sort==='rarity')base.push(s.comparison?.rarityRank??-1,...(s.comparison?.rarityProfile||Array(7).fill(0)));
+      else if(sort==='achievements')base.push(s.comparison?.achievementCount??s.records?.length??0);
+      else if(sort==='potential')base.push(s.comparison?.combatPotential??-Infinity);
       else if(sort==='power')base.push(s.comparison?.fixerPower??-1);
       return [...base,Number(s.alive),s.age,Math.min(stats.health,stats.sanity),Object.values(stats).reduce((sum,v)=>sum+v,0)];
     }

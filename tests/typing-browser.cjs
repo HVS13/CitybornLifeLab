@@ -3,7 +3,7 @@ const {launch,open,install,native,status,completeReplay,E,C}=require('./browser-
 (async()=>{
   const browser=await launch();
   try{
-    for(const field of ['color','ego','relic','child','partner','star','reflect']){
+    for(const field of ['color','ego','relic','child','partner','star','weapon','reflect']){
       const test=await open(browser,{live:process.env.TYPING_LIVE==='1',fast:true}),{page,ui}=test;
       E.lang('en');
       // Isolated native save fixtures expose each real text-entry dialog.
@@ -12,6 +12,7 @@ const {launch,open,install,native,status,completeReplay,E,C}=require('./browser-
       state.age=95;state.plan=[];state.cursor=0;state.stats={health:90,sanity:80,wealth:80,network:80,rep:80};
       state.prompt={kind:['color','reflect'].includes(field)?field:'name',field,age:95,question:'Your '+field,text:field+' entry',choices:[],t:0};
       if(field==='color'){state.flags.push('특색');state.job='해결사';state.grade=1;state.colorAsked=true;}
+      if(field==='weapon')state.weapon={cls:'상',name:null};
       if(field==='star')state.pinky={star:0,at:0,blade:null};
       await page.evaluate(state=>localStorage.setItem('cbl.save.v1',JSON.stringify(state)),state);
       await install(page);await ui.locator('#tabPlay').click();await ui.locator('#resume').click();
@@ -39,10 +40,10 @@ const {launch,open,install,native,status,completeReplay,E,C}=require('./browser-
       await page.locator('.modal .choices button').first().click();
       const entered=await native(page,'return b.runtime.state;');
       if(field==='reflect')assert.equal(entered.reflections.at(-1).text,text);
-      else assert.equal(field==='star'?entered.pinky.blade:entered[{color:'colorName',ego:'egoName',relic:'relicName',child:'childName',partner:'partnerName'}[field]],text);
+      else assert.equal(field==='weapon'?entered.weapon.name:field==='star'?entered.pinky.blade:entered[{color:'colorName',ego:'egoName',relic:'relicName',child:'childName',partner:'partnerName'}[field]],text);
       assert.equal(await native(page,'return b.runtime.paused;'),true,'submission does not restart following');
       await ui.locator('#badge').click();
-      if(['color','ego','relic','star','reflect','child'].includes(field)){
+      if(['color','ego','relic','star','weapon','reflect','child'].includes(field)){
         // Replanning must retain this route's goals, not a newly edited draft.
         await ui.locator('#tabFind').click();await ui.locator('#min-wealth').fill('100');await ui.locator('#tabPlay').click();
         await ui.locator('#follow').click();await completeReplay(page);
@@ -58,7 +59,7 @@ const {launch,open,install,native,status,completeReplay,E,C}=require('./browser-
         const final=await native(page,'return b.runtime.state;');
         assert.equal(C.signature(final),file.terminalSignature);
         if(field==='reflect')assert.ok(final.reflections.some(r=>r.text===text));
-        else assert.equal(field==='star'?final.pinky.blade:final[{color:'colorName',ego:'egoName',relic:'relicName',child:'childName'}[field]],text);
+        else assert.equal(field==='weapon'?final.weapon.name:field==='star'?final.pinky.blade:final[{color:'colorName',ego:'egoName',relic:'relicName',child:'childName'}[field]],text);
       }
       assert.deepEqual(test.errors,[]);console.log('Manual typing passed:',field);await test.ctx.close();
     }

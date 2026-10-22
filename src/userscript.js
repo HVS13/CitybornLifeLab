@@ -38,7 +38,7 @@ label{display:block}.row{display:flex;gap:7px;align-items:end;margin:8px 0}.row>
 <div id="playPreview"></div><p id="playStatus" class="notice" role="status">Choose a searched life, import a route, or plan your current life.</p><div id="playNext" class="hint"></div>
 <button id="resume" class="primary" disabled>Resume saved life</button><div class="row"><button id="start" disabled>Start from birth & follow</button><button id="goHome">Save & go home</button></div><p class="hint">Resume keeps your saved progress. Start begins the selected seed again from birth.</p>
 <div class="row"><button id="follow" disabled>Follow route</button><button id="apply" disabled>Choose next step</button></div>
-<p class="hint">Names and reflections are yours to enter. Submit in the game, then Resume after typing. Cosmetic entries keep the same choices when a native replay verifies the same gameplay outcome. Changes to randomness, such as custom child/partner names, require a new search using the original targets.</p>
+<p class="hint">Names, reflections and Workshop crafting are yours to complete. Submit in the game, then Resume after typing. Cosmetic entries keep the same choices when a native replay verifies the same gameplay outcome. Changes to randomness, such as custom child/partner names, require a new search using the original targets. Crafting predictions use the native fallback scores; after you craft, the script replans from your actual result.</p>
 <div class="row"><label>Following speed<select id="speed"><option value="1">x1</option><option value="4">x4</option><option value="8">x8</option><option value="32" selected>x32</option></select></label><button id="stopAuto" disabled>Pause & stop following</button></div>
 <p class="hint">Following checks the live state before every choice. Manual game interaction stops following. No route edits your game save or grants traits.</p></div>
 <div id="viewSaved" role="tabpanel" hidden><p class="hint">Up to 8 recent saved lives. Selecting one validates it again before play. Export routes you want to keep longer.</p><div id="library"></div></div>
@@ -182,7 +182,7 @@ function controls(){
   $('goHome').textContent=s&&!C.finished(s)?'Save & go home':'Go to home';
   $('follow').disabled=!ready||busy||auto||!selected||selected.scope!=='life'||!s||C.finished(s)||s.seed!==selected.seed;
   $('follow').textContent=active?.waitingForTyping?'Resume after typing':'Follow route';
-  if(active?.waitingForTyping&&s&&C.signature(s)===active.waitingForTyping.before)$('follow').disabled=true;
+  if(active?.waitingForTyping&&s&&(C.signature(s)===active.waitingForTyping.before||s.prompt?.kind==='craft'))$('follow').disabled=true;
   $('apply').disabled=!ready||busy||auto||!active||!s||!C.actionable(s);
   $('apply').disabled||=!!active?.waitingForTyping;
   $('stopAuto').disabled=!auto;
@@ -206,7 +206,7 @@ function stepRoute(){
   if(C.typing(s)){
     active.waitingForTyping={before:sig,after:step.afterSignature};saveLives();
     if(b.runtime.auto)b.life.toggleAuto();
-    stopFollowing(true,'Your input is needed: '+(s.prompt.text||s.prompt.question||'name or reflection')+'. Enter it in the game and submit, then click Resume after typing.');
+    stopFollowing(true,'Your input is needed: '+(s.prompt.kind==='craft'?'Workshop crafting':s.prompt.text||s.prompt.question||'name or reflection')+'. Complete it in the game and submit, then click Resume after typing.');
     return false;
   }
   const text=C.label(s,step.i);nativeChoose(b,step.i);active.index++;saveLives();$('playStatus').textContent=`${auto?'Following':'Chose'} ${active.index}/${active.file.route.length}: ${text}`;return true;
@@ -223,6 +223,7 @@ function follow(){
   active=active?.file===selected?active:{file:selected,index:0};
   if(active.waitingForTyping){
     const sig=C.signature(s),waiting=active.waitingForTyping;
+    if(s.prompt?.kind==='craft'){stopFollowing(true,'Your input is needed. Finish and submit crafting in the game, then resume to plan from your actual result.');return;}
     if(sig===waiting.before){stopFollowing(true,'Your input is needed. Enter and submit your text in the game, then click Resume after typing.');return;}
     if(sig!==waiting.after){planCurrent({goals:[...active.file.goals],sort:active.file.sort||'recommended',followAfter:true});return;}
     active.index++;delete active.waitingForTyping;
@@ -331,7 +332,7 @@ document.addEventListener('pointerdown',e=>{if(!e.composedPath().includes(host))
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(job)cancel();if(auto)stopFollowing(false,'Following stopped.');}else if(!e.composedPath().includes(host)&&auto)stopFollowing(false,'Stopped by manual keyboard input.');},true);
 function renderCatalogue(){
     const data=ADVISOR_CATALOG;
-    catalog=[...data.flags[lang()].map(([key,name])=>({key:'flag:'+key,name,hint:'Trait · Required at the ending.',trait:key})),...data.records.map(r=>({key:'record:'+r.key,name:r.label[lang()]||r.label.en,hint:r.hint[lang()]||r.hint.en}))];
+    catalog=[...data.flags[lang()].map(([key,name])=>({key:'flag:'+key,name,hint:'Trait · Required at the ending.',trait:key})),...data.records.map(r=>({key:'record:'+r.key,name:r.label[lang()]||r.label.en,hint:r.hint?.[lang()]||r.hint?.en||'No unlock hint is provided by the game.'}))];
     $('catalogSize').textContent=`${data.flags[lang()].length} traits and ${data.records.length} achievements from the inspected game. The number selected is your targets, not the available total.`;
     const valid=new Set(catalog.flatMap(c=>[c.key,...(c.trait?['avoid:'+c.trait]:[])]));chosen=new Set([...chosen].filter(g=>valid.has(g)));
     for(const c of catalog){

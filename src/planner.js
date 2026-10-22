@@ -17,7 +17,7 @@ function makePlanner(E) {
   function choices(s){
     if(s.dead?.voice)return [-2];
     if(!s.prompt)return [];
-    if(['reflect','name','color'].includes(s.prompt.kind))return [-1];
+    if(['reflect','name','color','craft'].includes(s.prompt.kind))return [-1];
     return s.prompt.choices.flatMap((c,i)=>c.locked?[]:[i]).concat(s.prompt.kind==='minor'?[-1]:[]);
   }
   function apply(s,i){
@@ -142,6 +142,7 @@ function makePlanner(E) {
     const s=copy(state);delete s.log;
     for(const key of ['colorName','egoName','relicName','childName','partnerName'])delete s[key];
     if(s.pinky)delete s.pinky.blade;
+    if(s.weapon)delete s.weapon.name;
     s.reflections=(s.reflections||[]).map(({text,...entry})=>entry);
     if(s.dead)delete s.dead.text;
     return C.signature(s);
@@ -155,9 +156,9 @@ function makePlanner(E) {
     for(let n=0;n<index;n++){settle(expected);apply(expected,checked.route[n].i);}
     settle(expected);if(!C.typing(expected))return null;
     const prompt=expected.prompt,field=prompt.kind==='color'?'color':prompt.field;
-    if(prompt.kind!=='reflect'&&!['color','ego','relic','star'].includes(field))return null;
+    if(prompt.kind!=='reflect'&&!['color','ego','relic','star','weapon'].includes(field))return null;
     const text=prompt.kind==='reflect'?state.reflections?.at(-1)?.text:
-      field==='star'?state.pinky?.blade:state[{color:'colorName',ego:'egoName',relic:'relicName'}[field]];
+      field==='weapon'?state.weapon?.name:field==='star'?state.pinky?.blade:state[{color:'colorName',ego:'egoName',relic:'relicName'}[field]];
     if(typeof text!=='string')return null;
     const entered=copy(expected);E.choose(entered,E.data(),-1,{text});
     if(C.signature(entered)!==C.signature(state))return null; // Exactly this entry, no other game changes.

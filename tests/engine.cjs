@@ -5,6 +5,11 @@ const ctx={console};vm.createContext(ctx);vm.runInContext(core+';globalThis.E=na
 const {E,P}=ctx;
 const opts={seed:'123456',name:'',gender:'m'};
 const initial=E.create(E.data(),opts), original=JSON.stringify(initial);
+const fixer=P.copy(initial);fixer.job='해결사';fixer.grade=1;fixer.merit=5;
+assert.ok(E.promotion(fixer).required>0,'Grade 1 has native Color promotion progress');
+const barePower=E.fixerPower(fixer);fixer.weapon={cls:'하'};
+assert.ok(E.fixerPower(fixer)<barePower,'combat comparisons account for native equipment penalties');
+fixer.flags.push('특색');assert.equal(E.promotion(fixer),null,'Color has no further Fixer promotion');
 const result=P.simulate(opts,['stat:wealth:90']);
 assert.ok(result.complete,'bounded full life completes');
 assert.equal(JSON.stringify(initial),original,'simulation does not mutate unrelated state');

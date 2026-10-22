@@ -1,5 +1,13 @@
 # Changes
 
+## 2.3.0
+
+- Update the inspected native engine to `index-LvXCymKa.js`, including Workshop careers, weapons and new achievements. Browse all 50 displayed traits and 211 achievements.
+- Fix panel startup when a native achievement has no unlock hint. Show that the game provides no hint instead of inventing one.
+- Handle crafting prompts in simulation instead of crashing on their missing choice list. Pause for manual naming/crafting, keep Resume disabled during unfinished crafting, and replan from the submitted result using the original targets. Craft predictions use native fallback scores, not a guaranteed minigame score.
+- Preserve verified remaining routes after cosmetic weapon naming; extend paired naming tests to eight prompts and 48 complete native lives.
+- Use the current native birth options, combat rating (including equipment), and promotion thresholds, including Grade 1-to-Color progress. Older-client routes must be regenerated.
+
 ## 2.2.0
 
 - Add paired naming tests: 42 complete native simulations across three seeds and seven controlled typing prompts. Cosmetic titles/reflections preserve paths and outcomes; custom child/partner names change RNG and can change endings.

@@ -1,6 +1,6 @@
 {
   "name": "cityborn-life-lab",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "private": true,
   "description": "Native-engine userscript advisor and goal-filtered seed finder for Cityborn Life",
   "scripts": {
@@ -11,7 +11,7 @@
     "test:filter": "node tests/filter-browser.cjs",
     "test:player": "node tests/player-browser.cjs",
     "test:replay-language": "node tests/replay-language-browser.cjs",
-    "test:typing": "node tests/typing-browser.cjs"
+    "test:typing": "node tests/typing-browser.cjs && node tests/crafting-browser.cjs"
   },
   "engines": { "node": ">=22" },
   "devDependencies": { "playwright": "1.62.1" }

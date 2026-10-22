@@ -1,5 +1,12 @@
 # Changes
 
+## 2.5.0
+
+- Add Birthplace to starting settings using the native region list and localized names. Prefix random/specific seeds with the engine’s birthplace encoding; preserve explicit prefixes and reject conflicting selections.
+- Save the preference, include it in route exports, restore it on import, and show birthplace explicitly on result cards. Same-client route files without this optional setting remain supported.
+- Update compatibility to the newly released client `index-BgAeWoVn.js` and its 225 achievements. Routes from the previous game client require regeneration because its simulation changed.
+- Test every native region, prefix handling, conflicting imports, preferences, random-region searching, and a full birthplace-selected replay. Add the browser flow to CI.
+
 ## 2.4.0
 
 - Apply the selected preference to intermediate branch scoring, so search pruning reflects the requested stat, lifespan, combat or achievement order. Required goal matches retain priority in completed results.

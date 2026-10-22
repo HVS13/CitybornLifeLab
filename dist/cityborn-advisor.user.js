@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Cityborn Life Advisor
 // @namespace    https://github.com/HVS13/CitybornLifeLab
-// @version      2.4.0
+// @version      2.5.0
 // @description  Find and replay lives by final stats, traits and achievements, or plan the rest of your current life.
 // @homepageURL  https://github.com/HVS13/CitybornLifeLab
 // @supportURL   https://github.com/HVS13/CitybornLifeLab/issues
@@ -15,66 +15,66 @@
 
 (() => {
 "use strict";
-function nativeEngine(){const Gg = "cbl.lang",
-  Kg = ["ko", "en", "ja"];
-let bo = "ko";
+function nativeEngine(){const Am = "cbl.lang",
+  jm = ["ko", "en", "ja"];
+let Oo = "ko";
 if (typeof window < "u")
   try {
-    const e = window.localStorage.getItem(Gg),
+    const e = window.localStorage.getItem(Am),
       t = (window.navigator && window.navigator.language) || "ko";
-    Kg.includes(e)
-      ? (bo = e)
+    jm.includes(e)
+      ? (Oo = e)
       : /^ja/i.test(t)
-        ? (bo = "ja")
-        : /^ko/i.test(t) || (bo = "en");
+        ? (Oo = "ja")
+        : /^ko/i.test(t) || (Oo = "en");
   } catch {}
-const Dh = new Set(),
-  Ce = () => bo;
-function Ol(e) {
-  if (Kg.includes(e)) {
-    bo = e;
+const gd = new Set(),
+  Se = () => Oo;
+function nh(e) {
+  if (jm.includes(e)) {
+    Oo = e;
     try {
-      window.localStorage.setItem(Gg, e);
+      window.localStorage.setItem(Am, e);
     } catch {}
     typeof document < "u" && (document.documentElement.lang = e);
-    for (const t of Dh) t(e);
+    for (const t of gd) t(e);
   }
 }
-function uk(e) {
-  return (Dh.add(e), () => Dh.delete(e));
+function Uk(e) {
+  return (gd.add(e), () => gd.delete(e));
 }
-const h = (e, t, o) => (bo === "en" ? t : bo === "ja" ? (o ?? t) : e),
-  ki = (e) => e[bo] || e.ko;
-function Gt(e) {
+const d = (e, t, o) => (Oo === "en" ? t : Oo === "ja" ? (o ?? t) : e),
+  Hi = (e) => e[Oo] || e.ko;
+function Qt(e) {
   return new Proxy(
     {},
     {
-      get: (t, o) => ki(e)[o] ?? e.ko[o],
-      has: (t, o) => o in ki(e) || o in e.ko,
-      ownKeys: () => Reflect.ownKeys(ki(e)),
+      get: (t, o) => Hi(e)[o] ?? e.ko[o],
+      has: (t, o) => o in Hi(e) || o in e.ko,
+      ownKeys: () => Reflect.ownKeys(Hi(e)),
       getOwnPropertyDescriptor: (t, o) => ({
         enumerable: !0,
         configurable: !0,
-        value: ki(e)[o] ?? e.ko[o],
+        value: Hi(e)[o] ?? e.ko[o],
       }),
     },
   );
 }
-function jt(e) {
+function Nt(e) {
   return new Proxy([], {
     get: (t, o) => {
-      const a = e[bo] || e.ko,
+      const a = e[Oo] || e.ko,
         n = a[o];
       return typeof n == "function" ? n.bind(a) : n;
     },
   });
 }
-const ck = 6e4,
-  er = [1, 2, 4, 8, 16, 32],
-  zg = 1e4,
-  qh = 110,
-  Ao = ["health", "sanity", "wealth", "network", "rep"],
-  Xe = Gt({
+const Jk = 6e4,
+  yr = [1, 2, 4, 8, 16, 32],
+  Sm = 1e4,
+  md = 110,
+  Jn = ["health", "sanity", "wealth", "network", "rep"],
+  ce = Qt({
     ko: {
       health: "건강",
       sanity: "정신력",
@@ -88,6 +88,11 @@ const ck = 6e4,
       heir_ji: "지",
       heir_yong: "용",
       heir_in: "인",
+      lmF: "우호도",
+      lmS: "강함",
+      lmL: "충성도",
+      lmSe: "장로",
+      lmSk: "권속",
     },
     en: {
       health: "Health",
@@ -102,6 +107,11 @@ const ck = 6e4,
       heir_ji: "Wisdom",
       heir_yong: "Courage",
       heir_in: "Benevolence",
+      lmF: "Favor",
+      lmS: "Strength",
+      lmL: "Loyalty",
+      lmSe: "Elder",
+      lmSk: "Kindred",
     },
     ja: {
       health: "健康",
@@ -116,15 +126,20 @@ const ck = 6e4,
       heir_ji: "智",
       heir_yong: "勇",
       heir_in: "仁",
+      lmF: "友好度",
+      lmS: "強さ",
+      lmL: "忠誠度",
+      lmSe: "長老",
+      lmSk: "眷属",
     },
   }),
-  Ug = jt({
+  Ym = Nt({
     ko: ["봄", "여름", "가을", "겨울"],
     en: ["Spring", "Summer", "Autumn", "Winter"],
     ja: ["春", "夏", "秋", "冬"],
   }),
-  Fl = {},
-  fk = {
+  rh = {},
+  Vk = {
     none: 2.4,
     "날개 직원": 5,
     손가락: 6.5,
@@ -149,7 +164,7 @@ const ck = 6e4,
     가주: 9,
     군주: 9,
   },
-  iu = [
+  Ou = [
     "손가락",
     "협회 직원",
     "흑수",
@@ -161,9 +176,10 @@ const ck = 6e4,
     "권속",
     "검계",
     "흑운회",
+    "장로",
   ],
-  wk = ["E.G.O개화", "특색", "유물", "혈귀"],
-  gk = Gt({
+  Xk = ["E.G.O개화", "특색", "유물", "혈귀"],
+  Qk = Qt({
     ko: {
       고아: "고아",
       부유한집: "부유한 집에서 태어남",
@@ -321,8 +337,8 @@ const ck = 6e4,
       잘린손: "手を一つ失った",
     },
   });
-function su(e, t = {}) {
-  const o = gk[e];
+function Fu(e, t = {}) {
+  const o = Qk[e];
   return (
     o &&
     (e === "E.G.O개화" && t.egoName
@@ -332,7 +348,7 @@ function su(e, t = {}) {
         : o)
   );
 }
-const bs = Gt({
+const Ln = Qt({
     ko: {
       m: [
         "도윤",
@@ -436,24 +452,24 @@ const bs = Gt({
       ],
     },
   }),
-  mk = Gt({
+  Zk = Qt({
     ko: { m: "남성", f: "여성" },
     en: { m: "Male", f: "Female" },
     ja: { m: "男性", f: "女性" },
   }),
-  xi = (e, t, o) => ({
+  Di = (e, t, o) => ({
     ...e,
     get label() {
-      const a = Ce();
+      const a = Se();
       return a === "en" ? t.label : a === "ja" ? o.label : e.labelKo;
     },
     get birth() {
-      const a = Ce();
+      const a = Se();
       return a === "en" ? t.birth : a === "ja" ? o.birth : e.birthKo;
     },
   }),
-  tt = {
-    rich: xi(
+  lt = {
+    rich: Di(
       {
         labelKo: "부유한 집",
         flag: "부유한집",
@@ -465,7 +481,7 @@ const bs = Gt({
       { label: "Wealthy family", birth: "Their parents were comfortably off." },
       { label: "裕福な家", birth: "両親の暮らし向きは豊かな方だった。" },
     ),
-    normal: xi(
+    normal: Di(
       {
         labelKo: "평범한 집",
         flag: "평범한집",
@@ -483,7 +499,7 @@ const bs = Gt({
         birth: "両親はどうにか食べていける程度の暮らしだった。",
       },
     ),
-    poor: xi(
+    poor: Di(
       {
         labelKo: "가난한 집",
         flag: "가난한집",
@@ -495,7 +511,7 @@ const bs = Gt({
       { label: "Poor family", birth: "Their parents lived hand to mouth." },
       { label: "貧しい家", birth: "両親はその日暮らしだった。" },
     ),
-    none: xi(
+    none: Di(
       {
         labelKo: "부모 없음",
         flag: null,
@@ -508,27 +524,27 @@ const bs = Gt({
       { label: "両親なし", birth: "" },
     ),
   };
-function ks(e, t, o) {
+function $n(e, t, o) {
   const a = (e || "").charCodeAt((e || "").length - 1);
   return a >= 44032 && a <= 55203 ? ((a - 44032) % 28 ? t : o) : t;
 }
-function wn(e) {
+function Yn(e) {
   const t = (e || "").charCodeAt((e || "").length - 1);
   return t >= 44032 && t <= 55203 ? ((t - 44032) % 28 ? "이라" : "라") : "이라";
 }
-const ot = Gt({
+const ht = Qt({
   ko: { 엄지: "엄지", 검지: "검지", 중지: "중지", 약지: "약지" },
   en: { 엄지: "Thumb", 검지: "Index", 중지: "Middle", 약지: "Ring" },
   ja: { 엄지: "親指", 검지: "人差し指", 중지: "中指", 약지: "薬指" },
 });
-function In(e) {
+function Vn(e) {
   let t = 2166136261;
   const o = String(e);
   for (let a = 0; a < o.length; a++)
     ((t ^= o.charCodeAt(a)), (t = Math.imul(t, 16777619)));
   return t >>> 0;
 }
-function lu() {
+function Bu() {
   return String(Math.floor(Math.random() * 4294967296));
 }
 function ae(e) {
@@ -554,13 +570,13 @@ function ae(e) {
     },
     weighted(o, a) {
       let n = 0;
-      const r = o.map((l) => {
-        const s = Math.max(0, a(l));
-        return ((n += s), s);
+      const r = o.map((s) => {
+        const l = Math.max(0, a(s));
+        return ((n += l), l);
       });
       if (n <= 0 || o.length === 0) return null;
       let i = t.next() * n;
-      for (let l = 0; l < o.length; l++) if (((i -= r[l]), i <= 0)) return o[l];
+      for (let s = 0; s < o.length; s++) if (((i -= r[s]), i <= 0)) return o[s];
       return o[o.length - 1];
     },
     shuffle(o) {
@@ -574,7 +590,7 @@ function ae(e) {
   };
   return t;
 }
-function yk(e) {
+function e0(e) {
   const t = [];
   for (const o of e || [])
     if (o.kind === "birth")
@@ -596,7 +612,7 @@ function yk(e) {
     }
   return t;
 }
-function Jg(e) {
+function Rm(e) {
   const t = [];
   for (const o of e || []) {
     const a = t[t.length - 1];
@@ -604,29 +620,29 @@ function Jg(e) {
   }
   return t;
 }
-const Vg = (e) => h(`${e}세`, `Age ${e}`, `${e}歳`),
-  Xg = () => h("흘려보냈다", "Let it pass", "やり過ごした");
-function Qg(e, t) {
+const Cm = (e) => d(`${e}세`, `Age ${e}`, `${e}歳`),
+  Nm = () => d("흘려보냈다", "Let it pass", "やり過ごした");
+function Im(e, t) {
   const o = [];
   o.push(
-    h(
+    d(
       "도시의 한 사람으로 태어나 — 삶의 기록",
       "Born as an Individual in the City — Life Record",
       "「都市の一人として生まれ、」人生の記録",
     ),
   );
   const a =
-    [e.name, e.region, h(`${e.age}세`, `died at ${e.age}`, `${e.age}歳`)]
+    [e.name, e.region, d(`${e.age}세`, `died at ${e.age}`, `${e.age}歳`)]
       .filter(Boolean)
       .join(" · ") + (e.cause ? ` (${e.cause})` : "");
   (o.push(a),
-    e.job && o.push(`${h("직업", "Occupation", "職業")}: ${e.job}`),
-    e.seed && o.push(`${h("시드", "Seed", "シード")}: ${e.seed}`));
-  for (const n of Jg(t)) {
-    o.push("", `── ${Vg(n.age)} ──`);
+    e.job && o.push(`${d("직업", "Occupation", "職業")}: ${e.job}`),
+    e.seed && o.push(`${d("시드", "Seed", "シード")}: ${e.seed}`));
+  for (const n of Rm(t)) {
+    o.push("", `── ${Cm(n.age)} ──`);
     for (const r of n.items)
       r.k === "r"
-        ? (o.push(`  ▸ ${r.x ? Xg() : r.c || ""}`.replace(/▸ $/, "▸")),
+        ? (o.push(`  ▸ ${r.x ? Nm() : r.c || ""}`.replace(/▸ $/, "▸")),
           o.push(`    ${r.t}`),
           r.j && o.push(`    (${r.j})`))
         : o.push(`${r.s ? `[${r.s}] ` : ""}${r.t}`);
@@ -634,28 +650,28 @@ function Qg(e, t) {
   return o.join(`
 `);
 }
-function pk(e) {
+function t0(e) {
   const t = String(e.seed || "")
     .replace(/[^0-9A-Za-z_-]+/g, "")
     .slice(0, 16);
   return `city-born-${e.age}${t ? `-${t}` : ""}.txt`;
 }
-function bk(e, t) {
-  const o = new Blob(["\uFEFF" + Qg(e, t)], {
+function o0(e, t) {
+  const o = new Blob(["\uFEFF" + Im(e, t)], {
       type: "text/plain;charset=utf-8",
     }),
     a = URL.createObjectURL(o),
     n = document.createElement("a");
   ((n.href = a),
-    (n.download = pk(e)),
+    (n.download = t0(e)),
     document.body.appendChild(n),
     n.click(),
     n.remove(),
     setTimeout(() => URL.revokeObjectURL(a), 2e3));
 }
-const kk = 0.085;
-function Zg(e, t, o) {
-  let a = o * Math.exp(kk * t);
+const a0 = 0.085;
+function Wm(e, t, o) {
+  let a = o * Math.exp(a0 * t);
   return (
     t === 0
       ? (a += e.infantMort)
@@ -665,49 +681,49 @@ function Zg(e, t, o) {
     a
   );
 }
-function Kc(e, t) {
+function Af(e, t) {
   let o = 1,
     a = 0;
-  for (let n = 0; n < qh; n++) {
-    const r = 1 - Math.exp(-Zg(e, n, t)),
+  for (let n = 0; n < md; n++) {
+    const r = 1 - Math.exp(-Wm(e, n, t)),
       i = o * r;
     ((a += i * n), (o -= i));
   }
-  return ((a += o * qh), a);
+  return ((a += o * md), a);
 }
-const El = new Map();
-function xk(e) {
-  if (El.has(e.id)) return El.get(e.id);
+const ih = new Map();
+function n0(e) {
+  if (ih.has(e.id)) return ih.get(e.id);
   const t = e.lifeExp + (e.calib || 0);
   let o = 0,
     a = 0.2,
     n;
-  if (Kc(e, 0) <= t) n = 0;
+  if (Af(e, 0) <= t) n = 0;
   else {
     for (let r = 0; r < 60; r++) {
       const i = (o + a) / 2;
-      Kc(e, i) > t ? (o = i) : (a = i);
+      Af(e, i) > t ? (o = i) : (a = i);
     }
     n = (o + a) / 2;
   }
-  return (El.set(e.id, n), n);
+  return (ih.set(e.id, n), n);
 }
-function Tk(e, t) {
-  return Zg(e, t, xk(e));
+function r0(e, t) {
+  return Wm(e, t, n0(e));
 }
-function vk(e, t, o = 0) {
+function i0(e, t, o = 0) {
   const a = e.age,
     n = e.stats,
     r = 0.5 + t.orgPressure * 0.35 + (10 - t.safety) * 0.35,
     i = 0.2 + t.fantasm * 0.6,
-    l = 0.1 + t.pollution * 0.5,
-    s = (10 - t.wealth) * 0.4 + (n.wealth < 15 ? 2 : 0),
+    s = 0.1 + t.pollution * 0.5,
+    l = (10 - t.wealth) * 0.4 + (n.wealth < 15 ? 2 : 0),
     c = 3 + (10 - t.medical) * 0.3,
     u = {};
   (a <= 4
     ? ((u["영유아 질병"] = 6 + (10 - t.medical) * 0.8),
-      (u["영양 결핍"] = s * 0.8),
-      (u.오염 = l * 0.5),
+      (u["영양 결핍"] = l * 0.8),
+      (u.오염 = s * 0.5),
       (u["환상체 사고"] = i * 0.25),
       (u.사고 = 1.2))
     : a < 20
@@ -715,25 +731,25 @@ function vk(e, t, o = 0) {
         (u.사고 = 3),
         (u["범죄·항쟁"] = r * 0.7),
         (u["환상체 사고"] = i * 0.7),
-        (u.오염 = l * 0.4),
-        (u["영양 결핍"] = s * 0.4),
+        (u.오염 = s * 0.4),
+        (u["영양 결핍"] = l * 0.4),
         (u.약물 = 0.2))
       : a < 60
         ? ((u.질병 = c),
           (u.사고 = 2.5),
           (u["범죄·항쟁"] = r),
           (u["환상체 사고"] = i),
-          (u.오염 = l * 0.6),
+          (u.오염 = s * 0.6),
           (u.약물 = 0.6 + t.orgPressure * 0.1),
           (u.뒤틀림 = 0.3),
-          (u["영양 결핍"] = s * 0.2),
+          (u["영양 결핍"] = l * 0.2),
           a >= 45 && (u.노화 = (a - 44) * 0.25))
         : ((u.노화 = 9 + (a - 60) * 0.7),
           (u.질병 = c),
           (u.사고 = 0.8),
           (u["범죄·항쟁"] = r * 0.15),
           (u["환상체 사고"] = i * 0.15),
-          (u.오염 = l * 0.3),
+          (u.오염 = s * 0.3),
           (u.뒤틀림 = 0.2)),
     (u.뒤틀림 =
       (u.뒤틀림 || 0) +
@@ -769,7 +785,7 @@ function vk(e, t, o = 0) {
     u
   );
 }
-const Co = {
+const ko = {
     노화: [
       "긴 하루가 저물듯, 조용히 눈을 감았다.",
       "마지막까지 창가에 앉아 있었다. 도시의 소음이 멀어졌다.",
@@ -818,7 +834,7 @@ const Co = {
     ],
     약물: ["마지막 한 알이 마지막이 되었다.", "깨어나지 못한 아침이었다."],
   },
-  No = {
+  xo = {
     노화: [
       "Like the end of a long day, they quietly closed their eyes.",
       "They sat by the window to the very end, as the noise of the City faded away.",
@@ -873,7 +889,7 @@ const Co = {
       "It was a morning they never woke from.",
     ],
   },
-  _k = {
+  s0 = {
     사고: [
       "날개 시설의 폭발이 구역 하나를 삼켰다. 그 많은 싸움을 넘긴 사람도 하늘이 무너지는 것은 막지 못했다.",
       "도시가 보낸 것은 적이 아니라 우연이었다. 누구도 그것이 끝이 될 줄 몰랐다.",
@@ -899,7 +915,7 @@ const Co = {
       "무기를 벽에 걸어 둔 채 침대 위에서 눈을 감았다. 이 일을 하는 사람에게는 드문 끝이다.",
     ],
   },
-  jk = {
+  l0 = {
     사고: [
       "의뢰를 마치고 돌아오던 길이었다. 그날따라 운이 없었다.",
       "현장을 정리하다 무너진 잔해 아래 깔렸다.",
@@ -910,7 +926,7 @@ const Co = {
     ],
     부상: ["일에서 얻은 상처가 끝내 아물지 않았다."],
   },
-  Ak = {
+  h0 = {
     사고: [
       "An explosion at a Wing facility swallowed an entire district. Even someone who had survived so many fights could not stop the sky from falling.",
       "What the City sent was not an enemy but chance. No one knew it would be the end.",
@@ -938,7 +954,7 @@ const Co = {
       "They closed their eyes in bed, their weapon hung on the wall. A rare ending for someone in this line of work.",
     ],
   },
-  Yk = {
+  d0 = {
     사고: [
       "They were on their way back from a job. Their luck simply ran out that day.",
       "They were buried under collapsing debris while clearing a site.",
@@ -949,7 +965,7 @@ const Co = {
     ],
     부상: ["A wound from the job never healed."],
   },
-  Sk = {
+  u0 = {
     사고: [
       "翼の施設の爆発が、区ひとつを呑み込んだ。あれほどの戦いをくぐり抜けた者でも、空が落ちてくるのは止められなかった。",
       "都市が寄越したのは敵ではなく、偶然だった。それが最期になるとは、誰も思わなかった。",
@@ -975,7 +991,7 @@ const Co = {
       "武器を壁に掛けたまま、ベッドの上で目を閉じた。この仕事をする者には珍しい最期だ。",
     ],
   },
-  Rk = {
+  c0 = {
     사고: [
       "依頼を終えて帰る途中だった。その日に限って運がなかった。",
       "現場を片付けている最中、崩れた瓦礫の下敷きになった。",
@@ -986,7 +1002,7 @@ const Co = {
     ],
     부상: ["仕事で負った傷が、ついに癒えなかった。"],
   },
-  Ck = {
+  f0 = {
     노화: "Old age",
     질병: "Illness",
     "영유아 질병": "Infant illness",
@@ -1030,8 +1046,14 @@ const Co = {
     조율자: "The Arbiter",
     "기억 소거": "Memory erased",
     "은퇴한 호위무사": "A retired Bodyguard",
+    토벌: "Subjugated",
+    습격: "Ambushed",
+    "특색의 토벌": "Subjugated by Colors",
+    "열쇠가 된 장로": "The Elder who became a key",
+    "사람과 함께": "Together with people",
+    재앙: "Calamity",
   },
-  Wo = {
+  To = {
     노화: [
       "長い一日の終わりのように、静かに目を閉じた。",
       "都市の喧騒が遠ざかっていく窓辺に、最後まで座っていた。",
@@ -1086,7 +1108,7 @@ const Co = {
       "目覚めることのない朝だった。",
     ],
   },
-  Nk = {
+  w0 = {
     노화: "老衰",
     질병: "病死",
     "영유아 질병": "乳幼児の病気",
@@ -1130,8 +1152,14 @@ const Co = {
     조율자: "調律者",
     "기억 소거": "記憶消去",
     "은퇴한 호위무사": "引退した護衛武士",
+    토벌: "討伐",
+    습격: "襲撃",
+    "특색의 토벌": "特色の討伐",
+    "열쇠가 된 장로": "鍵となった長老",
+    "사람과 함께": "人と共に",
+    재앙: "災厄",
   };
-Object.assign(Co, {
+Object.assign(ko, {
   시듦: [
     "마지막 해, 당신은 아주 가벼워졌다.",
     "혈액바 상자는 비어 있었다. 몸도 그랬다.",
@@ -1149,7 +1177,7 @@ Object.assign(Co, {
     "도시는 당신을 기억하지 않는다. 당신도 도시를 다 기억하지는 못했다.",
   ],
 });
-Object.assign(No, {
+Object.assign(xo, {
   시듦: [
     "In your final year, you became very light.",
     "The Hemobar box was empty. So were you.",
@@ -1169,7 +1197,7 @@ Object.assign(No, {
     "The City does not remember you. You could not remember all of the City either.",
   ],
 });
-Object.assign(Wo, {
+Object.assign(To, {
   시듦: [
     "最後の年、あなたはとても軽くなった。",
     "血液バーの箱は空だった。体もそうだった。",
@@ -1187,7 +1215,7 @@ Object.assign(Wo, {
     "都市はあなたを覚えていない。あなたも、都市のすべてを覚えてはいられなかった。",
   ],
 });
-Object.assign(Co, {
+Object.assign(ko, {
   "작전 중 사망": [
     "보고서 한 줄로 남았다.",
     "이름표의 번호가 명부에서 지워졌다.",
@@ -1198,7 +1226,7 @@ Object.assign(Co, {
   ],
   "부화장 경쟁": ["부화장에서 남지 못했다. 같은 얼굴 하나가 대신 남았다."],
 });
-Object.assign(No, {
+Object.assign(xo, {
   "작전 중 사망": [
     "You remained as a single line in a report.",
     "The number on your name tag was struck from the roster.",
@@ -1211,7 +1239,7 @@ Object.assign(No, {
     "You did not remain in the Hatchery. Another of the same face remained instead.",
   ],
 });
-Object.assign(Wo, {
+Object.assign(To, {
   "작전 중 사망": [
     "報告書の一行として残った。",
     "名札の番号が名簿から消された。",
@@ -1222,21 +1250,21 @@ Object.assign(Wo, {
   ],
   "부화장 경쟁": ["孵化場で残れなかった。同じ顔のひとりが代わりに残った。"],
 });
-const em = (e) => {
-  const t = Ce();
-  return t === "en" ? Ck[e] || e : (t === "ja" && Nk[e]) || e;
+const Mm = (e) => {
+  const t = Se();
+  return t === "en" ? f0[e] || e : (t === "ja" && w0[e]) || e;
 };
-function Wk(e, t, o = 0) {
-  const a = Ce(),
-    n = a === "en" ? No : a === "ja" ? Wo : Co,
-    r = a === "en" ? Ak : a === "ja" ? Sk : _k,
-    i = a === "en" ? Yk : a === "ja" ? Rk : jk;
+function g0(e, t, o = 0) {
+  const a = Se(),
+    n = a === "en" ? xo : a === "ja" ? To : ko,
+    r = a === "en" ? h0 : a === "ja" ? u0 : s0,
+    i = a === "en" ? d0 : a === "ja" ? c0 : l0;
   if (o >= 3 && r[e]) return t.pick(r[e]);
   if (o === 2 && i[e]) return t.pick(i[e]);
-  const l = n[e] || n.노화;
-  return t.pick(l);
+  const s = n[e] || n.노화;
+  return t.pick(s);
 }
-Object.assign(Co, {
+Object.assign(ko, {
   "흑운회와의 항쟁": [
     "골목 하나를 지키다 쓰러졌다. 그 골목은 다음 날 흑운회의 것이 되었다.",
     "칼자국이 하나 더 늘었다. 이번 것은 아물지 않았다.",
@@ -1246,7 +1274,7 @@ Object.assign(Co, {
     "마지막으로 본 것은 사람의 것이 아닌 칼끝이었다.",
   ],
 });
-Object.assign(No, {
+Object.assign(xo, {
   "흑운회와의 항쟁": [
     "You fell holding a single alley. The next day, that alley belonged to the Kurokumo Clan.",
     "One more scar. This one did not close.",
@@ -1256,7 +1284,7 @@ Object.assign(No, {
     "The last thing you saw was a blade tip that was no longer a person's.",
   ],
 });
-Object.assign(Wo, {
+Object.assign(To, {
   "흑운회와의 항쟁": [
     "路地ひとつを守って倒れた。その路地は翌日、黒雲会のものになった。",
     "刀傷がひとつ増えた。今度のものは塞がらなかった。",
@@ -1266,7 +1294,7 @@ Object.assign(Wo, {
     "最後に見たのは、もはや人のものではない切っ先だった。",
   ],
 });
-Object.assign(Co, {
+Object.assign(ko, {
   "검계와의 항쟁": [
     "두루마기 하나를 쫓아 골목 끝까지 갔다. 그 끝에서 숨이 긴 칼이 기다리고 있었다.",
     "검은 구름도 막지 못한 칼이었다.",
@@ -1277,7 +1305,7 @@ Object.assign(Co, {
   ],
   "해결사의 토벌": ["의뢰서에는 '처리 완료'라고 적혔다."],
 });
-Object.assign(No, {
+Object.assign(xo, {
   "검계와의 항쟁": [
     "You chased a single overcoat to the end of the alley. A long-breathed blade was waiting there.",
     "It was a blade even the black clouds could not stop.",
@@ -1288,7 +1316,7 @@ Object.assign(No, {
   ],
   "해결사의 토벌": ['The request was marked "Completed."'],
 });
-Object.assign(Wo, {
+Object.assign(To, {
   "검계와의 항쟁": [
     "周衣をひとつ追って路地の奥まで行った。そこには息の長い刀が待っていた。",
     "黒い雲でも防げない刀だった。",
@@ -1299,7 +1327,7 @@ Object.assign(Wo, {
   ],
   "해결사의 토벌": ["依頼書には「処理完了」と書かれた。"],
 });
-Object.assign(Co, {
+Object.assign(ko, {
   발톱: [
     "트레스의 봉투는 세 번째에서 끝났다. 네 번째는 사람이 왔다.",
     "공방 문은 다음 날 아침에도 열려 있었다.",
@@ -1309,7 +1337,7 @@ Object.assign(Co, {
     "선금은 돌려받지 않았다. 다른 것을 받아 갔다.",
   ],
 });
-Object.assign(No, {
+Object.assign(xo, {
   발톱: [
     "Tres's envelopes stopped at the third. For the fourth, a person came.",
     "The Workshop door was still open the next morning.",
@@ -1319,7 +1347,7 @@ Object.assign(No, {
     "They did not take the advance back. They took something else.",
   ],
 });
-Object.assign(Wo, {
+Object.assign(To, {
   발톱: [
     "トレスの封筒は三通目で終わった。四通目の代わりに人が来た。",
     "工房の扉は翌朝も開いていた。",
@@ -1329,21 +1357,21 @@ Object.assign(Wo, {
     "前金は取り返されなかった。別のものが持っていかれた。",
   ],
 });
-Object.assign(Co, {
+Object.assign(ko, {
   "앰플 부패": ["녹색이 탁해졌다. 배합이 조금 어긋나 있었을 뿐이다."],
   메마름: ["그 뒤의 기록은 출동 기록뿐이다."],
 });
-Object.assign(No, {
+Object.assign(xo, {
   "앰플 부패": [
     "The green turned murky. The formula had been off, only slightly.",
   ],
   메마름: ["After that, the only records are dispatch logs."],
 });
-Object.assign(Wo, {
+Object.assign(To, {
   "앰플 부패": ["緑が濁った。配合がほんの少しずれていただけだった。"],
   메마름: ["それからの記録は、出動記録だけだ。"],
 });
-Object.assign(Co, {
+Object.assign(ko, {
   "처형 중 사망": [
     "명령서는 다른 처형자에게 넘어갔다. 번호 하나가 지워졌다.",
     "반납 창구는 건틀릿 한 짝을 받았다. 이름은 받지 않았다.",
@@ -1361,7 +1389,7 @@ Object.assign(Co, {
     "건틀릿을 반납했다. 그 뒤의 삶은 기억나지 않는 무언가를 두고 온 사람의 삶이었다.",
   ],
 });
-Object.assign(No, {
+Object.assign(xo, {
   "처형 중 사망": [
     "The order passed to another Executioner. One number was struck out.",
     "The return counter received one gauntlet. It did not receive a name.",
@@ -1381,7 +1409,7 @@ Object.assign(No, {
     "You returned the gauntlet. The life after was that of someone who had left something behind they could not remember.",
   ],
 });
-Object.assign(Wo, {
+Object.assign(To, {
   "처형 중 사망": [
     "命令書は別の処刑人に回された。番号がひとつ消された。",
     "返納窓口はガントレットを片方受け取った。名前は受け取らなかった。",
@@ -1397,20 +1425,50 @@ Object.assign(Wo, {
     "ガントレットを返納した。その後の人生は、思い出せない何かを置いてきた人の人生だった。",
   ],
 });
-Object.assign(Co, {
+Object.assign(ko, {
   "은퇴한 호위무사": [
     "왼쪽 자리를 넘겨주었다. 그 뒤로는 아침마다 차를 마셨다.",
   ],
 });
-Object.assign(No, {
+Object.assign(xo, {
   "은퇴한 호위무사": [
     "You handed over the left side. After that, you drank tea every morning.",
   ],
 });
-Object.assign(Wo, {
+Object.assign(To, {
   "은퇴한 호위무사": ["左の席を譲った。それからは毎朝、茶を飲んだ。"],
 });
-const Br = [
+Object.assign(ko, {
+  토벌: ["새벽에 문 위의 이름이 내려졌다."],
+  습격: ["랜드에서 열 골목 떨어진 곳이었다."],
+  "특색의 토벌": ["문 위의 이름은 그대로 두었다. 아무도 내리지 않았다."],
+  "열쇠가 된 장로": ["문 위의 이름은 그대로였다. 그것만 당신 것이었다."],
+  "사람과 함께": ["도시에 그런 곳이 하나쯤은 있었다."],
+  재앙: ["그 뒤로 그 문이 닫혔다는 이야기는 없다."],
+});
+Object.assign(xo, {
+  토벌: ["At dawn, the name above the gate was taken down."],
+  습격: ["It was ten alleys away from the Land."],
+  "특색의 토벌": [
+    "The name above the gate was left as it was. No one took it down.",
+  ],
+  "열쇠가 된 장로": [
+    "The name above the gate stayed the same. That alone was yours.",
+  ],
+  "사람과 함께": ["The City had at least one such place."],
+  재앙: ["No one has said that gate was ever closed again."],
+});
+Object.assign(To, {
+  토벌: ["明け方、門の上の名が下ろされた。"],
+  습격: ["ランドから路地十本離れた場所だった。"],
+  "특색의 토벌": ["門の上の名はそのままにされた。誰も下ろさなかった。"],
+  "열쇠가 된 장로": [
+    "門の上の名はそのままだった。それだけがあなたのものだった。",
+  ],
+  "사람과 함께": ["都市にはそんな場所がひとつくらいはあった。"],
+  재앙: ["それ以来、その門が閉じたという話はない。"],
+});
+const oi = [
     ["천괴성", "天魁星", "Tiankui Star", "てんかいせい"],
     ["천강성", "天罡星", "Tiangang Star", "てんこうせい"],
     ["천기성", "天機星", "Tianji Star", "てんきせい"],
@@ -1520,10 +1578,10 @@ const Br = [
     ["지적성", "地賊星", "Dizei Star", "ちぞくせい"],
     ["지구성", "地狗星", "Digou Star", "ちくせい"],
   ],
-  tm = 36;
-function hu(e, t) {
+  Om = 36;
+function Eu(e, t) {
   if (!e.pinky) return null;
-  const o = Br[e.pinky.star];
+  const o = oi[e.pinky.star];
   if (!o) return null;
   const a = e.pinky.blade;
   return t === "en"
@@ -1532,7 +1590,7 @@ function hu(e, t) {
       ? `生まれたとき、${o[1]}（${o[3]}）の名を受けた。剣の名は「${a || `${o[1]}刀`}」。`
       : `태어날 때 ${o[0]}(${o[1]})의 이름을 받았다. 검의 이름은 ${a || `${o[0]}도`}.`;
 }
-const Ik = [
+const m0 = [
     "떠돌이",
     "정체공개",
     "정체들킴",
@@ -1546,18 +1604,18 @@ const Ik = [
     "환상체생존",
     "숭배",
   ],
-  du = (e) => ((e.log || []).find((t) => t.kind === "year") || { age: 0 }).age;
-function Q(e, t) {
+  Lu = (e) => ((e.log || []).find((t) => t.kind === "year") || { age: 0 }).age;
+function Z(e, t) {
   (e.story || (e.story = []), e.story.push({ age: e.age, ...t }));
 }
-function om(e, t) {
+function Fm(e, t) {
   for (const o of t || [])
-    Ik.includes(o) &&
+    m0.includes(o) &&
       ((e.story || []).some((a) => a.k === "flag" && a.flag === o) ||
-        Q(e, { k: "flag", flag: o }));
+        Z(e, { k: "flag", flag: o }));
 }
-const Ok = ["사원", "대리", "과장", "부장", "이사", "대표"],
-  Fk = [
+const y0 = ["사원", "대리", "과장", "부장", "이사", "대표"],
+  p0 = [
     "Staff",
     "Assistant Manager",
     "Manager",
@@ -1565,8 +1623,8 @@ const Ok = ["사원", "대리", "과장", "부장", "이사", "대표"],
     "Director",
     "CEO",
   ],
-  Ek = ["社員", "代理", "課長", "部長", "理事", "代表"];
-function uu(e, t) {
+  b0 = ["社員", "代理", "課長", "部長", "理事", "代表"];
+function $u(e, t) {
   let o = 0;
   for (let a = t + 1; a < e.length; a++) {
     const n = e[a];
@@ -1575,7 +1633,7 @@ function uu(e, t) {
   }
   return o;
 }
-const zc = {
+const jf = {
     "날개 직원": "날개의 사원이 되었다",
     "협회 직원": "사원으로 협회에 들어갔다",
     흑수: "환을 삼키고 흑수가 되었다",
@@ -1586,7 +1644,7 @@ const zc = {
     "4무리": "R사 4무리에 들어갔다",
     권속: "혈귀에게 물려 가문의 권속이 되었다",
   },
-  Uc = {
+  Sf = {
     가정: "가정을 꾸렸다",
     아이: "아이를 얻었다",
     "E.G.O개화": "E.G.O를 개화했다",
@@ -1600,7 +1658,7 @@ const zc = {
     정체공개: "몸담은 곳에 혈귀임을 밝혔다",
     정체들킴: "숨겨 온 정체를 몸담은 곳에 들켰다",
   },
-  Mk = {
+  k0 = {
     노화: "늙어 조용히 눈을 감았다",
     질병: "병으로 세상을 떠났다",
     "영유아 질병": "걸음마도 떼기 전에 병으로 떠났다",
@@ -1632,7 +1690,7 @@ const zc = {
     "은퇴한 호위무사": "왼쪽 자리를 젊은 호위에게 넘겨주고 물러났다",
     "앰플 부패": "어긋난 앰플을 몸이 견디지 못했다",
   },
-  Jc = {
+  Yf = {
     ko: ["뜬소문", "도시 괴담", "도시 전설", "도시 질병", "도시 악몽"],
     en: [
       "Canard",
@@ -1643,10 +1701,10 @@ const zc = {
     ],
     ja: ["あらぬ噂", "都市怪談", "都市伝説", "都市疾病", "都市悪夢"],
   };
-function cu(e, t) {
+function Pu(e, t) {
   const o = e.dr;
   if (!o) return null;
-  const a = Jc[t][o.grade] || Jc[t][0],
+  const a = Yf[t][o.grade] || Yf[t][0],
     n = {
       ko: `${o.since}세에 뒤틀려 ${a} 등급의 뒤틀림이 되었다.`,
       en: `At ${o.since}, you Distorted and were designated a Distortion rated ${a}.`,
@@ -1676,7 +1734,7 @@ function cu(e, t) {
     }[o.end];
   return { line: n, phrase: r ? r[t] : null };
 }
-const Bk = {
+const x0 = {
   ko: {
     marlin: "모든 것을 꿰뚫는 청새치 고래",
     pallid: "모든 것을 집어삼키는 창백한 고래",
@@ -1693,7 +1751,7 @@ const Bk = {
     crimson: "すべてを枯らす真紅の鯨",
   },
 };
-function fu(e, t) {
+function Hu(e, t) {
   const o = e.lakeRec,
     a = [];
   if (
@@ -1715,10 +1773,10 @@ function fu(e, t) {
           )),
     e.lakeWhale)
   ) {
-    const r = Bk[t][e.lakeWhale];
+    const r = x0[t][e.lakeWhale];
     a.push(
       {
-        ko: `대호수에서 ${r}${Hi(r, "이", "가")} 지나가는 것을 보았다.`,
+        ko: `대호수에서 ${r}${ds(r, "이", "가")} 지나가는 것을 보았다.`,
         en: `On the Great Lake, you saw ${r} pass by.`,
         ja: `大湖で、${r}が通り過ぎるのを見た。`,
       }[t],
@@ -1734,17 +1792,17 @@ function fu(e, t) {
       : null;
   return { lines: a, phrase: n };
 }
-function Hi(e, t, o) {
+function ds(e, t, o) {
   const a = e.charCodeAt(e.length - 1);
   return a < 44032 || a > 55203 ? o : (a - 44032) % 28 ? t : o;
 }
-const Lk = {
+const T0 = {
   ko: ["뜬소문", "도시 괴담", "도시 전설", "도시 질병"],
   en: ["Canard", "Urban Myth", "Urban Legend", "Urban Plague"],
   ja: ["あらぬ噂", "都市怪談", "都市伝説", "都市疾病"],
 };
-function wu(e, t) {
-  const o = (i, l, s) => (t === "en" ? l : t === "ja" ? s : i),
+function Du(e, t) {
+  const o = (i, s, l) => (t === "en" ? s : t === "ja" ? l : i),
     a = e.bld,
     n = a.hunterName || o("해결사들", "the Fixers", "フィクサーたち"),
     r = e.flags.includes("칼을내려놓은뒤틀림")
@@ -1772,7 +1830,7 @@ function wu(e, t) {
         `フィクサーたちに倒れた${r}`,
       );
 }
-function gu(e, t) {
+function qu(e, t) {
   const o = e.kx;
   if (!o || !o.hp)
     return o && o.dreamer
@@ -1804,7 +1862,7 @@ function gu(e, t) {
     n
   );
 }
-function mu(e, t) {
+function Gu(e, t) {
   const o = e.nh;
   if (!o) return [];
   const a = [];
@@ -1828,7 +1886,7 @@ function mu(e, t) {
     a
   );
 }
-function $k(e, t, o, a) {
+function v0(e, t, o, a) {
   const n = t[o],
     r = e.kk || {};
   if (n.k === "job" && n.job === "흑운회") {
@@ -1839,25 +1897,25 @@ function $k(e, t, o, a) {
         `${n.age}歳で黒雲会に入った。背に最初の黒い雲が彫られた。`,
       ),
     ];
-    for (let l = o + 1; l < t.length; l++) {
-      const s = t[l];
-      if (s.k === "job" || s.k === "quit" || s.k === "finger") break;
-      (s.k === "kkrank" &&
-        s.rank === 2 &&
+    for (let s = o + 1; s < t.length; s++) {
+      const l = t[s];
+      if (l.k === "job" || l.k === "quit" || l.k === "finger") break;
+      (l.k === "kkrank" &&
+        l.rank === 2 &&
         i.push(
           a(
-            `${s.age}세에 제${s.seat}대 부조장의 칼을 물려받았다.`,
-            `At ${s.age}, you inherited the blade of the ${s.seat}th Captain.`,
-            `${s.age}歳で${s.seat}代副組長の刀を受け継いだ。`,
+            `${l.age}세에 제${l.seat}대 부조장의 칼을 물려받았다.`,
+            `At ${l.age}, you inherited the blade of the ${l.seat}th Captain.`,
+            `${l.age}歳で${l.seat}代副組長の刀を受け継いだ。`,
           ),
         ),
-        s.k === "kkrank" &&
-          s.rank === 3 &&
+        l.k === "kkrank" &&
+          l.rank === 3 &&
           i.push(
             a(
-              `${s.age}세에 흑운회의 조장이 되었다.`,
-              `At ${s.age}, you became the Patriarch of the Kurokumo Clan.`,
-              `${s.age}歳で黒雲会の組長になった。`,
+              `${l.age}세에 흑운회의 조장이 되었다.`,
+              `At ${l.age}, you became the Patriarch of the Kurokumo Clan.`,
+              `${l.age}歳で黒雲会の組長になった。`,
             ),
           ));
     }
@@ -1909,7 +1967,7 @@ function $k(e, t, o, a) {
           : []
       : null;
 }
-const Kn = {
+const dr = {
     구름: ["구름 공방", "Cloud Workshop", "雲工房"],
     묵: ["묵 공방", "Mook Workshop", "ムク工房"],
     랑아: ["랑아 공방", "Ranga Workshop", "ランガ工房"],
@@ -1934,7 +1992,7 @@ const Kn = {
       "シュバルツ・インダストリー",
     ],
   },
-  Pk = {
+  _0 = {
     날붙이: ["날붙이", "blades", "刃物"],
     "둔기·특수": [
       "둔기와 특수 장비",
@@ -1949,13 +2007,13 @@ const Kn = {
     ],
     재단: ["옷", "clothes", "服"],
   },
-  Ml = [
+  sh = [
     ["견습", "apprentice", "見習い"],
     ["기술자", "artisan", "技術者"],
     ["수석", "chief artisan", "首席"],
     ["대표", "head of the Workshop", "代表"],
   ],
-  Hk = [
+  A0 = [
     ["미완", "Unfinished", "未完"],
     ["수작", "Fine Work", "秀作"],
     ["걸작", "Masterwork", "傑作"],
@@ -1963,21 +2021,21 @@ const Kn = {
     ["전설", "Legend", "伝説"],
     ["기적", "Miracle", "奇跡"],
   ],
-  Dk = (e) => {
+  j0 = (e) => {
     const t = e.charCodeAt(e.length - 1) - 44032,
       o = t >= 0 && t <= 11171 ? t % 28 : 0;
     return o === 0 || o === 8 ? "로" : "으로";
   };
-function qk(e, t, o, a, n) {
+function S0(e, t, o, a, n) {
   const r = t[o],
     i = e.ws;
   if (!i) return null;
   if (r.k === "ws") {
-    const l = [];
+    const s = [];
     if (r.shop) {
-      const u = Kn[r.shop][n],
-        f = Pk[r.field][n];
-      l.push(
+      const u = dr[r.shop][n],
+        f = _0[r.field][n];
+      s.push(
         a(
           `${r.age}세에 트레스 자격증을 받고 ${u}에서 ${f}를 만들었다.`,
           `At ${r.age}, you earned a Tres license and made ${f} at ${u}.`,
@@ -1985,24 +2043,24 @@ function qk(e, t, o, a, n) {
         ),
       );
     } else
-      l.push(
+      s.push(
         a(
           `${r.age}세에 트레스 자격증을 받고 이름 없는 재단사로 원단을 만졌다.`,
           `At ${r.age}, you earned a Tres license and worked cloth as a nameless tailor.`,
           `${r.age}歳でトレスの資格を得て、名もなき仕立て屋として布を扱った。`,
         ),
       );
-    let s = 0;
+    let l = 0;
     for (let u = o + 1; u < t.length; u++) {
       const f = t[u];
       if (
-        (f.k === "wsrank" && (s = Math.max(s, f.rank)),
+        (f.k === "wsrank" && (l = Math.max(l, f.rank)),
         f.k === "wsmove" &&
-          l.push(
+          s.push(
             a(
-              `${f.age}세에 ${Kn[f.shop][0]}${Dk(Kn[f.shop][0])} 옮겼다.`,
-              `At ${f.age}, you moved to ${Kn[f.shop][1]}.`,
-              `${f.age}歳で${Kn[f.shop][2]}に移った。`,
+              `${f.age}세에 ${dr[f.shop][0]}${j0(dr[f.shop][0])} 옮겼다.`,
+              `At ${f.age}, you moved to ${dr[f.shop][1]}.`,
+              `${f.age}歳で${dr[f.shop][2]}に移った。`,
             ),
           ),
         f.k === "wsmp")
@@ -2035,28 +2093,28 @@ function qk(e, t, o, a, n) {
                 "工房の壁に掛けていたが、盗まれた。",
               ),
             }[i.mp && i.mp.fate] || "",
-          b = Hk[f.grade][n];
-        l.push(
+          p = A0[f.grade][n];
+        s.push(
           a(
-            `${f.age}세에 「${f.name}」(${b})을 남겼다. ${g}`,
-            `At ${f.age}, you left behind "${f.name}" (${b}). ${g}`,
-            `${f.age}歳で「${f.name}」（${b}）を残した。${g}`,
+            `${f.age}세에 「${f.name}」(${p})을 남겼다. ${g}`,
+            `At ${f.age}, you left behind "${f.name}" (${p}). ${g}`,
+            `${f.age}歳で「${f.name}」（${p}）を残した。${g}`,
           ).trim(),
         );
       }
     }
-    s >= 3 &&
-      l.push(
+    l >= 3 &&
+      s.push(
         a(
-          `이후 ${Ml[s - 1][0]}까지 올랐다.`,
-          `You later rose to ${Ml[s - 1][1]}.`,
-          `のちに${Ml[s - 1][2]}まで上がった。`,
+          `이후 ${sh[l - 1][0]}까지 올랐다.`,
+          `You later rose to ${sh[l - 1][1]}.`,
+          `のちに${sh[l - 1][2]}まで上がった。`,
         ),
       );
     const c = i.bestTier || 1;
     return (
       c >= 2 &&
-        l.push(
+        s.push(
           a(
             [
               "",
@@ -2082,7 +2140,7 @@ function qk(e, t, o, a, n) {
           ),
         ),
       i.patent &&
-        l.push(
+        s.push(
           a(
             "특허 하나를 남겼다.",
             "You left one patent behind.",
@@ -2090,7 +2148,7 @@ function qk(e, t, o, a, n) {
           ),
         ),
       e.flags.includes("내칼의특색") &&
-        l.push(
+        s.push(
           a(
             "후원하던 해결사가 특색이 되었다. 그 사람의 무기를 만든 공방으로 불렸다.",
             "A Fixer you sponsored became a Color. Yours was called the Workshop that made their weapon.",
@@ -2099,7 +2157,7 @@ function qk(e, t, o, a, n) {
         ),
       e.flags.includes("발톱을본") &&
         !(e.dead && e.dead.cause === "발톱") &&
-        l.push(
+        s.push(
           a(
             "발톱이 온 적이 있다. 살아남았다.",
             "The Claw once came. You survived.",
@@ -2107,7 +2165,7 @@ function qk(e, t, o, a, n) {
           ),
         ),
       i.teach &&
-        l.push(
+        s.push(
           a(
             "말년에는 칼을 놓고 견습들을 가르쳤다.",
             "In your later years, you set down the tools and taught apprentices.",
@@ -2115,14 +2173,14 @@ function qk(e, t, o, a, n) {
           ),
         ),
       i.sold &&
-        l.push(
+        s.push(
           a(
             "공방을 날개에 넘겼다.",
             "You sold the Workshop to a Wing.",
             "工房を翼に手放した。",
           ),
         ),
-      l
+      s
     );
   }
   return r.k === "job" && r.job === "공방 직원"
@@ -2144,13 +2202,13 @@ function qk(e, t, o, a, n) {
         ? []
         : null;
 }
-function ko(e, t, o, a) {
+function Fo(e, t, o, a) {
   const n = t[o],
-    r = (s, c, u) => (a === "en" ? c : a === "ja" ? u : s),
-    i = qk(e, t, o, r, a === "en" ? 1 : a === "ja" ? 2 : 0);
+    r = (l, c, u) => (a === "en" ? c : a === "ja" ? u : l),
+    i = S0(e, t, o, r, a === "en" ? 1 : a === "ja" ? 2 : 0);
   if (i) return i;
-  const l = $k(e, t, o, r);
-  if (l) return l;
+  const s = v0(e, t, o, r);
+  if (s) return s;
   if (n.k === "hgd") {
     if (n.ev === "chosen")
       return [
@@ -2185,7 +2243,7 @@ function ko(e, t, o, a) {
         ),
       ];
     if (n.ev === "lord") {
-      const s =
+      const l =
         {
           stay: r(
             " 그 뒤로는 새 가주의 곁에 섰다.",
@@ -2208,7 +2266,7 @@ function ko(e, t, o, a) {
           `${n.age}세에 가주를 먼저 보냈다.`,
           `At ${n.age}, you saw the Hierarch off before you.`,
           `${n.age}歳で家主を先に見送った。`,
-        ) + s,
+        ) + l,
       ];
     }
     return [];
@@ -2224,7 +2282,7 @@ function ko(e, t, o, a) {
       ),
     ];
   if (n.k === "bld" && e.bld) {
-    const s = e.bld,
+    const l = e.bld,
       c = e.flags.includes("아낀제자")
         ? r(
             "스승이라 부르던 제자를",
@@ -2237,9 +2295,9 @@ function ko(e, t, o, a) {
             "最も長くそばにいた古参を",
           ),
       u = e.dead ? e.dead.age : e.age,
-      f = Lk[a][Math.max(0, Math.min(3, s.threat || 0))],
-      g = Math.max(0, u - s.since),
-      b = [
+      f = T0[a][Math.max(0, Math.min(3, l.threat || 0))],
+      g = Math.max(0, u - l.since),
+      p = [
         r(
           `${n.age}세, 마지막 골목에서 뒤틀렸다. 그 밤 ${c} 베었다.`,
           `At ${n.age}, you Distorted in the last alley. That night, you cut down ${c}.`,
@@ -2248,19 +2306,19 @@ function ko(e, t, o, a) {
       ];
     return (
       g > 0 &&
-        b.push(
+        p.push(
           r(
-            `그 뒤 ${g}년 동안 뒷골목에서 ${s.kills || 0}명을 베었다. 의뢰 등급은 ${f}까지 올랐다.`,
-            `For ${g} year${g === 1 ? "" : "s"} after that, you cut down ${s.kills || 0} people in the Backstreets. The request grade rose as high as ${f}.`,
-            `その後${g}年のあいだ、裏路地で${s.kills || 0}人を斬った。依頼等級は${f}まで上がった。`,
+            `그 뒤 ${g}년 동안 뒷골목에서 ${l.kills || 0}명을 베었다. 의뢰 등급은 ${f}까지 올랐다.`,
+            `For ${g} year${g === 1 ? "" : "s"} after that, you cut down ${l.kills || 0} people in the Backstreets. The request grade rose as high as ${f}.`,
+            `その後${g}年のあいだ、裏路地で${l.kills || 0}人を斬った。依頼等級は${f}まで上がった。`,
           ),
         ),
-      b
+      p
     );
   }
   if (n.k !== "job") return null;
   if (n.job === "검계") {
-    const s = [
+    const l = [
       r(
         `${n.age}세에 검계에 들었다.`,
         `At ${n.age}, you joined the Blade Lineage.`,
@@ -2272,7 +2330,7 @@ function ko(e, t, o, a) {
       if (u.k === "job" || u.k === "quit" || u.k === "finger") break;
       (u.k === "blrank" &&
         u.rank === 2 &&
-        s.push(
+        l.push(
           r(
             "이후 살수라 불렸다.",
             "Later, you were called a Salsu.",
@@ -2281,7 +2339,7 @@ function ko(e, t, o, a) {
         ),
         u.k === "blrank" &&
           u.rank === 3 &&
-          s.push(
+          l.push(
             r(
               `${u.age}세에 검계의 우두머리가 되었다.`,
               `At ${u.age}, you became the Mentor of the Blade Lineage.`,
@@ -2289,7 +2347,7 @@ function ko(e, t, o, a) {
             ),
           ));
     }
-    return s;
+    return l;
   }
   return n.job === "떠돌이 검객"
     ? e.flags.includes("마지막항쟁생존")
@@ -2309,10 +2367,10 @@ function ko(e, t, o, a) {
         ]
     : null;
 }
-function Gk(e, t) {
-  const o = Uk(e, t);
+function Y0(e, t) {
+  const o = N0(e, t);
   if (e.hgd && e.hgd.endWay === "before" && e.dead) {
-    const a = (n, r, i) => (Ce() === "en" ? r : Ce() === "ja" ? i : n);
+    const a = (n, r, i) => (Se() === "en" ? r : Se() === "ja" ? i : n);
     o.push(
       a(
         "가주는 그 뒤로 왼쪽을 한 뼘 비워 두고 걸었다.",
@@ -2321,13 +2379,13 @@ function Gk(e, t) {
       ),
     );
   }
-  return zk(e, o);
+  return C0(e, o);
 }
-const Kk = ["가주 심사 낙방", "영생", "군주의 자리"];
-function zk(e, t) {
+const R0 = ["가주 심사 낙방", "영생", "군주의 자리"];
+function C0(e, t) {
   if (!e.heir) return t;
   const o = e.dead,
-    a = (r, i, l) => (Ce() === "en" ? i : Ce() === "ja" ? l : r),
+    a = (r, i, s) => (Se() === "en" ? i : Se() === "ja" ? s : r),
     n = {
       "가주 심사 낙방": a(
         "31세, 가주 심사에서 떨어졌다. 그 뒤로는 부유하게 그냥저냥 잘 살았다.",
@@ -2345,36 +2403,37 @@ function zk(e, t) {
         "31歳、家主審査に出なかった。某種の契約によって黒獣十二獣を率い、鉄檻寺の家主承継の儀式に踏み込んだ。その日から自らを君主と呼ばせ、鴻園は長くその統治の下にあった。",
       ),
     }[o && o.cause];
-  return !n || !o.alive || !Kk.includes(o.cause) ? t : [...t.slice(0, -1), n];
+  return !n || !o.alive || !R0.includes(o.cause) ? t : [...t.slice(0, -1), n];
 }
-function Uk(e, t) {
-  if (e.cl) return tx(e, Ce());
-  if (Ce() === "en") return Xk(e, t);
-  if (Ce() === "ja") return Zk(e, t);
+function N0(e, t) {
+  if (e.cl) return E0(e, Se());
+  if (e.lm) return $0(e, Se());
+  if (Se() === "en") return M0(e, t);
+  if (Se() === "ja") return F0(e, t);
   const o = e.story || [],
     a = [],
     n = `${t.ward ? `${t.ward}구 ` : ""}${t.name}`;
   (e.flags.includes("복제")
-    ? a.push(`${n}의 부화장에서 ${du(e)}세의 몸으로 만들어졌다.`)
+    ? a.push(`${n}의 부화장에서 ${Lu(e)}세의 몸으로 만들어졌다.`)
     : e.family === "none"
       ? a.push(`${n}에서 부모 없이 태어났다.`)
       : t.id === "outskirts"
-        ? a.push(`외곽의 ${(tt[e.family] || tt.normal).label}에서 태어났다.`)
-        : a.push(`${n}의 ${(tt[e.family] || tt.normal).label}에서 태어났다.`),
-    e.pinky && a.push(hu(e, "ko")));
+        ? a.push(`외곽의 ${(lt[e.family] || lt.normal).label}에서 태어났다.`)
+        : a.push(`${n}의 ${(lt[e.family] || lt.normal).label}에서 태어났다.`),
+    e.pinky && a.push(Eu(e, "ko")));
   let r = 0,
     i = -1;
-  const l = new Set(),
-    s = (b) => (b === i ? "" : ((i = b), `${b}세에 `));
+  const s = new Set(),
+    l = (p) => (p === i ? "" : ((i = p), `${p}세에 `));
   for (; r < o.length;) {
-    const b = o[r],
-      k = ko(e, o, r, "ko");
-    if (k) {
-      (a.push(...k), r++);
+    const p = o[r],
+      b = Fo(e, o, r, "ko");
+    if (b) {
+      (a.push(...b), r++);
       continue;
     }
-    if (b.k === "job" && b.job === "해결사") {
-      let T = b.grade || 9;
+    if (p.k === "job" && p.job === "해결사") {
+      let T = p.grade || 9;
       const v = [];
       let w = r + 1;
       for (
@@ -2387,89 +2446,89 @@ function Uk(e, t) {
         (o[w].k === "grade" && (T = Math.min(T, o[w].grade)),
           o[w].k === "org" && !v.includes(o[w].name) && v.push(o[w].name),
           w++);
-      const m = b.grade || 9;
-      let y = "";
-      (v.length === 1 && (y = `${v[0]}에 몸담았다`),
+      const y = p.grade || 9;
+      let m = "";
+      (v.length === 1 && (m = `${v[0]}에 몸담았다`),
         v.length > 1 &&
-          (y = `${v.slice(0, -1).join(", ")}${Hi(v[v.length - 2], "을", "를")} 거쳐 ${v[v.length - 1]}에 몸담았다`),
-        T < m
+          (m = `${v.slice(0, -1).join(", ")}${ds(v[v.length - 2], "을", "를")} 거쳐 ${v[v.length - 1]}에 몸담았다`),
+        T < y
           ? a.push(
-              `${s(b.age)}${m}급 해결사로 일을 시작해 ${T}급까지 올랐${y ? `고, ${y}` : "다"}.`,
+              `${l(p.age)}${y}급 해결사로 일을 시작해 ${T}급까지 올랐${m ? `고, ${m}` : "다"}.`,
             )
           : a.push(
-              `${s(b.age)}${m}급 해결사가 되었지만 끝내 급수를 올리지 못했다.${y ? ` ${y}.` : ""}`,
+              `${l(p.age)}${y}급 해결사가 되었지만 끝내 급수를 올리지 못했다.${m ? ` ${m}.` : ""}`,
             ));
-      for (let j = r + 1; j < w; j++)
-        o[j].k === "hgd" && a.push(...(ko(e, o, j, "ko") || []));
+      for (let A = r + 1; A < w; A++)
+        o[A].k === "hgd" && a.push(...(Fo(e, o, A, "ko") || []));
       r = w;
       continue;
     }
-    if (b.k === "finger") {
-      let T = b.rankName,
+    if (p.k === "finger") {
+      let T = p.rankName,
         v = r + 1;
       for (; v < o.length && o[v].k !== "quit" && o[v].k !== "job";)
         (o[v].k === "frank" && (T = o[v].rankName), v++);
       const w = a.length > 1 ? "그러다 " : "";
       a.push(
-        T && T !== b.rankName
-          ? `${w}${s(b.age)}${b.finger}에 합류해 ${T}까지 올랐다.`
-          : `${w}${s(b.age)}${b.finger}에 합류해 ${b.rankName}${Hi(b.rankName, "으로", "로")} 살았다.`,
+        T && T !== p.rankName
+          ? `${w}${l(p.age)}${p.finger}에 합류해 ${T}까지 올랐다.`
+          : `${w}${l(p.age)}${p.finger}에 합류해 ${p.rankName}${ds(p.rankName, "으로", "로")} 살았다.`,
       );
-      for (let m = r + 1; m < v; m++)
-        o[m].k === "hgd" && a.push(...(ko(e, o, m, "ko") || []));
+      for (let y = r + 1; y < v; y++)
+        o[y].k === "hgd" && a.push(...(Fo(e, o, y, "ko") || []));
       r = v;
       continue;
     }
-    if (b.k === "quit") {
-      (b.finger === "약지"
-        ? a.push(`${s(b.age)}약지를 떠났다.`)
-        : b.finger
-          ? a.push(`${b.finger}를 떠난 뒤로는 손가락들에게 쫓기는 삶을 살았다.`)
-          : b.job === "해결사" && a.push(`${s(b.age)}해결사 일을 그만두었다.`),
+    if (p.k === "quit") {
+      (p.finger === "약지"
+        ? a.push(`${l(p.age)}약지를 떠났다.`)
+        : p.finger
+          ? a.push(`${p.finger}를 떠난 뒤로는 손가락들에게 쫓기는 삶을 살았다.`)
+          : p.job === "해결사" && a.push(`${l(p.age)}해결사 일을 그만두었다.`),
         r++);
       continue;
     }
-    if (b.k === "job" && zc[b.job]) {
+    if (p.k === "job" && jf[p.job]) {
       const T = o
         .slice(r + 1)
         .find((w) => w.k === "job" || w.k === "quit" || w.k === "finger");
       if (
-        (T ? T.age : e.dead ? e.dead.age : e.age) - b.age >= 3 &&
-        !l.has(b.job)
+        (T ? T.age : e.dead ? e.dead.age : e.age) - p.age >= 3 &&
+        !s.has(p.job)
       ) {
-        (l.add(b.job), a.push(`${s(b.age)}${zc[b.job]}.`));
-        const w = b.job === "날개 직원" ? uu(o, r) : 0;
+        (s.add(p.job), a.push(`${l(p.age)}${jf[p.job]}.`));
+        const w = p.job === "날개 직원" ? $u(o, r) : 0;
         w >= 3 &&
           a.push(
             w === 6
               ? "끝내 대표의 자리에 올랐다."
-              : `이후 ${Ok[w - 1]}까지 올랐다.`,
+              : `이후 ${y0[w - 1]}까지 올랐다.`,
           );
       }
       r++;
       continue;
     }
-    if (b.k === "flag") {
+    if (p.k === "flag") {
       if (
-        b.flag === "가정" &&
+        p.flag === "가정" &&
         o[r + 1] &&
         o[r + 1].k === "flag" &&
         o[r + 1].flag === "아이"
       ) {
-        (a.push(`${s(b.age)}가정을 꾸리고 아이를 얻었다.`), (r += 2));
+        (a.push(`${l(p.age)}가정을 꾸리고 아이를 얻었다.`), (r += 2));
         continue;
       }
-      (b.flag === "특색" && e.colorName
+      (p.flag === "특색" && e.colorName
         ? a.push(
-            `${s(b.age)}'${e.colorName}'${wn(e.colorName)}는 특색의 이름을 얻었다.`,
+            `${l(p.age)}'${e.colorName}'${Yn(e.colorName)}는 특색의 이름을 얻었다.`,
           )
-        : b.flag === "E.G.O개화" && e.egoName
-          ? a.push(`${s(b.age)}E.G.O를 개화했다. 이름은 '${e.egoName}'.`)
-          : b.flag === "유물" && e.relicName
+        : p.flag === "E.G.O개화" && e.egoName
+          ? a.push(`${l(p.age)}E.G.O를 개화했다. 이름은 '${e.egoName}'.`)
+          : p.flag === "유물" && e.relicName
             ? a.push(
-                `${s(b.age)}외곽의 폐허에서 유물을 얻었다. 이름은 '${e.relicName}'.`,
+                `${l(p.age)}외곽의 폐허에서 유물을 얻었다. 이름은 '${e.relicName}'.`,
               )
-            : Uc[b.flag] && a.push(`${s(b.age)}${Uc[b.flag]}.`),
+            : Sf[p.flag] && a.push(`${l(p.age)}${Sf[p.flag]}.`),
         r++);
       continue;
     }
@@ -2484,42 +2543,42 @@ function Uk(e, t) {
           ? `${c.age}세, 워프 열차에 올라 ${c.cars}칸을 돌파했다.`
           : `${c.age}세, 워프 열차에 올랐지만 첫 칸을 넘지 못했다.`,
     ),
-    a.push(...gu(e, "ko")),
-    a.push(...mu(e, "ko")));
-  const u = fu(e, "ko");
+    a.push(...qu(e, "ko")),
+    a.push(...Gu(e, "ko")));
+  const u = Hu(e, "ko");
   a.push(...u.lines);
   const f = e.dead,
-    g = cu(e, "ko");
+    g = Pu(e, "ko");
   if ((g && a.push(g.line), f)) {
-    const b = e.deathContext ? `${e.deathContext} ` : "";
-    let k = f.phrase || Mk[f.cause] || "생을 마쳤다";
+    const p = e.deathContext ? `${e.deathContext} ` : "";
+    let b = f.phrase || k0[f.cause] || "생을 마쳤다";
     if (
       (f.cause === "뒤틀림" &&
         e.flags.includes("검계뒤틀림") &&
-        (k = "마지막 골목에서 목소리에 답해 뒤틀렸다"),
-      f.cause === "해결사의 토벌" && e.bld && (k = wu(e, "ko")),
-      g && g.phrase && (k = g.phrase),
-      f.cause === "인어가 되었다" && u.phrase && (k = u.phrase),
-      !b && f.cause === "환상체 사고")
+        (b = "마지막 골목에서 목소리에 답해 뒤틀렸다"),
+      f.cause === "해결사의 토벌" && e.bld && (b = Du(e, "ko")),
+      g && g.phrase && (b = g.phrase),
+      f.cause === "인어가 되었다" && u.phrase && (b = u.phrase),
+      !p && f.cause === "환상체 사고")
     ) {
       const w = [...(e.log || [])]
         .reverse()
-        .find((m) => m.kind === "event" && /【(.+?)】/.test(m.text));
+        .find((y) => y.kind === "event" && /【(.+?)】/.test(y.text));
       if (w && w.age === f.age) {
-        const m = w.text.match(/【(.+?)】/)[1];
-        k = `환상체 '${m}'${Hi(m, "을", "를")} 마주친 끝에 숨을 거뒀다`;
+        const y = w.text.match(/【(.+?)】/)[1];
+        b = `환상체 '${y}'${ds(y, "을", "를")} 마주친 끝에 숨을 거뒀다`;
       }
     }
     const T =
-        e.flags.includes("손가락이탈") && f.cause === "범죄·항쟁" && !b
+        e.flags.includes("손가락이탈") && f.cause === "범죄·항쟁" && !p
           ? "쫓아온 손가락의 손에 "
           : "",
       v = a.length > 1 ? "그리고 " : "";
-    a.push(`${v}${f.age}세, ${b}${T}${k}.`);
+    a.push(`${v}${f.age}세, ${p}${T}${b}.`);
   }
   return a;
 }
-const Vc = {
+const Rf = {
     "날개 직원": "became a Wing employee",
     "협회 직원": "joined an Association as staff",
     흑수: "swallowed the Bolus and became one of the Heishou Pack",
@@ -2530,7 +2589,7 @@ const Vc = {
     "4무리": "joined R Corp.'s 4th Pack",
     권속: "were bitten by a Bloodfiend and became a Kindred of its Family",
   },
-  Xc = {
+  Cf = {
     가정: "started a family",
     아이: "had a child",
     "E.G.O개화": "effloresced their E.G.O",
@@ -2545,7 +2604,7 @@ const Vc = {
     정체공개: "told the people you worked with that you were a Bloodfiend",
     정체들킴: "had the secret you kept found out by the people you worked with",
   },
-  Jk = {
+  I0 = {
     노화: "you quietly closed your eyes in old age",
     질병: "you died of illness",
     "영유아 질병": "you died of illness before you could even walk",
@@ -2580,42 +2639,42 @@ const Vc = {
       "you handed the left side to a young guard and stepped back",
     "앰플 부패": "your body could not withstand a mismatched ampule",
   },
-  Vk = (e) => e.charAt(0).toUpperCase() + e.slice(1);
-function Xk(e, t) {
+  W0 = (e) => e.charAt(0).toUpperCase() + e.slice(1);
+function M0(e, t) {
   const o = e.story || [],
     a = [],
     n = `${t.name}${t.ward ? ` (District ${t.ward})` : ""}`,
-    i = (tt[e.family] || tt.normal).label.toLowerCase().replace(" family", ""),
-    l = /^[aeiou]/.test(i) ? "an" : "a";
+    i = (lt[e.family] || lt.normal).label.toLowerCase().replace(" family", ""),
+    s = /^[aeiou]/.test(i) ? "an" : "a";
   (e.flags.includes("복제")
     ? a.push(
-        `You were made in the Hatchery of ${n}, in a body recorded as ${du(e)} years old.`,
+        `You were made in the Hatchery of ${n}, in a body recorded as ${Lu(e)} years old.`,
       )
     : e.family === "none"
       ? a.push(`You were born in ${n} with no parents.`)
       : t.id === "outskirts"
-        ? a.push(`You were born into ${l} ${i} family in the Outskirts.`)
-        : a.push(`You were born into ${l} ${i} family in ${n}.`),
-    e.pinky && a.push(hu(e, "en")));
-  let s = 0,
+        ? a.push(`You were born into ${s} ${i} family in the Outskirts.`)
+        : a.push(`You were born into ${s} ${i} family in ${n}.`),
+    e.pinky && a.push(Eu(e, "en")));
+  let l = 0,
     c = -1;
   const u = new Set(),
     f = (w) => (w === c ? "" : ((c = w), `At ${w}, `)),
-    g = (w, m) => {
-      const y = f(w);
-      return y ? `${y}you ${m}` : Vk(`you ${m}`);
+    g = (w, y) => {
+      const m = f(w);
+      return m ? `${m}you ${y}` : W0(`you ${y}`);
     };
-  for (; s < o.length;) {
-    const w = o[s],
-      m = ko(e, o, s, "en");
-    if (m) {
-      (a.push(...m), s++);
+  for (; l < o.length;) {
+    const w = o[l],
+      y = Fo(e, o, l, "en");
+    if (y) {
+      (a.push(...y), l++);
       continue;
     }
     if (w.k === "job" && w.job === "해결사") {
-      let y = w.grade || 9;
-      const j = [];
-      let _ = s + 1;
+      let m = w.grade || 9;
+      const A = [];
+      let _ = l + 1;
       for (
         ;
         _ < o.length &&
@@ -2623,84 +2682,84 @@ function Xk(e, t) {
         o[_].k !== "quit" &&
         o[_].k !== "finger";
       )
-        (o[_].k === "grade" && (y = Math.min(y, o[_].grade)),
-          o[_].k === "org" && !j.includes(o[_].name) && j.push(o[_].name),
+        (o[_].k === "grade" && (m = Math.min(m, o[_].grade)),
+          o[_].k === "org" && !A.includes(o[_].name) && A.push(o[_].name),
           _++);
-      const Y = w.grade || 9;
+      const j = w.grade || 9;
       let R = "";
-      (j.length === 1 && (R = `served with ${j[0]}`),
-        j.length > 1 &&
-          (R = `passed through ${j.slice(0, -1).join(", ")} before settling with ${j[j.length - 1]}`),
-        y < Y
+      (A.length === 1 && (R = `served with ${A[0]}`),
+        A.length > 1 &&
+          (R = `passed through ${A.slice(0, -1).join(", ")} before settling with ${A[A.length - 1]}`),
+        m < j
           ? a.push(
-              `${g(w.age, `started out as a Grade ${Y} Fixer and rose to Grade ${y}`)}${R ? `, and ${R}` : ""}.`,
+              `${g(w.age, `started out as a Grade ${j} Fixer and rose to Grade ${m}`)}${R ? `, and ${R}` : ""}.`,
             )
           : a.push(
-              `${g(w.age, `became a Grade ${Y} Fixer but never rose any higher`)}.${R ? ` You ${R}.` : ""}`,
+              `${g(w.age, `became a Grade ${j} Fixer but never rose any higher`)}.${R ? ` You ${R}.` : ""}`,
             ));
-      for (let C = s + 1; C < _; C++)
-        o[C].k === "hgd" && a.push(...(ko(e, o, C, "en") || []));
-      s = _;
+      for (let N = l + 1; N < _; N++)
+        o[N].k === "hgd" && a.push(...(Fo(e, o, N, "en") || []));
+      l = _;
       continue;
     }
     if (w.k === "finger") {
-      let y = w.rankName,
-        j = s + 1;
-      for (; j < o.length && o[j].k !== "quit" && o[j].k !== "job";)
-        (o[j].k === "frank" && (y = o[j].rankName), j++);
-      const _ = ot[w.finger],
-        Y = a.length > 1 ? "Then, " : "",
+      let m = w.rankName,
+        A = l + 1;
+      for (; A < o.length && o[A].k !== "quit" && o[A].k !== "job";)
+        (o[A].k === "frank" && (m = o[A].rankName), A++);
+      const _ = ht[w.finger],
+        j = a.length > 1 ? "Then, " : "",
         R =
-          y && y !== w.rankName
-            ? `joined the ${_} and rose to ${y}`
+          m && m !== w.rankName
+            ? `joined the ${_} and rose to ${m}`
             : `joined the ${_} and lived as a ${w.rankName}`,
-        C = g(w.age, R);
-      a.push(`${Y}${Y ? C.charAt(0).toLowerCase() + C.slice(1) : C}.`);
-      for (let W = s + 1; W < j; W++)
-        o[W].k === "hgd" && a.push(...(ko(e, o, W, "en") || []));
-      s = j;
+        N = g(w.age, R);
+      a.push(`${j}${j ? N.charAt(0).toLowerCase() + N.slice(1) : N}.`);
+      for (let M = l + 1; M < A; M++)
+        o[M].k === "hgd" && a.push(...(Fo(e, o, M, "en") || []));
+      l = A;
       continue;
     }
     if (w.k === "quit") {
       (w.finger === "약지"
-        ? a.push(`You left the ${ot[w.finger]}.`)
+        ? a.push(`You left the ${ht[w.finger]}.`)
         : w.finger
           ? a.push(
-              `After leaving the ${ot[w.finger]}, you lived your life hunted by the Fingers.`,
+              `After leaving the ${ht[w.finger]}, you lived your life hunted by the Fingers.`,
             )
           : w.job === "해결사" &&
             a.push(`${g(w.age, "quit working as a Fixer")}.`),
-        s++);
+        l++);
       continue;
     }
-    if (w.k === "job" && Vc[w.job]) {
-      const y = o
-        .slice(s + 1)
+    if (w.k === "job" && Rf[w.job]) {
+      const m = o
+        .slice(l + 1)
         .find((_) => _.k === "job" || _.k === "quit" || _.k === "finger");
       if (
-        (y ? y.age : e.dead ? e.dead.age : e.age) - w.age >= 3 &&
+        (m ? m.age : e.dead ? e.dead.age : e.age) - w.age >= 3 &&
         !u.has(w.job)
       ) {
-        (u.add(w.job), a.push(`${g(w.age, Vc[w.job])}.`));
-        const _ = w.job === "날개 직원" ? uu(o, s) : 0;
+        (u.add(w.job), a.push(`${g(w.age, Rf[w.job])}.`));
+        const _ = w.job === "날개 직원" ? $u(o, l) : 0;
         _ >= 3 &&
           a.push(
             _ === 6
               ? "In the end, they took the CEO's seat."
-              : `They later rose to ${Fk[_ - 1]}.`,
+              : `They later rose to ${p0[_ - 1]}.`,
           );
       }
-      s++;
+      l++;
       continue;
     }
     if (w.k === "flag") {
       if (
         w.flag === "가정" &&
-        o[s + 1] &&
-        o[s + 1].k === "flag" &&
-        o[s + 1].flag === "아이"
+        o[l + 1] &&
+        o[l + 1].k === "flag" &&
+        o[l + 1].flag === "아이"
       ) {
-        (a.push(`${g(w.age, "started a family and had a child")}.`), (s += 2));
+        (a.push(`${g(w.age, "started a family and had a child")}.`), (l += 2));
         continue;
       }
       (w.flag === "특색" && e.colorName
@@ -2713,57 +2772,57 @@ function Xk(e, t) {
             ? a.push(
                 `${g(w.age, `found a relic in the ruins of the Outskirts, named '${e.relicName}'`)}.`,
               )
-            : Xc[w.flag] && a.push(`${g(w.age, Xc[w.flag])}.`),
-        s++);
+            : Cf[w.flag] && a.push(`${g(w.age, Cf[w.flag])}.`),
+        l++);
       continue;
     }
-    s++;
+    l++;
   }
-  const b = e.warpRec;
-  (b &&
+  const p = e.warpRec;
+  (p &&
     a.push(
-      b.clear
-        ? `At ${b.age}, you ran the Warp Train to the very end.`
-        : b.cars > 0
-          ? `At ${b.age}, you boarded a Warp Train and cleared ${b.cars} car${b.cars === 1 ? "" : "s"}.`
-          : `At ${b.age}, you boarded a Warp Train but could not get past the first car.`,
+      p.clear
+        ? `At ${p.age}, you ran the Warp Train to the very end.`
+        : p.cars > 0
+          ? `At ${p.age}, you boarded a Warp Train and cleared ${p.cars} car${p.cars === 1 ? "" : "s"}.`
+          : `At ${p.age}, you boarded a Warp Train but could not get past the first car.`,
     ),
-    a.push(...gu(e, "en")),
-    a.push(...mu(e, "en")));
-  const k = fu(e, "en");
-  a.push(...k.lines);
+    a.push(...qu(e, "en")),
+    a.push(...Gu(e, "en")));
+  const b = Hu(e, "en");
+  a.push(...b.lines);
   const T = e.dead,
-    v = cu(e, "en");
+    v = Pu(e, "en");
   if ((v && a.push(v.line), T)) {
     const w = e.deathContext ? ` ${e.deathContext}` : "";
-    let m = T.phrase || Jk[T.cause] || "your life came to an end";
+    let y = T.phrase || I0[T.cause] || "your life came to an end";
     if (
       (T.cause === "뒤틀림" &&
         e.flags.includes("검계뒤틀림") &&
-        (m = "you answered the voice in the last alley and Distorted"),
-      T.cause === "해결사의 토벌" && e.bld && (m = wu(e, "en")),
-      v && v.phrase && (m = v.phrase),
-      T.cause === "인어가 되었다" && k.phrase && (m = k.phrase),
+        (y = "you answered the voice in the last alley and Distorted"),
+      T.cause === "해결사의 토벌" && e.bld && (y = Du(e, "en")),
+      v && v.phrase && (y = v.phrase),
+      T.cause === "인어가 되었다" && b.phrase && (y = b.phrase),
       !w && T.cause === "환상체 사고")
     ) {
       const _ = [...(e.log || [])]
         .reverse()
-        .find((Y) => Y.kind === "event" && /【(.+?)】/.test(Y.text));
+        .find((j) => j.kind === "event" && /【(.+?)】/.test(j.text));
       _ &&
         _.age === T.age &&
-        (m = `you died after encountering the Abnormality '${_.text.match(/【(.+?)】/)[1]}'`);
+        (y = `you died after encountering the Abnormality '${_.text.match(/【(.+?)】/)[1]}'`);
     }
-    w && (m = m.replace(/^you /, "you ") + w);
-    const y =
+    w && (y = y.replace(/^you /, "you ") + w);
+    const m =
         e.flags.includes("손가락이탈") && T.cause === "범죄·항쟁" && !w
           ? ", cut down by the Finger that had hunted you"
           : "",
-      j = a.length > 1 ? "And at " : "At ";
-    a.push(`${j}${T.age}, ${m}${y}.`);
+      A = a.length > 1 ? "And at " : "At ";
+    a.push(`${A}${T.age}, ${y}${m}.`);
   }
   return a;
 }
-const Qc = {
+const Nf = {
     "날개 직원": "翼の社員になった",
     "협회 직원": "職員として協会に入った",
     흑수: "丸を呑んで黒獣となった",
@@ -2774,7 +2833,7 @@ const Qc = {
     "4무리": "R社第4群に入った",
     권속: "血鬼に噛まれ、家門の眷属となった",
   },
-  Zc = {
+  If = {
     가정: "家庭を築いた",
     아이: "子どもを授かった",
     "E.G.O개화": "E.G.Oを開花させた",
@@ -2788,7 +2847,7 @@ const Qc = {
     정체공개: "身を置く場所に血鬼であることを明かした",
     정체들킴: "隠してきた正体を身を置く場所に知られた",
   },
-  Qk = {
+  O0 = {
     노화: "年老いて静かに目を閉じた",
     질병: "病でこの世を去った",
     "영유아 질병": "歩き始める前に病で旅立った",
@@ -2820,127 +2879,127 @@ const Qc = {
     "은퇴한 호위무사": "左の席を若い護衛に譲って退いた",
     "앰플 부패": "合わないアンプルに体が耐えきれなかった",
   };
-function Zk(e, t) {
+function F0(e, t) {
   const o = e.story || [],
     a = [],
     n = `${t.name}${t.ward ? `（${t.ward}区）` : ""}`,
-    r = (tt[e.family] || tt.normal).label;
+    r = (lt[e.family] || lt.normal).label;
   (e.flags.includes("복제")
-    ? a.push(`${n}の孵化場で、${du(e)}歳の体として作られた。`)
+    ? a.push(`${n}の孵化場で、${Lu(e)}歳の体として作られた。`)
     : e.family === "none"
       ? a.push(`${n}で、両親のいないまま生まれた。`)
       : t.id === "outskirts"
         ? a.push(`外郭の${r}に生まれた。`)
         : a.push(`${n}の${r}に生まれた。`),
-    e.pinky && a.push(hu(e, "ja")));
+    e.pinky && a.push(Eu(e, "ja")));
   let i = 0,
-    l = -1;
-  const s = new Set(),
-    c = (k) => (k === l ? "" : ((l = k), `${k}歳で`));
+    s = -1;
+  const l = new Set(),
+    c = (b) => (b === s ? "" : ((s = b), `${b}歳で`));
   for (; i < o.length;) {
-    const k = o[i],
-      T = ko(e, o, i, "ja");
+    const b = o[i],
+      T = Fo(e, o, i, "ja");
     if (T) {
       (a.push(...T), i++);
       continue;
     }
-    if (k.k === "job" && k.job === "해결사") {
-      let v = k.grade || 9;
+    if (b.k === "job" && b.job === "해결사") {
+      let v = b.grade || 9;
       const w = [];
-      let m = i + 1;
+      let y = i + 1;
       for (
         ;
-        m < o.length &&
-        !(o[m].k === "job" && o[m].job !== "해결사") &&
-        o[m].k !== "quit" &&
-        o[m].k !== "finger";
+        y < o.length &&
+        !(o[y].k === "job" && o[y].job !== "해결사") &&
+        o[y].k !== "quit" &&
+        o[y].k !== "finger";
       )
-        (o[m].k === "grade" && (v = Math.min(v, o[m].grade)),
-          o[m].k === "org" && !w.includes(o[m].name) && w.push(o[m].name),
-          m++);
-      const y = k.grade || 9;
-      let j = "";
-      (w.length === 1 && (j = `${w[0]}に身を置いた`),
+        (o[y].k === "grade" && (v = Math.min(v, o[y].grade)),
+          o[y].k === "org" && !w.includes(o[y].name) && w.push(o[y].name),
+          y++);
+      const m = b.grade || 9;
+      let A = "";
+      (w.length === 1 && (A = `${w[0]}に身を置いた`),
         w.length > 1 &&
-          (j = `${w.slice(0, -1).join("、")}を経て${w[w.length - 1]}に身を置いた`),
-        v < y
+          (A = `${w.slice(0, -1).join("、")}を経て${w[w.length - 1]}に身を置いた`),
+        v < m
           ? a.push(
-              `${c(k.age)}${y}級フィクサーとして働き始め、${v}級まで上り詰めた${j ? `。${j}` : ""}。`,
+              `${c(b.age)}${m}級フィクサーとして働き始め、${v}級まで上り詰めた${A ? `。${A}` : ""}。`,
             )
           : a.push(
-              `${c(k.age)}${y}級フィクサーになったが、最後まで等級は上がらなかった。${j ? `${j}。` : ""}`,
+              `${c(b.age)}${m}級フィクサーになったが、最後まで等級は上がらなかった。${A ? `${A}。` : ""}`,
             ));
-      for (let _ = i + 1; _ < m; _++)
-        o[_].k === "hgd" && a.push(...(ko(e, o, _, "ja") || []));
-      i = m;
+      for (let _ = i + 1; _ < y; _++)
+        o[_].k === "hgd" && a.push(...(Fo(e, o, _, "ja") || []));
+      i = y;
       continue;
     }
-    if (k.k === "finger") {
-      let v = k.rankName,
+    if (b.k === "finger") {
+      let v = b.rankName,
         w = i + 1;
       for (; w < o.length && o[w].k !== "quit" && o[w].k !== "job";)
         (o[w].k === "frank" && (v = o[w].rankName), w++);
-      const m = ot[k.finger],
-        y = a.length > 1 ? "やがて" : "";
+      const y = ht[b.finger],
+        m = a.length > 1 ? "やがて" : "";
       a.push(
-        v && v !== k.rankName
-          ? `${y}${c(k.age)}${m}に加わり、${v}まで上り詰めた。`
-          : `${y}${c(k.age)}${m}に加わり、${k.rankName}として生きた。`,
+        v && v !== b.rankName
+          ? `${m}${c(b.age)}${y}に加わり、${v}まで上り詰めた。`
+          : `${m}${c(b.age)}${y}に加わり、${b.rankName}として生きた。`,
       );
-      for (let j = i + 1; j < w; j++)
-        o[j].k === "hgd" && a.push(...(ko(e, o, j, "ja") || []));
+      for (let A = i + 1; A < w; A++)
+        o[A].k === "hgd" && a.push(...(Fo(e, o, A, "ja") || []));
       i = w;
       continue;
     }
-    if (k.k === "quit") {
-      (k.finger === "약지"
-        ? a.push(`${ot[k.finger]}を離れた。`)
-        : k.finger
-          ? a.push(`${ot[k.finger]}を離れてからは、指に追われる人生を送った。`)
-          : k.job === "해결사" &&
-            a.push(`${c(k.age)}フィクサーの仕事を辞めた。`),
+    if (b.k === "quit") {
+      (b.finger === "약지"
+        ? a.push(`${ht[b.finger]}を離れた。`)
+        : b.finger
+          ? a.push(`${ht[b.finger]}を離れてからは、指に追われる人生を送った。`)
+          : b.job === "해결사" &&
+            a.push(`${c(b.age)}フィクサーの仕事を辞めた。`),
         i++);
       continue;
     }
-    if (k.k === "job" && Qc[k.job]) {
+    if (b.k === "job" && Nf[b.job]) {
       const v = o
         .slice(i + 1)
-        .find((m) => m.k === "job" || m.k === "quit" || m.k === "finger");
+        .find((y) => y.k === "job" || y.k === "quit" || y.k === "finger");
       if (
-        (v ? v.age : e.dead ? e.dead.age : e.age) - k.age >= 3 &&
-        !s.has(k.job)
+        (v ? v.age : e.dead ? e.dead.age : e.age) - b.age >= 3 &&
+        !l.has(b.job)
       ) {
-        (s.add(k.job), a.push(`${c(k.age)}${Qc[k.job]}。`));
-        const m = k.job === "날개 직원" ? uu(o, i) : 0;
-        m >= 3 &&
+        (l.add(b.job), a.push(`${c(b.age)}${Nf[b.job]}。`));
+        const y = b.job === "날개 직원" ? $u(o, i) : 0;
+        y >= 3 &&
           a.push(
-            m === 6
+            y === 6
               ? "ついに代表の座に就いた。"
-              : `のち${Ek[m - 1]}にまで上った。`,
+              : `のち${b0[y - 1]}にまで上った。`,
           );
       }
       i++;
       continue;
     }
-    if (k.k === "flag") {
+    if (b.k === "flag") {
       if (
-        k.flag === "가정" &&
+        b.flag === "가정" &&
         o[i + 1] &&
         o[i + 1].k === "flag" &&
         o[i + 1].flag === "아이"
       ) {
-        (a.push(`${c(k.age)}家庭を築き、子どもを授かった。`), (i += 2));
+        (a.push(`${c(b.age)}家庭を築き、子どもを授かった。`), (i += 2));
         continue;
       }
-      (k.flag === "특색" && e.colorName
-        ? a.push(`${c(k.age)}「${e.colorName}」という特色の名を得た。`)
-        : k.flag === "E.G.O개화" && e.egoName
-          ? a.push(`${c(k.age)}E.G.Oを開花させた。名は「${e.egoName}」。`)
-          : k.flag === "유물" && e.relicName
+      (b.flag === "특색" && e.colorName
+        ? a.push(`${c(b.age)}「${e.colorName}」という特色の名を得た。`)
+        : b.flag === "E.G.O개화" && e.egoName
+          ? a.push(`${c(b.age)}E.G.Oを開花させた。名は「${e.egoName}」。`)
+          : b.flag === "유물" && e.relicName
             ? a.push(
-                `${c(k.age)}外郭の廃墟で遺物を得た。名は「${e.relicName}」。`,
+                `${c(b.age)}外郭の廃墟で遺物を得た。名は「${e.relicName}」。`,
               )
-            : Zc[k.flag] && a.push(`${c(k.age)}${Zc[k.flag]}。`),
+            : If[b.flag] && a.push(`${c(b.age)}${If[b.flag]}。`),
         i++);
       continue;
     }
@@ -2955,46 +3014,46 @@ function Zk(e, t) {
           ? `${u.age}歳、ワープ列車に乗り、${u.cars}両を突破した。`
           : `${u.age}歳、ワープ列車に乗ったが、最初の車両を越えられなかった。`,
     ),
-    a.push(...gu(e, "ja")),
-    a.push(...mu(e, "ja")));
-  const f = fu(e, "ja");
+    a.push(...qu(e, "ja")),
+    a.push(...Gu(e, "ja")));
+  const f = Hu(e, "ja");
   a.push(...f.lines);
   const g = e.dead,
-    b = cu(e, "ja");
-  if ((b && a.push(b.line), g)) {
-    const k = e.deathContext ? `${e.deathContext}、` : "";
-    let T = g.phrase || Qk[g.cause] || "生涯を終えた";
+    p = Pu(e, "ja");
+  if ((p && a.push(p.line), g)) {
+    const b = e.deathContext ? `${e.deathContext}、` : "";
+    let T = g.phrase || O0[g.cause] || "生涯を終えた";
     if (
       (g.cause === "뒤틀림" &&
         e.flags.includes("검계뒤틀림") &&
         (T = "最後の路地で声に応え、ねじれた"),
-      g.cause === "해결사의 토벌" && e.bld && (T = wu(e, "ja")),
-      b && b.phrase && (T = b.phrase),
+      g.cause === "해결사의 토벌" && e.bld && (T = Du(e, "ja")),
+      p && p.phrase && (T = p.phrase),
       g.cause === "인어가 되었다" && f.phrase && (T = f.phrase),
-      !k && g.cause === "환상체 사고")
+      !b && g.cause === "환상체 사고")
     ) {
-      const m = [...(e.log || [])]
+      const y = [...(e.log || [])]
         .reverse()
-        .find((y) => y.kind === "event" && /【(.+?)】/.test(y.text));
-      m &&
-        m.age === g.age &&
-        (T = `幻想体「${m.text.match(/【(.+?)】/)[1]}」と遭遇した末に息を引き取った`);
+        .find((m) => m.kind === "event" && /【(.+?)】/.test(m.text));
+      y &&
+        y.age === g.age &&
+        (T = `幻想体「${y.text.match(/【(.+?)】/)[1]}」と遭遇した末に息を引き取った`);
     }
     const v =
-        e.flags.includes("손가락이탈") && g.cause === "범죄·항쟁" && !k
+        e.flags.includes("손가락이탈") && g.cause === "범죄·항쟁" && !b
           ? "追ってきた指の手にかかり、"
           : "",
       w = a.length > 1 ? "そして" : "";
-    a.push(`${w}${g.age}歳、${k}${v}${T}。`);
+    a.push(`${w}${g.age}歳、${b}${v}${T}。`);
   }
   return a;
 }
-const Bl = {
+const lh = {
     ko: ["시민", "조직", "날개", "특색"],
     en: ["Citizen", "Syndicate", "Wing", "Color"],
     ja: ["市民", "組織", "翼", "特色"],
   },
-  ex = {
+  B0 = {
     발톱: [
       "고지서를 받은 채 또 일을 그르쳐, 찾아온 발톱의 손에 생을 마쳤다",
       "having erred again with a notice already in hand, you died at the hands of the Claw that came for you",
@@ -3031,37 +3090,37 @@ const Bl = {
       "ガントレットを返納し、処刑人だった記憶をあの部屋に置いてきた",
     ],
   };
-function tx(e, t) {
+function E0(e, t) {
   const o = t === "en" ? 1 : t === "ja" ? 2 : 0,
-    a = (f, g, b) => [f, g, b][o],
+    a = (f, g, p) => [f, g, p][o],
     n = e.cl || {},
     r = (f) => f - 19,
     i = (f) => a(`${r(f)}년차`, `Year ${r(f)}`, `${r(f)}年目`),
-    l = [];
-  (l.push(
+    s = [];
+  (s.push(
     a(
       "C사의 관할에서 태어났다. 스무 살이 되기까지의 일은 어디에도 적혀 있지 않다.",
       "Born under C Corp.'s jurisdiction. Nothing of the years before twenty is written anywhere.",
       "C社の管轄で生まれた。二十歳になるまでのことは、どこにも記されていない。",
     ),
   ),
-    l.push(
+    s.push(
       a(
         "1년차, 머리의 처형자가 되었다.",
         "In Year 1, you became an Executioner of the Head.",
         "1年目、頭の処刑人になった。",
       ),
     ));
-  const s = n.tier || 0;
-  (s > 0 &&
-    l.push(
+  const l = n.tier || 0;
+  (l > 0 &&
+    s.push(
       a(
-        `명령서의 표시는 '${Bl.ko[s]}'까지 올랐다.`,
-        `The mark on your orders rose as far as '${Bl.en[s]}'.`,
-        `命令書の印は「${Bl.ja[s]}」まで上がった。`,
+        `명령서의 표시는 '${lh.ko[l]}'까지 올랐다.`,
+        `The mark on your orders rose as far as '${lh.en[l]}'.`,
+        `命令書の印は「${lh.ja[l]}」まで上がった。`,
       ),
     ),
-    l.push(
+    s.push(
       a(
         `혈청을 ${n.uses || 0}번 꽂았다. 고지서는 ${n.warns || 0}번 받았다.`,
         `You injected Serums ${n.uses || 0} times. You received ${n.warns || 0} notices.`,
@@ -3069,7 +3128,7 @@ function tx(e, t) {
       ),
     ),
     e.flags.includes("특색처리") &&
-      l.push(
+      s.push(
         a(
           "평균이 아닌 특색을 처리한 적이 있다.",
           "You once dealt with a Color who was not average.",
@@ -3078,7 +3137,7 @@ function tx(e, t) {
       ));
   const c = e.warpRec;
   (c &&
-    l.push(
+    s.push(
       c.clear
         ? a(
             `${i(c.age)}, 워프 열차 안의 금기를 처리했다.`,
@@ -3092,7 +3151,7 @@ function tx(e, t) {
           ),
     ),
     e.flags.includes("발톱을넘음") &&
-      l.push(
+      s.push(
         a(
           "처분하러 온 처형자 둘을 혈청 셋으로 넘었다.",
           "With all three Serums, you got past the two Executioners sent to dispose of you.",
@@ -3102,9 +3161,9 @@ function tx(e, t) {
   const u = e.dead;
   if (u) {
     const f =
-      (ex[u.cause] || [])[o] ||
+      (B0[u.cause] || [])[o] ||
       a("생을 마쳤다", "your life came to an end", "生涯を終えた");
-    l.push(
+    s.push(
       a(
         `그리고 ${i(u.age)}, ${f}.`,
         `And in ${i(u.age)}, ${f}.`,
@@ -3112,11 +3171,113 @@ function tx(e, t) {
       ),
     );
   }
-  return l;
+  return s;
 }
-function ox(e) {
+const L0 = {
+  토벌: [
+    "문 위의 이름이 내려졌다",
+    "the name above the gate was taken down",
+    "門の上の名が下ろされた",
+  ],
+  습격: [
+    "혼자 나선 길에서 돌아오지 못했다",
+    "you never came back from the road you took alone",
+    "ひとりで出た道から戻れなかった",
+  ],
+  "특색의 토벌": [
+    "혼자 연 문 앞에서 특색들과 싸우다 끝났다",
+    "you ended fighting Colors at the gate you opened alone",
+    "ひとりで開けた門の前で特色たちと戦って終わった",
+  ],
+  "열쇠가 된 장로": [
+    "권속들의 문을 여는 손이 되었다",
+    "you became the hand that opens the gate for your Kindred",
+    "眷属たちの門を開ける手になった",
+  ],
+  "사람과 함께": [
+    "사람들과 함께 열일곱 번째 문을 닫았다",
+    "you closed the seventeenth gate together with people",
+    "人々と共に十七番目の門を閉じた",
+  ],
+  재앙: [
+    "문은 다시 닫히지 않았다",
+    "the gate never closed again",
+    "門は二度と閉じなかった",
+  ],
+};
+function $0(e, t) {
+  const o = t === "en" ? 1 : t === "ja" ? 2 : 0,
+    a = (c, u, f) => [c, u, f][o],
+    n = e.lm || {},
+    r =
+      n.land || a(`${e.name}의 랜드`, `${e.name}'s Land`, `${e.name}のランド`),
+    i = [];
+  (i.push(
+    a(
+      "P사의 관할에서 태어났다. 서른이 되기까지의 일은 어디에도 적혀 있지 않다.",
+      "Born under P Corp.'s jurisdiction. Nothing of the years before thirty is written anywhere.",
+      "P社の管轄で生まれた。三十歳になるまでのことは、どこにも記されていない。",
+    ),
+  ),
+    n.phase !== "name" &&
+      i.push(
+        a(
+          `30세, 가문의 제1권속으로서 '${r}'의 문을 세웠다.`,
+          `At 30, as the First Kindred of a Family, you raised the gate of '${r}'.`,
+          `30歳、家門の第1眷属として「${r}」の門を建てた。`,
+        ),
+      ));
+  const s = n.fellAt || n.opens;
+  (s &&
+    i.push(
+      a(
+        `문을 ${s}번 열었다.`,
+        `You opened the gate ${s} time${s === 1 ? "" : "s"}.`,
+        `門を${s}度開けた。`,
+      ),
+    ),
+    n.lostN &&
+      i.push(
+        a(
+          `이름 있는 권속 ${n.lostN}을 잃었다.`,
+          `You lost ${n.lostN} named Kindred.`,
+          `名のある眷属を${n.lostN}人失った。`,
+        ),
+      ),
+    n.eats
+      ? i.push(
+          a(
+            `사람을 ${n.eats}번 먹었다.`,
+            `You ate people ${n.eats} time${n.eats === 1 ? "" : "s"}.`,
+            `人を${n.eats}度喰らった。`,
+          ),
+        )
+      : n.opens >= 17 &&
+        i.push(
+          a(
+            "개장에서 한 번도 사람을 먹지 않았다.",
+            "You never once ate people at an opening.",
+            "開園で一度も人を喰らわなかった。",
+          ),
+        ));
+  const l = e.dead;
+  if (l) {
+    const c =
+      (L0[l.cause] || [])[o] ||
+      a("생을 마쳤다", "your life came to an end", "生涯を終えた");
+    i.push(
+      a(
+        `그리고 ${l.age}세, ${c}.`,
+        `And at ${l.age}, ${c}.`,
+        `そして${l.age}歳、${c}。`,
+      ),
+    );
+  }
+  return i;
+}
+function P0(e) {
   const t = [],
-    o = (_, Y) => t.push({ key: _, label: Y }),
+    o = (_, j) => t.push({ key: _, label: j }),
     a = e.story || [],
     n = e.log || [],
     r = e.flags || [],
@@ -3125,7 +3286,7 @@ function ox(e) {
     (["A", "B", "C"].includes(e.regionId) &&
       o(
         "born_head",
-        h(
+        d(
           "머리(A~C사)에서 태어남",
           "Born under the Head (A–C Corp.)",
           "頭（A〜C社）の下に生まれた",
@@ -3134,36 +3295,36 @@ function ox(e) {
     e.regionId === "outskirts" &&
       o(
         "born_outskirts",
-        h("외곽에서 태어남", "Born in the Outskirts", "外郭で生まれた"),
+        d("외곽에서 태어남", "Born in the Outskirts", "外郭で生まれた"),
       ),
     e.family === "none" &&
       !r.includes("복제") &&
       o(
         "orphan",
-        h("부모 없이 태어남", "Born without parents", "両親なしで生まれた"),
+        d("부모 없이 태어남", "Born without parents", "両親なしで生まれた"),
       ),
     e.pinky &&
       (e.pinky.star < 36
         ? o(
             "pinky_star_heaven",
-            h("36천강의 이름", "Name of the 36 Tiangang", "三十六天罡の名"),
+            d("36천강의 이름", "Name of the 36 Tiangang", "三十六天罡の名"),
           )
         : o(
             "pinky_star_earth",
-            h("72지살의 이름", "Name of the 72 Disha", "七十二地煞の名"),
+            d("72지살의 이름", "Name of the 72 Disha", "七十二地煞の名"),
           )),
     i &&
       (i.age >= 100
         ? o(
             "age100",
-            h("100세를 넘겨 삶", "Lived past 100", "100歳を超えて生きた"),
+            d("100세를 넘겨 삶", "Lived past 100", "100歳を超えて生きた"),
           )
         : i.age >= 80 &&
-          o("age80", h("80세 넘게 삶", "Lived past 80", "80歳を超えて生きた")),
+          o("age80", d("80세 넘게 삶", "Lived past 80", "80歳を超えて生きた")),
       i.age < 10 &&
         o(
           "die_child",
-          h(
+          d(
             "열 살을 넘기지 못함",
             "Died before turning ten",
             "10歳を迎えられなかった",
@@ -3173,7 +3334,7 @@ function ox(e) {
         !(e.dr && e.dr.end === "return") &&
         o(
           "distorted",
-          h(
+          d(
             "뒤틀려 생을 마침",
             "Ended life as a Distortion",
             "ねじれて生涯を終えた",
@@ -3185,27 +3346,27 @@ function ox(e) {
     (o(
       `dist_grade_${_}`,
       [
-        h(
+        d(
           "뜬소문이 된 뒤틀림",
           "A Distortion rated Canard",
           "あらぬ噂となったねじれ",
         ),
-        h(
+        d(
           "도시 괴담이 된 뒤틀림",
           "A Distortion rated Urban Myth",
           "都市怪談となったねじれ",
         ),
-        h(
+        d(
           "도시 전설이 된 뒤틀림",
           "A Distortion rated Urban Legend",
           "都市伝説となったねじれ",
         ),
-        h(
+        d(
           "도시 질병이 된 뒤틀림",
           "A Distortion rated Urban Plague",
           "都市疾病となったねじれ",
         ),
-        h(
+        d(
           "도시 악몽이 된 뒤틀림",
           "A Distortion rated Urban Nightmare",
           "都市悪夢となったねじれ",
@@ -3215,7 +3376,7 @@ function ox(e) {
       e.dr.end === "final" &&
         o(
           "dist_final",
-          h(
+          d(
             "특색이 온 토벌대",
             "The subjugation team with a Color",
             "特色が来た討伐隊",
@@ -3224,12 +3385,12 @@ function ox(e) {
       e.dr.end === "nm6" &&
         o(
           "dist_nm6",
-          h("특색을 죽인 뒤", "After killing a Color", "特色を殺した後"),
+          d("특색을 죽인 뒤", "After killing a Color", "特色を殺した後"),
         ),
       e.dr.end === "return" &&
         o(
           "dist_return",
-          h("원래대로 돌아온 사람", "One who came back", "元に戻った人"),
+          d("원래대로 돌아온 사람", "One who came back", "元に戻った人"),
         ));
   }
   if (e.lakeRec) {
@@ -3237,7 +3398,7 @@ function ox(e) {
     (_.crossed &&
       o(
         "lake_cross",
-        h(
+        d(
           "대호수를 항해한 자",
           "One Who Sailed the Great Lake",
           "大湖を航海した者",
@@ -3247,7 +3408,7 @@ function ox(e) {
         (_.deep || 0) >= 3 &&
         o(
           "lake_deep",
-          h(
+          d(
             "깊은 물을 셋 지나 닿은 삶",
             "Crossed three deep waters and reached port",
             "深い水を三つ越えて着いた生",
@@ -3256,7 +3417,7 @@ function ox(e) {
       _.source === "drink" &&
         o(
           "lake_drink",
-          h(
+          d(
             "따여 있던 포도맛 캔",
             "The already-opened grape soda",
             "開けてあったぶどう味の缶",
@@ -3265,17 +3426,17 @@ function ox(e) {
   }
   if (e.lakeWhale) {
     const _ = {
-      marlin: h(
+      marlin: d(
         "모든 것을 꿰뚫는 청새치 고래를 만난 자",
         "One Who Met the All-Impaling Marlin Whale",
         "すべてを貫くカジキの鯨に出会った者",
       ),
-      pallid: h(
+      pallid: d(
         "모든 것을 집어삼키는 창백한 고래를 만난 자",
         "One Who Met the All-Consuming Pallid Whale",
         "すべてを呑み込む蒼白の鯨に出会った者",
       ),
-      crimson: h(
+      crimson: d(
         "모든 것을 마르게 하는 새빨간 고래를 만난 자",
         "One Who Met the All-Withering Crimson Whale",
         "すべてを枯らす真紅の鯨に出会った者",
@@ -3287,19 +3448,19 @@ function ox(e) {
     ((e.lakeHints || 0) >= 2 &&
       o(
         "lake_hint2",
-        h("법 두 개를 산 삶", "Bought two Laws", "法を二つ買った生"),
+        d("법 두 개를 산 삶", "Bought two Laws", "法を二つ買った生"),
       ),
     a.some((_) => _.k === "job" && _.job === "해결사"))
   ) {
-    o("fixer", h("해결사가 됨", "Became a Fixer", "フィクサーになった"));
+    o("fixer", d("해결사가 됨", "Became a Fixer", "フィクサーになった"));
     const _ = Math.min(
       9,
-      ...a.filter((Y) => Y.k === "grade").map((Y) => Y.grade),
+      ...a.filter((j) => j.k === "grade").map((j) => j.grade),
     );
     _ <= 7 &&
       o(
         `fixer_g${_}`,
-        h(
+        d(
           `해결사 ${_}급 도달`,
           `Reached Grade ${_} Fixer`,
           `${_}級フィクサーに到達`,
@@ -3307,11 +3468,11 @@ function ox(e) {
       );
   }
   ((r.includes("특색") || a.some((_) => _.k === "flag" && _.flag === "특색")) &&
-    o("color", h("특색의 이름을 얻음", "Became a Color", "特色の名を得た")),
+    o("color", d("특색의 이름을 얻음", "Became a Color", "特色の名を得た")),
     a.some((_) => _.k === "org" && _.type === "office") &&
       o(
         "office",
-        h(
+        d(
           "해결사 사무소 소속",
           "Joined a Fixer Office",
           "フィクサー事務所に所属",
@@ -3320,64 +3481,64 @@ function ox(e) {
     a.some((_) => _.k === "org" && _.type === "assoc") &&
       o(
         "assoc",
-        h("협회 소속 해결사", "Association Fixer", "協会所属フィクサー"),
+        d("협회 소속 해결사", "Association Fixer", "協会所属フィクサー"),
       ),
     (e.bestReq ?? -1) >= 5 &&
       o(
         "req_star",
-        h(
+        d(
           "도시의 별 이상 의뢰 완수",
           "Completed a Star of the City request",
           "都市の星級の依頼を完遂",
         ),
       ));
-  const s = a.find((_) => _.k === "finger");
-  if (s) {
+  const l = a.find((_) => _.k === "finger");
+  if (l) {
     o(
-      `finger_${s.finger}`,
-      h(
-        `${s.finger} 입단`,
-        `Joined the ${ot[s.finger]}`,
-        `${ot[s.finger]}に入団`,
+      `finger_${l.finger}`,
+      d(
+        `${l.finger} 입단`,
+        `Joined the ${ht[l.finger]}`,
+        `${ht[l.finger]}に入団`,
       ),
     );
     const _ = (R) => {
-      for (let C = 1; C <= 5; C++) {
-        const W = lt(s.finger, C, e.gender);
-        if (!W) break;
-        if (W === R) return C;
+      for (let N = 1; N <= 5; N++) {
+        const M = gt(l.finger, N, e.gender);
+        if (!M) break;
+        if (M === R) return N;
       }
       return 1;
     };
-    let Y = 1;
-    for (const R of a) R.k === "frank" && (Y = Math.max(Y, _(R.rankName)));
-    if (Y >= 2) {
-      const R = lt(s.finger, Y, e.gender);
+    let j = 1;
+    for (const R of a) R.k === "frank" && (j = Math.max(j, _(R.rankName)));
+    if (j >= 2) {
+      const R = gt(l.finger, j, e.gender);
       o(
-        `frank_${s.finger}_${Y}`,
-        h(
-          `${s.finger} ${R} 도달`,
-          `Reached ${ot[s.finger]} ${R}`,
-          `${ot[s.finger]}の${R}に到達`,
+        `frank_${l.finger}_${j}`,
+        d(
+          `${l.finger} ${R} 도달`,
+          `Reached ${ht[l.finger]} ${R}`,
+          `${ht[l.finger]}の${R}に到達`,
         ),
       );
     }
   }
   r.includes("손가락이탈") &&
-    o("finger_quit", h("손가락을 떠남", "Left the Fingers", "指を離れた"));
-  for (const [_, Y, R] of [
-    ["날개 직원", "corp", h("날개의 사원", "Wing employee", "翼の社員")],
+    o("finger_quit", d("손가락을 떠남", "Left the Fingers", "指を離れた"));
+  for (const [_, j, R] of [
+    ["날개 직원", "corp", d("날개의 사원", "Wing employee", "翼の社員")],
     [
       "협회 직원",
       "assoc_staff",
-      h("협회 직원", "Association staff", "協会職員"),
+      d("협회 직원", "Association staff", "協会職員"),
     ],
   ])
-    a.some((C) => C.k === "job" && C.job === _) && o(Y, R);
+    a.some((N) => N.k === "job" && N.job === _) && o(j, R);
   (r.includes("유물") &&
     o(
       "relic",
-      h(
+      d(
         "외곽의 유물을 얻음",
         "Obtained a relic of the Outskirts",
         "外郭の遺物を手に入れた",
@@ -3386,7 +3547,7 @@ function ox(e) {
     r.includes("좋은의체")
       ? o(
           "prosthetic_good",
-          h(
+          d(
             "좋은 의체 시술을 받음",
             "Underwent fine prosthetic surgery",
             "良質な義体手術を受けた",
@@ -3395,7 +3556,7 @@ function ox(e) {
       : r.includes("의체") &&
         o(
           "prosthetic",
-          h(
+          d(
             "의체 시술을 받음",
             "Underwent prosthetic surgery",
             "義体手術を受けた",
@@ -3406,23 +3567,23 @@ function ox(e) {
     o(
       c >= 2 ? "heishou_adept" : "heishou",
       c >= 2
-        ? h(
+        ? d(
             "흑수의 필두가 됨",
             "Became an Adept of the Heishou Pack",
             "黒獣の筆頭となった",
           )
-        : h("흑수가 됨", "Joined the Heishou Pack", "黒獣となった"),
+        : d("흑수가 됨", "Joined the Heishou Pack", "黒獣となった"),
     ),
     a.some((_) => _.k === "job" && _.job === "시간징수직") &&
       o(
         c >= 9 ? "t_class5" : "t_collector",
         c >= 9
-          ? h(
+          ? d(
               "T사 5등급 징수직 도달",
               "Reached T Corp. Class 5 Collection Staff",
               "T社5級徴収職に到達",
             )
-          : h(
+          : d(
               "T사 시간징수직이 됨",
               "Became T Corp. Collection Staff",
               "T社の徴収職になった",
@@ -3432,12 +3593,12 @@ function ox(e) {
       o(
         c >= 3 ? "r_commander" : "r_pack",
         c >= 3
-          ? h(
+          ? d(
               "R사 4무리 사령관이 됨",
               "Became Commander of R Corp.'s 4th Pack",
               "R社第4群の司令官になった",
             )
-          : h(
+          : d(
               "R사 4무리에 들어감",
               "Joined R Corp.'s 4th Pack",
               "R社第4群に入った",
@@ -3448,7 +3609,7 @@ function ox(e) {
     (u >= 6
       ? o(
           "office_ceo",
-          h(
+          d(
             "날개의 대표에 오름",
             "Rose to CEO of a Wing",
             "翼の代表に上りつめた",
@@ -3457,7 +3618,7 @@ function ox(e) {
       : u >= 5
         ? o(
             "office_dir",
-            h(
+            d(
               "날개의 이사에 오름",
               "Rose to Director of a Wing",
               "翼の理事に上りつめた",
@@ -3466,7 +3627,7 @@ function ox(e) {
         : u >= 4 &&
           o(
             "office_dept",
-            h(
+            d(
               "날개의 부장에 오름",
               "Rose to Department Head of a Wing",
               "翼の部長に上りつめた",
@@ -3476,19 +3637,19 @@ function ox(e) {
   ) {
     (o(
       "heir_cand",
-      h(
+      d(
         "H사의 가주 후보로 자람",
         "Raised as an H Corp. Family Hierarch Candidate",
         "H社の家主候補として育った",
       ),
     ),
       r.includes("가주") &&
-        o("heir_head", h("가주", "Family Hierarch", "家主")),
-      r.includes("군주") && o("heir_lord", h("군주", "Lord", "君主")),
+        o("heir_head", d("가주", "Family Hierarch", "家主")),
+      r.includes("군주") && o("heir_lord", d("군주", "Lord", "君主")),
       r.includes("심사낙방") &&
         o(
           "heir_fail",
-          h(
+          d(
             "가주 심사에서 떨어짐",
             "Failed the Family Hierarch Evaluation",
             "家主審査に落ちた",
@@ -3498,7 +3659,7 @@ function ox(e) {
     (r.includes("심사폐지") &&
       o(
         "rule_abolish",
-        h(
+        d(
           "가주 심사를 없앰",
           "Abolished the Family Hierarch Evaluation",
           "家主審査を廃止した",
@@ -3507,7 +3668,7 @@ function ox(e) {
       r.includes("공씨복권") &&
         o(
           "rule_kong",
-          h(
+          d(
             "공씨의 이름을 되살림",
             "Restored the name of the Kong family",
             "孔家の名を取り戻した",
@@ -3520,7 +3681,7 @@ function ox(e) {
         (_.tyr <= -3 &&
           o(
             "rule_mercy",
-            h(
+            d(
               "자비로운 군주로 불림",
               "Called a merciful lord",
               "慈悲深い君主と呼ばれた",
@@ -3529,7 +3690,7 @@ function ox(e) {
         _.tyr >= 3 &&
           o(
             "rule_tyrant",
-            h("폭군으로 불림", "Called a tyrant", "暴君と呼ばれた"),
+            d("폭군으로 불림", "Called a tyrant", "暴君と呼ばれた"),
           )),
       _ &&
         _.kind === "head" &&
@@ -3538,7 +3699,7 @@ function ox(e) {
         (_.human >= 5 &&
           o(
             "rule_human",
-            h(
+            d(
               "선황충을 한 번도 따르지 않음",
               "Never once followed the Xianhuang Worm",
               "仙皇蟲に一度も従わなかった",
@@ -3547,7 +3708,7 @@ function ox(e) {
         _.human <= 0 &&
           o(
             "rule_worm",
-            h(
+            d(
               "다섯 번 모두 선황충을 따름",
               "Followed the Xianhuang Worm all five times",
               "五度とも仙皇蟲に従った",
@@ -3559,12 +3720,12 @@ function ox(e) {
       o(
         c >= 5 ? "w_level5" : "w_cleanup",
         c >= 5
-          ? h(
+          ? d(
               "W사 5등급 정리 요원 도달",
               "Reached W Corp. Level 5 Cleanup Agent",
               "W社5級整理要員に到達",
             )
-          : h(
+          : d(
               "W사 정리 요원이 됨",
               "Became a W Corp. Cleanup Agent",
               "W社の整理要員になった",
@@ -3574,12 +3735,12 @@ function ox(e) {
       o(
         c >= 5 ? "k_special" : "k_excision",
         c >= 5
-          ? h(
+          ? d(
               "K사 특수 적출직 도달",
               "Reached K Corp. Special Excision Staff",
               "K社特殊摘出職に到達",
             )
-          : h(
+          : d(
               "K사 적출직이 됨",
               "Became K Corp. Excision Staff",
               "K社の摘出職になった",
@@ -3589,13 +3750,13 @@ function ox(e) {
       e.kx.end === "hollow" &&
       o(
         "k_hollow",
-        h("메마른 적출직", "Hollowed Excision Staff", "枯れた摘出職"),
+        d("메마른 적출직", "Hollowed Excision Staff", "枯れた摘出職"),
       ),
     e.kx &&
       e.kx.dreamer &&
       o(
         "k_dreamer",
-        h("꿈을 꾸는 적출직", "Excision Staff Who Dreamed", "夢を見る摘出職"),
+        d("꿈을 꾸는 적출직", "Excision Staff Who Dreamed", "夢を見る摘出職"),
       ),
     a.some((_) => _.k === "job" && _.job === "이단 심문관"))
   ) {
@@ -3603,8 +3764,8 @@ function ox(e) {
     o(
       _ >= 3 ? "n_grosshammer" : "n_inquisitor",
       _ >= 3
-        ? h("N사 큰 망치 도달", "Reached N Corp. Großhammer", "N社大槌に到達")
-        : h(
+        ? d("N사 큰 망치 도달", "Reached N Corp. Großhammer", "N社大槌に到達")
+        : d(
             "N사 이단 심문관이 됨",
             "Became an N Corp. Inquisitor",
             "N社の異端審問官になった",
@@ -3615,13 +3776,13 @@ function ox(e) {
     e.nh.peak &&
     o(
       "n_zealot",
-      h("신앙심이 가득 찬 망치", "A Hammer Full of Faith", "信仰に満ちた槌"),
+      d("신앙심이 가득 찬 망치", "A Hammer Full of Faith", "信仰に満ちた槌"),
     ),
     e.nh &&
       e.nh.empty &&
       o(
         "n_faithless",
-        h("신앙을 잃은 망치", "A Hammer Without Faith", "信仰を失った槌"),
+        d("신앙을 잃은 망치", "A Hammer Without Faith", "信仰を失った槌"),
       ));
   const f = e.warpRec;
   if (
@@ -3629,13 +3790,13 @@ function ox(e) {
       ? f.clear &&
         o(
           "cl_warp",
-          h("열차 안의 금기", "The Taboo Aboard the Train", "列車の中の禁忌"),
+          d("열차 안의 금기", "The Taboo Aboard the Train", "列車の中の禁忌"),
         )
       : f &&
         (f.clear
           ? o(
               "warp_clear",
-              h(
+              d(
                 `${f.age}세 · 워프 열차 완주`,
                 `Age ${f.age} · Ran the Warp Train to the end`,
                 `${f.age}歳 · ワープ列車を完走`,
@@ -3643,22 +3804,124 @@ function ox(e) {
             )
           : o(
               `warp_car_${f.cars}`,
-              h(
+              d(
                 `${f.age}세 · 워프 열차 ${f.cars}칸 돌파`,
                 `Age ${f.age} · Cleared ${f.cars} Warp Train car${f.cars === 1 ? "" : "s"}`,
                 `${f.age}歳 · ワープ列車${f.cars}両突破`,
               ),
             )),
-    e.cl)
+    e.lm)
   ) {
+    const _ = e.lm,
+      j = i && i.cause;
+    (_.phase !== "name" &&
+      o(
+        "dream_built",
+        d(
+          "꿈을 꾸기 시작한 밤",
+          "The night the dream began",
+          "夢を見はじめた夜",
+        ),
+      ),
+      _.opens >= 1 &&
+        o(
+          "dream_first",
+          d("처음 열린 문", "The first gate opened", "初めて開いた門"),
+        ),
+      _.opens >= 9 &&
+        o(
+          "dream_half",
+          d("아홉 번 열린 문", "A gate opened nine times", "九度開いた門"),
+        ),
+      _.opens >= 17 &&
+        o(
+          "dream_full",
+          d("끝나지 않는 꿈", "The dream that never ends", "終わらない夢"),
+        ),
+      j === "토벌" &&
+        o("dream_fell", d("무너진 꿈", "The fallen dream", "崩れた夢")),
+      j === "습격" &&
+        o(
+          "dream_road",
+          d(
+            "돌아오지 못한 길",
+            "The road you never came back from",
+            "帰れなかった道",
+          ),
+        ),
+      j === "열쇠가 된 장로" &&
+        o(
+          "dream_key",
+          d("문을 여는 손", "The hand that opens the gate", "門を開ける手"),
+        ),
+      j === "특색의 토벌" &&
+        o(
+          "dream_alone",
+          d(
+            "잔 하나만 남은 밤",
+            "The night only one cup remained",
+            "杯ひとつだけ残った夜",
+          ),
+        ),
+      j === "재앙" &&
+        o(
+          "dream_plague",
+          d("끝나지 않는 밤", "The night that never ends", "終わらない夜"),
+        ),
+      j === "사람과 함께" &&
+        o(
+          "dream_people",
+          d(
+            "사람과 함께 꾼 꿈",
+            "A dream dreamed with people",
+            "人と共に見た夢",
+          ),
+        ),
+      _.opens >= 17 &&
+        !_.eats &&
+        o(
+          "dream_clean",
+          d(
+            "한 방울도 억지로 받지 않은 꿈",
+            "A dream that never took a drop by force",
+            "一滴も無理に取らなかった夢",
+          ),
+        ),
+      j === "사람과 함께" &&
+        !_.lostN &&
+        o(
+          "dream_six",
+          d(
+            "처음 부른 이름 여섯",
+            "The six names first called",
+            "初めて呼んだ六つの名",
+          ),
+        ),
+      (_.eats || 0) >= 5 &&
+        o(
+          "dream_feast",
+          d(
+            "돌아오지 않은 이름들",
+            "The names that never came home",
+            "帰らなかった名前たち",
+          ),
+        ),
+      j === "사람과 함께" &&
+        _.guest &&
+        o(
+          "dream_guest",
+          d("칼을 맡긴 손님", "The guest who left their blade", "刀を預けた客"),
+        ));
+  }
+  if (e.cl) {
     const _ = (i ? i.age : e.age) - 19,
-      Y = i && i.cause;
-    (o("cl_claw", h("머리의 처형자", "Executioner of the Head", "頭の処刑人")),
+      j = i && i.cause;
+    (o("cl_claw", d("머리의 처형자", "Executioner of the Head", "頭の処刑人")),
       _ >= 15 &&
         !(e.cl.warns > 0) &&
         o(
           "cl_spotless",
-          h(
+          d(
             "고지서 없는 처형자",
             "An Executioner without a notice",
             "告知書のない処刑人",
@@ -3667,7 +3930,7 @@ function ox(e) {
       _ >= 25 &&
         o(
           "cl_long",
-          h(
+          d(
             "스물다섯 해를 넘긴 처형자",
             "An Executioner past twenty-five years",
             "二十五年を越えた処刑人",
@@ -3676,7 +3939,7 @@ function ox(e) {
       r.includes("특색처리") &&
         o(
           "cl_color_kill",
-          h(
+          d(
             "특색을 처리한 처형자",
             "An Executioner who dealt with a Color",
             "特色を処理した処刑人",
@@ -3685,30 +3948,30 @@ function ox(e) {
       r.includes("발톱을넘음") &&
         o(
           "cl_claw_beat",
-          h(
+          d(
             "발톱을 넘은 처형자",
             "An Executioner who got past the Claw",
             "爪を越えた処刑人",
           ),
         ),
-      Y === "조율자" &&
+      j === "조율자" &&
         o(
           "cl_arbiter",
-          h("조율자를 만난 자", "One who met the Arbiter", "調律者に会った者"),
+          d("조율자를 만난 자", "One who met the Arbiter", "調律者に会った者"),
         ),
-      (r.includes("건틀릿반납") || Y === "기억 소거") &&
+      (r.includes("건틀릿반납") || j === "기억 소거") &&
         o(
           "cl_retire",
-          h(
+          d(
             "건틀릿을 반납한 처형자",
             "An Executioner who returned the gauntlet",
             "ガントレットを返納した処刑人",
           ),
         ),
-      Y === "발톱" &&
+      j === "발톱" &&
         o(
           "cl_clawed",
-          h(
+          d(
             "발톱에게 처리된 처형자",
             "An Executioner dealt with by the Claw",
             "爪に処理された処刑人",
@@ -3718,7 +3981,7 @@ function ox(e) {
   (a.some((_) => _.k === "flag" && _.flag === "떠돌이") &&
     o(
       "bf_stray",
-      h(
+      d(
         "혈귀가 됨 (떠돌이)",
         "Became a Bloodfiend (stray)",
         "血鬼になった（放浪者）",
@@ -3727,7 +3990,7 @@ function ox(e) {
     a.some((_) => _.k === "job" && _.job === "권속") &&
       o(
         "bf_kin",
-        h(
+        d(
           "가문의 권속이 됨",
           "Became a Family's Kindred",
           "家門の眷属になった",
@@ -3738,7 +4001,7 @@ function ox(e) {
     ((g.bestGen || 99) <= 1 &&
       o(
         "bf_gen1",
-        h(
+        d(
           "제1권속(장로)에 오름",
           "Rose to First Kindred (Elder)",
           "第一眷属（長老）に上り詰めた",
@@ -3749,7 +4012,7 @@ function ox(e) {
         i.age - g.since >= 10 &&
         o(
           "bf_nobite",
-          h(
+          d(
             "열 해 동안 물지 않은 혈귀",
             "A Bloodfiend who went ten years without biting",
             "十年噛まなかった血鬼",
@@ -3758,7 +4021,7 @@ function ox(e) {
       (g.barUses || 0) >= 20 &&
         o(
           "bf_bar20",
-          h(
+          d(
             "혈액바 스무 해 치",
             "Twenty years' worth of Hemobars",
             "血液バー二十年分",
@@ -3767,39 +4030,39 @@ function ox(e) {
       g.made >= 2 &&
         o(
           "bf_two_kin",
-          h(
+          d(
             "권속 둘을 모두 만듦",
             "Made both of your Kindred",
             "眷属をふたりとも生み出した",
           ),
         ));
     const _ = {
-      couple_sleep: h(
+      couple_sleep: d(
         "둘이 함께 잠든 혈귀",
         "Bloodfiends who slept together",
         "ふたりで眠った血鬼",
       ),
-      smile_first: h(
+      smile_first: d(
         "배우자를 먼저 재운 혈귀",
         "A Bloodfiend who let their spouse sleep first",
         "配偶者を先に眠らせた血鬼",
       ),
-      gone_grave: h(
+      gone_grave: d(
         "배우자 곁으로 돌아간 혈귀",
         "A Bloodfiend who returned to their spouse's side",
         "配偶者のそばへ帰った血鬼",
       ),
-      elder_hand: h(
+      elder_hand: d(
         "자리를 넘기고 잠든 장로",
         "An Elder who handed over the seat and slept",
         "座を譲って眠った長老",
       ),
-      hunter_last: h(
+      hunter_last: d(
         "마지막 사냥꾼을 기다린 혈귀",
         "A Bloodfiend who waited for the last hunter",
         "最後の狩人を待った血鬼",
       ),
-      kin_cup: h(
+      kin_cup: d(
         "권속에게 남긴 잔",
         "A cup left to the Kindred",
         "眷属に遺した杯",
@@ -3811,60 +4074,60 @@ function ox(e) {
     ) {
       o(
         "bf_alive",
-        h(
+        d(
           "살아서 이야기를 맺은 혈귀",
           "A Bloodfiend whose story ended alive",
           "生きたまま物語を結んだ血鬼",
         ),
       );
-      const Y = {
-          couple: h("둘이서 오래", "Together, for a long time", "ふたりで長く"),
-          smile: h("늦게 온 웃음", "A smile that came late", "遅れてきた笑み"),
-          gone: h("늙지 않는 쪽", "The one who does not age", "老いないほう"),
-          slept: h("늙지 않는 쪽", "The one who does not age", "老いないほう"),
-          elder: h("오래 앉은 장로", "The long-seated Elder", "長く座した長老"),
-          hunter: h("잠그지 않는 문", "The unlocked door", "鍵のない扉"),
-          faces: h("밤이 아는 이름", "A name the night knows", "夜が知る名"),
-          kin: h("이름 없는 가문", "A nameless Family", "名もなき家門"),
-          bag: h(
+      const j = {
+          couple: d("둘이서 오래", "Together, for a long time", "ふたりで長く"),
+          smile: d("늦게 온 웃음", "A smile that came late", "遅れてきた笑み"),
+          gone: d("늙지 않는 쪽", "The one who does not age", "老いないほう"),
+          slept: d("늙지 않는 쪽", "The one who does not age", "老いないほう"),
+          elder: d("오래 앉은 장로", "The long-seated Elder", "長く座した長老"),
+          hunter: d("잠그지 않는 문", "The unlocked door", "鍵のない扉"),
+          faces: d("밤이 아는 이름", "A name the night knows", "夜が知る名"),
+          kin: d("이름 없는 가문", "A nameless Family", "名もなき家門"),
+          bag: d(
             "떠나지 않는 피주머니",
             "The Bloodbag that never left",
             "去らない血袋",
           ),
-          bar: h(
+          bar: d(
             "혈액바 상자의 탑",
             "A tower of Hemobar boxes",
             "血液バーの箱の塔",
           ),
-          nobite: h(
+          nobite: d(
             "물지 않은 스무 해",
             "Twenty years without a bite",
             "噛まなかった二十年",
           ),
         },
-        R = ja(e).k;
-      Y[R] && o(`bf_epi_${R === "slept" ? "gone" : R}`, Y[R]);
+        R = $a(e).k;
+      j[R] && o(`bf_epi_${R === "slept" ? "gone" : R}`, j[R]);
     }
     (i &&
       i.cause === "긴 잠" &&
-      ["faces"].includes(ja(e).k) &&
+      ["faces"].includes($a(e).k) &&
       o(
         "bf_end_faces",
-        h("셀 수 없는 얼굴", "Countless faces", "数えきれない顔"),
+        d("셀 수 없는 얼굴", "Countless faces", "数えきれない顔"),
       ),
-      a.some((Y) => Y.k === "flag" && Y.flag === "정체공개") &&
+      a.some((j) => j.k === "flag" && j.flag === "정체공개") &&
         o(
           "bf_reveal",
-          h(
+          d(
             "소속에 정체를 밝힌 혈귀",
             "A Bloodfiend who revealed themselves to their own",
             "所属に正体を明かした血鬼",
           ),
         ),
-      a.some((Y) => Y.k === "flag" && Y.flag === "정체들킴") &&
+      a.some((j) => j.k === "flag" && j.flag === "정체들킴") &&
         o(
           "bf_found",
-          h(
+          d(
             "숨긴 정체를 들킨 혈귀",
             "A Bloodfiend whose secret was found out",
             "隠した正体を知られた血鬼",
@@ -3873,13 +4136,13 @@ function ox(e) {
   }
   (i &&
     i.age >= 200 &&
-    o("age200", h("200년을 넘게 삶", "Lived past 200", "200年を超えて生きた")),
+    o("age200", d("200년을 넘게 삶", "Lived past 200", "200年を超えて生きた")),
     i &&
       i.age >= 300 &&
       e.bf &&
       o(
         "bf_300",
-        h(
+        d(
           "삼백 년을 살아낸 혈귀",
           "A Bloodfiend who lived three hundred years",
           "三百年を生き抜いた血鬼",
@@ -3889,33 +4152,33 @@ function ox(e) {
       i.cause === "긴 잠" &&
       o(
         "bf_sleep",
-        h("긴 잠에 듦", "Went into the long sleep", "長い眠りについた"),
+        d("긴 잠에 듦", "Went into the long sleep", "長い眠りについた"),
       ),
     i &&
       i.cause === "피주머니" &&
-      o("bloodbag", h("피주머니가 됨", "Became a Bloodbag", "血袋になった")));
-  const b = e.kk;
-  b &&
-    (o("kk_join", h("흑운회", "Kurokumo Clan", "黒雲会")),
-    (b.best || 1) >= 2 &&
+      o("bloodbag", d("피주머니가 됨", "Became a Bloodbag", "血袋になった")));
+  const p = e.kk;
+  p &&
+    (o("kk_join", d("흑운회", "Kurokumo Clan", "黒雲会")),
+    (p.best || 1) >= 2 &&
       o(
         "kk_captain",
-        h("흑운회 부조장", "Kurokumo Clan Captain", "黒雲会 副組長"),
+        d("흑운회 부조장", "Kurokumo Clan Captain", "黒雲会 副組長"),
       ),
-    (b.best || 1) >= 3 &&
+    (p.best || 1) >= 3 &&
       o(
         "kk_patriarch",
-        h("흑운회 조장", "Kurokumo Clan Patriarch", "黒雲会 組長"),
+        d("흑운회 조장", "Kurokumo Clan Patriarch", "黒雲会 組長"),
       ),
-    (b.ink || 0) >= 3 &&
+    (p.ink || 0) >= 3 &&
       o(
         "kk_ink3",
-        h("세 겹의 검은 구름", "Three layers of black cloud", "三重の黒い雲"),
+        d("세 겹의 검은 구름", "Three layers of black cloud", "三重の黒い雲"),
       ),
     r.includes("검계마지막골목") &&
       o(
         "kk_bl_last",
-        h(
+        d(
           "검계의 마지막 골목을 본 자",
           "One who saw the Blade Lineage's last alley",
           "剣契の最後の路地を見た者",
@@ -3924,17 +4187,17 @@ function ox(e) {
     r.includes("검계와마주앉음") &&
       o(
         "kk_truce",
-        h(
+        d(
           "검계와 마주 앉은 자",
           "One who sat across from the Blade Lineage",
           "剣契と向かい合って座った者",
         ),
       ),
-    (b.punish || 0) >= 1 &&
+    (p.punish || 0) >= 1 &&
       !(i && i.cause === "흑운회의 처벌") &&
       o(
         "kk_finger",
-        h(
+        d(
           "손가락으로 값을 치른 자",
           "One who paid with a finger",
           "指で代償を払った者",
@@ -3943,7 +4206,7 @@ function ox(e) {
     r.includes("칼을물려줌") &&
       o(
         "kk_retire",
-        h(
+        d(
           "칼을 물려준 부조장",
           "A Captain who passed on the blade",
           "刀を譲った副組長",
@@ -3952,7 +4215,7 @@ function ox(e) {
     r.includes("조장물러남") &&
       o(
         "kk_p_end",
-        h(
+        d(
           "자리를 넘긴 조장",
           "A Patriarch who passed on the seat",
           "座を譲った組長",
@@ -3961,7 +4224,7 @@ function ox(e) {
     r.includes("도장을차림") &&
       o(
         "kk_dojo",
-        h(
+        d(
           "도장을 차린 검객",
           "A swordsman who opened a dojo",
           "道場を開いた剣客",
@@ -3970,96 +4233,96 @@ function ox(e) {
     r.includes("도장제자") &&
       o(
         "kk_d_student",
-        h(
+        d(
           "검술을 물려준 자",
           "One who passed on swordsmanship",
           "剣術を伝えた者",
         ),
       ));
-  const k = e.ws;
-  if (k) {
+  const b = e.ws;
+  if (b) {
     (o(
       "ws_join",
-      h("공방에 이름을 올림", "Name on a Workshop roll", "工房に名を連ねた"),
+      d("공방에 이름을 올림", "Name on a Workshop roll", "工房に名を連ねた"),
     ),
-      (k.best || 1) >= 4 &&
-        o("ws_rep", h("공방 대표", "Workshop Head", "工房の代表")),
-      (k.best || 1) >= 4 &&
-        k.cls === 3 &&
+      (b.best || 1) >= 4 &&
+        o("ws_rep", d("공방 대표", "Workshop Head", "工房の代表")),
+      (b.best || 1) >= 4 &&
+        b.cls === 3 &&
         o(
           "ws_s",
-          h(
+          d(
             "이름난 공방의 대표",
             "Head of a renowned Workshop",
             "名高い工房の代表",
           ),
         ),
-      (k.bestFame || 0) >= 80 &&
+      (b.bestFame || 0) >= 80 &&
         o(
           "ws_fame5",
-          h("도시가 아는 공방", "A Workshop the City knows", "都市が知る工房"),
+          d("도시가 아는 공방", "A Workshop the City knows", "都市が知る工房"),
         ),
       r.includes("특색의주문") &&
         o(
           "ws_color_order",
-          h(
+          d(
             "특색의 손에 맞춤",
             "Fitted to a Color's hand",
             "特色の手に合わせた",
           ),
         ),
-      (k.fingers || []).length >= 4 &&
+      (b.fingers || []).length >= 4 &&
         o(
           "ws_finger4",
-          h(
+          d(
             "네 손가락이 모두 찾아옴",
             "All four Fingers came calling",
             "四本の指がすべて訪れた",
           ),
         ));
-    const _ = k.mp ? k.mp.grade || 0 : -1;
+    const _ = b.mp ? b.mp.grade || 0 : -1;
     (_ >= 2 &&
       o(
         "ws_masterpiece",
-        h("걸작을 남김", "Left a masterwork", "傑作を残した"),
+        d("걸작을 남김", "Left a masterwork", "傑作を残した"),
       ),
-      _ >= 3 && o("ws_meisterwerk", h("명작", "Magnum opus", "名作")),
+      _ >= 3 && o("ws_meisterwerk", d("명작", "Magnum opus", "名作")),
       _ >= 4 &&
         o(
           "ws_legend_work",
-          h("전설이 된 물건", "A piece that became legend", "伝説となった品"),
+          d("전설이 된 물건", "A piece that became legend", "伝説となった品"),
         ),
-      k.mp &&
-        k.mp.score >= 100 &&
+      b.mp &&
+        b.mp.score >= 100 &&
         o(
           "ws_perfect",
-          h("기적을 만든 자", "One who made a Miracle", "奇跡を作った者"),
+          d("기적을 만든 자", "One who made a Miracle", "奇跡を作った者"),
         ),
-      k.patent && o("ws_patent", h("특허 하나", "One patent", "特許ひとつ")),
+      b.patent && o("ws_patent", d("특허 하나", "One patent", "特許ひとつ")),
       r.includes("내칼의특색") &&
         o(
           "ws_patron_color",
-          h("내 칼을 쥔 특색", "A Color holding my blade", "我が刃を握る特色"),
+          d("내 칼을 쥔 특색", "A Color holding my blade", "我が刃を握る特色"),
         ),
       (r.includes("발톱을본") || r.includes("손톱을본")) &&
         o(
           "ws_claw",
-          h("발톱이 온 공방", "The Workshop the Claw visited", "爪が来た工房"),
+          d("발톱이 온 공방", "The Workshop the Claw visited", "爪が来た工房"),
         ),
-      k.sold &&
-        o("ws_sold", h("공방을 넘김", "Sold the Workshop", "工房を手放した")));
+      b.sold &&
+        o("ws_sold", d("공방을 넘김", "Sold the Workshop", "工房を手放した")));
   }
   const T = e.bl;
   (T &&
-    (o("bl_join", h("검계", "Blade Lineage", "剣契")),
+    (o("bl_join", d("검계", "Blade Lineage", "剣契")),
     (T.best || 1) >= 2 &&
-      o("bl_salsu", h("검계 살수", "Blade Lineage Salsu", "剣契 殺手")),
+      o("bl_salsu", d("검계 살수", "Blade Lineage Salsu", "剣契 殺手")),
     (T.best || 1) >= 3 &&
-      o("bl_mentor", h("검계 우두머리", "Blade Lineage Mentor", "剣契 頭目")),
+      o("bl_mentor", d("검계 우두머리", "Blade Lineage Mentor", "剣契 頭目")),
     r.includes("칼을들고떠남") &&
       o(
         "bl_scatter_leave",
-        h(
+        d(
           "칼을 들고 떠난 자",
           "One who left with their blade",
           "刀を手に去った者",
@@ -4068,7 +4331,7 @@ function ox(e) {
     r.includes("19구에사람보냄") &&
       o(
         "bl_homeland",
-        h(
+        d(
           "19구로 사람을 보낸 우두머리",
           "A Mentor who sent someone to District 19",
           "19区へ人を送った頭目",
@@ -4077,7 +4340,7 @@ function ox(e) {
     r.includes("마지막항쟁생존") &&
       o(
         "bl_last",
-        h(
+        d(
           "마지막 항쟁에서 살아 나온 자",
           "One who survived the last stand",
           "最後の抗争を生き延びた者",
@@ -4087,13 +4350,13 @@ function ox(e) {
       (e.bld || (i && i.cause === "뒤틀림")) &&
       o(
         "bl_m_distort",
-        h("뒤틀린 우두머리", "The Distorted Mentor", "ねじれた頭目"),
+        d("뒤틀린 우두머리", "The Distorted Mentor", "ねじれた頭目"),
       ),
     e.bld &&
       (e.bld.threat || 0) >= 3 &&
       o(
         "bl_d_plague",
-        h(
+        d(
           "도시 질병이 된 우두머리",
           "A Mentor rated Urban Plague",
           "都市疾病となった頭目",
@@ -4102,7 +4365,7 @@ function ox(e) {
     r.includes("칼을내려놓은뒤틀림") &&
       o(
         "bl_d_lay",
-        h(
+        d(
           "칼을 내려놓은 뒤틀림",
           "A Distortion that laid down the blade",
           "刀を置いたねじれ",
@@ -4111,7 +4374,7 @@ function ox(e) {
     r.includes("칼을거둔우두머리") &&
       o(
         "bl_m_retreat",
-        h(
+        d(
           "칼을 거둔 우두머리",
           "A Mentor who sheathed the blade",
           "刀を収めた頭目",
@@ -4120,7 +4383,7 @@ function ox(e) {
     r.includes("검계재건") &&
       o(
         "bl_w_reform",
-        h(
+        d(
           "검계를 다시 세운 자",
           "One who rebuilt the Blade Lineage",
           "剣契を再興した者",
@@ -4129,7 +4392,7 @@ function ox(e) {
     r.includes("칼을내려놓음") &&
       o(
         "bl_w_settle",
-        h(
+        d(
           "칼을 내려놓은 검객",
           "A swordsman who laid down the blade",
           "刀を置いた剣客",
@@ -4138,18 +4401,18 @@ function ox(e) {
     r.includes("본국검전수") &&
       o(
         "bl_w_student",
-        h(
+        d(
           "본국검을 물려준 자",
           "One who passed on Bongukgeom",
           "本国剣を伝えた者",
         ),
       )),
     r.includes("E.G.O개화") &&
-      o("ego", h("E.G.O 개화", "Effloresced E.G.O", "E.G.O開花")),
+      o("ego", d("E.G.O 개화", "Effloresced E.G.O", "E.G.O開花")),
     r.includes("도서관기억") &&
       o(
         "library_back",
-        h(
+        d(
           "도서관에서 돌아옴",
           "Returned from the Library",
           "図書館から帰還した",
@@ -4160,7 +4423,7 @@ function ox(e) {
       n.some((_) => _.eventId === "a_invitation") &&
       o(
         "library_lost",
-        h(
+        d(
           "도서관의 책이 됨",
           "Became a book in the Library",
           "図書館の本になった",
@@ -4171,7 +4434,7 @@ function ox(e) {
       .some((_) => !(i && i.age === _.age && i.cause === "환상체 사고")) &&
       o(
         "aleph_survive",
-        h(
+        d(
           "ALEPH 재해에서 살아남음",
           "Survived an ALEPH disaster",
           "ALEPHの災害を生き延びた",
@@ -4185,148 +4448,148 @@ function ox(e) {
     !(i && i.age === w.age && i.cause === "환상체 사고") &&
     o(
       "apocalypse",
-      h(
+      d(
         "종말새 아래에서 살아남음",
         "Survived beneath the Apocalypse Bird",
         "終末鳥の下で生き延びた",
       ),
     );
-  const m = e.hgd;
-  m &&
-    (m.full && m.vessel >= 9
-      ? o("guard_big", h("큰 그릇", "A Great Vessel", "大きな器"))
-      : m.full
-        ? o("guard_full", h("채워진 그릇", "A Filled Vessel", "満たされた器"))
+  const y = e.hgd;
+  y &&
+    (y.full && y.vessel >= 9
+      ? o("guard_big", d("큰 그릇", "A Great Vessel", "大きな器"))
+      : y.full
+        ? o("guard_full", d("채워진 그릇", "A Filled Vessel", "満たされた器"))
         : o(
             "guard_chosen",
-            h("가문의 부름", "The Family's Call", "家門の呼び声"),
+            d("가문의 부름", "The Family's Call", "家門の呼び声"),
           ),
-    m.guardSince != null
-      ? o("guard_stay", h("왼쪽 자리", "The Left Side", "左の席"))
-      : m.stage === "pass" &&
-        o("guard_pass", h("가주의 왼쪽", "The Hierarch's Left", "家主の左")),
-    (m.guardSince != null || m.stage === "pass") &&
-      m.trialPower != null &&
-      m.trialPower <= 6 &&
+    y.guardSince != null
+      ? o("guard_stay", d("왼쪽 자리", "The Left Side", "左の席"))
+      : y.stage === "pass" &&
+        o("guard_pass", d("가주의 왼쪽", "The Hierarch's Left", "家主の左")),
+    (y.guardSince != null || y.stage === "pass") &&
+      y.trialPower != null &&
+      y.trialPower <= 6 &&
       o(
         "guard_against",
-        h(
+        d(
           "작은 그릇의 기적",
           "The Miracle of a Small Vessel",
           "小さな器の奇跡",
         ),
       ),
-    m.stage === "fail" &&
-      o("guard_fail", h("빈 오른쪽", "The Empty Right", "空いた右")),
-    m.teach &&
-      o("guard_teach", h("잘못된 가르침", "A Wrong Lesson", "誤った教え")),
-    m.retired &&
+    y.stage === "fail" &&
+      o("guard_fail", d("빈 오른쪽", "The Empty Right", "空いた右")),
+    y.teach &&
+      o("guard_teach", d("잘못된 가르침", "A Wrong Lesson", "誤った教え")),
+    y.retired &&
       o(
         "guard_retire",
-        h("넘겨준 왼쪽", "The Left Side Handed Over", "譲った左"),
+        d("넘겨준 왼쪽", "The Left Side Handed Over", "譲った左"),
       ),
-    m.endWay === "before" &&
+    y.endWay === "before" &&
       o(
         "guard_before",
-        h("빈 왼쪽 한 뼘", "A Hand-Span Left Empty", "空けた左の一尺"),
+        d("빈 왼쪽 한 뼘", "A Hand-Span Left Empty", "空けた左の一尺"),
       ),
-    m.lordDead &&
+    y.lordDead &&
       o(
         "guard_after",
-        h("남겨진 호위", "The Guard Left Behind", "残された護衛"),
+        d("남겨진 호위", "The Guard Left Behind", "残された護衛"),
       ),
-    m.guardSince != null &&
+    y.guardSince != null &&
       i &&
-      (m.trust ?? 0) >= 10 &&
+      (y.trust ?? 0) >= 10 &&
       o(
         "guard_friend",
-        h("친구였던 가주", "A Hierarch Who Was a Friend", "友だった家主"),
+        d("친구였던 가주", "A Hierarch Who Was a Friend", "友だった家主"),
       ));
-  const y = e.cmRec || {};
+  const m = e.cmRec || {};
   return (
-    y.indexE &&
-      o("index_e", h("e(무리수)", "e (the irrational number)", "e（無理数）")),
-    y.ampoule && o("ampoule", h("K사 앰플", "K Corp. Ampoule", "K社アンプル")),
-    y.citizen &&
+    m.indexE &&
+      o("index_e", d("e(무리수)", "e (the irrational number)", "e（無理数）")),
+    m.ampoule && o("ampoule", d("K사 앰플", "K Corp. Ampoule", "K社アンプル")),
+    m.citizen &&
       o(
         "warp_citizen",
-        h("시민칸의 스승", "The Teacher of the Citizens' Car", "市民車両の師"),
+        d("시민칸의 스승", "The Teacher of the Citizens' Car", "市民車両の師"),
       ),
-    y.lost && o("warp_lost", h("길을 잃음", "Lost", "道を見失った")),
-    y.blindKill &&
+    m.lost && o("warp_lost", d("길을 잃음", "Lost", "道を見失った")),
+    m.blindKill &&
       o(
         "blind_kill",
-        h(
+        d(
           "알아보지 못한 채 죽인 자",
           "One who killed without knowing who it was",
           "誰かも分からないまま殺した者",
         ),
       ),
-    y.blindLove &&
-      o("blind_love", h("사랑하는 이에게", "To the One I Love", "愛する人へ")),
-    y.nameless && o("nameless", h("無名", "Nameless (無名)", "無名")),
-    y.lamentHappy &&
+    m.blindLove &&
+      o("blind_love", d("사랑하는 이에게", "To the One I Love", "愛する人へ")),
+    m.nameless && o("nameless", d("無名", "Nameless (無名)", "無名")),
+    m.lamentHappy &&
       o(
         "lament_happy",
-        h(
+        d(
           "그곳에서는 행복하기를",
           "May They Be Happy There",
           "そこでは幸せでありますように",
         ),
       ),
-    y.lamentWait &&
+    m.lamentWait &&
       o(
         "lament_wait",
-        h(
+        d(
           "그곳에서 기다려 주기를",
           "May They Wait for Me There",
           "そこで待っていてくれますように",
         ),
       ),
-    y.lotto && o("lotto", h("부", "Wealth", "富")),
-    y.officeBroken &&
-      o("office_broken", h("사무소 깨기", "Office Break-In", "事務所破り")),
-    y.thumbWill &&
+    m.lotto && o("lotto", d("부", "Wealth", "富")),
+    m.officeBroken &&
+      o("office_broken", d("사무소 깨기", "Office Break-In", "事務所破り")),
+    m.thumbWill &&
       o(
         "thumb_will",
-        h("대부의 유언", "The Capo dei Capi's Will", "ゴッドファーザーの遺言"),
+        d("대부의 유언", "The Capo dei Capi's Will", "ゴッドファーザーの遺言"),
       ),
-    y.middleGrudge &&
-      o("middle_grudge", h("식구의 원한", "The Family's Grudge", "家族の恨み")),
-    y.ringSilence &&
-      o("ring_silence", h("말없는 감상", "A Silent Viewing", "無言の鑑賞")),
-    y.fixerNamed &&
+    m.middleGrudge &&
+      o("middle_grudge", d("식구의 원한", "The Family's Grudge", "家族の恨み")),
+    m.ringSilence &&
+      o("ring_silence", d("말없는 감상", "A Silent Viewing", "無言の鑑賞")),
+    m.fixerNamed &&
       o(
         "fixer_named",
-        h("지명받은 이름", "A Name That Was Called", "指名された名"),
+        d("지명받은 이름", "A Name That Was Called", "指名された名"),
       ),
     (e.luckyUps || 0) >= 3 &&
       o(
         "fixer_lucky3",
-        h("앞당겨진 심사", "A Review Moved Up", "前倒しの審査"),
+        d("앞당겨진 심사", "A Review Moved Up", "前倒しの審査"),
       ),
-    y.fixerLuckyOne &&
+    m.fixerLuckyOne &&
       o(
         "fixer_lucky_one",
-        h("한 번에 1급", "Grade 1 in One Leap", "一足飛びの1級"),
+        d("한 번에 1급", "Grade 1 in One Leap", "一足飛びの1級"),
       ),
     e.colorFull &&
       e.grade === 1 &&
       !r.includes("특색") &&
       o(
         "fixer_colorless",
-        h("색 없는 1급", "A Grade 1 Without a Color", "色なき1級"),
+        d("색 없는 1급", "A Grade 1 Without a Color", "色なき1級"),
       ),
-    y.lamentMeet &&
+    m.lamentMeet &&
       o(
         "lament_meet",
-        h("그곳에서 만나기를", "May We Meet There", "そこで会えますように"),
+        d("그곳에서 만나기를", "May We Meet There", "そこで会えますように"),
       ),
-    ((_) => n.some((Y) => Y.eventId === _))("t_love") &&
+    ((_) => n.some((j) => j.eventId === _))("t_love") &&
       r.includes("가정") &&
       o(
         "love_first",
-        h(
+        d(
           "첫사랑과 가정을 이룸",
           "Built a home with a first love",
           "初恋の人と家庭を築いた",
@@ -4336,7 +4599,7 @@ function ox(e) {
       !r.includes("사별") &&
       o(
         "refuse_proposal",
-        h(
+        d(
           "청혼을 거절한 삶",
           "A life that turned down a proposal",
           "プロポーズを断った人生",
@@ -4345,7 +4608,7 @@ function ox(e) {
     r.includes("사별") &&
       o(
         "widowed",
-        h(
+        d(
           "곁을 지킨 사람을 먼저 보냄",
           "Saw off the one who stayed by my side",
           "そばにいてくれた人を先に見送った",
@@ -4355,7 +4618,7 @@ function ox(e) {
       !r.includes("가정") &&
       o(
         "unwed_lover",
-        h(
+        d(
           "끝내 이루지 못한 사이",
           "A bond that never came to be",
           "結ばれなかった間柄",
@@ -4364,7 +4627,7 @@ function ox(e) {
     t
   );
 }
-const Da = [
+const an = [
   { id: "common", ko: "흔함", en: "Common", ja: "平凡", min: 0.15 },
   { id: "uncommon", ko: "드묾", en: "Uncommon", ja: "珍しい", min: 0.05 },
   { id: "rare", ko: "희귀", en: "Rare", ja: "希少", min: 0.01 },
@@ -4372,16 +4635,16 @@ const Da = [
   { id: "legend", ko: "전설", en: "Legendary", ja: "伝説", min: 3e-4 },
   { id: "myth", ko: "신화", en: "Mythic", ja: "神話", min: 0 },
 ];
-function ax(e) {
+function H0(e) {
   return e == null
-    ? Da[Da.length - 1]
-    : Da.find((t) => e >= t.min) || Da[Da.length - 1];
+    ? an[an.length - 1]
+    : an.find((t) => e >= t.min) || an[an.length - 1];
 }
-const nx = { id: "miracle", ko: "기적", en: "Miracle", ja: "奇跡" },
-  gr = Da.concat([nx]),
-  rx = Object.fromEntries(gr.map((e) => [e.id, e])),
-  ef = Object.fromEntries(gr.map((e, t) => [e.id, t])),
-  am = {
+const D0 = { id: "miracle", ko: "기적", en: "Miracle", ja: "奇跡" },
+  Ir = an.concat([D0]),
+  q0 = Object.fromEntries(Ir.map((e) => [e.id, e])),
+  Wf = Object.fromEntries(Ir.map((e, t) => [e.id, t])),
+  Bm = {
     born_head: "uncommon",
     born_outskirts: "uncommon",
     orphan: "uncommon",
@@ -4571,6 +4834,20 @@ const nx = { id: "miracle", ko: "기적", en: "Miracle", ja: "奇跡" },
     kk_p_end: "legend",
     kk_dojo: "epic",
     kk_d_student: "legend",
+    dream_built: "uncommon",
+    dream_first: "common",
+    dream_fell: "common",
+    dream_road: "uncommon",
+    dream_half: "uncommon",
+    dream_key: "rare",
+    dream_alone: "rare",
+    dream_plague: "epic",
+    dream_full: "epic",
+    dream_people: "legend",
+    dream_clean: "legend",
+    dream_six: "myth",
+    dream_feast: "rare",
+    dream_guest: "rare",
     cl_claw: "rare",
     cl_spotless: "epic",
     cl_long: "epic",
@@ -4594,25 +4871,25 @@ const nx = { id: "miracle", ko: "기적", en: "Miracle", ja: "奇跡" },
     bl_w_student: "legend",
     bl_w_reform: "legend",
   };
-function ix(e, t) {
+function G0(e, t) {
   return e
     .map((o) => {
       const a = t && t[o.key] != null ? t[o.key] : null,
-        n = rx[am[o.key]] || ax(a);
-      return { ...o, p: a, tier: n.id, tierLabel: h(n.ko, n.en, n.ja) };
+        n = q0[Bm[o.key]] || H0(a);
+      return { ...o, p: a, tier: n.id, tierLabel: d(n.ko, n.en, n.ja) };
     })
-    .sort((o, a) => ef[a.tier] - ef[o.tier] || (o.p ?? 0) - (a.p ?? 0));
+    .sort((o, a) => Wf[a.tier] - Wf[o.tier] || (o.p ?? 0) - (a.p ?? 0));
 }
-const X = (e) => ({ o: "ok", k: e }),
-  Ae = (e) => ({ o: "cross", k: e }),
-  J = (e) => ({ o: "wave", w: e }),
-  At = (e, t) => {
+const Q = (e) => ({ o: "ok", k: e }),
+  Me = (e) => ({ o: "cross", k: e }),
+  X = (e) => ({ o: "wave", w: e }),
+  Wt = (e, t) => {
     const o = t.reduce((n, [, r]) => n + r, 0);
     let a = e.next() * o;
     for (const [n, r] of t) if (((a -= r), a < 0)) return n;
     return t[t.length - 1][0];
   },
-  nm = [
+  Em = [
     {
       id: "L01",
       max: 3,
@@ -4622,12 +4899,12 @@ const X = (e) => ({ o: "ok", k: e }),
       scene: (e, t) => (t === 1 ? "a" : t === 2 ? "b" : "c"),
       resolve(e, t) {
         return t === "row"
-          ? (e.rows++, e.rows >= 2 ? Ae("row2") : X("row1"))
+          ? (e.rows++, e.rows >= 2 ? Me("row2") : Q("row1"))
           : t === "dump"
             ? ((e.dumped = !0),
               e.rows++,
-              e.rows >= 2 ? Ae("dump2") : X("dump1"))
-            : X("rest");
+              e.rows >= 2 ? Me("dump2") : Q("dump1"))
+            : Q("rest");
       },
     },
     {
@@ -4637,7 +4914,7 @@ const X = (e) => ({ o: "ok", k: e }),
       scene: (e, t, o, a) =>
         a
           ? "fog"
-          : At(o, [
+          : Wt(o, [
               ["empty", 35],
               ["music", 20],
               ["people", 25],
@@ -4646,12 +4923,12 @@ const X = (e) => ({ o: "ok", k: e }),
       resolve(e, t, o) {
         const a = o === "empty" || o === "music";
         return t === "around"
-          ? X(a ? "around_empty" : "around")
+          ? Q(a ? "around_empty" : "around")
           : a
-            ? J(t === "call" ? "call" : "near")
+            ? X(t === "call" ? "call" : "near")
             : t === "go"
-              ? Ae("go")
-              : X(
+              ? Me("go")
+              : Q(
                   t === "approach"
                     ? o === "people"
                       ? "approach_people"
@@ -4670,12 +4947,12 @@ const X = (e) => ({ o: "ok", k: e }),
         t === 1 ? "shine" : t === 2 ? "lure" : t === 3 ? "sleepy" : "ready",
       resolve(e, t, o, a) {
         return t === "sleep"
-          ? J("sleep")
+          ? X("sleep")
           : t === "depart"
             ? a >= 4
-              ? Ae("depart")
-              : J("early")
-            : X(t === "look" ? "look" : a >= 4 ? "wait_ready" : "wait");
+              ? Me("depart")
+              : X("early")
+            : Q(t === "look" ? "look" : a >= 4 ? "wait_ready" : "wait");
       },
     },
     {
@@ -4685,7 +4962,7 @@ const X = (e) => ({ o: "ok", k: e }),
       scene: (e, t, o, a) =>
         a
           ? "quiet"
-          : At(o, [
+          : Wt(o, [
               ["quiet", 35],
               ["one", 25],
               ["two", 20],
@@ -4694,20 +4971,20 @@ const X = (e) => ({ o: "ok", k: e }),
       resolve(e, t, o) {
         const a = o === "one" || o === "two";
         return t === "toward"
-          ? J("toward")
+          ? X("toward")
           : t === "answer"
             ? a
-              ? X("answer")
+              ? Q("answer")
               : o === "three"
-                ? J("three")
-                : X("answer_quiet")
+                ? X("three")
+                : Q("answer_quiet")
             : t === "hush"
               ? a
-                ? J("silent")
-                : X(o === "three" ? "hush_three" : "hush_quiet")
+                ? X("silent")
+                : Q(o === "three" ? "hush_three" : "hush_quiet")
               : a
-                ? J("silent")
-                : Ae(o === "three" ? "away_three" : "away");
+                ? X("silent")
+                : Me(o === "three" ? "away_three" : "away");
       },
     },
     {
@@ -4731,14 +5008,14 @@ const X = (e) => ({ o: "ok", k: e }),
           : "scatter",
       resolve(e, t, o, a) {
         return t === "off"
-          ? ((e.lamp = !1), X("off"))
+          ? ((e.lamp = !1), Q("off"))
           : t === "signal"
-            ? J(o === "signal" ? "signal" : "signal_any")
+            ? X(o === "signal" ? "signal" : "signal_any")
             : t === "raise"
-              ? ((e.raised = !0), a >= 3 ? J("lit") : X("raise"))
+              ? ((e.raised = !0), a >= 3 ? X("lit") : Q("raise"))
               : e.lamp
-                ? J("lit_row")
-                : Ae("dark");
+                ? X("lit_row")
+                : Me("dark");
       },
       endTurn: (e, t) => (e.lamp && e.raised && t >= 3 ? "lit" : null),
     },
@@ -4749,7 +5026,7 @@ const X = (e) => ({ o: "ok", k: e }),
       scene: (e, t, o, a) =>
         a
           ? "clear"
-          : At(o, [
+          : Wt(o, [
               ["name", 30],
               ["shoulder", 20],
               ["steps", 25],
@@ -4757,11 +5034,11 @@ const X = (e) => ({ o: "ok", k: e }),
             ]),
       resolve(e, t, o) {
         return t === "look"
-          ? J("look")
+          ? X("look")
           : t === "answer"
-            ? J("answer")
+            ? X("answer")
             : t === "ears"
-              ? X(
+              ? Q(
                   o === "name"
                     ? "ears_name"
                     : o === "clear"
@@ -4769,8 +5046,8 @@ const X = (e) => ({ o: "ok", k: e }),
                       : "ears",
                 )
               : o === "name"
-                ? J("name")
-                : Ae("ahead");
+                ? X("name")
+                : Me("ahead");
       },
     },
     {
@@ -4778,7 +5055,7 @@ const X = (e) => ({ o: "ok", k: e }),
       max: 4,
       choices: ["down", "shut", "rope", "wave"],
       scene: (e, t, o) =>
-        At(o, [
+        Wt(o, [
           ["hand", 30],
           ["face", 25],
           ["rope", 20],
@@ -4786,12 +5063,12 @@ const X = (e) => ({ o: "ok", k: e }),
         ]),
       resolve(e, t, o) {
         return t === "down"
-          ? J(o === "face" ? "down_face" : o === "rope" ? "down_rope" : "down")
+          ? X(o === "face" ? "down_face" : o === "rope" ? "down_rope" : "down")
           : t === "rope"
-            ? J("rope")
+            ? X("rope")
             : t === "shut"
-              ? Ae("shut")
-              : X(
+              ? Me("shut")
+              : Q(
                   o === "rope"
                     ? "wave_rope"
                     : o === "deck"
@@ -4816,20 +5093,20 @@ const X = (e) => ({ o: "ok", k: e }),
             : "school";
       },
       resolve(e, t, o) {
-        if (t === "throw") return ((e.net = !0), (e.catch = null), X("throw"));
+        if (t === "throw") return ((e.net = !0), (e.catch = null), Q("throw"));
         if (t === "haul") {
-          if (o === "silver") return J("haul");
+          if (o === "silver") return X("haul");
           ((e.net = !1), (e.catch = null));
           const a = !e.fished;
-          return ((e.fished = !0), X(a ? "haul" : "haul_again"));
+          return ((e.fished = !0), Q(a ? "haul" : "haul_again"));
         }
         return t === "cut"
           ? ((e.net = !1),
             (e.catch = null),
-            X(o === "silver" ? "cut_silver" : "cut"))
+            Q(o === "silver" ? "cut_silver" : "cut"))
           : e.net
-            ? J("drag")
-            : Ae("row");
+            ? X("drag")
+            : Me("row");
       },
     },
     {
@@ -4865,7 +5142,7 @@ const X = (e) => ({ o: "ok", k: e }),
         return t === "dip"
           ? ((e.hold = !0),
             (e.known = !e.sim && e.cur === e.first),
-            X(
+            Q(
               e.sim
                 ? "dip_sim"
                 : e.cur === e.first
@@ -4875,12 +5152,12 @@ const X = (e) => ({ o: "ok", k: e }),
                   : "dip_other",
             ))
           : t === "wait"
-            ? X("wait")
+            ? Q("wait")
             : a === 1
-              ? J("too_soon")
+              ? X("too_soon")
               : e.cur === e.first && !e.sim
-                ? Ae("cross")
-                : J(e.sim ? "sim" : "other");
+                ? Me("cross")
+                : X(e.sim ? "sim" : "other");
       },
     },
     {
@@ -4892,32 +5169,32 @@ const X = (e) => ({ o: "ok", k: e }),
       scene: (e, t, o, a) =>
         a
           ? "calm"
-          : At(o, [
+          : Wt(o, [
               ["mine", 25],
               ["other", 25],
               ["calm", 50],
             ]),
       resolve(e, t, o) {
         return t === "radio"
-          ? J("radio")
+          ? X("radio")
           : t === "off"
             ? ((e.lamp = !1),
-              o === "other" ? J("other") : X(o === "mine" ? "off_mine" : "off"))
+              o === "other" ? X("other") : Q(o === "mine" ? "off_mine" : "off"))
             : t === "proxy"
               ? o === "other"
-                ? X("proxy")
+                ? Q("proxy")
                 : o === "mine"
                   ? e.lamp
-                    ? J("mine_answer")
-                    : X("proxy_mine_dark")
-                  : X("proxy_calm")
+                    ? X("mine_answer")
+                    : Q("proxy_mine_dark")
+                  : Q("proxy_calm")
               : o === "other"
-                ? J("other")
+                ? X("other")
                 : o === "mine"
                   ? e.lamp
-                    ? J("mine")
-                    : Ae("row_dark")
-                  : Ae("row");
+                    ? X("mine")
+                    : Me("row_dark")
+                  : Me("row");
       },
     },
     {
@@ -4933,7 +5210,7 @@ const X = (e) => ({ o: "ok", k: e }),
           i =
             n > 0 && r <= n
               ? "good"
-              : At(o, [
+              : Wt(o, [
                   ["good", 50],
                   ["broken", 25],
                   ["none", 25],
@@ -4942,20 +5219,20 @@ const X = (e) => ({ o: "ok", k: e }),
       },
       resolve(e, t, o) {
         return t === "open"
-          ? J("open")
+          ? X("open")
           : t === "release"
             ? ((e.carry = Math.max(0, e.carry - 1)),
               (e.got = Math.max(0, Math.min(e.got, e.carry))),
-              X("release"))
+              Q("release"))
             : t === "take"
               ? o === "good"
-                ? (e.got++, e.carry++, X(e.got === 3 ? "take3" : "take"))
+                ? (e.got++, e.carry++, Q(e.got === 3 ? "take3" : "take"))
                 : o === "broken"
-                  ? (e.carry++, X("take_broken"))
-                  : X("take_none")
+                  ? (e.carry++, Q("take_broken"))
+                  : Q("take_none")
               : e.got >= 3
-                ? Ae("row")
-                : J("early");
+                ? Me("row")
+                : X("early");
       },
     },
     {
@@ -4965,7 +5242,7 @@ const X = (e) => ({ o: "ok", k: e }),
       scene: (e, t, o, a) =>
         a ? "row" : o.pick(["oar", "bow", "hand", "row"]),
       resolve(e, t, o) {
-        return t !== o ? J(`miss_${t}`) : t === "row" ? Ae("row") : X("match");
+        return t !== o ? X(`miss_${t}`) : t === "row" ? Me("row") : Q("match");
       },
     },
     {
@@ -4981,25 +5258,25 @@ const X = (e) => ({ o: "ok", k: e }),
             ? "calm"
             : t === 3 && o.chance(0.6)
               ? "path"
-              : At(o, [
+              : Wt(o, [
                   ["fill", 35],
                   ["tide", 65],
                 ]);
       },
       resolve(e, t, o, a) {
         return t === "anchor"
-          ? ((e.anchor = !0), X("anchor"))
+          ? ((e.anchor = !0), Q("anchor"))
           : a === 1
-            ? J("drift")
+            ? X("drift")
             : t === "raise"
               ? a >= 6
-                ? Ae("raise")
-                : J("early")
+                ? Me("raise")
+                : X("early")
               : o === "fill"
                 ? t === "bail"
-                  ? X("bail")
-                  : J("fill")
-                : X(t === "bail" ? "bail_none" : "wait");
+                  ? Q("bail")
+                  : X("fill")
+                : Q(t === "bail" ? "bail_none" : "wait");
       },
     },
     {
@@ -5014,7 +5291,7 @@ const X = (e) => ({ o: "ok", k: e }),
           ? o.chance(0.5)
             ? "knob"
             : "closed"
-          : At(o, [
+          : Wt(o, [
               ["come", 25],
               ["knob", 35],
               ["closed", 40],
@@ -5022,18 +5299,18 @@ const X = (e) => ({ o: "ok", k: e }),
       },
       resolve(e, t, o) {
         return t === "open"
-          ? J("open")
+          ? X("open")
           : t === "knock"
             ? o === "come"
-              ? J("knock_come")
-              : (e.knocks++, X(e.knocks >= 2 ? "knock2" : "knock1"))
+              ? X("knock_come")
+              : (e.knocks++, Q(e.knocks >= 2 ? "knock2" : "knock1"))
             : t === "wait"
-              ? X(o === "come" ? "wait_come" : "wait")
+              ? Q(o === "come" ? "wait_come" : "wait")
               : o === "come"
-                ? J("pass_come")
+                ? X("pass_come")
                 : e.knocks >= 2
-                  ? Ae("pass")
-                  : J("early");
+                  ? Me("pass")
+                  : X("early");
       },
     },
     {
@@ -5045,7 +5322,7 @@ const X = (e) => ({ o: "ok", k: e }),
         const n =
           a || (t === 4 && !e.lineSeen)
             ? "line"
-            : At(o, [
+            : Wt(o, [
                 ["line", 35],
                 ["rainbow", 35],
                 ["tilt", 30],
@@ -5053,11 +5330,11 @@ const X = (e) => ({ o: "ok", k: e }),
         return (n === "line" && (e.lineSeen = !0), n);
       },
       resolve(e, t, o) {
-        if (t === "stop") return ((e.last = null), X("stop"));
+        if (t === "stop") return ((e.last = null), Q("stop"));
         if (t === "straight")
-          return o === "line" ? Ae("straight") : J("noline");
+          return o === "line" ? Me("straight") : X("noline");
         const a = t === "left" ? "L" : "R";
-        return e.last === a ? J(`repeat_${t}`) : ((e.last = a), X(t));
+        return e.last === a ? X(`repeat_${t}`) : ((e.last = a), Q(t));
       },
     },
     {
@@ -5067,7 +5344,7 @@ const X = (e) => ({ o: "ok", k: e }),
       scene: (e, t, o, a) =>
         a
           ? "calm"
-          : At(o, [
+          : Wt(o, [
               ["b1", 15],
               ["b2", 15],
               ["b3", 15],
@@ -5080,29 +5357,29 @@ const X = (e) => ({ o: "ok", k: e }),
           n = o === "b2" || o === "b4";
         return t === "answer"
           ? a
-            ? X("answer")
+            ? Q("answer")
             : n
-              ? J("even")
+              ? X("even")
               : o === "wind"
-                ? J("wind_lamp")
-                : X("answer_calm")
+                ? X("wind_lamp")
+                : Q("answer_calm")
           : t === "silent"
             ? n
-              ? X("silent")
+              ? Q("silent")
               : a
-                ? J("odd")
+                ? X("odd")
                 : o === "wind"
-                  ? J("wind_lamp")
-                  : X("silent_calm")
+                  ? X("wind_lamp")
+                  : Q("silent_calm")
             : t === "wrap"
               ? o === "wind"
-                ? X("wrap")
+                ? Q("wrap")
                 : a
-                  ? J("odd")
-                  : X(n ? "wrap_even" : "wrap_calm")
+                  ? X("odd")
+                  : Q(n ? "wrap_even" : "wrap_calm")
               : o === "calm"
-                ? Ae("row")
-                : J(o === "wind" ? "wind_row" : "bell_row");
+                ? Me("row")
+                : X(o === "wind" ? "wind_row" : "bell_row");
       },
     },
     {
@@ -5117,7 +5394,7 @@ const X = (e) => ({ o: "ok", k: e }),
             ? (a = "quiet")
             : t >= 5
               ? (a = "stop")
-              : (a = At(o, [
+              : (a = Wt(o, [
                   ["laugh", 40],
                   ["stop", 30],
                   ["prints", 20],
@@ -5128,9 +5405,9 @@ const X = (e) => ({ o: "ok", k: e }),
       },
       resolve(e, t, o) {
         return t === "answer"
-          ? J("answer")
+          ? X("answer")
           : t === "ears"
-            ? X(
+            ? Q(
                 o === "prints"
                   ? "ears_prints"
                   : o === "laugh"
@@ -5139,11 +5416,11 @@ const X = (e) => ({ o: "ok", k: e }),
               )
             : t === "wait"
               ? o === "prints"
-                ? J("prints")
-                : X("wait")
+                ? X("prints")
+                : Q("wait")
               : o === "quiet"
-                ? Ae("row")
-                : J(
+                ? Me("row")
+                : X(
                     o === "stop"
                       ? "early"
                       : o === "laugh"
@@ -5159,7 +5436,7 @@ const X = (e) => ({ o: "ok", k: e }),
       scene: (e, t, o, a) =>
         a
           ? "dark"
-          : At(o, [
+          : Wt(o, [
               ["ask", 30],
               ["wind", 25],
               ["water", 25],
@@ -5167,20 +5444,20 @@ const X = (e) => ({ o: "ok", k: e }),
             ]),
       resolve(e, t, o) {
         return t === "look"
-          ? J("look")
+          ? X("look")
           : t === "wrap"
             ? o === "ask"
-              ? J("silent")
-              : X(o === "wind" ? "wrap" : "wrap_calm")
+              ? X("silent")
+              : Q(o === "wind" ? "wrap" : "wrap_calm")
             : t === "here"
               ? o === "wind"
-                ? J("wind")
-                : X(o === "ask" ? "here" : "here_calm")
+                ? X("wind")
+                : Q(o === "ask" ? "here" : "here_calm")
               : o === "ask"
-                ? J("silent")
+                ? X("silent")
                 : o === "wind"
-                  ? J("wind_row")
-                  : Ae("row");
+                  ? X("wind_row")
+                  : Me("row");
       },
     },
     {
@@ -5191,25 +5468,25 @@ const X = (e) => ({ o: "ok", k: e }),
       scene: (e, t, o, a) =>
         a
           ? "out"
-          : At(o, [
+          : Wt(o, [
               ["in", 40],
               ["out", 35],
               ["stop", 25],
             ]),
       resolve(e, t, o) {
         return t === "sync"
-          ? ((e.doom = !0), X("sync"))
+          ? ((e.doom = !0), Q("sync"))
           : t === "hold"
             ? o === "stop"
-              ? J("hold_stop")
-              : X(o === "in" ? "hold" : "hold_out")
+              ? X("hold_stop")
+              : Q(o === "in" ? "hold" : "hold_out")
             : t === "still"
               ? o === "in"
-                ? J("still_in")
-                : X(o === "stop" ? "still" : "still_out")
+                ? X("still_in")
+                : Q(o === "stop" ? "still" : "still_out")
               : o === "out"
-                ? Ae("row")
-                : J(o === "in" ? "row_in" : "row_stop");
+                ? Me("row")
+                : X(o === "in" ? "row_in" : "row_stop");
       },
       before: (e) => (e.doom ? "sync" : null),
     },
@@ -5221,38 +5498,38 @@ const X = (e) => ({ o: "ok", k: e }),
       scene: () => "none",
       resolve(e, t) {
         return t === "speak"
-          ? J("speak")
+          ? X("speak")
           : t === "sky"
-            ? X("sky")
+            ? Q("sky")
             : t === "stop"
-              ? (e.stops++, X("stop"))
+              ? (e.stops++, Q("stop"))
               : e.stops === 3
-                ? Ae("row")
-                : J("row");
+                ? Me("row")
+                : X("row");
       },
     },
   ],
-  tf = [0, 1, 2, 3, 4, 5, 6, 7],
-  sx = [8, 9, 10, 11, 12, 13, 14],
-  rm = [15, 16, 17, 18, 19],
-  im = (e) => `21-${String(e + 1).padStart(2, "0")}`;
-function lx(e) {
+  Mf = [0, 1, 2, 3, 4, 5, 6, 7],
+  K0 = [8, 9, 10, 11, 12, 13, 14],
+  Lm = [15, 16, 17, 18, 19],
+  $m = (e) => `21-${String(e + 1).padStart(2, "0")}`;
+function z0(e) {
   const t = new Set(),
     o = (n) => {
-      const r = n.filter((l) => !t.has(l)),
+      const r = n.filter((s) => !t.has(s)),
         i = e.pick(r.length ? r : n);
       return (t.add(i), i);
     },
-    a = [o(tf), o(tf)];
-  for (let n = 0; n < 3; n++) a.push(o(e.chance(0.6) ? sx : rm));
+    a = [o(Mf), o(Mf)];
+  for (let n = 0; n < 3; n++) a.push(o(e.chance(0.6) ? K0 : Lm));
   return a;
 }
-const hx = (e, t) => e.choices.filter((o) => !e.visible || e.visible(o, t));
-function dx(e, t, o, a) {
+const U0 = (e, t) => e.choices.filter((o) => !e.visible || e.visible(o, t));
+function J0(e, t, o, a) {
   const n = e.before ? e.before(t) : null;
   return n ? { wave: n } : { scene: e.scene(t, o, a, o >= e.max) };
 }
-function ux(e, t, o, a, n) {
+function V0(e, t, o, a, n) {
   const r = e.resolve(t, o, a, n);
   if (r.o === "ok") {
     const i = e.endTurn ? e.endTurn(t, n) : null;
@@ -5261,43 +5538,43 @@ function ux(e, t, o, a, n) {
   }
   return r;
 }
-const B = (e, t = 0, o = 100) => Math.max(t, Math.min(o, e)),
-  Re = (e) => Math.round(e * 10) / 10,
-  of = new WeakMap();
-function Z(e, t) {
-  let o = of.get(e);
+const $ = (e, t = 0, o = 100) => Math.max(t, Math.min(o, e)),
+  Ce = (e) => Math.round(e * 10) / 10,
+  Of = new WeakMap();
+function ee(e, t) {
+  let o = Of.get(e);
   return (
-    o || ((o = new Map(e.events.map((a) => [a.id, a]))), of.set(e, o)),
+    o || ((o = new Map(e.events.map((a) => [a.id, a]))), Of.set(e, o)),
     o.get(t)
   );
 }
-const af = new WeakMap();
-function sm(e, t) {
-  let o = af.get(e);
+const Ff = new WeakMap();
+function Pm(e, t) {
+  let o = Ff.get(e);
   return (
-    o || ((o = new Map((e.daily || []).map((a) => [a.id, a]))), af.set(e, o)),
+    o || ((o = new Map((e.daily || []).map((a) => [a.id, a]))), Ff.set(e, o)),
     o.get(t)
   );
 }
-function xs(e, t) {
+function Ps(e, t) {
   return e.some((o) => o === t.id || (t.tags || []).includes(o));
 }
-const cx = {
+const X0 = {
     "마침표 사무소": { ko: "총", en: "gun", ja: "銃" },
     "시 협회": { ko: "단검", en: "dagger", ja: "短剣" },
   },
-  fx = { ko: "검", en: "sword", ja: "剣" };
-function wx(e) {
+  Q0 = { ko: "검", en: "sword", ja: "剣" };
+function Z0(e) {
   if (!e) return null;
   if (e.org) return e.org.name;
   const t = e.orgHistory || [];
   return t.length ? t[t.length - 1] : null;
 }
-function gx(e) {
-  const t = cx[wx(e)] || fx;
-  return h(t.ko, t.en, t.ja);
+function ex(e) {
+  const t = X0[Z0(e)] || Q0;
+  return d(t.ko, t.en, t.ja);
 }
-const mx = {
+const tx = {
     "츠바이 협회": { types: ["호위"], p: 0.7 },
     "리우 협회": { types: ["전쟁", "조직 소탕"], p: 0.6 },
     "세븐 협회": { types: ["수색"], p: 0.5 },
@@ -5306,51 +5583,51 @@ const mx = {
     "섕크 협회": { types: ["결투"], p: 0.5 },
     "마침표 사무소": { types: ["조직 소탕"], p: 0.2 },
   },
-  nf = {
+  Bf = {
     "시선 사무소": (e) =>
       e.flags.includes("의체") || e.flags.includes("좋은의체"),
   },
-  Ts = (e, t) =>
+  Hs = (e, t) =>
     (e.story || []).some((o) => o.k === "job" && o.job === t) || e.job === t,
-  Ht = (e, t, o) =>
+  Jt = (e, t, o) =>
     e &&
-    mm(e, o)
-      .replaceAll("{무기}", gx(o))
+    Vm(e, o)
+      .replaceAll("{무기}", ex(o))
       .replaceAll("{지역}", t.name)
       .replaceAll("{구역}", t.sub || t.name)
       .replaceAll(
         "{손가락}",
-        o && o.finger ? ot[o.finger] : h("손가락", "the Finger", "指"),
+        o && o.finger ? ht[o.finger] : d("손가락", "the Finger", "指"),
       )
       .replaceAll(
         "{소속}",
-        (o && o.org && o.org.name) || h("무소속", "no affiliation", "無所属"),
+        (o && o.org && o.org.name) || d("무소속", "no affiliation", "無所属"),
       )
       .replaceAll(
         "{제안}",
         (o && o.offer && o.offer.name) ||
-          h("어느 사무소", "an Office", "ある事務所"),
+          d("어느 사무소", "an Office", "ある事務所"),
       )
       .replaceAll(
         "{배우자상태}",
         o && o.age >= 65
-          ? h(
+          ? d(
               "배우자의 머리가 하얗게 셌다. 당신의 얼굴은 결혼하던 해 그대로다.",
               "Your spouse's hair has turned white. Your face is the same as the year you married.",
               "配偶者の髪は真っ白になった。あなたの顔は結婚した年のままだ。",
             )
-          : h(
+          : d(
               "배우자가 오래 아팠다. 의사는 고개를 저었다.",
               "Your spouse has been ill for a long time. The doctor shook their head.",
               "配偶者は長く患っていた。医者は首を横に振った。",
             ),
       )
-      .replaceAll("{R팀}", B0(o))
-      .replaceAll("{R직급}", L0(o))
+      .replaceAll("{R팀}", v1(o))
+      .replaceAll("{R직급}", _1(o))
       .replaceAll(
         "{상처줄}",
         o && (o.hatchHurt || 0) >= 2
-          ? h(
+          ? d(
               " 당신 쪽이 더 많이 다쳤다. 상대도 그것을 안다.",
               " You are the more badly hurt. Your opponent knows it too.",
               " あなたのほうが深く傷ついている。相手もそれを知っている。",
@@ -5360,7 +5637,7 @@ const mx = {
       .replaceAll(
         "{대장복제줄}",
         o && o.flags.includes("복제") && (o.wingRank || 0) >= 2
-          ? h(
+          ? d(
               " 팀원들은 당신을 보고 아무것도 묻지 않았다. 대장의 얼굴이었다.",
               " The team looked at you and asked nothing. It was the Team Leader's face.",
               " チームの者たちはあなたを見て何も聞かなかった。隊長の顔だった。",
@@ -5369,25 +5646,25 @@ const mx = {
       )
       .replace(
         /\{R:([^|}]*)\|([^|}]*)\|([^}]*)\}/g,
-        (a, n, r, i) => ({ 토끼: n, 순록: r, 코뿔소: i })[Pr(o)] ?? n,
+        (a, n, r, i) => ({ 토끼: n, 순록: r, 코뿔소: i })[ri(o)] ?? n,
       )
-      .replace(/\{(BF_[A-Z]+|윗사람|형님|어버이)\}/g, (a, n) => MT(n, o))
+      .replace(/\{(BF_[A-Z]+|윗사람|형님|어버이)\}/g, (a, n) => qv(n, o))
       .replace(/\{(해답|칙령\d|결정\d|평판줄|공씨줄|남은사람줄)\}/g, (a, n) =>
-        vx(n, o),
+        lx(n, o),
       )
       .replace(/\{BL고향:([^|}]*)\|([^}]*)\}/g, (a, n, r) =>
         o && o.regionId === "S" ? n : r,
       )
-      .replace(/\{BL(뜻줄|칼줄)\}/g, (a, n) => Sx(n, o))
+      .replace(/\{BL(뜻줄|칼줄)\}/g, (a, n) => fx(n, o))
       .replaceAll("{KK번호}", String((o && o.kk && o.kk.seat) || ""))
       .replace(
         /\{(KK직급|KK잉크사유|KK출신):([^|}]*)\|([^}]*)\}/g,
-        (a, n, r, i) => Mx(n, r, i, o),
+        (a, n, r, i) => Tx(n, r, i, o),
       )
       .replace(/\{(BL제자|토벌무기):([^|}]*)\|([^}]*)\}/g, (a, n, r, i) =>
-        g0(n, r, i, o),
+        e1(n, r, i, o),
       )
-      .replaceAll("{윗등급}", px(o))
+      .replaceAll("{윗등급}", ax(o))
       .replace(/\{KX심사:([^|}]*)\|([^}]*)\}/g, (a, n, r) =>
         ((o && o.wingRank) || 1) <= 1 ? n : r,
       )
@@ -5398,33 +5675,33 @@ const mx = {
         o && o.nh && o.nh.rites ? r : n,
       )
       .replace(/\{(연인|배우자|아이)(?::([^|}]*)\|([^}]*))?\}/g, (a, n, r, i) =>
-        yx(n, r, i, o),
+        ox(n, r, i, o),
       )
-      .replaceAll("{토벌}", xm(o))
-      .replaceAll("{등급}", m0(o));
-function yx(e, t, o, a) {
+      .replaceAll("{토벌}", ty(o))
+      .replaceAll("{등급}", t1(o));
+function ox(e, t, o, a) {
   const r =
     (e === "아이" ? a && a.childName : a && a.partnerName) ||
     (e === "아이"
-      ? h("아이", "your child", "子")
+      ? d("아이", "your child", "子")
       : e === "연인"
-        ? h("연인", "your partner", "恋人")
-        : h("배우자", "your spouse", "配偶者"));
-  return t !== void 0 && Ce() === "ko" ? r + ks(r, t, o) : r;
+        ? d("연인", "your partner", "恋人")
+        : d("배우자", "your spouse", "配偶者"));
+  return t !== void 0 && Se() === "ko" ? r + $n(r, t, o) : r;
 }
-function px(e) {
+function ax(e) {
   const t = (e && e.wingRank) || 3;
   return t >= 5
-    ? h(
+    ? d(
         "다른 특수 적출직",
         "another member of the Special Excision Staff",
         "別の特殊摘出職",
       )
     : t >= 4
-      ? h("특수 적출직", "a member of the Special Excision Staff", "特殊摘出職")
-      : h("4등급", "a Class 4", "4級");
+      ? d("특수 적출직", "a member of the Special Excision Staff", "特殊摘出職")
+      : d("4등급", "a Class 4", "4級");
 }
-const ct = Gt({
+const bt = Qt({
     ko: {
       엄지: ["솔다토", "카포", "언더보스", "대부"],
       검지: ["수행자", "대행자", "신탁 대행자"],
@@ -5459,7 +5736,7 @@ const ct = Gt({
       약지: ["スチューデント", "ドーセント", "マエストロ"],
     },
   }),
-  bx = Gt({
+  nx = Qt({
     ko: {
       "날개 직원": "날개 직원",
       "협회 직원": "협회 직원",
@@ -5491,7 +5768,7 @@ const ct = Gt({
       "이단 심문관": "N社 異端審問官",
     },
   }),
-  gn = {
+  Rn = {
     흑수: 2,
     시간징수직: 10,
     "정리 요원": 5,
@@ -5499,20 +5776,20 @@ const ct = Gt({
     적출직: 5,
     "이단 심문관": 3,
   },
-  lm = ["토끼", "순록", "코뿔소"],
-  yu = Gt({
+  Hm = ["토끼", "순록", "코뿔소"],
+  Ku = Qt({
     ko: { 토끼: "토끼", 순록: "순록", 코뿔소: "코뿔소" },
     en: { 토끼: "Rabbit", 순록: "Reindeer", 코뿔소: "Rhino" },
     ja: { 토끼: "ウサギ", 순록: "トナカイ", 코뿔소: "サイ" },
   }),
-  kx = 0.2,
-  xx = 0.1,
-  nn = 78,
-  xe = (e) => Math.min(15e3, Math.max(4e3, String(e || "").length * 55)),
-  hm = (e) =>
+  rx = 0.2,
+  ix = 0.1,
+  bn = 78,
+  me = (e) => Math.min(15e3, Math.max(4e3, String(e || "").length * 55)),
+  Dm = (e) =>
     !!e.heir && ((e.flags.includes("가주후보") && e.age >= 5) || !!e.rule),
-  Di = (e) => (e.heir && e.heir.kong) || 0;
-function rf(e) {
+  us = (e) => (e.heir && e.heir.kong) || 0;
+function Ef(e) {
   const t = e.heir;
   return (
     !!t &&
@@ -5522,48 +5799,48 @@ function rf(e) {
     t.ji + t.yong + t.in >= 60
   );
 }
-function Tx(e) {
+function sx(e) {
   const t = e.heir || { ji: 0, yong: 0, in: 0 };
   return t.ji >= t.yong && t.ji >= t.in ? "ji" : t.yong >= t.in ? "yong" : "in";
 }
-function vx(e, t) {
+function lx(e, t) {
   if (!t || !t.heir) return "";
   if (e === "해답")
     return {
-      ji: h(
+      ji: d(
         "장부와 처방을 엮은 해답을 냈다. 한 줄도 빈 데가 없었다.",
         "presented an answer woven from ledgers and prescriptions. Not a single line was empty.",
         "帳簿と処方を編み上げた答えを出した。一行の隙もなかった。",
       ),
-      yong: h(
+      yong: d(
         "스스로 몸으로 겪은 것을 해답으로 냈다. 꾸민 말은 없었다.",
         "presented what you had lived through in your own body. There were no embellished words.",
         "自分の体で経験したことを答えとして出した。飾った言葉はなかった。",
       ),
-      in: h(
+      in: d(
         "이름과 몫이 다음 사람에게 건너가는 일을 해답으로 냈다.",
         "presented, as your answer, the passing of names and shares to the next person.",
         "名と取り分が次の人へと渡っていくことを答えとして出した。",
       ),
-    }[Tx(t)];
+    }[sx(t)];
   const o = t.rule || {},
     a = /^(칙령|결정)(\d)$/.exec(e);
   if (a) return (o.lines || [])[Number(a[2]) - 1] || "";
   if (e === "평판줄") {
     const n = o.tyr || 0;
     return n >= 3
-      ? h(
+      ? d(
           "대관원 사람들은 대개 군주를 폭군이라 불렀다. 그 말을 군주 앞에서 하는 이는 없었다.",
           "The people of Daguanyuan mostly called the Lord a tyrant. No one said it in front of the Lord.",
           "大観園の人々はたいてい君主を暴君と呼んだ。その言葉を君主の前で口にする者はいなかった。",
         )
       : n <= -3
-        ? h(
+        ? d(
             "사람들은 대개 군주를 자비로운 군주라 불렀다. 거리에서는 다시 아이들의 웃음소리가 들렸다.",
             "People mostly called the Lord a merciful lord. Children's laughter was heard in the streets again.",
             "人々はたいてい君主を慈悲深い君主と呼んだ。通りには再び子どもたちの笑い声が響いた。",
           )
-        : h(
+        : d(
             "누군가는 군주를 폭군이라 불렀다. 누군가는 자비로운 군주라 불렀다. 거리에서는 다시 아이들의 웃음소리가 들렸다.",
             "Some called the Lord a tyrant. Some called the Lord a merciful lord. Children's laughter was heard in the streets again.",
             "ある者は君主を暴君と呼んだ。ある者は慈悲深い君主と呼んだ。通りには再び子どもたちの笑い声が響いた。",
@@ -5571,7 +5848,7 @@ function vx(e, t) {
   }
   if (e === "공씨줄")
     return t.flags.includes("공씨복권")
-      ? h(
+      ? d(
           `
 
 그해 서고의 그 칸에는, 처음으로 선이 그어지지 않은 이름들이 남았다.`,
@@ -5586,24 +5863,24 @@ That year, in that section of the archive, names without a line through them rem
   if (e === "남은사람줄") {
     const n = o.human ?? 5;
     return n >= 5
-      ? h(
+      ? d(
           "끝나지 않는 삶 속에서도, 가주는 이따금 병동 앞의 줄을 떠올렸다.",
           "Even in a life without end, the Family Hierarch sometimes remembered the line outside the ward.",
           "終わらない生の中でも、家主は時おり病棟の前の列を思い出した。",
         )
       : n >= 3
-        ? h(
+        ? d(
             "가주는 가끔, 자기가 무엇을 잊었는지 떠올리려 애썼다.",
             "Now and then, the Family Hierarch tried to remember what had been forgotten.",
             "家主はときどき、自分が何を忘れたのかを思い出そうとした。",
           )
         : n >= 1
-          ? h(
+          ? d(
               "가주는 더 이상 옛 이름을 부르지 않았다.",
               "The Family Hierarch no longer called the old names.",
               "家主はもう昔の名を呼ばなかった。",
             )
-          : h(
+          : d(
               "가주는 더 이상 무엇도 떠올리지 않았다.",
               "The Family Hierarch no longer remembered anything at all.",
               "家主はもう何も思い出さなかった。",
@@ -5611,7 +5888,7 @@ That year, in that section of the archive, names without a line through them rem
   }
   return "";
 }
-const Gh = jt({
+const yd = Nt({
     ko: ["검계 조직원", "검계 살수", "검계 우두머리"],
     en: [
       "Blade Lineage Cutthroat",
@@ -5620,7 +5897,7 @@ const Gh = jt({
     ],
     ja: ["剣契 組織員", "剣契 殺手", "剣契 頭目"],
   }),
-  rn = {
+  kn = {
     mentorCut: 20,
     mentorYears: 3,
     mentorRep: 30,
@@ -5628,9 +5905,9 @@ const Gh = jt({
     tick: 0.6,
     income: [4.5, 5.5, 7],
   },
-  Gs = (e) => (e && e.bl) || null,
-  On = (e) => (e && e.job === "검계" && e.bl ? e.bl.rank || 1 : 0);
-function dm(e) {
+  fl = (e) => (e && e.bl) || null,
+  Xn = (e) => (e && e.job === "검계" && e.bl ? e.bl.rank || 1 : 0);
+function qm(e) {
   if (["A", "B", "C", "outskirts"].includes(e.regionId)) return !1;
   const t = e.flags;
   return (
@@ -5640,7 +5917,7 @@ function dm(e) {
     t.includes("조직입문")
   );
 }
-function _x(e) {
+function hx(e) {
   return e.bl ||
     e.kk ||
     [
@@ -5657,35 +5934,35 @@ function _x(e) {
     (e.job === "해결사" && e.grade && e.grade <= 4) ||
     e.flags.includes("가주후보")
     ? !1
-    : dm(e);
+    : qm(e);
 }
-function jx(e) {
-  const t = Gs(e);
+function dx(e) {
+  const t = fl(e);
   return (
     !!t &&
     t.rank === 2 &&
-    e.age - (t.rankAt ?? e.age) >= rn.mentorYears &&
-    t.cut >= rn.mentorCut &&
-    e.stats.rep >= rn.mentorRep &&
-    e.stats.network >= rn.mentorNet
+    e.age - (t.rankAt ?? e.age) >= kn.mentorYears &&
+    t.cut >= kn.mentorCut &&
+    e.stats.rep >= kn.mentorRep &&
+    e.stats.network >= kn.mentorNet
   );
 }
-function Ax(e) {
-  const t = Gs(e),
+function ux(e) {
+  const t = fl(e),
     o = t ? Math.max(0, t.way || 0) : 0;
-  return B(
+  return $(
     0.45 + Math.min(0.25, 0.05 * o) + (e.stats.sanity <= 30 ? 0.15 : 0),
     0,
     0.95,
   );
 }
-function Yx(e) {
+function cx(e) {
   return e.flags.includes("E.G.O개화")
     ? 0
-    : B(0.5 + (e.stats.sanity - 50) * 0.005, 0.25, 0.75);
+    : $(0.5 + (e.stats.sanity - 50) * 0.005, 0.25, 0.75);
 }
-function um(e) {
-  const t = Gs(e) || { best: 1, cut: 0 },
+function Gm(e) {
+  const t = fl(e) || { best: 1, cut: 0 },
     o = t.cut || 0;
   return (t.best || 1) >= 3
     ? o >= 60
@@ -5703,25 +5980,25 @@ function um(e) {
         ? 7
         : 8;
 }
-function Sx(e, t) {
-  const o = Gs(t);
+function fx(e, t) {
+  const o = fl(t);
   return e === "뜻줄"
     ? o && (o.way || 0) >= 3
-      ? h(
+      ? d(
           " · 깃털들의 뜻이 아직 손에 남아 있다",
           " · The Feathers' will still remains in your hands",
           "・羽たちの志がまだ手に残っている",
         )
       : ""
     : e === "칼줄" && o && (o.way || 0) <= -3
-      ? h(
+      ? d(
           " · 칼은 어디서든 벨 수 있다",
           " · A blade can cut anywhere",
           "・刀はどこでも斬れる",
         )
       : "";
 }
-const Do = {
+const ea = {
     income: [5.5, 7, 9],
     tribute: 0.2,
     tributeLedger: 0.25,
@@ -5730,7 +6007,7 @@ const Do = {
     patStat: 35,
     seatMax: 40,
   },
-  Rx = jt({
+  wx = Nt({
     ko: ["흑운회 와카슈", "흑운회 부조장", "흑운회 조장"],
     en: [
       "Kurokumo Clan Wakashu",
@@ -5739,20 +6016,20 @@ const Do = {
     ],
     ja: ["黒雲会 若衆", "黒雲会 副組長", "黒雲会 組長"],
   }),
-  ei = (e) => (e && e.kk) || null,
-  ho = (e) => (e && e.job === "흑운회" && e.kk ? e.kk.rank || 1 : 0);
-function tr(e) {
-  const t = ho(e) || 1,
-    o = ei(e);
+  pi = (e) => (e && e.kk) || null,
+  vo = (e) => (e && e.job === "흑운회" && e.kk ? e.kk.rank || 1 : 0);
+function pr(e) {
+  const t = vo(e) || 1,
+    o = pi(e);
   return t === 2 && o && o.seat
-    ? h(
+    ? d(
         `흑운회 제${o.seat}대 부조장`,
-        `Kurokumo Clan Captain, the ${Fm(o.seat)}`,
+        `Kurokumo Clan Captain, the ${gy(o.seat)}`,
         `黒雲会 ${o.seat}代 副組長`,
       )
-    : Rx[t - 1];
+    : wx[t - 1];
 }
-function Cx(e) {
+function gx(e) {
   return e.kk ||
     e.bl ||
     [
@@ -5770,33 +6047,33 @@ function Cx(e) {
     (e.job === "해결사" && e.grade && e.grade <= 4) ||
     e.flags.includes("가주후보")
     ? !1
-    : dm(e);
+    : qm(e);
 }
-function Nx(e) {
-  return ho(e) === 1 && An(e);
+function mx(e) {
+  return vo(e) === 1 && Hn(e);
 }
-function Wx(e) {
-  const t = ei(e);
+function yx(e) {
+  const t = pi(e);
   return (
-    ho(e) === 2 &&
-    e.age - (t.rankAt ?? e.age) >= Do.patYears &&
-    An(e) &&
-    e.stats.rep >= Do.patStat &&
-    e.stats.network >= Do.patStat
+    vo(e) === 2 &&
+    e.age - (t.rankAt ?? e.age) >= ea.patYears &&
+    Hn(e) &&
+    e.stats.rep >= ea.patStat &&
+    e.stats.network >= ea.patStat
   );
 }
-function Ix(e) {
-  const t = ei(e);
+function px(e) {
+  const t = pi(e);
   return !!t && !!t.inkWhy && e.age - t.inkWhy.age <= 1;
 }
-function Ox(e) {
-  const t = ei(e),
-    o = ho(e) || 1,
-    a = t ? Math.min(1, Math.max(0, -(t.way || 0)) * Do.wayIncome) : 0,
-    n = e.flags.includes("흑운회장부") ? Do.tributeLedger : Do.tribute;
-  return (Do.income[o - 1] + a) * (1 - n);
+function bx(e) {
+  const t = pi(e),
+    o = vo(e) || 1,
+    a = t ? Math.min(1, Math.max(0, -(t.way || 0)) * ea.wayIncome) : 0,
+    n = e.flags.includes("흑운회장부") ? ea.tributeLedger : ea.tribute;
+  return (ea.income[o - 1] + a) * (1 - n);
 }
-function Fx(e) {
+function kx(e) {
   if (e.job === "흑운회" && e.kk) {
     const t = e.kk,
       o = (t.ink || 0) >= 3 ? 6 : (t.ink || 0) >= 2 ? 3 : 0,
@@ -5812,26 +6089,26 @@ function Fx(e) {
   }
   return 0;
 }
-function Ex(e, t) {
+function xx(e, t) {
   if (!e.some((n) => n.skillSave)) return e;
-  const o = Fx(t);
+  const o = kx(t);
   if (!o) return e;
   const a = e.map((n) => ({ ...n }));
   for (const n of a) {
     if (!n.skillSave) continue;
     const r = n.w ?? 1,
       i = Math.max(Math.min(5, r), r - o),
-      l = r - i;
+      s = r - i;
     n.w = i;
-    const s = a.find((c) => c.skillTo) || a.find((c) => !c.death && c !== n);
-    s && (s.w = (s.w ?? 1) + l);
+    const l = a.find((c) => c.skillTo) || a.find((c) => !c.death && c !== n);
+    l && (l.w = (l.w ?? 1) + s);
   }
   return a;
 }
-function Mx(e, t, o, a) {
-  const n = ei(a);
+function Tx(e, t, o, a) {
+  const n = pi(a);
   return e === "KK직급"
-    ? ho(a) >= 3
+    ? vo(a) >= 3
       ? o
       : t
     : e === "KK잉크사유"
@@ -5842,119 +6119,119 @@ function Mx(e, t, o, a) {
         ? o
         : t;
 }
-const Fe = (e, t, o) => ({ ko: e, en: t, ja: o }),
-  Na = [
+const $e = (e, t, o) => ({ ko: e, en: t, ja: o }),
+  Ka = [
     {
       k: "구름",
-      n: Fe("구름 공방", "Cloud Workshop", "雲工房"),
+      n: $e("구름 공방", "Cloud Workshop", "雲工房"),
       field: "날붙이",
       cls: 2,
     },
     {
       k: "묵",
-      n: Fe("묵 공방", "Mook Workshop", "ムク工房"),
+      n: $e("묵 공방", "Mook Workshop", "ムク工房"),
       field: "날붙이",
       cls: 3,
     },
     {
       k: "랑아",
-      n: Fe("랑아 공방", "Ranga Workshop", "ランガ工房"),
+      n: $e("랑아 공방", "Ranga Workshop", "ランガ工房"),
       field: "날붙이",
       cls: 2,
     },
     {
       k: "크리스탈",
-      n: Fe("크리스탈 아틀리에", "Crystal Atelier", "クリスタル・アトリエ"),
+      n: $e("크리스탈 아틀리에", "Crystal Atelier", "クリスタル・アトリエ"),
       field: "날붙이",
       cls: 2,
     },
     {
       k: "스티그마",
-      n: Fe("스티그마 공방", "Stigma Workshop", "スティグマ工房"),
+      n: $e("스티그마 공방", "Stigma Workshop", "スティグマ工房"),
       field: "날붙이",
       cls: 3,
     },
     {
       k: "메스틸",
-      n: Fe("메스틸 공방", "Meztil Workshop", "メスティル工房"),
+      n: $e("메스틸 공방", "Meztil Workshop", "メスティル工房"),
       field: "날붙이",
       cls: 1,
     },
     {
       k: "느티나무",
-      n: Fe("느티나무 공방", "Zelkova Workshop", "ケヤキ工房"),
+      n: $e("느티나무 공방", "Zelkova Workshop", "ケヤキ工房"),
       field: "둔기·특수",
       cls: 2,
     },
     {
       k: "늙은소년",
-      n: Fe("늙은소년 공방", "Old Boys Workshop", "オールドボーイズ工房"),
+      n: $e("늙은소년 공방", "Old Boys Workshop", "オールドボーイズ工房"),
       field: "둔기·특수",
       cls: 2,
     },
     {
       k: "네스터",
-      n: Fe("네스터 공방", "Nester Workshop", "ネスター工房"),
+      n: $e("네스터 공방", "Nester Workshop", "ネスター工房"),
       field: "둔기·특수",
       cls: 2,
     },
     {
       k: "나미르",
-      n: Fe("나미르 공방", "Namir Workshop", "ナミル工房"),
+      n: $e("나미르 공방", "Namir Workshop", "ナミル工房"),
       field: "둔기·특수",
       cls: 2,
     },
     {
       k: "바람계곡",
-      n: Fe("바람계곡 공방", "Windvalley Workshop", "風の谷工房"),
+      n: $e("바람계곡 공방", "Windvalley Workshop", "風の谷工房"),
       field: "둔기·특수",
       cls: 2,
     },
     {
       k: "스크류",
-      n: Fe("스크류 아틀리에", "Screw Atelier", "スクリュー・アトリエ"),
+      n: $e("스크류 아틀리에", "Screw Atelier", "スクリュー・アトリエ"),
       field: "둔기·특수",
       cls: 1,
     },
     {
       k: "이파리",
-      n: Fe("이파리 공방", "Leaflet Workshop", "リーフレット工房"),
+      n: $e("이파리 공방", "Leaflet Workshop", "リーフレット工房"),
       field: "둔기·특수",
       cls: 2,
     },
     {
       k: "알라스",
-      n: Fe("알라스 공방", "Allas Workshop", "アラス工房"),
+      n: $e("알라스 공방", "Allas Workshop", "アラス工房"),
       field: "둔기·특수",
       cls: 3,
     },
     {
       k: "휠스",
-      n: Fe("휠스 인더스트리", "Wheels Industry", "ホイールズ・インダストリー"),
+      n: $e("휠스 인더스트리", "Wheels Industry", "ホイールズ・インダストリー"),
       field: "둔기·특수",
       cls: 3,
     },
     {
       k: "코오리",
-      n: Fe("코오리 공방", "Kōri Workshop", "コオリ工房"),
+      n: $e("코오리 공방", "Kōri Workshop", "コオリ工房"),
       field: "둔기·특수",
       cls: 3,
     },
     {
       k: "로직",
-      n: Fe("로직 아틀리에", "Atelier Logic", "アトリエ・ロジック"),
+      n: $e("로직 아틀리에", "Atelier Logic", "アトリエ・ロジック"),
       field: "총기",
       cls: 3,
     },
     {
       k: "유니온",
-      n: Fe("유니온 공방", "Union Co. Workshop", "ユニオン工房"),
+      n: $e("유니온 공방", "Union Co. Workshop", "ユニオン工房"),
       field: "생체·의체",
       cls: 1,
     },
     {
       k: "슈바르츠",
-      n: Fe(
+      n: $e(
         "슈바르츠 인더스트리",
         "Schwarz Industries",
         "シュバルツ・インダストリー",
@@ -5963,7 +6240,7 @@ const Fe = (e, t, o) => ({ ko: e, en: t, ja: o }),
       cls: 3,
     },
   ];
-Gt({
+Qt({
   ko: {
     날붙이: "날붙이",
     "둔기·특수": "둔기·특수 장비",
@@ -5986,12 +6263,12 @@ Gt({
     재단: "仕立て",
   },
 });
-const Kh = jt({
+const pd = Nt({
     ko: ["견습", "기술자", "수석", "대표"],
     en: ["Apprentice", "Artisan", "Chief Artisan", "Head"],
     ja: ["見習い", "技術者", "首席", "代表"],
   }),
-  Bx = jt({
+  vx = Nt({
     ko: ["무명", "골목에 알려짐", "구에 알려짐", "이름이 돈다", "도시가 안다"],
     en: [
       "Unknown",
@@ -6002,7 +6279,7 @@ const Kh = jt({
     ],
     ja: ["無名", "路地で知られる", "区で知られる", "名が回る", "都市が知る"],
   }),
-  mr = jt({
+  Wr = Nt({
     ko: ["미완", "수작", "걸작", "명작", "전설", "기적"],
     en: [
       "Unfinished",
@@ -6014,8 +6291,8 @@ const Kh = jt({
     ],
     ja: ["未完", "秀作", "傑作", "名作", "伝説", "奇跡"],
   }),
-  cm = (e) => (e ? (e.score >= 100 ? 5 : e.grade || 0) : 0),
-  Be = {
+  Km = (e) => (e ? (e.score >= 100 ? 5 : e.grade || 0) : 0),
+  qe = {
     income: [2.6, 5, 6.6, 8.6],
     taxRate: 0.7,
     handsCost: 0.6,
@@ -6041,7 +6318,7 @@ const Kh = jt({
     sell: [8, 20, 35, 50, 70],
     fame: [2, 6, 12, 18, 25],
   },
-  zn = {
+  ur = {
     office: [4.6, 5, 5.6, 6.4, 9, 16],
     엄지: [6, 6.8, 7.6, 9],
     중지: [6, 6.8, 7.6, 9],
@@ -6054,16 +6331,16 @@ const Kh = jt({
     "이단 심문관": [5.6, 6.6, 8],
     "4무리": [5.6, 6.6, 8],
   },
-  sf = { cut: 0.9, fixer: 0.25 };
-function Lx(e) {
+  Lf = { cut: 0.9, fixer: 0.25 };
+function _x(e) {
   const t = (o, a) =>
     a > 1 ? Math.max(0, Math.min(1, ((o || 1) - 1) / (a - 1))) : 0;
-  return Ft(e)
+  return Ht(e)
     ? t(e.officeRank, 6)
-    : e.job === "손가락" && ct[e.finger]
-      ? t(e.fingerRank, ct[e.finger].length)
-      : ce(e)
-        ? t(e.wingRank, gn[e.work])
+    : e.job === "손가락" && bt[e.finger]
+      ? t(e.fingerRank, bt[e.finger].length)
+      : Te(e)
+        ? t(e.wingRank, Rn[e.work])
         : e.job === "해결사"
           ? e.flags.includes("특색")
             ? 1
@@ -6072,75 +6349,75 @@ function Lx(e) {
             ? t(e.bl.rank, 3)
             : e.job === "흑운회" && e.kk
               ? t(e.kk.rank, 3)
-              : Le(e)
+              : Ge(e)
                 ? t(e.ws.rank, 4)
                 : e.job === "가주" || e.job === "군주"
                   ? 1
                   : 0;
 }
-function $x(e) {
+function Ax(e) {
   const t = (o, a) => o[Math.max(0, Math.min(o.length, a || 1) - 1)];
-  return Ft(e)
-    ? t(zn.office, e.officeRank)
-    : e.job === "손가락" && zn[e.finger]
-      ? t(zn[e.finger], e.fingerRank)
-      : e.work && zn[e.work] && ce(e)
-        ? t(zn[e.work], e.wingRank)
+  return Ht(e)
+    ? t(ur.office, e.officeRank)
+    : e.job === "손가락" && ur[e.finger]
+      ? t(ur[e.finger], e.fingerRank)
+      : e.work && ur[e.work] && Te(e)
+        ? t(ur[e.work], e.wingRank)
         : null;
 }
-const Le = (e) => !!e && e.job === "공방 직원" && !!e.ws,
-  fm = (e) => (Le(e) ? e.ws.rank || 1 : 0),
-  xo = (e) => (e >= 80 ? 5 : e >= 60 ? 4 : e >= 40 ? 3 : e >= 20 ? 2 : 1),
-  Ks = (e) => Na.find((t) => t.k === e) || null,
-  zs = (e) => h(e.ko, e.en, e.ja);
-function fa(e) {
-  const t = e && e.ws ? Ks(e.ws.shop) : null;
+const Ge = (e) => !!e && e.job === "공방 직원" && !!e.ws,
+  zm = (e) => (Ge(e) ? e.ws.rank || 1 : 0),
+  Bo = (e) => (e >= 80 ? 5 : e >= 60 ? 4 : e >= 40 ? 3 : e >= 20 ? 2 : 1),
+  wl = (e) => Ka.find((t) => t.k === e) || null,
+  gl = (e) => d(e.ko, e.en, e.ja);
+function Ya(e) {
+  const t = e && e.ws ? wl(e.ws.shop) : null;
   return t
-    ? zs(t.n)
-    : h(
+    ? gl(t.n)
+    : d(
         "이름 없는 재단사의 작업실",
         "a nameless tailor's workroom",
         "名もなき仕立て屋の作業場",
       );
 }
-function Px(e) {
+function jx(e) {
   const t = e.ws,
-    o = Kh[Math.min(4, t.rank || 1) - 1],
-    a = Ks(t.shop);
+    o = pd[Math.min(4, t.rank || 1) - 1],
+    a = wl(t.shop);
   return a
-    ? `${zs(a.n)} ${o}`
-    : h(
+    ? `${gl(a.n)} ${o}`
+    : d(
         `이름 없는 재단사 ${o}`,
         `Nameless Tailor ${o}`,
         `名もなき仕立て屋 ${o}`,
       );
 }
-const Hx = (e) => (e >= 90 ? 4 : e >= 75 ? 3 : e >= 60 ? 2 : e >= 40 ? 1 : 0),
-  Dx = (e) =>
+const Sx = (e) => (e >= 90 ? 4 : e >= 75 ? 3 : e >= 60 ? 2 : e >= 40 ? 1 : 0),
+  Yx = (e) =>
     ((e.gear || 0) / 5) * 0.5 +
     ((e.stock || 0) / 3) * 0.25 +
     ((e.hands || 0) / 3) * 0.25;
-function qx(e) {
+function Rx(e) {
   return e.ws || e.flags.includes("가주후보") || e.bf
     ? !1
     : e.job
       ? e.job === "해결사"
         ? (e.grade || 9) >= 7
-        : Ft(e)
+        : Ht(e)
           ? (e.officeRank || 1) <= 2
           : !1
       : !0;
 }
-function Us(e, t) {
+function ml(e, t) {
   const o = e.ws;
   let a = 0;
-  for (const [n, r] of Object.entries(Be.cut[t] || {}))
+  for (const [n, r] of Object.entries(qe.cut[t] || {}))
     a += Math.max(0, r - (o[n] || 0));
   return a;
 }
-function Js(e, t) {
+function yl(e, t) {
   const o = e.ws;
-  let a = Us(e, Math.min(5, t.tier));
+  let a = ml(e, Math.min(5, t.tier));
   t.cut5 && (a += Math.max(0, 5 - (o.gear || 0)));
   const n =
     0.55 +
@@ -6148,77 +6425,77 @@ function Js(e, t) {
     0.05 * (o.rank || 1) -
     0.25 * a -
     (o.cls === 1 ? 0.05 : 0);
-  return B(n, 0.05, 0.95);
+  return $(n, 0.05, 0.95);
 }
-function Gx(e, t) {
-  const o = { ...(Be.cut[Math.min(5, t.tier)] || {}) };
+function Cx(e, t) {
+  const o = { ...(qe.cut[Math.min(5, t.tier)] || {}) };
   t.cut5 && (o.gear = 5);
   const a = {
-      gear: h("설비", "Equipment", "設備"),
-      stock: h("재료", "Materials", "材料"),
-      hands: h("일손", "Hands", "人手"),
-      guard: h("보안", "Security", "警備"),
+      gear: d("설비", "Equipment", "設備"),
+      stock: d("재료", "Materials", "材料"),
+      hands: d("일손", "Hands", "人手"),
+      guard: d("보안", "Security", "警備"),
     },
-    n = Object.entries(o).map(([i, l]) => `${a[i]} ${l}`);
+    n = Object.entries(o).map(([i, s]) => `${a[i]} ${s}`);
   if (!n.length) return "";
   const r =
-    Us(e, Math.min(5, t.tier)) +
+    ml(e, Math.min(5, t.tier)) +
       (t.cut5 ? Math.max(0, 5 - (e.ws.gear || 0)) : 0) >
     0;
-  return ` [${n.join(" · ")}${r ? h(" — 모자람", " — short", " — 不足") : ""}]`;
+  return ` [${n.join(" · ")}${r ? d(" — 모자람", " — short", " — 不足") : ""}]`;
 }
-const go = (e, t) =>
+const No = (e, t) =>
     "●".repeat(Math.max(0, e)) + "○".repeat(Math.max(0, t - e)),
-  Ll = new WeakMap(),
-  zh = (e) =>
+  hh = new WeakMap(),
+  bd = (e) =>
     Array.isArray(e)
-      ? e.map(zh)
+      ? e.map(bd)
       : e && typeof e == "object"
         ? "text" in e && Object.keys(e).length === 1
           ? e.text
-          : Object.fromEntries(Object.entries(e).map(([t, o]) => [t, zh(o)]))
+          : Object.fromEntries(Object.entries(e).map(([t, o]) => [t, bd(o)]))
         : e;
-function Io(e) {
-  const t = Z(e || oe, "ws_lines");
-  return t ? (Ll.has(t) || Ll.set(t, zh(t.lines)), Ll.get(t)) : {};
+function Go(e) {
+  const t = ee(e || re, "ws_lines");
+  return t ? (hh.has(t) || hh.set(t, bd(t.lines)), hh.get(t)) : {};
 }
-function Vs(e) {
-  const t = Z(e || oe, "ws_lines");
+function pl(e) {
+  const t = ee(e || re, "ws_lines");
   return t ? t.orders : [];
 }
-const pu = (e) => {
+const zu = (e) => {
     const t = (e.flags || []).find((o) => o.startsWith("손가락의눈:"));
     return t ? t.slice(6) : null;
   },
-  Uh = (e) => {
+  kd = (e) => {
     const t = (e.flags || []).find((o) => o.startsWith("독점:"));
     return t ? t.slice(3) : null;
   };
-function Kx(e) {
+function Nx(e) {
   const t = e.ws;
   return !!t && !t.mp && !t.mpGone && (t.mpNext == null || e.age >= t.mpNext);
 }
-function zx(e) {
+function Ix(e) {
   const t = e.ws;
-  return !t || (t.rank || 1) !== 3 || !An(e)
+  return !t || (t.rank || 1) !== 3 || !Hn(e)
     ? !1
     : e.age - (t.rankAt ?? e.age) >= (t.cls === 3 ? 10 : 5);
 }
-function wm(e) {
+function Um(e) {
   const t = e.ws;
   return !t || !t.shop
     ? []
-    : Na.filter(
+    : Ka.filter(
         (o) =>
           o.field === t.field && o.k !== t.shop && o.cls <= (t.cls || 2) + 1,
       );
 }
-function Ux(e) {
-  const t = Na.filter((a) => !e.ws || a.k !== e.ws.shop),
-    o = In(`${e.seed}:other:${e.age}`);
-  return zs(t[o % t.length].n);
+function Wx(e) {
+  const t = Ka.filter((a) => !e.ws || a.k !== e.ws.shop),
+    o = Vn(`${e.seed}:other:${e.age}`);
+  return gl(t[o % t.length].n);
 }
-const or = {
+const br = {
   ko: [
     "도현",
     "세린",
@@ -6262,71 +6539,71 @@ const or = {
     "テッサ",
   ],
 };
-function gm(e) {
+function Jm(e) {
   const t = e.ws && e.ws.patron;
   return t
-    ? { ko: or.ko, en: or.en, ja: or.ja }[Ce()][t.n] || or.ko[t.n]
-    : h("그 해결사", "that Fixer", "その解決屋");
+    ? { ko: br.ko, en: br.en, ja: br.ja }[Se()][t.n] || br.ko[t.n]
+    : d("그 해결사", "that Fixer", "その解決屋");
 }
-const Jx = () => [
-    h("시체를 쓴다", "uses corpses", "死体を使っている"),
-    h("훔친 설계를 쓴다", "uses stolen designs", "盗んだ設計を使っている"),
-    h(
+const Mx = () => [
+    d("시체를 쓴다", "uses corpses", "死体を使っている"),
+    d("훔친 설계를 쓴다", "uses stolen designs", "盗んだ設計を使っている"),
+    d(
       "머리의 규제를 어긴다",
       "breaks the Head's regulations",
       "頭の規制を破っている",
     ),
   ],
-  Vx = () => [
-    h("시제품", "A prototype", "試作品"),
-    h("재료 한 칸", "A shelf of materials", "材料ひと棚"),
-    h("걸작", "The masterpiece", "傑作"),
+  Ox = () => [
+    d("시제품", "A prototype", "試作品"),
+    d("재료 한 칸", "A shelf of materials", "材料ひと棚"),
+    d("걸작", "The masterpiece", "傑作"),
   ];
-function Xx(e) {
+function Fx(e) {
   const t = e.weapon,
-    o = t && Ks(t.shop);
-  return o ? zs(o.n) : h("공방", "The Workshop", "工房");
+    o = t && wl(t.shop);
+  return o ? gl(o.n) : d("공방", "The Workshop", "工房");
 }
-function Qx(e, t) {
+function Bx(e, t) {
   const o = t === "상" ? 3 : t === "하" ? 1 : 2,
-    a = Na.filter((n) => n.cls === o && n.field !== "생체·의체");
-  return e.pick(a.length ? a : Na).k;
+    a = Ka.filter((n) => n.cls === o && n.field !== "생체·의체");
+  return e.pick(a.length ? a : Ka).k;
 }
-function mm(e, t) {
+function Vm(e, t) {
   if (!e || !t || e.indexOf("{") < 0) return e;
   const o = t.ws;
   return e
-    .replaceAll("{공방}", fa(t))
-    .replaceAll("{다른공방}", Ux(t))
+    .replaceAll("{공방}", Ya(t))
+    .replaceAll("{다른공방}", Wx(t))
     .replaceAll(
       "{걸작}",
       (o && o.mp && o.mp.name) ||
-        h("이름 없는 것", "Nameless Thing", "名もなきもの"),
+        d("이름 없는 것", "Nameless Thing", "名もなきもの"),
     )
-    .replaceAll("{걸작등급}", o && o.mp ? mr[cm(o.mp)] : "")
+    .replaceAll("{걸작등급}", o && o.mp ? Wr[Km(o.mp)] : "")
     .replace(/\{후원(?::([^|}]*)\|([^}]*))?\}/g, (a, n, r) => {
-      const i = gm(t);
-      return n !== void 0 && Ce() === "ko" ? i + ks(i, n, r) : i;
+      const i = Jm(t);
+      return n !== void 0 && Se() === "ko" ? i + $n(i, n, r) : i;
     })
-    .replaceAll("{WS눈문장}", (Io().eyeIntro || {})[pu(t)] || "")
-    .replaceAll("{WS독점손가락}", o && o.exclOffer ? ot[o.exclOffer] : "")
-    .replaceAll("{WS도난}", Vx()[(o && o.theftWhat) || 0])
-    .replaceAll("{WS투서}", Jx()[In(`${t.seed}:envy:${t.age}`) % 3])
-    .replaceAll("{무기공방}", Xx(t))
+    .replaceAll("{WS눈문장}", (Go().eyeIntro || {})[zu(t)] || "")
+    .replaceAll("{WS독점손가락}", o && o.exclOffer ? ht[o.exclOffer] : "")
+    .replaceAll("{WS도난}", Ox()[(o && o.theftWhat) || 0])
+    .replaceAll("{WS투서}", Mx()[Vn(`${t.seed}:envy:${t.age}`) % 3])
+    .replaceAll("{무기공방}", Fx(t))
     .replaceAll(
       "{무기사고}",
       {
-        메스틸: h(
+        메스틸: d(
           "검이 당신을 끌고 갔다.",
           "The sword dragged you along.",
           "剣があなたを引きずっていった。",
         ),
-        스크류: h(
+        스크류: d(
           "손잡이에서 감전됐다.",
           "You were shocked through the grip.",
           "柄から感電した。",
         ),
-        유니온: h(
+        유니온: d(
           "생체 장비가 말을 듣지 않았다.",
           "The bio-gear would not obey.",
           "生体装備が言うことを聞かなかった。",
@@ -6334,28 +6611,28 @@ function mm(e, t) {
       }[t.weapon && t.weapon.shop] || "",
     );
 }
-function ym(e, t) {
+function Xm(e, t) {
   const o = e.ws;
   if (!o || !t) return null;
   const a = o.warn || 0;
   return (
-    (o.warn = B(a + t, 0, 3)),
-    a === 0 && o.warn >= 1 ? Io().warn1 : null
+    (o.warn = $(a + t, 0, 3)),
+    a === 0 && o.warn >= 1 ? Go().warn1 : null
   );
 }
-function Zx(e, t, o) {
+function Ex(e, t, o) {
   const a = e.stats.network >= 50 || e.flags.includes("상층");
   let n = null;
   if (t !== "재단") {
-    const l = Na.filter((c) => c.field === t && (c.cls < 3 || a)),
-      s = l.length ? l : Na.filter((c) => c.field === t);
-    n = o.weighted(s, (c) => (c.cls === 2 ? 3 : c.cls === 1 ? 1.5 : 1.2)).k;
+    const s = Ka.filter((c) => c.field === t && (c.cls < 3 || a)),
+      l = s.length ? s : Ka.filter((c) => c.field === t);
+    n = o.weighted(l, (c) => (c.cls === 2 ? 3 : c.cls === 1 ? 1.5 : 1.2)).k;
   }
-  const r = n ? Ks(n).cls : 2,
+  const r = n ? wl(n).cls : 2,
     i = r === 3 ? 1 : 2;
   return (
-    Gr(e),
-    e.job === "해결사" && js(e),
+    hi(e),
+    e.job === "해결사" && Ks(e),
     e.org && (e.orgHistory.push(e.org.name), (e.org = null)),
     (e.job = "공방 직원"),
     (e.work = null),
@@ -6374,7 +6651,7 @@ function Zx(e, t, o) {
       stock: 0,
       hands: 0,
       guard: 0,
-      ...Be.start[r],
+      ...qe.start[r],
       warn: 0,
       since: e.age,
       rankAt: e.age,
@@ -6394,47 +6671,47 @@ function Zx(e, t, o) {
       exclOffer: null,
       investDue: !1,
     }),
-    Q(e, { k: "job", job: "공방 직원" }),
-    Q(e, { k: "ws", shop: n, field: t }),
+    Z(e, { k: "job", job: "공방 직원" }),
+    Z(e, { k: "ws", shop: n, field: t }),
     e.flags.includes("공방") || e.flags.push("공방"),
     i === 1
-      ? h(
+      ? d(
           `
 
-${fa(e)} 쪽에서 연락이 왔다. 수습 기간은 두 해. 급여는 없고 끼니는 준다. 첫날 받은 것은 앞치마와 장갑, 그리고 다치면 알아서 하라는 말이었다.`,
+${Ya(e)} 쪽에서 연락이 왔다. 수습 기간은 두 해. 급여는 없고 끼니는 준다. 첫날 받은 것은 앞치마와 장갑, 그리고 다치면 알아서 하라는 말이었다.`,
           `
 
-${fa(e)} got in touch. Two years of apprenticeship. No wages, but meals are provided. On the first day you were given an apron, gloves, and the words: if you get hurt, that's on you.`,
+${Ya(e)} got in touch. Two years of apprenticeship. No wages, but meals are provided. On the first day you were given an apron, gloves, and the words: if you get hurt, that's on you.`,
           `
 
-${fa(e)}から連絡が来た。見習い期間は二年。給料は出ないが飯は出る。初日に渡されたのは前掛けと手袋、それから怪我をしても自分でなんとかしろという言葉だった。`,
+${Ya(e)}から連絡が来た。見習い期間は二年。給料は出ないが飯は出る。初日に渡されたのは前掛けと手袋、それから怪我をしても自分でなんとかしろという言葉だった。`,
         )
-      : h(
+      : d(
           `
 
-${fa(e)} 쪽에서 연락이 왔다. 자리는 하나. 전임자는 손가락을 잃고 그만두었다고 했다. 첫날 받은 것은 앞치마와 장갑, 그리고 다치면 알아서 하라는 말이었다.`,
+${Ya(e)} 쪽에서 연락이 왔다. 자리는 하나. 전임자는 손가락을 잃고 그만두었다고 했다. 첫날 받은 것은 앞치마와 장갑, 그리고 다치면 알아서 하라는 말이었다.`,
           `
 
-${fa(e)} got in touch. There was one opening. The last person, they said, quit after losing a finger. On the first day you were given an apron, gloves, and the words: if you get hurt, that's on you.`,
+${Ya(e)} got in touch. There was one opening. The last person, they said, quit after losing a finger. On the first day you were given an apron, gloves, and the words: if you get hurt, that's on you.`,
           `
 
-${fa(e)}から連絡が来た。席はひとつ。前任者は指を失って辞めたという。初日に渡されたのは前掛けと手袋、それから怪我をしても自分でなんとかしろという言葉だった。`,
+${Ya(e)}から連絡が来た。席はひとつ。前任者は指を失って辞めたという。初日に渡されたのは前掛けと手袋、それから怪我をしても自分でなんとかしろという言葉だった。`,
         )
   );
 }
-function e0(e, t) {
-  if (!Le(e)) return;
+function Lx(e, t) {
+  if (!Ge(e)) return;
   const o = e.ws,
     a = e.stats,
-    n = Io(),
+    n = Go(),
     r = 0.95,
     i = (c, u, f) =>
-      D(e, { kind: "flavor", text: c, delta: u || {}, tone: f || "system" }, r);
+      P(e, { kind: "flavor", text: c, delta: u || {}, tone: f || "system" }, r);
   if (!o.teach && e.age > o.since)
     if (o.contract > 0)
-      if (((a.wealth = B(a.wealth + 12)), o.contract--, o.contract === 0)) {
+      if (((a.wealth = $(a.wealth + 12)), o.contract--, o.contract === 0)) {
         const c = o.fame;
-        ((o.fame = B(o.fame - 15)),
+        ((o.fame = $(o.fame - 15)),
           i(
             n.contractEnd,
             { wealth: 12, fame: Math.round(o.fame - c) },
@@ -6442,24 +6719,24 @@ function e0(e, t) {
           ));
       } else i(n.contractYear, { wealth: 12 });
     else {
-      const c = xo(o.fame),
-        u = Js(e, { tier: c }),
+      const c = Bo(o.fame),
+        u = yl(e, { tier: c }),
         f = (o.rank || 1) === 1 ? 0.5 : 1;
       if (t.chance(u)) {
-        const g = Re((2 + c * 1.5) * f),
-          b = Re(t.int(1, 3) * f);
-        ((a.wealth = B(a.wealth + g)), (o.fame = B(o.fame + b)), qo(e, 1));
-        const k = { wealth: Math.round(g) };
-        (Math.round(b) && (k.fame = Math.round(b)),
+        const g = Ce((2 + c * 1.5) * f),
+          p = Ce(t.int(1, 3) * f);
+        ((a.wealth = $(a.wealth + g)), (o.fame = $(o.fame + p)), ta(e, 1));
+        const b = { wealth: Math.round(g) };
+        (Math.round(p) && (b.fame = Math.round(p)),
           i(
             o.fame >= 60
               ? n.plainBusy
               : (n.plainWin || {})[o.field] || n.plainBusy,
-            k,
+            b,
           ));
       } else {
-        o.fame = B(o.fame - 2);
-        const g = Us(e, c) > 0;
+        o.fame = $(o.fame - 2);
+        const g = ml(e, c) > 0;
         i(
           g ? ((o.rank || 1) >= 4 ? n.plainCutRep : n.plainCut) : n.plainLose,
           { fame: -2 },
@@ -6467,36 +6744,36 @@ function e0(e, t) {
         );
       }
     }
-  o.fame = Re(B(o.fame * (1 - Be.decay)));
-  const l = xo(o.fame);
+  o.fame = Ce($(o.fame * (1 - qe.decay)));
+  const s = Bo(o.fame);
   if ((o.rank || 1) >= 2 && o.fame >= 20) {
-    const c = Re(l * Be.taxRate);
-    if (a.wealth >= c) ((a.wealth = B(a.wealth - c)), (o.taxDue = 0));
+    const c = Ce(s * qe.taxRate);
+    if (a.wealth >= c) ((a.wealth = $(a.wealth - c)), (o.taxDue = 0));
     else {
       o.taxDue = (o.taxDue || 0) + 1;
-      const u = o.taxDue >= 2 ? ym(e, 1) : null;
+      const u = o.taxDue >= 2 ? Xm(e, 1) : null;
       (o.taxDue >= 2 && (o.taxDue = 0),
         i(n.taxUnpaid + (u ? ` ${u}` : ""), {}, "bad"));
     }
   }
   ((o.stock || 0) > 0 && t.chance(0.06) && (o.stock--, i(n.spoil, {}, "bad")),
-    o.hands && (a.wealth = B(a.wealth - o.hands * Be.handsCost)),
-    o.patent === "shop" && (a.wealth = B(a.wealth + 2)),
-    o.patent === "self" && (a.wealth = B(a.wealth + 3)),
+    o.hands && (a.wealth = $(a.wealth - o.hands * qe.handsCost)),
+    o.patent === "shop" && (a.wealth = $(a.wealth + 2)),
+    o.patent === "self" && (a.wealth = $(a.wealth + 3)),
     o.mp &&
       o.mp.fate === "hung" &&
-      (a.wealth = B(a.wealth + (o.mp.grade || 0) + 1)));
-  const s = xo(o.fame);
-  (s > (o.tierSeen || 1)
-    ? (i((n.tierUp || [])[s - 1] || "", {}, "good"),
+      (a.wealth = $(a.wealth + (o.mp.grade || 0) + 1)));
+  const l = Bo(o.fame);
+  (l > (o.tierSeen || 1)
+    ? (i((n.tierUp || [])[l - 1] || "", {}, "good"),
       (o.rank || 1) >= 2 && (o.investDue = !0))
-    : s < (o.tierSeen || 1) && i(n.tierDown, {}, "bad"),
-    (o.tierSeen = s),
-    (o.bestTier = Math.max(o.bestTier || 1, s)),
+    : l < (o.tierSeen || 1) && i(n.tierDown, {}, "bad"),
+    (o.tierSeen = l),
+    (o.bestTier = Math.max(o.bestTier || 1, l)),
     (o.bestFame = Math.max(o.bestFame || 0, o.fame)));
 }
-function t0(e, t) {
-  if (!Le(e)) return [];
+function $x(e, t) {
+  if (!Ge(e)) return [];
   const o = e.ws,
     a = e.age,
     n = [];
@@ -6508,27 +6785,27 @@ function t0(e, t) {
         (n.push({ id: "ws_eval", wsEval: !0 }), (o.investDue = !0)),
       !o.contract &&
         a - (o.lastBig ?? -99) >= 2 &&
-        t.chance(Be.bigP) &&
+        t.chance(qe.bigP) &&
         n.push({ id: "ws_big", wsBig: !0 })),
     n
   );
 }
-function o0(e, t, o) {
+function Px(e, t, o) {
   const a = e.ws,
-    n = Io(t),
-    r = [0, 10, 30, 50, 70, 90][xo(a.fame)],
+    n = Go(t),
+    r = [0, 10, 30, 50, 70, 90][Bo(a.fame)],
     i = {};
-  let l = n.eval;
-  if (a.fame >= r) l += ` ${n.evalGood}`;
+  let s = n.eval;
+  if (a.fame >= r) s += ` ${n.evalGood}`;
   else {
-    const s = a.fame;
-    ((a.fame = B(a.fame - 4)),
-      (e.stats.sanity = B(e.stats.sanity - 2)),
-      (i.fame = Math.round(a.fame - s)),
+    const l = a.fame;
+    ((a.fame = $(a.fame - 4)),
+      (e.stats.sanity = $(e.stats.sanity - 2)),
+      (i.fame = Math.round(a.fame - l)),
       (i.sanity = -2),
-      (l += ` ${n.evalBad}`));
+      (s += ` ${n.evalBad}`));
   }
-  (D(e, { kind: "flavor", text: l, delta: i, tone: "system" }, o),
+  (P(e, { kind: "flavor", text: s, delta: i, tone: "system" }, o),
     a.fame >= 60 &&
       ae(e).chance(0.25) &&
       e.plan.splice(e.cursor, 0, {
@@ -6537,82 +6814,82 @@ function o0(e, t, o) {
         t: Math.min(0.9, o + 0.02),
       }));
 }
-function a0(e, t, o) {
+function Hx(e, t, o) {
   const a = e.ws,
     n = ae(e),
-    r = Io(t),
-    i = xo(a.fame),
-    l = Uh(e),
-    s = (y) =>
+    r = Go(t),
+    i = Bo(a.fame),
+    s = kd(e),
+    l = (m) =>
       !(
-        (y.finger &&
-          (e.flags.includes(`거절:${y.finger}`) || (l && l !== y.finger))) ||
-        (y.needFlag && !e.flags.includes(y.needFlag)) ||
-        (y.id === "o5_wing_contract" && a.contractDone)
+        (m.finger &&
+          (e.flags.includes(`거절:${m.finger}`) || (s && s !== m.finger))) ||
+        (m.needFlag && !e.flags.includes(m.needFlag)) ||
+        (m.id === "o5_wing_contract" && a.contractDone)
       ),
-    c = Vs(t).filter(s),
-    u = c.filter((y) => !y.up && y.tier === i),
+    c = pl(t).filter(l),
+    u = c.filter((m) => !m.up && m.tier === i),
     f = (a.hands || 0) >= 2 ? 3 : 2,
     g = n.shuffle(u).slice(0, f),
-    b = c.filter((y) => y.up && y.tier === i + 1);
+    p = c.filter((m) => m.up && m.tier === i + 1);
   if (
-    (b.length && n.chance(i >= 4 ? 0.08 : 0.1) && g.push(n.pick(b)), !g.length)
+    (p.length && n.chance(i >= 4 ? 0.08 : 0.1) && g.push(n.pick(p)), !g.length)
   )
     return;
   a.lastBig = e.age;
-  const k = ["①", "②", "③", "④", "⑤", "⑥"],
+  const b = ["①", "②", "③", "④", "⑤", "⑥"],
     T = [],
     v = [],
     w = [(a.rank || 1) >= 4 ? r.bigIntroRep : r.bigIntro];
-  (g.forEach((y, j) => {
-    (w.push(`${k[j]} ${y.label} — ${mm(y.text, e)}`),
-      (y.picks || [null]).forEach((Y, R) => {
-        const C = `${k[j]} ${y.label}${Y ? ` — ${Y.label}` : ""}${Y && Y.noRoll ? "" : Gx(e, y)}`;
-        (v.push({ label: C, i: T.length }),
-          T.push({ oid: y.id, pick: Y ? R : null }));
+  (g.forEach((m, A) => {
+    (w.push(`${b[A]} ${m.label} — ${Vm(m.text, e)}`),
+      (m.picks || [null]).forEach((j, R) => {
+        const N = `${b[A]} ${m.label}${j ? ` — ${j.label}` : ""}${j && j.noRoll ? "" : Cx(e, m)}`;
+        (v.push({ label: N, i: T.length }),
+          T.push({ oid: m.id, pick: j ? R : null }));
       }));
   }),
     v.push({ label: r.skipLabel, i: T.length }));
-  const m = w.join(`
+  const y = w.join(`
 
 `);
-  (D(e, { kind: "event", text: m, tone: "event" }, o),
+  (P(e, { kind: "event", text: y, tone: "event" }, o),
     (e.prompt = {
       kind: "major",
       ws: "big",
       eventId: "ws_big",
-      text: m,
+      text: y,
       choices: v,
       items: T,
       t: o,
     }));
 }
-function n0(e, t, o, a) {
+function Dx(e, t, o, a) {
   const n = e.ws,
     r = ae(e),
-    i = Io(t),
-    l = Vs(t),
-    s = a != null && a >= 0 && a < o.items.length ? o.items[a] : null,
-    c = s ? o.choices[a].label : i.skipLabel;
-  if (!s) {
-    const w = o.items.map((j) => l.find((_) => _.id === j.oid)).filter(Boolean),
-      m = w.find((j) => j.skip && j.skip.flagsAdd) || w.find((j) => j.skip),
-      y = m
+    i = Go(t),
+    s = pl(t),
+    l = a != null && a >= 0 && a < o.items.length ? o.items[a] : null,
+    c = l ? o.choices[a].label : i.skipLabel;
+  if (!l) {
+    const w = o.items.map((A) => s.find((_) => _.id === A.oid)).filter(Boolean),
+      y = w.find((A) => A.skip && A.skip.flagsAdd) || w.find((A) => A.skip),
+      m = y
         ? {
-            text: m.skip.text,
-            effects: m.skip.effects,
-            flagsAdd: m.skip.flagsAdd,
+            text: y.skip.text,
+            effects: y.skip.effects,
+            flagsAdd: y.skip.flagsAdd,
           }
         : { text: i.skip };
-    Ze(e, t, y, o.t, { kind: "result", choiceLabel: c, eventId: "ws_big" });
+    st(e, t, m, o.t, { kind: "result", choiceLabel: c, eventId: "ws_big" });
     return;
   }
-  const u = l.find((w) => w.id === s.oid),
-    f = s.pick != null ? u.picks[s.pick] : null;
+  const u = s.find((w) => w.id === l.oid),
+    f = l.pick != null ? u.picks[l.pick] : null;
   if (f && f.noRoll) {
     const w = f.noRoll;
     (w.wsContract && (n.contractDone = !0),
-      Ze(
+      st(
         e,
         t,
         {
@@ -6627,38 +6904,38 @@ function n0(e, t, o, a) {
       ));
     return;
   }
-  const g = u.finger && Uh(e) === u.finger ? 1.3 : 1,
-    b = r.chance(Js(e, u)),
-    k = b ? { ...u.win, ...((f && f.win) || {}) } : u.lose,
-    T = { ...(k.effects || {}) };
-  b && T.wealth > 0 && (T.wealth = Math.round(T.wealth * g));
+  const g = u.finger && kd(e) === u.finger ? 1.3 : 1,
+    p = r.chance(yl(e, u)),
+    b = p ? { ...u.win, ...((f && f.win) || {}) } : u.lose,
+    T = { ...(b.effects || {}) };
+  p && T.wealth > 0 && (T.wealth = Math.round(T.wealth * g));
   const v = {
-    text: k.text,
+    text: b.text,
     effects: T,
-    wsFame: k.fame,
-    flagsAdd: k.flagsAdd,
-    flagsRemove: k.flagsRemove,
-    rmerit: b ? (u.up ? 5 : 3) : 0,
+    wsFame: b.fame,
+    flagsAdd: b.flagsAdd,
+    flagsRemove: b.flagsRemove,
+    rmerit: p ? (u.up ? 5 : 3) : 0,
   };
-  (b
+  (p
     ? ((n.lastWin = e.age),
       u.finger &&
         (n.fingers.includes(u.finger) || n.fingers.push(u.finger),
         n.fame >= 60 &&
-          !Uh(e) &&
+          !kd(e) &&
           !(n.exclAsked || []).includes(u.finger) &&
           r.chance(0.3) &&
           ((n.exclOffer = u.finger),
           (n.exclAsked ?? (n.exclAsked = [])).push(u.finger))),
-      k.warnP && r.chance(k.warnP) && (v.wsWarn = 1))
-    : k.deathP && r.chance(k.deathP) && (v.death = k.death),
-    Ze(e, t, v, o.t, { kind: "result", choiceLabel: c, eventId: "ws_big" }));
+      b.warnP && r.chance(b.warnP) && (v.wsWarn = 1))
+    : b.deathP && r.chance(b.deathP) && (v.death = b.death),
+    st(e, t, v, o.t, { kind: "result", choiceLabel: c, eventId: "ws_big" }));
 }
-function r0(e, t) {
+function qx(e, t) {
   const o = ae(e),
-    a = Vs(),
+    a = pl(),
     n = t.items
-      .map((i, l) => ({ i: l, o: a.find((s) => s.id === i.oid), it: i }))
+      .map((i, s) => ({ i: s, o: a.find((l) => l.id === i.oid), it: i }))
       .filter(
         (i) =>
           i.o &&
@@ -6668,17 +6945,17 @@ function r0(e, t) {
             i.it.pick === 1
           ),
       ),
-    r = n.filter((i) => Js(e, i.o) >= 0.5);
+    r = n.filter((i) => yl(e, i.o) >= 0.5);
   return r.length && o.chance(0.85)
     ? o.pick(r).i
     : o.chance(0.3) && n.length
       ? o.pick(n).i
       : t.items.length;
 }
-const Lr = ["gear", "stock", "hands", "guard"];
-function pm(e, t, o, a) {
+const ai = ["gear", "stock", "hands", "guard"];
+function Qm(e, t, o, a) {
   const n = e.ws,
-    r = Io(t);
+    r = Go(t);
   n.investDue = !1;
   const i = {
       gear: r.gearL,
@@ -6686,14 +6963,14 @@ function pm(e, t, o, a) {
       hands: r.handsL,
       guard: r.guardL,
     },
-    l = [];
-  (Lr.forEach((f, g) => {
-    const b = n[f] || 0;
-    if (b >= Be.max[f]) {
-      l.push({
+    s = [];
+  (ai.forEach((f, g) => {
+    const p = n[f] || 0;
+    if (p >= qe.max[f]) {
+      s.push({
         label: i[f],
         i: g,
-        locked: h(
+        locked: d(
           "더 올릴 것이 없다",
           "Nothing more to add",
           "これ以上は上げられない",
@@ -6701,54 +6978,54 @@ function pm(e, t, o, a) {
       });
       return;
     }
-    const k = Be.cost[f][b],
-      T = `${i[f]} (${h("재산", "Wealth", "財産")} −${k})`;
-    l.push(
-      e.stats.wealth >= k
+    const b = qe.cost[f][p],
+      T = `${i[f]} (${d("재산", "Wealth", "財産")} −${b})`;
+    s.push(
+      e.stats.wealth >= b
         ? { label: T, i: g }
         : {
             label: T,
             i: g,
-            locked: h("값이 모자란다", "Not enough money", "金が足りない"),
+            locked: d("값이 모자란다", "Not enough money", "金が足りない"),
           },
     );
   }),
-    l.push({ label: a ? r.doneL : r.noneL, i: 4 }));
-  const s = xo(n.fame),
+    s.push({ label: a ? r.doneL : r.noneL, i: 4 }));
+  const l = Bo(n.fame),
     c = [
       a ? r.investAgain : (n.rank || 1) >= 4 ? r.investIntroRep : r.investIntro,
     ];
   (!a && n.tierSeen > (n.tierPaid || 1) && c.push(r.investTier),
-    !a && Us(e, s) >= 2 && c.push(r.investBehind),
+    !a && ml(e, l) >= 2 && c.push(r.investBehind),
     c.push(
-      `${h("설비", "Equipment", "設備")} ${go(n.gear || 0, 5)} · ${h("재료", "Materials", "材料")} ${go(n.stock || 0, 3)} · ${h("일손", "Hands", "人手")} ${go(n.hands || 0, 3)} · ${h("보안", "Security", "警備")} ${go(n.guard || 0, 2)}`,
+      `${d("설비", "Equipment", "設備")} ${No(n.gear || 0, 5)} · ${d("재료", "Materials", "材料")} ${No(n.stock || 0, 3)} · ${d("일손", "Hands", "人手")} ${No(n.hands || 0, 3)} · ${d("보안", "Security", "警備")} ${No(n.guard || 0, 2)}`,
     ),
     (n.tierPaid = Math.max(n.tierPaid || 1, n.tierSeen || 1)));
   const u = c.join(`
 
 `);
-  (D(e, { kind: "event", text: u, tone: "event" }, o),
+  (P(e, { kind: "event", text: u, tone: "event" }, o),
     (e.prompt = {
       kind: "major",
       ws: "invest",
       eventId: "ws_invest",
       round: a || 0,
       text: u,
-      choices: l,
+      choices: s,
       t: o,
     }));
 }
-function i0(e, t, o, a) {
+function Gx(e, t, o, a) {
   const n = e.ws,
-    r = Io(t),
+    r = Go(t),
     i = a != null && a >= 0 ? o.choices[a] : null;
   if (i && i.locked) {
     e.prompt = o;
     return;
   }
-  const l = i && i.i < 4 ? Lr[i.i] : null;
-  if (!l) {
-    D(
+  const s = i && i.i < 4 ? ai[i.i] : null;
+  if (!s) {
+    P(
       e,
       {
         kind: "result",
@@ -6760,17 +7037,17 @@ function i0(e, t, o, a) {
     );
     return;
   }
-  const s = Be.cost[l][n[l] || 0],
+  const l = qe.cost[s][n[s] || 0],
     c = e.stats.wealth;
-  ((e.stats.wealth = Re(B(c - s))), (n[l] = (n[l] || 0) + 1));
+  ((e.stats.wealth = Ce($(c - l))), (n[s] = (n[s] || 0) + 1));
   const u = {
     gear: r.buyGear,
     stock: r.buyStock,
     hands: r.buyHands,
     guard: r.buyGuard,
-  }[l];
+  }[s];
   if (
-    (D(
+    (P(
       e,
       {
         kind: "result",
@@ -6784,38 +7061,38 @@ function i0(e, t, o, a) {
     !o.round)
   ) {
     const f = Math.min(
-      ...Lr.filter((g) => (n[g] || 0) < Be.max[g]).map(
-        (g) => Be.cost[g][n[g] || 0],
-      ),
+      ...ai
+        .filter((g) => (n[g] || 0) < qe.max[g])
+        .map((g) => qe.cost[g][n[g] || 0]),
     );
-    e.stats.wealth >= f && pm(e, t, Math.min(0.98, o.t + 0.01), 1);
+    e.stats.wealth >= f && Qm(e, t, Math.min(0.98, o.t + 0.01), 1);
   }
 }
-function s0(e, t) {
+function Kx(e, t) {
   const o = ae(e),
     a = e.ws,
-    n = t.choices.filter((s) => !s.locked && s.i < 4);
+    n = t.choices.filter((l) => !l.locked && l.i < 4);
   if (!n.length || e.stats.wealth < 25 || o.chance(0.15))
     return t.choices.length - 1;
-  const r = Be.cut[Math.min(5, xo(a.fame) + 1)] || {};
+  const r = qe.cut[Math.min(5, Bo(a.fame) + 1)] || {};
   if ((a.rank || 1) >= 3 && (a.stock || 0) < 2) {
-    const s = n.find((c) => c.i === 1);
-    if (s) return t.choices.indexOf(s);
+    const l = n.find((c) => c.i === 1);
+    if (l) return t.choices.indexOf(l);
   }
-  const i = n.filter((s) => (a[Lr[s.i]] || 0) < (r[Lr[s.i]] || 0)),
-    l = i.length ? i[0] : o.pick(n);
-  return t.choices.indexOf(l);
+  const i = n.filter((l) => (a[ai[l.i]] || 0) < (r[ai[l.i]] || 0)),
+    s = i.length ? i[0] : o.pick(n);
+  return t.choices.indexOf(s);
 }
-function l0(e, t) {
-  const o = pu(e),
-    a = Vs().find((r) => r.finger === o) || { tier: 4 },
-    n = Io();
-  return t.chance(Js(e, a))
+function zx(e, t) {
+  const o = zu(e),
+    a = pl().find((r) => r.finger === o) || { tier: 4 },
+    n = Go();
+  return t.chance(yl(e, a))
     ? { text: n.eyeWin, wsFame: 8, flagsRemove: [`손가락의눈:${o}`], rmerit: 3 }
     : { text: n.eyeLose, effects: { health: -15 } };
 }
-const bm = [5, 20, 45, 30];
-function h0(e, t) {
+const Zm = [5, 20, 45, 30];
+function Ux(e, t) {
   const o = e.ws;
   e.prompt = {
     kind: "craft",
@@ -6830,84 +7107,84 @@ function h0(e, t) {
     t,
   };
 }
-function d0(e, t) {
+function Jx(e, t) {
   const o = ae(e),
-    a = Dx(t),
+    a = Yx(t),
     n = (t.progress && t.progress.scores) || [];
-  return bm.map((r, i) => {
+  return Zm.map((r, i) => {
     if (typeof n[i] == "number") return n[i];
     if (i === 0) return o.chance(Math.min(0.98, 0.3 + 0.68 * a)) ? 5 : 0;
-    const l = B(0.25 + 0.3 * a + (o.next() - 0.5) * 0.24, 0, 0.55);
-    return Math.round(r * l * 10) / 10;
+    const s = $(0.25 + 0.3 * a + (o.next() - 0.5) * 0.24, 0, 0.55);
+    return Math.round(r * s * 10) / 10;
   });
 }
-function u0(e, t, o, a) {
+function Vx(e, t, o, a) {
   const n = e.ws,
     r = a && a.craft;
   let i,
-    l = ((r && r.name) || (o.progress && o.progress.name) || "")
+    s = ((r && r.name) || (o.progress && o.progress.name) || "")
       .trim()
       .slice(0, 16);
   r &&
   Array.isArray(r.scores) &&
   r.scores.length >= 4 &&
-  r.scores.slice(0, 4).every((k) => typeof k == "number")
+  r.scores.slice(0, 4).every((b) => typeof b == "number")
     ? (i = r.scores
         .slice(0, 4)
-        .map((k, T) => B(Math.round(k * 10) / 10, 0, bm[T])))
-    : (i = d0(e, o));
-  const s = Math.round(i.reduce((k, T) => k + T, 0) * 10) / 10,
-    c = Hx(s);
-  (l || (l = h("이름 없는 것", "Nameless Thing", "名もなきもの")),
+        .map((b, T) => $(Math.round(b * 10) / 10, 0, Zm[T])))
+    : (i = Jx(e, o));
+  const l = Math.round(i.reduce((b, T) => b + T, 0) * 10) / 10,
+    c = Sx(l);
+  (s || (s = d("이름 없는 것", "Nameless Thing", "名もなきもの")),
     (n.stock = Math.max(0, (n.stock || 0) - 2)),
     (n.mp = {
-      name: l,
-      score: s,
+      name: s,
+      score: l,
       grade: c,
       age: e.age,
       fate: null,
       scores: i,
     }));
-  const u = cm(n.mp);
-  Q(e, { k: "wsmp", name: l, grade: u });
+  const u = Km(n.mp);
+  Z(e, { k: "wsmp", name: s, grade: u });
   const f = [
-      h(
+      d(
         "끝까지 만들었다. 끝까지 만든 것이 전부였다.",
         "You finished it. Finishing it was all there was.",
         "最後まで作った。最後まで作ったことがすべてだった。",
       ),
-      h(
+      d(
         "공방 사람들이 돌아가며 들어 봤다. 고개를 끄덕였다.",
         "The people of the Workshop took turns holding it. They nodded.",
         "工房の者たちが代わる代わる持ってみた。うなずいた。",
       ),
-      h(
+      d(
         "공방 사람들이 돌아가며 들어 봤다. 아무도 값을 말하지 않았다.",
         "The people of the Workshop took turns holding it. No one named a price.",
         "工房の者たちが代わる代わる持ってみた。誰も値を口にしなかった。",
       ),
-      h(
+      d(
         "공방이 조용해졌다. 공방장이 앞치마를 벗고 그것을 두 손으로 받았다.",
         "The Workshop fell quiet. The workshop head took off the apron and received it with both hands.",
         "工房が静まり返った。工房長が前掛けを外し、それを両手で受け取った。",
       ),
-      h(
+      d(
         "공방이 조용해졌다. 공방장은 한참을 서 있다가 그것을 두 손으로 받았다. 아무도 숨을 쉬지 않았다.",
         "The Workshop fell quiet. The workshop head stood a long while, then received it with both hands. No one breathed.",
         "工房が静まり返った。工房長はしばらく立ち尽くしてから、それを両手で受け取った。誰も息をしなかった。",
       ),
-      h(
+      d(
         "공방이 조용해졌다. 공방장은 그것을 받지 못했다. 손이 떨렸다. 누군가 처음으로 숨을 내쉬었고, 그제야 모두가 울었다.",
         "The Workshop fell quiet. The workshop head could not take it. Their hands were shaking. Someone breathed out first, and only then did everyone weep.",
         "工房が静まり返った。工房長はそれを受け取れなかった。手が震えていた。誰かが最初に息を吐き、そこでようやく皆が泣いた。",
       ),
     ][u],
-    g = h(
-      `「${l}」 · ${mr[u]} (${s}점)`,
-      `"${l}" · ${mr[u]} (${s} pts)`,
-      `「${l}」 · ${mr[u]}（${s}点）`,
+    g = d(
+      `「${s}」 · ${Wr[u]} (${l}점)`,
+      `"${s}" · ${Wr[u]} (${l} pts)`,
+      `「${s}」 · ${Wr[u]}（${l}点）`,
     );
-  D(
+  P(
     e,
     {
       kind: "result",
@@ -6919,20 +7196,20 @@ ${f}`,
     },
     o.t,
   );
-  const b = Z(t, "ws_masterpiece_fate");
-  b && !e.dead && Bo(e, t, b, Math.min(0.98, o.t + 0.01));
+  const p = ee(t, "ws_masterpiece_fate");
+  p && !e.dead && Jo(e, t, p, Math.min(0.98, o.t + 0.01));
 }
-function c0(e, t, o, a, n, r) {
+function Xx(e, t, o, a, n, r) {
   const i = [];
-  let l = null,
-    s = null,
+  let s = null,
+    l = null,
     c = !1;
-  o.wsStart && !e.ws && (i.push(Zx(e, o.wsStart, n)), (s = be(e)), (c = !0));
+  o.wsStart && !e.ws && (i.push(Ex(e, o.wsStart, n)), (l = Re(e)), (c = !0));
   const u = e.ws;
-  if (!u) return { tails: i, gradeNote: l, jobNote: s, rare: c };
+  if (!u) return { tails: i, gradeNote: s, jobNote: l, rare: c };
   if (typeof o.wsFame == "number" && o.wsFame) {
     const f = u.fame;
-    u.fame = Re(B(f + o.wsFame));
+    u.fame = Ce($(f + o.wsFame));
     const g = Math.round(u.fame - f);
     (g && (a.fame = (a.fame || 0) + g),
       (u.bestFame = Math.max(u.bestFame || 0, u.fame)));
@@ -6943,12 +7220,12 @@ function c0(e, t, o, a, n, r) {
     ["wsHands", "hands"],
     ["wsGuard", "guard"],
   ])
-    typeof o[f] == "number" && (u[g] = B((u[g] || 0) + o[f], 0, Be.max[g]));
+    typeof o[f] == "number" && (u[g] = $((u[g] || 0) + o[f], 0, qe.max[g]));
   if (typeof o.wsWarn == "number") {
-    const f = ym(e, o.wsWarn);
+    const f = Xm(e, o.wsWarn);
     f && i.push(` ${f}`);
   }
-  if ((o.wsWarnSet != null && (u.warn = o.wsWarnSet), o.wsUp && Le(e))) {
+  if ((o.wsWarnSet != null && (u.warn = o.wsWarnSet), o.wsUp && Ge(e))) {
     const f = u.rank || 1;
     ((u.rank = Math.min(4, f + o.wsUp)),
       u.rank !== f &&
@@ -6956,14 +7233,14 @@ function c0(e, t, o, a, n, r) {
         (u.rankAt = e.age),
         (e.rmerit = 0),
         u.rank === 4 && (u.investDue = !0),
-        (l = `${Kh[f - 1]} → ${Kh[u.rank - 1]}`),
-        Q(e, { k: "wsrank", rank: u.rank }),
+        (s = `${pd[f - 1]} → ${pd[u.rank - 1]}`),
+        Z(e, { k: "wsrank", rank: u.rank }),
         (c = !0)));
   }
   if (
     (o.wsPatron === "start" && !u.patron
       ? (u.patron = {
-          n: n.int(0, or.ko.length - 1),
+          n: n.int(0, br.ko.length - 1),
           grade: n.int(7, 9),
           since: e.age,
         })
@@ -6984,11 +7261,11 @@ function c0(e, t, o, a, n, r) {
     const f = u.mp.grade || 0;
     u.mp.fate = o.wsFate;
     let g = 0,
-      b = Be.fame[f];
+      p = qe.fame[f];
     if (
-      (o.wsFate === "sold" && (g = Be.sell[f]),
+      (o.wsFate === "sold" && (g = qe.sell[f]),
       o.wsFate === "given" &&
-        ((b = Math.round(b * 1.5)),
+        ((p = Math.round(p * 1.5)),
         f >= 3 &&
           !e.flags.includes("걸작을건넴") &&
           e.flags.push("걸작을건넴")),
@@ -7007,14 +7284,14 @@ function c0(e, t, o, a, n, r) {
       g)
     ) {
       const v = e.stats.wealth;
-      e.stats.wealth = Re(B(v + g));
+      e.stats.wealth = Ce($(v + g));
       const w = Math.round(e.stats.wealth - v);
       w && (a.wealth = (a.wealth || 0) + w);
     }
-    const k = u.fame;
-    u.fame = Re(B(k + b));
-    const T = Math.round(u.fame - k);
-    (T && (a.fame = (a.fame || 0) + T), Q(e, { k: "wsfate", fate: o.wsFate }));
+    const b = u.fame;
+    u.fame = Ce($(b + p));
+    const T = Math.round(u.fame - b);
+    (T && (a.fame = (a.fame || 0) + T), Z(e, { k: "wsfate", fate: o.wsFate }));
   }
   if (
     (o.wsContract && (u.contract = o.wsContract),
@@ -7030,28 +7307,28 @@ function c0(e, t, o, a, n, r) {
         ? ((u.theftWhat = 2),
           (u.mp.fate = "stolen"),
           (e.flags = e.flags.filter((f) => f !== "걸작을걸어둠")),
-          (e.stats.sanity = B(e.stats.sanity - 8)),
+          (e.stats.sanity = $(e.stats.sanity - 8)),
           (a.sanity = (a.sanity || 0) - 8))
         : (u.stock || 0) > 0
           ? ((u.theftWhat = 1), u.stock--)
           : (u.theftWhat = 0)),
-    o.wsMove && Le(e))
+    o.wsMove && Ge(e))
   ) {
-    const f = wm(e);
+    const f = Um(e);
     if (f.length) {
       const g = n.pick(f);
       ((u.shop = g.k),
         (u.cls = g.cls),
-        Object.assign(u, { gear: 0, stock: 0, guard: 0, ...Be.start[g.cls] }),
+        Object.assign(u, { gear: 0, stock: 0, guard: 0, ...qe.start[g.cls] }),
         (e.rmerit = Math.floor((e.rmerit || 0) / 2)),
-        Q(e, { k: "wsmove", shop: g.k }),
-        (s = be(e)));
+        Z(e, { k: "wsmove", shop: g.k }),
+        (l = Re(e)));
     }
   }
   return (
     o.wsSell &&
-      Le(e) &&
-      (Gr(e),
+      Ge(e) &&
+      (hi(e),
       (u.sold = !0),
       (e.job = "사원"),
       (e.work = "날개 직원"),
@@ -7061,16 +7338,16 @@ function c0(e, t, o, a, n, r) {
       (e.warn = 0),
       (e.warnLast = null),
       (e.dirSince = null),
-      Q(e, { k: "job", job: "날개 직원" }),
-      Q(e, { k: "orank", rank: 4 }),
-      (s = be(e)),
+      Z(e, { k: "job", job: "날개 직원" }),
+      Z(e, { k: "orank", rank: 4 }),
+      (l = Re(e)),
       (c = !0)),
-    { tails: i, gradeNote: l, jobNote: s, rare: c }
+    { tails: i, gradeNote: s, jobNote: l, rare: c }
   );
 }
-function f0(e, t, o) {
+function Qx(e, t, o) {
   t.weapon &&
-    ((e.weapon = { shop: Qx(o, t.weapon), cls: t.weapon, name: null }),
+    ((e.weapon = { shop: Bx(o, t.weapon), cls: t.weapon, name: null }),
     t.weapon === "상" &&
       !e.flags.includes("고급장비") &&
       e.flags.push("고급장비"));
@@ -7078,7 +7355,7 @@ function f0(e, t, o) {
   if (!a) return;
   const n = ["하", "중", "상"];
   (t.weaponUp &&
-    (a.free && ((e.stats.wealth = B(e.stats.wealth + 12)), (a.free = !1)),
+    (a.free && ((e.stats.wealth = $(e.stats.wealth + 12)), (a.free = !1)),
     (a.cls = n[Math.min(2, n.indexOf(a.cls) + t.weaponUp)]),
     a.cls === "상" &&
       !e.flags.includes("고급장비") &&
@@ -7087,37 +7364,37 @@ function f0(e, t, o) {
     t.weaponLose &&
       ((e.weapon = null), (e.flags = e.flags.filter((r) => r !== "고급장비"))));
 }
-const aa = (e) => !!e.bld && !e.dead,
-  km = [2, 0, 3, 4],
-  w0 = 4;
-function g0(e, t, o, a) {
+const ga = (e) => !!e.bld && !e.dead,
+  ey = [2, 0, 3, 4],
+  Zx = 4;
+function e1(e, t, o, a) {
   const n = a && (a.dr || a.bld);
   return e === "BL제자"
     ? a && a.flags.includes("아낀제자")
       ? t
       : o
     : e === "토벌무기"
-      ? n && n.hunter && n.hunter.type === "office" && n.hunter.idx === w0
+      ? n && n.hunter && n.hunter.type === "office" && n.hunter.idx === Zx
         ? t
         : o
       : t;
 }
-function xm(e) {
+function ty(e) {
   const t = e && (e.dr || e.bld);
-  if (t && t.hunter && t.hunter.type === "nm") return de("hunterNm");
-  if (!t || !t.hunter || !oe)
-    return h("해결사들", "the Fixers", "フィクサーたち");
-  const o = (oe.orgs[t.hunter.type] || [])[t.hunter.idx];
-  return o ? o.name : h("해결사들", "the Fixers", "フィクサーたち");
+  if (t && t.hunter && t.hunter.type === "nm") return pe("hunterNm");
+  if (!t || !t.hunter || !re)
+    return d("해결사들", "the Fixers", "フィクサーたち");
+  const o = (re.orgs[t.hunter.type] || [])[t.hunter.idx];
+  return o ? o.name : d("해결사들", "the Fixers", "フィクサーたち");
 }
-function m0(e) {
+function t1(e) {
   if (e && e.dr)
-    return oe && oe.orgs && oe.orgs.tiers ? oe.orgs.tiers[e.dr.grade] : "";
+    return re && re.orgs && re.orgs.tiers ? re.orgs.tiers[e.dr.grade] : "";
   const t = e && e.bld,
-    o = B((t && t.threat) || 0, 0, 3);
-  return oe && oe.orgs && oe.orgs.tiers ? oe.orgs.tiers[o] : "";
+    o = $((t && t.threat) || 0, 0, 3);
+  return re && re.orgs && re.orgs.tiers ? re.orgs.tiers[o] : "";
 }
-const mn = {
+const Cn = {
     voiceP: 0.3,
     progMax: 3,
     win: [
@@ -7130,38 +7407,38 @@ const mn = {
     restP: 0.3,
     blindP: 0.2,
   },
-  ka = (e) => !!e.dr && !e.dead,
-  y0 = () => (oe && Z(oe, "dr_lines")) || null;
-function Nt(e) {
-  let t = y0();
+  Oa = (e) => !!e.dr && !e.dead,
+  o1 = () => (re && ee(re, "dr_lines")) || null;
+function Et(e) {
+  let t = o1();
   for (const o of e.split(".")) {
     if (!t) return null;
     t = t[o];
   }
   return t;
 }
-function de(e) {
-  const t = Nt(e);
+function pe(e) {
+  const t = Et(e);
   return (t && t.text) || "";
 }
-function oo(e, t, o) {
+function co(e, t, o) {
   const a = e.dr,
     n = (o || [])
-      .map((s) => (typeof s == "string" ? s : s && s.text))
+      .map((l) => (typeof l == "string" ? l : l && l.text))
       .filter(Boolean);
   if (!n.length) return "";
   a.used || (a.used = {});
   let r = a.used[t] || [],
-    i = n.filter((s) => !r.includes(s));
+    i = n.filter((l) => !r.includes(l));
   if (!i.length) {
-    const s = r[r.length - 1];
-    ((r = []), (i = n.filter((c) => c !== s)), i.length || (i = n));
+    const l = r[r.length - 1];
+    ((r = []), (i = n.filter((c) => c !== l)), i.length || (i = n));
   }
-  const l = ae(e).pick(i);
-  return (r.push(l), (a.used[t] = r), l);
+  const s = ae(e).pick(i);
+  return (r.push(s), (a.used[t] = r), s);
 }
-const p0 = (e) => (e.dr.grade >= 4 ? "nm" : e.dr.grade >= 2 ? "mid" : "low");
-function b0(e) {
+const a1 = (e) => (e.dr.grade >= 4 ? "nm" : e.dr.grade >= 2 ? "mid" : "low");
+function n1(e) {
   return e.bf
     ? "bf"
     : e.job === "해결사"
@@ -7174,32 +7451,32 @@ function b0(e) {
             ? "worker"
             : "other";
 }
-const k0 = jt({
+const r1 = Nt({
   ko: ["첫 번째", "두 번째", "세 번째", "네 번째", "다섯 번째", "여섯 번째"],
   en: ["first", "second", "third", "fourth", "fifth", "sixth"],
   ja: ["一つ目の", "二つ目の", "三つ目の", "四つ目の", "五つ目の", "六つ目の"],
 });
-function xa(e, t) {
+function Fa(e, t) {
   const o = t.dr;
-  return Ht(e, ft(oe, t), t)
-    .replaceAll("{회차}", k0[Math.max(0, Math.min(5, (o.n || 1) - 1))])
+  return Jt(e, kt(re, t), t)
+    .replaceAll("{회차}", r1[Math.max(0, Math.min(5, (o.n || 1) - 1))])
     .replaceAll("{물리친수}", String(o.beat || 0));
 }
-function x0(e, t) {
-  oe = t;
+function i1(e, t) {
+  re = t;
   const o = e.dead;
   if (!o || !o.voice) return !1;
   const a = ae(e),
     n = e.log[e.log.length - 1];
   (n && n.kind === "death" && e.log.pop(), (e.dead = null));
-  const r = uo(e),
+  const r = _o(e),
     i = Math.round(((r ?? 2) / 2 + a.next() * 4) * 10) / 10,
-    l = i < 1.5 ? 0 : i < 3 ? 1 : i < 4.5 ? 2 : i < 7 ? 3 : 4,
-    s =
-      l >= 4
+    s = i < 1.5 ? 0 : i < 3 ? 1 : i < 4.5 ? 2 : i < 7 ? 3 : 4,
+    l =
+      s >= 4
         ? { type: "nm" }
-        : l === 3
-          ? { type: "assoc", idx: a.pick(km) }
+        : s === 3
+          ? { type: "assoc", idx: a.pick(ey) }
           : {
               type: "office",
               idx: a.int(
@@ -7209,7 +7486,7 @@ function x0(e, t) {
             };
   ((e.dr = {
     since: e.age,
-    grade: l,
+    grade: s,
     S: i,
     san: e.stats.sanity,
     prog: 0,
@@ -7217,8 +7494,8 @@ function x0(e, t) {
     res: 0,
     n: 0,
     kills: 0,
-    hunter: s,
-    kind: b0(e),
+    hunter: l,
+    kind: n1(e),
     used: {},
     lastProg: -1,
     resJust: !1,
@@ -7228,9 +7505,9 @@ function x0(e, t) {
     (e.plan = []),
     (e.cursor = 0));
   const c = o.t || 0.5,
-    u = de("voice");
-  D(e, { kind: "event", text: u, tone: "event" }, c);
-  const f = de("label.listen");
+    u = pe("voice");
+  P(e, { kind: "event", text: u, tone: "event" }, c);
+  const f = pe("label.listen");
   return (
     (e.prompt = {
       kind: "major",
@@ -7245,7 +7522,7 @@ function x0(e, t) {
     !0
   );
 }
-function T0(e) {
+function s1(e) {
   const t = e.dr,
     a = (t.grade >= 4 ? 6 : 5) - (t.n || 0);
   if (a <= 0) return;
@@ -7256,42 +7533,42 @@ function T0(e) {
           ? [0.3, 0.6, 0.9]
           : [0.33, 0.66],
     i = Math.min(a, r.length);
-  for (let l = 0; l < i; l++)
-    (l > 0 &&
+  for (let s = 0; s < i; s++)
+    (s > 0 &&
       e.plan.push({
         dr: "rest",
-        t: Math.round(((r[l - 1] + r[l]) / 2) * 1e3) / 1e3,
-        nm5: t.grade >= 4 && t.n + l === 5,
+        t: Math.round(((r[s - 1] + r[s]) / 2) * 1e3) / 1e3,
+        nm5: t.grade >= 4 && t.n + s === 5,
       }),
-      e.plan.push({ dr: "raid", t: r[l] }));
+      e.plan.push({ dr: "raid", t: r[s] }));
 }
-function v0(e, t, o) {
+function l1(e, t, o) {
   const a = e.dr;
   if (!a || e.dead) return !0;
   const n = ae(e);
   if (o.dr === "rest") {
     if (o.nm5)
       return (
-        D(
+        P(
           e,
           {
             kind: "flavor",
-            text: de("nm5.rest"),
+            text: pe("nm5.rest"),
             tone: "system",
-            hold: xe(de("nm5.rest")),
+            hold: me(pe("nm5.rest")),
           },
           o.t,
         ),
         !0
       );
-    if (!n.chance(mn.restP)) return !0;
-    const g = [...(Nt("rest") || [])];
+    if (!n.chance(Cn.restP)) return !0;
+    const g = [...(Et("rest") || [])];
     return (
-      e.bf && g.push(Nt("restBf")),
-      a.res >= 1 && g.push(Nt("restRes")),
-      D(
+      e.bf && g.push(Et("restBf")),
+      a.res >= 1 && g.push(Et("restRes")),
+      P(
         e,
-        { kind: "flavor", text: xa(oo(e, "rest", g), e), tone: "system" },
+        { kind: "flavor", text: Fa(co(e, "rest", g), e), tone: "system" },
         o.t,
       ),
       !0
@@ -7304,28 +7581,28 @@ function v0(e, t, o) {
     !a.blindDone &&
     a.grade >= 3 &&
     e.flags.includes("가정") &&
-    n.chance(mn.blindP)
+    n.chance(Cn.blindP)
   )
-    return ((a.blindDone = !0), a.n--, _0(e, t, o));
+    return ((a.blindDone = !0), a.n--, h1(e, t, o));
   const i =
       r <= 4 ? "raid" : r === 5 ? (a.grade >= 4 ? "nm5" : "final") : "nm6",
-    l = p0(e),
-    s = i === "raid" ? oo(e, `pre.${l}`, Nt(`pre.${l}`)) : de(`${i}.pre`);
-  D(e, { kind: "event", text: xa(s, e), tone: "event" }, o.t);
+    s = a1(e),
+    l = i === "raid" ? co(e, `pre.${s}`, Et(`pre.${s}`)) : pe(`${i}.pre`);
+  P(e, { kind: "event", text: Fa(l, e), tone: "event" }, o.t);
   let c;
   if (i === "raid") {
-    const g = [oo(e, `body.${l}`, Nt(`body.${l}`))];
-    (a.prog !== a.lastProg && g.push(de(`prog.${Math.min(2, a.prog)}`)),
+    const g = [co(e, `body.${s}`, Et(`body.${s}`))];
+    (a.prog !== a.lastProg && g.push(pe(`prog.${Math.min(2, a.prog)}`)),
       a.resJust &&
         a.res >= 1 &&
         a.res <= 2 &&
-        g.push(de(`resLine.${a.res - 1}`)),
+        g.push(pe(`resLine.${a.res - 1}`)),
       (a.lastProg = a.prog),
       (c = g.join(" ")));
-  } else c = de(`${i}.body`);
-  ((c = xa(c, e)), (a.resJust = !1));
-  const u = { label: de("label.fight"), i: 0 },
-    f = { label: de("label.resist"), i: 1 };
+  } else c = pe(`${i}.body`);
+  ((c = Fa(c, e)), (a.resJust = !1));
+  const u = { label: pe("label.fight"), i: 0 },
+    f = { label: pe("label.resist"), i: 1 };
   return (
     (e.prompt = {
       kind: "major",
@@ -7341,11 +7618,11 @@ function v0(e, t, o) {
     !0
   );
 }
-function _0(e, t, o) {
-  const a = Z(t, "cm_blind"),
-    n = xa(a.text, e);
+function h1(e, t, o) {
+  const a = ee(t, "cm_blind"),
+    n = Fa(a.text, e);
   return (
-    D(e, { kind: "event", text: n, tone: "event" }, o.t),
+    P(e, { kind: "event", text: n, tone: "event" }, o.t),
     (e.prompt = {
       kind: "major",
       eventId: "cm_blind",
@@ -7360,87 +7637,87 @@ function _0(e, t, o) {
     !0
   );
 }
-const lf = (e) => B(0.35 + ((e.dr.san || 0) - 30) * 0.005, 0.2, 0.6);
-function pt(e, t, o, a = {}) {
-  const n = xa(t, e);
-  D(
+const $f = (e) => $(0.35 + ((e.dr.san || 0) - 30) * 0.005, 0.2, 0.6);
+function _t(e, t, o, a = {}) {
+  const n = Fa(t, e);
+  P(
     e,
-    { kind: "result", text: n, tone: a.tone || "normal", hold: xe(n), ...a },
+    { kind: "result", text: n, tone: a.tone || "normal", hold: me(n), ...a },
     o,
   );
 }
-function Ti(e, t, o, a, n, r = 5e3) {
+function qi(e, t, o, a, n, r = 5e3) {
   e.dr.end = o;
   const i = e.log[e.log.length - 1];
-  (et(e, a, t, "event", { text: xa(n, e) }),
-    e.dead && (e.dead.hold = xe(i ? i.text : n) + r));
+  (Ze(e, a, t, "event", { text: Fa(n, e) }),
+    e.dead && (e.dead.hold = me(i ? i.text : n) + r));
 }
-function hf(e, t, o) {
+function Pf(e, t, o) {
   const a = e.dr;
-  (pt(e, de("ret.body"), t, { tone: "rare" }),
-    pt(
+  (_t(e, pe("ret.body"), t, { tone: "rare" }),
+    _t(
       e,
-      `${de(`ret.job.${a.kind}`)} ${de(o ? "ret.hunterNm5" : "ret.hunter")}`,
+      `${pe(`ret.job.${a.kind}`)} ${pe(o ? "ret.hunterNm5" : "ret.hunter")}`,
       t,
     ),
-    D(
+    P(
       e,
-      { kind: "banner", text: de("ret.banner"), hold: 3500, scene: "calm" },
+      { kind: "banner", text: pe("ret.banner"), hold: 3500, scene: "calm" },
       t,
     ),
     (e.flags = e.flags.filter((r) => r !== "뒤틀림레이드")),
     (a.end = "return"));
-  const n = de("ret.end");
-  (et(e, "돌아온 사람", t, "event", { alive: !0, text: n }),
-    e.dead && (e.dead.hold = xe(n) + 3e3));
+  const n = pe("ret.end");
+  (Ze(e, "돌아온 사람", t, "event", { alive: !0, text: n }),
+    e.dead && (e.dead.hold = me(n) + 3e3));
 }
-function j0(e, t, o, a) {
+function d1(e, t, o, a) {
   const n = e.dr,
     r = ae(e),
     i = o.t || 0.5;
-  let l = a;
-  (l == null || l < 0) && (l = 0);
-  const s = o.choices[l] || o.choices[0],
-    c = s.i,
-    u = s.label;
+  let s = a;
+  (s == null || s < 0) && (s = 0);
+  const l = o.choices[s] || o.choices[0],
+    c = l.i,
+    u = l.label;
   if (o.dr === "voice") {
-    pt(e, de("voiceRes"), i, { tone: "rare", choice: u });
-    const f = `${de(`turn.${n.kind}`)}
+    _t(e, pe("voiceRes"), i, { tone: "rare", choice: u });
+    const f = `${pe(`turn.${n.kind}`)}
 
-${de("turnCommon")}`;
-    (D(
+${pe("turnCommon")}`;
+    (P(
       e,
       {
         kind: "result",
         text: f,
         tone: "rare",
-        hold: Math.max(6e3, xe(f)),
-        job: be(e),
+        hold: Math.max(6e3, me(f)),
+        job: Re(e),
       },
       i,
     ),
-      D(e, { kind: "banner", text: xa(de("banner"), e), hold: 3500 }, i),
-      D(
+      P(e, { kind: "banner", text: Fa(pe("banner"), e), hold: 3500 }, i),
+      P(
         e,
-        { kind: "flavor", text: de(`gradeLine.${n.grade}`), tone: "system" },
+        { kind: "flavor", text: pe(`gradeLine.${n.grade}`), tone: "system" },
         i,
       ));
     return;
   }
   if (o.dr === "blind") {
-    const f = Z(t, "cm_blind");
+    const f = ee(t, "cm_blind");
     if ((e.cmRec ?? (e.cmRec = {}), c === 1 && r.chance(0.5)))
       return (
         (e.cmRec.blindLove = !0),
-        pt(e, f.choices[1].ok.text, i, {
+        _t(e, f.choices[1].ok.text, i, {
           tone: "death",
           choice: u,
           scene: "end",
         }),
-        Ti(e, i, "blind", "해결사의 토벌", f.loveEnd.text)
+        qi(e, i, "blind", "해결사의 토벌", f.loveEnd.text)
       );
     ((e.cmRec.blindKill = !0),
-      pt(e, c === 0 ? f.choices[0].text : f.choices[1].fail.text, i, {
+      _t(e, c === 0 ? f.choices[0].text : f.choices[1].fail.text, i, {
         tone: "bad",
         choice: u,
       }));
@@ -7448,27 +7725,27 @@ ${de("turnCommon")}`;
   }
   if (o.dr === "final")
     return (
-      pt(e, de(c === 0 ? "final.fight" : "final.resist"), i, {
+      _t(e, pe(c === 0 ? "final.fight" : "final.resist"), i, {
         tone: "death",
         choice: u,
         scene: "end",
       }),
-      Ti(e, i, "final", "해결사의 토벌", oo(e, "obit.final", Nt("obit.final")))
+      qi(e, i, "final", "해결사의 토벌", co(e, "obit.final", Et("obit.final")))
     );
   if (o.dr === "nm6")
     return (
-      pt(e, de("nm6.fight"), i, {
+      _t(e, pe("nm6.fight"), i, {
         tone: "death",
         choice: u,
         scene: "blows",
         hold: 15e3,
       }),
-      Ti(
+      qi(
         e,
         i,
         "nm6",
         "분노한 사람의 손",
-        oo(e, "obit.nm6", Nt("obit.nm6")),
+        co(e, "obit.nm6", Et("obit.nm6")),
         9e3,
       )
     );
@@ -7476,50 +7753,50 @@ ${de("turnCommon")}`;
     if (c === 0)
       (n.beat++,
         (n.kills += 1),
-        pt(e, de("nm5.fight"), i, { tone: "rare", choice: u }));
-    else if (r.chance(lf(e))) {
+        _t(e, pe("nm5.fight"), i, { tone: "rare", choice: u }));
+    else if (r.chance($f(e))) {
       if (
         (n.res++,
         (n.resJust = !0),
-        pt(e, de("nm5.resOk"), i, { tone: "rare", choice: u }),
+        _t(e, pe("nm5.resOk"), i, { tone: "rare", choice: u }),
         n.res >= 3)
       )
-        return hf(e, i, !0);
+        return Pf(e, i, !0);
     } else
-      ((n.prog = Math.min(mn.progMax - 1, n.prog + 1)),
-        pt(e, de("nm5.resFail"), i, { tone: "bad", choice: u }));
-    D(e, { kind: "banner", text: de("nm5.banner"), hold: 3500 }, i);
+      ((n.prog = Math.min(Cn.progMax - 1, n.prog + 1)),
+        _t(e, pe("nm5.resFail"), i, { tone: "bad", choice: u }));
+    P(e, { kind: "banner", text: pe("nm5.banner"), hold: 3500 }, i);
     return;
   }
   if (c === 0) {
-    const f = mn.win[n.grade][Math.min(3, (o.drN || 1) - 1)];
+    const f = Cn.win[n.grade][Math.min(3, (o.drN || 1) - 1)];
     r.chance(f)
       ? (n.beat++,
         (n.kills += r.int(1, 3)),
-        pt(e, oo(e, "win", Nt("win")), i, { tone: "good", choice: u }))
+        _t(e, co(e, "win", Et("win")), i, { tone: "good", choice: u }))
       : ((n.prog += 2),
-        pt(e, oo(e, "lose", Nt("lose")), i, { tone: "bad", choice: u }));
-  } else if (r.chance(lf(e))) {
+        _t(e, co(e, "lose", Et("lose")), i, { tone: "bad", choice: u }));
+  } else if (r.chance($f(e))) {
     (n.res++, (n.resJust = !0));
-    const f = n.res <= 2 ? ` ${de(`resTail.${n.res - 1}`)}` : "";
+    const f = n.res <= 2 ? ` ${pe(`resTail.${n.res - 1}`)}` : "";
     if (
-      (pt(e, `${oo(e, "resOk", Nt("resOk"))}${f}`, i, {
+      (_t(e, `${co(e, "resOk", Et("resOk"))}${f}`, i, {
         tone: "rare",
         choice: u,
       }),
       n.res >= 3)
     )
-      return hf(e, i, !1);
+      return Pf(e, i, !1);
   } else
     ((n.prog += 1),
-      pt(e, oo(e, "resFail", Nt("resFail")), i, { tone: "bad", choice: u }));
-  if (n.prog >= mn.progMax) {
+      _t(e, co(e, "resFail", Et("resFail")), i, { tone: "bad", choice: u }));
+  if (n.prog >= Cn.progMax) {
     const f = e.log[e.log.length - 1];
     (f && (f.scene = "end"),
-      Ti(e, i, "prog", "해결사의 토벌", oo(e, "obit.prog", Nt("obit.prog"))));
+      qi(e, i, "prog", "해결사의 토벌", co(e, "obit.prog", Et("obit.prog"))));
   }
 }
-const yr = {
+const Mr = {
   uP: 0.04,
   drinkP: 0.03,
   whaleP: 0.03,
@@ -7530,25 +7807,25 @@ const yr = {
     pirateX: [0.005, 0.002],
   },
 };
-function A0(e) {
-  const t = ae({ rngState: In(`${e}:lake`) });
-  return t.chance(yr.drinkP) ? t.int(16, 60) : null;
+function u1(e) {
+  const t = ae({ rngState: Vn(`${e}:lake`) });
+  return t.chance(Mr.drinkP) ? t.int(16, 60) : null;
 }
-const Y0 = () => (oe && Z(oe, "lk_lines")) || null;
-function Tm(e) {
-  let t = Y0();
+const c1 = () => (re && ee(re, "lk_lines")) || null;
+function oy(e) {
+  let t = c1();
   for (const o of e.split(".")) {
     if (t == null) return null;
     t = t[o];
   }
   return t;
 }
-const se = (e) => {
-    const t = Tm(e);
+const ue = (e) => {
+    const t = oy(e);
     return (t && t.text) || "";
   },
-  df = (e) => e.regionId === "U";
-function vm(e) {
+  Hf = (e) => e.regionId === "U";
+function ay(e) {
   return e.dead ||
     e.lake ||
     e.lakeRec ||
@@ -7559,46 +7836,46 @@ function vm(e) {
     e.flags.includes("가주후보") ||
     e.heir ||
     e.rule ||
-    ka(e) ||
-    aa(e)
+    Oa(e) ||
+    ga(e)
     ? !1
     : e.age >= 16;
 }
-function S0(e, t) {
+function f1(e, t) {
   return e.job === "해결사"
     ? "lk_u_fixer"
-    : Ft(e)
+    : Ht(e)
       ? "lk_u_work"
       : e.age >= 30 && t.chance(0.4)
         ? "lk_u_ferry"
         : "lk_u_fish";
 }
-function R0(e, t) {
+function w1(e, t) {
   const o = [],
-    a = vm(e);
+    a = ay(e);
   (e.lakeDrinkAt != null &&
     e.age >= e.lakeDrinkAt &&
     (a && e.age === e.lakeDrinkAt && o.push({ id: "lk_drink", lakeEnter: !0 }),
     (e.lakeDrinkAt = null)),
     a &&
-      df(e) &&
+      Hf(e) &&
       !e.lakeOffered &&
       e.age >= 18 &&
       e.age <= 65 &&
-      t.chance(yr.uP) &&
-      o.push({ id: S0(e, t), lakeEnter: !0 }));
+      t.chance(Mr.uP) &&
+      o.push({ id: f1(e, t), lakeEnter: !0 }));
   const n = e.lakeHints || 0;
   if (n < 2 && !e.bf && e.age >= 16) {
     const r = n >= 1 ? 1 : 0,
-      i = df(e),
-      l = !!e.lakeRec && !e.lakeRec.dead;
-    (i || l) &&
-      (t.chance(yr.hint[i ? "sailor" : "sailorX"][r])
+      i = Hf(e),
+      s = !!e.lakeRec && !e.lakeRec.dead;
+    (i || s) &&
+      (t.chance(Mr.hint[i ? "sailor" : "sailorX"][r])
         ? o.push({
             id: i ? "lk_hint_sailor" : "lk_hint_sailor_x",
             lakeHintEv: !0,
           })
-        : t.chance(yr.hint[i ? "pirate" : "pirateX"][r]) &&
+        : t.chance(Mr.hint[i ? "pirate" : "pirateX"][r]) &&
           o.push({
             id: i ? "lk_hint_pirate" : "lk_hint_pirate_x",
             lakeHintEv: !0,
@@ -7606,57 +7883,57 @@ function R0(e, t) {
   }
   return o;
 }
-function $r(e, t) {
+function ni(e, t) {
   const o = t.lake,
     a = o ? o.source : null,
     n =
       a === "u_work"
-        ? h("옆자리 직원", "the coworker beside you", "隣の席の社員")
+        ? d("옆자리 직원", "the coworker beside you", "隣の席の社員")
         : a === "u_fixer"
-          ? h("의뢰인", "the client", "依頼人")
+          ? d("의뢰인", "the client", "依頼人")
           : a === "drink"
-            ? h(
+            ? d(
                 "회색 작업복의 선원",
                 "the sailor in grey overalls",
                 "灰色の作業着の船乗り",
               )
-            : h("같이 탄 선원", "a fellow sailor", "同乗の船乗り"),
+            : d("같이 탄 선원", "a fellow sailor", "同乗の船乗り"),
     r = t.flags.includes("가정")
-      ? h("배우자", "your spouse", "配偶者")
+      ? d("배우자", "your spouse", "配偶者")
       : t.flags.includes("고아")
-        ? h("오래전 동료", "an old comrade", "昔の仲間")
-        : h("어머니", "your mother", "母");
-  let i = Ht(e, ft(oe, t), t)
+        ? d("오래전 동료", "an old comrade", "昔の仲間")
+        : d("어머니", "your mother", "母");
+  let i = Jt(e, kt(re, t), t)
     .replaceAll("{동행}", n)
     .replaceAll("{아는얼굴}", r);
-  const l = o && o.st;
-  if (l && l.first != null) {
-    const s = (c) => se(`colors.${c}`);
+  const s = o && o.st;
+  if (s && s.first != null) {
+    const l = (c) => ue(`colors.${c}`);
     i = i
-      .replaceAll("{처음빛}", s(l.first))
-      .replaceAll("{지금빛}", s(l.cur ?? l.first))
-      .replaceAll("{닮은빛}", se(`similar.${l.first}`));
+      .replaceAll("{처음빛}", l(s.first))
+      .replaceAll("{지금빛}", l(s.cur ?? s.first))
+      .replaceAll("{닮은빛}", ue(`similar.${s.first}`));
   }
   return i;
 }
-const Xs = (e) => nm[e.lake.route[e.lake.i]],
-  Qs = (e) => im(e.lake.route[e.lake.i]);
-function C0(e) {
-  const t = Xs(e);
-  return se("common.tag")
-    .replaceAll("{호수}", Qs(e))
-    .replaceAll("{이름}", se(`lakes.${t.id}.name`));
+const bl = (e) => Em[e.lake.route[e.lake.i]],
+  kl = (e) => $m(e.lake.route[e.lake.i]);
+function g1(e) {
+  const t = bl(e);
+  return ue("common.tag")
+    .replaceAll("{호수}", kl(e))
+    .replaceAll("{이름}", ue(`lakes.${t.id}.name`));
 }
-function N0(e, t, o, a) {
-  oe = t;
+function m1(e, t, o, a) {
+  re = t;
   const n = ae(e);
   e.lakeOffered = !0;
-  const r = n.chance(yr.whaleP)
+  const r = n.chance(Mr.whaleP)
     ? { kind: n.pick(["marlin", "pallid", "crimson"]), at: n.int(0, 4) }
     : null;
   ((e.lake = {
     source: a,
-    route: lx(n),
+    route: z0(n),
     i: 0,
     t: 1,
     st: null,
@@ -7667,30 +7944,30 @@ function N0(e, t, o, a) {
     age: e.age,
   }),
     e.flags.includes("대호수항해") || e.flags.push("대호수항해"));
-  const i = se(a === "drink" ? "common.departDrink" : "common.depart");
-  (D(e, { kind: "flavor", text: i, tone: "system", hold: xe(i) }, o), _m(e, o));
+  const i = ue(a === "drink" ? "common.departDrink" : "common.depart");
+  (P(e, { kind: "flavor", text: i, tone: "system", hold: me(i) }, o), ny(e, o));
 }
-function _m(e, t) {
+function ny(e, t) {
   const o = e.lake,
     a = ae(e),
-    n = Xs(e);
+    n = bl(e);
   ((o.t = 1),
     (o.st = n.init ? n.init(a) : {}),
-    D(e, { kind: "lakesep", text: Qs(e), lake: o.route[o.i] }, t),
-    D(
+    P(e, { kind: "lakesep", text: kl(e), lake: o.route[o.i] }, t),
+    P(
       e,
-      { kind: "event", text: $r(se(`lakes.${n.id}.enter`), e), tone: "event" },
+      { kind: "event", text: ni(ue(`lakes.${n.id}.enter`), e), tone: "event" },
       t,
     ),
     o.whale &&
       o.whale.at === o.i &&
       !o.whaleDone &&
-      ((o.whaleDone = !0), I0(e, o.whale.kind, t)),
-    jm(e, t));
+      ((o.whaleDone = !0), p1(e, o.whale.kind, t)),
+    ry(e, t));
 }
-const W0 = { marlin: "Marlin", pallid: "Pallid", crimson: "Crimson" };
-function I0(e, t, o) {
-  ((e.lakeWhale = t), Q(e, { k: "lakeWhale", whale: t }));
+const y1 = { marlin: "Marlin", pallid: "Pallid", crimson: "Crimson" };
+function p1(e, t, o) {
+  ((e.lakeWhale = t), Z(e, { k: "lakeWhale", whale: t }));
   const a =
       t === "marlin"
         ? { health: -8 }
@@ -7699,18 +7976,18 @@ function I0(e, t, o) {
           : { health: -5, sanity: -5 },
     n = {};
   for (const [r, i] of Object.entries(a)) {
-    const l = e.stats[r];
-    ((e.stats[r] = Re(B(l + i, 1, 100))), (n[r] = Math.round(e.stats[r] - l)));
+    const s = e.stats[r];
+    ((e.stats[r] = Ce($(s + i, 1, 100))), (n[r] = Math.round(e.stats[r] - s)));
   }
   for (let r = 1; r <= 3; r++) {
-    const i = se(`common.whale${W0[t]}${r}`);
-    D(
+    const i = ue(`common.whale${y1[t]}${r}`);
+    P(
       e,
       {
         kind: "result",
         text: i,
         tone: "rare",
-        hold: xe(i) + 1200,
+        hold: me(i) + 1200,
         scene: `whale_${t}`,
         ...(r === 3 ? { delta: n } : {}),
       },
@@ -7718,90 +7995,90 @@ function I0(e, t, o) {
     );
   }
 }
-function jm(e, t) {
+function ry(e, t) {
   const o = e.lake,
     a = ae(e),
-    n = Xs(e),
-    r = dx(n, o.st, o.t, a);
-  if (r.wave) return Am(e, n, r.wave, t);
+    n = bl(e),
+    r = J0(n, o.st, o.t, a);
+  if (r.wave) return iy(e, n, r.wave, t);
   ((o.scene = r.scene),
-    o.t > 1 && (e.stats.sanity = Re(B(e.stats.sanity - 1, 1, 100))));
-  const i = $r(se(`lakes.${n.id}.scene.${r.scene}`), e);
-  D(e, { kind: "event", text: i, tone: "event" }, t);
-  const l = hx(n, o.st).map((s, c) => ({
-    label: $r(se(`lakes.${n.id}.c.${s}`), e),
+    o.t > 1 && (e.stats.sanity = Ce($(e.stats.sanity - 1, 1, 100))));
+  const i = ni(ue(`lakes.${n.id}.scene.${r.scene}`), e);
+  P(e, { kind: "event", text: i, tone: "event" }, t);
+  const s = U0(n, o.st).map((l, c) => ({
+    label: ni(ue(`lakes.${n.id}.c.${l}`), e),
     i: c,
-    key: s,
+    key: l,
   }));
   e.prompt = {
     kind: "major",
     lake: n.id,
-    lakeNum: Qs(e),
-    tag: C0(e),
+    lakeNum: kl(e),
+    tag: g1(e),
     eventId: `lk_${n.id}`,
     text: i,
-    choices: l,
+    choices: s,
     ignoreLabel: null,
     remainingMs: null,
     t,
   };
 }
-function O0(e, t, o, a) {
+function b1(e, t, o, a) {
   const n = e.lake;
   if (!n) return;
   const r = o.t || 0.5,
-    i = Xs(e);
-  let l = a;
-  (l == null || l < 0 || !o.choices[l]) && (l = 0);
-  const s = o.choices[l],
-    c = ux(i, n.st, s.key, n.scene, n.t);
+    i = bl(e);
+  let s = a;
+  (s == null || s < 0 || !o.choices[s]) && (s = 0);
+  const l = o.choices[s],
+    c = V0(i, n.st, l.key, n.scene, n.t);
   if ((c.k === "haul" && (n.fished = !0), c.k)) {
-    const u = $r(se(`lakes.${i.id}.r.${c.k}`), e);
-    D(
+    const u = ni(ue(`lakes.${i.id}.r.${c.k}`), e);
+    P(
       e,
       {
         kind: "result",
         text: u,
         tone: c.o === "cross" ? "good" : "normal",
-        choice: s.label,
+        choice: l.label,
       },
       r,
     );
   }
-  if (c.o === "wave") return Am(e, i, c.w, r, c.k ? null : s.label);
+  if (c.o === "wave") return iy(e, i, c.w, r, c.k ? null : l.label);
   if (c.o === "cross")
     return (
-      rm.includes(n.route[n.i]) && n.deep++,
+      Lm.includes(n.route[n.i]) && n.deep++,
       n.i++,
-      n.i >= n.route.length ? F0(e, r) : _m(e, r)
+      n.i >= n.route.length ? k1(e, r) : ny(e, r)
     );
-  (n.t++, jm(e, r));
+  (n.t++, ry(e, r));
 }
-function Am(e, t, o, a, n) {
+function iy(e, t, o, a, n) {
   const r = e.lake,
-    i = Qs(e),
-    l = se(`lakes.${t.id}.w.${o}`) || se("common.stay"),
-    s = $r(l, e);
-  D(
+    i = kl(e),
+    s = ue(`lakes.${t.id}.w.${o}`) || ue("common.stay"),
+    l = ni(s, e);
+  P(
     e,
     {
       kind: "result",
-      text: s,
+      text: l,
       tone: "bad",
-      hold: xe(s),
+      hold: me(l),
       scene: "lake_wave",
       ...(n ? { choice: n } : {}),
     },
     a,
   );
-  const c = se("common.mermaid");
-  D(
+  const c = ue("common.mermaid");
+  P(
     e,
-    { kind: "result", text: c, tone: "death", hold: xe(c), scene: "lake_wave" },
+    { kind: "result", text: c, tone: "death", hold: me(c), scene: "lake_wave" },
     a,
   );
-  const u = se("common.mermaidEnd");
-  (D(
+  const u = ue("common.mermaidEnd");
+  (P(
     e,
     { kind: "flavor", text: u, tone: "system", hold: 3500, scene: "lake_end" },
     a,
@@ -7814,81 +8091,81 @@ function Am(e, t, o, a, n) {
       at: i,
       cleared: r.i,
     }),
-    Q(e, { k: "lake", age: r.age, crossed: !1, at: i }),
+    Z(e, { k: "lake", age: r.age, crossed: !1, at: i }),
     (e.lake = null));
   const f = e.name || "",
     g = f.charCodeAt(f.length - 1),
-    b = g >= 44032 && g <= 55203 && (g - 44032) % 28 === 0 ? "는" : "은",
-    k = se("common.obit")
-      .replaceAll("{이름}은", f + b)
+    p = g >= 44032 && g <= 55203 && (g - 44032) % 28 === 0 ? "는" : "은",
+    b = ue("common.obit")
+      .replaceAll("{이름}은", f + p)
       .replaceAll("{이름}", f)
       .replaceAll("{호수}", i);
-  (et(e, "인어가 되었다", a, "event", { text: k }),
-    e.dead && (e.dead.hold = xe(u) + 4e3));
+  (Ze(e, "인어가 되었다", a, "event", { text: b }),
+    e.dead && (e.dead.hold = me(u) + 4e3));
 }
-function F0(e, t) {
+function k1(e, t) {
   const o = e.lake,
-    a = se("common.arrive");
-  (D(
+    a = ue("common.arrive");
+  (P(
     e,
     {
       kind: "result",
       text: a,
       tone: "rare",
-      hold: xe(a),
+      hold: me(a),
       scene: "lake_arrive",
     },
     t,
   ),
     o.deep >= 3 &&
-      D(
+      P(
         e,
-        { kind: "flavor", text: se("common.arriveDeep"), tone: "system" },
+        { kind: "flavor", text: ue("common.arriveDeep"), tone: "system" },
         t,
       ));
   const n = e.stats,
     r = {},
     i = (c, u) => {
       const f = n[c];
-      n[c] = Re(B(f + u));
+      n[c] = Ce($(f + u));
       const g = Math.round(n[c] - f);
       g && (r[c] = (r[c] || 0) + g);
     };
   (i("wealth", 25), i("rep", 5), i("network", 3), i("sanity", 5));
-  const l = [];
+  const s = [];
   (e.job === "해결사"
     ? ((e.grade || 9) > 1 && (e.merit = (e.merit || 0) + 6),
-      l.push(
-        se(o.source === "u_fixer" ? "common.r_fixerReq" : "common.r_fixer"),
+      s.push(
+        ue(o.source === "u_fixer" ? "common.r_fixerReq" : "common.r_fixer"),
       ))
     : e.job === "손가락"
-      ? (qo(e, 6), l.push(Ht(se("common.r_finger"), ft(oe, e), e)))
-      : ce(e)
+      ? (ta(e, 6), s.push(Jt(ue("common.r_finger"), kt(re, e), e)))
+      : Te(e)
         ? e.work === "4무리"
-          ? (i("rep", 5), l.push(se("common.r_rcorp")))
-          : (qo(e, 6), l.push(se("common.r_wing")))
-        : Ft(e)
-          ? (xu(e, 6), l.push(se("common.r_office")))
+          ? (i("rep", 5), s.push(ue("common.r_rcorp")))
+          : (ta(e, 6), s.push(ue("common.r_wing")))
+        : Ht(e)
+          ? (Vu(e, 6), s.push(ue("common.r_office")))
           : e.job === "검계" && e.bl
-            ? ((e.bl.cut = (e.bl.cut || 0) + 3), l.push(se("common.r_blade")))
+            ? ((e.bl.cut = (e.bl.cut || 0) + 3), s.push(ue("common.r_blade")))
             : e.job === "떠돌이 검객" && e.bl
               ? ((e.bl.cut = (e.bl.cut || 0) + 3),
-                l.push(se("common.r_wanderer")))
+                s.push(ue("common.r_wanderer")))
               : e.job === "흑운회"
-                ? (qo(e, 6), l.push(se("common.r_kuro")))
-                : Le(e) && qo(e, 6),
-    o.fished && (i("wealth", 6), l.push(se("common.r_fish"))),
-    o.source === "drink" && (i("wealth", 10), l.push(se("common.r_drink"))));
-  for (const c of Ao) n[c] = Re(B(n[c]));
-  const s = l.join(" ");
-  (D(
+                ? (ta(e, 6), s.push(ue("common.r_kuro")))
+                : Ge(e) && ta(e, 6),
+    o.fished && (i("wealth", 6), s.push(ue("common.r_fish"))),
+    o.source === "drink" && (i("wealth", 10), s.push(ue("common.r_drink"))));
+  for (const c of Jn) n[c] = Ce($(n[c]));
+  const l = s.join(" ");
+  (P(
     e,
     {
       kind: "result",
-      text: s || se("common.rec"),
+      text: l || ue("common.rec"),
       tone: "good",
       delta: r,
-      hold: xe(s),
+      hold: me(l),
     },
     t,
   ),
@@ -7900,117 +8177,117 @@ function F0(e, t) {
       at: null,
       cleared: 5,
     }),
-    Q(e, { k: "lake", age: o.age, crossed: !0, deep: o.deep }),
+    Z(e, { k: "lake", age: o.age, crossed: !0, deep: o.deep }),
     (e.lake = null));
 }
-function E0(e, t, o) {
+function x1(e, t, o) {
   const a = ae(e),
     n = [];
-  nm.forEach((c, u) =>
-    (Tm(`lakes.${c.id}.hint`) || []).forEach((f) => n.push({ li: u, h: f })),
+  Em.forEach((c, u) =>
+    (oy(`lakes.${c.id}.hint`) || []).forEach((f) => n.push({ li: u, h: f })),
   );
   const r = a.pick(n);
   if (!r) return;
   e.lakeHints = (e.lakeHints || 0) + 1;
-  const i = im(r.li),
-    l = (r.h[t === "pirate" ? "p" : "s"] || {}).text || "",
-    s = se(t === "pirate" ? "common.hintPirate" : "common.hintSailor")
+  const i = $m(r.li),
+    s = (r.h[t === "pirate" ? "p" : "s"] || {}).text || "",
+    l = ue(t === "pirate" ? "common.hintPirate" : "common.hintSailor")
       .replaceAll("{호수}", i)
-      .replaceAll("{귀띔}", l);
-  (D(e, { kind: "result", text: s, tone: "rare", hold: xe(s) }, o),
-    D(
+      .replaceAll("{귀띔}", s);
+  (P(e, { kind: "result", text: l, tone: "rare", hold: me(l) }, o),
+    P(
       e,
       {
         kind: "flavor",
-        text: se("common.hintLog")
+        text: ue("common.hintLog")
           .replaceAll("{호수}", i)
-          .replaceAll("{귀띔}", l),
+          .replaceAll("{귀띔}", s),
         tone: "system",
       },
       o,
     ));
 }
-function M0(e) {
+function T1(e) {
   const t = e.prompt;
   return ae(e).int(0, Math.max(0, t.choices.length - 1));
 }
-const Pr = (e) => (e && (e.branch || e.cloneTeam)) || "토끼";
-function B0(e) {
-  return yu[Pr(e)] || Pr(e);
+const ri = (e) => (e && (e.branch || e.cloneTeam)) || "토끼";
+function v1(e) {
+  return Ku[ri(e)] || ri(e);
 }
-function L0(e) {
+function _1(e) {
   const t = e && (e.work === "4무리" ? e.wingRank : e.cloneRank);
   return t >= 3
-    ? h("사령관", "Commander", "司令官")
+    ? d("사령관", "Commander", "司令官")
     : t >= 2
-      ? h("대장", "Team Leader", "隊長")
-      : h("대원", "Member", "隊員");
+      ? d("대장", "Team Leader", "隊長")
+      : d("대원", "Member", "隊員");
 }
-const $0 = Gt({
+const A1 = Qt({
   ko: { 묘: "묘", 오: "오", 사: "사", 유: "유", 미: "미" },
   en: { 묘: "Mao", 오: "Wu", 사: "Si", 유: "You", 미: "Wei" },
   ja: { 묘: "卯", 오: "午", 사: "巳", 유: "酉", 미: "未" },
 });
-function sn(e, t, o) {
+function xn(e, t, o) {
   if (e === "흑수") {
-    const a = $0[o] || o || "";
+    const a = A1[o] || o || "";
     return t >= 2
-      ? h(
+      ? d(
           `흑수 - ${a} 필두`,
           `Heishou Pack - ${a} Branch Adept`,
           `黒獣 - ${a} 筆頭`,
         )
-      : h(`흑수 - ${a}`, `Heishou Pack - ${a} Branch`, `黒獣 - ${a}`);
+      : d(`흑수 - ${a}`, `Heishou Pack - ${a} Branch`, `黒獣 - ${a}`);
   }
   if (e === "시간징수직") {
     const a = Math.ceil(t / 2);
     return t % 2 === 0
-      ? h(
+      ? d(
           `T사 ${a}등급 강력징수직`,
           `T Corp. Class ${a} Violent Defaulter Collections Staff`,
           `T社 ${a}級 強制徴収職`,
         )
-      : h(
+      : d(
           `T사 ${a}등급 징수직`,
           `T Corp. Class ${a} Collection Staff`,
           `T社 ${a}級 徴収職`,
         );
   }
   if (e === "정리 요원")
-    return h(
+    return d(
       `W사 ${t}등급 정리 요원`,
       `W Corp. Level ${t} Cleanup Agent`,
       `W社 ${t}級 整理要員`,
     );
   if (e === "적출직")
     return t >= 5
-      ? h("K사 특수 적출직", "K Corp. Special Excision Staff", "K社 特殊摘出職")
-      : h(
+      ? d("K사 특수 적출직", "K Corp. Special Excision Staff", "K社 特殊摘出職")
+      : d(
           `K사 ${t}등급 적출직`,
           `K Corp. Class ${t} Excision Staff`,
           `K社 ${t}級 摘出職`,
         );
   if (e === "이단 심문관")
     return [
-      h("N사 작은 망치", "N Corp. Kleinhammer", "N社 小槌"),
-      h("N사 중간 망치", "N Corp. Mittelhammer", "N社 中槌"),
-      h("N사 큰 망치", "N Corp. Großhammer", "N社 大槌"),
+      d("N사 작은 망치", "N Corp. Kleinhammer", "N社 小槌"),
+      d("N사 중간 망치", "N Corp. Mittelhammer", "N社 中槌"),
+      d("N사 큰 망치", "N Corp. Großhammer", "N社 大槌"),
     ][Math.min(3, t) - 1];
   if (e === "4무리") {
     if (t >= 3)
-      return h(
+      return d(
         "R사 4무리 사령관",
         "R Corp. 4th Pack Commander",
         "R社 第4群 司令官",
       );
-    const a = yu[o] || o || "";
+    const a = Ku[o] || o || "";
     return t >= 2
-      ? h(
+      ? d(
           `R사 4무리 - ${a}팀 대장`,
           `R Corp. 4th Pack - ${a} Team Leader`,
           `R社 第4群 - ${a}チーム 隊長`,
         )
-      : h(
+      : d(
           `R사 4무리 - ${a}팀 대원`,
           `R Corp. 4th Pack - ${a} Team Member`,
           `R社 第4群 - ${a}チーム 隊員`,
@@ -8018,7 +8295,7 @@ function sn(e, t, o) {
   }
   return "";
 }
-function P0(e) {
+function j1(e) {
   const t = e.wingRank || 1;
   return e.work === "흑수"
     ? t >= 2
@@ -8054,8 +8331,8 @@ function P0(e) {
                 : 1
             : 0;
 }
-const ce = (e) => e.job === "사원" && !!gn[e.work],
-  no = {
+const Te = (e) => e.job === "사원" && !!Rn[e.work],
+  go = {
     heal: 40,
     drain: 1.5,
     idealP: 0.05,
@@ -8066,17 +8343,17 @@ const ce = (e) => e.job === "사원" && !!gn[e.work],
     hpChoiceP: 0.7,
     hpMiss: 30,
   },
-  kt = (e) => ce(e) && e.work === "적출직",
-  Ym = (e) => e.kx || (e.kx = { hp: 0, fit: 0, tube: !1, ideal: !1 }),
-  H0 = (e) => (e.kx && e.kx.ideal ? 10 : 20);
-function na(e) {
-  return !e || !e.kx ? 100 : Math.max(0, 100 - H0(e) * (e.kx.hp || 0));
+  jt = (e) => Te(e) && e.work === "적출직",
+  sy = (e) => e.kx || (e.kx = { hp: 0, fit: 0, tube: !1, ideal: !1 }),
+  S1 = (e) => (e.kx && e.kx.ideal ? 10 : 20);
+function ma(e) {
+  return !e || !e.kx ? 100 : Math.max(0, 100 - S1(e) * (e.kx.hp || 0));
 }
-function bu(e) {
-  e.kx && e.stats.sanity > na(e) && (e.stats.sanity = na(e));
+function Uu(e) {
+  e.kx && e.stats.sanity > ma(e) && (e.stats.sanity = ma(e));
 }
-const D0 = new Set(["x_ego_edge"]),
-  q0 = new Set([
+const Y1 = new Set(["x_ego_edge"]),
+  R1 = new Set([
     "a_marriage",
     "a_child_born",
     "x_burglary",
@@ -8085,53 +8362,53 @@ const D0 = new Set(["x_ego_edge"]),
     "x_care_old",
     "x_inquisition",
   ]);
-function G0(e, t) {
-  return kt(t)
-    ? D0.has(e.id)
+function C1(e, t) {
+  return jt(t)
+    ? Y1.has(e.id)
       ? !0
-      : !!(t.kx && t.kx.tube && q0.has(e.id))
+      : !!(t.kx && t.kx.tube && R1.has(e.id))
     : !1;
 }
-function K0(e, t) {
+function N1(e, t) {
   const o = t.kx;
   return !(
     (e.kxIdeal != null && !!(o && o.ideal) !== e.kxIdeal) ||
-    (e.kxHpAt && !te((o && o.hp) || 0, e.kxHpAt)) ||
-    (e.kxMaxAt && !te(na(t), e.kxMaxAt)) ||
+    (e.kxHpAt && !ne((o && o.hp) || 0, e.kxHpAt)) ||
+    (e.kxMaxAt && !ne(ma(t), e.kxMaxAt)) ||
     (e.kxFamily && !(t.flags.includes("가정") || t.flags.includes("아이"))) ||
     (e.kxTube && !(o && o.tube))
   );
 }
-function Sm(e, t, o) {
+function ly(e, t, o) {
   const a = ae(e),
-    n = Ym(e),
-    r = Z(t, "kx_hp_bullet");
-  D(e, { kind: "event", text: r.text, tone: "event" }, o);
+    n = sy(e),
+    r = ee(t, "kx_hp_bullet");
+  P(e, { kind: "event", text: r.text, tone: "event" }, o);
   const i = n.ideal
     ? 0.01
     : (e.wingRank || 1) >= 3
-      ? no.decay[Math.min(5, n.fit || 0)]
-      : no.lowDecay;
+      ? go.decay[Math.min(5, n.fit || 0)]
+      : go.lowDecay;
   if (a.chance(i)) {
-    et(e, "앰플 부패", o, "event", { text: r.decay.text });
+    Ze(e, "앰플 부패", o, "event", { text: r.decay.text });
     return;
   }
   n.hp = (n.hp || 0) + 1;
-  const l = e.stats,
-    s = { health: l.health, sanity: l.sanity };
-  ((l.health = B(Math.max(0, l.health) + no.heal)), bu(e));
+  const s = e.stats,
+    l = { health: s.health, sanity: s.sanity };
+  ((s.health = $(Math.max(0, s.health) + go.heal)), Uu(e));
   const c = {};
   for (const g of ["health", "sanity"]) {
-    const b = Math.round(l[g] - s[g]);
-    b && (c[g] = b);
+    const p = Math.round(s[g] - l[g]);
+    p && (c[g] = p);
   }
-  if (na(e) <= 0) {
-    z0(e, t, o, c);
+  if (ma(e) <= 0) {
+    I1(e, t, o, c);
     return;
   }
   const u = n.ideal ? (n.hp % 2 === 0 ? n.hp / 2 - 1 : -1) : n.hp - 1,
     f = u >= 0 && r.lines[u] ? ` ${r.lines[u].text}` : "";
-  D(
+  P(
     e,
     {
       kind: "result",
@@ -8143,18 +8420,18 @@ function Sm(e, t, o) {
     o,
   );
 }
-function z0(e, t, o, a) {
-  const n = Z(t, "kx_end_hollow"),
+function I1(e, t, o, a) {
+  const n = ee(t, "kx_end_hollow"),
     r = e.kx,
-    i = ft(t, e),
-    l = e.wingRank || 1;
-  let s = 0;
+    i = kt(t, e),
+    s = e.wingRank || 1;
+  let l = 0;
   const c = (f, g = {}) => {
-    const b = xe(f);
-    ((s += b),
-      D(
+    const p = me(f);
+    ((l += p),
+      P(
         e,
-        { kind: "result", text: f, tone: "normal", keep: !0, hold: b, ...g },
+        { kind: "result", text: f, tone: "normal", keep: !0, hold: p, ...g },
         o,
       ));
   };
@@ -8164,38 +8441,38 @@ function z0(e, t, o, a) {
       tone: "death",
       scene: "hollow",
     }),
-    c((l >= 5 ? n.special : l >= 3 ? n.tube : n.low).text),
+    c((s >= 5 ? n.special : s >= 3 ? n.tube : n.low).text),
     e.flags.includes("가정") || e.flags.includes("아이"))
   ) {
     let f = n.family.text;
-    (e.flags.includes("선반의그림") && (f += ` ${Ht(n.shelf.text, i, e)}`),
+    (e.flags.includes("선반의그림") && (f += ` ${Jt(n.shelf.text, i, e)}`),
       c(f));
   }
   r.end = "hollow";
   const u = n.close.text;
-  (et(e, "메마름", o, "event", { text: u, alive: !0 }),
-    e.dead && (e.dead.hold = Math.min(3e4, s + xe(u) + 3e3)));
+  (Ze(e, "메마름", o, "event", { text: u, alive: !0 }),
+    e.dead && (e.dead.hold = Math.min(3e4, l + me(u) + 3e3)));
 }
-const Jh = {
+const xd = {
   시간징수직: () => [
-    h(
+    d(
       "이 장면은 처음이 아니다. 시계는 그 횟수까지 세어 두었다.",
       "This is not the first time. The watch has kept count of that too.",
       "この場面は初めてではない。時計はその回数まで数えていた。",
     ),
-    h(
+    d(
       "몇 번째인지 셈하지 않게 되었다. 시간은 세면서도.",
       "You stopped counting how many times. Even while counting time.",
       "何度目かを数えなくなった。時間は数えながらも。",
     ),
   ],
   "정리 요원": () => [
-    h(
+    d(
       "처음에는 이 칸에서 토했다. 지금은 검사기 배터리를 먼저 본다.",
       "The first time, you threw up in a car like this. Now you check the identifier's battery first.",
       "最初はこの車両で吐いた。今は検査機のバッテリーを先に見る。",
     ),
-    h(
+    d(
       "같은 칸, 다른 승객. 검사기 소리는 같았다.",
       "Same car, different passengers. The identifier made the same sound.",
       "同じ車両、違う乗客。検査機の音は同じだった。",
@@ -8204,38 +8481,38 @@ const Jh = {
   적출직: (e) =>
     e.kx && e.kx.hp >= 3
       ? [
-          h(
+          d(
             "몸이 먼저 기억하고 있었다. 마음은 따라오지 않았다.",
             "Your body remembered first. Your heart did not follow.",
             "体が先に覚えていた。心はついてこなかった。",
           ),
         ]
       : [
-          h(
+          d(
             "몇 번째인지 세지 않게 되었다.",
             "You stopped counting how many times.",
             "何度目かを数えなくなった。",
           ),
-          h(
+          d(
             "몸이 먼저 기억하고 있었다. 마음은 따라오지 않았다.",
             "Your body remembered first. Your heart did not follow.",
             "体が先に覚えていた。心はついてこなかった。",
           ),
         ],
 };
-Jh["이단 심문관"] = () => [
-  h(
+xd["이단 심문관"] = () => [
+  d(
     "같은 문, 같은 망치 소리. 다른 이름.",
     "The same door, the same sound of the hammer. A different name.",
     "同じ扉、同じ槌の音。違う名前。",
   ),
-  h(
+  d(
     "몇 번째 정화인지 세지 않게 되었다.",
     "You stopped counting which purification this was.",
     "何度目の浄化か数えなくなった。",
   ),
 ];
-const Qe = {
+const it = {
     start: 50,
     drift: 2,
     hi: 70,
@@ -8246,83 +8523,83 @@ const Qe = {
     loMerit: 0.6,
     riteEvery: 5,
   },
-  lo = (e) => ce(e) && e.work === "이단 심문관",
-  Zs = (e) =>
-    e.nh || (e.nh = { faith: Qe.start, since: e.age, rites: 0, ate: 0 }),
-  Vh = (e) => (e >= Qe.hi ? 1 : e < Qe.lo ? -1 : 0);
-function Rm(e, t) {
-  if (!lo(e) || !e.nh) return 1;
-  const o = Vh(e.nh.faith);
+  bo = (e) => Te(e) && e.work === "이단 심문관",
+  xl = (e) =>
+    e.nh || (e.nh = { faith: it.start, since: e.age, rites: 0, ate: 0 }),
+  Td = (e) => (e >= it.hi ? 1 : e < it.lo ? -1 : 0);
+function hy(e, t) {
+  if (!bo(e) || !e.nh) return 1;
+  const o = Td(e.nh.faith);
   return t === "merit"
     ? o > 0
-      ? Qe.hiMerit
+      ? it.hiMerit
       : o < 0
-        ? Qe.loMerit
+        ? it.loMerit
         : 1
     : o > 0
-      ? Qe.hiDrain
+      ? it.hiDrain
       : o < 0
-        ? Qe.loDrain
+        ? it.loDrain
         : 1;
 }
-function U0(e, t, o, a) {
-  if (!t || !lo(e)) return;
-  const n = Zs(e),
-    r = Vh(n.faith);
-  ((n.faith = B(n.faith + t, 0, 100)),
+function W1(e, t, o, a) {
+  if (!t || !bo(e)) return;
+  const n = xl(e),
+    r = Td(n.faith);
+  ((n.faith = $(n.faith + t, 0, 100)),
     n.faith >= 100 && (n.peak = !0),
     n.faith <= 0 && (n.empty = !0));
-  const i = Vh(n.faith);
+  const i = Td(n.faith);
   if (i !== r && i !== 0 && o) {
-    const l = Z(o, "nh_lines");
-    D(
+    const s = ee(o, "nh_lines");
+    P(
       e,
       {
         kind: "flavor",
-        text: (i > 0 ? l.zealIn : l.doubtIn).text,
+        text: (i > 0 ? s.zealIn : s.doubtIn).text,
         tone: i > 0 ? "rare" : "bad",
       },
       a,
     );
   }
 }
-const J0 = ["의체", "좋은의체", "전투의체", "강화시술"];
-function V0(e) {
+const M1 = ["의체", "좋은의체", "전투의체", "강화시술"];
+function O1(e) {
   return [e, ...(e.outcomes || [])].some(
-    (t) => t.prosthetic > 0 || (t.flagsAdd || []).some((o) => J0.includes(o)),
+    (t) => t.prosthetic > 0 || (t.flagsAdd || []).some((o) => M1.includes(o)),
   );
 }
-const X0 = new Set([
+const F1 = new Set([
   "x_care_young",
   "x_care_mid",
   "x_care_old",
   "x_inquisition",
 ]);
-function Q0(e, t) {
+function B1(e, t) {
   if (
     (e.noPros && ((t.prosthetics || 0) > 0 || t.flags.includes("강화시술"))) ||
-    (lo(t) && X0.has(e.id))
+    (bo(t) && F1.has(e.id))
   )
     return !1;
   if (e.nhRite) {
-    if (!lo(t)) return !1;
-    const o = Zs(t),
+    if (!bo(t)) return !1;
+    const o = xl(t),
       a = t.age - o.since;
-    if (a < Qe.riteEvery || a % Qe.riteEvery !== 0 || o.riteAge === t.age)
+    if (a < it.riteEvery || a % it.riteEvery !== 0 || o.riteAge === t.age)
       return !1;
   }
   return !0;
 }
-function Z0(e, t, o) {
+function E1(e, t, o) {
   if (!o || !e.evN || (e.evN[o] || 0) < 3) return null;
-  const a = Z(t, o);
+  const a = ee(t, o);
   if (!a || a.rankGate || !a.repeat || !a.jobs) return null;
-  const n = a.jobs.find((r) => Jh[r]);
-  return n ? ae(e).pick(Jh[n](e)) : null;
+  const n = a.jobs.find((r) => xd[r]);
+  return n ? ae(e).pick(xd[n](e)) : null;
 }
-const Ft = (e) => e.job === "사원" && e.work === "날개 직원",
-  yn = (e) => (Ft(e) ? e.officeRank || 1 : 0),
-  ar = jt({
+const Ht = (e) => e.job === "사원" && e.work === "날개 직원",
+  Nn = (e) => (Ht(e) ? e.officeRank || 1 : 0),
+  kr = Nt({
     ko: ["사원", "대리", "과장", "부장", "이사", "대표"],
     en: [
       "Staff",
@@ -8334,12 +8611,12 @@ const Ft = (e) => e.job === "사원" && e.work === "날개 직원",
     ],
     ja: ["社員", "代理", "課長", "部長", "理事", "代表"],
   }),
-  Cm = ["A", "B", "C", "H"],
-  e1 = [5, 15, 36, 62, 60],
-  ku = 3;
-function Wa(e, t) {
-  const o = B(t || yn(e) || 1, 1, 5);
-  let a = e1[o - 1];
+  dy = ["A", "B", "C", "H"],
+  L1 = [5, 15, 36, 62, 60],
+  Ju = 3;
+function za(e, t) {
+  const o = $(t || Nn(e) || 1, 1, 5);
+  let a = L1[o - 1];
   return (
     e.stats.rep >= 50 && (a *= 0.85),
     e.stats.network >= 50 && (a *= 0.9),
@@ -8350,22 +8627,22 @@ function Wa(e, t) {
     Math.max(1, Math.round(a))
   );
 }
-function t1(e) {
-  const t = oe ? ft(oe, e) : null,
+function $1(e) {
+  const t = re ? kt(re, e) : null,
     o = t ? t.name : "",
-    a = ar[(e.officeRank || 1) - 1];
+    a = kr[(e.officeRank || 1) - 1];
   return o ? `${o} ${a}` : a;
 }
-function o1(e) {
-  return yn(e) !== 5 || Cm.includes(e.regionId)
+function P1(e) {
+  return Nn(e) !== 5 || dy.includes(e.regionId)
     ? !1
-    : (e.perf || 0) >= Wa(e, 5) &&
+    : (e.perf || 0) >= za(e, 5) &&
         e.age - (e.dirSince ?? e.age) >= 8 &&
         e.flags.includes("후견") &&
         e.stats.rep >= 50 &&
         e.stats.network >= 50;
 }
-function xu(e, t) {
+function Vu(e, t) {
   const o = 1 + 0.4 * ((e.officeRank || 1) - 1),
     a = e.perf || 0;
   return (
@@ -8373,13 +8650,13 @@ function xu(e, t) {
     Math.round(e.perf - a)
   );
 }
-function a1(e) {
-  Ft(e) &&
+function H1(e) {
+  Ht(e) &&
     (e.officeRank == null &&
       ((e.officeRank = 1), (e.perf = e.perf || 0), (e.warn = e.warn || 0)),
-    e.officeRank <= 3 && xu(e, 1 / (1 + 0.4 * (e.officeRank - 1))));
+    e.officeRank <= 3 && Vu(e, 1 / (1 + 0.4 * (e.officeRank - 1))));
 }
-const Xh = {
+const vd = {
     엄지: [80, 25, 10],
     검지: [67, 8],
     중지: [39, 22, 20],
@@ -8393,25 +8670,25 @@ const Xh = {
     흑운회: [24, 36, 40],
     "공방 직원": [8, 30, 60],
   },
-  n1 = 1,
-  r1 = 2,
-  i1 = 0.6,
-  s1 = 0.05,
-  Nm = (e) => (e && e.pinky ? Br[e.pinky.star] : null),
-  Wm = (e) => (e && e.pinky ? (e.pinky.star < tm ? 1 : 2) : 0),
-  Yo = (e, t, o) => {
-    const a = Wm(e);
+  D1 = 1,
+  q1 = 2,
+  G1 = 0.6,
+  K1 = 0.05,
+  uy = (e) => (e && e.pinky ? oi[e.pinky.star] : null),
+  cy = (e) => (e && e.pinky ? (e.pinky.star < Om ? 1 : 2) : 0),
+  Ho = (e, t, o) => {
+    const a = cy(e);
     return a === 1 ? t : a === 2 ? o : 1;
   };
-function Hr(e) {
-  const t = Nm(e);
-  return t ? h(t[0], t[2], t[1]) : "";
+function ii(e) {
+  const t = uy(e);
+  return t ? d(t[0], t[2], t[1]) : "";
 }
-function el(e) {
-  const t = Nm(e);
-  return t ? e.pinky.blade || h(`${t[0]}도`, `${t[2]} Blade`, `${t[1]}刀`) : "";
+function Tl(e) {
+  const t = uy(e);
+  return t ? e.pinky.blade || d(`${t[0]}도`, `${t[2]} Blade`, `${t[1]}刀`) : "";
 }
-const l1 = [
+const z1 = [
   "R사 4무리 ",
   "T사 ",
   "W사 ",
@@ -8424,86 +8701,86 @@ const l1 = [
   "剣契 ",
   "黒雲会 ",
 ];
-function Qh(e) {
+function _d(e) {
   if (e.job === "손가락" && e.finger)
-    return `${ot[e.finger]} - ${lt(e.finger, e.fingerRank, e.gender)}`;
+    return `${ht[e.finger]} - ${gt(e.finger, e.fingerRank, e.gender)}`;
   if (e.job === "해결사" && e.flags.includes("특색")) {
-    const o = e.colorName || h("특색", "Color", "特色");
-    return h(`해결사 - ${o}`, `Fixer - ${o}`, `フィクサー - ${o}`);
+    const o = e.colorName || d("특색", "Color", "特色");
+    return d(`해결사 - ${o}`, `Fixer - ${o}`, `フィクサー - ${o}`);
   }
   if (e.job === "해결사" && e.grade)
-    return h(
+    return d(
       `해결사 - ${e.grade}급`,
       `Fixer - Grade ${e.grade}`,
       `フィクサー - ${e.grade}級`,
     );
-  const t = be(e);
+  const t = Re(e);
   if (!t) return "";
   if (t.includes(" - ")) return t;
-  if (ce(e) || e.job === "검계" || e.job === "흑운회") {
-    const o = l1.find((a) => t.startsWith(a) && t.length > a.length);
+  if (Te(e) || e.job === "검계" || e.job === "흑운회") {
+    const o = z1.find((a) => t.startsWith(a) && t.length > a.length);
     if (o) return `${o.trim()} - ${t.slice(o.length)}`;
   }
   return t;
 }
-function h1(e) {
-  if (!e.pinky) return be(e);
-  const t = Qh(e);
-  return t ? `${Hr(e)} (${t})` : Hr(e);
+function U1(e) {
+  if (!e.pinky) return Re(e);
+  const t = _d(e);
+  return t ? `${ii(e)} (${t})` : ii(e);
 }
-const $l = new WeakMap();
-function d1(e, t) {
+const dh = new WeakMap();
+function J1(e, t) {
   return t.pinky
     ? e.bf === "none" ||
       e.id === "bf_bitten" ||
       e.id.startsWith("bf_child_distort")
       ? !0
-      : ($l.has(e) || $l.set(e, JSON.stringify(e).includes('"bfTurn"')),
-        $l.get(e))
+      : (dh.has(e) || dh.set(e, JSON.stringify(e).includes('"bfTurn"')),
+        dh.get(e))
     : !1;
 }
-const Zh = (e) =>
+const Ad = (e) =>
     e && e.job === "사원" && (e.work || "날개 직원") === "날개 직원",
-  u1 = (e) =>
-    Zh(e) || (!!e.outcomes && e.outcomes.length > 0 && e.outcomes.every(Zh)),
-  uf = (e) => !!(e && (e.flagsAdd || []).includes("유물")),
-  c1 = (e) => uf(e) || (e.outcomes || []).some(uf),
-  f1 = new Set([
+  V1 = (e) =>
+    Ad(e) || (!!e.outcomes && e.outcomes.length > 0 && e.outcomes.every(Ad)),
+  Df = (e) => !!(e && (e.flagsAdd || []).includes("유물")),
+  X1 = (e) => Df(e) || (e.outcomes || []).some(Df),
+  Q1 = new Set([
     "bl_mentor_named",
     "kk_seat_open",
     "kk_patriarch_open",
     "rc_captain_named",
     "rc_cmdr_named",
   ]);
-function w1(e) {
-  const t = ae({ rngState: In(`${e}:pinky`) });
-  return t.chance(s1) ? t.int(0, Br.length - 1) : null;
+function Z1(e) {
+  const t = ae({ rngState: Vn(`${e}:pinky`) });
+  return t.chance(K1) ? t.int(0, oi.length - 1) : null;
 }
-const g1 = 0.4,
-  m1 = { luckyNoInto: [] };
-function jn(e) {
-  return e.job === "손가락" && e.finger && Xh[e.finger]
+const eT = 0.4,
+  tT = { luckyNoInto: [] };
+function Pn(e) {
+  return e.job === "손가락" && e.finger && vd[e.finger]
     ? e.finger
-    : ce(e) && Xh[e.work]
+    : Te(e) && vd[e.work]
       ? e.work
       : e.job === "흑운회" && e.kk
         ? `흑운회:${e.kk.rank || 1}`
-        : Le(e) && (e.ws.rank || 1) < 4 && !e.ws.teach
+        : Ge(e) && (e.ws.rank || 1) < 4 && !e.ws.teach
           ? `공방 직원:${e.ws.rank || 1}`
           : null;
 }
-const y1 = (e) =>
+const oT = (e) =>
   e.job === "손가락"
     ? e.fingerRank || 1
     : e.job === "흑운회" && e.kk
       ? e.kk.rank || 1
-      : Le(e)
+      : Ge(e)
         ? e.ws.rank || 1
         : e.wingRank || 1;
-function at(e) {
-  const t = jn(e);
+function dt(e) {
+  const t = Pn(e);
   if (!t) return 0;
-  const o = Xh[t.split(":")[0]][y1(e) - 1];
+  const o = vd[t.split(":")[0]][oT(e) - 1];
   if (o == null) return 0;
   let a = o;
   const n = e.flags.includes("유물");
@@ -8512,39 +8789,39 @@ function at(e) {
     e.stats.rep >= 50 && (a *= 0.9),
     e.flags.includes("좋은의체") && (a *= 0.97),
     e.flags.includes("강화시술") && (a *= 0.93),
-    (a *= Yo(e, 0.8, 0.9)),
+    (a *= Ho(e, 0.8, 0.9)),
     Math.max(1, Math.round(a))
   );
 }
-function Im(e) {
-  const t = jn(e);
+function fy(e) {
+  const t = Pn(e);
   return (
     (e.rmeritKey || null) !== t && ((e.rmeritKey = t), (e.rmerit = 0)),
     t
   );
 }
-function qo(e, t) {
-  if (!Im(e) || !t) return;
-  t > 0 && (t *= Rm(e, "merit"));
-  const o = at(e);
+function ta(e, t) {
+  if (!fy(e) || !t) return;
+  t > 0 && (t *= hy(e, "merit"));
+  const o = dt(e);
   o &&
     (e.rmerit = Math.max(
       0,
       Math.min(o, Math.round(((e.rmerit || 0) + t) * 10) / 10),
     ));
 }
-function An(e) {
-  if (!Im(e)) return !1;
-  const t = at(e);
+function Hn(e) {
+  if (!fy(e)) return !1;
+  const t = dt(e);
   return !!t && (e.rmerit || 0) >= t;
 }
-function ro(e) {
-  return ((e.rmeritKey || null) === jn(e) && e.rmerit) || 0;
+function mo(e) {
+  return ((e.rmeritKey || null) === Pn(e) && e.rmerit) || 0;
 }
-function p1(e) {
-  qo(e, 1);
+function aT(e) {
+  ta(e, 1);
 }
-function b1(e, t) {
+function nT(e, t) {
   const o = (e.pastPower || 0) - 1;
   return t === "시간징수직"
     ? o >= 3
@@ -8564,7 +8841,7 @@ function b1(e, t) {
             : 1
       : 1;
 }
-function k1(e) {
+function rT(e) {
   const t = (e.wingRank || 1) - 1,
     o = e.flags.includes("유물"),
     a = e.flags.includes("E.G.O개화");
@@ -8574,7 +8851,7 @@ function k1(e) {
     (a ? 2 : o ? 1.6 : 1) / (1 + n * t * t)
   );
 }
-const x1 = Gt({
+const iT = Qt({
     ko: {},
     en: {
       운반: "Courier",
@@ -8605,8 +8882,8 @@ const x1 = Gt({
       "환상체 토벌": "幻想体討伐",
     },
   }),
-  pr = (e) => x1[e] || e,
-  le = {
+  Or = (e) => iT[e] || e,
+  ge = {
     birthP: 0.006,
     thirstBase: 12,
     mult: { stray: 1.5, kin: 0.7 },
@@ -8633,35 +8910,35 @@ const x1 = Gt({
     kinDeepen: 0.06,
     kinDeepenMax: 5,
   },
-  Tu = (e) =>
-    Math.max(le.bar.floor, 1 - le.bar.decay * ((e && e.barUses) || 0)),
-  Om = (e) =>
-    Math.max(le.pack.floor, 1 - le.pack.decay * ((e && e.packUses) || 0)),
-  Zo = (e) => (e.bf ? e.age - e.bf.since : 0);
-function Pl(e) {
+  Xu = (e) =>
+    Math.max(ge.bar.floor, 1 - ge.bar.decay * ((e && e.barUses) || 0)),
+  wy = (e) =>
+    Math.max(ge.pack.floor, 1 - ge.pack.decay * ((e && e.packUses) || 0)),
+  ua = (e) => (e.bf ? e.age - e.bf.since : 0);
+function uh(e) {
   const t = e.bf && e.bf.family;
   return t
     ? t.ward != null
-      ? h(
+      ? d(
           `${t.ward}구의 가문`,
           `the District ${t.ward} Family`,
           `${t.ward}区の家門`,
         )
-      : h("어느 구의 가문", "a District Family", "ある区の家門")
+      : d("어느 구의 가문", "a District Family", "ある区の家門")
     : "";
 }
-function ed(e) {
+function jd(e) {
   const t = (e.bf && e.bf.gen) || 5,
-    o = t === 1 ? h(" · 장로", " · Elder", "・長老") : "";
+    o = t === 1 ? d(" · 장로", " · Elder", "・長老") : "";
   return (
-    h(
-      `${Pl(e)} 제${t}권속`,
-      `${Pl(e).replace(/^(the|a) /, (a) => a.charAt(0).toUpperCase() + a.slice(1))} · ${Fm(t)} Kindred`,
-      `${Pl(e)} 第${t}眷属`,
+    d(
+      `${uh(e)} 제${t}권속`,
+      `${uh(e).replace(/^(the|a) /, (a) => a.charAt(0).toUpperCase() + a.slice(1))} · ${gy(t)} Kindred`,
+      `${uh(e)} 第${t}眷属`,
     ) + o
   );
 }
-const Fm = (e) =>
+const gy = (e) =>
   e +
   (e % 10 === 1 && e % 100 !== 11
     ? "st"
@@ -8670,108 +8947,110 @@ const Fm = (e) =>
       : e % 10 === 3 && e % 100 !== 13
         ? "rd"
         : "th");
-function T1(e) {
+function sT(e) {
   return e >= 85 ? 3 : e >= 60 ? 2 : e >= 30 ? 1 : 0;
 }
-function lt(e, t, o) {
-  const a = (ct[e] || [])[(t || 1) - 1];
+function gt(e, t, o) {
+  const a = (bt[e] || [])[(t || 1) - 1];
   return Array.isArray(a) ? (o === "f" ? a[1] : a[0]) : a || "";
 }
-function be(e) {
+function Re(e) {
   if (e.dr)
     return e.dr.end === "return"
-      ? `${be({ ...e, dr: null }) || h("무직", "Unemployed", "無職")} · ${h("뒤틀렸다 돌아옴", "Returned from Distortion", "ねじれから戻った")}`
-      : h("이름 없는 뒤틀림", "Nameless Distortion", "名もなきねじれ");
-  if (e.job === "가주") return h("가주", "Family Hierarch", "家主");
-  if (e.job === "군주") return h("군주", "Lord", "君主");
+      ? `${Re({ ...e, dr: null }) || d("무직", "Unemployed", "無職")} · ${d("뒤틀렸다 돌아옴", "Returned from Distortion", "ねじれから戻った")}`
+      : d("이름 없는 뒤틀림", "Nameless Distortion", "名もなきねじれ");
+  if (e.job === "가주") return d("가주", "Family Hierarch", "家主");
+  if (e.job === "군주") return d("군주", "Lord", "君主");
   if (!e.job && e.flags.includes("가주후보") && e.age >= 5)
-    return h("가주 후보", "Family Hierarch Candidate", "家主候補");
+    return d("가주 후보", "Family Hierarch Candidate", "家主候補");
   if (e.job === "해결사" && e.flags.includes("특색"))
-    return e.colorName || h("특색", "Color", "特色");
+    return e.colorName || d("특색", "Color", "特色");
   if (e.job === "해결사" && e.grade)
-    return h(
+    return d(
       `해결사 ${e.grade}급`,
       `Grade ${e.grade} Fixer`,
       `${e.grade}級フィクサー`,
     );
   if (e.job === "손가락" && e.finger)
-    return `${ot[e.finger]} ${lt(e.finger, e.fingerRank, e.gender)}`.trim();
-  if (ce(e)) return sn(e.work, e.wingRank || 1, e.branch);
-  if (e.job === "검계") return Gh[(On(e) || 1) - 1];
-  if (e.job === "흑운회") return tr(e);
-  if (e.job === "공방 직원" && e.ws) return Px(e);
-  if (e.job === "도장 사범") return h("도장 사범", "Dojo Master", "道場師範");
+    return `${ht[e.finger]} ${gt(e.finger, e.fingerRank, e.gender)}`.trim();
+  if (Te(e)) return xn(e.work, e.wingRank || 1, e.branch);
+  if (e.job === "검계") return yd[(Xn(e) || 1) - 1];
+  if (e.job === "흑운회") return pr(e);
+  if (e.job === "공방 직원" && e.ws) return jx(e);
+  if (e.job === "도장 사범") return d("도장 사범", "Dojo Master", "道場師範");
   if (e.job === "발톱 처형자")
-    return h("발톱 처형자", "Claw Executioner", "爪の処刑人");
-  if (e.job === "호위무사") return h("호위무사", "Bodyguard", "護衛武士");
+    return d("발톱 처형자", "Claw Executioner", "爪の処刑人");
+  if (e.job === "장로")
+    return d("제1권속 · 장로", "First Kindred · Elder", "第1眷属・長老");
+  if (e.job === "호위무사") return d("호위무사", "Bodyguard", "護衛武士");
   if (e.job === "은퇴한 호위무사")
-    return h("은퇴한 호위무사", "Retired Bodyguard", "引退した護衛武士");
+    return d("은퇴한 호위무사", "Retired Bodyguard", "引退した護衛武士");
   if (
     e.hgd &&
     (e.hgd.stage === "support" || e.hgd.stage === "trial") &&
     !e.dead
   ) {
-    const t = be({ ...e, hgd: null });
-    return h(`호위무사 (${t})`, `Bodyguard (${t})`, `護衛武士（${t}）`);
+    const t = Re({ ...e, hgd: null });
+    return d(`호위무사 (${t})`, `Bodyguard (${t})`, `護衛武士（${t}）`);
   }
   return e.job === "이름 없는 뒤틀림"
-    ? h("이름 없는 뒤틀림", "Nameless Distortion", "名もなきねじれ")
+    ? d("이름 없는 뒤틀림", "Nameless Distortion", "名もなきねじれ")
     : e.job === "떠돌이 검객"
-      ? h("떠돌이 검객", "Wandering Swordsman", "放浪の剣客")
+      ? d("떠돌이 검객", "Wandering Swordsman", "放浪の剣客")
       : e.job === "권속"
-        ? ed(e)
-        : Ft(e)
-          ? t1(e)
+        ? jd(e)
+        : Ht(e)
+          ? $1(e)
           : e.job === "사원" && e.work
-            ? h(`사원 - ${e.work}`, bx[e.work] || e.work)
+            ? d(`사원 - ${e.work}`, nx[e.work] || e.work)
             : e.job === "해결사"
-              ? h("해결사", "Fixer", "フィクサー")
+              ? d("해결사", "Fixer", "フィクサー")
               : e.job === "손가락"
-                ? h("손가락", "Finger", "指")
+                ? d("손가락", "Finger", "指")
                 : e.job;
 }
-function Dr(e, t) {
+function si(e, t) {
   return e.includes(t.job ?? "없음")
     ? !0
     : !!(t.job === "사원" && t.work && e.includes(t.work));
 }
-function Em(e, t) {
+function my(e, t) {
   const [o, a] = e;
   return t.org && o && (o.includes("*") || o.includes(t.org.name))
     ? !0
-    : !!a && Dr(a, t);
+    : !!a && si(a, t);
 }
-function ft(e, t) {
+function kt(e, t) {
   return e.regions.find((o) => o.id === t.regionId);
 }
-const Ta = (e) => Array.isArray(e.choices) && e.choices.length > 0;
-function v1(e) {
-  return Ug[Math.min(3, Math.floor(e * 4))];
+const Ba = (e) => Array.isArray(e.choices) && e.choices.length > 0;
+function lT(e) {
+  return Ym[Math.min(3, Math.floor(e * 4))];
 }
-function D(e, t, o) {
-  e.log.push({ id: e.log.length, age: e.age, season: v1(o), ...t });
+function P(e, t, o) {
+  e.log.push({ id: e.log.length, age: e.age, season: lT(o), ...t });
 }
-function _1(e) {
+function yy(e) {
   const t = Object.entries(e).reduce(
     (o, [a, n]) => o + (a === "thirst" ? -n / 4 : n),
     0,
   );
   return t >= 4 ? "good" : t <= -4 ? "bad" : "normal";
 }
-function td(e, t) {
+function Sd(e, t) {
   const o = /^([A-Z]|OUT):/.exec(String(t || ""));
   if (!o) return null;
   const a = o[1] === "OUT" ? "outskirts" : o[1];
   return e.regions.some((n) => n.id === a) ? a : null;
 }
-const Mm = (e) => (e === "outskirts" ? "OUT" : e);
-function cf(e, t = {}) {
-  oe = e;
-  const o = t.seed ? String(t.seed) : lu(),
+const py = (e) => (e === "outskirts" ? "OUT" : e);
+function qf(e, t = {}) {
+  re = e;
+  const o = t.seed ? String(t.seed) : Bu(),
     a = {
       v: 7,
       seed: o,
-      rngState: In(o),
+      rngState: Vn(o),
       name: "",
       gender: "m",
       regionId: null,
@@ -8806,89 +9085,90 @@ function cf(e, t = {}) {
       : n.chance(0.5)
         ? "f"
         : "m"),
-    (a.name = (t.name || "").trim().slice(0, 12) || n.pick(bs[a.gender])));
-  const r = t.regionId || td(e, o),
+    (a.name = (t.name || "").trim().slice(0, 12) || n.pick(Ln[a.gender])));
+  const r = t.regionId || Sd(e, o),
     i = r
       ? e.regions.find((u) => u.id === r)
       : n.weighted(e.regions, (u) =>
-          t.boost && nr.on ? nr.cWeight : u.birthWeight,
+          t.boost && xr.on ? xr.cWeight : u.birthWeight,
         );
   if (
     ((a.regionId = i.id),
     (a.stats = {
-      health: B(40 + i.medical * 3 + n.int(-8, 8)),
-      sanity: B(45 + i.safety * 3 + n.int(-8, 8)),
-      wealth: B(i.wealth * 9 + n.int(-8, 8)),
-      network: B(15 + i.orgPressure + n.int(-5, 5)),
-      rep: B(20 + n.int(-5, 5)),
+      health: $(40 + i.medical * 3 + n.int(-8, 8)),
+      sanity: $(45 + i.safety * 3 + n.int(-8, 8)),
+      wealth: $(i.wealth * 9 + n.int(-8, 8)),
+      network: $(15 + i.orgPressure + n.int(-5, 5)),
+      rep: $(20 + n.int(-5, 5)),
     }),
-    i.id === "R" && n.chance(kx))
+    i.id === "R" && n.chance(rx))
   )
-    return j1(a, e, i, n);
-  if (i.id === "C" && (t.claw || n.chance(t.boost && nr.on ? nr.p : ge.P)))
-    return F1(a, e, i, n);
+    return hT(a, e, i, n);
+  if (i.id === "C" && (t.claw || n.chance(t.boost && xr.on ? xr.p : Ae.P)))
+    return bT(a, e, i, n);
+  if (i.id === "P" && (t.land || n.chance(fe.P))) return IT(a, e, i, n);
   (i.tags || []).includes("top") && a.flags.push("상층");
-  const l = i.id === "H" && (t.heir || n.chance(xx));
-  l
+  const s = i.id === "H" && (t.heir || n.chance(ix));
+  s
     ? (a.flags.push("가주후보"), (a.heir = { ji: 0, yong: 0, in: 0, kong: 0 }))
-    : n.chance(le.birthP) && a.flags.push("피의기색");
-  let s = !1;
+    : n.chance(ge.birthP) && a.flags.push("피의기색");
+  let l = !1;
   if (
-    (l ||
+    (s ||
       (n.chance(i.orphanRate)
-        ? (a.flags.push("고아"), (s = !0))
+        ? (a.flags.push("고아"), (l = !0))
         : n.chance(0.18) && a.flags.push("한부모")),
-    s)
+    l)
   )
     ((a.family = "none"),
-      (a.stats.wealth = B(Math.min(a.stats.wealth, 8 + n.int(0, 6)))));
+      (a.stats.wealth = $(Math.min(a.stats.wealth, 8 + n.int(0, 6)))));
   else {
     const u = 0.05 + i.wealth * 0.03,
       f = 0.05 + (10 - i.wealth) * 0.05,
       g = n.next();
-    a.family = l || g < u ? "rich" : g < u + f ? "poor" : "normal";
-    const b = tt[a.family];
-    ((a.stats.wealth = B(a.stats.wealth + b.wealth + n.int(-4, 4))),
-      (a.stats.network = B(a.stats.network + b.network)),
-      (a.stats.health = B(a.stats.health + b.health)),
-      a.flags.push(b.flag));
+    a.family = s || g < u ? "rich" : g < u + f ? "poor" : "normal";
+    const p = lt[a.family];
+    ((a.stats.wealth = $(a.stats.wealth + p.wealth + n.int(-4, 4))),
+      (a.stats.network = $(a.stats.network + p.network)),
+      (a.stats.health = $(a.stats.health + p.health)),
+      a.flags.push(p.flag));
   }
-  (D(
+  (P(
     a,
     {
       kind: "birth",
-      text: `${i.birthText}${s ? h(" 곁에는 아무도 없었다.", " There was no one beside them.", "そばには誰もいなかった。") : `${h(" ", " ", "")}${tt[a.family].birth}`}${l ? h(" 당신은 가문의 방 하나를 물려받을 아이로 자랐다. 어른들은 당신을 눈여겨보았다.", " You grew up as a child who would inherit one of the family's rooms. The elders kept their eyes on you.", " あなたは家門の部屋をひとつ受け継ぐ子として育った。大人たちはあなたに目を留めていた。") : ""}`,
+      text: `${i.birthText}${l ? d(" 곁에는 아무도 없었다.", " There was no one beside them.", "そばには誰もいなかった。") : `${d(" ", " ", "")}${lt[a.family].birth}`}${s ? d(" 당신은 가문의 방 하나를 물려받을 아이로 자랐다. 어른들은 당신을 눈여겨보았다.", " You grew up as a child who would inherit one of the family's rooms. The elders kept their eyes on you.", " あなたは家門の部屋をひとつ受け継ぐ子として育った。大人たちはあなたに目を留めていた。") : ""}`,
       tone: "system",
     },
     0,
   ),
-    (a.lakeDrinkAt = A0(o)));
+    (a.lakeDrinkAt = u1(o)));
   const c =
     t.pinky != null
       ? t.pinky
-      : l || a.flags.includes("피의기색")
+      : s || a.flags.includes("피의기색")
         ? null
-        : w1(o);
+        : Z1(o);
   if (c != null && c !== !1) {
     ((a.pinky = {
-      star: Math.max(0, Math.min(Br.length - 1, Number(c) || 0)),
+      star: Math.max(0, Math.min(oi.length - 1, Number(c) || 0)),
       at: 0,
       blade: null,
     }),
-      Q(a, { k: "pinky", star: a.pinky.star }));
-    const u = Br[a.pinky.star];
-    (D(
+      Z(a, { k: "pinky", star: a.pinky.star }));
+    const u = oi[a.pinky.star];
+    (P(
       a,
       {
         kind: "star",
-        lead: h(
+        lead: d(
           "주인을 잃은 별의 이름이 당신에게 왔다",
           "The name of a star that lost its owner has come to you",
           "主を失った星の名が、あなたのもとへ来た",
         ),
-        name: h(u[0], u[2], u[1]),
-        sub: h(u[1], u[1], u[3]),
-        heaven: a.pinky.star < tm,
+        name: d(u[0], u[2], u[1]),
+        sub: d(u[1], u[1], u[3]),
+        heaven: a.pinky.star < Om,
         tone: "rare",
       },
       0,
@@ -8897,60 +9177,60 @@ function cf(e, t = {}) {
         kind: "name",
         field: "star",
         age: 0,
-        question: h(
+        question: d(
           `별의 검이 당신의 것이 되었다. 이 검을 무엇이라 부를 것인가? (비워 두면 '${u[0]}도')`,
           `The star's sword is yours now. What will you call it? (Leave blank for '${u[2]} Blade')`,
           `星の剣があなたのものになった。この剣を何と呼ぶ？（空欄なら『${u[1]}刀』）`,
         ),
-        text: h("검의 이름", "Sword name", "剣の名"),
+        text: d("검의 이름", "Sword name", "剣の名"),
         choices: [],
         t: 0,
       }));
   }
   return (
-    D(a, { kind: "year", text: h("0세", "Age 0", "0歳") }, 0),
-    ol(a, e),
+    P(a, { kind: "year", text: d("0세", "Age 0", "0歳") }, 0),
+    Zn(a, e),
     a
   );
 }
-function j1(e, t, o, a) {
+function hT(e, t, o, a) {
   ((e.age = a.int(20, 30)),
     (e.family = "none"),
     e.flags.push("복제", "고아", "부화장"),
-    (e.cloneTeam = a.pick(lm)),
+    (e.cloneTeam = a.pick(Hm)),
     (e.cloneRank = a.chance(0.1) ? 2 : 1),
     (e.hatchHurt = 0),
     (e.cloneYear = e.age),
     (e.stats = {
-      health: B(78 + a.int(-5, 5)),
-      sanity: B(48 + a.int(-6, 6)),
-      wealth: B(6 + a.int(0, 6)),
-      network: B(6 + a.int(0, 6)),
-      rep: B(18 + a.int(-4, 4)),
+      health: $(78 + a.int(-5, 5)),
+      sanity: $(48 + a.int(-6, 6)),
+      wealth: $(6 + a.int(0, 6)),
+      network: $(6 + a.int(0, 6)),
+      rep: $(18 + a.int(-4, 4)),
     }));
   const n = {
-      토끼: h(
+      토끼: d(
         "총을 쥐는 법도, 단검을 뽑는 각도도.",
         "How to hold a gun, the angle to draw a dagger.",
         "銃の握り方も、短剣を抜く角度も。",
       ),
-      순록: h(
+      순록: d(
         "뿔에 전기가 고이는 감각도, 머리를 누르는 두통도.",
         "The feeling of electricity pooling in the antlers, the headache pressing on your skull.",
         "角に電気が溜まる感覚も、頭を押さえつける頭痛も。",
       ),
-      코뿔소: h(
+      코뿔소: d(
         "갑옷의 무게도, 망치를 내리치는 순서도.",
         "The weight of the armor, the order in which the hammer comes down.",
         "鎧の重さも、ハンマーを振り下ろす順番も。",
       ),
     }[e.cloneTeam],
-    r = yu[e.cloneTeam],
+    r = Ku[e.cloneTeam],
     i =
       e.cloneRank >= 2
-        ? h("대장", "Team Leader", "隊長")
-        : h("대원", "Member", "隊員"),
-    l = h(
+        ? d("대장", "Team Leader", "隊長")
+        : d("대원", "Member", "隊員"),
+    s = d(
       `복제 개체. 당신은 태어난 것이 아니라 만들어졌다. R사 18구, 부화장.
 
 당신은 ${r}팀 ${i}의 복제다. 원본이 누구인지는 적혀 있지 않다. 같은 얼굴이 수천이고, 모두 당신의 얼굴이다.
@@ -8986,21 +9266,21 @@ The door opens.`,
 扉が開く。`,
     );
   return (
-    D(e, { kind: "birth", text: l, tone: "system" }, 0),
-    D(
+    P(e, { kind: "birth", text: s, tone: "system" }, 0),
+    P(
       e,
-      { kind: "year", text: h(`${e.age}세`, `Age ${e.age}`, `${e.age}歳`) },
+      { kind: "year", text: d(`${e.age}세`, `Age ${e.age}`, `${e.age}歳`) },
       0,
     ),
-    ol(e, t),
+    Zn(e, t),
     e
   );
 }
-const ff = new WeakMap();
-function Bm(e, t) {
+const Gf = new WeakMap();
+function by(e, t) {
   if (!e) return !1;
-  let o = ff.get(e);
-  if ((o || ff.set(e, (o = {})), o[t] == null)) {
+  let o = Gf.get(e);
+  if ((o || Gf.set(e, (o = {})), o[t] == null)) {
     const a = (n) => !!n && (n.flagsAdd || []).includes(t);
     o[t] =
       a(e) ||
@@ -9009,37 +9289,37 @@ function Bm(e, t) {
   }
   return o[t];
 }
-const Lm = (e) => Bm(e, "가정"),
-  A1 = (e) => Bm(e, "연인");
-function Y1(e) {
+const ky = (e) => by(e, "가정"),
+  dT = (e) => by(e, "연인");
+function uT(e) {
   (e.flags.includes("결혼불가") || e.flags.push("결혼불가"),
     (e.flags = e.flags.filter((t) => t !== "연인")));
 }
-function $m(e) {
-  return ae(e).pick(bs[e.gender === "f" ? "m" : "f"]);
+function xy(e) {
+  return ae(e).pick(Ln[e.gender === "f" ? "m" : "f"]);
 }
-const S1 = (e) =>
+const cT = (e) =>
   e.flags.includes("아이") && e.childBorn != null ? e.age - e.childBorn : null;
-function ea(e, t, o) {
+function ca(e, t, o) {
   if (
     (e.offer && (t.job === "검계" || t.job === "흑운회")) ||
-    d1(e, t) ||
-    (e.cl && !va(t)) ||
-    G0(e, t) ||
-    !K0(e, t) ||
-    !Q0(e, t)
+    J1(e, t) ||
+    (e.cl && !Ea(t)) ||
+    C1(e, t) ||
+    !N1(e, t) ||
+    !B1(e, t)
   )
     return !1;
-  if (Lm(e)) {
+  if (ky(e)) {
     if (
       t.flags.includes("결혼불가") ||
-      lo(t) ||
+      bo(t) ||
       (t.flags.includes("연인") && !(e.requires && e.requires.includes("연인")))
     )
       return !1;
-  } else if (A1(e) && t.flags.includes("결혼불가")) return !1;
+  } else if (dT(e) && t.flags.includes("결혼불가")) return !1;
   if (e.childAge) {
-    const r = S1(t);
+    const r = cT(t);
     if (r != null && (r < e.childAge[0] || r > e.childAge[1])) return !1;
   }
   if (e.wingRankEven && (t.wingRank || 1) % 2) return !1;
@@ -9049,8 +9329,8 @@ function ea(e, t, o) {
     (e.age && (a < e.age[0] || a > e.age[1])) ||
     (e.ageEvery &&
       (a < e.ageEvery[0] || (a - e.ageEvery[0]) % e.ageEvery[1] !== 0)) ||
-    (e.regions && !xs(e.regions, o)) ||
-    (e.notRegions && xs(e.notRegions, o)) ||
+    (e.regions && !Ps(e.regions, o)) ||
+    (e.notRegions && Ps(e.notRegions, o)) ||
     (!e.repeat && t.used.includes(e.id)) ||
     (e.cooldown &&
       t.last &&
@@ -9058,74 +9338,74 @@ function ea(e, t, o) {
       a - t.last[e.id] < e.cooldown) ||
     (e.requires && !e.requires.every((r) => t.flags.includes(r))) ||
     (e.forbids && e.forbids.some((r) => t.flags.includes(r))) ||
-    (e.jobs && !Dr(e.jobs, t)) ||
-    (e.notJobs && Dr(e.notJobs, t)) ||
+    (e.jobs && !si(e.jobs, t)) ||
+    (e.notJobs && si(e.notJobs, t)) ||
     (e.noJob && t.job) ||
     (e.orgName && !(t.org && e.orgName.includes(t.org.name))) ||
-    (e.everJob && !Ts(t, e.everJob)) ||
-    (e.neverJob && Ts(t, e.neverJob)) ||
+    (e.everJob && !Hs(t, e.everJob)) ||
+    (e.neverJob && Hs(t, e.neverJob)) ||
     (e.prosMin && (t.prosthetics || 0) < e.prosMin) ||
-    (e.orgOrJobs && !Em(e.orgOrJobs, t))
+    (e.orgOrJobs && !my(e.orgOrJobs, t))
   )
     return !1;
   if (e.afterLast) {
     const [r, i] = e.afterLast,
-      l = Math.max(
+      s = Math.max(
         -1 / 0,
-        ...r.map((s) => (t.last && t.last[s] != null ? t.last[s] : -1 / 0)),
+        ...r.map((l) => (t.last && t.last[l] != null ? t.last[l] : -1 / 0)),
       );
-    if (!(a - l >= i)) return !1;
+    if (!(a - s >= i)) return !1;
   }
-  if (!vu(e.power, t) || !N1(e.presence, t) || (e.ego && !qm(t))) return !1;
+  if (!Qu(e.power, t) || !gT(e.presence, t) || (e.ego && !Ay(t))) return !1;
   const n = e.bf && e.bf !== "none" && !!t.bf;
   if (
     (t.job === "손가락" && !e.finger && !e.anyone && !n) ||
-    (ce(t) &&
+    (Te(t) &&
       !e.anyone &&
       !e.wingOk &&
       !n &&
       !(e.jobs && e.jobs.includes(t.work))) ||
     (t.job === "검계" && !e.bl && !e.anyone && !e.wingOk && !n) ||
-    (e.blEntry && !_x(t)) ||
-    (e.blRank && !te(On(t), e.blRank)) ||
-    (e.blCutAt && !(t.bl && te(t.bl.cut || 0, e.blCutAt))) ||
-    (e.blWayAt && !(t.bl && te(t.bl.way || 0, e.blWayAt))) ||
-    (e.blYearsAt && !(t.bl && te(a - (t.bl.since ?? a), e.blYearsAt))) ||
-    (e.blBestAt && !(t.bl && te(t.bl.best || 1, e.blBestAt))) ||
+    (e.blEntry && !hx(t)) ||
+    (e.blRank && !ne(Xn(t), e.blRank)) ||
+    (e.blCutAt && !(t.bl && ne(t.bl.cut || 0, e.blCutAt))) ||
+    (e.blWayAt && !(t.bl && ne(t.bl.way || 0, e.blWayAt))) ||
+    (e.blYearsAt && !(t.bl && ne(a - (t.bl.since ?? a), e.blYearsAt))) ||
+    (e.blBestAt && !(t.bl && ne(t.bl.best || 1, e.blBestAt))) ||
     (e.blEver && !t.bl) ||
-    (e.blMentorReady && !jx(t)) ||
+    (e.blMentorReady && !dx(t)) ||
     (t.job === "흑운회" && !e.kk && !e.anyone && !e.wingOk && !n) ||
-    (e.kkEntry && !Cx(t)) ||
-    (e.kkRank && !te(ho(t), e.kkRank)) ||
+    (e.kkEntry && !gx(t)) ||
+    (e.kkRank && !ne(vo(t), e.kkRank)) ||
     (e.kkEver && !t.kk) ||
-    (e.kkYearsAt && !(t.kk && te(a - (t.kk.since ?? a), e.kkYearsAt))) ||
+    (e.kkYearsAt && !(t.kk && ne(a - (t.kk.since ?? a), e.kkYearsAt))) ||
     (e.kkRankYearsAt &&
-      !(t.kk && te(a - (t.kk.rankAt ?? a), e.kkRankYearsAt))) ||
-    (e.kkWayAt && !(t.kk && te(t.kk.way || 0, e.kkWayAt))) ||
-    (e.kkInkAt && !(t.kk && te(t.kk.ink || 0, e.kkInkAt))) ||
-    (e.kkDueAt && !(t.kk && te(t.kk.due || 0, e.kkDueAt))) ||
-    (e.kkBestAt && !(t.kk && te(t.kk.best || 1, e.kkBestAt))) ||
-    (e.kkSeatReady && !Nx(t)) ||
-    (e.kkPatReady && !Wx(t)) ||
-    (e.kkInkReason && !Ix(t)) ||
-    (e.ws && !Le(t)) ||
-    (e.wsEntry && !qx(t)) ||
+      !(t.kk && ne(a - (t.kk.rankAt ?? a), e.kkRankYearsAt))) ||
+    (e.kkWayAt && !(t.kk && ne(t.kk.way || 0, e.kkWayAt))) ||
+    (e.kkInkAt && !(t.kk && ne(t.kk.ink || 0, e.kkInkAt))) ||
+    (e.kkDueAt && !(t.kk && ne(t.kk.due || 0, e.kkDueAt))) ||
+    (e.kkBestAt && !(t.kk && ne(t.kk.best || 1, e.kkBestAt))) ||
+    (e.kkSeatReady && !mx(t)) ||
+    (e.kkPatReady && !yx(t)) ||
+    (e.kkInkReason && !px(t)) ||
+    (e.ws && !Ge(t)) ||
+    (e.wsEntry && !Rx(t)) ||
     (e.id === "ws_buyout" && t.pinky) ||
-    (e.wsRank && !te(fm(t), e.wsRank)) ||
+    (e.wsRank && !ne(zm(t), e.wsRank)) ||
     (e.wsField && !(t.ws && e.wsField.includes(t.ws.field))) ||
     (e.wsShop && !(t.ws && e.wsShop.includes(t.ws.shop))) ||
-    (e.wsFameAt && !(t.ws && te(t.ws.fame || 0, e.wsFameAt))) ||
-    (e.wsGearAt && !(t.ws && te(t.ws.gear || 0, e.wsGearAt))) ||
-    (e.wsStockAt && !(t.ws && te(t.ws.stock || 0, e.wsStockAt))) ||
-    (e.wsWarnAt && !(t.ws && te(t.ws.warn || 0, e.wsWarnAt))) ||
-    (e.wsMeritFull && !An(t)) ||
+    (e.wsFameAt && !(t.ws && ne(t.ws.fame || 0, e.wsFameAt))) ||
+    (e.wsGearAt && !(t.ws && ne(t.ws.gear || 0, e.wsGearAt))) ||
+    (e.wsStockAt && !(t.ws && ne(t.ws.stock || 0, e.wsStockAt))) ||
+    (e.wsWarnAt && !(t.ws && ne(t.ws.warn || 0, e.wsWarnAt))) ||
+    (e.wsMeritFull && !Hn(t)) ||
     (e.wsRankYearsAt &&
-      !(t.ws && te(a - (t.ws.rankAt ?? a), e.wsRankYearsAt))) ||
-    (e.wsUp4Ready && !zx(t)) ||
+      !(t.ws && ne(a - (t.ws.rankAt ?? a), e.wsRankYearsAt))) ||
+    (e.wsUp4Ready && !Ix(t)) ||
     (e.wsPatronHas != null && !!(t.ws && t.ws.patron) !== e.wsPatronHas) ||
     (e.wsPatronGradeAt &&
-      !(t.ws && t.ws.patron && te(t.ws.patron.grade, e.wsPatronGradeAt))) ||
-    (e.wsMpReady && !Kx(t)) ||
+      !(t.ws && t.ws.patron && ne(t.ws.patron.grade, e.wsPatronGradeAt))) ||
+    (e.wsMpReady && !Nx(t)) ||
     (e.wsMpNews &&
       !(
         t.ws &&
@@ -9135,66 +9415,66 @@ function ea(e, t, o) {
         a - t.ws.mp.age >= 10 &&
         !t.flags.includes("걸작소식")
       )) ||
-    (e.wsEye && !pu(t)) ||
+    (e.wsEye && !zu(t)) ||
     (e.wsExcl && !(t.ws && t.ws.exclOffer)) ||
-    (e.wsMoveOk && !wm(t).length) ||
+    (e.wsMoveOk && !Um(t).length) ||
     (e.wsRecentWin &&
       !(t.ws && t.ws.lastWin != null && a - t.ws.lastWin <= e.wsRecentWin)) ||
     (e.wsNotTeach && t.ws && t.ws.teach) ||
     (e.weaponAt && !(t.weapon && e.weaponAt.includes(t.weapon.cls))) ||
     (e.weaponNoName && t.weapon && t.weapon.name) ||
-    (e.bld && !aa(t)) ||
-    (aa(t) && !e.bld) ||
-    ka(t) ||
-    (e.bldRemAt && !(t.bld && te(t.bld.rem || 0, e.bldRemAt))) ||
-    (e.bldThreatAt && !(t.bld && te(t.bld.threat || 0, e.bldThreatAt))) ||
-    (e.notExec && rd(t)) ||
-    (e.notWingExec && yn(t) >= 5) ||
-    (e.exec && yn(t) < 5) ||
+    (e.bld && !ga(t)) ||
+    (ga(t) && !e.bld) ||
+    Oa(t) ||
+    (e.bldRemAt && !(t.bld && ne(t.bld.rem || 0, e.bldRemAt))) ||
+    (e.bldThreatAt && !(t.bld && ne(t.bld.threat || 0, e.bldThreatAt))) ||
+    (e.notExec && Id(t)) ||
+    (e.notWingExec && Nn(t) >= 5) ||
+    (e.exec && Nn(t) < 5) ||
     (e.colorReady &&
-      !(t.job === "해결사" && t.grade === 1 && (t.merit || 0) >= ht(t))) ||
+      !(t.job === "해결사" && t.grade === 1 && (t.merit || 0) >= mt(t))) ||
     (e.colorReadyHalf &&
       !(
         t.job === "해결사" &&
         t.grade <= 2 &&
-        (t.grade === 2 || (t.merit || 0) >= ht(t) / 2)
+        (t.grade === 2 || (t.merit || 0) >= mt(t) / 2)
       ))
   )
     return !1;
   if (e.officeRank) {
-    const r = yn(t);
+    const r = Nn(t);
     if (!r || r < e.officeRank[0] || r > e.officeRank[1] || (r <= 4 && a > 60))
       return !1;
   }
   if (
-    (e.perfFull && !((t.perf || 0) >= Wa(t))) ||
-    (e.perfLow && !((t.perf || 0) < Wa(t) * 0.3)) ||
-    (e.warnAt && !te(t.warn || 0, e.warnAt)) ||
+    (e.perfFull && !((t.perf || 0) >= za(t))) ||
+    (e.perfLow && !((t.perf || 0) < za(t) * 0.3)) ||
+    (e.warnAt && !ne(t.warn || 0, e.warnAt)) ||
     (e.warnQuiet && !(a - (t.warnLast ?? -99) >= e.warnQuiet)) ||
-    (e.ceoReady && !o1(t)) ||
-    (e.rankGate && !An(t)) ||
-    (e.heirKong && !(Di(t) >= e.heirKong)) ||
-    (e.heirHead && !(Di(t) < 3 && rf(t))) ||
-    (e.heirFail && !(Di(t) < 3 && !rf(t)))
+    (e.ceoReady && !P1(t)) ||
+    (e.rankGate && !Hn(t)) ||
+    (e.heirKong && !(us(t) >= e.heirKong)) ||
+    (e.heirHead && !(us(t) < 3 && Ef(t))) ||
+    (e.heirFail && !(us(t) < 3 && !Ef(t)))
   )
     return !1;
   if (e.wingRank) {
-    if (!ce(t)) return !1;
+    if (!Te(t)) return !1;
     const r = t.wingRank || 1;
     if (r < e.wingRank[0] || r > e.wingRank[1]) return !1;
   }
-  return (e.branch && !(ce(t) && e.branch.includes(t.branch))) ||
-    (e.rOverAt && !te(t.rOver || 0, e.rOverAt)) ||
-    (e.rMisAt && !te(t.rMis || 0, e.rMisAt)) ||
-    (e.org && !Dm(e.org, t)) ||
-    !_u(e, t) ||
-    !Pm(e, t) ||
+  return (e.branch && !(Te(t) && e.branch.includes(t.branch))) ||
+    (e.rOverAt && !ne(t.rOver || 0, e.rOverAt)) ||
+    (e.rMisAt && !ne(t.rMis || 0, e.rMisAt)) ||
+    (e.org && !_y(e.org, t)) ||
+    !Zu(e, t) ||
+    !Ty(e, t) ||
     (t.bf && e.age && e.age[0] >= 55 && !e.bf && !e.bfOk)
     ? !1
-    : Hm(e, t, o);
+    : vy(e, t, o);
 }
-const te = (e, t) => !t || (e >= t[0] && e <= t[1]);
-function Pm(e, t) {
+const ne = (e, t) => !t || (e >= t[0] && e <= t[1]);
+function Ty(e, t) {
   const o = t.bf;
   if (e.bf) {
     if (e.bf === "none") {
@@ -9203,31 +9483,31 @@ function Pm(e, t) {
   }
   return !(
     (e.noStray && o && o.kind === "stray") ||
-    (Array.isArray(e.thirst) && !(o && te(o.thirst, e.thirst))) ||
-    (Array.isArray(e.heat) && !(o && te(o.heat, e.heat))) ||
-    (e.bfYears && !(o && te(t.age - o.since, e.bfYears))) ||
+    (Array.isArray(e.thirst) && !(o && ne(o.thirst, e.thirst))) ||
+    (Array.isArray(e.heat) && !(o && ne(o.heat, e.heat))) ||
+    (e.bfYears && !(o && ne(t.age - o.since, e.bfYears))) ||
     (e.kinSlot && !(o && o.made < 2)) ||
-    (e.hasKin && !(o && Cu(t) > 0)) ||
-    (e.barStreak && !(o && te(o.barStreak, e.barStreak))) ||
-    (e.barUses && !(o && te(o.barUses || 0, e.barUses))) ||
+    (e.hasKin && !(o && rc(t) > 0)) ||
+    (e.barStreak && !(o && ne(o.barStreak, e.barStreak))) ||
+    (e.barUses && !(o && ne(o.barUses || 0, e.barUses))) ||
     (e.neverBit && !(o && o.bites === 0)) ||
-    (e.gen && !(o && o.gen && te(o.gen, e.gen))) ||
+    (e.gen && !(o && o.gen && ne(o.gen, e.gen))) ||
     (e.bar && !(o && t.flags.includes("혈액바") && !(o.barShort >= t.age))) ||
     (e.noBar && o && t.flags.includes("혈액바")) ||
     (e.feedGate && !(o && t.age - (o.lastFeed ?? -99) >= 2)) ||
     (e.hasBag && !(o && (o.bags || []).length)) ||
     (e.notFinal && o && o.finalHunt) ||
-    (e.life && !(o && e.life.includes(ja(t).k))) ||
-    (e.lifeSub && !(o && e.lifeSub.includes(ja(t).sub))) ||
-    (e.lifeNot && o && e.lifeNot.includes(ja(t).k)) ||
-    (e.bfActive && !(o && id(t))) ||
-    (e.bfRetired && !(o && !id(t))) ||
-    (e.outlive && !(o && IT(t))) ||
-    (e.revealOk && !(o && OT(t))) ||
-    (e.revealAt && !(o && o.revealOrg && o.revealOrg === Sn(t)))
+    (e.life && !(o && e.life.includes($a(t).k))) ||
+    (e.lifeSub && !(o && e.lifeSub.includes($a(t).sub))) ||
+    (e.lifeNot && o && e.lifeNot.includes($a(t).k)) ||
+    (e.bfActive && !(o && Wd(t))) ||
+    (e.bfRetired && !(o && !Wd(t))) ||
+    (e.outlive && !(o && $v(t))) ||
+    (e.revealOk && !(o && Pv(t))) ||
+    (e.revealAt && !(o && o.revealOrg && o.revealOrg === qn(t)))
   );
 }
-function Hm(e, t, o) {
+function vy(e, t, o) {
   if (e.needs)
     for (const [a, [n, r]] of Object.entries(e.needs)) {
       const i = t.stats[a];
@@ -9244,13 +9524,13 @@ function Hm(e, t, o) {
   }
   return !0;
 }
-function Dm(e, t) {
+function _y(e, t) {
   const o = t.org;
   return e === "none" ? !o : e === "any" ? !!o : !!o && o.type === e;
 }
-const R1 = { 엄지: 2, 검지: 2, 중지: 3, 약지: 2 },
-  C1 = { 엄지: !0 };
-function tl(e) {
+const fT = { 엄지: 2, 검지: 2, 중지: 3, 약지: 2 },
+  wT = { 엄지: !0 };
+function vl(e) {
   let t = 0;
   if (e.job === "해결사" && e.grade)
     e.flags.includes("특색") || e.grade <= 1
@@ -9261,34 +9541,34 @@ function tl(e) {
           ? (t = 2)
           : (t = 1);
   else if (e.job === "손가락" && e.finger) {
-    const o = ct[e.finger].length,
+    const o = bt[e.finger].length,
       a = e.fingerRank || 1;
     t = a >= o ? 4 : a >= o - 1 ? 3 : a >= 2 ? 2 : 1;
   } else
-    ce(e)
-      ? (t = P0(e))
+    Te(e)
+      ? (t = j1(e))
       : e.job === "검계"
-        ? (t = On(e))
+        ? (t = Xn(e))
         : e.job === "흑운회"
-          ? (t = ho(e))
+          ? (t = vo(e))
           : e.job === "이름 없는 뒤틀림" && (t = 3);
   return (e.flags.includes("E.G.O개화") && (t = Math.max(t, 3)), t);
 }
-function qr(e) {
-  return Math.max(tl(e), Math.max(0, (e.pastPower || 0) - 1));
+function li(e) {
+  return Math.max(vl(e), Math.max(0, (e.pastPower || 0) - 1));
 }
-const N1 = (e, t) => !e || (qr(t) >= e[0] && qr(t) <= e[1]),
-  vu = (e, t) => !e || (qr(t) >= e[0] && qr(t) <= e[1]);
-function qm(e) {
+const gT = (e, t) => !e || (li(t) >= e[0] && li(t) <= e[1]),
+  Qu = (e, t) => !e || (li(t) >= e[0] && li(t) <= e[1]);
+function Ay(e) {
   return e.flags.includes("E.G.O개화")
     ? !1
     : e.job === "해결사"
       ? !!e.grade && e.grade <= 3
       : e.job === "손가락" && e.finger
-        ? (e.fingerRank || 1) >= (R1[e.finger] || 2)
+        ? (e.fingerRank || 1) >= (fT[e.finger] || 2)
         : !1;
 }
-function _u(e, t) {
+function Zu(e, t) {
   if (
     e.finger &&
     !(Array.isArray(e.finger) ? e.finger : [e.finger]).includes(t.finger)
@@ -9300,54 +9580,54 @@ function _u(e, t) {
   }
   return !0;
 }
-function W1(e, t, o) {
+function mT(e, t, o) {
   return !(
-    (t.pinky && u1(e)) ||
+    (t.pinky && V1(e)) ||
     (e.requires && !e.requires.every((a) => t.flags.includes(a))) ||
     (e.forbids && e.forbids.some((a) => t.flags.includes(a))) ||
-    (e.jobs && !Dr(e.jobs, t)) ||
-    (e.notJobs && Dr(e.notJobs, t)) ||
-    !vu(e.power, t) ||
-    (e.ego && !qm(t)) ||
-    (e.org && !Dm(e.org, t)) ||
+    (e.jobs && !si(e.jobs, t)) ||
+    (e.notJobs && si(e.notJobs, t)) ||
+    !Qu(e.power, t) ||
+    (e.ego && !Ay(t)) ||
+    (e.org && !_y(e.org, t)) ||
     (e.orgName && !(t.org && e.orgName.includes(t.org.name))) ||
-    (e.orgOrJobs && !Em(e.orgOrJobs, t)) ||
-    (e.branch && !(ce(t) && e.branch.includes(t.branch))) ||
+    (e.orgOrJobs && !my(e.orgOrJobs, t)) ||
+    (e.branch && !(Te(t) && e.branch.includes(t.branch))) ||
     (e.wingRank &&
       !(
-        ce(t) &&
+        Te(t) &&
         (t.wingRank || 1) >= e.wingRank[0] &&
         (t.wingRank || 1) <= e.wingRank[1]
       )) ||
-    (e.everJob && !Ts(t, e.everJob)) ||
-    (e.neverJob && Ts(t, e.neverJob)) ||
-    (e.regions && !xs(e.regions, o)) ||
-    (e.notRegions && xs(e.notRegions, o)) ||
+    (e.everJob && !Hs(t, e.everJob)) ||
+    (e.neverJob && Hs(t, e.neverJob)) ||
+    (e.regions && !Ps(e.regions, o)) ||
+    (e.notRegions && Ps(e.notRegions, o)) ||
     (e.blScar &&
       !(
         t.job === "해결사" ||
         t.flags.includes("조직입문") ||
         t.flags.includes("고아")
       )) ||
-    (e.kkRank && !te(ho(t), e.kkRank)) ||
-    (e.kkBestAt && !(t.kk && te(t.kk.best || 1, e.kkBestAt))) ||
-    (e.kkWayAt && !(t.kk && te(t.kk.way || 0, e.kkWayAt))) ||
-    (e.bldRemAt && !(t.bld && te(t.bld.rem || 0, e.bldRemAt))) ||
-    (e.wsRank && !te(fm(t), e.wsRank)) ||
-    (e.wsHandsAt && !(t.ws && te(t.ws.hands || 0, e.wsHandsAt))) ||
+    (e.kkRank && !ne(vo(t), e.kkRank)) ||
+    (e.kkBestAt && !(t.kk && ne(t.kk.best || 1, e.kkBestAt))) ||
+    (e.kkWayAt && !(t.kk && ne(t.kk.way || 0, e.kkWayAt))) ||
+    (e.bldRemAt && !(t.bld && ne(t.bld.rem || 0, e.bldRemAt))) ||
+    (e.wsRank && !ne(zm(t), e.wsRank)) ||
+    (e.wsHandsAt && !(t.ws && ne(t.ws.hands || 0, e.wsHandsAt))) ||
     (e.wsPatronHas != null && !!(t.ws && t.ws.patron) !== e.wsPatronHas) ||
     (e.wsMpGradeAt &&
-      !(t.ws && t.ws.mp && te(t.ws.mp.grade || 0, e.wsMpGradeAt))) ||
-    (e.wsMpDelayAt && !(t.ws && te(t.ws.mpDelay || 0, e.wsMpDelayAt))) ||
-    !_u(e, t) ||
-    !Pm(e, t) ||
-    (e.age && !te(t.age, e.age)) ||
-    (e.heirKong && !(Di(t) >= e.heirKong)) ||
-    (e.rneeds && !Hm({ rneeds: e.rneeds }, t, o)) ||
-    ((lo(t) || t.flags.includes("시술금지서약")) && V0(e))
+      !(t.ws && t.ws.mp && ne(t.ws.mp.grade || 0, e.wsMpGradeAt))) ||
+    (e.wsMpDelayAt && !(t.ws && ne(t.ws.mpDelay || 0, e.wsMpDelayAt))) ||
+    !Zu(e, t) ||
+    !Ty(e, t) ||
+    (e.age && !ne(t.age, e.age)) ||
+    (e.heirKong && !(us(t) >= e.heirKong)) ||
+    (e.rneeds && !vy({ rneeds: e.rneeds }, t, o)) ||
+    ((bo(t) || t.flags.includes("시술금지서약")) && O1(e))
   );
 }
-function od(e, t) {
+function Yd(e, t) {
   if (
     (e.needs &&
       e.orGrade &&
@@ -9358,25 +9638,25 @@ function od(e, t) {
       (e = { ...e, needs: null }),
     e.kinSlotLock && !(t.bf && t.bf.made < 2))
   )
-    return h(
+    return d(
       "권속은 둘까지다",
       "A Bloodfiend can have only two Kindred",
       "眷属は二人までだ",
     );
   if (e.bagSlotLock && !(t.bf && (t.bf.bagsMade || 0) < 3))
-    return h(
+    return d(
       "피주머니는 평생 셋까지다",
       "You can make only three Bloodbags in a lifetime",
       "血袋は生涯で三体までだ",
     );
-  if (e.clSerum && !_a(t, e.clSerum))
-    return h(
+  if (e.clSerum && !La(t, e.clSerum))
+    return d(
       `혈청 ${e.clSerum.toUpperCase()}가 남아 있지 않다`,
       `No Serum ${e.clSerum.toUpperCase()} left`,
       `血清${e.clSerum.toUpperCase()}が残っていない`,
     );
-  if (e.clAllLock && !E1(t))
-    return h(
+  if (e.clAllLock && !kT(t))
+    return d(
       "꽂을 혈청이 모자라다",
       "Not enough Serums to inject",
       "挿す血清が足りない",
@@ -9385,22 +9665,22 @@ function od(e, t) {
     for (const [o, [a, n]] of Object.entries(e.needs)) {
       const r = t.stats[o];
       if (r < a)
-        return h(
-          `${Xe[o]} ${a} 이상 필요`,
-          `Requires ${Xe[o]} ${a}+`,
-          `${Xe[o]} ${a}以上が必要`,
+        return d(
+          `${ce[o]} ${a} 이상 필요`,
+          `Requires ${ce[o]} ${a}+`,
+          `${ce[o]} ${a}以上が必要`,
         );
       if (r > n)
-        return h(
-          `${Xe[o]} ${n} 이하일 때만`,
-          `Only with ${Xe[o]} ${n} or less`,
-          `${Xe[o]} ${n}以下のときのみ`,
+        return d(
+          `${ce[o]} ${n} 이하일 때만`,
+          `Only with ${ce[o]} ${n} or less`,
+          `${ce[o]} ${n}以下のときのみ`,
         );
     }
   if (e.grade) {
     const o = t.grade ?? 99;
     if (o < e.grade[0] || o > e.grade[1])
-      return h(
+      return d(
         `해결사 ${e.grade[1]}급 이상 필요`,
         `Requires Grade ${e.grade[1]} Fixer or higher`,
         `${e.grade[1]}級フィクサー以上が必要`,
@@ -9408,22 +9688,22 @@ function od(e, t) {
   }
   return null;
 }
-function Gm(e, t) {
+function jy(e, t) {
   return e.bias
     ? e.bias.startsWith("!")
       ? 0.3 + (10 - t[e.bias.slice(1)]) / 5
       : 0.3 + t[e.bias] / 5
     : 1;
 }
-function vi(e, t) {
-  const o = (e.weight ?? 1) * (e.rankGate ? n1 : 1);
-  return e.chance == null ? o * Gm(e, t) : o;
+function Gi(e, t) {
+  const o = (e.weight ?? 1) * (e.rankGate ? D1 : 1);
+  return e.chance == null ? o * jy(e, t) : o;
 }
-function I1(e, t, o, a) {
+function yT(e, t, o, a) {
   if (e.chance == null) return !0;
-  let n = e.chance * Gm(e, t);
-  (e.rankGate && (n = Math.min(1, n * r1)),
-    (e.rankGate || f1.has(e.id)) && (n = Math.min(1, n * Yo(a, 1.2, 1.1))),
+  let n = e.chance * jy(e, t);
+  (e.rankGate && (n = Math.min(1, n * q1)),
+    (e.rankGate || Q1.has(e.id)) && (n = Math.min(1, n * Ho(a, 1.2, 1.1))),
     e.prosScale && (n *= Math.min(a.prosthetics || 0, 6)),
     e.regionMult &&
       e.regionMult[a.regionId] &&
@@ -9432,12 +9712,12 @@ function I1(e, t, o, a) {
     a.flags.includes(r) && (n *= i);
   return (e.noJobMult && !a.job && (n *= e.noJobMult), o.chance(n));
 }
-function O1(e, t) {
+function pT(e, t) {
   if (e <= 4) return t.chance(0.6) ? 1 : 0;
   const o = t.next();
   return o < 0.15 ? 0 : o < 0.55 ? 1 : o < 0.87 ? 2 : 3;
 }
-const ge = {
+const Ae = {
     P: 0.2,
     startAge: 20,
     tierAt: [5, 10, 15],
@@ -9453,37 +9733,37 @@ const ge = {
     healAt: 30,
     power: 13,
   },
-  nr = { on: !1, cWeight: 16.1, p: 0.5 },
-  va = (e) => !!e.cl && e.job === "발톱 처형자" && !e.dead,
-  qi = (e) => e - ge.startAge + 1;
-function Km(e, t = e.age) {
+  xr = { on: !1, cWeight: 16.1, p: 0.5 },
+  Ea = (e) => !!e.cl && e.job === "발톱 처형자" && !e.dead,
+  cs = (e) => e - Ae.startAge + 1;
+function Qn(e, t = e.age) {
   return e && e.cl
-    ? h(`${qi(t)}년차`, `Year ${qi(t)}`, `${qi(t)}年目`)
-    : h(`${t}세`, `Age ${t}`, `${t}歳`);
+    ? d(`${cs(t)}년차`, `Year ${cs(t)}`, `${cs(t)}年目`)
+    : d(`${t}세`, `Age ${t}`, `${t}歳`);
 }
-function Yn(e) {
+function Dn(e) {
   if (!e.cl) return 0;
-  const t = qi(e.age);
-  return t >= ge.tierAt[2]
+  const t = cs(e.age);
+  return t >= Ae.tierAt[2]
     ? 3
-    : t >= ge.tierAt[1]
+    : t >= Ae.tierAt[1]
       ? 2
-      : t >= ge.tierAt[0]
+      : t >= Ae.tierAt[0]
         ? 1
         : 0;
 }
-const ju = Gt({
+const ec = Qt({
   ko: ["시민", "조직", "날개", "특색"],
   en: ["Citizen", "Syndicate", "Wing", "Color"],
   ja: ["市民", "組織", "翼", "特色"],
 });
-function F1(e, t, o, a) {
-  ((e.age = ge.startAge),
+function bT(e, t, o, a) {
+  ((e.age = Ae.startAge),
     (e.family = "none"),
     e.flags.push("처형자", "고아", "상층"),
     (e.job = "발톱 처형자"),
     (e.cl = {
-      since: ge.startAge,
+      since: Ae.startAge,
       warn: 0,
       warnAt: null,
       warns: 0,
@@ -9496,14 +9776,14 @@ function F1(e, t, o, a) {
       firstDone: !1,
     }),
     (e.stats = {
-      health: B(88 + a.int(-4, 4)),
-      sanity: B(66 + a.int(-6, 6)),
+      health: $(88 + a.int(-4, 4)),
+      sanity: $(66 + a.int(-6, 6)),
       wealth: 100,
-      network: B(14 + a.int(-4, 4)),
-      rep: B(24 + a.int(-4, 4)),
+      network: $(14 + a.int(-4, 4)),
+      rep: $(24 + a.int(-4, 4)),
     }),
-    Q(e, { k: "job", job: "발톱 처형자" }));
-  const n = h(
+    Z(e, { k: "job", job: "발톱 처형자" }));
+  const n = d(
     `C사 · 발톱
 
 C사의 관할에서 태어났다. 스무 살이 되기까지의 일은 어디에도 적혀 있지 않다.
@@ -9539,26 +9819,26 @@ C社の管轄で生まれた。二十歳になるまでのことは、どこに�
 今日からあなたは、頭の処刑人だ。`,
   );
   return (
-    D(
+    P(
       e,
       { kind: "birth", text: n, tone: "system", scene: "cl_start", hold: 9e3 },
       0,
     ),
-    D(e, { kind: "year", text: Km(e) }, 0),
-    ol(e, t),
+    P(e, { kind: "year", text: Qn(e) }, 0),
+    Zn(e, t),
     e
   );
 }
-const _a = (e, t) => !!e.cl && (e.cl.dose[t] || 0) >= 1,
-  E1 = (e) => _a(e, "w") && _a(e, "k") && _a(e, "r");
-function M1(e, t, o) {
+const La = (e, t) => !!e.cl && (e.cl.dose[t] || 0) >= 1,
+  kT = (e) => La(e, "w") && La(e, "k") && La(e, "r");
+function xT(e, t, o) {
   const a = e.cl;
   if (((a.warns = (a.warns || 0) + 1), a.warn >= 1)) {
     ((a.clawDue = !0),
       o.push(
         (n) =>
           n +
-          h(
+          d(
             " 고지서는 이미 한 장 있었다.",
             " There was already one notice.",
             " 告知書はすでに一枚あった。",
@@ -9576,14 +9856,14 @@ function M1(e, t, o) {
     o.push(
       (n) =>
         n +
-        h(
+        d(
           " 명령서 묶음 맨 아래에 고지서 한 장이 끼어 있었다. 받는 사람은 당신이었다. 두 번째 고지서는 없다.",
           " At the bottom of the stack of orders, a notice was tucked in. It was addressed to you. There is no second notice.",
           " 命令書の束のいちばん下に、告知書が一枚挟まっていた。宛先はあなただった。二枚目の告知書はない。",
         ),
     ));
 }
-function B1(e, t, o, a) {
+function TT(e, t, o, a) {
   const n = e.cl;
   e.stats.wealth = 100;
   const r = e.age === n.since && !n.firstDone;
@@ -9592,14 +9872,14 @@ function B1(e, t, o, a) {
       n.load[f] = Math.max(0, (n.load[f] || 0) - 1);
     n.warn &&
       n.warnAt != null &&
-      e.age - n.warnAt >= ge.warnClear &&
+      e.age - n.warnAt >= Ae.warnClear &&
       ((n.warn = 0),
       (n.warnAt = null),
-      D(
+      P(
         e,
         {
           kind: "flavor",
-          text: h(
+          text: d(
             "고지서가 기한 만료로 빠졌다.",
             "The notice expired and was removed.",
             "告知書が期限切れで抜かれた。",
@@ -9608,15 +9888,15 @@ function B1(e, t, o, a) {
         },
         0.02,
       ));
-    const u = Yn(e);
+    const u = Dn(e);
     if (u > (n.tier || 0)) {
       n.tier = u;
-      const f = ju[u];
-      D(
+      const f = ec[u];
+      P(
         e,
         {
           kind: "flavor",
-          text: h(
+          text: d(
             `명령서 귀퉁이의 표시가 바뀌었다. ${f}.`,
             `The mark in the corner of the orders changed. ${f}.`,
             `命令書の隅の印が変わった。${f}。`,
@@ -9635,46 +9915,880 @@ function B1(e, t, o, a) {
     ((n.firstDone = !0), i("cl_first", 0.3));
     return;
   }
-  if (e.age >= ge.retireAge && !n.retireAsked) {
+  if (e.age >= Ae.retireAge && !n.retireAsked) {
     ((n.retireAsked = !0), i("cl_retire", 0.3));
     return;
   }
   for (const u of ["w", "k", "r"])
-    (n.load[u] || 0) >= ge.sideAt &&
+    (n.load[u] || 0) >= Ae.sideAt &&
       !n.side[u] &&
       ((n.side[u] = !0), i(`cl_serum_${u}`, 0.15));
-  (e.stats.health <= ge.healAt && _a(e, "k") && i("cl_serum_k_heal", 0.1),
-    Yu(e) &&
-      a.chance(ey(e.age)) &&
+  (e.stats.health <= Ae.healAt && La(e, "k") && i("cl_serum_k_heal", 0.1),
+    oc(e) &&
+      a.chance(Ly(e.age)) &&
       ((e.last.wt_enter_claw = e.age),
       e.plan.push({ id: "wt_enter_claw", warpEnter: !0, t: 0.8 })));
-  const l = Yn(e),
-    s = (u) =>
+  const s = Dn(e),
+    l = (u) =>
       u.cl &&
-      (u.clTier || 0) <= l &&
-      !(e.last[u.id] != null && e.age - e.last[u.id] < ge.cooldown);
+      (u.clTier || 0) <= s &&
+      !(e.last[u.id] != null && e.age - e.last[u.id] < Ae.cooldown);
   let c = null;
   if (
-    (l >= 3 &&
-      a.chance(ge.colorP) &&
-      (c = a.pick(t.events.filter((u) => s(u) && u.clGroup === "color"))),
-    !c && a.chance(ge.eventP))
+    (s >= 3 &&
+      a.chance(Ae.colorP) &&
+      (c = a.pick(t.events.filter((u) => l(u) && u.clGroup === "color"))),
+    !c && a.chance(Ae.eventP))
   ) {
-    const u = t.events.filter((f) => s(f) && f.clGroup !== "color");
+    const u = t.events.filter((f) => l(f) && f.clGroup !== "color");
     c = a.weighted(u, (f) => (f.weight ?? 1) * (1 + 0.6 * (f.clTier || 0)));
   }
   if (c) i(c.id, 0.45);
   else {
     const u = e.recentDaily || [],
-      f = (t.daily || []).filter((b) => ea(b, e, o) && !u.includes(b.id)),
-      g = a.weighted(f, (b) => b.weight ?? 1);
+      f = (t.daily || []).filter((p) => ca(p, e, o) && !u.includes(p.id)),
+      g = a.weighted(f, (p) => p.weight ?? 1);
     g &&
       ((e.recentDaily = [...u, g.id].slice(-14)),
       e.plan.push({ id: g.id, daily: !0, t: 0.5 }));
   }
   e.plan.sort((u, f) => u.t - f.t);
 }
-const Ge = {
+const fe = {
+    P: 0.1,
+    startAge: 30,
+    opens: 17,
+    F0: 40,
+    Se0: 12,
+    Sk0: 12,
+    L0: 60,
+    forget: 6,
+    thr0: 18,
+    thrStep: 6,
+    finalF: 60,
+    revoltL: 30,
+    revoltK: 2,
+    frenzySe: 50,
+    awayNote: 83,
+    awayAge: 89,
+    awayNeed: 24,
+    outNote: 143,
+    outAge: 149,
+    outK: 2,
+    lossPct: 0.07,
+  },
+  Sy = (e) => !!e.lm && !e.dead,
+  Ds = ["A", "B", "A1", "A2", "B1", "B2"],
+  vT = [
+    [14, 0, 0, 0],
+    [0, 8, 0, -8],
+    [0, 0, 8, 10],
+    [0, -1, -1, -4],
+  ],
+  _T = {
+    hunter: [
+      [8, 0, 0, -5, 0, 0],
+      [-10, 10, 0, 0, 0, 0],
+      [-6, 0, 6, 8, 0, 0],
+      [0, 0, 0, 0, 0, 8],
+    ],
+    slip: [
+      [4, 0, 0, -8, 0, 0],
+      [-15, 0, 4, 2, 0, 0],
+      [-8, 0, 0, 8, 0, 0],
+      [-10, 0, 0, -4, 0, 0],
+    ],
+    people: [
+      [10, -1, -1, -5, 0, 0],
+      [0, 0, 0, 0, 0, 0],
+      [6, 0, 4, 4, 0, 0],
+      [-25, 12, 0, 0, 0, 0],
+    ],
+    kin: [
+      [8, 0, -2, -6, 0, 0],
+      [-4, 0, 0, 6, 0, 0],
+      [-6, 0, 8, 4, 0, 0],
+      [0, 0, -2, -25, 1, 0],
+    ],
+    city: [
+      [6, 0, 0, -2, 0, 0],
+      [-6, 4, 0, 0, 0, 0],
+      [3, 0, 3, 0, 0, 0],
+      [-12, 0, 0, 0, 0, 0],
+    ],
+    hunger: [
+      [0, -2, 0, 4, 0, 0],
+      [0, 0, -2, -6, 0, 0],
+      [-8, 4, 4, 0, 0, 0],
+      [-10, 0, 0, -6, 0, 0],
+    ],
+    water: [
+      [6, 0, 0, -2, 0, 0],
+      [0, -2, 0, 8, 0, 0],
+      [0, 0, 3, -6, 0, 0],
+      [-10, 0, 0, -4, 0, 0],
+    ],
+  },
+  AT = [
+    "b1",
+    "b2",
+    "b3",
+    "b4",
+    "b5",
+    "b6",
+    "b7",
+    "b8",
+    "b9",
+    "b9h",
+    "b10",
+    "b11",
+    "b12",
+    "b12h",
+    "b13",
+    "b14",
+    "b15",
+  ],
+  jT = {
+    b1: "hunter",
+    b2: "slip",
+    b3: "people",
+    b4: "kin",
+    b5: "hunger",
+    b6: "city",
+    b7: "hunter",
+    b8: "slip",
+    b9: "kin",
+    b9h: "water",
+    b10: "people",
+    b11: "hunger",
+    b12: "city",
+    b12h: "city",
+    b13: "kin",
+    b14: "hunter",
+    b15: "people",
+  },
+  ST = () => (re && ee(re, "lm_lines")) || null;
+function wo(e) {
+  let t = ST();
+  for (const o of e.split(".")) {
+    if (t == null) return null;
+    t = t[o];
+  }
+  return t;
+}
+const oe = (e) => {
+    const t = wo(e);
+    return (t && t.text) || "";
+  },
+  Xa = (e) => Math.round((e.Se || 0) + (e.Sk || 0)),
+  YT = (e) => fe.thr0 + fe.thrStep * e,
+  ch = (e) => (e < 70 ? "a1" : e < 120 ? "a2" : e < 160 ? "a3" : "a4");
+function Qa(e) {
+  const t = e.lm;
+  return t && t.land
+    ? t.land
+    : d(`${e.name}의 랜드`, `${e.name}'s Land`, `${e.name}のランド`);
+}
+const _l = () =>
+    oe("name.nameless") ||
+    d("이름 모를 권속", "a nameless Kindred", "名も知らぬ眷属"),
+  Yy = (e, t) => e.lm.slot[t] || _l();
+function RT(e) {
+  const t = e.lm.slot;
+  return t.A || t.B || t.A1 || t.A2 || t.B1 || t.B2 || _l();
+}
+function CT(e) {
+  const t = Ds.map((a) => e.lm.slot[a])
+    .filter(Boolean)
+    .slice(0, 3);
+  if (!t.length)
+    return (
+      oe("name.newKin") ||
+      d("새로 들인 권속들", "the newly taken Kindred", "新しく迎えた眷属たち")
+    );
+  const o = Se();
+  return o === "en"
+    ? t.length === 1
+      ? t[0]
+      : `${t.slice(0, -1).join(", ")} and ${t[t.length - 1]}`
+    : o === "ja"
+      ? t.join("と")
+      : t
+          .map((a, n) => (n < t.length - 1 ? `${a}${$n(a, "과", "와")}` : a))
+          .join(" ");
+}
+function le(e, t, o = {}) {
+  const a = t.lm,
+    n = Se() === "ko",
+    r = (s) => {
+      if (s in o) return String(o[s]);
+      if (s === "랜드") return Qa(t);
+      if (s === "이끄는권속") return RT(t);
+      if (s === "살아있는권속들") return CT(t);
+      if (s === "권속힘") return String(Math.round(a.Sk));
+      if (s === "장로힘") return String(Math.round(a.Se));
+      if (s === "이름") return t.name;
+      const l = /^권속(A1|A2|B1|B2|A|B)$/.exec(s);
+      return l ? Yy(t, l[1]) : null;
+    };
+  let i = String(e || "").replace(
+    /\{([^{}:|]+)(?::([^|}]*)\|([^}]*))?\}/g,
+    (s, l, c, u) => {
+      const f = r(l);
+      return f == null ? s : c !== void 0 && n ? f + $n(f, c, u) : f;
+    },
+  );
+  return (
+    Se() === "en" &&
+      (i = i.replace(
+        /(^|[.!?]["”]?\s+|\n)([a-z])/g,
+        (s, l, c) => l + c.toUpperCase(),
+      )),
+    i
+  );
+}
+function NT(e, t, o) {
+  const a = e.lm,
+    n = (o || []).map((l) => (l && l.text) || "").filter(Boolean);
+  if (!n.length) return "";
+  a.used ?? (a.used = {});
+  let r = a.used[t] || [],
+    i = n.filter((l) => !r.includes(l));
+  i.length || ((r = []), (i = n));
+  const s = ae(e).pick(i);
+  return (r.push(s), (a.used[t] = r), s);
+}
+const Rd = (e, t) => `${Qn(e)} · ${oe(t)}`;
+function Ry(e, t) {
+  const o = {},
+    a = Math.round(e.F - t.F),
+    n = Xa(e) - t.S,
+    r = Math.round(e.L - t.L);
+  return (a && (o.lmF = a), n && (o.lmS = n), r && (o.lmL = r), o);
+}
+const Cy = (e) => ({ F: e.F, S: Xa(e), L: e.L });
+function Kf(e, t) {
+  const o = e.lm;
+  ((o.F = $(o.F + (t[0] || 0))),
+    (o.Se = Math.max(0, o.Se + (t[1] || 0))),
+    (o.Sk = Math.max(0, o.Sk + (t[2] || 0))),
+    (o.L = $(o.L + (t[3] || 0))),
+    (o.R = Math.min(3, o.R + (t[4] || 0))),
+    (o.scout += t[5] || 0));
+}
+function zf(e, t) {
+  const o = ae(e);
+  for (let n = 0; n < 40; n++) {
+    const r = o.pick(Ln[o.chance(0.5) ? "f" : "m"]);
+    if (!t.includes(r)) return (t.push(r), r);
+  }
+  const a = o.pick(Ln.f);
+  return (t.push(a), a);
+}
+function IT(e, t, o, a) {
+  return (
+    (e.age = fe.startAge),
+    (e.family = "none"),
+    e.flags.push("장로", "혈귀"),
+    (e.job = "장로"),
+    (e.lm = {
+      phase: "name",
+      land: null,
+      slot: { A: null, B: null, A1: null, A2: null, B1: null, B2: null },
+      six: [],
+      F: fe.F0,
+      Se: fe.Se0,
+      Sk: fe.Sk0,
+      L: fe.L0,
+      R: 0,
+      scout: 0,
+      ate: !1,
+      eats: 0,
+      opens: 0,
+      lostN: 0,
+      lost: [],
+      lastDead: null,
+      b15: null,
+      guest: !1,
+      frenzyAt: null,
+      aloneN: 0,
+      revolt: null,
+      end: null,
+    }),
+    (e.stats = {
+      health: 100,
+      sanity: 80,
+      wealth: 70,
+      network: $(30 + a.int(-4, 4)),
+      rep: $(30 + a.int(-4, 4)),
+    }),
+    Z(e, { k: "job", job: "장로" }),
+    P(
+      e,
+      {
+        kind: "birth",
+        text: oe("intro"),
+        tone: "system",
+        scene: "lm_start",
+        hold: 9e3,
+      },
+      0,
+    ),
+    P(e, { kind: "year", text: Qn(e) }, 0),
+    Zn(e, t),
+    e
+  );
+}
+function WT(e) {
+  const t = e.lm,
+    o = e.age,
+    a = (r) => e.plan.push(r);
+  if (t.phase === "name") return a({ lm: "name", step: 0, t: 0.3 });
+  if (t.phase === "frenzy") return a({ lm: "frenzy", t: 0.2 });
+  if (t.phase === "alone")
+    return a({
+      lm: (o - fe.startAge) % 10 === 0 ? "aloneEnd" : "alone",
+      t: 0.35,
+    });
+  if (o === fe.awayAge) return a({ lm: "away", t: 0.35 });
+  if (o === fe.outAge) return a({ lm: "out", t: 0.35 });
+  const n = (o - fe.startAge) % 10;
+  n === 3
+    ? ((o === fe.awayNote || o === fe.outNote) && a({ lm: "note", t: 0.15 }),
+      a({ lm: "A", t: 0.4 }))
+    : n === 7
+      ? (a({ lm: "closed", t: 0.15 }), a({ lm: "B", t: 0.45 }))
+      : n === 0 && a({ lm: "open", t: 0.2 });
+}
+function MT(e) {
+  const t = e.lm;
+  if (t.phase === "frenzy" && t.frenzyAt) return t.frenzyAt;
+  let o = e.age + 1;
+  if (t.phase === "alone") return o + (o % 2);
+  for (; ; o++) {
+    const a = (o - fe.startAge) % 10;
+    if (a === 3 || a === 7 || a === 0 || o === fe.awayAge || o === fe.outAge)
+      return o;
+  }
+}
+function OT(e, t) {
+  const o = e.lm,
+    a = e.stats;
+  ((a.sanity = Ce($(a.sanity + ((o.F + o.L) / 2 - a.sanity) * 0.1))),
+    (e.age - fe.startAge) % 10 !== 0 && (a.health = Ce($(a.health + 10))),
+    (e.age = MT(e)),
+    P(e, { kind: "year", text: Qn(e) }, 0),
+    Zn(e, t));
+}
+function FT(e, t, o) {
+  const a = ["land", "kin2", "kin3"][t],
+    n = `name.${a}`;
+  let r;
+  t === 0
+    ? (r = [{ label: oe(`${n}.field`), ph: Qa(e) }])
+    : t === 1
+      ? (r = [{ label: oe(`${n}.fa`) }, { label: oe(`${n}.fb`) }])
+      : (r = ["A", "A", "B", "B"].map((s) => ({
+          label: le(oe(`${n}.field`), e, { 윗권속: Yy(e, s) }),
+        })));
+  const i = le(oe(`${n}.q`), e);
+  e.prompt = {
+    kind: "name",
+    field: `lm_${a}`,
+    lm: "name",
+    step: t,
+    age: e.age,
+    tag: oe(`${n}.tag`),
+    question: i,
+    text: i,
+    fields: r,
+    random: t > 0,
+    trust: t === 2,
+    choices: [],
+    t: o,
+  };
+}
+function BT(e, t, o) {
+  const a = e.lm,
+    n = o && o.text,
+    r = n && Array.isArray(n.texts) ? n.texts : typeof n == "string" ? [n] : [],
+    i = (u) =>
+      String(u || "")
+        .trim()
+        .slice(0, 12),
+    s = [e.name, ...Ds.map((u) => a.slot[u]).filter(Boolean)],
+    l = t.t || 0.3;
+  let c;
+  if (t.step === 0)
+    ((a.land = i(r[0]) || null), (c = le(oe("name.land.done"), e)));
+  else if (t.step === 1) {
+    for (const [u, f] of [
+      [0, "A"],
+      [1, "B"],
+    ]) {
+      const g = i(r[u]);
+      a.slot[f] = g && !s.includes(g) ? (s.push(g), g) : zf(e, s);
+    }
+    c = le(oe("name.kin2.done"), e);
+  } else {
+    const u = !!(n && n.trust);
+    (["A1", "A2", "B1", "B2"].forEach((f, g) => {
+      const p = u ? "" : i(r[g]);
+      a.slot[f] = p && !s.includes(p) ? (s.push(p), p) : zf(e, s);
+    }),
+      (c = le(oe(u ? "name.kin3.trust" : "name.kin3.done"), e)));
+  }
+  if ((P(e, { kind: "result", text: c, tone: "rare" }, l), t.step < 2)) {
+    e.plan.splice(e.cursor, 0, {
+      lm: "name",
+      step: t.step + 1,
+      t: Math.min(0.9, l + 0.05),
+    });
+    return;
+  }
+  ((a.six = Ds.map((u) => a.slot[u])),
+    (a.phase = "run"),
+    P(
+      e,
+      { kind: "flavor", text: le(oe("name.common"), e), tone: "system" },
+      l,
+    ));
+}
+function ET(e) {
+  const o = e.lm.slot,
+    a = ae(e),
+    n = ["A1", "A2", "B1", "B2"].filter((s) => o[s]),
+    r = ["A", "B"].filter((s) => o[s]),
+    i = n.length ? a.pick(n) : r.length ? a.pick(r) : null;
+  return i ? { name: o[i], succ: Ny(e, i) } : { name: null, succ: null };
+}
+function Ny(e, t, o = {}) {
+  const a = e.lm,
+    n = a.slot,
+    r = n[t];
+  if (!r) return null;
+  if (
+    (o.left ||
+      ((a.lostN = (a.lostN || 0) + 1), a.lost.push(r), (a.lastDead = r)),
+    t.length === 2)
+  )
+    return ((n[t] = null), le(oe("succ.take"), e, { 죽은권속: r }));
+  const i = [`${t}1`, `${t}2`].filter((s) => n[s]);
+  if (i.length) {
+    const s = i[0];
+    return (
+      (n[t] = n[s]),
+      (n[s] = null),
+      le(oe("succ.rise"), e, { 죽은권속: r, 오른권속: n[t] })
+    );
+  }
+  return ((n[t] = null), le(oe("succ.riseX"), e, { 죽은권속: r }));
+}
+function oa(e, t, o, a, n, r = {}) {
+  const i = le(a, e);
+  Ze(e, o, t, "event", { text: i, alive: !!r.alive });
+  const s = e.log[e.log.length - 1];
+  (n && s && Object.assign(s, { scene: n, land: Qa(e) }, r.extra || {}),
+    e.dead && (e.dead.hold = Math.max(me(i), r.hold || 0)));
+}
+function LT(e, t, o) {
+  const a = e.lm;
+  if (!a || e.dead) return !0;
+  const n = o.t,
+    r = o.lm;
+  if (r === "name") return (FT(e, o.step || 0, n), !0);
+  if (r === "note") {
+    const i = e.age === fe.awayNote;
+    return (
+      P(
+        e,
+        {
+          kind: "event",
+          text: le(oe(i ? "gate.awayNote" : "gate.outNote"), e),
+          tone: "rare",
+        },
+        n,
+      ),
+      (a.gate = i ? "away" : "out"),
+      !0
+    );
+  }
+  if (r === "closed") {
+    const i = NT(e, `closed.${ch(e.age)}`, wo(`closed.${ch(e.age)}`));
+    return (
+      i && P(e, { kind: "flavor", text: le(i, e), tone: "system" }, n),
+      !0
+    );
+  }
+  if (r === "A" || r === "B") {
+    const i =
+        r === "A"
+          ? ch(e.age)
+          : AT[Math.max(0, Math.min(16, Math.round((e.age - 37) / 10)))],
+      s = wo(`${r}.${i}`);
+    if (!s) return !0;
+    const l = le(s.text.text, e);
+    return (
+      P(e, { kind: "event", text: l, tone: "event" }, n),
+      (e.prompt = {
+        kind: "major",
+        lm: r,
+        key: i,
+        eventId: `lm_${i}`,
+        tag: r === "A" ? Rd(e, "tag.A") : `${Qn(e)} · ${oe(`B.${i}.tag`)}`,
+        text: l,
+        choices: s.c.map((c, u) => ({ label: le(c.l.text, e), i: u })),
+        ignoreLabel: null,
+        remainingMs: null,
+        t: n,
+      }),
+      !0
+    );
+  }
+  if (r === "open") return $T(e, n);
+  if (r === "away")
+    return (
+      P(e, { kind: "event", text: le(oe("gate.away"), e), tone: "event" }, n),
+      (a.gate = null),
+      a.Sk >= fe.awayNeed
+        ? P(
+            e,
+            { kind: "result", text: le(oe("gate.awayOk"), e), tone: "good" },
+            n,
+          )
+        : ((a.end = "away"),
+          oa(e, n, "토벌", oe("gate.awayFail"), "lm_fall", { hold: 11e3 })),
+      !0
+    );
+  if (r === "out")
+    return (
+      P(e, { kind: "event", text: le(oe("gate.out"), e), tone: "event" }, n),
+      (a.gate = null),
+      a.Sk <= fe.outK * a.Se
+        ? P(
+            e,
+            { kind: "result", text: le(oe("gate.outOk"), e), tone: "good" },
+            n,
+          )
+        : ((a.end = "out"),
+          oa(e, n, "습격", oe("gate.outFail"), "lm_fall", {
+            hold: 11e3,
+            extra: { road: !0 },
+          })),
+      !0
+    );
+  if (r === "relic") {
+    const i = le(oe("relic.text"), e);
+    return (
+      P(e, { kind: "event", text: i, tone: "event" }, n),
+      (e.prompt = {
+        kind: "major",
+        lm: "relic",
+        eventId: "lm_relic",
+        tag: Rd(e, "tag.relic"),
+        text: i,
+        choices: wo("relic.c").map((s, l) => ({
+          label: le(s.l.text, e),
+          i: l,
+        })),
+        ignoreLabel: null,
+        remainingMs: null,
+        t: n,
+        lmDelay: 2200,
+      }),
+      !0
+    );
+  }
+  if (r === "alone") {
+    const i = wo("revolt.alone") || [],
+      s = i[(a.aloneN || 0) % Math.max(1, i.length)];
+    return (
+      (a.aloneN = (a.aloneN || 0) + 1),
+      s && P(e, { kind: "flavor", text: le(s.text, e), tone: "system" }, n),
+      !0
+    );
+  }
+  if (r === "aloneEnd")
+    return (
+      (a.end = "alone"),
+      oa(e, n, "특색의 토벌", oe("revolt.end"), "lm_fall", { hold: 12e3 }),
+      !0
+    );
+  if (r === "frenzy") {
+    const i = le(oe("frenzy.start"), e, { 죽은권속: a.lastDead || _l() });
+    return (
+      P(
+        e,
+        {
+          kind: "event",
+          text: i,
+          tone: "death",
+          scene: "lm_frenzy",
+          h: e.stats.health,
+          s: e.stats.sanity,
+          power: Xa(a),
+          breaks: (wo("frenzy.breaks") || []).map((s) => le(s.text, e)),
+          delay: Math.min(9e3, me(i) * 0.55),
+        },
+        n,
+      ),
+      (a.end = "plague"),
+      (e.stats.health = 100),
+      (e.stats.sanity = 0),
+      oa(e, n, "재앙", oe("frenzy.end"), null, {
+        alive: !0,
+        hold: Math.min(9e3, me(i) * 0.55) + 17500,
+      }),
+      !0
+    );
+  }
+  return !0;
+}
+function $T(e, t) {
+  const o = e.lm,
+    a = o.opens,
+    n = YT(a),
+    r = Xa(o),
+    i = n + Math.max(0, Math.floor((40 - o.F) / 4)) + (o.scout || 0);
+  ((o.scout = 0), (o.lastOpen = { T: n, W: i, S: r }));
+  const l = o.F >= 60 && r >= 1.3 * i ? "feast" : o.F >= 40 ? "mixed" : "hunt",
+    c = le(oe("open.head"), e, { 문턱: n, 몰려온힘: i, 랜드힘: r });
+  P(
+    e,
+    {
+      kind: "event",
+      text: c,
+      tone: "event",
+      scene: "lm_open",
+      cold: o.F >= 60 ? 0 : o.F >= 40 ? 0.35 : 0.85,
+    },
+    t,
+  );
+  const u = (wo(`open.${l}`) || []).map((T) => le(T.text, e));
+  if (
+    ((a === 8 || a === 12 || a === 16) &&
+      u.push(le(oe(`open.named${a + 1}`), e)),
+    P(e, { kind: "flavor", text: u.join(" "), tone: "system" }, t),
+    (e.stats.health = Ce($(e.stats.health - $(i - r + 12, 0, 40)))),
+    r < n || r < i - 2)
+  )
+    return (
+      (o.end = "fall"),
+      (o.fellAt = a + 1),
+      oa(e, t, "토벌", oe("open.fall"), "lm_fall", { hold: 12e3 }),
+      !0
+    );
+  const f = Math.abs(r - i) <= fe.lossPct * r,
+    g = !f && o.ate && o.F < 40;
+  let p = null;
+  if (f || g) {
+    const T = ET(e);
+    o.R = Math.min(3, o.R + 1);
+    const v = `open.${g ? "ate" : "near"}${T.name ? "" : "X"}`;
+    ((p = T.name || _l()),
+      T.name || (o.lastDead = null),
+      P(
+        e,
+        {
+          kind: "result",
+          text: le(oe(v), e, { 죽은권속: p }),
+          tone: "bad",
+          scene: "lm_loss",
+          kin: p,
+          rage: o.R,
+        },
+        t,
+      ),
+      T.succ && P(e, { kind: "flavor", text: T.succ, tone: "system" }, t));
+  } else o.R = Math.max(0, o.R - 1);
+  ((o.ate = !1), (o.L = Math.min(100, o.L + 2)), (o.opens = a + 1));
+  const b = le(oe("open.prompt"), e);
+  return (
+    (e.prompt = {
+      kind: "major",
+      lm: "eat",
+      eventId: "lm_open",
+      hunt: l === "hunt",
+      tag: `${Rd(e, "tag.open")} · ${a + 1}/${fe.opens}`,
+      text: b,
+      choices: [
+        { label: oe("open.eat"), i: 0 },
+        { label: oe("open.noeat"), i: 1 },
+      ],
+      ignoreLabel: null,
+      remainingMs: null,
+      t,
+      lmDelay: p ? 7600 : 2800,
+    }),
+    !0
+  );
+}
+function PT(e, t, o, a) {
+  const n = e.lm,
+    r = t.t || 0.5,
+    i = Cy(n);
+  let s;
+  if (o === 0)
+    ((n.Se += 8),
+      (n.Sk += 7),
+      (n.F = $(n.F - 18)),
+      (n.ate = !0),
+      (n.eats = (n.eats || 0) + 1),
+      (s = oe(t.hunt ? "open.eatHunt" : "open.eatGood")));
+  else {
+    const c = n.F >= 40;
+    ((n.F = $(n.F + (c ? 4 : 1))),
+      (s =
+        oe(t.hunt ? "open.noeatHunt" : "open.noeatGood") +
+        (c && ae(e).chance(0.35) ? ` ${oe("open.flowers")}` : "")));
+  }
+  n.F = $(n.F - fe.forget);
+  const l = Ry(n, i);
+  if (
+    (P(
+      e,
+      {
+        kind: "result",
+        text: le(s, e),
+        tone: o === 0 ? "bad" : "normal",
+        choice: a,
+        delta: l,
+      },
+      r,
+    ),
+    n.L < fe.revoltL)
+  ) {
+    e.plan.splice(e.cursor, 0, { lm: "relic", t: Math.min(0.95, r + 0.04) });
+    return;
+  }
+  if (n.R >= 3) {
+    if (n.Se >= fe.frenzySe) {
+      (P(e, { kind: "flavor", text: oe("open.rageEye"), tone: "death" }, r),
+        (n.phase = "frenzy"),
+        (n.frenzyAt = e.age + 1));
+      return;
+    }
+    P(e, { kind: "flavor", text: oe("open.rageSlow"), tone: "bad" }, r);
+  }
+  n.opens >= fe.opens && HT(e, r);
+}
+function HT(e, t) {
+  const o = e.lm;
+  if (o.F >= fe.finalF) {
+    o.end = "people";
+    const a = le(oe("end.happy"), e);
+    P(
+      e,
+      { kind: "result", text: a, tone: "rare", scene: "lm_happy", land: Qa(e) },
+      t,
+    );
+    const n = wo("end.tail") || [],
+      r = (n[o.b15 == null ? 0 : o.b15] || n[0] || {}).text || "";
+    oa(e, t, "사람과 함께", r, null, {
+      alive: !0,
+      hold: Math.max(16500, me(a) + 4e3),
+    });
+    return;
+  }
+  ((o.end = "final"),
+    oa(e, t, "토벌", oe("end.final"), "lm_fall", { hold: 12e3 }));
+}
+function DT(e, t, o, a) {
+  const n = e.lm,
+    r = t.t || 0.5,
+    i = wo("relic.c") || [];
+  P(
+    e,
+    {
+      kind: "result",
+      text: le((i[o] || i[0]).r.text, e),
+      tone: "bad",
+      choice: a,
+    },
+    r,
+  );
+  const s = n.Se >= n.Sk * (fe.revoltK - n.L / 100);
+  n.revolt = s ? "win" : "lose";
+  const l = le(oe("revolt.night"), e);
+  if (
+    (P(
+      e,
+      {
+        kind: "event",
+        text: l,
+        tone: "death",
+        scene: "lm_revolt",
+        win: s,
+        h: e.stats.health,
+        s: e.stats.sanity,
+      },
+      r,
+    ),
+    !s)
+  ) {
+    ((n.end = "key"),
+      (e.stats.health = 1),
+      (e.stats.sanity = 1),
+      oa(e, r, "열쇠가 된 장로", oe("revolt.lose"), null, {
+        alive: !0,
+        hold: 15500 + me(oe("revolt.lose")) * 0.5,
+      }));
+    return;
+  }
+  const c = le(oe("revolt.win"), e);
+  for (const u of Ds)
+    (n.slot[u] && ((n.lostN += 1), n.lost.push(n.slot[u])), (n.slot[u] = null));
+  ((n.R = 2),
+    (n.phase = "alone"),
+    (n.aloneN = 0),
+    P(e, { kind: "result", text: c, tone: "death", hold: 15500 + me(c) }, r));
+}
+function qT(e, t, o, a, n) {
+  const r = e.lm;
+  if (!r) return;
+  if (o.lm === "name") return BT(e, o, n);
+  let i = a;
+  (i == null || i < 0 || !o.choices[i]) && (i = 0);
+  const s = o.choices[i],
+    l = s.i,
+    c = s.label,
+    u = { auto: !!n.auto };
+  if (o.lm === "eat") return PT(e, o, l, c);
+  if (o.lm === "relic") return DT(e, o, l, c);
+  const f = o.t || 0.5,
+    g = Cy(r),
+    p = wo(`${o.lm}.${o.key}`);
+  if (!p) return;
+  const b = (p.c[l] || p.c[0]).r.text;
+  let T = le(b, e),
+    v = null;
+  o.lm === "A"
+    ? Kf(e, vT[l])
+    : (Kf(e, _T[jT[o.key]][l]),
+      o.key === "b4" &&
+        (l === 0 || l === 3) &&
+        (v = Ny(e, "A1", { left: l === 0 })),
+      o.key === "b14" && l === 0 && (r.guest = !0),
+      o.key === "b15" && (r.b15 = l));
+  const w = Ry(r, g);
+  (P(
+    e,
+    {
+      kind: "result",
+      text: T,
+      tone: yy({ a: (w.lmF || 0) + (w.lmS || 0) + (w.lmL || 0) }),
+      choice: c,
+      delta: w,
+      ...(u.auto ? { auto: !0 } : {}),
+    },
+    f,
+  ),
+    v && P(e, { kind: "flavor", text: v, tone: "system" }, f));
+}
+function GT(e, t) {
+  return ae(e).int(0, Math.max(0, t.choices.length - 1));
+}
+const Qe = {
     minPower: 3,
     vessel: [
       [0.2, 9],
@@ -9684,7 +10798,7 @@ const Ge = {
     ],
     boldP: 0.55,
     carefulP: 0.8,
-    block: (e) => B((e - 2) / 8, 0.05, 0.95),
+    block: (e) => $((e - 2) / 8, 0.05, 0.95),
     oldFrom: 73,
     oldStep: 0.12,
     eventP: 0.85,
@@ -9696,15 +10810,15 @@ const Ge = {
     retireAgain: 5,
     trustStart: 5,
   },
-  vs = (e) => e.job === "호위무사" || e.job === "은퇴한 호위무사",
-  L1 = (e) => e.job === "호위무사" && !!e.hgd && !e.dead,
-  ad = (e) => !!e.hgd && e.hgd.stage === "support" && !e.dead;
-function Ia(e) {
+  qs = (e) => e.job === "호위무사" || e.job === "은퇴한 호위무사",
+  KT = (e) => e.job === "호위무사" && !!e.hgd && !e.dead,
+  Cd = (e) => !!e.hgd && e.hgd.stage === "support" && !e.dead;
+function Ua(e) {
   return e.job === "해결사" && e.grade
     ? "fixer"
     : e.job === "손가락" && e.finger
       ? "finger"
-      : ce(e) && e.work !== "적출직" && e.work !== "흑수"
+      : Te(e) && e.work !== "적출직" && e.work !== "흑수"
         ? "wing"
         : e.job === "검계" && e.bl
           ? "bl"
@@ -9712,7 +10826,7 @@ function Ia(e) {
             ? "kk"
             : null;
 }
-function $1(e, t) {
+function zT(e, t) {
   return e.age !== 25 ||
     e.hgd ||
     e.dead ||
@@ -9721,11 +10835,11 @@ function $1(e, t) {
     e.heir ||
     e.flags.includes("가주후보") ||
     e.flags.includes("부화장") ||
-    !Ia(e)
+    !Ua(e)
     ? !1
-    : (uo(e) || 0) >= Ge.minPower;
+    : (_o(e) || 0) >= Qe.minPower;
 }
-function P1(e) {
+function UT(e) {
   return JSON.parse(
     JSON.stringify({
       grade: e.grade,
@@ -9740,7 +10854,7 @@ function P1(e) {
     }),
   );
 }
-function H1(e, t) {
+function JT(e, t) {
   for (const o of [
     "grade",
     "merit",
@@ -9753,17 +10867,17 @@ function H1(e, t) {
     e[o] = t[o];
   (t.bl && e.bl && (e.bl = t.bl), t.kk && e.kk && (e.kk = t.kk));
 }
-function D1(e) {
-  const t = Ia(e);
+function VT(e) {
+  const t = Ua(e);
   if (t === "fixer") {
     if (e.flags.includes("특색")) return !1;
-    const a = ht(e);
+    const a = mt(e);
     return (e.merit || 0) >= a
       ? e.grade <= 1
         ? !1
         : ((e.grade -= 1),
           (e.merit = 0),
-          Q(e, { k: "grade", grade: e.grade }),
+          Z(e, { k: "grade", grade: e.grade }),
           !0)
       : ((e.merit = Math.min(
           a,
@@ -9778,33 +10892,33 @@ function D1(e) {
       ? ((a.rank = 2),
         (a.best = Math.max(a.best || 1, 2)),
         (a.rankAt = e.age),
-        Q(e, { k: "blrank", rank: 2 }),
+        Z(e, { k: "blrank", rank: 2 }),
         !0)
       : n >= 2 && (a.cut || 0) >= 35
         ? !1
         : ((a.cut = (a.cut || 0) + 2), !0);
   }
-  const o = at(e);
+  const o = dt(e);
   if (!o) return !1;
-  if ((ro(e) || 0) < o) return (qo(e, Math.max(1, o / 6)), !0);
+  if ((mo(e) || 0) < o) return (ta(e, Math.max(1, o / 6)), !0);
   if (t === "finger") {
-    const a = ct[e.finger].length;
+    const a = bt[e.finger].length;
     return (e.fingerRank || 1) >= a - 1
       ? !1
       : ((e.fingerRank = (e.fingerRank || 1) + 1),
         (e.rmerit = 0),
-        Q(e, { k: "frank", rankName: lt(e.finger, e.fingerRank, e.gender) }),
+        Z(e, { k: "frank", rankName: gt(e.finger, e.fingerRank, e.gender) }),
         !0);
   }
   if (t === "wing") {
-    const a = e.work === "흑수" ? 1 : e.work === "4무리" ? 2 : gn[e.work];
+    const a = e.work === "흑수" ? 1 : e.work === "4무리" ? 2 : Rn[e.work];
     return (e.wingRank || 1) >= a
       ? !1
       : ((e.wingRank = (e.wingRank || 1) + 1),
         (e.wingBest = Math.max(e.wingBest || 0, e.wingRank)),
         e.nh && (e.nh.best = Math.max(e.nh.best || 1, e.wingRank)),
         (e.rmerit = 0),
-        Q(e, { k: "wrank", name: sn(e.work, e.wingRank, e.branch) }),
+        Z(e, { k: "wrank", name: xn(e.work, e.wingRank, e.branch) }),
         !0);
   }
   if (t === "kk") {
@@ -9816,46 +10930,46 @@ function D1(e) {
         (a.rankAt = e.age),
         (a.seat = a.seat || 1 + Math.floor(ae(e).next() * 40)),
         (e.rmerit = 0),
-        Q(e, { k: "kkrank", rank: 2, seat: a.seat }),
+        Z(e, { k: "kkrank", rank: 2, seat: a.seat }),
         !0);
   }
   return !1;
 }
-function zm(e, t) {
-  for (let o = 0; o < 120; o++) if ((uo(e) || 0) >= t - 1e-6 || !D1(e)) return;
+function Iy(e, t) {
+  for (let o = 0; o < 120; o++) if ((_o(e) || 0) >= t - 1e-6 || !VT(e)) return;
 }
-function q1(e) {
+function XT(e) {
   const t = ae(e),
-    o = uo(e) || 0,
+    o = _o(e) || 0,
     a = t.next();
-  let n = Ge.vessel.find(([r]) => a < r)[1];
+  let n = Qe.vessel.find(([r]) => a < r)[1];
   (n <= o && (n = Math.min(13, Math.floor(o) + 1)),
     (e.hgd = {
       stage: "support",
       since: e.age,
-      kind: Ia(e),
+      kind: Ua(e),
       p0: o,
       vessel: n,
       gap: Math.max(0.5, n - o),
       raised: 0,
       full: !1,
-      snap: P1(e),
+      snap: UT(e),
       blocks: 0,
       trialPower: null,
     }),
     e.flags.includes("호위발탁") || e.flags.push("호위발탁"),
-    Q(e, { k: "hgd", ev: "chosen" }));
+    Z(e, { k: "hgd", ev: "chosen" }));
 }
-function G1(e, t, o, a) {
+function QT(e, t, o, a) {
   const n = e.hgd;
   if (
-    !(!n || n.stage !== "support" || Ia(e) !== n.kind) &&
+    !(!n || n.stage !== "support" || Ua(e) !== n.kind) &&
     ((n.raised = Math.min(1, (n.raised || 0) + t)),
-    zm(e, Math.min(n.vessel, n.p0 + n.gap * n.raised)),
-    !n.full && ((uo(e) || 0) >= n.vessel - 1e-6 || n.raised >= 1))
+    Iy(e, Math.min(n.vessel, n.p0 + n.gap * n.raised)),
+    !n.full && ((_o(e) || 0) >= n.vessel - 1e-6 || n.raised >= 1))
   ) {
     n.full = !0;
-    const r = Z(o, "hgd_lines");
+    const r = ee(o, "hgd_lines");
     r &&
       r.full &&
       a.push(
@@ -9865,58 +10979,58 @@ ${r.full.text}`,
       );
   }
 }
-function K1(e) {
+function ZT(e) {
   const t = e.hgd;
   if (!t) return;
-  const o = uo(e) || 0;
-  if (Ia(e) === t.kind && t.snap) {
+  const o = _o(e) || 0;
+  if (Ua(e) === t.kind && t.snap) {
     const a = t.p0 + Math.max(0, o - t.p0) / 2;
-    (H1(e, t.snap), zm(e, a));
+    (JT(e, t.snap), Iy(e, a));
   }
   ((e.merit = 0),
     e.rmerit != null && (e.rmerit = 0),
     (t.stage = "fail"),
     (t.endAge = e.age),
-    Q(e, { k: "hgd", ev: "fail" }));
+    Z(e, { k: "hgd", ev: "fail" }));
 }
-function z1(e, t = 0) {
+function ev(e, t = 0) {
   const o = e.hgd,
-    a = o && o.trialPower != null ? o.trialPower : uo(e) || 0;
-  return B(Ge.block(a) + t, 0.05, 0.95);
+    a = o && o.trialPower != null ? o.trialPower : _o(e) || 0;
+  return $(Qe.block(a) + t, 0.05, 0.95);
 }
-function U1(e) {
+function tv(e) {
   const t = e.hgd;
   ((t.stage = "guard"),
     (t.guardSince = e.age),
-    (t.trust = Ge.trustStart),
+    (t.trust = Qe.trustStart),
     (t.origJob = "해결사"),
-    Q(e, { k: "hgd", ev: "pass" }),
-    Q(e, { k: "hgd", ev: "stay" }),
+    Z(e, { k: "hgd", ev: "pass" }),
+    Z(e, { k: "hgd", ev: "stay" }),
     e.org && (e.orgHistory.push(e.org.name), (e.org = null)),
     (e.job = "호위무사"),
-    Q(e, { k: "job", job: "호위무사" }));
+    Z(e, { k: "job", job: "호위무사" }));
 }
-function J1(e) {
+function ov(e) {
   const t = e.hgd;
   return (
     (t.stage = "pass"),
     (t.endAge = e.age),
-    Q(e, { k: "hgd", ev: "pass" }),
+    Z(e, { k: "hgd", ev: "pass" }),
     ""
   );
 }
-function V1(e, t) {
+function av(e, t) {
   const o = e.hgd;
   if (!o || o.guardSince == null) return "";
-  const a = Z(t, "hgd_lines");
+  const a = ee(t, "hgd_lines");
   if (!a) return "";
-  const n = o.trust ?? Ge.trustStart;
+  const n = o.trust ?? Qe.trustStart;
   return (n >= 8 ? a.trustHigh : n >= 4 ? a.trustMid : a.trustLow).text;
 }
-function X1(e) {
+function nv(e) {
   const t = e.hgd;
   ((t.stage = "trial"),
-    (t.trialPower = uo(e) || 0),
+    (t.trialPower = _o(e) || 0),
     e.plan.push(
       { id: "hgd_bond1", chain: !0, t: 0.1 },
       { id: "hgd_bond2", chain: !0, t: 0.2 },
@@ -9926,255 +11040,259 @@ function X1(e) {
       { id: "hgd_trial1", chain: !0, t: 0.45 },
     ));
 }
-function Q1(e, t, o, a) {
+function rv(e, t, o, a) {
   const n = e.hgd;
   e.last || (e.last = {});
-  const r = (l, s) => {
-      ((e.last[l] = e.age), e.plan.push({ id: l, chain: !0, t: s }));
+  const r = (s, l) => {
+      ((e.last[s] = e.age), e.plan.push({ id: s, chain: !0, t: l }));
     },
     i = () => {
-      const l = e.recentDaily || [],
-        s = (t.daily || []).filter((u) => ea(u, e, o) && !l.includes(u.id)),
-        c = a.weighted(s, (u) => u.weight ?? 1);
+      const s = e.recentDaily || [],
+        l = (t.daily || []).filter((u) => ca(u, e, o) && !s.includes(u.id)),
+        c = a.weighted(l, (u) => u.weight ?? 1);
       c &&
-        ((e.recentDaily = [...l, c.id].slice(-14)),
+        ((e.recentDaily = [...s, c.id].slice(-14)),
         e.plan.push({ id: c.id, daily: !0, t: 0.5 }));
     };
   if (e.job === "은퇴한 호위무사") return i();
-  if (!n.lordDead && e.age >= Ge.lordFrom && a.chance(Ge.lordP))
+  if (!n.lordDead && e.age >= Qe.lordFrom && a.chance(Qe.lordP))
     return ((n.lordDead = e.age), r("hgd_lord_pass", 0.4));
   if (
-    e.age >= Ge.retireFrom &&
-    (n.retireAsk == null || e.age - n.retireAsk >= Ge.retireAgain) &&
-    a.chance(Ge.retireP)
+    e.age >= Qe.retireFrom &&
+    (n.retireAsk == null || e.age - n.retireAsk >= Qe.retireAgain) &&
+    a.chance(Qe.retireP)
   )
     return ((n.retireAsk = e.age), r("hgd_end_retire", 0.4));
-  if (a.chance(Ge.eventP)) {
-    const l = e.age - (n.guardSince ?? e.age),
-      s = t.events.filter(
+  if (a.chance(Qe.eventP)) {
+    const s = e.age - (n.guardSince ?? e.age),
+      l = t.events.filter(
         (u) =>
           u.hgdDay &&
-          !(e.last[u.id] != null && e.age - e.last[u.id] < Ge.cooldown) &&
-          !(u.hgdYears && l < u.hgdYears) &&
+          !(e.last[u.id] != null && e.age - e.last[u.id] < Qe.cooldown) &&
+          !(u.hgdYears && s < u.hgdYears) &&
           !(u.age && (e.age < u.age[0] || e.age > u.age[1])),
       ),
-      c = a.weighted(s, (u) => u.weight ?? 1);
+      c = a.weighted(l, (u) => u.weight ?? 1);
     if (c) return r(c.id, 0.45);
   }
   i();
 }
-function Z1(e, t, o, a, n) {
+function iv(e, t, o, a, n) {
   if (
-    (o.hgdAccept && !e.hgd && q1(e),
-    typeof o.hgdRaise == "number" && G1(e, o.hgdRaise, t, a),
+    (o.hgdAccept && !e.hgd && XT(e),
+    typeof o.hgdRaise == "number" && QT(e, o.hgdRaise, t, a),
     o.hgdBlockOk && e.hgd && (e.hgd.blocks = (e.hgd.blocks || 0) + 1),
     o.hgdTeach && e.hgd && (e.hgd.teach = !0),
-    o.hgdRevert && e.hgd && K1(e),
-    o.hgdStay && e.hgd && U1(e),
-    o.hgdReturn && e.hgd && J1(e),
+    o.hgdRevert && e.hgd && ZT(e),
+    o.hgdStay && e.hgd && tv(e),
+    o.hgdReturn && e.hgd && ov(e),
     typeof o.hgdTrust == "number" &&
       e.hgd &&
-      (e.hgd.trust = B((e.hgd.trust ?? Ge.trustStart) + o.hgdTrust, 0, 10)),
+      (e.hgd.trust = $((e.hgd.trust ?? Qe.trustStart) + o.hgdTrust, 0, 10)),
     o.hgdLord && e.hgd)
   ) {
     const r = e.hgd;
     ((r.lordWay = o.hgdLord),
-      Q(e, { k: "hgd", ev: "lord", way: o.hgdLord }),
+      Z(e, { k: "hgd", ev: "lord", way: o.hgdLord }),
       o.hgdLord === "grave"
         ? ((e.job = "은퇴한 호위무사"),
-          Q(e, { k: "job", job: "은퇴한 호위무사" }))
+          Z(e, { k: "job", job: "은퇴한 호위무사" }))
         : o.hgdLord === "back" &&
-          ((e.job = r.origJob || "해결사"), Q(e, { k: "job", job: e.job })));
+          ((e.job = r.origJob || "해결사"), Z(e, { k: "job", job: e.job })));
   }
   if (
     (o.hgdRetire && e.hgd && (e.hgd.retired = e.age),
-    L1(e) && e.hgd.lordWay === "stay" && n && n.startsWith("hgd_g_"))
+    KT(e) && e.hgd.lordWay === "stay" && n && n.startsWith("hgd_g_"))
   ) {
-    const r = Z(t, "hgd_lines");
+    const r = ee(t, "hgd_lines");
     r &&
       r.newLord &&
       ae(e).chance(0.3) &&
       a.push((i) => `${i} ${r.newLord.text}`);
   }
 }
-function ol(e, t) {
-  var C;
-  oe = t;
+function Zn(e, t) {
+  var N;
+  re = t;
   const o = ae(e),
-    a = ft(t, e);
-  if (((e.plan = []), (e.cursor = 0), e.flags.includes("부화장"))) {
+    a = kt(t, e);
+  if (((e.plan = []), (e.cursor = 0), Sy(e))) {
+    WT(e);
+    return;
+  }
+  if (e.flags.includes("부화장")) {
     e.plan.push({ id: "rc_hatch_open", t: 0.08 });
     return;
   }
   if (
-    (Fl[e.age] &&
-      !e.reflections.some((W) => W.age === e.age) &&
+    (rh[e.age] &&
+      !e.reflections.some((M) => M.age === e.age) &&
       (e.prompt = {
         kind: "reflect",
         age: e.age,
-        question: Fl[e.age],
-        text: Fl[e.age],
+        question: rh[e.age],
+        text: rh[e.age],
         choices: [],
         t: 0,
       }),
-    hm(e))
+    Dm(e))
   ) {
-    const W = t.events.filter((O) => O.heir && ea(O, e, a));
-    W.length && W[0].forceGroup === "hh31"
-      ? e.plan.push({ banner: "heir", t: 0.3 }, { id: W[0].id, t: 0.36 })
-      : W.length && e.plan.push({ id: W[0].id, t: 0.3 });
+    const M = t.events.filter((F) => F.heir && ca(F, e, a));
+    M.length && M[0].forceGroup === "hh31"
+      ? e.plan.push({ banner: "heir", t: 0.3 }, { id: M[0].id, t: 0.36 })
+      : M.length && e.plan.push({ id: M[0].id, t: 0.3 });
     return;
   }
-  if (va(e)) {
-    B1(e, t, a, o);
+  if (Ea(e)) {
+    TT(e, t, a, o);
     return;
   }
-  if (vs(e) && e.hgd) {
-    Q1(e, t, a, o);
+  if (qs(e) && e.hgd) {
+    rv(e, t, a, o);
     return;
   }
-  if (ad(e) && e.age >= 30) {
-    if (Ia(e) === e.hgd.kind) {
-      X1(e);
+  if (Cd(e) && e.age >= 30) {
+    if (Ua(e) === e.hgd.kind) {
+      nv(e);
       return;
     }
     e.hgd.stage = "lost";
   }
-  if (ka(e)) {
-    T0(e);
+  if (Oa(e)) {
+    s1(e);
     return;
   }
-  if (aa(e)) {
-    eT(e, t, a, o);
+  if (ga(e)) {
+    sv(e, t, a, o);
     return;
   }
-  (a1(e), p1(e));
-  const n = t.events.filter((W) => ea(W, e, a) && I1(W, a, o, e)),
-    r = n.filter((W) => W.must && e.age >= W.age[1]).slice(0, 1),
+  (H1(e), aT(e));
+  const n = t.events.filter((M) => ca(M, e, a) && yT(M, a, o, e)),
+    r = n.filter((M) => M.must && e.age >= M.age[1]).slice(0, 1),
     i = {};
-  for (const W of n)
-    W.force &&
-      !r.includes(W) &&
-      (i[(C = W.forceGroup || W.id)] ?? (i[C] = [])).push(W);
-  for (const W of Object.values(i)) r.push(o.pick(W));
-  const l = r.some((W) => W.forceGroup === "bf_feed") ? 1 : 0;
-  let s = 0,
+  for (const M of n)
+    M.force &&
+      !r.includes(M) &&
+      (i[(N = M.forceGroup || M.id)] ?? (i[N] = [])).push(M);
+  for (const M of Object.values(i)) r.push(o.pick(M));
+  const s = r.some((M) => M.forceGroup === "bf_feed") ? 1 : 0;
+  let l = 0,
     c = null;
-  if (Ft(e) && o.chance(0.9)) {
-    const W = n.filter(
-      (O) =>
-        O.office &&
-        !O.force &&
-        !r.includes(O) &&
-        !(O.major && r.some((L) => L.major)),
+  if (Ht(e) && o.chance(0.9)) {
+    const M = n.filter(
+      (F) =>
+        F.office &&
+        !F.force &&
+        !r.includes(F) &&
+        !(F.major && r.some((O) => O.major)),
     );
-    ((c = o.weighted(W, (O) => vi(O, a))), c && (r.push(c), (s = 1)));
+    ((c = o.weighted(M, (F) => Gi(F, a))), c && (r.push(c), (l = 1)));
   }
   let u = 0;
-  if (Le(e) && o.chance(Be.slotP)) {
-    const W = n.filter(
-        (L) =>
-          L.ws &&
-          !L.force &&
-          !r.includes(L) &&
-          !(L.major && r.some((G) => G.major)),
+  if (Ge(e) && o.chance(qe.slotP)) {
+    const M = n.filter(
+        (O) =>
+          O.ws &&
+          !O.force &&
+          !r.includes(O) &&
+          !(O.major && r.some((D) => D.major)),
       ),
-      O = o.weighted(W, (L) => vi(L, a));
-    O && (r.push(O), (u = 1));
+      F = o.weighted(M, (O) => Gi(O, a));
+    F && (r.push(F), (u = 1));
   }
   let f = 0;
   if (
-    An(e) &&
-    !r.some((W) => W.major) &&
-    o.chance(Math.min(1, i1 * Yo(e, 1.2, 1.1)))
+    Hn(e) &&
+    !r.some((M) => M.major) &&
+    o.chance(Math.min(1, G1 * Ho(e, 1.2, 1.1)))
   ) {
-    const W = o.weighted(
-      n.filter((O) => O.rankGate && !r.includes(O)),
-      (O) => vi(O, a),
+    const M = o.weighted(
+      n.filter((F) => F.rankGate && !r.includes(F)),
+      (F) => Gi(F, a),
     );
-    W && (r.push(W), (f = 1));
+    M && (r.push(M), (f = 1));
   }
-  let g = Math.max(O1(e.age, o) + l + s + f + u, r.length),
-    b = r.filter((W) => W.major).length,
-    k = r.filter(Ta).length;
+  let g = Math.max(pT(e.age, o) + s + l + f + u, r.length),
+    p = r.filter((M) => M.major).length,
+    b = r.filter(Ba).length;
   for (; r.length < g;) {
-    const W = n.filter(
-        (L) =>
-          !r.includes(L) &&
-          !(L.major && b >= 1) &&
-          !(Ta(L) && k >= 2) &&
-          !(L.office && Ft(e)) &&
-          !L.ws,
+    const M = n.filter(
+        (O) =>
+          !r.includes(O) &&
+          !(O.major && p >= 1) &&
+          !(Ba(O) && b >= 2) &&
+          !(O.office && Ht(e)) &&
+          !O.ws,
       ),
-      O = o.weighted(W, (L) => vi(L, a));
-    if (!O) break;
-    (r.push(O), O.major && b++, Ta(O) && k++);
+      F = o.weighted(M, (O) => Gi(O, a));
+    if (!F) break;
+    (r.push(F), F.major && p++, Ba(F) && b++);
   }
   let T = 0;
   e.job === "해결사" &&
     t.requests &&
     e.age >= 16 &&
     (T = (o.chance(0.85) ? 1 : 0) + (e.org && o.chance(0.45) ? 1 : 0));
-  const v = Yu(e) && o.chance(ey(e.age)),
-    w = e.bf ? $T(e, o, r) : [],
-    m = R0(e, o),
-    y = t0(e, o),
-    j = Le(e) && e.ws.investDue && (e.ws.rank || 1) >= 2 && !e.ws.teach;
-  j && e.plan.push({ id: "ws_invest", wsInvest: !0, t: 0.93 });
+  const v = oc(e) && o.chance(Ly(e.age)),
+    w = e.bf ? zv(e, o, r) : [],
+    y = w1(e, o),
+    m = $x(e, o),
+    A = Ge(e) && e.ws.investDue && (e.ws.rank || 1) >= 2 && !e.ws.teach;
+  A && e.plan.push({ id: "ws_invest", wsInvest: !0, t: 0.93 });
   const _ = [];
   if (
-    ($1(e, a)
+    (zT(e, a)
       ? _.push({ id: "hgd_offer", chain: !0 })
-      : ad(e) &&
+      : Cd(e) &&
         e.age >= 26 &&
         e.age <= 29 &&
-        (Ia(e) === e.hgd.kind
+        (Ua(e) === e.hgd.kind
           ? _.push({ id: `hgd_job${e.age - 24}`, chain: !0 })
           : (e.hgd.stage = "lost")),
     r.length === 0 &&
       T === 0 &&
       !v &&
       !w.length &&
-      !m.length &&
       !y.length &&
+      !m.length &&
       !_.length)
   ) {
-    const W = e.recentDaily || [],
-      O = (t.daily || []).filter((G) => ea(G, e, a) && !W.includes(G.id)),
-      L = o.weighted(O, (G) => (G.regions ? 2.2 : 1) * (G.weight ?? 1));
-    (L &&
-      ((e.recentDaily = [...W, L.id].slice(-14)),
+    const M = e.recentDaily || [],
+      F = (t.daily || []).filter((D) => ca(D, e, a) && !M.includes(D.id)),
+      O = o.weighted(F, (D) => (D.regions ? 2.2 : 1) * (D.weight ?? 1));
+    (O &&
+      ((e.recentDaily = [...M, O.id].slice(-14)),
       e.plan.push({
-        id: L.id,
+        id: O.id,
         daily: !0,
         t: Math.round((0.35 + o.next() * 0.3) * 1e3) / 1e3,
       })),
-      e.plan.sort((G, I) => G.t - I.t));
+      e.plan.sort((D, B) => D.t - B.t));
     return;
   }
-  const Y = [
-    ...r.map((W) => ({ id: W.id })),
+  const j = [
+    ...r.map((M) => ({ id: M.id })),
     ...Array.from({ length: T }, () => ({ id: "request", req: !0 })),
   ];
-  (v && Y.push({ id: Qm(e), warpEnter: !0 }),
+  (v && j.push({ id: By(e), warpEnter: !0 }),
     e.fingerLeave &&
       e.age >= e.fingerLeave.at &&
-      (Zm(e) && Y.push({ id: "f_finger_leave", fingerLeave: !0 }),
+      (Ey(e) && j.push({ id: "f_finger_leave", fingerLeave: !0 }),
       (e.fingerLeave = null)),
-    Y.push(...w, ...m, ...y, ..._));
-  const R = o.shuffle(Y);
-  (R.forEach((W, O) => {
-    const L = B(
-      (O + 0.5 + (o.next() - 0.5) * 0.5) / R.length,
+    j.push(...w, ...y, ...m, ..._));
+  const R = o.shuffle(j);
+  (R.forEach((M, F) => {
+    const O = $(
+      (F + 0.5 + (o.next() - 0.5) * 0.5) / R.length,
       0.04,
-      j ? 0.9 : 0.96,
+      A ? 0.9 : 0.96,
     );
-    e.plan.push({ ...W, t: Math.round(L * 1e3) / 1e3 });
+    e.plan.push({ ...M, t: Math.round(O * 1e3) / 1e3 });
   }),
-    j && e.plan.sort((W, O) => W.t - O.t));
+    A && e.plan.sort((M, F) => M.t - F.t));
 }
-const wf = { huntLegend: 0.25, maxYears: 5 };
-function eT(e, t, o, a) {
+const Uf = { huntLegend: 0.25, maxYears: 5 };
+function sv(e, t, o, a) {
   const n = e.bld,
     r = e.age - n.since;
   let i = !1;
@@ -10183,14 +11301,14 @@ function eT(e, t, o, a) {
       ? (n.noHunt = !1)
       : (n.huntNext ||
           (n.threat || 0) >= 3 ||
-          r >= wf.maxYears ||
-          ((n.threat || 0) >= 2 && a.chance(wf.huntLegend))) &&
+          r >= Uf.maxYears ||
+          ((n.threat || 0) >= 2 && a.chance(Uf.huntLegend))) &&
         (i = !0),
     i)
   ) {
     ((n.hunter =
       (n.threat || 0) >= 3
-        ? { type: "assoc", idx: a.pick(km) }
+        ? { type: "assoc", idx: a.pick(ey) }
         : {
             type: "office",
             idx: a.int(0, Math.max(0, (t.orgs.office || []).length - 1)),
@@ -10200,17 +11318,17 @@ function eT(e, t, o, a) {
       e.plan.push({ id: "bl_d_hunt", chain: !0, t: 0.4 }));
     return;
   }
-  const l = t.events.filter((c) => c.bld && !c.bldEnd && ea(c, e, o)),
-    s = a.weighted(l, (c) => c.weight ?? 1);
-  s
-    ? e.plan.push({ id: s.id, t: 0.4 })
+  const s = t.events.filter((c) => c.bld && !c.bldEnd && ca(c, e, o)),
+    l = a.weighted(s, (c) => c.weight ?? 1);
+  l
+    ? e.plan.push({ id: l.id, t: 0.4 })
     : (e.last || (e.last = {}),
       (e.last.bl_d_pass = e.age),
       e.plan.push({ id: "bl_d_pass", chain: !0, t: 0.4 }));
 }
-const Au = 0.55,
-  ra = [0.5, 1.5, 3, 4.5, 6.5, 8.5];
-function ti(e) {
+const tc = 0.55,
+  ya = [0.5, 1.5, 3, 4.5, 6.5, 8.5];
+function bi(e) {
   let t = 10 - (e.grade || 9);
   return (
     e.flags.includes("특색") && (t += 1),
@@ -10225,45 +11343,45 @@ function ti(e) {
     t
   );
 }
-function _s(e) {
-  const t = ti(e);
+function Gs(e) {
+  const t = bi(e);
   let o = 0;
   return (
-    ra.forEach((a, n) => {
+    ya.forEach((a, n) => {
       a <= t && (o = n);
     }),
     o
   );
 }
-function gf(e, t, o) {
-  const a = ra[t] - ti(e);
-  let n = 0.025 * Math.pow(1.85, a) * Au;
+function Jf(e, t, o) {
+  const a = ya[t] - bi(e);
+  let n = 0.025 * Math.pow(1.85, a) * tc;
   return (
     (n *= o === "bold" ? 1.3 : 0.45),
     e.org && (n *= 0.85),
-    (n *= B(1 + (50 - e.stats.health) / 150, 0.7, 1.5)),
+    (n *= $(1 + (50 - e.stats.health) / 150, 0.7, 1.5)),
     (n *= 1.15 - e.stats.network * 0.006),
     e.bf && e.bf.vigor && (n *= 0.75),
-    (n *= Yo(e, 0.8, 0.9)),
-    B(n, 0.005, 0.92)
+    (n *= Ho(e, 0.8, 0.9)),
+    $(n, 0.005, 0.92)
   );
 }
-function nd(e, t, o) {
-  const a = ra[t] - ti(e),
-    n = (e.bf && e.bf.vigor ? 0.1 : 0) + (Yo(e, 1.08, 1.04) - 1);
+function Nd(e, t, o) {
+  const a = ya[t] - bi(e),
+    n = (e.bf && e.bf.vigor ? 0.1 : 0) + (Ho(e, 1.08, 1.04) - 1);
   return o === "bold"
-    ? B(0.68 - 0.12 * a + n, 0.12, 0.95)
-    : B(0.82 - 0.12 * a + n, 0.2, 0.97);
+    ? $(0.68 - 0.12 * a + n, 0.12, 0.95)
+    : $(0.82 - 0.12 * a + n, 0.2, 0.97);
 }
-const br = {
+const Fr = {
   needMult: [1, 1, 1, 1, 1, 0.7, 0.5, 0.35, 0.6],
   lucky: { 0: [0.1, 0.14], 1: [0.32, 0.42], 2: [0.48, 0.6], 3: [0.6, 0.72] },
   namedP: 0.1,
   luckyMinGrade: 2,
 };
-function ht(e) {
+function mt(e) {
   const t = 9 - (e.grade || 9);
-  let o = (4 + 4.5 * t * t) * (br.needMult[t] ?? 1);
+  let o = (4 + 4.5 * t * t) * (Fr.needMult[t] ?? 1);
   return (
     e.flags.includes("E.G.O개화") && (o *= 0.4),
     e.flags.includes("유물") &&
@@ -10271,13 +11389,13 @@ function ht(e) {
     e.stats.rep >= 50 && (o *= 0.85),
     e.flags.includes("좋은의체") && (o *= 0.97),
     e.flags.includes("강화시술") && (o *= 0.93),
-    (o *= Yo(e, 0.8, 0.9)),
+    (o *= Ho(e, 0.8, 0.9)),
     Math.max(1, Math.round(o))
   );
 }
-function tT(e, t, o) {
-  const a = ra[t] - ti(e),
-    n = B(1 + a * 0.35, 0.4, 2.5);
+function lv(e, t, o) {
+  const a = ya[t] - bi(e),
+    n = $(1 + a * 0.35, 0.4, 2.5);
   return Math.max(
     1,
     Math.round(
@@ -10288,10 +11406,10 @@ function tT(e, t, o) {
     ),
   );
 }
-const oT = [3, 5, 8, 13, 20, 32, 50],
-  aT = [2, 3, 5, 8, 12, 18, 26];
-function nT(e, t, o) {
-  const a = _s(e),
+const hv = [3, 5, 8, 13, 20, 32, 50],
+  dv = [2, 3, 5, 8, 12, 18, 26];
+function uv(e, t, o) {
+  const a = Gs(e),
     n = o.weighted(
       [
         [-1, 18],
@@ -10303,46 +11421,46 @@ function nT(e, t, o) {
       (T) => T[1],
     )[0],
     r = e.org && e.org.type === "assoc" && o.chance(0.35) ? 1 : 0,
-    i = B(a + n + r, 0, ra.length - 1),
-    l = e.org ? e.org.name : null,
-    s = t.requests.filter((T) => !T.org || T.org === l);
-  let c = s.filter((T) => i >= T.tiers[0] && i <= T.tiers[1]);
-  c.length || (c = s.filter((T) => T.tiers[1] >= i - 1 && T.tiers[0] <= i + 1));
+    i = $(a + n + r, 0, ya.length - 1),
+    s = e.org ? e.org.name : null,
+    l = t.requests.filter((T) => !T.org || T.org === s);
+  let c = l.filter((T) => i >= T.tiers[0] && i <= T.tiers[1]);
+  c.length || (c = l.filter((T) => T.tiers[1] >= i - 1 && T.tiers[0] <= i + 1));
   const u = e.recentReq || [],
     f = c.filter((T) => !u.includes(T.id));
   let g = f.length ? f : c;
-  const b = mx[l];
-  if (b && o.chance(b.p)) {
-    const T = s.filter((m) => b.types.includes(m.type));
-    let v = T.filter((m) => m.tiers[0] <= i + 1 && m.tiers[1] >= i - 1);
+  const p = tx[s];
+  if (p && o.chance(p.p)) {
+    const T = l.filter((y) => p.types.includes(y.type));
+    let v = T.filter((y) => y.tiers[0] <= i + 1 && y.tiers[1] >= i - 1);
     if (!v.length) {
-      const m = (j) =>
-          Math.min(Math.abs(j.tiers[0] - i), Math.abs(j.tiers[1] - i)),
-        y = Math.min(...T.map(m));
-      v = T.filter((j) => m(j) === y);
+      const y = (A) =>
+          Math.min(Math.abs(A.tiers[0] - i), Math.abs(A.tiers[1] - i)),
+        m = Math.min(...T.map(y));
+      v = T.filter((A) => y(A) === m);
     }
-    const w = v.filter((m) => !u.includes(m.id));
+    const w = v.filter((y) => !u.includes(y.id));
     v.length && (g = w.length ? w : v);
   }
-  const k = o.pick(g);
-  return ((e.recentReq = [...u, k.id].slice(-8)), { tpl: k.id, tier: i });
+  const b = o.pick(g);
+  return ((e.recentReq = [...u, b.id].slice(-8)), { tpl: b.id, tier: i });
 }
-function mf(e, t) {
+function Vf(e, t) {
   const o = e < 0.01 ? 0 : Math.round(e * 100),
     a = Math.round((1 - e) * t * 100);
   return { ok: a, fail: Math.max(0, 100 - a - o), die: o, tiny: e < 0.01 };
 }
-function rT(e, t, o, a) {
-  const n = nT(e, t, o);
-  if (e.grade >= 2 && e.namedReqAge !== e.age && o.chance(br.namedP)) {
-    const v = Math.min(ra.length - 1, _s(e) + 2);
-    if (v > n.tier || v === ra.length - 1) {
+function cv(e, t, o, a) {
+  const n = uv(e, t, o);
+  if (e.grade >= 2 && e.namedReqAge !== e.age && o.chance(Fr.namedP)) {
+    const v = Math.min(ya.length - 1, Gs(e) + 2);
+    if (v > n.tier || v === ya.length - 1) {
       n.tier = v;
       const w = t.requests.filter(
-        (m) =>
-          (!m.org || m.org === (e.org ? e.org.name : null)) &&
-          v >= m.tiers[0] &&
-          v <= m.tiers[1],
+        (y) =>
+          (!y.org || y.org === (e.org ? e.org.name : null)) &&
+          v >= y.tiers[0] &&
+          v <= y.tiers[1],
       );
       (w.length && (n.tpl = o.pick(w).id),
         (n.named = !0),
@@ -10352,11 +11470,11 @@ function rT(e, t, o, a) {
   const r = t.requests.find((v) => v.id === n.tpl);
   if (r.text.includes("{환상체}")) {
     const w = (t.orgs.abnormal || []).filter(
-      (m) => n.tier >= m.tiers[0] && n.tier <= m.tiers[1] && (!m.aleph || !1),
+      (y) => n.tier >= y.tiers[0] && n.tier <= y.tiers[1] && (!y.aleph || !1),
     );
     n.abn = (
       o.pick(w.length ? w : t.orgs.abnormal) || {
-        name: h("환상체", "an Abnormality", "幻想体"),
+        name: d("환상체", "an Abnormality", "幻想体"),
       }
     ).name;
   }
@@ -10364,93 +11482,93 @@ function rT(e, t, o, a) {
       ...r,
       text: r.text.replaceAll(
         "{환상체}",
-        n.abn || h("환상체", "an Abnormality", "幻想体"),
+        n.abn || d("환상체", "an Abnormality", "幻想体"),
       ),
     },
-    l = t.orgs.tiers[n.tier],
-    s = gf(e, n.tier, "bold"),
-    c = gf(e, n.tier, "care"),
-    u = e.org ? e.org.name : h("개인", "Freelance", "個人"),
-    g = `${n.named ? (e.org ? h(`${e.org.name}의 대표가 당신을 지목했다. 평소 맡던 일보다 두 단계 위의 일이다. "다른 사람에게는 넘기지 않았다." `, `The head of ${e.org.name} named you for this. It is two steps above your usual work. "I didn't hand it to anyone else." `, `${e.org.name}の代表があなたを指名した。普段の仕事より二段上の仕事だ。「他の誰にも回していない」`) : h("의뢰인이 다른 사무소를 다 건너뛰고 당신의 문을 두드렸다. 평소 맡던 일보다 두 단계 위의 일이다. ", "The client passed over every other office and knocked on your door. It is two steps above your usual work. ", "依頼人は他の事務所をすべて素通りし、あなたの扉を叩いた。普段の仕事より二段上の仕事だ。")) : ""}${i.text}`,
-    b = n.named ? h("[지명] ", "[Named] ", "[指名] ") : "";
-  D(
+    s = t.orgs.tiers[n.tier],
+    l = Jf(e, n.tier, "bold"),
+    c = Jf(e, n.tier, "care"),
+    u = e.org ? e.org.name : d("개인", "Freelance", "個人"),
+    g = `${n.named ? (e.org ? d(`${e.org.name}의 대표가 당신을 지목했다. 평소 맡던 일보다 두 단계 위의 일이다. "다른 사람에게는 넘기지 않았다." `, `The head of ${e.org.name} named you for this. It is two steps above your usual work. "I didn't hand it to anyone else." `, `${e.org.name}の代表があなたを指名した。普段の仕事より二段上の仕事だ。「他の誰にも回していない」`) : d("의뢰인이 다른 사무소를 다 건너뛰고 당신의 문을 두드렸다. 평소 맡던 일보다 두 단계 위의 일이다. ", "The client passed over every other office and knocked on your door. It is two steps above your usual work. ", "依頼人は他の事務所をすべて素通りし、あなたの扉を叩いた。普段の仕事より二段上の仕事だ。")) : ""}${i.text}`,
+    p = n.named ? d("[지명] ", "[Named] ", "[指名] ") : "";
+  P(
     e,
     {
       kind: "event",
       text:
-        b +
-        h(
-          `[${l}] ${i.type} 의뢰 · ${g}`,
-          `[${l}] ${pr(i.type)} request · ${g}`,
-          `[${l}] ${pr(i.type)}依頼 · ${g}`,
+        p +
+        d(
+          `[${s}] ${i.type} 의뢰 · ${g}`,
+          `[${s}] ${Or(i.type)} request · ${g}`,
+          `[${s}] ${Or(i.type)}依頼 · ${g}`,
         ),
       tone: n.tier >= 4 ? "rare" : "event",
       tier: n.tier,
     },
     a,
   );
-  const k = t.orgs.tiers[_s(e)],
+  const b = t.orgs.tiers[Gs(e)],
     T =
       e.grade > 1
-        ? h(
-            ` · 승급 공적 ${e.merit || 0}/${ht(e)}`,
-            ` · Promotion merit ${e.merit || 0}/${ht(e)}`,
-            ` · 昇級功績 ${e.merit || 0}/${ht(e)}`,
+        ? d(
+            ` · 승급 공적 ${e.merit || 0}/${mt(e)}`,
+            ` · Promotion merit ${e.merit || 0}/${mt(e)}`,
+            ` · 昇級功績 ${e.merit || 0}/${mt(e)}`,
           )
         : e.grade === 1 && !e.flags.includes("특색")
-          ? h(
-              ` · 특색 공적 ${e.merit || 0}/${ht(e)}`,
-              ` · Color merit ${e.merit || 0}/${ht(e)}`,
-              ` · 特色功績 ${e.merit || 0}/${ht(e)}`,
+          ? d(
+              ` · 특색 공적 ${e.merit || 0}/${mt(e)}`,
+              ` · Color merit ${e.merit || 0}/${mt(e)}`,
+              ` · 特色功績 ${e.merit || 0}/${mt(e)}`,
             )
           : "";
   e.prompt = {
     kind: "major",
     eventId: "request",
     text: g,
-    badge: `${b}${l} · ${pr(i.type)}`,
-    sub: h(
-      `${u} · ${be(e)} (적정 등급: ${k})${T}`,
-      `${u} · ${be(e)} (suited for: ${k})${T}`,
-      `${u} · ${be(e)} (適正等級: ${k})${T}`,
+    badge: `${p}${s} · ${Or(i.type)}`,
+    sub: d(
+      `${u} · ${Re(e)} (적정 등급: ${b})${T}`,
+      `${u} · ${Re(e)} (suited for: ${b})${T}`,
+      `${u} · ${Re(e)} (適正等級: ${b})${T}`,
     ),
     choices: [
       {
-        label: h("정면으로 해치운다", "Go in head-on", "正面から片付ける"),
-        pay: h("보수 많음", "higher pay", "報酬多め"),
-        odds: mf(s, nd(e, n.tier, "bold")),
+        label: d("정면으로 해치운다", "Go in head-on", "正面から片付ける"),
+        pay: d("보수 많음", "higher pay", "報酬多め"),
+        odds: Vf(l, Nd(e, n.tier, "bold")),
         i: 0,
       },
       {
-        label: h("신중하게 처리한다", "Handle it carefully", "慎重に処理する"),
-        pay: h("보수 적음", "lower pay", "報酬少なめ"),
-        odds: mf(c, nd(e, n.tier, "care")),
+        label: d("신중하게 처리한다", "Handle it carefully", "慎重に処理する"),
+        pay: d("보수 적음", "lower pay", "報酬少なめ"),
+        odds: Vf(c, Nd(e, n.tier, "care")),
         i: 1,
       },
       {
-        label: h("의뢰를 거절한다", "Decline the request", "依頼を断る"),
+        label: d("의뢰를 거절한다", "Decline the request", "依頼を断る"),
         i: 2,
       },
     ],
-    req: { ...n, dBold: s, dCare: c },
+    req: { ...n, dBold: l, dCare: c },
     t: a,
     rare: n.tier >= 5,
   };
 }
-function iT(e, t, o, a, n) {
+function fv(e, t, o, a, n) {
   const r = ae(e),
     i = o.req,
-    l = t.requests.find((w) => w.id === i.tpl);
+    s = t.requests.find((w) => w.id === i.tpl);
   i.abn && (e.lastAbnormal = i.abn);
-  const s = o.choices[a] ? o.choices[a].label.split(" · ")[0] : null,
-    c = { ...n, kind: "result", choiceLabel: s, eventId: "request" };
+  const l = o.choices[a] ? o.choices[a].label.split(" · ")[0] : null,
+    c = { ...n, kind: "result", choiceLabel: l, eventId: "request" };
   if (a === 2 || a == null || a < 0) {
     if (i.named) {
-      Ze(
+      st(
         e,
         t,
         {
-          text: h(
+          text: d(
             "지명은 다음으로 미뤄졌다. 의뢰인은 다른 이름을 찾아 나섰다.",
             "The nomination was put off. The client went looking for another name.",
             "指名は次へ持ち越された。依頼人は別の名を探しに出た。",
@@ -10464,95 +11582,95 @@ function iT(e, t, o, a, n) {
     }
     const w = {
       text: e.org
-        ? h(
+        ? d(
             "의뢰를 다른 해결사에게 넘겼다. 소속에서 좋은 소리는 듣지 못했다.",
             "You passed the request to another Fixer. Your superiors were not pleased.",
             "依頼を別のフィクサーに回した。所属先からはいい顔をされなかった。",
           )
-        : h(
+        : d(
             "의뢰를 거절했다. 오늘은 살아 있는 쪽을 골랐다.",
             "You turned the request down. Today you chose to stay alive.",
             "依頼を断った。今日は生き残る方を選んだ。",
           ),
       effects: { rep: e.org ? -2 : -1 },
     };
-    Ze(e, t, w, o.t, c);
+    st(e, t, w, o.t, c);
     return;
   }
   const u = a === 0 ? "bold" : "care",
     f = u === "bold" ? i.dBold : i.dCare,
     g = () => {
-      const w = Z(t, "bf_bitten");
-      Ze(e, t, w, o.t, { ...c, kind: "result" });
+      const w = ee(t, "bf_bitten");
+      st(e, t, w, o.t, { ...c, kind: "result" });
     },
-    b = l.bite && !e.bf && !e.pinky && Z(t, "bf_bitten");
+    p = s.bite && !e.bf && !e.pinky && ee(t, "bf_bitten");
   if (r.chance(f)) {
-    if (b && r.chance(0.3)) return g();
-    ((e.deathContext = h(
-      `${t.orgs.tiers[i.tier]} 등급의 ${i.abn ? `'${i.abn}' ` : ""}${l.type} 의뢰 도중`,
-      `during a ${t.orgs.tiers[i.tier]} ${pr(l.type)} request${i.abn ? ` against '${i.abn}'` : ""}`,
-      `${t.orgs.tiers[i.tier]}級の${i.abn ? `「${i.abn}」` : ""}${pr(l.type)}依頼の最中に`,
+    if (p && r.chance(0.3)) return g();
+    ((e.deathContext = d(
+      `${t.orgs.tiers[i.tier]} 등급의 ${i.abn ? `'${i.abn}' ` : ""}${s.type} 의뢰 도중`,
+      `during a ${t.orgs.tiers[i.tier]} ${Or(s.type)} request${i.abn ? ` against '${i.abn}'` : ""}`,
+      `${t.orgs.tiers[i.tier]}級の${i.abn ? `「${i.abn}」` : ""}${Or(s.type)}依頼の最中に`,
     )),
-      Ze(e, t, { text: l.death, death: l.cause }, o.t, c));
+      st(e, t, { text: s.death, death: s.cause }, o.t, c));
     return;
   }
-  const k = i.tier;
-  ra[k] - ti(e);
+  const b = i.tier;
+  ya[b] - bi(e);
   const T =
       (u === "bold" ? 1.5 : 0.7) *
       (e.org ? (e.org.type === "assoc" ? 1.2 : 1) : 0.85),
-    v = l.type === "뒤틀림" || l.type.includes("환상체") || k >= 5;
-  if (r.chance(nd(e, k, u))) {
+    v = s.type === "뒤틀림" || s.type.includes("환상체") || b >= 5;
+  if (r.chance(Nd(e, b, u))) {
     let w = 0,
-      m = !1;
-    const y = !!i.named,
-      j = k - _s(e);
+      y = !1;
+    const m = !!i.named,
+      A = b - Gs(e);
     if (e.grade > 1 || (e.grade === 1 && !e.flags.includes("특색"))) {
-      e.merit = (e.merit || 0) + Math.round(tT(e, k, u) * (y ? 1.5 : 1));
-      const Y = ht(e);
-      e.grade > 1 && e.merit >= Y
-        ? ((e.merit -= Y), (w = 1))
+      e.merit = (e.merit || 0) + Math.round(lv(e, b, u) * (m ? 1.5 : 1));
+      const j = mt(e);
+      e.grade > 1 && e.merit >= j
+        ? ((e.merit -= j), (w = 1))
         : e.grade === 1 &&
-          ((e.merit = Math.min(e.merit, Y)),
-          e.merit >= Y && (e.colorFull = !0));
+          ((e.merit = Math.min(e.merit, j)),
+          e.merit >= j && (e.colorFull = !0));
     }
     if (
       !w &&
-      e.grade >= br.luckyMinGrade &&
-      j >= 0 &&
-      br.lucky[Math.min(3, j)]
+      e.grade >= Fr.luckyMinGrade &&
+      A >= 0 &&
+      Fr.lucky[Math.min(3, A)]
     ) {
-      const Y = br.lucky[Math.min(3, j)][u === "bold" ? 1 : 0] + (y ? 0.1 : 0);
-      r.chance(Y) && ((w = 1), (m = !0));
+      const j = Fr.lucky[Math.min(3, A)][u === "bold" ? 1 : 0] + (m ? 0.1 : 0);
+      r.chance(j) && ((w = 1), (y = !0));
     }
     const _ = {
-      text: r.pick(l.ok),
+      text: r.pick(s.ok),
       effects: {
-        wealth: Math.round(oT[k] * T),
-        rep: Math.round(aT[k] * (u === "bold" ? 1.3 : 0.8)),
-        health: u === "bold" ? -Math.round(1 + k * 0.6) : 0,
-        sanity: v ? -Math.round(1 + k * 0.45) : 0,
+        wealth: Math.round(hv[b] * T),
+        rep: Math.round(dv[b] * (u === "bold" ? 1.3 : 0.8)),
+        health: u === "bold" ? -Math.round(1 + b * 0.6) : 0,
+        sanity: v ? -Math.round(1 + b * 0.45) : 0,
       },
       gradeUp: w,
     };
-    (y &&
+    (m &&
       ((_.effects.wealth = Math.round(_.effects.wealth * 1.3)),
       (_.effects.rep += 3)),
-      m &&
+      y &&
         ((_.text +=
           " " +
           r.pick([
-            h(
+            d(
               "협회가 이번 일을 눈여겨봤다. 공적이 다 차기도 전에 급수 심사가 앞당겨졌다.",
               "The Association took notice of this job. Your grade review was moved up before your merit was even full.",
               "協会がこの件に目を留めた。功績が満ちる前に、等級審査が前倒しになった。",
             ),
-            h(
+            d(
               "그 일의 보고서가 협회 지부장의 책상에 올라갔다. 다음 주, 새 면허증이 도착했다.",
               "The report on that job reached the branch director's desk. The next week, a new license arrived.",
               "その件の報告書が協会支部長の机に上がった。翌週、新しい免許証が届いた。",
             ),
-            h(
+            d(
               "소문이 의뢰서보다 먼저 협회에 닿았다. 심사는 서류 한 장으로 끝났다.",
               "Word reached the Association before the paperwork did. The review was settled with a single form.",
               "噂が依頼書より先に協会に届いた。審査は書類一枚で終わった。",
@@ -10560,43 +11678,43 @@ function iT(e, t, o, a, n) {
           ])),
         (e.luckyUps = (e.luckyUps || 0) + 1),
         e.grade === 2 && ((e.cmRec ?? (e.cmRec = {})).fixerLuckyOne = !0)),
-      y && ((e.cmRec ?? (e.cmRec = {})).fixerNamed = !0),
-      k >= 5 && r.chance(0.3) && (_.flagsAdd = ["환상체생존"]),
-      (e.bestReq = Math.max(e.bestReq ?? -1, k)),
-      Ze(e, t, _, o.t, c));
+      m && ((e.cmRec ?? (e.cmRec = {})).fixerNamed = !0),
+      b >= 5 && r.chance(0.3) && (_.flagsAdd = ["환상체생존"]),
+      (e.bestReq = Math.max(e.bestReq ?? -1, b)),
+      st(e, t, _, o.t, c));
   } else {
-    if (b && r.chance(0.06)) return g();
+    if (p && r.chance(0.06)) return g();
     const w = {
-      text: r.pick(l.fail),
+      text: r.pick(s.fail),
       effects: {
-        health: -Math.round(5 + k * 1.3),
-        sanity: -Math.round(3 + k * 0.7),
-        rep: -Math.max(1, k),
+        health: -Math.round(5 + b * 1.3),
+        sanity: -Math.round(3 + b * 0.7),
+        rep: -Math.max(1, b),
       },
     };
-    Ze(e, t, w, o.t, c);
+    st(e, t, w, o.t, c);
   }
 }
-function Bo(e, t, o, a) {
-  const n = ft(t, e),
+function Jo(e, t, o, a) {
+  const n = kt(t, e),
     r = [];
-  (o.choices.forEach((l, s) => {
-    if (!W1(l, e, n)) return;
-    const c = od(l, e),
-      u = l.dream && [].concat(l.dream).some((g) => e.flags.includes(g)),
+  (o.choices.forEach((s, l) => {
+    if (!mT(s, e, n)) return;
+    const c = Yd(s, e),
+      u = s.dream && [].concat(s.dream).some((g) => e.flags.includes(g)),
       f =
-        Ht(l.label, n, e) +
-        (u ? h(" (어릴 적 꿈)", " (childhood dream)", "（幼い頃の夢）") : "");
+        Jt(s.label, n, e) +
+        (u ? d(" (어릴 적 꿈)", " (childhood dream)", "（幼い頃の夢）") : "");
     r.push(
       c
-        ? { label: f, i: s, locked: c, dream: u }
-        : { label: f, i: s, dream: u },
+        ? { label: f, i: l, locked: c, dream: u }
+        : { label: f, i: l, dream: u },
     );
   }),
-    r.some((l) => !l.locked) ||
-      r.push({ label: Ht(o.choices[0].label, n, e), i: 0 }));
-  const i = Ht(o.text, n, e);
-  (D(e, { kind: "event", text: i, tone: o.rare ? "rare" : "event" }, a),
+    r.some((s) => !s.locked) ||
+      r.push({ label: Jt(o.choices[0].label, n, e), i: 0 }));
+  const i = Jt(o.text, n, e);
+  (P(e, { kind: "event", text: i, tone: o.rare ? "rare" : "event" }, a),
     (e.prompt = {
       kind: o.major ? "major" : "minor",
       eventId: o.id,
@@ -10604,115 +11722,116 @@ function Bo(e, t, o, a) {
       choices: r,
       ignoreLabel: o.major
         ? null
-        : o.ignoreLabel || h("흘려보낸다", "Let it pass", "やり過ごす"),
-      remainingMs: o.major ? null : zg,
+        : o.ignoreLabel || d("흘려보낸다", "Let it pass", "やり過ごす"),
+      remainingMs: o.major ? null : Sm,
       t: a,
       rare: !!o.rare,
     }));
 }
-function sT(e, t) {
-  oe = t;
+function wv(e, t) {
+  re = t;
   const o = e.plan[e.cursor];
   if (!o) return !1;
   e.cursor++;
-  const a = ft(t, e);
-  if (o.dr) return v0(e, t, o);
+  const a = kt(t, e);
+  if (o.dr) return l1(e, t, o);
+  if (o.lm) return LT(e, t, o);
   if (o.banner) {
-    const r = h(
+    const r = d(
       "가주 심사가 시작되었다.",
       "The Family Hierarch Evaluation has begun.",
       "家主審査が始まった。",
     );
-    return (D(e, { kind: "banner", text: r, hold: 3500 }, o.t), !0);
+    return (P(e, { kind: "banner", text: r, hold: 3500 }, o.t), !0);
   }
   if (o.chain) {
-    const r = Z(t, o.id);
+    const r = ee(t, o.id);
     return (
       !r ||
         e.dead ||
-        (Ta(r)
-          ? Bo(e, t, r, o.t)
-          : Ze(e, t, r, o.t, { kind: "flavor", eventId: r.id })),
+        (Ba(r)
+          ? Jo(e, t, r, o.t)
+          : st(e, t, r, o.t, { kind: "flavor", eventId: r.id })),
       !0
     );
   }
   if (o.wsEval || o.wsBig || o.wsInvest)
     return (
-      !Le(e) ||
+      !Ge(e) ||
         e.dead ||
         e.prompt ||
-        (o.wsEval ? o0(e, t, o.t) : o.wsBig ? a0(e, t, o.t) : pm(e, t, o.t, 0)),
+        (o.wsEval ? Px(e, t, o.t) : o.wsBig ? Hx(e, t, o.t) : Qm(e, t, o.t, 0)),
       !0
     );
-  if (o.req) return (e.job !== "해결사" || rT(e, t, ae(e), o.t), !0);
+  if (o.req) return (e.job !== "해결사" || cv(e, t, ae(e), o.t), !0);
   if (o.daily) {
-    const r = sm(t, o.id);
+    const r = Pm(t, o.id);
     return r
-      ? (ea(r, e, a) &&
-          Ze(e, t, r, o.t, { kind: "daily", tone: "daily", eventId: r.id }),
+      ? (ca(r, e, a) &&
+          st(e, t, r, o.t, { kind: "daily", tone: "daily", eventId: r.id }),
         !0)
       : !1;
   }
   if (o.bfEng) {
-    const r = Z(t, o.id);
+    const r = ee(t, o.id);
     return (
       !r ||
         !e.bf ||
         e.dead ||
-        (r.id === "bf_hunt" && BT(e),
+        (r.id === "bf_hunt" && Gv(e),
         e.last || (e.last = {}),
         (e.last[r.id] = e.age),
-        Ta(r)
-          ? Bo(e, t, r, o.t)
-          : Ze(e, t, r, o.t, { kind: "flavor", eventId: r.id })),
+        Ba(r)
+          ? Jo(e, t, r, o.t)
+          : st(e, t, r, o.t, { kind: "flavor", eventId: r.id })),
       !0
     );
   }
   if (o.fingerLeave) {
-    const r = Z(t, o.id);
+    const r = ee(t, o.id);
     return (
       !r ||
         e.dead ||
-        !Zm(e) ||
-        (e.last || (e.last = {}), (e.last[r.id] = e.age), Bo(e, t, r, o.t)),
+        !Ey(e) ||
+        (e.last || (e.last = {}), (e.last[r.id] = e.age), Jo(e, t, r, o.t)),
       !0
     );
   }
   if (o.lakeEnter || o.lakeHintEv) {
-    const r = Z(t, o.id);
+    const r = ee(t, o.id);
     if (!r || e.dead || e.prompt) return !0;
     if (o.lakeEnter) {
-      if (!vm(e)) return !0;
+      if (!ay(e)) return !0;
       o.id !== "lk_drink" && (e.lakeOffered = !0);
     }
     return (
       e.last || (e.last = {}),
       (e.last[r.id] = e.age),
-      Bo(e, t, r, o.t),
+      Jo(e, t, r, o.t),
       !0
     );
   }
   if (o.warpEnter) {
-    const r = Z(t, o.id);
+    const r = ee(t, o.id);
     return (
       !r ||
-        !Yu(e) ||
-        Qm(e) !== r.id ||
-        (e.last || (e.last = {}), (e.last[r.id] = e.age), Bo(e, t, r, o.t)),
+        !oc(e) ||
+        By(e) !== r.id ||
+        (e.last || (e.last = {}), (e.last[r.id] = e.age), Jo(e, t, r, o.t)),
       !0
     );
   }
-  const n = Z(t, o.id);
+  const n = ee(t, o.id);
   if (!n) return !1;
-  if (!ea(n, e, a)) return !0;
+  if (!ca(n, e, a)) return !0;
   if ((n.repeat || e.used.push(n.id), n.offer)) {
     const r = ae(e),
       i = (t.orgs[n.offer] || []).filter(
-        (s) =>
-          (!e.org || s.name !== e.org.name) && (!nf[s.name] || nf[s.name](e)),
+        (l) =>
+          (!e.org || l.name !== e.org.name) && (!Bf[l.name] || Bf[l.name](e)),
       ),
-      l = r.pick(i);
-    e.offer = l ? { type: n.offer, name: l.name } : null;
+      s = r.pick(i);
+    e.offer = s ? { type: n.offer, name: s.name } : null;
   }
   return (
     e.last || (e.last = {}),
@@ -10723,13 +11842,13 @@ function sT(e, t) {
     e.bf &&
       n.id === "bf_outlive" &&
       ((e.bf.outlives = (e.bf.outlives || 0) + 1), (e.bf.lastOutlive = e.age)),
-    Ta(n)
-      ? Bo(e, t, n, o.t)
-      : Ze(e, t, n, o.t, { kind: "flavor", eventId: n.id }),
+    Ba(n)
+      ? Jo(e, t, n, o.t)
+      : st(e, t, n, o.t, { kind: "flavor", eventId: n.id }),
     !0
   );
 }
-function lT(e) {
+function gv(e) {
   const t = 9 - (e.grade || 9),
     o =
       (e.flags.includes("좋은의체") ? 1.05 : 1) *
@@ -10741,7 +11860,7 @@ function lT(e) {
       ? (1.7 * o) / (1 + 0.015 * t * t)
       : o / (1 + 0.06 * t * t);
 }
-function yf(e) {
+function Xf(e) {
   const t = (e.fingerRank || 1) - 1,
     o =
       (e.flags.includes("좋은의체") ? 1.05 : 1) *
@@ -10753,20 +11872,20 @@ function yf(e) {
       ? (1.7 * o) / (1 + 0.6 * t * t)
       : o / (1 + 3 * t * t);
 }
-function Gr(e) {
+function hi(e) {
   const t =
     e.job === "해결사" ||
     e.job === "손가락" ||
     e.job === "검계" ||
     e.job === "흑운회" ||
-    ce(e)
-      ? tl(e)
+    Te(e)
+      ? vl(e)
       : 0;
   e.pastPower = Math.max(e.pastPower || 0, t);
 }
-function hT(e, t, o) {
+function mv(e, t, o) {
   const a = ae(e),
-    n = ft(t, e);
+    n = kt(t, e);
   e.bf ||
     ((e.bf = {
       kind: "stray",
@@ -10788,12 +11907,12 @@ function hT(e, t, o) {
   if (o === "stray")
     return (
       e.flags.includes("떠돌이") || e.flags.push("떠돌이"),
-      om(e, ["떠돌이"]),
+      Fm(e, ["떠돌이"]),
       null
     );
   if (
-    (Gr(e),
-    e.job === "해결사" && js(e),
+    (hi(e),
+    e.job === "해결사" && Ks(e),
     e.org && (e.orgHistory.push(e.org.name), (e.org = null)),
     e.finger)
   )
@@ -10802,7 +11921,7 @@ function hT(e, t, o) {
   return (
     (e.flags = e.flags.filter((i) => i !== "떠돌이")),
     (r.kind = "kin"),
-    (r.gen = 3 + a.weighted([0, 1, 2, 3, 4], (i) => le.startGen[i])),
+    (r.gen = 3 + a.weighted([0, 1, 2, 3, 4], (i) => ge.startGen[i])),
     (r.bestGen = r.gen),
     (r.rankAt = e.age),
     (r.favor = 0),
@@ -10815,19 +11934,19 @@ function hT(e, t, o) {
     (e.fingerRank = null),
     (e.wingRank = null),
     (e.branch = null),
-    Q(e, { k: "job", job: "권속" }),
-    be(e)
+    Z(e, { k: "job", job: "권속" }),
+    Re(e)
   );
 }
-function js(e) {
+function Ks(e) {
   e.flags = e.flags.filter((t) => t !== "특색");
 }
-function dT(e) {
+function yv(e) {
   const t = (e.pastPower || 0) - 1;
   return t >= 3 ? 3 : t === 2 ? 5 : t === 1 ? 8 : 9;
 }
-function uT(e, t) {
-  const o = ct[e].length;
+function pv(e, t) {
+  const o = bt[e].length;
   return t >= 6
     ? 1
     : t >= 4
@@ -10836,27 +11955,27 @@ function uT(e, t) {
         ? Math.min(o, e === "중지" ? 3 : 2)
         : Math.max(1, o - 1);
 }
-function cT(e, t) {
-  const o = ct[t].length,
+function bv(e, t) {
+  const o = bt[t].length,
     a = (e.pastPower || 0) - 1;
   return a >= 3 ? Math.max(1, o - 1) : a === 2 ? Math.min(2, o - 1) : 1;
 }
-const fT = (e) =>
+const kv = (e) =>
   e.job === "해결사" && !!e.grade && (e.flags.includes("특색") || e.grade <= 3);
-function wT(e, t) {
+function xv(e, t) {
   const o = t.ws || {},
     a = (t.stats.network >= 40 ? 0.15 : 0) + (t.stats.sanity >= 60 ? 0.1 : 0);
-  if (e.wsW === "pass") return B((e.w ?? 60) / 100 + a, 0, 0.95) * 100;
+  if (e.wsW === "pass") return $((e.w ?? 60) / 100 + a, 0, 0.95) * 100;
   if (e.wsW === "fail")
-    return (1 - B((100 - (e.w ?? 40)) / 100 + a, 0, 0.95)) * 100;
-  const n = B(
+    return (1 - $((100 - (e.w ?? 40)) / 100 + a, 0, 0.95)) * 100;
+  const n = $(
     0.5 + 0.1 * (o.gear || 0) + (t.flags.includes("끌려간손") ? 0.1 : 0),
     0,
     0.95,
   );
   if (e.wsW === "protoWin") return n * 100;
   if (e.wsW === "protoLose") return (1 - n) * 100;
-  const r = (o.guard || 0) >= (xo(o.fame || 0) >= 5 ? 2 : 1) ? 0.8 : 0.15;
+  const r = (o.guard || 0) >= (Bo(o.fame || 0) >= 5 ? 2 : 1) ? 0.8 : 0.15;
   return e.wsW === "guardOk"
     ? r * 100
     : e.wsW === "guardFail"
@@ -10879,26 +11998,26 @@ function wT(e, t) {
                 : 1
               : (e.w ?? 1);
 }
-function gT(e, t) {
-  if ((t.pinky && Zh(e)) || (e.clTierMin != null && Yn(t) < e.clTierMin))
+function Tv(e, t) {
+  if ((t.pinky && Ad(e)) || (e.clTierMin != null && Dn(t) < e.clTierMin))
     return 0;
   if (t.cl && e.death && e.death !== "발톱" && e.death !== "조율자")
-    return (e.w ?? 1) + 3 * Math.max(0, Yn(t) - 1);
+    return (e.w ?? 1) + 3 * Math.max(0, Dn(t) - 1);
   if (
-    (e.fingerRank && !_u({ fingerRank: e.fingerRank }, t)) ||
-    (e.top3 != null && e.top3 !== fT(t)) ||
-    (e.death === "뒤틀림" && kt(t)) ||
-    (e.kxFitAt && !te((t.kx && t.kx.fit) || 0, e.kxFitAt))
+    (e.fingerRank && !Zu({ fingerRank: e.fingerRank }, t)) ||
+    (e.top3 != null && e.top3 !== kv(t)) ||
+    (e.death === "뒤틀림" && jt(t)) ||
+    (e.kxFitAt && !ne((t.kx && t.kx.fit) || 0, e.kxFitAt))
   )
     return 0;
-  if (e.wsW) return wT(e, t);
+  if (e.wsW) return xv(e, t);
   if (e.hgdBlock != null) {
-    const a = z1(t, e.hgdBlock);
+    const a = ev(t, e.hgdBlock);
     return e.hgdBlockOk ? a * 100 : (1 - a) * 100;
   }
   if (e.exact) return e.w ?? 1;
   if (e.blDistort != null) {
-    const a = Ax(t);
+    const a = ux(t);
     return e.blDistort ? a * 100 : (1 - a) * 50;
   }
   if (e.hatch) {
@@ -10913,26 +12032,26 @@ function gT(e, t) {
   }
   let o = e.w ?? 1;
   if (
-    (e.death && (o *= Au),
+    (e.death && (o *= tc),
     e.death &&
       t.bf &&
       t.bf.vigor &&
-      (ce(t) || t.job === "손가락") &&
+      (Te(t) || t.job === "손가락") &&
       (o *= 0.75),
     e.death &&
-      (ce(t) || t.job === "손가락" || t.job === "검계" || t.job === "흑운회") &&
-      (o *= Yo(t, 0.8, 0.9)),
+      (Te(t) || t.job === "손가락" || t.job === "검계" || t.job === "흑운회") &&
+      (o *= Ho(t, 0.8, 0.9)),
     (e.fingerUp > 0 || e.wingUp > 0 || e.kkUp || e.blUp || e.gradeUp > 0) &&
-      (o *= Yo(t, 1.15, 1.07)),
-    e.gradeUp > 0 && t.job === "해결사" && (o *= lT(t)),
-    e.fingerUp > 0 && t.finger && !e.topRank && !jn(t) && (o *= yf(t)),
-    e.rmerit > 0 && t.finger && (o *= yf(t)),
-    e.wingUp > 0 && ce(t) && !jn(t) && (o *= k1(t)),
-    !vu(e.power, t))
+      (o *= Ho(t, 1.15, 1.07)),
+    e.gradeUp > 0 && t.job === "해결사" && (o *= gv(t)),
+    e.fingerUp > 0 && t.finger && !e.topRank && !Pn(t) && (o *= Xf(t)),
+    e.rmerit > 0 && t.finger && (o *= Xf(t)),
+    e.wingUp > 0 && Te(t) && !Pn(t) && (o *= rT(t)),
+    !Qu(e.power, t))
   )
     return 0;
   for (const a of e.wPower || []) {
-    const n = qr(t);
+    const n = li(t);
     (a.min == null || n >= a.min) &&
       (a.max == null || n <= a.max) &&
       (o *= a.mult);
@@ -10946,19 +12065,19 @@ function gT(e, t) {
   }
   return o;
 }
-function Um(e) {
+function Wy(e) {
   return e >= 20
     ? 0
     : e <= 0
       ? 1
       : Math.min(1, 0.015 * Math.pow(2, (20 - e) / 3.2));
 }
-function mT(e, t, o) {
+function vv(e, t, o) {
   if (!e.bf || e.bf.kind !== "stray" || !o.eventId) return 1;
-  const a = Z(t, o.eventId) || sm(t, o.eventId);
+  const a = ee(t, o.eventId) || Pm(t, o.eventId);
   return !a || !a.bf || a.bf === "none" || a.forceGroup || a.noBoost ? 1 : 2;
 }
-function Ze(e, t, o, a, n = {}) {
+function st(e, t, o, a, n = {}) {
   const r = ae(e);
   let i = o;
   if (o.kkStages && e.kk) {
@@ -10968,11 +12087,11 @@ function Ze(e, t, o, a, n = {}) {
       (x.due = 0));
   }
   if (
-    (i.wsEyeTry && e.ws && (i = l0(e, r)),
+    (i.wsEyeTry && e.ws && (i = zx(e, r)),
     e.pinky &&
-      c1(i) &&
+      X1(i) &&
       (i = {
-        text: h(
+        text: d(
           "당신은 이미 한 자루를 보유하고 있다.",
           "You already carry one.",
           "あなたはすでに一振りを持っている。",
@@ -10980,29 +12099,29 @@ function Ze(e, t, o, a, n = {}) {
       }),
     i.outcomes)
   ) {
-    const x = Ex(i.outcomes, e);
-    i = r.weighted(x, (S) => gT(S, e)) || x[0];
+    const x = xx(i.outcomes, e);
+    i = r.weighted(x, (Y) => Tv(Y, e)) || x[0];
   }
   i.bloomAlt &&
     (i.death === "뒤틀림" || i.bldStart) &&
-    r.chance(Yx(e)) &&
+    r.chance(cx(e)) &&
     (i = i.bloomAlt);
-  const l = e.job,
-    s = {},
-    c = mT(e, t, n),
+  const s = e.job,
+    l = {},
+    c = vv(e, t, n),
     u =
-      kt(e) && n.eventId && n.eventId.startsWith("kx")
-        ? no.drain
-        : lo(e) && n.eventId && n.eventId.startsWith("nh_")
-          ? Rm(e, "drain")
+      jt(e) && n.eventId && n.eventId.startsWith("kx")
+        ? go.drain
+        : bo(e) && n.eventId && n.eventId.startsWith("nh_")
+          ? hy(e, "drain")
           : 1;
   if (i.effects)
-    for (const [x, S] of Object.entries(i.effects)) {
-      const P = e.stats[x],
-        H = S < 0 && (x === "health" || x === "sanity") ? u : 1;
-      e.stats[x] = Re(B(P + S * c * H));
-      const A = Math.round(e.stats[x] - P);
-      A && (s[x] = A);
+    for (const [x, Y] of Object.entries(i.effects)) {
+      const H = e.stats[x],
+        E = Y < 0 && (x === "health" || x === "sanity") ? u : 1;
+      e.stats[x] = Ce($(H + Y * c * E));
+      const S = Math.round(e.stats[x] - H);
+      S && (l[x] = S);
     }
   const f = !!(n.eventId && n.eventId.startsWith("hgd_"));
   f && e.stats.health < 1 && (e.stats.health = 1);
@@ -11013,44 +12132,44 @@ function Ze(e, t, o, a, n = {}) {
       ((x.dose = { w: 0, k: 0, r: 0 }),
         (x.uses = (x.uses || 0) + 3),
         (g = "cl_all"));
-    else if (o.clSerum && _a(e, o.clSerum)) {
-      const S = o.clSerum;
-      ((x.dose[S] -= 1),
-        (x.load[S] = Math.min(ge.endAt, (x.load[S] || 0) + ge.load)),
+    else if (o.clSerum && La(e, o.clSerum)) {
+      const Y = o.clSerum;
+      ((x.dose[Y] -= 1),
+        (x.load[Y] = Math.min(Ae.endAt, (x.load[Y] || 0) + Ae.load)),
         (x.uses = (x.uses || 0) + 1),
-        (g = `cl_${S}`));
+        (g = `cl_${Y}`));
     }
     if (i.clHeal || o.clHeal)
-      for (const S of ["health", "sanity"]) {
-        const P = e.stats[S];
-        e.stats[S] = 100;
-        const H = Math.round(100 - P);
-        H && (s[S] = (s[S] || 0) + H);
+      for (const Y of ["health", "sanity"]) {
+        const H = e.stats[Y];
+        e.stats[Y] = 100;
+        const E = Math.round(100 - H);
+        E && (l[Y] = (l[Y] || 0) + E);
       }
-    for (const [S, P] of Object.entries(i.clLoad || {}))
-      x.load[S] = B((x.load[S] || 0) + P, 0, ge.endAt);
-    for (const [S, P] of Object.entries(i.clLoadSet || {})) x.load[S] = P;
-    va(e) && ((e.stats.wealth = 100), delete s.wealth);
+    for (const [Y, H] of Object.entries(i.clLoad || {}))
+      x.load[Y] = $((x.load[Y] || 0) + H, 0, Ae.endAt);
+    for (const [Y, H] of Object.entries(i.clLoadSet || {})) x.load[Y] = H;
+    Ea(e) && ((e.stats.wealth = 100), delete l.wealth);
   }
-  if (i.kxHp && kt(e) && e.stats.health > 0) {
+  if (i.kxHp && jt(e) && e.stats.health > 0) {
     const x = e.stats.health;
-    ((e.stats.health = r.chance(no.hpChoiceP) ? 0 : Math.max(0, x - no.hpMiss)),
-      (s.health = (s.health || 0) + Math.round(e.stats.health - x)));
+    ((e.stats.health = r.chance(go.hpChoiceP) ? 0 : Math.max(0, x - go.hpMiss)),
+      (l.health = (l.health || 0) + Math.round(e.stats.health - x)));
   }
   if (
     (typeof i.kxFit == "number" &&
       e.kx &&
       !(e.kx.ideal && i.kxFit < 0) &&
-      (e.kx.fit = B((e.kx.fit || 0) + i.kxFit, 0, 5)),
-    n.eventId === "nh_canned_rite" && lo(e))
+      (e.kx.fit = $((e.kx.fit || 0) + i.kxFit, 0, 5)),
+    n.eventId === "nh_canned_rite" && bo(e))
   ) {
-    const x = Zs(e);
+    const x = xl(e);
     ((x.rites = (x.rites || 0) + 1),
       (x.riteAge = e.age),
       (i.nhFaith || 0) > 0 && (x.ate = (x.ate || 0) + 1));
   }
-  (typeof i.nhFaith == "number" && U0(e, i.nhFaith, t, a),
-    om(
+  (typeof i.nhFaith == "number" && W1(e, i.nhFaith, t, a),
+    Fm(
       e,
       (i.flagsAdd || []).filter((x) => !e.flags.includes(x)),
     ),
@@ -11058,36 +12177,36 @@ function Ze(e, t, o, a, n = {}) {
       !e.flags.includes("아이") &&
       (e.childBorn = e.age));
   for (const x of i.flagsAdd || []) e.flags.includes(x) || e.flags.push(x);
-  const b = (i.flagsAdd || []).filter((x) => x.endsWith("동경"));
-  if (b.length) {
-    const x = b[b.length - 1];
-    e.flags = e.flags.filter((S) => !S.endsWith("동경") || S === x);
+  const p = (i.flagsAdd || []).filter((x) => x.endsWith("동경"));
+  if (p.length) {
+    const x = p[p.length - 1];
+    e.flags = e.flags.filter((Y) => !Y.endsWith("동경") || Y === x);
   }
-  for (const x of i.flagsRemove || []) e.flags = e.flags.filter((S) => S !== x);
-  let k = null;
+  for (const x of i.flagsRemove || []) e.flags = e.flags.filter((Y) => Y !== x);
+  let b = null;
   if (!i.death) {
-    const x = n.eventId ? Z(t, n.eventId) : null;
+    const x = n.eventId ? ee(t, n.eventId) : null;
     (x &&
-      Lm(x) &&
+      ky(x) &&
       ((i.flagsAdd || []).includes("가정")
-        ? e.partnerName || (k = "spouse")
-        : e.flags.includes("가정") || Y1(e)),
-      (i.flagsAdd || []).includes("연인") && !e.partnerName && (k = "lover"));
+        ? e.partnerName || (b = "spouse")
+        : e.flags.includes("가정") || uT(e)),
+      (i.flagsAdd || []).includes("연인") && !e.partnerName && (b = "lover"));
   }
-  if (jn(e)) {
-    const x = n.eventId ? Z(t, n.eventId) : null,
-      S = x && (x.finger || x.work || x.fingerRank || x.wingRank || x.kk);
-    let P = i.rmerit || 0;
-    const H = (i.effects && i.effects.rep) || 0;
+  if (Pn(e)) {
+    const x = n.eventId ? ee(t, n.eventId) : null,
+      Y = x && (x.finger || x.work || x.fingerRank || x.wingRank || x.kk);
+    let H = i.rmerit || 0;
+    const E = (i.effects && i.effects.rep) || 0;
     if (
-      (S && H > 0 && (P += Math.min(3, Math.ceil(H / 5))),
+      (Y && E > 0 && (H += Math.min(3, Math.ceil(E / 5))),
       x && e.kk && e.job === "흑운회" && !i.death)
     ) {
-      const A = e.kk.way || 0;
-      (((x.kkFight && A >= 2) || (x.kkLedger && A <= -2)) && (P += 1),
-        P >= 2 && (e.kk.inkWhy = { age: e.age, why: "merit" }));
+      const S = e.kk.way || 0;
+      (((x.kkFight && S >= 2) || (x.kkLedger && S <= -2)) && (H += 1),
+        H >= 2 && (e.kk.inkWhy = { age: e.age, why: "merit" }));
     }
-    qo(e, P);
+    ta(e, H);
   }
   if (i.rec) {
     e.cmRec ?? (e.cmRec = {});
@@ -11095,21 +12214,21 @@ function Ze(e, t, o, a, n = {}) {
   }
   if (
     (i.warpBonus && (e.warpBonus = i.warpBonus),
-    i.nameless && (e.name = h("무명", "Nameless", "無名")),
+    i.nameless && (e.name = d("무명", "Nameless", "無名")),
     i.prosthetic &&
       (e.prosthetics = Math.max(0, (e.prosthetics || 0) + i.prosthetic)),
     i.prosthetic > 0)
   ) {
     e.prosGain ?? (e.prosGain = {});
     for (const x of ["health", "sanity", "rep"])
-      s[x] > 0 && (e.prosGain[x] = (e.prosGain[x] || 0) + s[x]);
+      l[x] > 0 && (e.prosGain[x] = (e.prosGain[x] || 0) + l[x]);
   }
   if (i.clearProsthetic) {
-    for (const [x, S] of Object.entries(e.prosGain || {})) {
-      const P = e.stats[x];
-      e.stats[x] = Re(B(P - S));
-      const H = Math.round(e.stats[x] - P);
-      H && (s[x] = (s[x] || 0) + H);
+    for (const [x, Y] of Object.entries(e.prosGain || {})) {
+      const H = e.stats[x];
+      e.stats[x] = Ce($(H - Y));
+      const E = Math.round(e.stats[x] - H);
+      E && (l[x] = (l[x] || 0) + E);
     }
     ((e.prosGain = {}),
       (e.prosthetics = 0),
@@ -11118,45 +12237,45 @@ function Ze(e, t, o, a, n = {}) {
       )));
   }
   let T = null;
-  i.bfTurn && (T = hT(e, t, i.bfTurn));
+  i.bfTurn && (T = mv(e, t, i.bfTurn));
   const v = [];
   let w = null;
   if (e.bf) {
     const x = e.bf;
-    let S = typeof i.thirst == "number" ? i.thirst * c : null;
+    let Y = typeof i.thirst == "number" ? i.thirst * c : null;
     if (
-      (i.feedBite && (S = i.tithe ? -45 : -70),
+      (i.feedBite && (Y = i.tithe ? -45 : -70),
       i.tithe && (x.tithe = !0),
       i.pack &&
-        S < 0 &&
-        ((S *= Om(x)),
+        Y < 0 &&
+        ((Y *= wy(x)),
         (x.packUses = (x.packUses || 0) + (i.feedPack ? 2 : 1)),
         i.feedPack &&
-          r.chance(le.pack.spoil) &&
-          ((S /= 2),
+          r.chance(ge.pack.spoil) &&
+          ((Y /= 2),
           v.push(
-            h(
+            d(
               " 차갑고 비렸다. 반쯤 상해 있었다.",
               " It was cold and rank. Half of it had gone bad.",
               " 冷たく生臭かった。半分傷んでいた。",
             ),
           ))),
       i.barUse &&
-        S < 0 &&
-        ((S *= Tu(x)), (x.barUses = (x.barUses || 0) + (i.feedBar ? 2 : 1))),
+        Y < 0 &&
+        ((Y *= Xu(x)), (x.barUses = (x.barUses || 0) + (i.feedBar ? 2 : 1))),
       i.feedRation &&
         ((x.rations = (x.rations || 0) + 1),
-        x.tithe && S < 0 && ((S *= 1.5), (x.tithe = !1))),
-      S != null || i.thirstSet != null)
+        x.tithe && Y < 0 && ((Y *= 1.5), (x.tithe = !1))),
+      Y != null || i.thirstSet != null)
     ) {
-      const P = x.thirst;
-      let H = i.thirstSet != null ? i.thirstSet : P + S;
+      const H = x.thirst;
+      let E = i.thirstSet != null ? i.thirstSet : H + Y;
       (i.thirstFloor != null &&
-        S < 0 &&
-        (H = Math.max(H, Math.min(P, i.thirstFloor))),
-        (x.thirst = Re(B(H))));
-      const A = Math.round(x.thirst - P);
-      A && (s.thirst = A);
+        Y < 0 &&
+        (E = Math.max(E, Math.min(H, i.thirstFloor))),
+        (x.thirst = Ce($(E))));
+      const S = Math.round(x.thirst - H);
+      S && (l.thirst = S);
     }
     if (
       (typeof i.heat == "number" && (x.heat = Math.max(0, x.heat + i.heat * c)),
@@ -11166,37 +12285,37 @@ function Ze(e, t, o, a, n = {}) {
         (x.barStreak = 0),
         (x.bitAge = e.age),
         n.eventId === "bf_frenzy" && (x.frenzies = (x.frenzies || 0) + 1));
-      const P = ae(e),
-        H = P.next(),
-        A = H < 0.4 ? 0 : H < 0.85 ? 1 : 2,
-        E = A === 0 ? P.int(0, 3) : A === 1 ? P.int(5, 10) : P.int(12, 20),
-        F = e.stats.wealth;
-      e.stats.wealth = Re(B(F + E));
-      const q = Math.round(e.stats.wealth - F);
-      (q && (s.wealth = (s.wealth || 0) + q),
-        (x.heat += i.bagBite ? 2 : le.biteHeat + (A === 2 ? le.richHeat : 0)),
+      const H = ae(e),
+        E = H.next(),
+        S = E < 0.4 ? 0 : E < 0.85 ? 1 : 2,
+        C = S === 0 ? H.int(0, 3) : S === 1 ? H.int(5, 10) : H.int(12, 20),
+        W = e.stats.wealth;
+      e.stats.wealth = Ce($(W + C));
+      const q = Math.round(e.stats.wealth - W);
+      (q && (l.wealth = (l.wealth || 0) + q),
+        (x.heat += i.bagBite ? 2 : ge.biteHeat + (S === 2 ? ge.richHeat : 0)),
         v.push(
           [
-            h(
+            d(
               " 주머니에는 아무것도 없었다.",
               " Their pockets were empty.",
               " ポケットには何もなかった。",
             ),
-            h(
+            d(
               " 지갑은 생각보다 두꺼웠다.",
               " The wallet was thicker than you expected.",
               " 財布は思ったより厚かった。",
             ),
-            h(
+            d(
               " 손목시계 하나가 한 달 치 집세였다. 누군가 이 사람을 찾을 것이다.",
               " The wristwatch alone was worth a month of rent. Someone will come looking for this person.",
               " 腕時計ひとつがひと月分の家賃だった。誰かがこの人を捜すだろう。",
             ),
-          ][A],
+          ][S],
         ),
         (x.wither || 0) >= 2 &&
           v.push(
-            h(
+            d(
               " 거울 속 얼굴이 돌아왔다.",
               " The face in the mirror came back.",
               " 鏡の中の顔が戻ってきた。",
@@ -11212,7 +12331,7 @@ function Ze(e, t, o, a, n = {}) {
     (i.barUse && (x.barUsed = e.age),
       i.barShort && (x.barShort = e.age + 1),
       i.kinMake && (x.made = Math.min(2, x.made + 1)),
-      i.kinLose && Cu(e) > 0 && (x.lost = Math.min(x.made, x.lost + 1)),
+      i.kinLose && rc(e) > 0 && (x.lost = Math.min(x.made, x.lost + 1)),
       i.bagMake &&
         ((x.bags ?? (x.bags = [])).push(e.age + r.int(6, 10)),
         (x.bagsMade = (x.bagsMade || 0) + 1)),
@@ -11223,24 +12342,24 @@ function Ze(e, t, o, a, n = {}) {
         (x.heat += 3),
         (x.vigor = !0)),
       i.sireWeak &&
-        (x.favor = Math.min(le.favorCap, (x.favor || 0) + le.favorStep)),
+        (x.favor = Math.min(ge.favorCap, (x.favor || 0) + ge.favorStep)),
       i.lastHunter && (x.lastHunter = !0),
-      i.revealOrg && (x.revealOrg = Sn(e)),
+      i.revealOrg && (x.revealOrg = qn(e)),
       i.endRec && (e.bfEndRec = i.endRec));
   }
-  (typeof i.rOver == "number" && (e.rOver = B((e.rOver || 0) + i.rOver, 0, 12)),
+  (typeof i.rOver == "number" && (e.rOver = $((e.rOver || 0) + i.rOver, 0, 12)),
     i.rOverHalf && (e.rOver = Math.floor((e.rOver || 0) / 2)),
-    typeof i.rMis == "number" && (e.rMis = B((e.rMis || 0) + i.rMis, 0, 10)),
+    typeof i.rMis == "number" && (e.rMis = $((e.rMis || 0) + i.rMis, 0, 10)),
     i.hurt && (e.hatchHurt = (e.hatchHurt || 0) + i.hurt));
-  let m = null;
+  let y = null;
   if (e.heir) {
     const x = e.heir;
-    for (const [S, P] of Object.entries(i.heir || {})) {
-      const H = x[S] || 0;
-      ((x[S] = B(H + P, 0, nn)), x[S] !== H && (s[`heir_${S}`] = x[S] - H));
+    for (const [Y, H] of Object.entries(i.heir || {})) {
+      const E = x[Y] || 0;
+      ((x[Y] = $(E + H, 0, bn)), x[Y] !== E && (l[`heir_${Y}`] = x[Y] - E));
     }
     (i.kong && (x.kong = Math.min(3, (x.kong || 0) + i.kong)),
-      i.verse && (m = i.verse));
+      i.verse && (y = i.verse));
   }
   (i.heirJob &&
     ((e.job = i.heirJob),
@@ -11254,31 +12373,31 @@ function Ze(e, t, o, a, n = {}) {
       (typeof i.tyr == "number" && (e.rule.tyr += i.tyr),
       typeof i.human == "number" &&
         (e.rule.human = Math.max(0, e.rule.human + i.human)),
-      i.ruleLine && e.rule.lines.push(Ht(i.ruleLine, ft(t, e), e))),
+      i.ruleLine && e.rule.lines.push(Jt(i.ruleLine, kt(t, e), e))),
     e.job === "해결사" &&
       e.flags.includes("특색") &&
       e.grade &&
       e.grade > 1 &&
       (e.grade = 1));
-  const y = ft(t, e);
-  let j = n.tone,
+  const m = kt(t, e);
+  let A = n.tone,
     _ = null,
-    Y = null,
+    j = null,
     R = null;
-  const C = [];
-  (va(e) && (i.clWarn || (o !== i && o.clWarn)) && M1(e, a, C),
-    Z1(e, t, i, C, n.eventId),
-    v.length && C.push((x) => x + v.join("")),
-    (i.joinFinger || i.job || i.clearJob) && Gr(e),
-    (i.blFixer || l === "떠돌이 검객") &&
+  const N = [];
+  (Ea(e) && (i.clWarn || (o !== i && o.clWarn)) && xT(e, a, N),
+    iv(e, t, i, N, n.eventId),
+    v.length && N.push((x) => x + v.join("")),
+    (i.joinFinger || i.job || i.clearJob) && hi(e),
+    (i.blFixer || s === "떠돌이 검객") &&
       i.job === "해결사" &&
       e.job !== "해결사" &&
-      (e.grade = um(e)));
-  const W =
-    i.wingRetire && ce(e) ? { 1: 5, 2: 3, 3: 1 }[e.wingRank || 1] || 5 : null;
+      (e.grade = Gm(e)));
+  const M =
+    i.wingRetire && Te(e) ? { 1: 5, 2: 3, 3: 1 }[e.wingRank || 1] || 5 : null;
   if (i.joinFinger) {
     const x =
-      i.gradeRank && e.grade ? uT(i.joinFinger, e.grade) : cT(e, i.joinFinger);
+      i.gradeRank && e.grade ? pv(i.joinFinger, e.grade) : bv(e, i.joinFinger);
     if (
       ((e.job = "손가락"),
       (e.work = null),
@@ -11286,40 +12405,40 @@ function Ze(e, t, o, a, n = {}) {
       (e.fingerRank = x),
       (e.grade = null),
       e.flags.includes("손가락") || e.flags.push("손가락"),
-      Q(e, {
+      Z(e, {
         k: "finger",
         finger: e.finger,
-        rankName: lt(e.finger, 1, e.gender),
+        rankName: gt(e.finger, 1, e.gender),
       }),
-      vT(e, r),
+      Cv(e, r),
       x > 1)
     ) {
-      Q(e, { k: "frank", rankName: lt(e.finger, x, e.gender) });
-      const S = ["m", "f"].map((H) => lt(i.joinFinger, 1, H)),
-        P = lt(i.joinFinger, x, e.gender);
-      (C.push((H) => S.reduce((A, E) => (E ? A.replaceAll(E, P) : A), H)),
-        C.push(
-          (H) =>
-            H +
-            h(
+      Z(e, { k: "frank", rankName: gt(e.finger, x, e.gender) });
+      const Y = ["m", "f"].map((E) => gt(i.joinFinger, 1, E)),
+        H = gt(i.joinFinger, x, e.gender);
+      (N.push((E) => Y.reduce((S, C) => (C ? S.replaceAll(C, H) : S), E)),
+        N.push(
+          (E) =>
+            E +
+            d(
               " 지난 이력은 이곳에서도 알려져 있었다. 맨 아래부터 시작하지는 않았다.",
               " Your past was known here too. You did not start from the bottom.",
               " 過去の経歴はここでも知られていた。一番下から始まることはなかった。",
             ),
         ));
     }
-    ((_ = be(e)), (j = "rare"));
+    ((_ = Re(e)), (A = "rare"));
   } else if (i.job) {
     const x = i.job === "사원" ? i.work || "날개 직원" : null,
-      S = i.job === "해결사" && !e.grade ? W || dT(e) : null;
-    (e.job === "해결사" && i.job !== "해결사" && js(e),
+      Y = i.job === "해결사" && !e.grade ? M || yv(e) : null;
+    (e.job === "해결사" && i.job !== "해결사" && Ks(e),
       (i.job !== e.job || x !== e.work) &&
-        Q(e, {
+        Z(e, {
           k: "job",
           job: x || i.job,
-          grade: i.job === "해결사" ? e.grade || S || 9 : null,
+          grade: i.job === "해결사" ? e.grade || Y || 9 : null,
         }));
-    const P = e.work;
+    const H = e.work;
     if (
       ((e.job = i.job),
       (e.work = x),
@@ -11327,65 +12446,65 @@ function Ze(e, t, o, a, n = {}) {
         e.org &&
         (e.orgHistory.push(e.org.name), (e.org = null)),
       x === "날개 직원" &&
-        P !== "날개 직원" &&
+        H !== "날개 직원" &&
         ((e.officeRank = 1),
         (e.perf = 0),
         (e.warn = 0),
         (e.warnLast = null),
         (e.dirSince = null)),
       x === "이단 심문관" &&
-        P !== x &&
-        (e.nh = { faith: Qe.start, since: e.age, rites: 0, ate: 0, best: 1 }),
-      gn[x] && P !== x)
+        H !== x &&
+        (e.nh = { faith: it.start, since: e.age, rites: 0, ate: 0, best: 1 }),
+      Rn[x] && H !== x)
     ) {
-      ((e.wingRank = x === "4무리" && e.cloneRank ? e.cloneRank : b1(e, x)),
+      ((e.wingRank = x === "4무리" && e.cloneRank ? e.cloneRank : nT(e, x)),
         (e.wingBest = Math.max(e.wingBest || 0, e.wingRank)),
         (e.branch =
           x === "흑수"
             ? i.branch || ae(e).pick(["묘", "오", "사", "유", "미"])
             : x === "4무리"
-              ? i.branch || e.cloneTeam || ae(e).pick(lm)
+              ? i.branch || e.cloneTeam || ae(e).pick(Hm)
               : null));
-      const H = x === "4무리" && !!e.cloneRank;
+      const E = x === "4무리" && !!e.cloneRank;
       (x === "4무리" && ((e.rOver = 0), (e.rMis = 0), (e.cloneRank = null)),
-        e.wingRank > 1 && H
-          ? Q(e, { k: "wrank", name: sn(x, e.wingRank, e.branch) })
+        e.wingRank > 1 && E
+          ? Z(e, { k: "wrank", name: xn(x, e.wingRank, e.branch) })
           : e.wingRank > 1 &&
-            (Q(e, { k: "wrank", name: sn(x, e.wingRank, e.branch) }),
-            C.push(
-              (A) =>
-                A +
-                h(
+            (Z(e, { k: "wrank", name: xn(x, e.wingRank, e.branch) }),
+            N.push(
+              (S) =>
+                S +
+                d(
                   " 지난 이력이 반영되어 맨 아래부터 시작하지는 않았다.",
                   " Your past record was taken into account; you did not start from the bottom.",
                   " 過去の経歴が反映され、一番下から始まることはなかった。",
                 ),
             )),
-        (j = "rare"));
-    } else gn[x] || ((e.wingRank = null), (e.branch = null));
-    if (i.job === "해결사" && !e.grade && ((e.grade = S || 9), e.grade < 9)) {
-      Q(e, { k: "grade", grade: e.grade });
-      const H = e.grade;
-      (C.push((A) =>
-        A.replace(/9급/g, `${H}급`)
-          .replace(/Grade 9/g, `Grade ${H}`)
-          .replace(/9級/g, `${H}級`),
+        (A = "rare"));
+    } else Rn[x] || ((e.wingRank = null), (e.branch = null));
+    if (i.job === "해결사" && !e.grade && ((e.grade = Y || 9), e.grade < 9)) {
+      Z(e, { k: "grade", grade: e.grade });
+      const E = e.grade;
+      (N.push((S) =>
+        S.replace(/9급/g, `${E}급`)
+          .replace(/Grade 9/g, `Grade ${E}`)
+          .replace(/9級/g, `${E}級`),
       ),
-        C.push(
-          (A) =>
-            A +
-            h(
+        N.push(
+          (S) =>
+            S +
+            d(
               " 지난 이력이 심사에 반영되었다.",
               " Your past record was taken into account.",
               " 過去の経歴が審査に反映された。",
             ),
         ));
     }
-    ((_ = be(e)),
+    ((_ = Re(e)),
       i.job !== "해결사" && (e.grade = null),
       (e.finger = null),
       (e.fingerRank = null),
-      iu.includes(x || i.job) && (j = "rare"));
+      Ou.includes(x || i.job) && (A = "rare"));
   }
   if (
     (i.joinOffer &&
@@ -11394,21 +12513,21 @@ function Ze(e, t, o, a, n = {}) {
       e.job !== "흑운회" &&
       (e.org && e.orgHistory.push(e.org.name),
       (e.org = { ...e.offer }),
-      (_ = h(
+      (_ = d(
         `소속 · ${e.org.name}`,
         `Affiliation · ${e.org.name}`,
         `所属 · ${e.org.name}`,
       )),
-      Q(e, { k: "org", name: e.org.name, type: e.org.type })),
+      Z(e, { k: "org", name: e.org.name, type: e.org.type })),
     i.leaveOrg && e.org && (e.orgHistory.push(e.org.name), (e.org = null)),
     i.clearJob && e.job)
   ) {
     if (
-      (e.job === "해결사" && js(e),
+      (e.job === "해결사" && Ks(e),
       (e.wingRank = null),
       (e.branch = null),
-      Q(e, { k: "quit", job: e.work || e.job, finger: e.finger }),
-      (e.lastJob = be(e)),
+      Z(e, { k: "quit", job: e.work || e.job, finger: e.finger }),
+      (e.lastJob = Re(e)),
       e.org && (e.orgHistory.push(e.org.name), (e.org = null)),
       e.finger)
     )
@@ -11420,41 +12539,41 @@ function Ze(e, t, o, a, n = {}) {
       (e.finger = null),
       (e.fingerRank = null));
   }
-  const O =
+  const F =
     i.rmerit > 0 &&
     e.finger &&
     !i.fingerUp &&
-    (e.fingerRank || 1) < ct[e.finger].length - 1 &&
-    !m1.luckyNoInto.includes(`${e.finger}${(e.fingerRank || 1) + 1}`) &&
-    r.chance(g1);
-  if ((i.fingerUp || O) && e.finger) {
+    (e.fingerRank || 1) < bt[e.finger].length - 1 &&
+    !tT.luckyNoInto.includes(`${e.finger}${(e.fingerRank || 1) + 1}`) &&
+    r.chance(eT);
+  if ((i.fingerUp || F) && e.finger) {
     const x = e.fingerRank || 1,
-      S = ct[e.finger].length,
-      P = C1[e.finger] && !i.topRank ? S - 1 : S,
-      H = e.rmerit || 0;
-    ((e.fingerRank = B(x + (i.fingerUp || 1), 1, Math.max(P, x))),
+      Y = bt[e.finger].length,
+      H = wT[e.finger] && !i.topRank ? Y - 1 : Y,
+      E = e.rmerit || 0;
+    ((e.fingerRank = $(x + (i.fingerUp || 1), 1, Math.max(H, x))),
       e.fingerRank !== x &&
-        ((e.rmerit = O ? Math.min(H, Math.floor(at(e) / 2)) : 0),
-        O &&
-          C.push(
-            (A) =>
-              A +
-              h(
+        ((e.rmerit = F ? Math.min(E, Math.floor(dt(e) / 2)) : 0),
+        F &&
+          N.push(
+            (S) =>
+              S +
+              d(
                 " 그 일로 윗선의 눈에 들었다. 공적이 다 차기도 전에 자리가 한 칸 올랐다.",
                 " It caught the eye of those above. You rose a rank before your merit was even full.",
                 " その件で上の目に留まった。功績が満ちる前に、席が一つ上がった。",
               ),
           ),
-        Q(e, { k: "frank", rankName: lt(e.finger, e.fingerRank, e.gender) }),
-        (Y = `${lt(e.finger, x, e.gender)} → ${lt(e.finger, e.fingerRank, e.gender)}`),
-        (j = "rare"),
-        e.fingerRank === S && x < S && (R = e.finger)));
+        Z(e, { k: "frank", rankName: gt(e.finger, e.fingerRank, e.gender) }),
+        (j = `${gt(e.finger, x, e.gender)} → ${gt(e.finger, e.fingerRank, e.gender)}`),
+        (A = "rare"),
+        e.fingerRank === Y && x < Y && (R = e.finger)));
   }
-  if (i.wingUp && ce(e)) {
+  if (i.wingUp && Te(e)) {
     const x = e.wingRank || 1;
     if (
-      ((e.wingRank = B(x + i.wingUp, 1, gn[e.work])),
-      lo(e) && e.nh && (e.nh.best = Math.max(e.nh.best || 1, e.wingRank)),
+      ((e.wingRank = $(x + i.wingUp, 1, Rn[e.work])),
+      bo(e) && e.nh && (e.nh.best = Math.max(e.nh.best || 1, e.wingRank)),
       (e.wingBest = Math.max(e.wingBest || 0, e.wingRank)),
       e.wingRank !== x)
     ) {
@@ -11462,94 +12581,94 @@ function Ze(e, t, o, a, n = {}) {
         ((e.rmerit = 0),
         e.work === "적출직" && e.wingRank >= 3 && !(e.kx && e.kx.tube))
       ) {
-        const P = Ym(e);
+        const H = sy(e);
         if (
-          ((P.tube = !0),
-          (P.fit = Math.max(P.fit || 0, 2)),
-          r.chance(no.idealP))
+          ((H.tube = !0),
+          (H.fit = Math.max(H.fit || 0, 2)),
+          r.chance(go.idealP))
         ) {
-          P.ideal = !0;
-          const H = Z(t, "kx_hp_bullet").ideal.text;
-          C.push((A) => `${A} ${H}`);
+          H.ideal = !0;
+          const E = ee(t, "kx_hp_bullet").ideal.text;
+          N.push((S) => `${S} ${E}`);
         }
       }
-      const S = sn(e.work, e.wingRank, e.branch);
-      (Q(e, { k: "wrank", name: S }),
-        (Y = `${sn(e.work, x, e.branch)} → ${S}`),
-        (j = "rare"));
+      const Y = xn(e.work, e.wingRank, e.branch);
+      (Z(e, { k: "wrank", name: Y }),
+        (j = `${xn(e.work, x, e.branch)} → ${Y}`),
+        (A = "rare"));
     }
   }
   if (i.gradeUp && e.job === "해결사" && e.grade) {
     const x = e.grade;
-    ((e.grade = B(x - i.gradeUp, 1, 9)),
+    ((e.grade = $(x - i.gradeUp, 1, 9)),
       e.grade !== x &&
-        ((e.merit = Math.min(e.merit || 0, Math.floor(ht(e) / 2))),
-        (Y = h(
+        ((e.merit = Math.min(e.merit || 0, Math.floor(mt(e) / 2))),
+        (j = d(
           `${x}급 → ${e.grade}급`,
           `Grade ${x} → Grade ${e.grade}`,
           `${x}級 → ${e.grade}級`,
         )),
-        Q(e, { k: "grade", grade: e.grade })),
-      e.grade <= 3 && e.grade < x && (j = "rare"));
+        Z(e, { k: "grade", grade: e.grade })),
+      e.grade <= 3 && e.grade < x && (A = "rare"));
   }
   if (i.genUp && e.bf && e.bf.kind === "kin") {
-    const x = ed(e);
+    const x = jd(e);
     ((e.bf.gen = Math.max(1, e.bf.gen - i.genUp)),
       (e.bf.rankAt = e.age),
       (e.bf.favor = 0),
       (e.bf.bestGen = Math.min(e.bf.bestGen || 99, e.bf.gen)));
-    const S = ed(e);
-    S !== x &&
-      ((Y = `${x} → ${S}`), Q(e, { k: "kgen", gen: e.bf.gen }), (j = "rare"));
+    const Y = jd(e);
+    Y !== x &&
+      ((j = `${x} → ${Y}`), Z(e, { k: "kgen", gen: e.bf.gen }), (A = "rare"));
   }
-  if (Ft(e)) {
+  if (Ht(e)) {
     if (
       (e.officeRank == null &&
         ((e.officeRank = 1), (e.perf = e.perf || 0), (e.warn = e.warn || 0)),
       i.perfReset)
     ) {
       const x = -Math.round(e.perf || 0);
-      ((e.perf = 0), (e.warn = 0), x && (s.perf = x));
+      ((e.perf = 0), (e.warn = 0), x && (l.perf = x));
     } else if (typeof i.perf == "number" && i.perf) {
-      const x = xu(e, i.perf);
-      x && (s.perf = x);
+      const x = Vu(e, i.perf);
+      x && (l.perf = x);
     }
     if (typeof i.warn == "number" && i.warn) {
       const x = e.warn || 0;
-      ((e.warn = B(x + i.warn, 0, ku)),
+      ((e.warn = $(x + i.warn, 0, Ju)),
         e.warn !== x &&
-          ((s.warn = e.warn - x), i.warn > 0 && (e.warnLast = e.age)));
+          ((l.warn = e.warn - x), i.warn > 0 && (e.warnLast = e.age)));
     }
     if ((i.warnSet != null && (e.warn = i.warnSet), i.officeUp)) {
       const x = e.officeRank || 1,
-        S = B(x + 1, 1, Cm.includes(e.regionId) ? 5 : 6);
-      S !== x &&
-        ((Y = `${ar[x - 1]} → ${ar[S - 1]}`),
-        (e.officeRank = S),
-        (e.officeBest = Math.max(e.officeBest || 1, S)),
-        S === 5 && (e.dirSince = e.age),
-        (e.perf = Math.min(e.perf || 0, Math.floor(Wa(e) / 2))),
+        Y = $(x + 1, 1, dy.includes(e.regionId) ? 5 : 6);
+      Y !== x &&
+        ((j = `${kr[x - 1]} → ${kr[Y - 1]}`),
+        (e.officeRank = Y),
+        (e.officeBest = Math.max(e.officeBest || 1, Y)),
+        Y === 5 && (e.dirSince = e.age),
+        (e.perf = Math.min(e.perf || 0, Math.floor(za(e) / 2))),
         (e.warn = 0),
-        Q(e, { k: "orank", rank: S }),
-        (j = "rare"));
+        Z(e, { k: "orank", rank: Y }),
+        (A = "rare"));
     }
     if (i.officeDown) {
       const x = e.officeRank || 1,
-        S = B(x - 1, 1, 6);
-      S !== x &&
-        ((Y = `${ar[x - 1]} → ${ar[S - 1]}`),
-        (e.officeRank = S),
+        Y = $(x - 1, 1, 6);
+      Y !== x &&
+        ((j = `${kr[x - 1]} → ${kr[Y - 1]}`),
+        (e.officeRank = Y),
         (e.perf = 0),
         (e.warn = 0),
-        S === 5 && (e.dirSince = e.age),
-        (j = "rare"));
+        Y === 5 && (e.dirSince = e.age),
+        (A = "rare"));
     }
   } else
     e.officeRank &&
       ((e.officeRank = null), (e.perf = 0), (e.warn = 0), (e.dirSince = null));
   if (
     (i.job === "검계" &&
-      l !== "검계" &&
+      s !== "검계" &&
       !e.bl &&
       (e.bl = {
         rank: 1,
@@ -11568,14 +12687,14 @@ function Ze(e, t, o, a, n = {}) {
       typeof i.blWay == "number" && (x.way = (x.way || 0) + i.blWay),
       i.blUp && e.job === "검계")
     ) {
-      const S = x.rank || 1;
-      ((x.rank = B(S + i.blUp, 1, 3)),
-        x.rank !== S &&
+      const Y = x.rank || 1;
+      ((x.rank = $(Y + i.blUp, 1, 3)),
+        x.rank !== Y &&
           ((x.best = Math.max(x.best || 1, x.rank)),
           (x.rankAt = e.age),
-          (Y = `${Gh[S - 1]} → ${Gh[x.rank - 1]}`),
-          Q(e, { k: "blrank", rank: x.rank }),
-          (j = "rare")));
+          (j = `${yd[Y - 1]} → ${yd[x.rank - 1]}`),
+          Z(e, { k: "blrank", rank: x.rank }),
+          (A = "rare")));
     }
     i.blRegather &&
       (e.org && (e.orgHistory.push(e.org.name), (e.org = null)),
@@ -11586,13 +12705,13 @@ function Ze(e, t, o, a, n = {}) {
       (x.best = 3),
       (x.rankAt = e.age),
       (x.since = e.age),
-      Q(e, { k: "blre" }),
-      (_ = be(e)),
-      (j = "rare"));
+      Z(e, { k: "blre" }),
+      (_ = Re(e)),
+      (A = "rare"));
   }
   if (
     (i.job === "흑운회" &&
-      l !== "흑운회" &&
+      s !== "흑운회" &&
       !e.kk &&
       (e.kk = {
         rank: 1,
@@ -11610,43 +12729,43 @@ function Ze(e, t, o, a, n = {}) {
   ) {
     const x = e.kk;
     if (
-      (typeof i.kkInk == "number" && (x.ink = B((x.ink || 0) + i.kkInk, 0, 3)),
-      typeof i.kkWay == "number" && (x.way = B((x.way || 0) + i.kkWay, -5, 5)),
-      typeof i.kkDue == "number" && (x.due = B((x.due || 0) + i.kkDue, 0, 2)),
+      (typeof i.kkInk == "number" && (x.ink = $((x.ink || 0) + i.kkInk, 0, 3)),
+      typeof i.kkWay == "number" && (x.way = $((x.way || 0) + i.kkWay, -5, 5)),
+      typeof i.kkDue == "number" && (x.due = $((x.due || 0) + i.kkDue, 0, 2)),
       i.kkCaptainChange && (x.inkWhy = { age: e.age, why: "captain" }),
       i.kkSeat && e.job === "흑운회" && (x.rank || 1) < 2)
     ) {
-      const S = tr(e);
+      const Y = pr(e);
       ((x.rank = 2),
         (x.best = Math.max(x.best || 1, 2)),
         (x.rankAt = e.age),
-        (x.seat = r.int(1, Do.seatMax)),
+        (x.seat = r.int(1, ea.seatMax)),
         (e.rmerit = 0),
-        (Y = `${S} → ${tr(e)}`),
-        Q(e, { k: "kkrank", rank: 2, seat: x.seat }),
-        (j = "rare"));
+        (j = `${Y} → ${pr(e)}`),
+        Z(e, { k: "kkrank", rank: 2, seat: x.seat }),
+        (A = "rare"));
     }
     if (i.kkUp && e.job === "흑운회" && (x.rank || 1) === 2) {
-      const S = tr(e);
+      const Y = pr(e);
       ((x.rank = 3),
         (x.best = 3),
         (x.rankAt = e.age),
         (e.rmerit = 0),
-        (Y = `${S} → ${tr(e)}`),
-        Q(e, { k: "kkrank", rank: 3 }),
-        (j = "rare"));
+        (j = `${Y} → ${pr(e)}`),
+        Z(e, { k: "kkrank", rank: 3 }),
+        (A = "rare"));
     }
   }
-  const L = c0(e, t, i, s, r);
+  const O = Xx(e, t, i, l, r);
   if (
-    (L.tails.length && C.push((x) => x + L.tails.join("")),
-    L.gradeNote && (Y = L.gradeNote),
-    L.jobNote && (_ = L.jobNote),
-    L.rare && (j = "rare"),
-    f0(e, i, r),
+    (O.tails.length && N.push((x) => x + O.tails.join("")),
+    O.gradeNote && (j = O.gradeNote),
+    O.jobNote && (_ = O.jobNote),
+    O.rare && (A = "rare"),
+    Qx(e, i, r),
     i.bldStart &&
       !e.bld &&
-      (Gr(e),
+      (hi(e),
       e.org && (e.orgHistory.push(e.org.name), (e.org = null)),
       (e.bld = {
         since: e.age,
@@ -11660,35 +12779,35 @@ function Ze(e, t, o, a, n = {}) {
       (e.job = "이름 없는 뒤틀림"),
       (e.work = null),
       (e.grade = null),
-      Q(e, { k: "bld" }),
-      (_ = be(e)),
-      (j = "rare")),
+      Z(e, { k: "bld" }),
+      (_ = Re(e)),
+      (A = "rare")),
     e.bld)
   ) {
     const x = e.bld;
     (typeof i.bldKill == "number" && (x.kills = (x.kills || 0) + i.bldKill),
-      typeof i.bldRem == "number" && (x.rem = B((x.rem || 0) + i.bldRem, 0, 4)),
+      typeof i.bldRem == "number" && (x.rem = $((x.rem || 0) + i.bldRem, 0, 4)),
       typeof i.bldThreat == "number" &&
-        (x.threat = B((x.threat || 0) + i.bldThreat, 0, 3)),
+        (x.threat = $((x.threat || 0) + i.bldThreat, 0, 3)),
       i.bldNoHunt && (x.noHunt = !0),
       i.bldHuntNext && (x.huntNext = !0));
   }
-  (T && ((_ = T), (j = "rare")),
-    (i.flagsAdd || []).some((x) => wk.includes(x)) && (j = "rare"),
-    j || (j = _1(s)));
-  const G = Z0(e, t, n.eventId);
-  (G && C.push((x) => `${x} ${G}`), bu(e));
-  const I = C.reduce((x, S) => S(x), Ht(i.text, y, e));
+  (T && ((_ = T), (A = "rare")),
+    (i.flagsAdd || []).some((x) => Xk.includes(x)) && (A = "rare"),
+    A || (A = yy(l)));
+  const D = E1(e, t, n.eventId);
+  (D && N.push((x) => `${x} ${D}`), Uu(e));
+  const B = N.reduce((x, Y) => Y(x), Jt(i.text, m, e));
   if (
-    (D(
+    (P(
       e,
       {
         kind: n.kind || "result",
-        text: I,
-        delta: s,
+        text: B,
+        delta: l,
         job: _,
-        grade: Y,
-        tone: j,
+        grade: j,
+        tone: A,
         auto: !!n.auto,
         timeout: !!n.timeout,
         ignored: !!n.ignored,
@@ -11696,11 +12815,11 @@ function Ze(e, t, o, a, n = {}) {
         eventId: n.eventId || null,
         hold:
           g === "cl_all"
-            ? Math.max(4500, xe(I))
+            ? Math.max(4500, me(B))
             : typeof i.hold == "number"
-              ? Math.max(i.hold, xe(I))
+              ? Math.max(i.hold, me(B))
               : i.hold || (e.rule && n.eventId)
-                ? xe(I)
+                ? me(B)
                 : void 0,
         scene: g || i.scene || void 0,
       },
@@ -11708,32 +12827,32 @@ function Ze(e, t, o, a, n = {}) {
     ),
     R)
   ) {
-    const x = lt(R, ct[R].length, e.gender),
-      S = {
-        엄지: h(
+    const x = gt(R, bt[R].length, e.gender),
+      Y = {
+        엄지: d(
           "엄지에서 더 오를 자리는 없다. 모자를 벗는 쪽이 아니라 벗기는 쪽이 되었다. 당신은 대부다.",
           "There is no higher seat in the Thumb. You are no longer the one who takes off the hat, but the one they take it off for. You are the Capo dei Capi.",
           "親指にこれ以上の席はない。帽子を脱ぐ側ではなく、脱がせる側になった。あなたはゴッドファーザーだ。",
         ),
-        검지: h(
+        검지: d(
           "쪽지와 함께 작은 기기 하나가 왔다. 지령은 더 이상 종이로 오지 않는다. 당신은 이제 신의 뜻을 직접 듣는다.",
           "A small device came with the note. Orders no longer arrive on paper. From now on you hear the god's will directly.",
           "紙片と共に小さな機器がひとつ届いた。指令はもう紙では来ない。あなたはこれから、神の意志を直接聞く。",
         ),
-        중지: h(
+        중지: d(
           `몸에 문신과 사슬이 한 겹 더 감겼다. 이제 이 가족을 지키는 것은 당신의 몫이다. 당신은 ${x}이다.`,
           `One more layer of ink and chain wraps your body. Protecting this family is now yours to do. You are the ${x}.`,
           `体に刺青と鎖がもう一重巻かれた。この家族を守るのは、これからあなたの役目だ。あなたは${x}だ。`,
         ),
-        약지: h(
+        약지: d(
           "약지에서 더 오를 자리는 없다. 붓이든 몸이든, 당신의 손이 닿는 것이 곧 작품이 된다. 당신은 마에스트로다.",
           "There is no higher seat in the Ring. Brush or body, whatever your hand touches becomes the work. You are the Maestro.",
           "薬指にこれ以上の席はない。筆であれ身体であれ、あなたの手が触れたものがそのまま作品になる。あなたはマエストロだ。",
         ),
       }[R];
-    D(
+    P(
       e,
-      { kind: "result", text: S, tone: "rare", hold: 5600, scene: `ftop_${R}` },
+      { kind: "result", text: Y, tone: "rare", hold: 5600, scene: `ftop_${R}` },
       a,
     );
   }
@@ -11745,17 +12864,17 @@ function Ze(e, t, o, a, n = {}) {
       (e.prompt = {
         kind: "color",
         age: e.age,
-        question: h(
+        question: d(
           "도시가 당신에게 특색의 이름을 내렸다. 이제 사람들은 1급, 2급 같은 급수 대신 별칭으로 당신을 부른다. 어떤 이름으로 불릴 것인가?",
           "The City has granted you the title of a Color. From now on, people will call you by an epithet instead of a grade. What name will you be known by?",
           "都市があなたに特色の名を授けた。これからは1級、2級といった等級ではなく、異名であなたを呼ぶ。どんな名で呼ばれたい？",
         ),
-        text: h("특색의 별칭", "Color epithet", "特色の異名"),
+        text: d("특색의 별칭", "Color epithet", "特色の異名"),
         choices: [],
         t: a,
       })),
-    Xm(e, a),
-    i.wsCraft && Le(e) && !e.dead && !e.prompt && h0(e, a),
+    Fy(e, a),
+    i.wsCraft && Ge(e) && !e.dead && !e.prompt && Ux(e, a),
     i.weaponName &&
       e.weapon &&
       !e.dead &&
@@ -11764,12 +12883,12 @@ function Ze(e, t, o, a, n = {}) {
         kind: "name",
         field: "weapon",
         age: e.age,
-        question: h(
+        question: d(
           "무기에 붙일 이름은? (비워 두면 이름 없이 쓴다)",
           "What will you name your weapon? (Leave blank to keep it nameless.)",
           "武器に付ける名は？（空欄なら名無しのまま）",
         ),
-        text: h("무기의 이름", "Weapon's name", "武器の名"),
+        text: d("무기의 이름", "Weapon's name", "武器の名"),
         choices: [],
         t: a,
       }),
@@ -11778,103 +12897,103 @@ function Ze(e, t, o, a, n = {}) {
           kind: "name",
           field: "child",
           age: e.age,
-          question: h(
+          question: d(
             "아이의 이름을 정할 때가 되었다. 어떤 이름을 지어 줄 것인가? (비워 두면 무작위 이름이 붙는다)",
             "It is time to name your child. What will you call them? (Leave blank and a random name is chosen.)",
             "子どもの名前を決める時が来た。どんな名を付ける？（空欄ならランダムな名前が付く）",
           ),
-          text: h("아이의 이름", "Child's name", "子の名"),
+          text: d("아이의 이름", "Child's name", "子の名"),
           choices: [],
           t: a,
         })
       : i.nameChildRandom &&
         !e.dead &&
-        ((e.childName = Jm(e)),
-        D(
+        ((e.childName = My(e)),
+        P(
           e,
-          { kind: "result", text: Vm(e.childName, !0), tone: "rare" },
+          { kind: "result", text: Oy(e.childName, !0), tone: "rare" },
           Math.min(0.99, a + 0.01),
         )),
-    k &&
+    b &&
       !e.dead &&
       (e.prompt
-        ? (e.partnerName = $m(e))
+        ? (e.partnerName = xy(e))
         : (e.prompt = {
             kind: "name",
             field: "partner",
-            lover: k === "lover",
+            lover: b === "lover",
             age: e.age,
             question:
-              k === "lover"
-                ? h(
+              b === "lover"
+                ? d(
                     "곁에서 걸음을 맞추는 사람이 생겼다. 그 사람의 이름은 무엇인가? (비워 두면 무작위 이름이 붙는다)",
                     "Someone now walks in step beside you. What is their name? (Leave blank and a random name is chosen.)",
                     "歩調を合わせてくれる人ができた。その人の名前は？（空欄ならランダムな名前が付く）",
                   )
-                : h(
+                : d(
                     "함께 살게 될 사람의 이름은 무엇인가? (비워 두면 무작위 이름이 붙는다)",
                     "What is the name of the person you will share a home with? (Leave blank and a random name is chosen.)",
                     "共に暮らすことになる人の名前は？（空欄ならランダムな名前が付く）",
                   ),
             text:
-              k === "lover"
-                ? h("연인의 이름", "Partner's name", "恋人の名")
-                : h("배우자의 이름", "Spouse's name", "配偶者の名"),
+              b === "lover"
+                ? d("연인의 이름", "Partner's name", "恋人の名")
+                : d("배우자의 이름", "Spouse's name", "配偶者の名"),
             choices: [],
             t: a,
           })),
-    m &&
-      D(
+    y &&
+      P(
         e,
-        { kind: "verse", lines: m, text: m.join(" "), tone: "rare" },
+        { kind: "verse", lines: y, text: y.join(" "), tone: "rare" },
         Math.min(0.99, a + 0.01),
       ),
     i.heirMax && e.heir)
   ) {
     const x = e.heir,
-      S = {};
-    for (const A of ["ji", "yong", "in"])
-      (x[A] < nn && (S[`heir_${A}`] = nn - x[A]), (x[A] = nn));
-    const P = h(
+      Y = {};
+    for (const S of ["ji", "yong", "in"])
+      (x[S] < bn && (Y[`heir_${S}`] = bn - x[S]), (x[S] = bn));
+    const H = d(
         "지 · 용 · 인이 끝까지 차올랐다.",
         "Wisdom, Courage, and Benevolence filled to the brim.",
         "智・勇・仁が満ちきった。",
       ),
-      H = e.log[e.log.length - 1];
-    H && H.kind === "verse"
-      ? Object.assign(H, { after: P, delta: S })
-      : D(
+      E = e.log[e.log.length - 1];
+    E && E.kind === "verse"
+      ? Object.assign(E, { after: H, delta: Y })
+      : P(
           e,
-          { kind: "result", text: P, delta: S, tone: "rare" },
+          { kind: "result", text: H, delta: Y, tone: "rare" },
           Math.min(0.99, a + 0.02),
         );
   }
   if (i.alive && (e.bf || i.aliveCause)) {
-    et(e, i.aliveCause || "이야기의 끝", a, "event", { text: I, alive: !0 });
+    Ze(e, i.aliveCause || "이야기의 끝", a, "event", { text: B, alive: !0 });
     return;
   }
   if (i.death) {
-    const x = e.bf && ["긴 잠", "세월"].includes(i.death) ? { text: I } : {};
+    const x = e.bf && ["긴 잠", "세월"].includes(i.death) ? { text: B } : {};
     i.blDistort != null && (x.noBloom = !0);
-    const S = !!e.cl;
-    if (et(e, i.death, a, "event", x)) {
-      S &&
+    const Y = !!e.cl;
+    if (Ze(e, i.death, a, "event", x)) {
+      Y &&
         e.dead &&
         (e.dead.hold = Math.max(
           e.dead.hold || 0,
-          xe(I) +
+          me(B) +
             (i.death === "조율자" || g === "cl_all" ? 3600 : g ? 1500 : 0),
         ));
       return;
     }
   }
-  if (!(kt(e) && e.stats.health <= 0 && (Sm(e, t, a), e.dead))) {
-    if (s.health < 0 && !aa(e) && !kt(e) && !f) {
-      const x = Um(e.stats.health);
+  if (!(jt(e) && e.stats.health <= 0 && (ly(e, t, a), e.dead))) {
+    if (l.health < 0 && !ga(e) && !jt(e) && !f) {
+      const x = Wy(e.stats.health);
       if (
         x > 0 &&
         r.chance(x) &&
-        et(
+        Ze(
           e,
           e.flags.includes("부화장")
             ? "부화장 경쟁"
@@ -11888,15 +13007,15 @@ function Ze(e, t, o, a, n = {}) {
     }
     if (i.risk) {
       const x = 1.15 - e.stats.network * 0.006,
-        S = B(1 + (50 - e.stats.health) / 100, 0.5, 2) * x;
-      for (const [P, H] of Object.entries(i.risk))
-        if (r.chance(H * S * Au) && et(e, P, a)) return;
+        Y = $(1 + (50 - e.stats.health) / 100, 0.5, 2) * x;
+      for (const [H, E] of Object.entries(i.risk))
+        if (r.chance(E * Y * tc) && Ze(e, H, a)) return;
     }
     if (
-      (va(e) &&
+      (Ea(e) &&
         !e.prompt &&
-        e.stats.health <= ge.healAt &&
-        _a(e, "k") &&
+        e.stats.health <= Ae.healAt &&
+        La(e, "k") &&
         !i.next &&
         !(e.cl && e.cl.clawDue) &&
         (e.last || (e.last = {}),
@@ -11909,7 +13028,7 @@ function Ze(e, t, o, a, n = {}) {
           }))),
       i.next && i.nextLater && !e.dead && !e.prompt)
     ) {
-      const x = Z(t, i.next);
+      const x = ee(t, i.next);
       x &&
         (e.last || (e.last = {}),
         (e.last[x.id] = e.age),
@@ -11920,32 +13039,32 @@ function Ze(e, t, o, a, n = {}) {
           t: Math.min(0.98, a + 0.03),
         }));
     } else if ((i.next || w) && !e.dead && !e.prompt) {
-      const S = []
+      const Y = []
         .concat(i.next || w)
-        .map((P) => Z(t, P))
-        .find((P) => P && (!P.branch || P.branch.includes(Pr(e))));
-      S &&
+        .map((H) => ee(t, H))
+        .find((H) => H && (!H.branch || H.branch.includes(ri(e))));
+      Y &&
         (e.last || (e.last = {}),
-        (e.last[S.id] = e.age),
-        S.repeat || e.used.push(S.id),
-        Ta(S)
-          ? Bo(e, t, S, Math.min(0.98, a + 0.02))
-          : Ze(e, t, S, Math.min(0.98, a + 0.02), {
+        (e.last[Y.id] = e.age),
+        Y.repeat || e.used.push(Y.id),
+        Ba(Y)
+          ? Jo(e, t, Y, Math.min(0.98, a + 0.02))
+          : st(e, t, Y, Math.min(0.98, a + 0.02), {
               kind: "flavor",
-              eventId: S.id,
+              eventId: Y.id,
             }));
     }
-    (i.warpStart && !e.dead && !e.prompt && jT(e, t, a, i.warpSkip || 0),
-      i.lakeHint && !e.dead && E0(e, i.lakeHint, a),
-      i.lakeStart && !e.dead && !e.prompt && N0(e, t, a, i.lakeStart));
+    (i.warpStart && !e.dead && !e.prompt && Iv(e, t, a, i.warpSkip || 0),
+      i.lakeHint && !e.dead && x1(e, i.lakeHint, a),
+      i.lakeStart && !e.dead && !e.prompt && m1(e, t, a, i.lakeStart));
   }
 }
-function yT(e) {
-  return e.flags.includes("E.G.O개화") || kt(e)
+function _v(e) {
+  return e.flags.includes("E.G.O개화") || jt(e)
     ? 0
-    : B((e.stats.sanity - 30) * 0.0015, 0, 0.08);
+    : $((e.stats.sanity - 30) * 0.0015, 0, 0.08);
 }
-const pT = jt({
+const Av = Nt({
   ko: [
     "몸이 속삭임이 원하는 모양으로 비틀리려던 순간, 끝내 놓지 않은 것이 있었다. 뒤틀림이 되어야 했던 마음이 형태를 얻었다. E.G.O가 개화했다.",
     "뼈가 다른 모양을 기억해 내던 그때, 당신은 자신이 무엇을 원하는지 똑바로 보았다. 마음은 괴물이 되는 대신 무기가 되었다. E.G.O가 개화했다.",
@@ -11959,23 +13078,23 @@ const pT = jt({
     "骨が別の形を思い出しかけたその時、あなたは自分が何を望んでいるのかをまっすぐに見た。心は怪物になる代わりに武器になった。E.G.Oが開花した。",
   ],
 });
-function Jm(e) {
-  return ae(e).pick([...bs.m, ...bs.f]);
+function My(e) {
+  return ae(e).pick([...Ln.m, ...Ln.f]);
 }
-function Vm(e, t) {
+function Oy(e, t) {
   return t
-    ? h(
-        `아이는 '${e}'${wn(e)}는 이름으로 자라났다.`,
+    ? d(
+        `아이는 '${e}'${Yn(e)}는 이름으로 자라났다.`,
         `The child grew up as '${e}'.`,
         `子は「${e}」という名で育った。`,
       )
-    : h(
-        `아이에게 '${e}'${wn(e)}는 이름을 지어 주었다.`,
+    : d(
+        `아이에게 '${e}'${Yn(e)}는 이름을 지어 주었다.`,
         `You named the child '${e}'.`,
         `子には「${e}」という名を付けた。`,
       );
 }
-function Xm(e, t) {
+function Fy(e, t) {
   if (e.prompt || e.dead) return;
   const o = (a) => e.flags.includes(a);
   if (o("E.G.O개화") && !e.egoAsked) {
@@ -11984,12 +13103,12 @@ function Xm(e, t) {
         kind: "name",
         field: "ego",
         age: e.age,
-        question: h(
+        question: d(
           "마음이 형태를 얻었다. 당신의 E.G.O에는 어떤 이름이 붙는가? (비워 두면 이름 없이 둔다)",
           "Your heart has taken form. What is your E.G.O called? (Leave blank to keep it unnamed.)",
           "心が形を得た。あなたのE.G.Oにはどんな名が付く？（空欄なら名前を付けない）",
         ),
-        text: h("E.G.O의 이름", "E.G.O name", "E.G.Oの名"),
+        text: d("E.G.O의 이름", "E.G.O name", "E.G.Oの名"),
         choices: [],
         t,
       }));
@@ -12002,17 +13121,17 @@ function Xm(e, t) {
       kind: "name",
       field: "relic",
       age: e.age,
-      question: h(
+      question: d(
         "외곽에서 얻은 유물을 손에 쥐었다. 이 유물을 무엇이라 부를 것인가? (비워 두면 이름 없이 둔다)",
         "You hold a relic from the Outskirts. What will you call it? (Leave blank to keep it unnamed.)",
         "外郭で得た遺物を手にした。これを何と呼ぶ？（空欄なら名前を付けない）",
       ),
-      text: h("유물의 이름", "Relic name", "遺物の名"),
+      text: d("유물의 이름", "Relic name", "遺物の名"),
       choices: [],
       t,
     }));
 }
-const bT = [
+const jv = [
   "노화",
   "시듦",
   "긴 잠",
@@ -12023,83 +13142,83 @@ const bT = [
   "해결사의 토벌",
   "분노한 사람의 손",
 ];
-function kT(e, t, o, a) {
+function Sv(e, t, o, a) {
   if (
     !e.flags.includes("K사앰플") ||
     a.alive ||
-    bT.includes(t) ||
+    jv.includes(t) ||
     e.heir ||
     e.rule ||
-    ka(e) ||
-    aa(e)
+    Oa(e) ||
+    ga(e)
   )
     return !1;
-  ((e.flags = e.flags.filter((s) => s !== "K사앰플")),
+  ((e.flags = e.flags.filter((l) => l !== "K사앰플")),
     e.cmRec ?? (e.cmRec = {}),
     (e.cmRec.ampouleUsed = !0));
   const n = e.stats,
     r = { health: n.health, sanity: n.sanity };
-  ((n.health = B(Math.max(n.health, 25))),
-    (n.sanity = B(Math.max(n.sanity, 20))));
+  ((n.health = $(Math.max(n.health, 25))),
+    (n.sanity = $(Math.max(n.sanity, 20))));
   const i = {};
-  for (const s of ["health", "sanity"])
-    Math.round(n[s] - r[s]) && (i[s] = Math.round(n[s] - r[s]));
-  const l =
+  for (const l of ["health", "sanity"])
+    Math.round(n[l] - r[l]) && (i[l] = Math.round(n[l] - r[l]));
+  const s =
     t === "뒤틀림"
-      ? h(
+      ? d(
           "뒤틀려 가던 몸이 멈췄다. 품에 넣어 둔 K사 앰플이 먼저 깨져 있었다. 무엇이 몸을 붙잡았는지는 알 수 없다. 숨이 돌아왔다.",
           "The body that was twisting stopped. The K Corp. ampoule in your coat had already broken. You cannot tell what held you back. Your breath returned.",
           "ねじれていく体が止まった。懐に入れていたK社のアンプルが先に割れていた。何が体を繋ぎ止めたのかは分からない。息が戻った。",
         )
-      : h(
+      : d(
           "숨이 끊어지려던 순간, 품에 넣어 둔 K사 앰플이 깨졌다. 쓴 것이 몸을 타고 내려갔다. 눈을 떴을 때 숨은 아직 붙어 있었다.",
           "At the moment your breath was about to stop, the K Corp. ampoule in your coat broke. Something bitter went down through your body. When you opened your eyes, you were still breathing.",
           "息が絶えようとしたその瞬間、懐に入れていたK社のアンプルが割れた。苦いものが体を伝っていった。目を開けたとき、息はまだ残っていた。",
         );
-  return (D(e, { kind: "result", text: l, delta: i, tone: "rare" }, o), !0);
+  return (P(e, { kind: "result", text: s, delta: i, tone: "rare" }, o), !0);
 }
-function et(e, t, o, a = "event", n = {}) {
+function Ze(e, t, o, a = "event", n = {}) {
   const r = ae(e);
-  if (t === "뒤틀림" && kt(e) && oe)
+  if (t === "뒤틀림" && jt(e) && re)
     return (
-      D(
+      P(
         e,
         {
           kind: "result",
-          text: Z(oe, "kx_hp_bullet").noDistort.text,
+          text: ee(re, "kx_hp_bullet").noDistort.text,
           tone: "bad",
         },
         o,
       ),
       !1
     );
-  if (t === "뒤틀림" && !n.noBloom && r.chance(yT(e)))
+  if (t === "뒤틀림" && !n.noBloom && r.chance(_v(e)))
     return (
       e.flags.push("E.G.O개화"),
-      Q(e, { k: "flag", flag: "E.G.O개화" }),
-      (e.stats.sanity = B(e.stats.sanity - 6, 0, 100)),
-      D(
+      Z(e, { k: "flag", flag: "E.G.O개화" }),
+      (e.stats.sanity = $(e.stats.sanity - 6, 0, 100)),
+      P(
         e,
         {
           kind: "result",
-          text: r.pick(pT),
+          text: r.pick(Av),
           tone: "rare",
           delta: { sanity: -6 },
         },
         o,
       ),
-      Xm(e, o),
+      Fy(e, o),
       !1
     );
-  if (kT(e, t, o, n)) return !1;
+  if (Sv(e, t, o, n)) return !1;
   let i = t;
   i === "질병" && e.age <= 4 && (i = "영유아 질병");
-  let l = n.text || Wk(i, r, tl(e));
+  let s = n.text || g0(i, r, vl(e));
   if (
     (i === "뒤틀림" &&
       !n.text &&
       e.flags.includes("검계뒤틀림") &&
-      (l = h(
+      (s = d(
         "골목이 조용해진 뒤에도 칼은 한동안 멈추지 않았다. 그 뒤로 그 골목에 들어간 사람은 없었다.",
         "Even after the alley fell silent, the blade did not stop for a while. No one entered that alley again.",
         "路地が静まり返った後も、刀はしばらく止まらなかった。それ以来、その路地に入った者はいない。",
@@ -12107,13 +13226,13 @@ function et(e, t, o, a = "event", n = {}) {
     i === "뒤틀린 우두머리의 칼" &&
       !n.text &&
       e.job === "흑운회" &&
-      (l = r.pick([
-        h(
+      (s = r.pick([
+        d(
           "검은 구름은 찌르기를 막아 준다. 그 칼은 찌르지 않았다.",
           "The black clouds stop a thrust. That blade did not thrust.",
           "黒い雲は突きを防ぐ。あの刃は突かなかった。",
         ),
-        h(
+        d(
           "골목 끝에서 무엇이 왔는지 끝내 보지 못했다.",
           "You never saw what came from the end of the alley.",
           "路地の奥から何が来たのか、最後まで見えなかった。",
@@ -12122,21 +13241,21 @@ function et(e, t, o, a = "event", n = {}) {
     e.cl &&
       i === "발톱" &&
       !n.text &&
-      (l = h(
+      (s = d(
         "경고는 한 번이었다. 두 번째로는 사람이 왔다. 당신이 늘 그랬던 것처럼.",
         "There was one warning. The second time, a person came. Just as you always had.",
         "警告は一度だった。二度目には人が来た。あなたがいつもそうしてきたように。",
       )),
-    e.bld && (e.bld.hunterName = xm(e)),
+    e.bld && (e.bld.hunterName = ty(e)),
     i === "해결사의 토벌" &&
       !n.text &&
-      (l = e.flags.includes("칼을내려놓은뒤틀림")
-        ? h(
+      (s = e.flags.includes("칼을내려놓은뒤틀림")
+        ? d(
             "의뢰서에는 '처리 완료'라고 적혔다. 칼을 먼저 내려놓았다는 말은 어디에도 적히지 않았다.",
             'The request was marked "Completed." Nowhere did it say the blade had been laid down first.',
             "依頼書には「処理完了」と書かれた。先に刀を置いたことは、どこにも書かれなかった。",
           )
-        : h(
+        : d(
             "의뢰서에는 '처리 완료'라고 적혔다. 그 칼이 누구의 것이었는지 적는 칸은 없었다.",
             'The request was marked "Completed." There was no space to write whose blade it had been.',
             "依頼書には「処理完了」と書かれた。その刀が誰のものだったかを書く欄はなかった。",
@@ -12144,48 +13263,48 @@ function et(e, t, o, a = "event", n = {}) {
     e.bf &&
       !n.text &&
       (i === "혈귀 사냥" || i === "시듦") &&
-      (l = rr(e, i === "시듦" ? "wither" : "hunt") || l),
-    e.bf && WT.includes(i))
+      (s = Tr(e, i === "시듦" ? "wither" : "hunt") || s),
+    e.bf && Lv.includes(i))
   ) {
-    const g = FT(e);
-    g && (l = `${l} ${g}`);
+    const g = Hv(e);
+    g && (s = `${s} ${g}`);
   }
   e.kx &&
     e.kx.ideal &&
     e.kx.tube &&
     i !== "메마름" &&
-    oe &&
-    ((e.kx.dreamer = !0), (l = `${l} ${Z(oe, "kx_end_hollow").dreamer.text}`));
-  const s = l;
-  if (e.hgd && e.hgd.guardSince != null && oe) {
-    const g = Z(oe, "hgd_lines");
+    re &&
+    ((e.kx.dreamer = !0), (s = `${s} ${ee(re, "kx_end_hollow").dreamer.text}`));
+  const l = s;
+  if (e.hgd && e.hgd.guardSince != null && re) {
+    const g = ee(re, "hgd_lines");
     g &&
       e.job === "호위무사" &&
       !e.hgd.lordDead &&
       !n.text &&
       (i === "노화" || i === "질병") &&
-      ((l = g.before.text), (e.hgd.endWay = "before"));
-    const b = V1(e, oe);
-    b &&
-      (l = `${l}
+      ((s = g.before.text), (e.hgd.endWay = "before"));
+    const p = av(e, re);
+    p &&
+      (s = `${s}
 
-${b}`);
+${p}`);
   }
   const c = e.log[e.log.length - 1],
-    u = e.bld ? xe(c && c.kind !== "year" ? c.text : l) + 5e3 : 0;
+    u = e.bld ? me(c && c.kind !== "year" ? c.text : s) + 5e3 : 0;
   ((e.dead = {
     age: e.age,
     cause: i,
     t: o,
-    text: l,
+    text: s,
     source: a,
     alive: !!n.alive,
-    phrase: e.bf ? ET(e, i) : null,
+    phrase: e.bf ? Dv(e, i) : null,
     hold:
       (e.hgd && e.hgd.guardSince != null) ||
       (e.heir && n.alive) ||
       (e.cl && n.alive)
-        ? xe(l)
+        ? me(s)
         : e.cl && i === "조율자"
           ? 4200
           : u,
@@ -12196,24 +13315,24 @@ ${b}`);
       !e.heir &&
       !e.flags.includes("가주후보") &&
       !e.flags.includes("검계뒤틀림") &&
-      r.chance(mn.voiceP) &&
+      r.chance(Cn.voiceP) &&
       (e.dead.voice = !0),
     (e.prompt = null),
     (e.plan = []),
     (e.cursor = 0));
   const f = e.log[e.log.length - 1];
   return (
-    n.alive && f && (f.text === l || f.text === s) && f.kind !== "year"
-      ? Object.assign(f, { kind: "death", tone: "death", cause: i, text: l })
-      : D(e, { kind: "death", text: l, tone: "death", cause: i }, o),
+    n.alive && f && (f.text === s || f.text === l) && f.kind !== "year"
+      ? Object.assign(f, { kind: "death", tone: "death", cause: i, text: s })
+      : P(e, { kind: "death", text: s, tone: "death", cause: i }, o),
     !0
   );
 }
-function pf(e) {
-  const t = at(e);
-  return t > 0 ? Math.min(1, ro(e) / t) : 0;
+function Qf(e) {
+  const t = dt(e);
+  return t > 0 ? Math.min(1, mo(e) / t) : 0;
 }
-const bf = {
+const Zf = {
   엄지: [
     [3, 7],
     [9, 9.9],
@@ -12237,33 +13356,33 @@ const bf = {
     [12, 12],
   ],
 };
-function uo(e) {
+function _o(e) {
   let t = null;
   const o = e.flags;
   if (e.job === "해결사" && e.grade)
     ((t = 10 - e.grade),
       e.grade === 1 &&
         !o.includes("특색") &&
-        (t += 2 * Math.min(1, (e.merit || 0) / ht(e))));
+        (t += 2 * Math.min(1, (e.merit || 0) / mt(e))));
   else if (e.job === "손가락" && e.finger) {
-    const a = bf[e.finger] || bf.검지,
+    const a = Zf[e.finger] || Zf.검지,
       n = Math.min(e.fingerRank || 1, a.length),
       [r, i] = a[n - 1],
-      l = at(e);
-    t = l > 0 ? r + (i - r) * Math.min(1, ro(e) / l) : i;
-  } else if (ce(e)) {
+      s = dt(e);
+    t = s > 0 ? r + (i - r) * Math.min(1, mo(e) / s) : i;
+  } else if (Te(e)) {
     const a = e.wingRank || 1;
     if (e.work === "흑수") {
-      const n = at(e),
-        r = n > 0 ? Math.min(1, ro(e) / n) : 1;
+      const n = dt(e),
+        r = n > 0 ? Math.min(1, mo(e) / n) : 1;
       t = a >= 2 ? 9 + 3 * r : 3 + 5 * r;
     } else if (e.work === "시간징수직") {
-      const n = at(e),
-        r = a < 10 && n > 0 ? Math.min(1, ro(e) / n) : 0;
+      const n = dt(e),
+        r = a < 10 && n > 0 ? Math.min(1, mo(e) / n) : 0;
       t = 1 + ((Math.min(a, 10) - 1 + r) * 11) / 9;
     } else if (e.work === "정리 요원" || e.work === "적출직") {
-      const n = at(e),
-        r = a < 5 && n > 0 ? Math.min(1, ro(e) / n) : 0;
+      const n = dt(e),
+        r = a < 5 && n > 0 ? Math.min(1, mo(e) / n) : 0;
       t = 1 + ((Math.min(a, 5) - 1 + r) * 11) / 4;
     } else if (e.work === "4무리" || e.work === "이단 심문관") {
       const n =
@@ -12279,35 +13398,35 @@ function uo(e) {
                 [7, 11],
               ],
         [r, i] = n[Math.min(a, 3) - 1];
-      t = r + (i - r) * pf(e);
+      t = r + (i - r) * Qf(e);
     }
   } else if (e.job === "검계" && e.bl) {
-    const a = Math.min(3, On(e) || 1) - 1,
+    const a = Math.min(3, Xn(e) || 1) - 1,
       n = e.bl.cut || 0,
       r = Math.min(
         1,
         Math.max(0, a === 0 ? n / 15 : a === 1 ? (n - 15) / 20 : (n - 20) / 40),
       ),
-      [i, l] = [
+      [i, s] = [
         [1, 4],
         [5, 7],
         [8, 10.5],
       ][a];
-    t = i + (l - i) * r + xf(e);
+    t = i + (s - i) * r + tw(e);
   } else if (e.job === "흑운회" && e.kk) {
     const [a, n] = [
       [1, 4],
       [5, 7],
       [8, 10.5],
-    ][Math.min(3, ho(e) || 1) - 1];
-    t = a + (n - a) * pf(e) + xf(e);
-  } else e.job === "떠돌이 검객" ? (t = 10 - um(e)) : va(e) && (t = ge.power);
+    ][Math.min(3, vo(e) || 1) - 1];
+    t = a + (n - a) * Qf(e) + tw(e);
+  } else e.job === "떠돌이 검객" ? (t = 10 - Gm(e)) : Ea(e) && (t = Ae.power);
   if (t == null) return null;
   (o.includes("특색") && (t += 4),
     o.includes("E.G.O개화") && (t += 2),
     o.includes("유물") && (t += 1),
     e.bf && (t += 1),
-    (t += Yo(e, 2, 1.5) - 1));
+    (t += Ho(e, 2, 1.5) - 1));
   for (const a of ["강화시술", "전투의체", "고급장비"])
     o.includes(a) && (t += 0.5);
   return (
@@ -12317,7 +13436,7 @@ function uo(e) {
     t
   );
 }
-const al = [
+const Al = [
     { E: 3, kind: "person" },
     { E: 4.5, kind: "person" },
     { E: 5.5, kind: "person" },
@@ -12327,13 +13446,13 @@ const al = [
     { E: 8.5, kind: "thing", mindHalf: !0 },
     { E: 11.5, kind: "person", noRed: !0 },
   ],
-  kf = al.length;
-function Kr(e) {
+  ew = Al.length;
+function di(e) {
   return e.job === "해결사" && e.grade
     ? "fixer"
     : e.job === "손가락" && e.finger
       ? "finger"
-      : ce(e)
+      : Te(e)
         ? {
             흑수: "heishou",
             시간징수직: "tcorp",
@@ -12352,11 +13471,11 @@ function Kr(e) {
               : "kurokumo"
             : e.job === "떠돌이 검객"
               ? "wanderer"
-              : va(e)
+              : Ea(e)
                 ? "claw"
                 : null;
 }
-function xf(e) {
+function tw(e) {
   if (e.job === "검계" && e.bl) {
     const t = e.bl.cut || 0;
     return Math.min(
@@ -12374,24 +13493,24 @@ function xf(e) {
   }
   return 0;
 }
-function Qm(e) {
-  const t = Kr(e);
+function By(e) {
+  const t = di(e);
   return t === "kcorp" && (e.wingRank || 1) < 3
     ? "wt_enter_kcorp_low"
     : t === "fixer" && e.flags.includes("특색")
       ? "cm_color_citizen"
       : `wt_enter_${t}`;
 }
-function Yu(e) {
-  return vs(e) || ad(e)
+function oc(e) {
+  return qs(e) || Cd(e)
     ? !1
     : e.age >= 25 &&
         !e.warp &&
         !e.flags.includes("워프열차") &&
         !e.flags.includes("부화장") &&
-        !!Kr(e);
+        !!di(e);
 }
-const Tf = {
+const ow = {
   흑수: 2,
   시간징수직: 10,
   "정리 요원": 5,
@@ -12399,38 +13518,38 @@ const Tf = {
   적출직: 5,
   "이단 심문관": 3,
 };
-function rd(e) {
-  return yn(e) >= 5 ||
+function Id(e) {
+  return Nn(e) >= 5 ||
     (e.job === "해결사" &&
       (e.flags.includes("특색") || (e.grade && e.grade <= 2))) ||
     (e.job === "손가락" &&
       e.finger &&
-      (e.fingerRank || 1) >= ct[e.finger].length) ||
-    (ce(e) && Tf[e.work] && (e.wingRank || 1) >= Tf[e.work]) ||
-    On(e) >= 3 ||
-    ho(e) >= 3
+      (e.fingerRank || 1) >= bt[e.finger].length) ||
+    (Te(e) && ow[e.work] && (e.wingRank || 1) >= ow[e.work]) ||
+    Xn(e) >= 3 ||
+    vo(e) >= 3
     ? !0
     : e.job === "가주" || e.job === "군주";
 }
-const xT = 0.3,
-  TT = { 엄지: 1, 검지: 1, 중지: 4, 약지: 3 },
-  Zm = (e) =>
+const Yv = 0.3,
+  Rv = { 엄지: 1, 검지: 1, 중지: 4, 약지: 3 },
+  Ey = (e) =>
     e.job === "손가락" &&
     !!e.finger &&
-    (e.fingerRank || 1) <= (TT[e.finger] || 0);
-function vT(e, t) {
-  if (e.fingerLeaveRolled || ((e.fingerLeaveRolled = !0), !t.chance(xT)))
+    (e.fingerRank || 1) <= (Rv[e.finger] || 0);
+function Cv(e, t) {
+  if (e.fingerLeaveRolled || ((e.fingerLeaveRolled = !0), !t.chance(Yv)))
     return;
   const o = e.finger === "엄지" || e.finger === "검지",
     a = Math.min(65, e.age + (o ? t.int(1, 4) : t.int(2, 25)));
   e.fingerLeave = { at: Math.max(e.age + 1, a) };
 }
-function ey(e) {
+function Ly(e) {
   return e < 25 ? 0 : e >= 50 ? 1 : 0.005 + (e - 25) * 0.006;
 }
-function ty(e, t) {
-  const o = Z(t, "wt_common").labels,
-    a = Kr(e);
+function $y(e, t) {
+  const o = ee(t, "wt_common").labels,
+    a = di(e);
   if (a === "fixer")
     return {
       label: (e.flags.includes("특색") ? o.color : o.fixer).label,
@@ -12451,7 +13570,7 @@ function ty(e, t) {
   if (a === "wanderer") return { label: o.wanderer.label, bonus: 1.5, s: 5 };
   if (a === "claw")
     return {
-      label: h(
+      label: d(
         "칼날 손가락으로 끝낸다",
         "Finish it with the bladed fingers",
         "刃の指で終わらせる",
@@ -12459,14 +13578,14 @@ function ty(e, t) {
       bonus: 1.5,
       h: 5,
     };
-  const n = Pr(e);
+  const n = ri(e);
   return n === "순록"
     ? { label: o.순록.label, bonus: 1.5, s: 5 }
     : n === "코뿔소"
       ? { label: o.코뿔소.label, bonus: 1.5, h: 5 }
       : { label: o.토끼.label, bonus: 1 };
 }
-const _T = [
+const Nv = [
     { bonus: -0.5, half: !0 },
     { bonus: 1, h: 5 },
     { bonus: 0, link: !0 },
@@ -12476,8 +13595,8 @@ const _T = [
     { bonus: 1, s: 6 },
     { bonus: 3, h: 20, s: 20 },
   ],
-  oy = () => h("????세", "Age ????", "????歳");
-function oi(e, t, o, a, n, r) {
+  Py = () => d("????세", "Age ????", "????歳");
+function ki(e, t, o, a, n, r) {
   const i = o === "fight" ? e.warp.car : o === "rest" ? e.warp.cleared : null;
   e.prompt = {
     kind: "major",
@@ -12489,13 +13608,13 @@ function oi(e, t, o, a, n, r) {
     t: r,
   };
 }
-function jT(e, t, o, a = 0) {
+function Iv(e, t, o, a = 0) {
   ((e.warp = {
     car: a > 1 ? a : 1,
     red: 0,
     link: 0,
     cleared: a > 1 ? a - 1 : 0,
-    cp: (uo(e) ?? 1) + (e.bf && e.bf.vigor ? 0.5 : 0) + (e.warpBonus || 0),
+    cp: (_o(e) ?? 1) + (e.bf && e.bf.vigor ? 0.5 : 0) + (e.warpBonus || 0),
     age: e.age,
     down: !1,
     snapshot: {
@@ -12504,15 +13623,15 @@ function jT(e, t, o, a = 0) {
     },
   }),
     (e.warpBonus = 0),
-    Gi(e, t, o, !1));
+    fs(e, t, o, !1));
 }
-const AT = 0.1;
-function YT(e, t, o) {
-  const a = Z(t, "cm_warp_portal");
+const Wv = 0.1;
+function Mv(e, t, o) {
+  const a = ee(t, "cm_warp_portal");
   ((e.warp.portalDone = !0),
-    D(e, { kind: "warpsep", text: oy() }, o),
-    D(e, { kind: "event", text: a.text, tone: "event" }, o),
-    oi(
+    P(e, { kind: "warpsep", text: Py() }, o),
+    P(e, { kind: "event", text: a.text, tone: "event" }, o),
+    ki(
       e,
       a,
       "portal",
@@ -12521,84 +13640,84 @@ function YT(e, t, o) {
       o,
     ));
 }
-function Gi(e, t, o, a) {
+function fs(e, t, o, a) {
   const n = e.warp,
-    r = Z(t, `wt_car_${n.car}`),
-    i = ft(t, e);
+    r = ee(t, `wt_car_${n.car}`),
+    i = kt(t, e);
   (e.last || (e.last = {}), (e.last[r.id] = e.age), (e.last.wt_common = e.age));
-  let l;
+  let s;
   if (a) {
-    const u = Z(t, "wt_common").retry;
-    l = (al[n.car - 1].kind === "thing" ? u.thing : u.person).text;
+    const u = ee(t, "wt_common").retry;
+    s = (Al[n.car - 1].kind === "thing" ? u.thing : u.person).text;
   } else {
-    D(e, { kind: "warpsep", text: oy() }, o);
+    P(e, { kind: "warpsep", text: Py() }, o);
     const u = [],
       f = r.lines || {};
     (n.car === 6 &&
       n.linkSet &&
       u.push((n.link > 0 ? f.linkWin : f.linkLose).text),
       e.bf && f.bf && u.push(f.bf.text),
-      (l = [Ht(r.text, i, e), ...u].join(" ")));
+      (s = [Jt(r.text, i, e), ...u].join(" ")));
   }
-  D(e, { kind: "event", text: l, tone: "event" }, o);
-  const s = Z(t, "wt_common").labels.front.label,
-    c = ty(e, t);
-  oi(
+  P(e, { kind: "event", text: s, tone: "event" }, o);
+  const l = ee(t, "wt_common").labels.front.label,
+    c = $y(e, t);
+  ki(
     e,
     r,
     "fight",
-    l,
+    s,
     [
-      { label: s, i: 0 },
+      { label: l, i: 0 },
       { label: c.label, i: 1 },
       { label: r.special.label, i: 2 },
     ],
     o,
   );
 }
-function vf(e, t, o, a) {
-  const n = Z(t, "wt_rest"),
+function aw(e, t, o, a) {
+  const n = ee(t, "wt_rest"),
     r = n.text.replaceAll("{칸}", String(e.warp.cleared));
-  a && D(e, { kind: "event", text: r, tone: "event" }, o);
-  const i = n.choices.map((l, s) => {
+  a && P(e, { kind: "event", text: r, tone: "event" }, o);
+  const i = n.choices.map((s, l) => {
     const c =
-      s === 0
-        ? od({ needs: { sanity: [13, 100] } }, e)
-        : s === 1
-          ? od({ needs: { health: [11, 100] } }, e)
+      l === 0
+        ? Yd({ needs: { sanity: [13, 100] } }, e)
+        : l === 1
+          ? Yd({ needs: { health: [11, 100] } }, e)
           : null;
-    return c ? { label: l.label, i: s, locked: c } : { label: l.label, i: s };
+    return c ? { label: s.label, i: l, locked: c } : { label: s.label, i: l };
   });
-  oi(e, n, "rest", r, i, o);
+  ki(e, n, "rest", r, i, o);
 }
-function _i(e, t, o) {
-  const a = Z(t, "wt_down");
+function Ki(e, t, o) {
+  const a = ee(t, "wt_down");
   ((e.warp.down = !0),
-    D(e, { kind: "event", text: a.text, tone: "warpdown" }, o),
-    oi(e, a, "down", a.text, [{ label: a.choices[0].label, i: 0 }], o));
+    P(e, { kind: "event", text: a.text, tone: "warpdown" }, o),
+    ki(e, a, "down", a.text, [{ label: a.choices[0].label, i: 0 }], o));
 }
-function ST(e, t, o) {
-  const a = Z(t, "wt_clear");
-  (D(e, { kind: "event", text: a.text, tone: "rare" }, o),
-    oi(e, a, "clear", a.text, [{ label: a.choices[0].label, i: 0 }], o));
+function Ov(e, t, o) {
+  const a = ee(t, "wt_clear");
+  (P(e, { kind: "event", text: a.text, tone: "rare" }, o),
+    ki(e, a, "clear", a.text, [{ label: a.choices[0].label, i: 0 }], o));
 }
-function Yt(e, t, o, a) {
+function Mt(e, t, o, a) {
   if (!a) return;
   const n = e.stats[o];
-  e.stats[o] = Re(B(n + a));
+  e.stats[o] = Ce($(n + a));
   const r = Math.round(e.stats[o] - n);
   r && (t[o] = (t[o] || 0) + r);
 }
-const ji = (e) => e.stats.health <= 0 || e.stats.sanity <= 0;
-function RT(e, t, o, a) {
+const zi = (e) => e.stats.health <= 0 || e.stats.sanity <= 0;
+function Fv(e, t, o, a) {
   const n = e.warp,
-    r = Z(t, o.eventId);
+    r = ee(t, o.eventId);
   ((e.stats = { ...n.snapshot.stats }), (e.flags = [...n.snapshot.flags]));
   const i = o.warp === "clear";
   ((e.warpRec = { age: n.age, cars: n.cleared, clear: i }),
-    Q(e, { k: "warp", age: n.age, cars: n.cleared, clear: i }),
+    Z(e, { k: "warp", age: n.age, cars: n.cleared, clear: i }),
     (e.warp = null),
-    D(
+    P(
       e,
       {
         kind: "result",
@@ -12610,13 +13729,13 @@ function RT(e, t, o, a) {
       o.t,
     ));
 }
-function CT(e, t, o, a, n) {
+function Bv(e, t, o, a, n) {
   const r = ae(e),
     i = e.warp,
-    l = o.t;
-  let s = a;
-  (s == null || s < 0) && (s = o.warp === "rest" ? 2 : 0);
-  const c = o.choices[s];
+    s = o.t;
+  let l = a;
+  (l == null || l < 0) && (l = o.warp === "rest" ? 2 : 0);
+  const c = o.choices[l];
   if (!c || c.locked) {
     e.prompt = o;
     return;
@@ -12625,217 +13744,217 @@ function CT(e, t, o, a, n) {
     f = !!n.auto;
   if (!i) return;
   if (o.warp === "down" || o.warp === "clear") {
-    RT(e, t, o, u);
+    Fv(e, t, o, u);
     return;
   }
   if (o.warp === "portal") {
-    const L = Z(t, "cm_warp_portal"),
-      G = L.choices[c.i];
+    const O = ee(t, "cm_warp_portal"),
+      D = O.choices[c.i];
     if (c.i === 0)
       return (
-        D(
+        P(
           e,
           {
             kind: "result",
-            text: G.text,
+            text: D.text,
             tone: "normal",
             choice: u,
             auto: f,
             eventId: o.eventId,
           },
-          l,
+          s,
         ),
         i.car++,
         (i.red = 0),
-        Gi(e, t, l, !1)
+        fs(e, t, s, !1)
       );
     ((e.stats = { ...i.snapshot.stats }),
       (e.flags = [...i.snapshot.flags]),
       e.cmRec ?? (e.cmRec = {}),
       (e.cmRec.lost = !0),
       (e.warpRec = { age: i.age, cars: i.cleared, clear: !1 }),
-      Q(e, { k: "warp", age: i.age, cars: i.cleared, clear: !1 }),
+      Z(e, { k: "warp", age: i.age, cars: i.cleared, clear: !1 }),
       (e.warp = null),
-      D(
+      P(
         e,
         {
           kind: "result",
-          text: G.text,
+          text: D.text,
           tone: "rare",
           choice: u,
           auto: f,
           eventId: o.eventId,
         },
-        l,
+        s,
       ),
-      et(e, "실종", l, "event", { text: L.lostEnd.text }));
+      Ze(e, "실종", s, "event", { text: O.lostEnd.text }));
     return;
   }
   if (o.warp === "rest") {
-    const L = Z(t, "wt_rest"),
-      G = {};
+    const O = ee(t, "wt_rest"),
+      D = {};
     return c.i === 2
-      ? (Yt(e, G, "sanity", -4),
-        D(
+      ? (Mt(e, D, "sanity", -4),
+        P(
           e,
           {
             kind: "result",
-            text: L.choices[2].text,
-            delta: G,
+            text: O.choices[2].text,
+            delta: D,
             tone: "normal",
             choice: u,
             auto: f,
             eventId: o.eventId,
           },
-          l,
+          s,
         ),
-        ji(e)
-          ? _i(e, t, l)
+        zi(e)
+          ? Ki(e, t, s)
           : i.car === 2 &&
               !i.portalDone &&
-              Kr(e) === "wcorp" &&
-              ((i.portalDone = !0), r.chance(AT))
-            ? YT(e, t, l)
-            : (i.car++, (i.red = 0), Gi(e, t, l, !1)))
+              di(e) === "wcorp" &&
+              ((i.portalDone = !0), r.chance(Wv))
+            ? Mv(e, t, s)
+            : (i.car++, (i.red = 0), fs(e, t, s, !1)))
       : (c.i === 0
-          ? (Yt(e, G, "health", 8), Yt(e, G, "sanity", -12))
-          : (Yt(e, G, "sanity", 6), Yt(e, G, "health", -10)),
-        D(
+          ? (Mt(e, D, "health", 8), Mt(e, D, "sanity", -12))
+          : (Mt(e, D, "sanity", 6), Mt(e, D, "health", -10)),
+        P(
           e,
           {
             kind: "result",
-            text: r.pick(L.choices[c.i].texts).text,
-            delta: G,
+            text: r.pick(O.choices[c.i].texts).text,
+            delta: D,
             tone: "normal",
             choice: u,
             auto: f,
             eventId: o.eventId,
           },
-          l,
+          s,
         ),
-        ji(e) ? _i(e, t, l) : vf(e, t, l, !1));
+        zi(e) ? Ki(e, t, s) : aw(e, t, s, !1));
   }
-  const g = al[i.car - 1],
-    b = Z(t, `wt_car_${i.car}`),
-    k = {};
+  const g = Al[i.car - 1],
+    p = ee(t, `wt_car_${i.car}`),
+    b = {};
   let T = 1,
     v = null;
   const w = [];
   if (c.i === 1) {
-    const L = ty(e, t);
-    ((T = L.bonus),
-      Yt(e, k, "sanity", -(L.s || 0)),
-      Yt(e, k, "health", -(L.h || 0)),
-      L.heal && Yt(e, k, "health", L.heal),
-      L.discharge &&
+    const O = $y(e, t);
+    ((T = O.bonus),
+      Mt(e, b, "sanity", -(O.s || 0)),
+      Mt(e, b, "health", -(O.h || 0)),
+      O.heal && Mt(e, b, "health", O.heal),
+      O.discharge &&
         r.chance(0.3) &&
-        (Yt(e, k, "health", -10), w.push(Z(t, "wt_common").discharge.text)));
+        (Mt(e, b, "health", -10), w.push(ee(t, "wt_common").discharge.text)));
   } else
     c.i === 2 &&
-      ((v = _T[i.car - 1]),
+      ((v = Nv[i.car - 1]),
       (T = v.bonus),
-      Yt(e, k, "sanity", -(v.s || 0)),
-      Yt(e, k, "health", -(v.h || 0)));
-  if (ji(e))
+      Mt(e, b, "sanity", -(v.s || 0)),
+      Mt(e, b, "health", -(v.h || 0)));
+  if (zi(e))
     return (
-      D(
+      P(
         e,
         {
           kind: "result",
-          text: w.join(" ") || b.res.lose.text,
-          delta: k,
+          text: w.join(" ") || p.res.lose.text,
+          delta: b,
           tone: "bad",
           choice: u,
           auto: f,
           eventId: o.eventId,
         },
-        l,
+        s,
       ),
-      _i(e, t, l)
+      Ki(e, t, s)
     );
-  const m = (r.next() * 2 - 1) * (g.jit || 1),
-    y = g.E - (g.noRed ? 0 : i.red) - (i.car === 6 ? i.link : 0),
-    j = i.cp + T - (y + m),
-    _ = Kr(e) === "claw" && i.car >= kf,
-    Y = _ || j >= 1 ? "big" : j >= 0 ? "win" : j >= -1.5 ? "hold" : "lose",
-    R = Y === "big" || Y === "win";
-  let C = { big: 3, win: 8, hold: 15, lose: 25 }[Y],
-    W = { big: 0, win: 0, hold: 6, lose: 8 }[Y];
-  (v && v.half && ((C /= 2), (W /= 2)),
-    v && v.winHalf && R && (C /= 2),
-    v && v.failX && !R && ((C *= v.failX), (W *= v.failX)),
-    g.failMindX2 && !R && (W *= 2),
-    g.mindHalf && ((W += C / 2), (C /= 2)),
+  const y = (r.next() * 2 - 1) * (g.jit || 1),
+    m = g.E - (g.noRed ? 0 : i.red) - (i.car === 6 ? i.link : 0),
+    A = i.cp + T - (m + y),
+    _ = di(e) === "claw" && i.car >= ew,
+    j = _ || A >= 1 ? "big" : A >= 0 ? "win" : A >= -1.5 ? "hold" : "lose",
+    R = j === "big" || j === "win";
+  let N = { big: 3, win: 8, hold: 15, lose: 25 }[j],
+    M = { big: 0, win: 0, hold: 6, lose: 8 }[j];
+  (v && v.half && ((N /= 2), (M /= 2)),
+    v && v.winHalf && R && (N /= 2),
+    v && v.failX && !R && ((N *= v.failX), (M *= v.failX)),
+    g.failMindX2 && !R && (M *= 2),
+    g.mindHalf && ((M += N / 2), (N /= 2)),
     v && v.link && ((i.link = R ? 0.5 : -0.5), (i.linkSet = !0)),
-    Yt(e, k, "health", -Math.round(C)),
-    Yt(e, k, "sanity", -Math.round(W)));
-  const O = _
-    ? Z(t, "wt_claw_last").result.text
-    : [...w, b.res[Y].text].join(" ");
+    Mt(e, b, "health", -Math.round(N)),
+    Mt(e, b, "sanity", -Math.round(M)));
+  const F = _
+    ? ee(t, "wt_claw_last").result.text
+    : [...w, p.res[j].text].join(" ");
   return (
-    D(
+    P(
       e,
       {
         kind: "result",
-        text: O,
-        delta: k,
+        text: F,
+        delta: b,
         tone: R ? "good" : "bad",
         choice: u,
         auto: f,
         eventId: o.eventId,
       },
-      l,
+      s,
     ),
-    ji(e)
-      ? _i(e, t, l)
+    zi(e)
+      ? Ki(e, t, s)
       : R
-        ? ((i.cleared = i.car), i.car >= kf ? ST(e, t, l) : vf(e, t, l, !0))
-        : (g.noRed || i.red++, Gi(e, t, l, !0))
+        ? ((i.cleared = i.car), i.car >= ew ? Ov(e, t, s) : aw(e, t, s, !0))
+        : (g.noRed || i.red++, fs(e, t, s, !0))
   );
 }
-function NT(e) {
+function Ev(e) {
   const t = e.prompt,
     o = e.warp;
   if (!o || t.warp === "down" || t.warp === "clear" || t.warp === "portal")
     return 0;
   const a = e.stats;
   if (t.warp === "rest") {
-    const i = (l) => t.choices[l] && !t.choices[l].locked;
+    const i = (s) => t.choices[s] && !t.choices[s].locked;
     return a.health < 45 && a.sanity >= 35 && i(0)
       ? 0
       : a.sanity < 30 && a.health >= 40 && i(1)
         ? 1
         : 2;
   }
-  const n = al[o.car - 1],
+  const n = Al[o.car - 1],
     r = n.E - (n.noRed ? 0 : o.red) - (o.car === 6 ? o.link : 0);
   return o.cp + 1 - r >= 0.5 || a.sanity <= 12 ? 0 : 1;
 }
-let oe = null;
-function Su(e, t) {
-  let o = oe && Z(oe, e);
+let re = null;
+function ac(e, t) {
+  let o = re && ee(re, e);
   for (const a of t.split(".")) {
     if (!o) return "";
     o = o[a];
   }
   return (o && o.text) || "";
 }
-const dt = (e) => Su("bf_end_lines", e),
-  WT = ["긴 잠", "세월", "이야기의 끝", "혈귀 사냥", "시듦"];
-function id(e) {
-  return !!(e.org || e.job === "해결사" || e.job === "손가락" || ce(e));
+const yt = (e) => ac("bf_end_lines", e),
+  Lv = ["긴 잠", "세월", "이야기의 끝", "혈귀 사냥", "시듦"];
+function Wd(e) {
+  return !!(e.org || e.job === "해결사" || e.job === "손가락" || Te(e));
 }
-function Ru(e) {
-  return e.bf && Zo(e) >= le.compressAfter ? 10 : 1;
+function nc(e) {
+  return e.bf && ua(e) >= ge.compressAfter ? 10 : 1;
 }
-function IT(e) {
+function $v(e) {
   const t = e.bf,
     o = t.outlives || 0;
-  return Zo(e) < 60 || o >= 2
+  return ua(e) < 60 || o >= 2
     ? !1
     : o === 0 || e.age - (t.lastOutlive ?? 0) >= 50;
 }
-function Cu(e) {
+function rc(e) {
   const t = e.bf;
   return t
     ? Math.max(
@@ -12846,7 +13965,7 @@ function Cu(e) {
       )
     : 0;
 }
-function ja(e) {
+function $a(e) {
   const t = e.bf,
     o = (n) => e.flags.includes(n);
   if (!t) return { k: "base" };
@@ -12855,7 +13974,7 @@ function ja(e) {
   if (o("쓸쓸한배우자")) return { k: "smile" };
   if (o("배우자권속")) return { k: "couple" };
   if (t.kind === "kin" && t.gen === 1) return { k: "elder" };
-  if (t.bites === 0 && Zo(e) >= 20) {
+  if (t.bites === 0 && ua(e) >= 20) {
     const n = t.barUses || 0,
       r = t.packUses || 0,
       i = t.rations || 0;
@@ -12868,7 +13987,7 @@ function ja(e) {
     return { k: "hunter" };
   if (t.bites >= 30) return { k: "faces", sub: "a" };
   if ((t.frenzies || 0) >= 3) return { k: "faces", sub: "b" };
-  const a = Cu(e);
+  const a = rc(e);
   return t.kind === "stray" && a >= 1
     ? { k: "kin", sub: a >= 2 ? "2" : "1" }
     : (t.bags || []).length
@@ -12877,23 +13996,23 @@ function ja(e) {
         ? { k: "bar" }
         : { k: "base" };
 }
-function rr(e, t) {
-  const { k: o, sub: a } = ja(e),
+function Tr(e, t) {
+  const { k: o, sub: a } = $a(e),
     n = [a ? `${o}_${a}` : null, o, o === "slept" ? "gone" : null].filter(
       Boolean,
     );
   for (const r of n) {
-    const i = dt(`paths.${r}.${t}`);
+    const i = yt(`paths.${r}.${t}`);
     if (i) return i;
   }
   return "";
 }
-function Sn(e) {
+function qn(e) {
   return e.job === "손가락" && e.finger
     ? `finger:${e.finger}`
     : e.job === "사원" && e.work === "흑수"
       ? "heishou"
-      : ce(e)
+      : Te(e)
         ? e.work === "4무리"
           ? null
           : "wing"
@@ -12901,8 +14020,8 @@ function Sn(e) {
           ? "org"
           : null;
 }
-const ay = { 엄지: "thumb", 검지: "index", 중지: "middle", 약지: "ring" },
-  _f = {
+const Hy = { 엄지: "thumb", 검지: "index", 중지: "middle", 약지: "ring" },
+  nw = {
     thumb: "th_bf_found",
     index: "in_bf_found",
     middle: "mi_bf_found",
@@ -12911,74 +14030,74 @@ const ay = { 엄지: "thumb", 검지: "index", 중지: "middle", 약지: "ring" 
     wing: "wg_bf_found",
     org: "og_bf_found",
   };
-function OT(e) {
+function Pv(e) {
   if (
     e.bf.kind !== "stray" ||
-    Zo(e) < 2 ||
+    ua(e) < 2 ||
     ["정체공개", "정체숨김", "정체들킴"].some((a) => e.flags.includes(a))
   )
     return !1;
-  const o = Sn(e);
+  const o = qn(e);
   return !(
     !o ||
     (o.startsWith("finger:") &&
-      (e.fingerRank || 1) >= (ct[e.finger] || []).length)
+      (e.fingerRank || 1) >= (bt[e.finger] || []).length)
   );
 }
-function FT(e) {
+function Hv(e) {
   const t = e.bf;
   if (!t) return "";
   const o = (r) => e.flags.includes(r),
     a = o("정체들킴") ? "found" : o("정체공개") ? "open" : "hide",
-    n = Sn(e);
+    n = qn(e);
   if (n && n.startsWith("finger:")) {
-    const r = (e.fingerRank || 1) >= (ct[e.finger] || []).length;
-    return Ht(
-      dt(`org.${ay[e.finger]}_${a === "open" && r ? "top" : a}`),
+    const r = (e.fingerRank || 1) >= (bt[e.finger] || []).length;
+    return Jt(
+      yt(`org.${Hy[e.finger]}_${a === "open" && r ? "top" : a}`),
       {},
       e,
     );
   }
   return t.revealOrg && t.revealOrg.startsWith("finger:") && n !== t.revealOrg
-    ? dt("org.fingerPast").replaceAll(
+    ? yt("org.fingerPast").replaceAll(
         "{손가락}",
-        ot[t.revealOrg.slice(7)] || "",
+        ht[t.revealOrg.slice(7)] || "",
       )
     : n === "heishou"
-      ? dt("org.heishou")
+      ? yt("org.heishou")
       : n === "wing"
-        ? dt("org.wing")
+        ? yt("org.wing")
         : n === "org"
-          ? dt(e.org.type === "assoc" ? "org.assoc" : "org.office")
+          ? yt(e.org.type === "assoc" ? "org.assoc" : "org.office")
           : e.job === "해결사"
-            ? dt("org.fixer")
+            ? yt("org.fixer")
             : "";
 }
-function ET(e, t) {
+function Dv(e, t) {
   if (t === "이야기의 끝")
-    return h(
+    return d(
       "그 뒤로도 살아갔다",
       "you went on living after that",
       "その後も生き続けた",
     );
   const o = e.bfEndRec,
     a = {
-      couple_sleep: h(
+      couple_sleep: d(
         "배우자와 함께 지하의 방에서 긴 잠에 들었다",
         "you went into the long sleep in a room underground, together with your spouse",
         "配偶者とともに地下の部屋で長い眠りについた",
       ),
-      gone_grave: h(
+      gone_grave: d(
         "배우자가 묻힌 구에서 생을 마쳤다",
         "you ended your life in the District where your spouse was buried",
         "配偶者の眠る区で生涯を終えた",
       ),
-      elder_hand: h(
+      elder_hand: d(
         "장로의 자리를 넘기고 긴 잠에 들었다",
         "you handed over the Elder's seat and went into the long sleep",
         "長老の座を譲り、長い眠りについた",
       ),
-      kin_cup: h(
+      kin_cup: d(
         "권속에게 마지막 잔을 남기고 잠들었다",
         "you left your last cup to your Kindred and went to sleep",
         "眷属に最後の杯を遺して眠りについた",
@@ -12986,15 +14105,15 @@ function ET(e, t) {
     };
   if (o && a[o] && (t === "긴 잠" || t === "세월")) return a[o];
   if (t === "긴 잠") {
-    const n = ja(e).k;
+    const n = $a(e).k;
     if (n === "nobite")
-      return h(
+      return d(
         "한 번도 사람을 물지 않고 긴 잠에 들었다",
         "you went into the long sleep without ever having bitten a person",
         "一度も人を噛まずに長い眠りについた",
       );
     if (n === "faces")
-      return h(
+      return d(
         "셀 수 없는 얼굴을 안고 긴 잠에 들었다",
         "you went into the long sleep carrying countless faces",
         "数えきれない顔を抱いて長い眠りについた",
@@ -13002,141 +14121,141 @@ function ET(e, t) {
   }
   return null;
 }
-function MT(e, t) {
+function qv(e, t) {
   const o = t && t.bf;
   if (e === "형님")
     return t && t.gender === "f"
-      ? h("누님", "Big Sister", "姉貴")
-      : h("형님", "Big Brother", "兄貴");
+      ? d("누님", "Big Sister", "姉貴")
+      : d("형님", "Big Brother", "兄貴");
   if (e === "윗사람")
     return t && t.finger
-      ? lt(
+      ? gt(
           t.finger,
-          Math.min((t.fingerRank || 1) + 1, (ct[t.finger] || []).length),
+          Math.min((t.fingerRank || 1) + 1, (bt[t.finger] || []).length),
           t.gender,
         )
       : "";
   if (e === "어버이")
     return o && o.gen === 2
-      ? h("장로인 어버이", "your sire, the Elder", "長老である親")
-      : h("어버이", "your sire", "親");
+      ? d("장로인 어버이", "your sire, the Elder", "長老である親")
+      : d("어버이", "your sire", "親");
   if (!o) return "";
   if (e === "BF_LEAD") {
-    const a = rr(t, "lead");
+    const a = Tr(t, "lead");
     return a ? `${a} ` : "";
   }
   return e === "BF_BODY"
-    ? dt(id(t) ? "misc.bodyActive" : "misc.bodyRetired")
+    ? yt(Wd(t) ? "misc.bodyActive" : "misc.bodyRetired")
     : e === "BF_SLEEP"
-      ? rr(t, "sleep") || dt("misc.sleepBase")
+      ? Tr(t, "sleep") || yt("misc.sleepBase")
       : e === "BF_EPI"
-        ? rr(t, "epi") || dt("paths.base.epi")
+        ? Tr(t, "epi") || yt("paths.base.epi")
         : e === "BF_LIVE"
-          ? rr(t, "live") ||
-            dt((o.outlives || 0) >= 2 ? "misc.live2" : "misc.live1")
+          ? Tr(t, "live") ||
+            yt((o.outlives || 0) >= 2 ? "misc.live2" : "misc.live1")
           : e === "BF_HUNTER"
-            ? Su("bf_hunt", `tiers.t${(o.curHunt && o.curHunt.tier) || 1}`)
-            : e === "BF_BAR" && Tu(o) <= le.bar.floor
-              ? dt("misc.barWeak")
+            ? ac("bf_hunt", `tiers.t${(o.curHunt && o.curHunt.tier) || 1}`)
+            : e === "BF_BAR" && Xu(o) <= ge.bar.floor
+              ? yt("misc.barWeak")
               : "";
 }
-function ny(e) {
+function Dy(e) {
   const t = e.bf;
-  let o = uo(e) ?? 1;
+  let o = _o(e) ?? 1;
   return (
     e.age >= 65 ? (o += 2) : e.age >= 55 && (o += 1),
     t
-      ? (t.kind === "kin" && t.gen && (o += (7 - t.gen) * le.genPow),
+      ? (t.kind === "kin" && t.gen && (o += (7 - t.gen) * ge.genPow),
         (o +=
           Math.min(3, Math.floor((t.bites || 0) / 5) * 0.5) +
           (t.strong || 0) +
           (t.vigor ? 1 : 0) -
           0.5 * (t.wither || 0) +
-          Math.min(1, Math.floor(Zo(e) / 50) * 0.25)),
+          Math.min(1, Math.floor(ua(e) / 50) * 0.25)),
         Math.round(o * 100) / 100)
       : o
   );
 }
-const Hl = [
+const fh = [
   [18, 9.5, 4],
   [13, 7, 3],
   [9, 4.5, 2],
   [5, 2, 1],
 ];
-function BT(e) {
+function Gv(e) {
   const t = e.bf,
-    o = t.finalHunt ? Hl[0] : Hl.find(([n]) => t.heat >= n) || Hl[3],
-    a = t.kind === "stray" ? le.strayHunter : (7 - (t.gen || 7)) * le.genHunter;
+    o = t.finalHunt ? fh[0] : fh.find(([n]) => t.heat >= n) || fh[3],
+    a = t.kind === "stray" ? ge.strayHunter : (7 - (t.gen || 7)) * ge.genHunter;
   t.curHunt = { h: o[1] + a, tier: o[2] };
 }
-function LT(e, t, o) {
+function Kv(e, t, o) {
   const a = ae(e),
     n = e.bf,
     r = n.curHunt || { h: 2, tier: 1 },
-    i = (w) => Su("bf_hunt", `res.${w}`);
+    i = (w) => ac("bf_hunt", `res.${w}`);
   ((n.lastHunt = e.age),
     (n.hunts ?? (n.hunts = [])).push(r.tier),
     (n.finalHunt = !1));
-  const l = {},
-    s = (w, m) => (l[w] = (l[w] || 0) + m),
+  const s = {},
+    l = (w, y) => (s[w] = (s[w] || 0) + y),
     c = [];
   let u = 0,
     f = 0,
     g = 1,
-    b = !1;
+    p = !1;
   if (o.hunt === "flee") {
-    if (((f -= 6), s("wealth", -15), s("network", -5), !a.chance(0.3)))
-      return { text: i("flee"), effects: l, heat: f };
-    (c.push(i("caught")), (g = 0), (b = !0));
+    if (((f -= 6), l("wealth", -15), l("network", -5), !a.chance(0.3)))
+      return { text: i("flee"), effects: s, heat: f };
+    (c.push(i("caught")), (g = 0), (p = !0));
   }
   (o.hunt === "surge" &&
-    ((g = 2), (u += 30), s("sanity", -5), (b = !0), c.push(i("surge"))),
+    ((g = 2), (u += 30), l("sanity", -5), (p = !0), c.push(i("surge"))),
     o.hunt === "bag" &&
       ((g = 1.5), (n.bags || []).length && n.bags.pop(), c.push(i("bag"))));
-  const k = ny(e) + g - (r.h + (a.next() * 2 - 1)),
+  const b = Dy(e) + g - (r.h + (a.next() * 2 - 1)),
     T = (w) => ({
       text: c.join(" "),
-      effects: l,
+      effects: s,
       heat: f,
       ...(u ? { thirst: u } : {}),
       ...w,
     });
-  if (k >= 0)
+  if (b >= 0)
     return (
-      s("health", k >= 1 ? -3 : -10),
-      c.push(i(k >= 1 ? "big" : "win")),
+      l("health", b >= 1 ? -3 : -10),
+      c.push(i(b >= 1 ? "big" : "win")),
       T({ next: "bf_hunt_drink" })
     );
-  if (k >= -1.5) return (s("health", -15), c.push(i("hold")), T({}));
-  s("health", -25);
+  if (b >= -1.5) return (l("health", -15), c.push(i("hold")), T({}));
+  l("health", -25);
   const v =
-    (b ? 0.6 : 0.5) *
+    (p ? 0.6 : 0.5) *
     (n.vigor ? 0.7 : 1) *
-    (n.kind === "kin" ? le.kinGuard : le.strayDie);
+    (n.kind === "kin" ? ge.kinGuard : ge.strayDie);
   return a.chance(v)
     ? (c.push(i("dead")), T({ death: "혈귀 사냥" }))
     : (c.push(i("lose")), T({}));
 }
-function $T(e, t, o) {
+function zv(e, t, o) {
   const a = e.bf,
     n = [],
-    r = Ru(e),
+    r = nc(e),
     i = (c) => e.flags.includes(c);
   if (a.lastHunter)
     ((a.lastHunter = !1),
       (a.finalHunt = !0),
       n.push({ id: "bf_hunt", bfEng: !0 }));
   else if (a.heat >= 5 && e.age - (a.lastHunt ?? -99) >= 2) {
-    let c = a.heat * le.huntRate;
-    (a.kind === "stray" && (c *= le.strayHunt),
-      i("정체공개") && a.revealOrg && a.revealOrg === Sn(e) && (c *= 0.8),
+    let c = a.heat * ge.huntRate;
+    (a.kind === "stray" && (c *= ge.strayHunt),
+      i("정체공개") && a.revealOrg && a.revealOrg === qn(e) && (c *= 0.8),
       i("정체들킴") && (c *= 1.1),
-      t.chance(Math.min(le.huntCap, c)) &&
+      t.chance(Math.min(ge.huntCap, c)) &&
         n.push({ id: "bf_hunt", bfEng: !0 }));
   }
   if (a.kind === "kin" && a.gen >= 2) {
     const c = e.age - (a.rankAt ?? e.age),
-      u = le.succ,
+      u = ge.succ,
       f = a.gen === 2 ? u.m1 : a.gen === 3 ? u.m2 : 1,
       g = Math.min(u.cap, u.base + u.per * c + (a.favor || 0)) * f;
     t.chance(1 - Math.pow(1 - g, r)) &&
@@ -13145,35 +14264,35 @@ function $T(e, t, o) {
         bfEng: !0,
       });
   }
-  const l = (a.bags || []).length;
-  l &&
+  const s = (a.bags || []).length;
+  s &&
     !o.some((c) => c.feedGate) &&
-    t.chance(1 - Math.pow(0.94, l)) &&
+    t.chance(1 - Math.pow(0.94, s)) &&
     n.push({ id: "bf_bag_bring", bfEng: !0 });
-  const s = Sn(e);
+  const l = qn(e);
   if (
     i("정체숨김") &&
-    s &&
-    a.revealOrg === s &&
+    l &&
+    a.revealOrg === l &&
     t.chance(Math.min(0.12, 0.03 + 0.003 * (a.bites || 0)))
   ) {
-    const c = s.startsWith("finger:") ? ay[s.slice(7)] : s;
-    _f[c] && n.push({ id: _f[c], bfEng: !0 });
+    const c = l.startsWith("finger:") ? Hy[l.slice(7)] : l;
+    nw[c] && n.push({ id: nw[c], bfEng: !0 });
   }
   return n;
 }
-function PT(e, t, o) {
+function Uv(e, t, o) {
   const a = e.bf;
   if (!a.bags || !a.bags.length) return;
   const n = a.bags.filter((r) => r > e.age);
   (n.length < a.bags.length &&
     ((a.bags = n),
     (e.stats.sanity -= 1),
-    D(
+    P(
       e,
       {
         kind: "result",
-        text: dt("misc.bagFade"),
+        text: yt("misc.bagFade"),
         delta: { sanity: -1 },
         tone: "bad",
       },
@@ -13183,15 +14302,15 @@ function PT(e, t, o) {
       t.chance(Math.min(0.5, a.heat * 0.01)) &&
       (a.bags.pop(),
       (a.heat += 3),
-      D(e, { kind: "result", text: dt("misc.bagHunted"), tone: "bad" }, 0.96)));
+      P(e, { kind: "result", text: yt("misc.bagHunted"), tone: "bad" }, 0.96)));
 }
-function HT(e, t, o) {
-  const a = oe && Z(oe, t.eventId);
+function Jv(e, t, o) {
+  const a = re && ee(re, t.eventId);
   if (!a || !a.choices) return;
   const n = e.bf,
-    r = (i, l) =>
+    r = (i, s) =>
       t.choices.findIndex(
-        (s) => !s.locked && a.choices[s.i] && a.choices[s.i][i] === l,
+        (l) => !l.locked && a.choices[l.i] && a.choices[l.i][i] === s,
       );
   if (a.feedGate) {
     if (n.thirst >= 60) {
@@ -13201,9 +14320,9 @@ function HT(e, t, o) {
     }
     return r("feed", "ration") >= 0 && o.chance(0.6)
       ? r("feed", "ration")
-      : r("feed", "pack") >= 0 && Om(n) > 0.5
+      : r("feed", "pack") >= 0 && wy(n) > 0.5
         ? r("feed", "pack")
-        : r("feed", "bar") >= 0 && Tu(n) > 0.4
+        : r("feed", "bar") >= 0 && Xu(n) > 0.4
           ? r("feed", "bar")
           : r("feed", "bag") >= 0
             ? r("feed", "bag")
@@ -13212,7 +14331,7 @@ function HT(e, t, o) {
               : -1;
   }
   if (a.id === "bf_hunt") {
-    const i = ny(e) + 1 - (n.curHunt ? n.curHunt.h : 2);
+    const i = Dy(e) + 1 - (n.curHunt ? n.curHunt.h : 2);
     return i >= 0
       ? r("hunt", "fight")
       : i >= -1.5
@@ -13232,11 +14351,15 @@ function HT(e, t, o) {
         : 0;
   if (a.id === "bf_bag_bring") return o.chance(0.8) ? 0 : 1;
 }
-function kr(e, t, o, a = {}) {
-  oe = t;
+function Br(e, t, o, a = {}) {
+  re = t;
   const n = e.prompt;
   if (!n) return;
-  if (((e.prompt = null), n.kind === "reflect")) {
+  if (((e.prompt = null), n.lm)) {
+    qT(e, t, n, o, a);
+    return;
+  }
+  if (n.kind === "reflect") {
     e.reflections.push({
       age: n.age,
       q: n.question,
@@ -13246,40 +14369,40 @@ function kr(e, t, o, a = {}) {
   }
   if (n.kind === "color") {
     const u = (a.text || "").trim().slice(0, 16),
-      f = wn(u);
+      f = Yn(u);
     ((e.colorName = u || null),
-      D(
+      P(
         e,
         {
           kind: "result",
           text: u
-            ? h(
+            ? d(
                 `이제 도시는 당신의 급수를 묻지 않는다. 사람들은 당신을 '${u}'${f} 부른다.`,
                 `The City no longer asks your grade. People call you '${u}'.`,
                 `もはや都市はあなたの等級を問わない。人々はあなたを「${u}」と呼ぶ。`,
               )
-            : h(
+            : d(
                 "이제 도시는 당신의 급수를 묻지 않는다. 사람들은 당신을 그저 '특색'이라 부른다.",
                 "The City no longer asks your grade. People simply call you 'Color'.",
                 "もはや都市はあなたの等級を問わない。人々はあなたをただ「特色」と呼ぶ。",
               ),
           tone: "rare",
-          job: be(e),
+          job: Re(e),
         },
         n.t || 0,
       ));
     return;
   }
   if (n.kind === "craft") {
-    u0(e, t, n, a);
+    Vx(e, t, n, a);
     return;
   }
   if (n.ws === "big") {
-    n0(e, t, n, o);
+    Dx(e, t, n, o);
     return;
   }
   if (n.ws === "invest") {
-    i0(e, t, n, o);
+    Gx(e, t, n, o);
     return;
   }
   if (n.kind === "name") {
@@ -13287,11 +14410,11 @@ function kr(e, t, o, a = {}) {
     if (n.field === "weapon") {
       (e.weapon && (e.weapon.name = u || null),
         u &&
-          D(
+          P(
             e,
             {
               kind: "result",
-              text: h(
+              text: d(
                 `'${u}'. 공방 장부에도 그 이름으로 올라갔다.`,
                 `'${u}'. It went into the Workshop ledger under that name too.`,
                 `「${u}」。工房の帳簿にもその名で記された。`,
@@ -13304,12 +14427,12 @@ function kr(e, t, o, a = {}) {
     }
     if (n.field === "star") {
       e.pinky && (e.pinky.blade = u || null);
-      const f = el(e);
-      D(
+      const f = Tl(e);
+      P(
         e,
         {
           kind: "result",
-          text: h(
+          text: d(
             `검의 이름은 '${f}'.`,
             `The sword is called '${f}'.`,
             `剣の名は「${f}」。`,
@@ -13321,29 +14444,29 @@ function kr(e, t, o, a = {}) {
       return;
     }
     if (n.field === "child") {
-      ((e.childName = u || Jm(e)),
-        D(
+      ((e.childName = u || My(e)),
+        P(
           e,
-          { kind: "result", text: Vm(e.childName, !u), tone: "rare" },
+          { kind: "result", text: Oy(e.childName, !u), tone: "rare" },
           n.t || 0,
         ));
       return;
     }
     if (n.field === "partner") {
-      e.partnerName = u || $m(e);
+      e.partnerName = u || xy(e);
       const f = e.partnerName;
-      D(
+      P(
         e,
         {
           kind: "result",
           text: n.lover
-            ? h(
-                `${f}${ks(f, "은", "는")} 걸음을 맞추어 주었다.`,
+            ? d(
+                `${f}${$n(f, "은", "는")} 걸음을 맞추어 주었다.`,
                 `${f} fell into step with you.`,
                 `${f}は歩調を合わせてくれた。`,
               )
-            : h(
-                `${f}${ks(f, "과", "와")} 한 지붕 아래 살게 되었다.`,
+            : d(
+                `${f}${$n(f, "과", "와")} 한 지붕 아래 살게 되었다.`,
                 `You began to live under one roof with ${f}.`,
                 `${f}と一つ屋根の下で暮らすことになった。`,
               ),
@@ -13355,19 +14478,19 @@ function kr(e, t, o, a = {}) {
     }
     (n.field === "ego" ? (e.egoName = u || null) : (e.relicName = u || null),
       u &&
-        D(
+        P(
           e,
           {
             kind: "result",
             text:
               n.field === "ego"
-                ? h(
-                    `당신의 E.G.O는 '${u}'${wn(u)} 불린다.`,
+                ? d(
+                    `당신의 E.G.O는 '${u}'${Yn(u)} 불린다.`,
                     `Your E.G.O is called '${u}'.`,
                     `あなたのE.G.Oは「${u}」と呼ばれる。`,
                   )
-                : h(
-                    `그 유물에는 '${u}'${wn(u)}는 이름이 붙었다.`,
+                : d(
+                    `그 유물에는 '${u}'${Yn(u)}는 이름이 붙었다.`,
                     `You named the relic '${u}'.`,
                     `その遺物には「${u}」という名が付いた。`,
                   ),
@@ -13378,24 +14501,24 @@ function kr(e, t, o, a = {}) {
     return;
   }
   if (n.warp) {
-    CT(e, t, n, o, a);
+    Bv(e, t, n, o, a);
     return;
   }
   if (n.dr) {
-    j0(e, t, n, o);
+    d1(e, t, n, o);
     return;
   }
   if (n.lake) {
-    O0(e, t, n, o);
+    b1(e, t, n, o);
     return;
   }
   if (n.req) {
     let u = o;
     ((u == null || u < 0) && (u = 1),
-      iT(e, t, n, u, { auto: !!a.auto, timeout: !!a.timeout }));
+      fv(e, t, n, u, { auto: !!a.auto, timeout: !!a.timeout }));
     return;
   }
-  const r = Z(t, n.eventId);
+  const r = ee(t, n.eventId);
   let i = o;
   if (i != null && i >= 0 && n.choices[i] && n.choices[i].locked) {
     e.prompt = n;
@@ -13405,24 +14528,24 @@ function kr(e, t, o, a = {}) {
     n.kind === "major" &&
     (i = n.choices.findIndex((u) => !u.locked)),
     i != null && i >= 0 && (i = n.choices[i] ? n.choices[i].i : -1));
-  const l = { auto: !!a.auto, timeout: !!a.timeout, eventId: n.eventId };
+  const s = { auto: !!a.auto, timeout: !!a.timeout, eventId: n.eventId };
   if (i == null || i < 0 || i >= r.choices.length) {
     const u = r.ignore || {
-      text: h(
+      text: d(
         "아무것도 하지 못한 채 시간이 흘렀다.",
         "Time passed before you could do anything.",
         "何もできないまま時間が流れた。",
       ),
     };
-    Ze(e, t, u, n.t, { ...l, kind: "result", ignored: !0 });
+    st(e, t, u, n.t, { ...s, kind: "result", ignored: !0 });
     return;
   }
-  let s = r.choices[i];
-  const c = Ht(s.label, ft(t, e), e);
-  (s.hunt && e.bf && (s = LT(e, t, s)),
-    Ze(e, t, s, n.t, { ...l, kind: "result", choiceLabel: c }));
+  let l = r.choices[i];
+  const c = Jt(l.label, kt(t, e), e);
+  (l.hunt && e.bf && (l = Kv(e, t, l)),
+    st(e, t, l, n.t, { ...s, kind: "result", choiceLabel: c }));
 }
-function DT(e) {
+function Vv(e) {
   const t = e.prompt;
   if (
     !t ||
@@ -13432,15 +14555,16 @@ function DT(e) {
     t.kind === "craft"
   )
     return -1;
-  if (t.ws === "big") return r0(e, t);
+  if (t.lm) return GT(e, t);
+  if (t.ws === "big") return qx(e, t);
   if (
     (t.eventId === "ws_warn_2" || t.eventId === "ws_claw") &&
     t.choices.findIndex((i) => !i.locked) === 0
   )
     return 0;
-  if (t.ws === "invest") return s0(e, t);
-  if (t.warp) return NT(e);
-  if (t.lake) return M0(e);
+  if (t.ws === "invest") return Kx(e, t);
+  if (t.warp) return Ev(e);
+  if (t.lake) return T1(e);
   const o = ae(e);
   if (/^lk_(u_|drink)/.test(t.eventId || "")) return o.chance(0.5) ? 0 : 1;
   if (/^wt_enter_/.test(t.eventId || "")) return o.chance(0.8) ? 0 : 1;
@@ -13460,7 +14584,7 @@ function DT(e) {
           : 1;
   }
   if (e.bf) {
-    const r = HT(e, t, o);
+    const r = Jv(e, t, o);
     if (r !== void 0) return r;
   }
   if (t.kind === "minor" && o.chance(0.2)) return -1;
@@ -13468,7 +14592,7 @@ function DT(e) {
     n = a.filter((r) => t.choices[r].dream);
   return n.length && o.chance(0.6) ? o.pick(n) : a.length ? o.pick(a) : -1;
 }
-const qT = jt({
+const Xv = Nt({
     ko: [
       "뜻밖의 돈이 들어왔다. 연락이 끊겼던 친척의 유산이었다.",
       "헐값에 사 둔 물건의 값이 갑자기 뛰었다.",
@@ -13491,7 +14615,7 @@ const qT = jt({
       "住んでいた町が再開発区域に指定され、補償金を受け取った。",
     ],
   }),
-  GT = jt({
+  Qv = Nt({
     ko: [
       "맡겨 둔 돈이 사라졌다. 맡아 준 사람도 함께 사라졌다.",
       "믿고 투자한 가게가 하룻밤 사이 문을 닫았다.",
@@ -13511,8 +14635,8 @@ const qT = jt({
       "翼の税金が突然上がった。理由は告知されなかった。",
     ],
   }),
-  KT = 0.7,
-  zT = jt({
+  Zv = 0.7,
+  e2 = Nt({
     ko: [
       "큰 거래 하나가 막판에 틀어졌다. 들인 돈은 돌아오지 않았다.",
       "윗선에 바친 몫이 생각보다 컸다.",
@@ -13532,26 +14656,26 @@ const qT = jt({
       "手を組んでいた側が先に崩れた。その穴を埋めるのに金がかかった。",
     ],
   });
-function UT(e) {
-  return e < 90 ? 0 : B(0.15 * Math.pow(1.2, e - 90), 0, 0.95);
+function t2(e) {
+  return e < 90 ? 0 : $(0.15 * Math.pow(1.2, e - 90), 0, 0.95);
 }
-function JT(e, t) {
+function o2(e, t) {
   const o = e.stats;
-  let a = Tk(t, e.age);
+  let a = r0(t, e.age);
   return (
     (a *=
-      B(1 + (50 - o.health) / 50, 0.25, 3) *
-      B(1 + (30 - o.wealth) / 150, 0.8, 1.4)),
-    o.sanity <= 10 && !kt(e) && (a += 0.06),
+      $(1 + (50 - o.health) / 50, 0.25, 3) *
+      $(1 + (30 - o.wealth) / 150, 0.8, 1.4)),
+    o.sanity <= 10 && !jt(e) && (a += 0.06),
     1 - Math.exp(-a)
   );
 }
-function VT(e) {
+function a2(e) {
   if (!e.bf) return e;
   const t = Math.max(e.bf.since, 20);
   return { ...e, age: Math.min(e.age, t) };
 }
-const XT = jt({
+const n2 = Nt({
     ko: [
       "그 십 년 동안 도시는 바뀌었다. 당신은 그대로였다.",
       "간판이 몇 번 바뀌었다. 당신의 얼굴은 바뀌지 않았다.",
@@ -13568,7 +14692,7 @@ const XT = jt({
       "十年が過ぎた。鏡はそれを教えてくれなかった。",
     ],
   }),
-  QT = jt({
+  r2 = Nt({
     ko: [
       "손끝이 조금 말랐다.",
       "거울 속 얼굴에서 핏기가 빠졌다.",
@@ -13588,25 +14712,25 @@ const XT = jt({
       "肌が紙のように薄くなった。",
     ],
   });
-function ZT(e, t, o) {
+function i2(e, t, o) {
   const a = e.bf,
     n = e.stats;
   (a.barUsed === e.age || a.barUsed === e.age - 1) && a.bitAge !== e.age
     ? (a.barStreak++, (a.barBest = Math.max(a.barBest, a.barStreak)))
     : (a.bitAge === e.age || (a.barUsed ?? -99) < e.age - 1) &&
       (a.barStreak = 0);
-  const r = T1(a.thirst);
+  const r = sT(a.thirst);
   if (
     (r === 1 && (n.sanity -= 2),
     a.vigor &&
       a.thirst >= 50 &&
       ((a.vigor = !1),
-      D(
+      P(
         e,
-        { kind: "result", text: dt("misc.vigorGone"), tone: "system" },
+        { kind: "result", text: yt("misc.vigorGone"), tone: "system" },
         0.97,
       )),
-    PT(e, t),
+    Uv(e, t),
     a.wither > 0 && (n.sanity -= a.wither),
     a.wither >= 3 && (n.health -= a.wither),
     a.thirst >= 50)
@@ -13616,54 +14740,58 @@ function ZT(e, t, o) {
       (n.sanity -= 3),
       a.wither++,
       (a.low = 0),
-      a.wither >= le.witherMax)
+      a.wither >= ge.witherMax)
     )
-      return (et(e, "시듦", 0.5 + t.next() * 0.48, "year"), !0);
-    D(e, { kind: "result", text: QT[a.wither - 1], tone: "bad" }, 0.98);
+      return (Ze(e, "시듦", 0.5 + t.next() * 0.48, "year"), !0);
+    P(e, { kind: "result", text: r2[a.wither - 1], tone: "bad" }, 0.98);
   } else r === 0 && a.wither > 0 && ++a.low >= 4 && (a.wither--, (a.low = 0));
   n.health = Math.min(n.health, 100 - a.wither * 12);
-  for (const u of Ao) n[u] = Re(B(n[u]));
+  for (const u of Jn) n[u] = Ce($(n[u]));
   const i =
       a.kind === "kin"
-        ? Math.min(le.kinDeepenMax, 1 + le.kinDeepen * Zo(e))
+        ? Math.min(ge.kinDeepenMax, 1 + ge.kinDeepen * ua(e))
         : 1,
-    l = Math.max(0, (a.made || 0) - (a.lost || 0)),
+    s = Math.max(0, (a.made || 0) - (a.lost || 0)),
     c =
       (a.kind === "stray"
-        ? le.strayKinShare[Math.min(2, l)]
-        : le.mult[a.kind]) *
+        ? ge.strayKinShare[Math.min(2, s)]
+        : ge.mult[a.kind]) *
       (e.age <= 15 ? 0.5 : 1) *
       i;
   return (
-    (a.thirst = Re(B(a.thirst + le.thirstBase * c))),
-    (a.heat = Math.max(0, a.heat - le.heatDecay * Ru(e))),
-    Zo(e) > 0 && Zo(e) % 10 === 0 && (a.heat += 1),
+    (a.thirst = Ce($(a.thirst + ge.thirstBase * c))),
+    (a.heat = Math.max(0, a.heat - ge.heatDecay * nc(e))),
+    ua(e) > 0 && ua(e) % 10 === 0 && (a.heat += 1),
     !1
   );
 }
-const jf = { 검지: 1.25, 약지: 0.58 };
-function ev(e, t) {
-  if (((oe = t), e.dead)) return;
+const rw = { 검지: 1.25, 약지: 0.58 };
+function s2(e, t) {
+  if (((re = t), e.dead)) return;
+  if (Sy(e)) {
+    OT(e, t);
+    return;
+  }
   const o = ae(e),
-    a = ft(t, e),
+    a = kt(t, e),
     n = e.stats,
-    r = hm(e) || aa(e) || ka(e) || (vs(e) && !!e.hgd && e.age < Ge.oldFrom);
+    r = Dm(e) || ga(e) || Oa(e) || (qs(e) && !!e.hgd && e.age < Qe.oldFrom);
   if (
-    (aa(e) &&
-      ((e.bld.threat = B((e.bld.threat || 0) + 1, 0, 3)),
+    (ga(e) &&
+      ((e.bld.threat = $((e.bld.threat || 0) + 1, 0, 3)),
       (e.bld.kills = (e.bld.kills || 0) + o.int(2, 5))),
-    kt(e) &&
+    jt(e) &&
       n.health > 0 &&
-      o.chance(no.yearHurt[Math.min(5, e.wingRank || 1) - 1]))
+      o.chance(go.yearHurt[Math.min(5, e.wingRank || 1) - 1]))
   ) {
-    const c = Z(t, "kx_hp_bullet"),
+    const c = ee(t, "kx_hp_bullet"),
       u = (e.wingRank || 1) >= 3,
       f = n.health;
     n.health = Math.max(
       0,
-      n.health - o.int(no.yearHurtDmg[0], no.yearHurtDmg[1]),
+      n.health - o.int(go.yearHurtDmg[0], go.yearHurtDmg[1]),
     );
-    const b =
+    const p =
       n.health <= 0
         ? u
           ? c.hurtHigh
@@ -13671,11 +14799,11 @@ function ev(e, t) {
         : u
           ? c.hurtHighLight
           : c.hurtLowLight;
-    D(
+    P(
       e,
       {
         kind: "flavor",
-        text: b.text,
+        text: p.text,
         tone: "bad",
         delta: { health: Math.round(n.health - f) },
       },
@@ -13683,11 +14811,11 @@ function ev(e, t) {
     );
   }
   if (
-    (kt(e) && n.health <= 0 && (Sm(e, t, 0.5), e.dead)) ||
+    (jt(e) && n.health <= 0 && (ly(e, t, 0.5), e.dead)) ||
     (!r &&
-      !kt(e) &&
-      o.chance(Um(n.health)) &&
-      et(
+      !jt(e) &&
+      o.chance(Wy(n.health)) &&
+      Ze(
         e,
         e.bf
           ? "시듦"
@@ -13701,31 +14829,31 @@ function ev(e, t) {
       ))
   )
     return;
-  const i = VT(e);
-  if (!r && o.chance(JT(i, a) * (e.bf ? 0.6 : 1))) {
-    const c = vk(i, a, tl(e));
+  const i = a2(e);
+  if (!r && o.chance(o2(i, a) * (e.bf ? 0.6 : 1))) {
+    const c = i0(i, a, vl(e));
     if (
       (e.bf && (delete c.노화, delete c["영양 결핍"]),
-      kt(e) && delete c.뒤틀림,
-      vs(e))
+      jt(e) && delete c.뒤틀림,
+      qs(e))
     )
       for (const g of Object.keys(c))
         g !== "노화" && g !== "질병" && delete c[g];
     const u = Object.entries(c).filter(([, g]) => g > 0),
       f = o.weighted(u, (g) => g[1]);
-    if (et(e, f ? f[0] : "질병", 0.5 + o.next() * 0.48, "year")) return;
+    if (Ze(e, f ? f[0] : "질병", 0.5 + o.next() * 0.48, "year")) return;
   }
   if (
     (!r &&
       e.hgd &&
       e.hgd.guardSince != null &&
-      e.age >= Ge.oldFrom &&
-      o.chance(Math.min(1, (e.age - Ge.oldFrom + 1) * Ge.oldStep)) &&
-      et(e, "노화", 0.5 + o.next() * 0.48, "year")) ||
+      e.age >= Qe.oldFrom &&
+      o.chance(Math.min(1, (e.age - Qe.oldFrom + 1) * Qe.oldStep)) &&
+      Ze(e, "노화", 0.5 + o.next() * 0.48, "year")) ||
     (!r &&
       !e.bf &&
-      o.chance(UT(e.age)) &&
-      et(e, "노화", 0.5 + o.next() * 0.48, "year"))
+      o.chance(t2(e.age)) &&
+      Ze(e, "노화", 0.5 + o.next() * 0.48, "year"))
   )
     return;
   if (e.age >= 18) {
@@ -13734,52 +14862,52 @@ function ev(e, t) {
         e.work || e.job || (e.flags.includes("가주후보") ? "가주후보" : "none"),
       g =
         ((e.job === "검계"
-          ? rn.income[(On(e) || 1) - 1]
+          ? kn.income[(Xn(e) || 1) - 1]
           : e.job === "흑운회"
-            ? Ox(e)
-            : Le(e)
-              ? Be.income[(e.ws.rank || 1) - 1]
-              : ($x(e) ?? fk[u] ?? 1)) -
+            ? bx(e)
+            : Ge(e)
+              ? qe.income[(e.ws.rank || 1) - 1]
+              : (Ax(e) ?? Vk[u] ?? 1)) -
           3.6) *
           0.6 +
         c,
-      b = (o.next() + o.next() + o.next() - 1.5) * 12,
-      k =
+      p = (o.next() + o.next() + o.next() - 1.5) * 12,
+      b =
         n.wealth > 50
           ? e.job === "해결사"
-            ? sf.fixer
-            : 0.05 * (1 - sf.cut * Lx(e))
+            ? Lf.fixer
+            : 0.05 * (1 - Lf.cut * _x(e))
           : 0.05;
-    let T = g + b - (n.wealth - 50) * k;
+    let T = g + p - (n.wealth - 50) * b;
     if (e.cloneYear !== e.age && o.chance(0.07)) {
       const v = o.chance(0.45),
-        w = !v && rd(e),
-        m = Math.round(o.int(15, 40) * (w ? KT : 1));
-      T += v ? m : -m;
-      const y = v ? qT : w ? zT : GT,
-        j = n.wealth;
-      n.wealth = Re(B(n.wealth + T));
-      const _ = Math.round(n.wealth - j);
-      D(
+        w = !v && Id(e),
+        y = Math.round(o.int(15, 40) * (w ? Zv : 1));
+      T += v ? y : -y;
+      const m = v ? Xv : w ? e2 : Qv,
+        A = n.wealth;
+      n.wealth = Ce($(n.wealth + T));
+      const _ = Math.round(n.wealth - A);
+      P(
         e,
         {
           kind: "result",
-          text: o.pick(y),
+          text: o.pick(m),
           delta: _ ? { wealth: _ } : {},
           tone: _ >= 0 ? "good" : "bad",
         },
         0.97,
       );
-    } else n.wealth = B(n.wealth + T);
+    } else n.wealth = $(n.wealth + T);
   }
   (e.flags.includes("빚") &&
-    rd(e) &&
+    Id(e) &&
     ((e.flags = e.flags.filter((c) => c !== "빚")),
-    D(
+    P(
       e,
       {
         kind: "flavor",
-        text: h(
+        text: d(
           "자리가 오른 뒤, 남아 있던 빚은 조용히 정리되었다.",
           "After you rose in rank, the debt you still had was quietly settled.",
           "地位が上がってから、残っていた借金は静かに片付いた。",
@@ -13788,25 +14916,25 @@ function ev(e, t) {
       },
       0.96,
     )),
-    e.age >= 16 && e0(e, o),
+    e.age >= 16 && Lx(e, o),
     e.age >= 18 &&
       e.prosthetics > 0 &&
       (n.wealth -= 0.4 * Math.min(e.prosthetics, 6)),
     e.work === "4무리" &&
       (e.branch === "순록" || e.branch === "코뿔소") &&
-      (e.rOver = B((e.rOver || 0) + 0.3, 0, 12)),
+      (e.rOver = $((e.rOver || 0) + 0.3, 0, 12)),
     e.job === "검계" &&
       e.bl &&
-      o.chance(rn.tick) &&
+      o.chance(kn.tick) &&
       (e.bl.cut = (e.bl.cut || 0) + 1));
-  const l = i.age;
+  const s = i.age;
   if (
-    (l >= 45 && (n.health -= l >= 70 ? 2.2 : l >= 55 ? 1.3 : 0.6),
+    (s >= 45 && (n.health -= s >= 70 ? 2.2 : s >= 55 ? 1.3 : 0.6),
     e.age >= 15 && a.pollution >= 7 && (n.health -= 0.5),
     e.age >= 40 && a.medical >= 6 && (n.health += 0.3),
-    l < 45 && n.health < 70
+    s < 45 && n.health < 70
       ? (n.health += 5)
-      : l < 65 && n.health < 60 && (n.health += 3),
+      : s < 65 && n.health < 60 && (n.health += 3),
     n.health < 30 && (n.health += 3),
     e.age >= 10 && n.wealth <= 5 && (n.health -= 1),
     e.flags.includes("약물중독") ||
@@ -13814,59 +14942,59 @@ function ev(e, t) {
         ? (n.sanity += 2.5 + (n.network >= 40 ? 1.5 : 0))
         : n.sanity < 75 && (n.sanity += 1)),
     e.job === "손가락" &&
-      jf[e.finger] &&
+      rw[e.finger] &&
       n.sanity < 70 &&
-      (n.sanity += jf[e.finger]),
+      (n.sanity += rw[e.finger]),
     n.sanity > 75 && (n.sanity -= 0.3),
-    kt(e) && e.kx && e.kx.tube && (e.kx.fit = Math.min(5, (e.kx.fit || 0) + 1)),
-    lo(e))
+    jt(e) && e.kx && e.kx.tube && (e.kx.fit = Math.min(5, (e.kx.fit || 0) + 1)),
+    bo(e))
   ) {
-    const c = Zs(e);
-    c.faith < Qe.start
-      ? (c.faith = Math.min(Qe.start, c.faith + Qe.drift))
-      : c.faith > Qe.start &&
-        (c.faith = Math.max(Qe.start, c.faith - Qe.drift));
+    const c = xl(e);
+    c.faith < it.start
+      ? (c.faith = Math.min(it.start, c.faith + it.drift))
+      : c.faith > it.start &&
+        (c.faith = Math.max(it.start, c.faith - it.drift));
   }
-  bu(e);
-  for (const c of Ao) n[c] = Re(B(n[c]));
-  if (e.bf && !ka(e) && ZT(e, o)) return;
-  const s = e.rule ? 10 : ka(e) ? 1 : Ru(e);
-  if (((e.age += s), e.age >= qh && !e.bf)) {
-    et(e, "노화", 0.9, "year");
+  Uu(e);
+  for (const c of Jn) n[c] = Ce($(n[c]));
+  if (e.bf && !Oa(e) && i2(e, o)) return;
+  const l = e.rule ? 10 : Oa(e) ? 1 : nc(e);
+  if (((e.age += l), e.age >= md && !e.bf)) {
+    Ze(e, "노화", 0.9, "year");
     return;
   }
-  if ((D(e, { kind: "year", text: Km(e) }, 0), s > 1)) {
+  if ((P(e, { kind: "year", text: Qn(e) }, 0), l > 1)) {
     const c = e.rule
       ? e.rule.kind === "lord"
-        ? h(
+        ? d(
             "십 년이 흘렀다. 홍원은 그사이에도 군주의 것이었다.",
             "Ten years passed. Hongyuan remained the Lord's all the while.",
             "十年が過ぎた。その間も、鴻園は君主のものだった。",
           )
-        : h(
+        : d(
             "십 년이 흘렀다. 장부는 그사이에도 가주의 손을 거쳤다.",
             "Ten years passed. The ledgers passed through the Family Hierarch's hands all the while.",
             "十年が過ぎた。その間も、帳簿は家主の手を通った。",
           )
-      : o.pick(XT);
-    D(e, { kind: "flavor", text: c, tone: "system" }, 0.01);
+      : o.pick(n2);
+    P(e, { kind: "flavor", text: c, tone: "system" }, 0.01);
   }
-  ol(e, t);
+  Zn(e, t);
 }
-function ry(e, t) {
-  oe = t;
-  const o = ft(t, e),
+function qy(e, t) {
+  re = t;
+  const o = kt(t, e),
     a = e.dead,
     n = [];
-  (iu.includes(e.work || e.job) && n.push(be(e)),
+  (Ou.includes(e.work || e.job) && n.push(Re(e)),
     e.flags.includes("E.G.O개화") &&
-      n.push(h("E.G.O 개화", "Effloresced E.G.O", "E.G.O開花")),
-    e.job === "해결사" && e.grade && e.grade <= 3 && n.push(be(e)),
+      n.push(d("E.G.O 개화", "Effloresced E.G.O", "E.G.O開花")),
+    e.job === "해결사" && e.grade && e.grade <= 3 && n.push(Re(e)),
     e.flags.includes("특색") &&
-      n.push(h("특색 해결사", "Color Fixer", "特色フィクサー")));
-  const r = Gk(e, o),
-    i = ix(ox(e), t.rarity),
-    l = o.avgLife ?? o.lifeExp;
+      n.push(d("특색 해결사", "Color Fixer", "特色フィクサー")));
+  const r = Y0(e, o),
+    i = G0(P0(e), t.rarity),
+    s = o.avgLife ?? o.lifeExp;
   return {
     seed: e.seed,
     name: e.name,
@@ -13877,42 +15005,52 @@ function ry(e, t) {
     age: a.age,
     alive: !!a.alive,
     undying: a.cause === "영생",
-    clYears: e.cl ? a.age - ge.startAge + 1 : null,
-    cause: em(a.cause),
+    clYears: e.cl ? a.age - Ae.startAge + 1 : null,
+    lm: e.lm
+      ? {
+          land: Qa(e),
+          F: Math.round(e.lm.F),
+          Se: Math.round(e.lm.Se),
+          Sk: Math.round(e.lm.Sk),
+          L: Math.round(e.lm.L),
+          R: e.lm.R || 0,
+        }
+      : null,
+    cause: Mm(a.cause),
     causeKey: a.cause,
     obituary: a.text,
-    region: { id: o.id, name: o.name, ward: o.ward, avgLife: l },
-    diff: a.age - l,
+    region: { id: o.id, name: o.name, ward: o.ward, avgLife: s },
+    diff: a.age - s,
     jobLord: e.job === "군주",
     job: e.pinky
-      ? !be(e) && e.lastJob
-        ? `${Hr(e)} (${h(`전 ${e.lastJob}`, `Former ${e.lastJob}`, `元${e.lastJob}`)})`
-        : h1(e)
-      : be(e) ||
+      ? !Re(e) && e.lastJob
+        ? `${ii(e)} (${d(`전 ${e.lastJob}`, `Former ${e.lastJob}`, `元${e.lastJob}`)})`
+        : U1(e)
+      : Re(e) ||
         (e.lastJob
-          ? h(`전 ${e.lastJob}`, `Former ${e.lastJob}`, `元${e.lastJob}`)
+          ? d(`전 ${e.lastJob}`, `Former ${e.lastJob}`, `元${e.lastJob}`)
           : null),
-    pinky: e.pinky ? { star: Hr(e), blade: el(e), heaven: Wm(e) === 1 } : null,
+    pinky: e.pinky ? { star: ii(e), blade: Tl(e), heaven: cy(e) === 1 } : null,
     rare: n,
     stats: { ...e.stats },
     flags: [...e.flags],
     egoName: e.egoName || null,
     relicName: e.relicName || null,
-    reflections: e.reflections.filter((s) => s.text),
+    reflections: e.reflections.filter((l) => l.text),
     story: r,
-    chronicle: yk(e.log),
+    chronicle: e0(e.log),
     records: i,
     jobTier:
       (
-        i.find((s) =>
+        i.find((l) =>
           /^(frank_|fixer_g|color|finger_|assoc|corp|fixer$|bf_kin|bf_gen1|bl_join|bl_salsu|bl_mentor$|kk_join|kk_captain|kk_patriarch)/.test(
-            s.key,
+            l.key,
           ),
         ) || {}
       ).tier || null,
   };
 }
-const tv = [
+const l2 = [
     {
       id: "A",
       name: "A사",
@@ -14587,7 +15725,7 @@ const tv = [
       avgLife: 36,
     },
   ],
-  ov = [
+  h2 = [
     {
       text: "특별한 일 없이 한 해가 지나갔다. 같은 길, 같은 얼굴, 같은 하늘.",
       age: [13, 110],
@@ -15303,7 +16441,7 @@ const tv = [
       wsField: ["총기"],
     },
   ],
-  av = [
+  d2 = [
     {
       id: "c_fever",
       age: [1, 9],
@@ -16225,7 +17363,7 @@ const tv = [
       regions: ["outskirts"],
     },
   ],
-  nv = [
+  u2 = [
     {
       id: "t_school_end",
       age: [13, 16],
@@ -16698,7 +17836,7 @@ const tv = [
       regions: ["wing"],
     },
   ],
-  rv = [
+  c2 = [
     {
       id: "a_career_top",
       age: [18, 22],
@@ -17023,7 +18161,7 @@ const tv = [
       ],
     },
   ],
-  iv = [
+  f2 = [
     {
       id: "a_marriage",
       age: [22, 55],
@@ -18359,7 +19497,7 @@ const tv = [
       },
     },
   ],
-  sv = [
+  w2 = [
     {
       id: "j_corp_overtime_exec",
       age: [20, 80],
@@ -19113,7 +20251,7 @@ const tv = [
       ],
     },
   ],
-  lv = [
+  g2 = [
     {
       id: "o_memory",
       age: [60, 95],
@@ -19234,7 +20372,7 @@ const tv = [
       effects: { rep: 3, sanity: 3, network: 2 },
     },
   ],
-  hv = [
+  m2 = [
     {
       id: "ff_fantasm_market",
       age: [10, 70],
@@ -20861,7 +21999,7 @@ const tv = [
       },
     },
   ],
-  dv = [
+  y2 = [
     {
       id: "x_client_trap",
       grade: [3, 9],
@@ -21311,7 +22449,7 @@ const tv = [
       },
     },
   ],
-  uv = [
+  p2 = [
     {
       id: "f_recruit_thumb",
       age: [16, 35],
@@ -21934,7 +23072,7 @@ const tv = [
       ],
     },
   ],
-  cv = [
+  b2 = [
     {
       id: "th_drill",
       age: [16, 90],
@@ -22705,7 +23843,7 @@ const tv = [
       ],
     },
   ],
-  fv = [
+  k2 = [
     {
       id: "in_shoe",
       age: [16, 70],
@@ -23330,7 +24468,7 @@ const tv = [
       ],
     },
   ],
-  wv = [
+  x2 = [
     {
       id: "mi_collect",
       age: [16, 90],
@@ -23993,7 +25131,7 @@ const tv = [
       ],
     },
   ],
-  gv = [
+  T2 = [
     {
       id: "ri_submit",
       age: [16, 70],
@@ -24687,7 +25825,7 @@ const tv = [
       ],
     },
   ],
-  mv = [
+  v2 = [
     {
       id: "og_office_offer",
       age: [18, 60],
@@ -25729,7 +26867,7 @@ const tv = [
       ],
     },
   ],
-  yv = [
+  _2 = [
     {
       id: "ab_nothing_there",
       age: [14, 90],
@@ -26544,7 +27682,7 @@ const tv = [
       anyone: !0,
     },
   ],
-  pv = [
+  A2 = [
     {
       id: "wc_checkpoint",
       age: [19, 70],
@@ -27752,7 +28890,7 @@ const tv = [
       officeRank: [1, 4],
     },
   ],
-  bv = [
+  j2 = [
     {
       id: "hs_join",
       age: [18, 40],
@@ -32704,7 +33842,7 @@ const tv = [
       ],
     },
   ],
-  kv = [
+  S2 = [
     {
       id: "wo_task_stock",
       age: [18, 70],
@@ -35174,7 +36312,7 @@ const tv = [
       ],
     },
   ],
-  xv = [
+  Y2 = [
     {
       id: "bf_birth_sign",
       age: [0, 0],
@@ -38241,7 +39379,7 @@ const tv = [
       ],
     },
   ],
-  Tv = [
+  R2 = [
     {
       id: "wt_enter_fixer",
       manual: !0,
@@ -38702,7 +39840,7 @@ const tv = [
       ],
     },
   ],
-  vv = [
+  C2 = [
     {
       id: "hh_05",
       age: [5, 5],
@@ -40118,7 +41256,7 @@ const tv = [
 {남은사람줄}`,
     },
   ],
-  _v = [
+  N2 = [
     {
       id: "bl_join",
       age: [18, 35],
@@ -41653,7 +42791,7 @@ const tv = [
       ],
     },
   ],
-  jv = [
+  I2 = [
     {
       id: "kk_join",
       age: [18, 35],
@@ -43173,7 +44311,7 @@ const tv = [
       ],
     },
   ],
-  Av = [
+  W2 = [
     {
       id: "dr_lines",
       manual: !0,
@@ -43534,7 +44672,7 @@ const tv = [
       hunterNm: { text: "협회 연합" },
     },
   ],
-  Yv = [
+  M2 = [
     {
       id: "lk_u_work",
       manual: !0,
@@ -44925,7 +46063,7 @@ const tv = [
       ],
     },
   ],
-  Sv = [
+  O2 = [
     {
       id: "cm_ring_art",
       age: [20, 30],
@@ -46708,7 +47846,7 @@ const tv = [
       ],
     },
   ],
-  Rv = [
+  F2 = [
     {
       id: "kx_join",
       age: [18, 40],
@@ -48310,7 +49448,7 @@ const tv = [
       ],
     },
   ],
-  Cv = [
+  B2 = [
     {
       id: "nh_join",
       age: [18, 40],
@@ -49394,7 +50532,7 @@ const tv = [
       banned: { text: "이단 심문관은 몸을 바꾸지 않는다." },
     },
   ],
-  Nv = [
+  E2 = [
     {
       id: "ws_join",
       age: [18, 35],
@@ -51259,7 +52397,7 @@ const tv = [
       ],
     },
   ],
-  Wv = [
+  L2 = [
     {
       id: "cl_first",
       manual: !0,
@@ -53046,7 +54184,7 @@ C사의 관할. 마른 시트와 조용한 복도. 손이 가벼웠다. 가벼�
       label: "처리한다",
     },
   ],
-  Iv = [
+  $2 = [
     {
       id: "hgd_offer",
       manual: !0,
@@ -54255,7 +55393,1084 @@ C사의 관할. 마른 시트와 조용한 복도. 손이 가벼웠다. 가벼�
       ],
     },
   ],
-  Ov = [
+  P2 = [
+    {
+      id: "lm_lines",
+      manual: !0,
+      intro: {
+        text: `P사 · 장로
+
+P사의 관할에서 태어났다. 서른이 되기까지의 일은 어디에도 적혀 있지 않다.
+
+당신은 어느 가문의 제1권속, 장로다. 당신이 피를 나눠 준 권속이 둘, 그 둘이 만든 권속이 넷. 그 아래는 세지 않는다.
+
+굶주림은 사람의 피로만 채워진다. 피는 쌓아 둘 수 없다.
+
+열 해에 한 번, 문을 크게 열 것이다. 사람들이 올 것이다. 사냥꾼도 올 것이다.
+
+오늘 밤, 당신은 문을 세운다.`,
+      },
+      job: { text: "제1권속 · 장로" },
+      name: {
+        defaultLand: { text: "{이름}의 랜드" },
+        nameless: { text: "이름 모를 권속" },
+        newKin: { text: "새로 들인 권속들" },
+        land: {
+          tag: { text: "문 위에 걸 이름" },
+          q: { text: "문 위에 걸 이름을 정한다." },
+          field: { text: "랜드의 이름" },
+          done: {
+            text: "문 위에 {랜드:이라|라}고 썼다. 권속들이 아래에서 올려다보았다.",
+          },
+        },
+        kin2: {
+          tag: { text: "두 오른팔" },
+          q: {
+            text: "당신이 제 피를 나눠 준 둘. 이 둘이 당신의 자식이고, 당신의 전부다. 새 이름은 어버이가 준다. 왼쪽 아이는 말이 없고, 오른쪽 아이는 늘 먼저 웃는다.",
+          },
+          fa: { text: "말이 없는 아이" },
+          fb: { text: "먼저 웃는 아이" },
+          done: {
+            text: "{권속A}, {권속B}. 두 번씩 불러 주었다. 둘은 제 이름을 받아 들고 오래 고개를 숙였다. 피를 나눈 밤처럼.",
+          },
+        },
+        kin3: {
+          tag: { text: "그 아래 넷" },
+          q: {
+            text: '{권속A:과|와} {권속B:이|가} 제 피로 만든 아이들을 데려왔다. 둘씩, 넷. "어버이께서 지어 주십시오."',
+          },
+          field: { text: "{윗권속}의 아이" },
+          done: {
+            text: "{권속A}의 아이들을 {권속A1}, {권속A2}. {권속B}의 아이들을 {권속B1}, {권속B2}. 넷은 제 이름을 입 안에서 굴려 보고, 제 어버이를 먼저 올려다보았다.",
+          },
+          trust: {
+            text: "이름은 둘에게 맡겼다. 제 아이의 이름은 제가 짓는 것이 맞다. 이튿날 {권속A:이|가} {권속A1:과|와} {권속A2:을|를}, {권속B:이|가} {권속B1:과|와} {권속B2:을|를} 데려와 인사시켰다. 당신은 넷의 이름을 한 번씩 불러 주었다. 넷은 그것을 오래 기억했다.",
+          },
+        },
+        common: {
+          text: "{랜드}. 장로 하나, 이름 있는 권속 여섯, 이름 없는 권속 수십. 첫 문은 열 해 뒤에 연다.",
+        },
+      },
+      closed: {
+        a1: [
+          { text: "담장을 한 칸 더 올렸다. 밤에만 일했다." },
+          {
+            text: "{권속B2:이|가} 기둥에 못을 거꾸로 박았다. 아무도 말하지 않았다.",
+          },
+          {
+            text: "길 잃은 사람이 문 앞까지 왔다가 돌아갔다. 권속들은 문 안에서 숨을 죽였다.",
+          },
+          {
+            text: "손님이 남긴 피 반 잔을 이름 있는 여섯이 먼저 마셨다. 아랫것들은 잔을 핥았다.",
+          },
+          { text: "밤바람에 문 위의 이름이 삐걱거렸다." },
+          { text: "{권속A:이|가} 담장 밖을 오래 보고 서 있었다." },
+        ],
+        a2: [
+          {
+            text: "문 밖에 누가 {랜드} 이야기를 적어 붙였다. 틀린 데가 많았다.",
+          },
+          { text: "해가 지기 전부터 문 앞을 서성이는 사람이 생겼다." },
+          {
+            text: '{권속B:이|가} 손님 응대하는 법을 아래 둘에게 가르쳤다. "목덜미를 보지 마라."',
+          },
+          { text: "어느 해결사가 문 앞에서 한참 담배를 피우고 갔다." },
+          { text: "{랜드} 안에 사람의 발자국이 남아 있는 아침이 늘었다." },
+          { text: "권속 하나가 손님의 이름을 외웠다. 당신은 모른 척했다." },
+        ],
+        a3: [
+          { text: "첫 기구가 녹슬었다. 사람이 아니라 세월이 한 일이었다." },
+          {
+            text: "당신의 얼굴은 그대로였다. 문 앞의 사람들은 세대가 바뀌었다.",
+          },
+          {
+            text: "{권속A:이|가} 물가에 오래 서 있었다. 발을 담그지는 않았다. 혈귀는 물을 무서워한다.",
+          },
+          {
+            text: "오래된 손님이 손자를 데려왔다. 손자가 아니라 손자의 아들이었다.",
+          },
+          { text: "밤마다 같은 음악을 틀었다. 권속들은 가사를 외웠다." },
+          { text: "담장 아래 묻은 것들 위로 풀이 자랐다." },
+        ],
+        a4: [
+          { text: "문을 몇 번 더 열 수 있을지 세어 보았다. 손가락이 남았다." },
+          { text: "권속들은 당신이 셈하는 것을 알았다. 묻지 않았다." },
+          {
+            text: "바깥에서는 {랜드:을|를} 오래된 것으로 불렀다. 유령 같은 것으로.",
+          },
+          { text: "당신은 처음 문을 세운 밤을 떠올리려 했다. 잘 되지 않았다." },
+          { text: "남은 권속이 당신 곁에 앉았다. 둘 다 말이 없었다." },
+          { text: "마지막 문까지 몇 해. 당신은 숫자를 문 안쪽에 새겼다." },
+        ],
+      },
+      A: {
+        a1: {
+          text: {
+            text: `올해 손님들이 남긴 피가 모였다. 많지 않다. 어디에 쓸지는 장로가 정한다.
+권속들이 잔을 보고 있었다.`,
+          },
+          c: [
+            {
+              l: { text: "기구를 하나 더 세운다" },
+              r: {
+                text: "피를 굳혀 기둥을 세웠다. 굳은 사람 피는 쇠보다 오래 간다. 봄에 사람들이 줄을 섰다.",
+              },
+            },
+            {
+              l: { text: "내가 마신다" },
+              r: {
+                text: "잔을 비웠다. 몸이 뜨거워졌다. 권속들은 빈 잔 바닥을 핥았다.",
+              },
+            },
+            {
+              l: { text: "권속에게 나눠 준다" },
+              r: {
+                text: "여섯 잔에 나누고, 남은 것은 아래로 내렸다. {권속B:이|가} 먼저 비우고 웃었다. 그날 밤 담장 안의 눈들이 더 붉었다.",
+              },
+            },
+            {
+              l: { text: "자발적으로 낸 피로 버틴다" },
+              r: {
+                text: "문 앞에 피를 내고 간 사람들의 몫으로 한 해를 났다. 식은 피였다. 권속들은 입을 다물었다.",
+              },
+            },
+          ],
+        },
+        a2: {
+          text: {
+            text: `{랜드}의 이름이 밖에 돌기 시작했다. 손님이 늘었고, 남기는 피도 늘었다.
+늘어난 만큼 눈독 들이는 쪽도 늘었다.`,
+          },
+          c: [
+            {
+              l: { text: "야시장을 연다" },
+              r: {
+                text: "피로 등을 달았다. 밤마다 문 앞이 환했다. 손님들은 그 불빛을 자랑했다.",
+              },
+            },
+            {
+              l: { text: "내가 마신다" },
+              r: {
+                text: "혼자 마셨다. 손님이 많은 해의 피는 진했다. 권속들은 당신의 등을 보고 있었다.",
+              },
+            },
+            {
+              l: { text: "권속에게 나눠 준다" },
+              r: {
+                text: "권속들에게 돌렸다. {권속A:이|가} 잔을 들어 당신에게 먼저 기울였다.",
+              },
+            },
+            {
+              l: { text: "자발적으로 낸 피로 버틴다" },
+              r: {
+                text: "소문을 듣고 피를 내러 오는 사람이 생겼다. 그 피로 났다. 미지근했다.",
+              },
+            },
+          ],
+        },
+        a3: {
+          text: {
+            text: `{랜드:이|가} 오래되었다. 고칠 것이 늘었고, 새로 들어온 권속의 몫도 생각해야 했다.
+올해의 피를 어디에 쓸까.`,
+          },
+          c: [
+            {
+              l: { text: "낡은 기구를 고친다" },
+              r: {
+                text: "녹슨 자리에 피를 발랐다. 기구가 다시 돌았다. 오래된 손님이 울었다.",
+              },
+            },
+            {
+              l: { text: "내가 마신다" },
+              r: {
+                text: "당신이 마셨다. 오래 산 혈귀의 갈증은 깊었다. 권속들은 그 깊이를 몰랐다.",
+              },
+            },
+            {
+              l: { text: "권속에게 나눠 준다" },
+              r: {
+                text: "새 권속에게 먼저 주었다. 오래된 권속이 그 순서를 보았다. 그래도 받았다.",
+              },
+            },
+            {
+              l: { text: "자발적으로 낸 피로 버틴다" },
+              r: {
+                text: "오래 다닌 손님들이 알아서 피를 두고 갔다. 그것으로 났다. 힘이 되지는 않았다.",
+              },
+            },
+          ],
+        },
+        a4: {
+          text: {
+            text: "남은 문이 몇 개 없다. 올해의 피를 남길 것에 쓸지, 당신에게 쓸지.",
+          },
+          c: [
+            {
+              l: { text: "마지막 등을 단다" },
+              r: {
+                text: "문 위에 등을 하나 더 달았다. 멀리서도 보였다. 사람들이 그 등을 보고 왔다.",
+              },
+            },
+            {
+              l: { text: "내가 마신다" },
+              r: {
+                text: "당신이 마셨다. 남은 문을 세며 마셨다. 권속들은 묻지 않았다.",
+              },
+            },
+            {
+              l: { text: "권속에게 나눠 준다" },
+              r: {
+                text: "남을 것들에게 주었다. 당신이 없을 때를 생각하며 주었다.",
+              },
+            },
+            {
+              l: { text: "자발적으로 낸 피로 버틴다" },
+              r: { text: "그냥 났다. 식은 피로도 한 해는 간다." },
+            },
+          ],
+        },
+      },
+      B: {
+        b1: {
+          tag: { text: "첫 사냥꾼" },
+          text: {
+            text: `문 안에서 사람 하나가 잡혔다. 손님 옷을 입었지만 신발이 해결사의 것이었다. 7급. 정찰이다.
+{권속A:이|가} 그를 바닥에 눌러 놓고 당신을 보았다.`,
+          },
+          c: [
+            {
+              l: { text: "문 앞까지 배웅해 돌려보낸다" },
+              r: {
+                text: '신발을 돌려주고 문 앞까지 걸어 나갔다. "본 대로 적어라. 손님은 다치지 않는다고." 그는 뒤돌아보지 않고 갔다. 권속들은 놓아준 것을 아까워했다.',
+              },
+            },
+            {
+              l: { text: "피를 마신다" },
+              r: {
+                text: "목덜미를 물었다. 해결사의 피는 손님 피와 달랐다. 뜨겁고 거칠었다. 사무소에서는 돌아오지 않은 7급의 이름을 명단에 올렸다.",
+              },
+            },
+            {
+              l: { text: "{권속A}에게 맡긴다" },
+              r: {
+                text: "{권속A}에게 넘겼다. {권속A:은|는} 그를 제 아래 둘과 나눠 마셨다. 다음 날 {권속A}의 눈이 당신을 오래 보았다.",
+              },
+            },
+            {
+              l: { text: "모른 척 내버려 둔다" },
+              r: {
+                text: "손님인 척하게 두었다. 그는 폐장까지 {랜드:을|를} 다 돌고 나갔다. 담장 높이, 권속 수, 당신의 자리까지.",
+              },
+            },
+          ],
+        },
+        b2: {
+          tag: { text: "권속의 실수" },
+          text: {
+            text: `문이 닫힌 해에 {권속B1:이|가} 손님을 물었다. 손님은 살았다. 목에 자국이 남은 채 문 앞에서 울고 있었다.
+{권속B1:은|는} 입가를 닦지도 않고 서 있었다.`,
+          },
+          c: [
+            {
+              l: { text: "{권속B1:을|를} 벌하고 손님에게 값을 치른다" },
+              r: {
+                text: "{권속B1:을|를} 한 달 동안 굶겼다. 손님에게는 돈과 약을 쥐여 보냈다. 손님은 다시 오지 않았지만, 나쁜 말도 하지 않았다.",
+              },
+            },
+            {
+              l: { text: "손님을 피주머니로 만들어 입을 막는다" },
+              r: {
+                text: "손님을 끝까지 물었다. 눈이 흐려지고 말이 사라졌다. 피주머니 하나가 늘었다. 그의 가족이 몇 해 동안 문 앞을 서성였다.",
+              },
+            },
+            {
+              l: { text: "손님을 돌려보내고 {권속B1:을|를} 감싼다" },
+              r: {
+                text: "손님을 그냥 보냈다. {권속B1}에게는 아무 말도 하지 않았다. 권속들은 안도했고, 손님은 밖에서 말을 퍼뜨렸다.",
+              },
+            },
+            {
+              l: { text: "못 본 척한다" },
+              r: {
+                text: "아무것도 하지 않았다. 손님은 제 발로 나갔고 {권속B1:은|는} 제 자리로 돌아갔다. 둘 다 당신이 보고 있었다는 것을 알았다.",
+              },
+            },
+          ],
+        },
+        b3: {
+          tag: { text: "피를 내겠다는 사람들" },
+          text: {
+            text: `문 앞에 사람 열몇이 모였다. {랜드:을|를} 좋아한다고 했다. 피를 조금씩 내겠다고, 그러니 아무도 물지 말아 달라고 했다.
+팔을 걷은 채 기다리고 있었다.`,
+          },
+          c: [
+            {
+              l: { text: "받는다" },
+              r: {
+                text: "잔을 돌렸다. 사람들은 제 피를 보고 조금 웃었다. 식은 피였지만 그들은 매해 왔다. 권속들은 그 피를 싫어했다.",
+              },
+            },
+            {
+              l: { text: "거절한다" },
+              r: {
+                text: '돌려보냈다. "피는 문이 열릴 때 받는다." 사람들은 섭섭해하며 갔다. 달라진 것은 없었다.',
+              },
+            },
+            {
+              l: { text: "받아서 권속과 나눈다" },
+              r: {
+                text: '받은 피를 권속들과 나눴다. {권속B:이|가} "사람 손으로 짜낸 피 맛"이라고 했다. 그래도 다 마셨다.',
+              },
+            },
+            {
+              l: { text: "모인 사람들을 다 마신다" },
+              r: {
+                text: "팔을 걷은 채로 하나씩 물었다. 열몇이 그 자리에서 쓰러졌다. 당신은 몇 해 치 힘을 얻었다. 그 밤 이후 문 앞에 팔을 걷고 오는 사람은 없었다.",
+              },
+            },
+          ],
+        },
+        b4: {
+          tag: { text: "아끼는 권속" },
+          text: {
+            text: `{권속A1:이|가} 밤에 찾아왔다. 사람들 사이에서 살아 보고 싶다고 했다. 물지 않고, 피를 사서 마시며.
+"허락해 주십시오." 무릎을 꿇지는 않았다.`,
+          },
+          c: [
+            {
+              l: { text: "보내 준다" },
+              r: {
+                text: "문을 열어 주었다. {권속A1:은|는} 사람의 옷을 입고 나갔다. 가끔 손님으로 돌아왔다. 돈을 내고 들어와 당신을 멀리서 보고 갔다.",
+              },
+            },
+            {
+              l: { text: "붙잡는다" },
+              r: {
+                text: '"너는 내 피다." {권속A1:은|는} 고개를 숙이고 돌아갔다. 그 뒤로 문 밖을 보지 않았다. 보지 않으려고 애썼다.',
+              },
+            },
+            {
+              l: { text: "몫을 늘려 묶는다" },
+              r: {
+                text: "그날 밤부터 {권속A1}의 잔을 남보다 먼저, 남보다 많이 채웠다. {권속A1:은|는} 마시고 잠들었다. 깨어났을 때 바깥 이야기는 하지 않았다. 더 강해져 있었다.",
+              },
+            },
+            {
+              l: { text: "죽인다" },
+              r: {
+                text: "목을 비틀었다. 소리는 짧았다. 다른 권속들이 문틈으로 보고 있었다. 그날 밤부터 아무도 당신에게 먼저 말을 걸지 않았다.",
+              },
+            },
+          ],
+        },
+        b5: {
+          tag: { text: "가난한 해" },
+          text: {
+            text: `손님이 줄었다. 도시의 사정이었다. 남긴 피가 겨울을 나기에 모자랐다.
+이름 있는 여섯의 잔과, 그 아래 수십의 입. 피는 한 잔 반.`,
+          },
+          c: [
+            {
+              l: { text: "내가 굶는다" },
+              r: {
+                text: "당신 잔을 비워 두었다. 권속들이 당신 잔을 보고 또 보았다. {권속B:이|가} 제 몫의 반을 당신 잔에 부었다. 마시지 않았다.",
+              },
+            },
+            {
+              l: { text: "권속이 굶는다" },
+              r: {
+                text: "당신이 마셨다. 권속들은 빈 잔을 들고 서 있었다. 봄까지 그들의 눈이 당신을 따라다녔다.",
+              },
+            },
+            {
+              l: { text: "손님에게서 더 거둔다" },
+              r: {
+                text: "들어온 손님마다 조금 더 물었다. 아무도 죽지 않았다. 몇은 어지러워하며 나갔고, 다음 해 오지 않았다.",
+              },
+            },
+            {
+              l: { text: "권속끼리 다투게 둔다" },
+              r: {
+                text: "잔을 놓고 자리를 떴다. 돌아왔을 때 잔은 비어 있었고 {권속B2}의 입가가 찢어져 있었다. 누가 마셨는지 묻지 않았다.",
+              },
+            },
+          ],
+        },
+        b6: {
+          tag: { text: "글 쓰는 사람" },
+          text: {
+            text: `글 쓰는 사람이 찾아왔다. {랜드} 이야기를 적어 팔겠다고 했다. 무서운 쪽으로도, 아름다운 쪽으로도 쓸 수 있다고.
+공책을 펴 들고 당신을 기다렸다.`,
+          },
+          c: [
+            {
+              l: { text: "안내한다" },
+              r: {
+                text: "밤새 {랜드:을|를} 보여 주었다. 그는 아름다운 쪽으로 썼다. 다음 개장에 그 글을 들고 온 손님이 많았다. 권속들은 낯선 얼굴이 느는 것을 싫어했다.",
+              },
+            },
+            {
+              l: { text: "피주머니로 만들어 입을 막는다" },
+              r: {
+                text: "공책을 덮게 했다. 그는 글을 쓰지 않았다. 쓰지 못했다. 그의 공책은 {랜드} 안 어딘가에 아직 있다.",
+              },
+            },
+            {
+              l: { text: "권속이 안내한다" },
+              r: {
+                text: "{권속B:이|가} 데리고 다녔다. 글은 반쯤 맞고 반쯤 틀렸다. 손님이 조금 늘었고 권속들은 {권속B:이|가} 바깥 사람과 말하는 것을 보았다.",
+              },
+            },
+            {
+              l: { text: "쫓아낸다" },
+              r: {
+                text: "문 밖으로 밀어냈다. 그는 무서운 쪽으로 썼다. 틀린 데가 많았지만 사람들은 그것을 믿었다.",
+              },
+            },
+          ],
+        },
+        b7: {
+          tag: { text: "사무소의 제안" },
+          text: {
+            text: `송곳니 사냥 사무소에서 사람이 왔다. 칼을 문 앞에 두고 들어왔다.
+"개장 때 손님 몫만 받고, 사냥꾼은 보내지 않겠습니다. 대신 해마다 피 한 몫을 저희에게." 사무소가 혈귀의 피로 무엇을 하는지는 말하지 않았다.`,
+          },
+          c: [
+            {
+              l: { text: "받아들인다" },
+              r: {
+                text: '해마다 한 몫을 보냈다. 개장 때 사냥꾼이 줄었다. 권속들은 "사냥꾼에게 피를 바치는 혈귀"라는 말을 입 밖에 내지는 않았다.',
+              },
+            },
+            {
+              l: { text: "심부름 온 사냥꾼을 마신다" },
+              r: {
+                text: "문 앞의 칼을 집기 전에 물었다. 사무소의 피는 진했다. 사무소는 답을 들은 셈이 되었다. 다음 개장에 깃발을 들고 왔다.",
+              },
+            },
+            {
+              l: { text: "{권속B}에게 협상을 맡긴다" },
+              r: {
+                text: "{권속B:이|가} 반 몫으로 깎았다. 사무소는 받았다. {권속B:은|는} 그날부터 바깥일을 제 일로 여겼다.",
+              },
+            },
+            {
+              l: { text: "답을 미룬다" },
+              r: {
+                text: '"생각해 보겠다." 그는 돌아갔다. 사무소는 미룬 답을 거절로 적었다. 다음 개장에 사냥꾼이 배로 왔다.',
+              },
+            },
+          ],
+        },
+        b8: {
+          tag: { text: "피주머니의 가족" },
+          text: {
+            text: `문 앞에 여자 하나가 앉아 있었다. 몇 해째였다. 안에 있는 피주머니 하나가 그의 남편이었다.
+오늘은 문을 두드렸다. 얼굴만 보게 해 달라고.`,
+          },
+          c: [
+            {
+              l: { text: "값을 치른다" },
+              r: {
+                text: "남편은 보여 주지 않았다. 대신 돈과, 그가 더는 돌아오지 않는다는 말을 주었다. 그는 울고 갔다. 다시 오지 않았다.",
+              },
+            },
+            {
+              l: { text: "가족도 피주머니로" },
+              r: {
+                text: "문을 열어 주었다. 남편 옆에 세웠다. 둘은 서로를 보지 않았다. 볼 수 없었다.",
+              },
+            },
+            {
+              l: { text: "권속을 시켜 돌려보낸다" },
+              r: {
+                text: '{권속B1:이|가} 그를 길 끝까지 데려다주었다. 돌아온 {권속B1:이|가} "다시 올 겁니다"라고 했다. 왔다. 그러나 문은 두드리지 않았다.',
+              },
+            },
+            {
+              l: { text: "못 본 척한다" },
+              r: {
+                text: "문을 열지 않았다. 그는 문 앞에서 겨울을 났다. 봄에 없었다. 문 앞을 지나는 사람들이 그 자리를 보고 갔다.",
+              },
+            },
+          ],
+        },
+        b9: {
+          tag: { text: "두 권속의 다툼" },
+          text: {
+            text: `{권속A:과|와} {권속B:이|가} 당신 앞에 나란히 섰다. 나란히 서지는 않았다.
+{권속A}: "사람을 더 들여야 합니다. 그래야 오래 갑니다." {권속B}: "사람을 더 마셔야 합니다. 그래야 다음 문을 넘습니다."`,
+          },
+          c: [
+            {
+              l: { text: "{권속A} 편을 든다" },
+              r: {
+                text: '"사람 쪽이다." {권속B:은|는} 고개를 숙였다. 그날 밤 {권속B}의 아래 둘이 {권속B:을|를} 둘러싸고 오래 서 있었다.',
+              },
+            },
+            {
+              l: { text: "{권속B} 편을 든다" },
+              r: {
+                text: '"힘 쪽이다." {권속A:은|는} 알겠다고 했다. 그 뒤로 {권속A:은|는} 손님에게 인사하지 않았다.',
+              },
+            },
+            {
+              l: { text: "둘에게 피를 나눠 달랜다" },
+              r: {
+                text: "당신 몫의 피를 둘에게 한 잔씩 주었다. 둘은 마시고 입을 다물었다. 다툼은 피 밑으로 가라앉았다. 없어지지는 않았다.",
+              },
+            },
+            {
+              l: { text: "둘 다 벌한다" },
+              r: {
+                text: "둘 다 한 달을 굶겼다. 아래 넷이 제 윗사람 대신 잔을 들고 당신에게 왔다. 당신은 받지 않았다. 넷은 그것을 기억했다.",
+              },
+            },
+          ],
+        },
+        b9h: {
+          tag: { text: "물이 찼다" },
+          text: {
+            text: `큰비가 왔다. {랜드} 바닥에 물이 무릎까지 찼다. 권속들은 담장과 기구 위로 올라가 내려오지 않았다. 혈귀는 물을 무서워한다.
+문을 열 날이 멀지 않았다. 누군가는 물을 퍼내야 했다.`,
+          },
+          c: [
+            {
+              l: { text: "사람을 불러 퍼내게 한다" },
+              r: {
+                text: "품삯을 걸고 바깥 사람들을 불렀다. 그들은 물속에서 하루 종일 일했고, 담장 위의 눈들을 올려다보며 웃었다. {랜드:은|는} 사람 손으로 말랐다.",
+              },
+            },
+            {
+              l: { text: "당신이 직접 들어가 퍼낸다" },
+              r: {
+                text: "장로는 물을 견딘다. 당신 혼자 물속에서 사흘을 퍼냈다. 권속들이 담장 위에서 그것을 보았다. 내려오지는 못했지만, 보았다.",
+              },
+            },
+            {
+              l: { text: "권속을 떠밀어 들어가게 한다" },
+              r: {
+                text: "{권속B:을|를} 물속으로 밀어 넣었다. {권속B:은|는} 떨면서 퍼냈다. 다 퍼낸 뒤에도 한동안 떨었다. 그래도 그 뒤로 {권속B:은|는} 물을 조금 덜 무서워했다.",
+              },
+            },
+            {
+              l: { text: "물이 빠질 때까지 둔다" },
+              r: {
+                text: "아무것도 하지 않았다. 물은 한 달을 갔다. 그해 문 앞에 온 손님들은 진흙과 썩은 냄새를 보고 돌아갔다.",
+              },
+            },
+          ],
+        },
+        b10: {
+          tag: { text: "혈귀가 되고 싶다는 손님" },
+          text: {
+            text: `오래 다닌 손님 하나가 폐장 뒤에 남았다. 늙어 가고 있었다. "저를 물어 주십시오. 여기 남게."
+권속들이 둘러서서 당신을 보았다.`,
+          },
+          c: [
+            {
+              l: { text: "돌려보낸다" },
+              r: {
+                text: '"사람으로 늙어라." 그는 울었다. 다음 개장에 지팡이를 짚고 왔다. 그다음엔 오지 않았다. 그의 가족이 대신 왔다.',
+              },
+            },
+            {
+              l: { text: "거절하고 잊는다" },
+              r: {
+                text: "거절했다. 그는 더 조르지 않았다. 몇 해 뒤 바깥에서 죽었다는 말을 들었다. 당신은 얼굴을 떠올리지 못했다.",
+              },
+            },
+            {
+              l: { text: "가문에 들인다" },
+              r: {
+                text: "당신은 더 만들 수 없다. {권속B:이|가} 아랫것 하나를 불러 물게 했다. 그는 사흘 뒤 깨어났다. 사람의 이름을 버리고 가문의 맨 아래로 들어갔다. 당신은 그의 새 이름을 듣지 못했다.",
+              },
+            },
+            {
+              l: { text: "마신다" },
+              r: {
+                text: "물고, 깨우지 않았다. 늙은 피는 묽었다. 권속들은 당신이 손님을 마시는 것을 처음 보았다. 손님들이 보지 않은 것은 다행이었다.",
+              },
+            },
+          ],
+        },
+        b11: {
+          tag: { text: "오래된 피주머니" },
+          text: {
+            text: `처음 만든 피주머니가 쓰러졌다. 오래 버텼다. 눈을 뜬 채였고, 아무것도 보지 않았다.
+안에 남은 피가 반 잔쯤 되었다.`,
+          },
+          c: [
+            {
+              l: { text: "묻어 준다" },
+              r: {
+                text: "담장 아래 묻었다. 남은 피는 땅에 주었다. 권속들은 아깝다는 얼굴을 숨기지 않았다. 당신은 그 자리에 돌 하나를 놓았다.",
+              },
+            },
+            {
+              l: { text: "권속에게 나눈다" },
+              r: {
+                text: "남은 피를 권속들에게 주었다. 오래된 피주머니의 피는 맛이 없었다. 다 마셨다. 빈 몸은 담장 밖에 두었다.",
+              },
+            },
+            {
+              l: { text: "새 피주머니를 만든다" },
+              r: {
+                text: "그 자리에 손님 하나를 새로 세웠다. {랜드}에서 돌아오지 않은 사람이 하나 늘었다. 밖에서 이름이 돌았다.",
+              },
+            },
+            {
+              l: { text: "버려 둔다" },
+              r: {
+                text: "그대로 두었다. 며칠 동안 거기 있었다. 권속들이 그 앞을 지날 때마다 걸음이 느려졌다. 손님 하나가 보고 비명을 질렀다.",
+              },
+            },
+          ],
+        },
+        b12: {
+          tag: { text: "도시의 기록" },
+          text: {
+            text: `기록 부서 사람이 왔다. 날개의 사람은 아니었다. 그냥 적는 사람이었다. {랜드:이|가} 언제 생겼고 무엇이 있는지.
+"적어 두면 오래 갑니다. 적어 두면 찾기도 쉽고요."`,
+          },
+          c: [
+            {
+              l: { text: "안내한다" },
+              r: {
+                text: "보여 주었다. 그는 적었다. {랜드:은|는} 도시의 기록에 들어갔다. 찾아오는 사람이 늘었고, 찾는 사람도 늘었다.",
+              },
+            },
+            {
+              l: { text: "피주머니로 만들고 기록을 태운다" },
+              r: {
+                text: '그는 빈손으로도 돌아가지 못했다. 공책은 태웠다. 기록에는 "뒷골목, 놀이공원 흔적"이라고만 남았다.',
+              },
+            },
+            {
+              l: { text: "권속이 안내한다" },
+              r: {
+                text: "{권속A:이|가} 안내했다. 권속의 수는 틀리게 적혔다. 당신의 나이도.",
+              },
+            },
+            {
+              l: { text: "쫓아낸다" },
+              r: {
+                text: '문을 닫았다. 그는 밖에서 적었다. 틀린 것이 많았고, 가장 틀린 것은 "위험하다"였다.',
+              },
+            },
+          ],
+        },
+        b12h: {
+          tag: { text: "오래된 손님의 마지막" },
+          text: {
+            text: `수십 해를 다닌 손님이 문 앞에 왔다. 늙었고, 오래 못 갈 것 같았다. 혈귀가 되고 싶다고는 하지 않았다.
+"여기서 마지막 밤을 보내고 싶습니다. 물지는 말아 주십시오."`,
+          },
+          c: [
+            {
+              l: { text: "들여서 곁을 지킨다" },
+              r: {
+                text: "가장 좋은 자리에 눕혔다. 음악을 틀었다. 새벽에 그는 숨이 멎었다. 당신이 눈을 감겨 주었다. 그의 가족이 다음 문에 왔다.",
+              },
+            },
+            {
+              l: { text: "피를 마신다" },
+              r: {
+                text: "마지막 밤이라는 말을 들어주었다. 그 뒤는 들어주지 않았다. 늙은 피였다. 권속들은 당신을 보지 않았다.",
+              },
+            },
+            {
+              l: { text: "권속이 곁을 지킨다" },
+              r: {
+                text: "{권속B:이|가} 그의 곁에 앉아 밤을 샜다. 그는 {권속B}의 손을 잡고 갔다. {권속B:은|는} 그 손을 오래 놓지 않았다.",
+              },
+            },
+            {
+              l: { text: "돌려보낸다" },
+              r: {
+                text: '"여기는 죽는 곳이 아니다." 그는 문 앞에서 돌아섰다. 길에서 쓰러졌다는 말이 들렸다. 그 말을 손님들이 했다.',
+              },
+            },
+          ],
+        },
+        b13: {
+          tag: { text: "늙지 않는 장로" },
+          text: {
+            text: `{권속A:이|가} 당신 곁에 앉았다. 오래 말이 없다가 물었다.
+"언제까지 문을 여실 겁니까." 당신이 늙지 않는다는 것을 둘 다 알고 있었다.`,
+          },
+          c: [
+            {
+              l: { text: "다음 문이 마지막이라 답한다" },
+              r: {
+                text: '"몇 번 더." 숫자를 말했다. {권속A:은|는} 그 숫자를 받아 적듯 고개를 끄덕였다. 권속들 사이에 그 숫자가 돌았다. 그들은 끝을 준비했다.',
+              },
+            },
+            {
+              l: { text: "끝까지 연다고 답한다" },
+              r: {
+                text: '"문이 있는 한." {권속A:은|는} 더 묻지 않았다. 그날 밤부터 {권속A:은|는} 당신의 잔을 당신보다 먼저 채웠다.',
+              },
+            },
+            {
+              l: { text: "몫을 늘려 준다" },
+              r: {
+                text: "답 대신 당신 몫의 잔을 주었다. {권속A:은|는} 마셨다. 묻지 않게 되었다.",
+              },
+            },
+            {
+              l: { text: "입을 막는다" },
+              r: {
+                text: '"묻지 마라." {권속A:은|는} 입을 다물었다. 다른 권속들도 다물었다. {랜드:이|가} 조용해졌다. 좋은 조용함은 아니었다.',
+              },
+            },
+          ],
+        },
+        b14: {
+          tag: { text: "이름 난 사냥꾼" },
+          text: {
+            text: `문이 닫힌 해, 혼자 온 사람이 문을 두드렸다. 칼은 등에, 손은 비어 있었다. 2급 해결사. 이름을 아는 사람이 많은 쪽이었다.
+"싸우러 온 게 아닙니다. 아직은."`,
+          },
+          c: [
+            {
+              l: { text: "손님으로 맞는다" },
+              r: {
+                text: '밤새 {랜드:을|를} 보여 주었다. 그는 아무것도 베지 않았다. 떠나며 "다음 문에는 제가 사람들을 데려오겠습니다"라고 했다. 손님 쪽으로.',
+              },
+            },
+            {
+              l: { text: "싸워 피를 마신다" },
+              r: {
+                text: "문 안에서 싸웠다. 그는 셋을 베고 당신에게 베였다. 2급의 피는 당신이 마셔 본 것 중 가장 뜨거웠다. 그의 이름이 명단에서 지워졌고, 사무소는 그 이름을 기억했다.",
+              },
+            },
+            {
+              l: { text: "권속들이 맞선다" },
+              r: {
+                text: "권속들이 둘러쌌다. 이름 있는 여섯과 이름 없는 수십. 그는 둘을 베고 {권속B2}의 팔을 꺾고 담장을 넘어 갔다. 권속들은 다친 채로 서로를 보았다. 이긴 것은 아니었다. 진 것도 아니었다.",
+              },
+            },
+            {
+              l: { text: "문을 잠근다" },
+              r: {
+                text: "열지 않았다. 그는 문 앞에 하룻밤 앉았다가 갔다. 다음 문에 그는 사냥꾼들 맨 앞에 서 있었다.",
+              },
+            },
+          ],
+        },
+        b15: {
+          tag: { text: "마지막 문 앞" },
+          text: {
+            text: `마지막 개장까지 세 해. 권속들이 모여 당신의 뜻을 물었다. 마지막 문을 어떻게 열지.
+이름 있는 권속이 몇 남았는지 당신은 세지 않아도 알았다. 이름 없는 것들은 세지 않았다.`,
+          },
+          c: [
+            {
+              l: { text: "사람들과 함께 연다" },
+              r: {
+                text: '"손님을 다 들인다. 끝까지." 권속들은 등을 닦고 기구에 기름을 쳤다. 사람의 일처럼.',
+              },
+            },
+            {
+              l: { text: "조용히 연다" },
+              r: {
+                text: '"알리지 않는다. 오는 사람만." 권속들은 고개를 끄덕였다. 마지막 밤이 조용할 것 같았다.',
+              },
+            },
+            {
+              l: { text: "권속과 함께 연다" },
+              r: {
+                text: '"너희 이름으로 연다." 권속들의 피를 문 위 이름 아래 발랐다. 그들은 그것을 오래 보았다.',
+              },
+            },
+            {
+              l: { text: "혼자 연다" },
+              r: {
+                text: '"내가 연다. 너희는 안에 있어라." 권속들은 물러났다. 마지막 밤 문 앞에는 당신 혼자였다. 그것을 사람들이 보았다.',
+              },
+            },
+          ],
+        },
+      },
+      tag: {
+        A: { text: "피를 어디에" },
+        open: { text: "문이 열리는 밤" },
+        relic: { text: "아랫것의 부탁" },
+      },
+      gate: {
+        awayNote: {
+          text: "가문에서 사람이 왔다. 내년에 열 달, 어버이의 일로 자리를 비워야 한다. 담장은 권속들이 지킨다. 버티려면 권속의 힘 24. 지금 {권속힘}.",
+        },
+        away: {
+          text: `열 달. 당신은 문을 권속들에게 맡기고 {랜드:을|를} 나섰다. 가문의 일은 길었고, 말할 것이 없다.
+권속의 힘 {권속힘} · 버티는 데 필요한 힘 24.`,
+        },
+        awayOk: {
+          text: "돌아왔을 때 담장은 그대로였다. 사냥꾼이 두 번 왔다고 했다. 두 번 다 담장을 넘지 못했다. {권속A:이|가} 열쇠를 돌려주었다. 손이 조금 떨렸다.",
+        },
+        awayFail: {
+          text: "돌아왔을 때 문 위의 이름이 없었다. 담장은 반쯤 무너졌고, 안에는 아무도 없었다. 이름 있는 것도, 없는 것도. 당신이 없는 열 달이면 충분했다. 당신은 빈 {랜드} 한가운데 서서 끝났다.",
+        },
+        outNote: {
+          text: "내년엔 바깥에 다녀와야 한다. 혼자. {랜드}의 힘이 권속에게만 있다는 소문이 돌면, 사냥꾼은 담장이 아니라 장로를 노린다. 장로의 힘 {장로힘} · 권속의 힘 {권속힘} — 권속이 장로의 두 배를 넘으면 위험하다.",
+        },
+        out: {
+          text: `당신 혼자 {랜드:을|를} 나섰다. 가야 할 곳이 있었다. 권속은 데려가지 않았다. 담장을 비울 수 없어서였다.
+장로의 힘 {장로힘} · 권속의 힘 {권속힘}.`,
+        },
+        outOk: {
+          text: "골목에서 사냥꾼 셋이 기다리고 있었다. 당신이 약하다는 소문을 들은 얼굴들이었다. 소문은 틀렸다. 당신은 셋의 피를 마시고 돌아왔다. 권속들은 문 앞에 나와 있었다.",
+        },
+        outFail: {
+          text: "골목에서 사냥꾼들이 기다리고 있었다. {랜드}의 힘은 담장 안에 있고, 장로는 혼자이며 약하다는 소문이 맞았다. 칼이 몇 자루였는지 세지 못했다. 당신은 {랜드}에서 열 골목 떨어진 곳에서 끝났다. 권속들은 그 밤 당신이 돌아오지 않는 것을 담장 위에서 기다렸다.",
+        },
+      },
+      succ: {
+        rise: {
+          text: "{오른권속:이|가} {죽은권속}의 자리에 올랐다. 묻지 않아도 그렇게 된다. 아랫것 하나가 {오른권속}의 자리를 채웠다. 이름은 묻지 않았다.",
+        },
+        riseX: {
+          text: "이름 모를 권속 하나가 {죽은권속}의 자리에 올랐다. 묻지 않아도 그렇게 된다. 이름은 묻지 않았다.",
+        },
+        take: {
+          text: "아랫것 하나가 {죽은권속}의 자리를 차지했다. 이름은 묻지 않았다.",
+        },
+      },
+      open: {
+        head: {
+          text: "{랜드}의 문이 열렸다. 문턱 {문턱} · 몰려온 힘 {몰려온힘} · {랜드}의 힘 {랜드힘}.",
+        },
+        feast: [
+          {
+            text: "해 지기 전부터 줄이 섰다. 사냥꾼은 없었다. 있었어도 손님 틈에서 칼을 꺼내지 않았다.",
+          },
+          {
+            text: "폐장까지 아무도 물리지 않았다. 음악이 끝나자 사람들은 손을 흔들며 나갔다.",
+          },
+        ],
+        mixed: [
+          {
+            text: "손님이 많았다. 그 사이에 신발이 다른 사람이 몇 있었다. 권속들이 문 양쪽에 섰다.",
+          },
+          {
+            text: "자정 무렵 담장 뒤에서 짧은 싸움이 있었다. 손님들은 음악 때문에 듣지 못했다. 몇 명은 들었다.",
+          },
+        ],
+        hunt: [
+          {
+            text: "손님보다 칼이 많았다. 송곳니 사냥 사무소의 깃발이 문 앞에 꽂혔다.",
+          },
+          {
+            text: "문을 연 것을 후회할 틈은 없었다. 권속들이 담장을 따라 흩어졌고, 밤새 비명이 음악을 덮었다.",
+          },
+        ],
+        named9: {
+          text: "그 틈에 2급 하나가 섞여 있었다. 혼자였고, 혼자로 충분했다.",
+        },
+        named13: {
+          text: "1급 하나가 왔다. 사무소 깃발 없이. 이름만으로 손님 몇이 돌아갔다.",
+        },
+        named17: {
+          text: "특색이 왔다. 문 앞에 서서 한참 {랜드:을|를} 보기만 했다. 그러고는 들어왔다.",
+        },
+        fall: {
+          text: `{랜드}의 힘이 모자랐다.
+담장이 먼저 무너졌다. 권속들이 하나씩 쓰러졌다. {이끄는권속:이|가} 당신 앞을 막았고, 막은 채로 베였다.
+새벽에 문 위의 이름이 내려졌다. 당신은 그것을 보며 끝났다.`,
+        },
+        near: {
+          text: `막아 냈다. 겨우.
+담장 아래에 {죽은권속:이|가} 누워 있었다. 목을 물린 쪽은 사냥꾼이었다. {죽은권속:은|는} 끝까지 그를 놓지 않았다.
+당신은 {죽은권속}의 이름을 한 번 불렀다. 대답은 없었다.`,
+        },
+        nearX: {
+          text: `막아 냈다. 겨우.
+담장 아래에 이름 모를 권속 하나가 누워 있었다. 목을 물린 쪽은 사냥꾼이었다. 끝까지 그를 놓지 않았다.
+당신은 그 아이의 이름을 몰랐다.`,
+        },
+        ate: {
+          text: `사냥꾼들은 당신을 노리지 않았다. 권속을 노렸다. 지난 문에서 사람을 먹은 {랜드}의 권속을.
+{죽은권속:이|가} 담장 밖으로 끌려 나갔다. 돌아오지 않았다.`,
+        },
+        ateX: {
+          text: `사냥꾼들은 당신을 노리지 않았다. 권속을 노렸다. 지난 문에서 사람을 먹은 {랜드}의 권속을.
+이름 모를 권속 하나가 담장 밖으로 끌려 나갔다. 돌아오지 않았다.`,
+        },
+        prompt: { text: "문 안에 아직 사람들이 있다. 폐장 음악 전이다." },
+        eat: { text: "들어온 사람을 먹는다" },
+        noeat: { text: "먹지 않는다" },
+        eatGood: {
+          text: "문을 안에서 잠갔다. 음악을 더 크게 틀었다. 그날 밤 들어온 사람들은 나가지 않았다. 피주머니가 줄지어 섰다. 바깥에서 돌아오지 않은 이름들이 벽에 붙었다.",
+        },
+        eatHunt: {
+          text: "손님이 적어 사냥꾼을 먹었다. 해결사의 피였다. 권속들의 눈이 아침까지 붉었다. 사무소는 명단을 길게 적었다.",
+        },
+        noeatGood: {
+          text: "폐장 음악을 틀었다. 사람들이 나갔다. 몇은 다음에 또 오겠다고 했다.",
+        },
+        noeatHunt: {
+          text: "살아남은 사냥꾼들을 문 밖으로 내보냈다. 그들은 뒤돌아보며 갔다. 손님 몇이 그것을 보았다.",
+        },
+        flowers: {
+          text: "문 앞에 꽃이 몇 송이 놓여 있었다. 누가 둔 것인지는 몰랐다.",
+        },
+        rageEye: { text: "분노가 타오르는 눈이 되었다." },
+        rageSlow: {
+          text: "분노가 끓었다. 몸이 따라 주지 않았다. 당신은 문을 닫았다.",
+        },
+      },
+      relic: {
+        text: {
+          text: `개장이 끝난 밤, 이름 모를 권속 하나가 당신 앞에 무릎을 꿇었다. 손에 든 것을 내밀었다. 오래된 것이었다. 어디서 났는지는 말하지 않았다.
+"어버이께 드리는 것입니다. 받아 주십시오. 부디."
+아랫세대는 윗세대를 거스르지 못한다. 핏속에 새겨진 것이다. 그것을 깨는 것은 굶주림, 그리고 그런 것들.`,
+        },
+        c: [
+          {
+            l: { text: "받는다" },
+            r: {
+              text: "받았다. 손에 쥐자 차가웠다. 권속은 고개를 숙이고 물러갔다. 돌아서는 어깨가 떨리고 있었다.",
+            },
+          },
+          {
+            l: { text: "거절한다" },
+            r: {
+              text: '"필요 없다." 권속은 물러가지 않았다. 무릎을 꿇은 채 밤새 거기 있었다. 새벽에 당신은 결국 받았다. 손에 쥐자 차가웠다.',
+            },
+          },
+        ],
+      },
+      revolt: {
+        night: {
+          text: `올해도 피는 장로의 잔에 먼저 채워졌다. 권속들은 빈 잔 바닥을 핥았다.
+그날 밤, 방 밖의 불이 하나씩 꺼졌다. 문틈으로 비린 피 냄새가 스며들었다.
+어둠 속에서 눈이 하나둘 떠졌다. 둘은 당신이, 넷은 그 둘이 피를 나눠 준 눈이었다. 그 뒤로 이름 없는 눈이 수십. {이끄는권속:이|가} 맨 앞이었다.
+눈마다 붉은 것이 흘러내렸다. 굶주린 혈귀가 흘리는 피눈물이었다.
+손에 쥔 것이 뜨거워졌다. 핏속에 새겨진 것이 풀리는 소리를 당신은 들었다. 그들도 들었다.
+가장 먼저 덤벼든 권속의 이빨이 당신의 목덜미에 박혔다.`,
+        },
+        win: {
+          text: `당신은 그 권속의 목을 비틀어 벽에 내던졌다. 그다음, 또 그다음. 새벽까지 비명이 그치지 않았다.
+해가 떴을 때 바닥은 온통 끈적했다. 서 있는 것은 당신 하나뿐이었다.
+{이끄는권속:은|는} 마지막이었다. 눈을 뜬 채였다. 당신은 그 눈을 감겨 주지 않았다.`,
+        },
+        lose: {
+          text: '수십, 수백이 넘는 날붙이가 차례대로 당신의 몸에 박혀 왔다. 당신에 대한 그간의 분노, 서러움을 표현하는 것 같았다. 그렇게 당신을 미워하고 저주했으나, 그들은 당신에게 진심으로 눈물을 흘리며 다가와 공격할 뿐이었다. 당신의 피가 바닥으로 쏟아졌다. 피를 거의 다 잃은 당신을, 당신의 권속들은 절대 죽게 두지 않았다. {이끄는권속:은|는} 눈물을 삼키며 당신 앞에 섰다. "문은 이제 저희가 엽니다. 어버이께서는 여는 손만 되어 주십시오." 열 해마다, 당신은 문을 열었다. 권속들의 뜻대로. 권속들이 먹고, 당신은 문을 닫았다. 문 위의 이름은 그대로였다. 그것만 당신 것이었다.',
+        },
+        alone: [
+          { text: "잔은 하나만 씻었다." },
+          { text: "문 위의 이름을 올려다볼 사람이 없었다." },
+          { text: "권속의 피로 바닥을 새로 칠했다. 마르지 않았다." },
+          { text: "밤에 누가 부르는 것 같아 돌아보았다. 아무도 없었다." },
+          { text: "손님이 왔다. 당신 혼자 문을 열고 혼자 닫았다." },
+        ],
+        end: {
+          text: "문을 열었다. 혼자 열었다. 손님은 오지 않았다. 온 것은 특색 여럿과 그 뒤의 사람들이었다. 특색은 당신에게 이름을 묻지 않았다. 당신은 오래 싸웠다. 권속 여섯 몫을 혼자 싸웠다. 담장 아래, 권속들의 피 위에 당신의 피가 섞였다. 문 위의 이름은 그대로 두었다. 아무도 내리지 않았다.",
+        },
+      },
+      frenzy: {
+        start: {
+          text: `세 번째였다. 당신이 이름을 지어 준 것들이, 당신 앞에서, 세 번째로 끌려 나갔다.
+{죽은권속}의 이름을 불렀다. 대답이 없었다. 다시 불렀다. 목이 찢어지도록 불렀다. 담장 밖에서 사냥꾼들이 웃는 소리가 들렸다.
+폐장 음악이 울려야 할 시간이었다. 당신은 음악을 틀지 않았다. 문을 닫지 않았다. 닫을 손이 떨려서가 아니었다. 닫을 이유가 없어졌다.
+이름을 가진 것들을 셋이나 가져간 자들에게 이제 돌려줄 것은 하나뿐이었다.
+그날부터 {랜드}의 문은 늘 열려 있었다. 들어오는 것은 무엇이든, 나가지 못했다.`,
+        },
+        fixLine: {
+          text: "전투 · {상대} (토벌대 강함 {적}) — {동사} · 강함 {S}",
+        },
+        pplLine: { text: "사냥 · {상대} — {동사} · 강함 {S}" },
+        fixers: [
+          { text: "9급 해결사 셋", pow: 9 },
+          { text: "8급 해결사 둘", pow: 10 },
+          { text: "해결사 무리", pow: 18 },
+          { text: "7급 해결사 넷", pow: 32 },
+          { text: "6급 해결사 둘", pow: 24 },
+          { text: "해결사 셋", pow: 21 },
+          { text: "5급 해결사 둘", pow: 32 },
+          { text: "4급 해결사 셋", pow: 66 },
+          { text: "4급 해결사 하나", pow: 22 },
+          { text: "3급 해결사 둘", pow: 60 },
+          { text: "3급 해결사 하나", pow: 30 },
+          { text: "2급 해결사 둘", pow: 80 },
+          { text: "2급 해결사 하나", pow: 40 },
+        ],
+        grade1: { text: "1급 해결사 하나", pow: 55 },
+        people: [
+          { text: "밤길의 행인 둘" },
+          { text: "문 앞에서 서성이던 사람" },
+          { text: "골목의 취객 넷" },
+          { text: "퇴근하던 사람들" },
+          { text: "노점 앞의 사람들" },
+          { text: "구경 온 사람 다섯" },
+          { text: "길 잃은 사람" },
+          { text: "버스를 기다리던 사람들" },
+          { text: "도망치던 사람" },
+        ],
+        fixV: [
+          { text: "목덜미를 물어 쓰러뜨렸다" },
+          { text: "벽에 처박았다" },
+          { text: "칼째로 짓눌렀다" },
+          { text: "피를 다 마셨다" },
+          { text: "숨이 끊길 때까지 놓지 않았다" },
+          { text: "쓰러뜨렸다" },
+        ],
+        pplV: [
+          { text: "피를 다 마셨다" },
+          { text: "등을 덮쳤다" },
+          { text: "한 방울도 남기지 않았다" },
+          { text: "비명이 끊겼다" },
+          { text: "목을 물었다" },
+          { text: "놓치지 않았다" },
+        ],
+        breaks: [
+          { text: "담장이 한 구역 더 밀려났다. 담장 아래로 피가 고였다." },
+          { text: "위험 등급 · 도시 전설 → 도시 질병" },
+          {
+            text: "남은 권속들도 피 냄새에 미쳐 거리로 쏟아져 나갔다. {이끄는권속:이|가} 맨 앞이었다.",
+          },
+          { text: "위험 등급 · 도시 질병 → 도시 악몽" },
+          { text: "그 거리에서 숨 쉬는 것이 하나도 남지 않았다." },
+        ],
+        flood: { text: "끝나지 않는 밤" },
+        end: {
+          text: "붉은 밤은 끝나지 않았다. 그 구역의 하수구는 몇 달 동안 붉었다. 그 뒤로 그 문이 닫혔다는 이야기는 없다.",
+        },
+      },
+      end: {
+        happy: {
+          text: `열일곱 번째 문이 닫혔다. 해가 지기도 전에 줄이 섰던 밤이었다.
+손님들은 문 앞에서 피 한 잔씩을 내고, 그만큼 웃다 돌아갔다. 억지로 받아 낸 피는 한 방울도 없었다.
+권속들은 사람 곁에서 잔을 받았다. 누구도 사람의 목덜미를 쳐다보지 않았다. {살아있는권속들:이|가} 문 양쪽에 서서 손을 흔들었다.
+사냥꾼들도 왔다. 칼을 문 앞에 맡기고 들어와, 다른 손님들처럼 줄을 섰다.
+새벽, 당신은 비어 있는 {랜드:을|를} 한 바퀴 돌았다. 바닥에 피 자국은 없었다.`,
+        },
+        tail: [
+          {
+            text: "{랜드}의 문은 열 해마다 열렸고, 그때마다 사람들이 찾아왔다. 혈귀와 사람이 한 잔을 나누는 곳. 도시에 그런 곳이 하나쯤은 있었다.",
+          },
+          {
+            text: "{랜드}의 문은 열 해마다, 아는 사람만 아는 밤에 열렸다. 줄은 길지 않았고, 온 사람은 늘 다시 왔다. 도시에 그런 곳이 하나쯤은 있었다.",
+          },
+          {
+            text: "{랜드}의 문은 열 해마다 열렸다. 문 위 이름 아래에 권속들의 이름이 함께 있었다. 혈귀의 가문이 사람 곁에서 산 곳. 도시에 그런 곳이 하나쯤은 있었다.",
+          },
+          {
+            text: "{랜드}의 문은 열 해마다 열렸다. 마지막 문은 당신 혼자 열었고, 사람들은 그 문 앞에 선 당신을 보고도 들어왔다. 도시에 그런 곳이 하나쯤은 있었다.",
+          },
+        ],
+        final: {
+          text: `열일곱 번째 문이 닫혔다. 손님은 적었고, 돌아보는 사람은 없었다.
+도시는 {랜드:을|를} 오래 참았다. 더 참을 이유가 없어졌다.
+봄에 정식 토벌대가 왔다. 사냥꾼이 아니라 토벌대였다. 문 앞에 서서 지켜 주는 사람은 하나도 없었다.
+당신은 권속들과 싸웠고, 권속들과 쓰러졌다. 문 위의 이름이 내려졌다. 아무도 그것을 주워 가지 않았다.`,
+        },
+        happyTitle: { text: "사람과 함께한 랜드" },
+      },
+    },
+  ],
+  H2 = [
     {
       id: "rq_delivery",
       type: "단순 업무",
@@ -55456,7 +57671,7 @@ C사의 관할. 마른 시트와 조용한 복도. 손이 가벼웠다. 가벼�
       death: "장로가 직접 내려왔다.",
     },
   ],
-  Fv = [
+  D2 = [
     "뜬소문",
     "도시 괴담",
     "도시 전설",
@@ -55464,7 +57679,7 @@ C사의 관할. 마른 시트와 조용한 복도. 손이 가벼웠다. 가벼�
     "도시 악몽",
     "도시의 별",
   ],
-  Ev = [
+  q2 = [
     { name: "윤 사무소" },
     { name: "가로등 사무소" },
     { name: "갈고리 사무소" },
@@ -55477,7 +57692,7 @@ C사의 관할. 마른 시트와 조용한 복도. 손이 가벼웠다. 가벼�
     { name: "송곳니 사냥 사무소" },
     { name: "솔 사무소" },
   ],
-  Mv = [
+  G2 = [
     {
       name: "하나 협회",
       desc: "해결사 면허 발급과 등급 심사, 특색 지정을 맡는 협회",
@@ -55491,7 +57706,7 @@ C사의 관할. 마른 시트와 조용한 복도. 손이 가벼웠다. 가벼�
     { name: "디에치 협회", desc: "" },
     { name: "외우피 협회", desc: "거래 중개와 계약을 다루는 협회" },
   ],
-  Bv = [
+  K2 = [
     { name: "불타버린 소녀", tiers: [1, 2] },
     { name: "거미봉오리", tiers: [1, 2] },
     { name: "행복한 테디", tiers: [2, 3] },
@@ -55507,348 +57722,368 @@ C사의 관할. 마른 시트와 조용한 복도. 손이 가벼웠다. 가벼�
     { name: "푸른 별", tiers: [5, 5], aleph: !0 },
     { name: "종말새", tiers: [5, 5], aleph: !0 },
   ],
-  Lv = { tiers: Fv, office: Ev, assoc: Mv, abnormal: Bv },
-  $v = 0.448167,
-  Pv = 0.360667,
-  Hv = 0.304417,
-  Dv = 0.303167,
-  qv = 0.258083,
-  Gv = 0.22525,
-  Kv = 0.2125,
-  zv = 0.211333,
-  Uv = 0.210167,
-  Jv = 0.207917,
-  Vv = 0.201583,
-  Xv = 0.197,
-  Qv = 0.184667,
-  Zv = 0.171667,
-  e2 = 0.139,
-  t2 = 0.115083,
-  o2 = 0.113833,
-  a2 = 0.112333,
-  n2 = 0.102667,
-  r2 = 0.102417,
-  i2 = 0.0785,
-  s2 = 0.061583,
-  l2 = 0.058833,
-  h2 = 0.05725,
-  d2 = 0.055,
-  u2 = 0.05125,
-  c2 = 0.045,
-  f2 = 0.0445,
-  w2 = 0.043917,
-  g2 = 0.0435,
-  m2 = 0.04275,
-  y2 = 0.036667,
-  p2 = 0.033333,
-  b2 = 0.031917,
-  k2 = 0.030833,
-  x2 = 0.0305,
-  T2 = 0.030417,
-  v2 = 0.0235,
-  _2 = 0.022333,
-  j2 = 0.02125,
-  A2 = 0.019333,
-  Y2 = 0.019333,
-  S2 = 0.018833,
-  R2 = 0.01875,
-  C2 = 0.018,
-  N2 = 0.01725,
-  W2 = 0.017167,
-  I2 = 0.016417,
-  O2 = 0.01575,
-  F2 = 0.013833,
-  E2 = 0.012667,
-  M2 = 0.01225,
-  B2 = 0.011917,
-  L2 = 0.011833,
-  $2 = 0.011083,
-  P2 = 0.009833,
-  H2 = 0.00975,
-  D2 = 0.009583,
-  q2 = 0.0085,
-  G2 = 0.008,
-  K2 = 0.00725,
-  z2 = 0.007083,
-  U2 = 0.007,
-  J2 = 0.006583,
-  V2 = 0.006333,
-  X2 = 0.0055,
-  Q2 = 0.005083,
-  Z2 = 0.004833,
-  e_ = 0.00425,
-  t_ = 0.004083,
-  o_ = 0.004083,
-  a_ = 0.00375,
-  n_ = 0.003667,
-  r_ = 0.003667,
-  i_ = 0.003583,
-  s_ = 0.003417,
-  l_ = 0.00325,
-  h_ = 0.00325,
-  d_ = 0.00275,
-  u_ = 0.00275,
-  c_ = 0.00275,
-  f_ = 0.002583,
-  w_ = 0.002417,
-  g_ = 0.002333,
-  m_ = 0.002333,
-  y_ = 0.00225,
-  p_ = 0.002083,
-  b_ = 0.002,
-  k_ = 0.001917,
-  x_ = 0.001917,
-  T_ = 0.001917,
-  v_ = 0.001833,
-  __ = 0.00175,
-  j_ = 0.001583,
-  A_ = 0.0015,
-  Y_ = 0.0015,
-  S_ = 0.001417,
-  R_ = 0.001417,
-  C_ = 0.001333,
-  N_ = 0.001333,
-  W_ = 0.001333,
-  I_ = 0.001333,
-  O_ = 0.00125,
-  F_ = 0.00125,
-  E_ = 0.001167,
-  M_ = 0.001167,
-  B_ = 0.001083,
-  L_ = 0.001,
-  $_ = 0.001,
-  P_ = 917e-6,
-  H_ = 917e-6,
-  D_ = 917e-6,
-  q_ = 833e-6,
-  G_ = 833e-6,
-  K_ = 833e-6,
-  z_ = 75e-5,
-  U_ = 75e-5,
-  J_ = 667e-6,
-  V_ = 583e-6,
-  X_ = 583e-6,
-  Q_ = 583e-6,
-  Z_ = 583e-6,
-  e5 = 5e-4,
-  t5 = 417e-6,
-  o5 = 417e-6,
-  a5 = 417e-6,
-  n5 = 417e-6,
-  r5 = 333e-6,
-  i5 = 333e-6,
-  s5 = 333e-6,
-  l5 = 333e-6,
-  h5 = 333e-6,
-  d5 = 333e-6,
-  u5 = 25e-5,
-  c5 = 25e-5,
-  f5 = 25e-5,
-  w5 = 25e-5,
-  g5 = 167e-6,
-  m5 = 167e-6,
-  y5 = 167e-6,
-  p5 = 167e-6,
-  b5 = 167e-6,
-  k5 = 167e-6,
-  x5 = 167e-6,
-  T5 = 167e-6,
-  v5 = 83e-6,
-  _5 = 83e-6,
-  j5 = 83e-6,
-  A5 = 83e-6,
-  Y5 = 83e-6,
-  S5 = 83e-6,
-  R5 = 83e-6,
-  C5 = 83e-6,
-  N5 = 83e-6,
-  W5 = 83e-6,
-  I5 = 83e-6,
-  O5 = 83e-6,
-  F5 = 83e-6,
-  E5 = 83e-6,
-  M5 = 83e-6,
-  B5 = 83e-6,
-  L5 = 83e-6,
-  $5 = {
-    fixer: $v,
-    fixer_g7: Pv,
-    prosthetic_good: Hv,
-    fixer_g6: Dv,
-    fixer_g5: qv,
-    prosthetic: Gv,
-    age80: Kv,
-    fixer_g4: zv,
-    corp: Uv,
-    office: Jv,
-    fixer_named: Vv,
-    req_star: Xv,
-    refuse_proposal: Qv,
-    fixer_g3: Zv,
-    fixer_g2: e2,
-    love_first: t2,
-    fixer_lucky3: o2,
-    fixer_g1: a2,
-    ws_join: n2,
-    assoc: r2,
-    assoc_staff: i2,
-    office_dept: s2,
-    orphan: l2,
-    born_outskirts: h2,
-    fixer_lucky_one: d2,
-    warp_car_7: u2,
-    finger_약지: 0.045667,
-    finger_검지: 0.045083,
-    warp_car_5: c2,
-    finger_중지: 0.0445,
-    warp_car_6: f2,
-    aleph_survive: w2,
-    warp_car_3: g2,
-    finger_엄지: 0.042833,
-    warp_car_4: m2,
-    born_head: y2,
-    die_child: p2,
-    distorted: b2,
-    frank_약지_2: 0.0315,
-    warp_clear: k2,
-    pinky_star_earth: x2,
-    warp_car_2: T2,
-    frank_중지_2: 0.026667,
-    ws_fame5: v2,
-    office_dir: _2,
-    frank_엄지_2: 0.0215,
-    kk_join: j2,
-    frank_검지_2: 0.020833,
-    frank_중지_3: 0.020833,
-    lament_happy: A2,
-    lament_wait: Y2,
-    color: S2,
-    ego: R2,
-    bl_join: C2,
-    kk_captain: N2,
-    lament_meet: W2,
-    pinky_star_heaven: I2,
-    unwed_lover: O2,
-    frank_약지_3: 0.015083,
-    frank_엄지_3: 0.014833,
-    frank_중지_4: 0.014417,
-    bl_salsu: F2,
-    fixer_colorless: E2,
-    widowed: M2,
-    warp_car_1: B2,
-    finger_quit: L2,
-    bf_two_kin: $2,
-    lake_drink: P2,
-    bf_kin: H2,
-    kk_truce: D2,
-    office_ceo: q2,
-    ws_color_order: G2,
-    r_pack: K2,
-    ws_patent: z2,
-    ws_rep: U2,
-    frank_검지_3: 0.006917,
-    kk_retire: J2,
-    age100: V2,
-    frank_엄지_4: 0.005583,
-    bf_stray: X2,
-    kk_finger: Q2,
-    heir_cand: Z2,
-    bloodbag: e_,
-    bf_sleep: t_,
-    library_lost: o_,
-    bl_scatter_leave: a_,
-    dist_grade_3: n_,
-    library_back: r_,
-    w_cleanup: i_,
-    k_hollow: s_,
-    bf_alive: l_,
-    lake_hint2: h_,
-    age200: d_,
-    cl_claw: u_,
-    heir_head: c_,
-    dist_final: f_,
-    t_collector: w_,
-    k_excision: g_,
-    kk_patriarch: m_,
-    kk_bl_last: y_,
-    k_special: p_,
-    n_inquisitor: b_,
-    dist_grade_4: k_,
-    heir_fail: x_,
-    index_e: T_,
-    dist_grade_2: v_,
-    heishou: __,
-    dist_grade_1: j_,
-    kk_ink3: A_,
-    kk_p_end: Y_,
-    bl_mentor: S_,
-    relic: R_,
-    bf_300: C_,
-    dist_nm6: N_,
-    heishou_adept: W_,
-    ws_claw: I_,
-    bf_epi_hunter: O_,
-    bl_last: F_,
-    bf_reveal: E_,
-    kk_dojo: M_,
-    ws_sold: B_,
-    cl_clawed: L_,
-    warp_car_0: $_,
-    bf_epi_faces: P_,
-    cl_color_kill: H_,
-    t_class5: D_,
-    apocalypse: q_,
-    bf_end_hunter_last: G_,
-    cl_warp: K_,
-    cl_long: z_,
-    office_broken: U_,
-    n_zealot: J_,
-    bf_end_kin_cup: V_,
-    bl_w_settle: X_,
-    cl_retire: Q_,
-    kk_d_student: Z_,
-    bf_epi_gone: e5,
-    ampoule: t5,
-    bf_end_gone_grave: o5,
-    blind_kill: a5,
-    rule_human: n5,
-    bf_end_faces: r5,
-    bf_end_smile_first: i5,
-    cl_spotless: s5,
-    guard_fail: l5,
-    lotto: h5,
-    w_level5: d5,
-    bf_found: u5,
-    bf_nobite: c5,
-    bl_m_retreat: f5,
-    dist_return: w5,
-    bf_end_elder_hand: g5,
-    bf_gen1: m5,
-    guard_big: y5,
-    guard_chosen: p5,
-    heir_lord: b5,
-    lake_whale_pallid: k5,
-    middle_grudge: x5,
-    rule_abolish: T5,
-    bf_epi_kin: v5,
-    bl_homeland: _5,
-    bl_w_student: j5,
-    cl_arbiter: A5,
-    cl_claw_beat: Y5,
-    guard_full: S5,
-    guard_pass: R5,
-    guard_teach: C5,
-    lake_whale_marlin: N5,
-    n_grosshammer: W5,
-    r_commander: I5,
-    ring_silence: O5,
-    rule_kong: F5,
-    rule_tyrant: E5,
-    warp_citizen: M5,
-    ws_finger4: B5,
-    ws_s: L5,
+  z2 = { tiers: D2, office: q2, assoc: G2, abnormal: K2 },
+  U2 = 0.44575,
+  J2 = 0.35875,
+  V2 = 0.305333,
+  X2 = 0.302,
+  Q2 = 0.257083,
+  Z2 = 0.223,
+  e_ = 0.212333,
+  t_ = 0.21025,
+  o_ = 0.209833,
+  a_ = 0.208667,
+  n_ = 0.201083,
+  r_ = 0.197083,
+  i_ = 0.185,
+  s_ = 0.17125,
+  l_ = 0.13875,
+  h_ = 0.115,
+  d_ = 0.113167,
+  u_ = 0.11125,
+  c_ = 0.102417,
+  f_ = 0.101667,
+  w_ = 0.078417,
+  g_ = 0.061917,
+  m_ = 0.06175,
+  y_ = 0.05725,
+  p_ = 0.05475,
+  b_ = 0.0515,
+  k_ = 0.044833,
+  x_ = 0.043583,
+  T_ = 0.043333,
+  v_ = 0.042833,
+  __ = 0.042833,
+  A_ = 0.036667,
+  j_ = 0.033417,
+  S_ = 0.031583,
+  Y_ = 0.030667,
+  R_ = 0.0305,
+  C_ = 0.030417,
+  N_ = 0.023667,
+  I_ = 0.0225,
+  W_ = 0.021083,
+  M_ = 0.019167,
+  O_ = 0.019083,
+  F_ = 0.019083,
+  B_ = 0.018833,
+  E_ = 0.017833,
+  L_ = 0.017333,
+  $_ = 0.01725,
+  P_ = 0.016333,
+  H_ = 0.015583,
+  D_ = 0.013667,
+  q_ = 0.012583,
+  G_ = 0.012,
+  K_ = 0.011917,
+  z_ = 0.01175,
+  U_ = 0.011167,
+  J_ = 0.00975,
+  V_ = 0.009583,
+  X_ = 0.009417,
+  Q_ = 0.009083,
+  Z_ = 0.008583,
+  e5 = 0.008083,
+  t5 = 0.007167,
+  o5 = 0.007083,
+  a5 = 0.007083,
+  n5 = 0.007,
+  r5 = 0.005583,
+  i5 = 0.005,
+  s5 = 0.004833,
+  l5 = 0.004417,
+  h5 = 0.00425,
+  d5 = 0.004083,
+  u5 = 0.004,
+  c5 = 0.003917,
+  f5 = 0.003833,
+  w5 = 0.003583,
+  g5 = 0.003583,
+  m5 = 0.003583,
+  y5 = 0.003417,
+  p5 = 0.003417,
+  b5 = 0.00325,
+  k5 = 0.00325,
+  x5 = 0.00275,
+  T5 = 0.00275,
+  v5 = 0.002667,
+  _5 = 0.002583,
+  A5 = 0.002417,
+  j5 = 0.002333,
+  S5 = 0.002333,
+  Y5 = 0.002167,
+  R5 = 0.002083,
+  C5 = 0.002083,
+  N5 = 0.002,
+  I5 = 0.002,
+  W5 = 0.001917,
+  M5 = 0.001917,
+  O5 = 0.001833,
+  F5 = 0.00175,
+  B5 = 0.001667,
+  E5 = 0.001583,
+  L5 = 0.0015,
+  $5 = 0.001417,
+  P5 = 0.001417,
+  H5 = 0.001417,
+  D5 = 0.001417,
+  q5 = 0.001417,
+  G5 = 0.001333,
+  K5 = 0.00125,
+  z5 = 0.00125,
+  U5 = 0.00125,
+  J5 = 0.001167,
+  V5 = 0.001167,
+  X5 = 0.001083,
+  Q5 = 0.001083,
+  Z5 = 0.001,
+  e3 = 917e-6,
+  t3 = 917e-6,
+  o3 = 917e-6,
+  a3 = 833e-6,
+  n3 = 833e-6,
+  r3 = 833e-6,
+  i3 = 75e-5,
+  s3 = 75e-5,
+  l3 = 75e-5,
+  h3 = 667e-6,
+  d3 = 583e-6,
+  u3 = 583e-6,
+  c3 = 583e-6,
+  f3 = 5e-4,
+  w3 = 5e-4,
+  g3 = 417e-6,
+  m3 = 417e-6,
+  y3 = 417e-6,
+  p3 = 417e-6,
+  b3 = 417e-6,
+  k3 = 417e-6,
+  x3 = 417e-6,
+  T3 = 333e-6,
+  v3 = 333e-6,
+  _3 = 333e-6,
+  A3 = 333e-6,
+  j3 = 333e-6,
+  S3 = 25e-5,
+  Y3 = 25e-5,
+  R3 = 167e-6,
+  C3 = 167e-6,
+  N3 = 167e-6,
+  I3 = 167e-6,
+  W3 = 167e-6,
+  M3 = 167e-6,
+  O3 = 167e-6,
+  F3 = 167e-6,
+  B3 = 167e-6,
+  E3 = 167e-6,
+  L3 = 167e-6,
+  $3 = 83e-6,
+  P3 = 83e-6,
+  H3 = 83e-6,
+  D3 = 83e-6,
+  q3 = 83e-6,
+  G3 = 83e-6,
+  K3 = 83e-6,
+  z3 = 83e-6,
+  U3 = 83e-6,
+  J3 = 83e-6,
+  V3 = 83e-6,
+  X3 = 83e-6,
+  Q3 = 83e-6,
+  Z3 = 83e-6,
+  eA = 83e-6,
+  tA = 83e-6,
+  oA = 83e-6,
+  aA = 83e-6,
+  nA = {
+    fixer: U2,
+    fixer_g7: J2,
+    prosthetic_good: V2,
+    fixer_g6: X2,
+    fixer_g5: Q2,
+    prosthetic: Z2,
+    age80: e_,
+    fixer_g4: t_,
+    corp: o_,
+    office: a_,
+    fixer_named: n_,
+    req_star: r_,
+    refuse_proposal: i_,
+    fixer_g3: s_,
+    fixer_g2: l_,
+    love_first: h_,
+    fixer_lucky3: d_,
+    fixer_g1: u_,
+    assoc: c_,
+    ws_join: f_,
+    assoc_staff: w_,
+    orphan: g_,
+    office_dept: m_,
+    born_outskirts: y_,
+    fixer_lucky_one: p_,
+    warp_car_7: b_,
+    finger_약지: 0.04625,
+    warp_car_5: k_,
+    finger_중지: 0.044167,
+    finger_검지: 0.044083,
+    warp_car_6: x_,
+    aleph_survive: T_,
+    warp_car_3: v_,
+    warp_car_4: __,
+    finger_엄지: 0.042667,
+    born_head: A_,
+    die_child: j_,
+    frank_약지_2: 0.0325,
+    distorted: S_,
+    warp_clear: Y_,
+    warp_car_2: R_,
+    pinky_star_earth: C_,
+    frank_중지_2: 0.026833,
+    ws_fame5: N_,
+    office_dir: I_,
+    frank_엄지_2: 0.02125,
+    kk_join: W_,
+    frank_중지_3: 0.020917,
+    frank_검지_2: 0.02,
+    lament_wait: M_,
+    color: O_,
+    lament_happy: F_,
+    ego: B_,
+    bl_join: E_,
+    lament_meet: L_,
+    kk_captain: $_,
+    pinky_star_heaven: P_,
+    unwed_lover: H_,
+    frank_약지_3: 0.015417,
+    frank_엄지_3: 0.0145,
+    frank_중지_4: 0.014333,
+    bl_salsu: D_,
+    fixer_colorless: q_,
+    finger_quit: G_,
+    warp_car_1: K_,
+    widowed: z_,
+    bf_two_kin: U_,
+    bf_kin: J_,
+    lake_drink: V_,
+    kk_truce: X_,
+    age100: Q_,
+    office_ceo: Z_,
+    ws_color_order: e5,
+    r_pack: t5,
+    ws_patent: o5,
+    ws_rep: a5,
+    kk_retire: n5,
+    frank_검지_3: 0.0065,
+    frank_엄지_4: 0.005833,
+    bf_stray: r5,
+    kk_finger: i5,
+    heir_cand: s5,
+    library_lost: l5,
+    bloodbag: h5,
+    dream_built: d5,
+    bf_sleep: u5,
+    dream_first: c5,
+    library_back: f5,
+    bl_scatter_leave: w5,
+    dist_grade_3: g5,
+    w_cleanup: m5,
+    age200: y5,
+    k_hollow: p5,
+    bf_alive: b5,
+    lake_hint2: k5,
+    cl_claw: x5,
+    heir_head: T5,
+    dist_final: v5,
+    dream_plague: _5,
+    t_collector: A5,
+    dream_feast: j5,
+    k_excision: S5,
+    kk_bl_last: Y5,
+    dream_half: R5,
+    k_special: C5,
+    dist_grade_4: N5,
+    n_inquisitor: I5,
+    heir_fail: W5,
+    kk_patriarch: M5,
+    dist_grade_2: O5,
+    heishou: F5,
+    index_e: B5,
+    dist_grade_1: E5,
+    bf_300: L5,
+    bl_mentor: $5,
+    dist_nm6: P5,
+    kk_p_end: H5,
+    relic: D5,
+    ws_claw: q5,
+    heishou_adept: G5,
+    bf_epi_hunter: K5,
+    bl_last: z5,
+    kk_ink3: U5,
+    bf_reveal: J5,
+    kk_dojo: V5,
+    warp_car_0: X5,
+    ws_sold: Q5,
+    cl_clawed: Z5,
+    bf_end_hunter_last: e3,
+    cl_color_kill: t3,
+    t_class5: o3,
+    bf_epi_faces: a3,
+    cl_warp: n3,
+    dream_fell: r3,
+    apocalypse: i3,
+    cl_long: s3,
+    office_broken: l3,
+    n_zealot: h3,
+    bf_end_kin_cup: d3,
+    cl_retire: u3,
+    kk_d_student: c3,
+    bf_epi_gone: f3,
+    dream_full: w3,
+    ampoule: g3,
+    bf_end_gone_grave: m3,
+    bf_end_smile_first: y3,
+    bl_w_settle: p3,
+    blind_kill: b3,
+    dream_key: k3,
+    rule_human: x3,
+    bf_end_faces: T3,
+    cl_spotless: v3,
+    guard_fail: _3,
+    lotto: A3,
+    w_level5: j3,
+    bf_nobite: S3,
+    dream_alone: Y3,
+    bf_end_elder_hand: R3,
+    bf_found: C3,
+    bf_gen1: N3,
+    bl_m_retreat: I3,
+    dist_return: W3,
+    guard_big: M3,
+    guard_chosen: O3,
+    heir_lord: F3,
+    lake_whale_pallid: B3,
+    middle_grudge: E3,
+    rule_abolish: L3,
+    bf_epi_kin: $3,
+    bf_epi_smile: P3,
+    bl_homeland: H3,
+    bl_w_student: D3,
+    cl_arbiter: q3,
+    cl_claw_beat: G3,
+    guard_full: K3,
+    guard_pass: z3,
+    guard_teach: U3,
+    lake_whale_marlin: J3,
+    n_grosshammer: V3,
+    r_commander: X3,
+    ring_silence: Q3,
+    rule_kong: Z3,
+    rule_tyrant: eA,
+    warp_citizen: tA,
+    ws_finger4: oA,
+    ws_s: aA,
   };
-function P5({
+function rA({
   regions: e,
   events: t,
   daily: o,
@@ -55857,43 +58092,43 @@ function P5({
   rarity: r = {},
 }) {
   const i = t.flat(),
-    l = new Set();
+    s = new Set();
   for (const c of i) {
-    if (l.has(c.id)) throw new Error(`중복 이벤트 id: ${c.id}`);
-    l.add(c.id);
+    if (s.has(c.id)) throw new Error(`중복 이벤트 id: ${c.id}`);
+    s.add(c.id);
   }
-  const s = o.map((c, u) => ({ id: c.id || `d${u}`, repeat: !0, ...c }));
-  return { regions: e, events: i, daily: s, requests: a, orgs: n, rarity: r };
+  const l = o.map((c, u) => ({ id: c.id || `d${u}`, repeat: !0, ...c }));
+  return { regions: e, events: i, daily: l, requests: a, orgs: n, rarity: r };
 }
-const H5 = new Set(["text", "label", "ignoreLabel", "ruleLine"]),
-  D5 = new Set(["verse"]);
-function Af(e, t, o) {
+const iA = new Set(["text", "label", "ignoreLabel", "ruleLine"]),
+  sA = new Set(["verse"]);
+function iw(e, t, o) {
   const a = new Set(),
     n = (g) => {
       if (typeof g != "string" || !/[가-힣]/.test(g)) return g;
-      const b = t[g];
-      return b ?? (a.add(g), g);
+      const p = t[g];
+      return p ?? (a.add(g), g);
     },
     r = (g) => {
       if (Array.isArray(g)) return g.map(r);
       if (g && typeof g == "object") {
-        const b = {};
-        for (const [k, T] of Object.entries(g))
-          b[k] =
-            H5.has(k) && typeof T == "string"
+        const p = {};
+        for (const [b, T] of Object.entries(g))
+          p[b] =
+            iA.has(b) && typeof T == "string"
               ? n(T)
-              : D5.has(k) && Array.isArray(T)
+              : sA.has(b) && Array.isArray(T)
                 ? T.map(n)
                 : typeof T == "object"
                   ? r(T)
                   : T;
-        return b;
+        return p;
       }
       return g;
     },
     i = e.events.map(r),
-    l = e.daily.map(r),
-    s = e.requests.map((g) => ({
+    s = e.daily.map(r),
+    l = e.requests.map((g) => ({
       ...g,
       text: n(g.text),
       death: n(g.death),
@@ -55916,17 +58151,17 @@ function Af(e, t, o) {
   return {
     ...e,
     events: i,
-    daily: l,
-    requests: s,
+    daily: s,
+    requests: l,
     regions: c,
     orgs: f,
     missing: [...a],
   };
 }
-function Yf(e) {
+function sw(e) {
   return Object.assign({}, ...e);
 }
-const q5 = {
+const lA = {
     "밤새 열이 내리지 않는다. 이마 위의 젖은 천이 금세 미지근해진다.":
       "The fever won't break all night. The wet cloth on your forehead turns lukewarm in no time.",
     "있는 돈을 털어 약을 구한다": "Spend every last coin on medicine",
@@ -56315,7 +58550,7 @@ const q5 = {
     "흰 옷의 사람은 웃으며 명함을 남겼다. 명함에는 이름 대신 작은 반지가 그려져 있었다.":
       "The person in white smiled and left a card. Instead of a name, a small ring was drawn on it.",
   },
-  G5 = {
+  hA = {
     "학교를 마칠 때가 다가온다. 상급 과정에 가려면 시간과 돈이 든다. 일을 시작하면 당장의 생활이 나아진다.":
       "School is coming to an end. Going on to higher education takes time and money. Starting work would make life easier right now.",
     "상급 과정에 진학한다": "Go on to higher education",
@@ -56606,7 +58841,7 @@ const q5 = {
     "흰 옷의 사람은 웃으며 명함을 남겼다. 명함에는 이름 대신 작은 반지가 그려져 있었다.":
       "The person in white smiled and left a card. Instead of a name, a small ring was drawn on it.",
   },
-  K5 = {
+  dA = {
     "{지역}의 상층에서 자란 아이에게 열린 길은 많다. 그러나 그 길 모두에 날개의 이름이 붙어 있다.":
       "Many paths are open to a child raised in the upper levels of {지역}. But every one of them bears the Wing's name.",
     "날개의 정규 사원이 된다": "Become a regular employee of the Wing",
@@ -56690,7 +58925,7 @@ const q5 = {
     "가문은 말리지 않았다. 응시료는 걱정할 필요가 없었다. 시험 날짜가 다가왔다.":
       "Your family did not stop you. The exam fee was nothing to worry about. The exam date drew near.",
   },
-  z5 = {
+  uA = {
     "함께 산다": "Live together",
     "좁은 방 하나에 두 사람의 짐이 섞였다. 이상하게도 덜 외로웠다.":
       "Two people's belongings mixed together in one small room. Strangely, it felt less lonely.",
@@ -57063,7 +59298,7 @@ const q5 = {
     "공방에 이름을 올리면 일은 끊기지 않는다고 했다. 응시료를 마련했다.":
       "They said a name on a Workshop roll means the work never stops. You scraped together the exam fee.",
   },
-  U5 = {
+  cA = {
     "분기 실적 발표를 앞두고 부서 전체가 불을 끄지 못했다. 복도의 시계는 새벽 세 시를 가리킨다. 월급 명세서에는 '성과 보너스'라는 항목이 생겼다.":
       "With the quarterly results announcement coming up, the whole department couldn't turn off the lights. The clock in the hallway reads three in the morning. A new line appeared on your payslip: 'performance bonus.'",
     "승진 심사가 다가온다. 상사는 은근히 말한다. '이번 프로젝트, 책임자 이름에 네 이름을 올려 줄 수도 있어. 대신…'":
@@ -57287,7 +59522,7 @@ const q5 = {
     "그 사람은 봉투를 도로 넣었다. 다음 날부터 거스름돈은 챙겨져 있지 않았다.":
       "That person put the envelope back. From the next day, your change was no longer set aside for you.",
   },
-  J5 = {
+  fA = {
     "문득 옛날 일이 선명하게 떠올랐다. 첫 월급으로 샀던 낡은 외투, 함께 걷던 사람의 뒷모습. 도시는 그때보다 훨씬 조용해졌다.":
       "Out of nowhere, old memories came back vividly. The worn coat you bought with your first paycheck, the back of someone you used to walk with. The City has grown much quieter since then.",
     "같은 골목에서 오래 살던 이웃이 어느 날 보이지 않는다. 방은 비어 있고, 우편함은 가득 찼다.":
@@ -57324,7 +59559,7 @@ const q5 = {
     "{아이}에게 남긴다": "Leave it to {아이}",
     "가족에게 남긴다": "Leave it to your family",
   },
-  V5 = {
+  wA = {
     "장 보러 나간 시장 한복판, 생선 좌판 너머의 사람들이 한꺼번에 소리 없이 쓰러진다. 그 뒤에서 무언가가 천천히 몸을 일으킨다. 아무도 경보를 울리지 않았다.":
       "You're in the middle of the market for groceries when the people beyond the fish stall all collapse at once, without a sound. Behind them, something slowly rises. No one has sounded an alarm.",
     "좌판 밑으로 기어 들어가 숨을 죽인다":
@@ -57817,7 +60052,7 @@ const q5 = {
     "빗나간 칼날이 구경꾼 쪽으로 날아왔다. 구경꾼들에게 가는 칼을 막다 부상을 입었다.":
       "A stray blade flew toward the onlookers. You were wounded blocking the blade meant for the bystanders.",
   },
-  X5 = {
+  gA = {
     "평범한 배달 의뢰였다. 그런데 약속 장소에 도착하자 의뢰인 대신 다른 사무소의 해결사 다섯이 기다리고 있다. 누군가 당신 목에 현상금을 걸었다.":
       "It was an ordinary delivery request. But when you arrive at the meeting point, five Fixers from another Office are waiting instead of the client. Someone has put a bounty on your head.",
     "싸워서 뚫는다": "Fight your way through",
@@ -57958,7 +60193,7 @@ const q5 = {
     "봉투는 책상 위에서 며칠을 기다리다 돌아갔다.":
       "The envelope sat on your desk for a few days, then went back.",
   },
-  Q5 = {
+  mA = {
     "붉은 코트에 중절모를 쓴 사내들이 골목 끝 식당을 통째로 빌렸다. 카포라 불리는 남자가 손짓으로 당신을 부른다. '예의를 아는 얼굴이군. 엄지에서는 위를 공경하는 자에게 빵과 총알이 주어진다.'":
       "Men in red coats and fedoras have rented out an entire restaurant at the end of the alley. A man they call Capo beckons you over. 'You've got the face of someone who knows manners. In the Thumb, bread and bullets are given to those who respect their superiors.'",
     "모자를 벗고 고개를 숙여 예를 갖춘다":
@@ -58136,7 +60371,7 @@ const q5 = {
     "대행자는 한참 서 있다가 종이를 접었다. 지령은 수행되지 못했고, 그 책임은 그의 몫이 되었다. 그는 끝까지 칼에 손을 대지 않았다.":
       "The Proxy stood there a long while, then folded the note. The Prescript went unfulfilled, and the responsibility became his. He never once reached for his blade.",
   },
-  Z5 = {
+  yA = {
     "솔다토의 하루는 막사에서 시작해 막사에서 끝난다. 새벽 점호, 사격 자세, 경례 각도. 같은 솔다토 안에서도 프리모부터 콰르토까지 서열이 있고, 당신은 아직 맨 끝이다.":
       "A Soldato's day starts and ends in the barracks. Dawn roll call, firing stance, the angle of your salute. Even among Soldati there's a pecking order from Primo to Quarto, and you're still at the very bottom.",
     "이를 악물고 훈련을 버틴다": "Grit your teeth and endure the training",
@@ -58387,7 +60622,7 @@ const q5 = {
     "이름이 장부에 적혔다. 대신 그날 밤의 식탁은 오래 비어 있지 않았다. 다음 날 아침 누군가 말없이 당신의 어깨를 두드렸다.":
       "Your name was written in the ledger. In exchange, the table that night was not empty for long. The next morning someone tapped your shoulder without a word.",
   },
-  e3 = {
+  pA = {
     "검지 인장이 찍힌 쪽지가 문틈에 꽂혀 있다. '오늘 해가 지기 전, 다섯 번째로 마주친 사람의 오른쪽 신발을 가져올 것.'":
       "A note bearing the Index's seal is tucked into the crack of your door. 'Before sunset today, bring the right shoe of the fifth person you meet.'",
     "지령대로 신발을 가져온다": "Bring the shoe as the Prescript says",
@@ -58589,7 +60824,7 @@ const q5 = {
     "그 사람은 다른 문을 두드렸다. 그 문이 열렸는지는 알지 못한다.":
       "They knocked on another door. You never learned whether it opened.",
   },
-  t3 = {
+  bA = {
     "형님이 오늘 돌 가게 목록을 건넨다. 밀린 돈, 밀린 인사, 밀린 의리. 첫 번째 가게 주인은 당신 얼굴을 보자마자 금고부터 연다. 두 번째 가게는 셔터가 내려져 있다.":
       "Big Brother hands you today's list of shops to make the rounds. Overdue money, overdue respects, overdue loyalty. The first shopkeeper opens the safe the moment he sees your face. The second shop has its shutter down.",
     "셔터를 걷어차고 들어간다": "Kick in the shutter and go inside",
@@ -58787,7 +61022,7 @@ const q5 = {
     '가족은 사흘 안에 구역을 떠났다. 문 앞에서 {배우자:이|가} 말했다. "어디로 가든 같이 가는 거야."':
       'Your family left the district within three days. At the door, {배우자} said, "Wherever we go, we go together."',
   },
-  o3 = {
+  kA = {
     "작품 제출일. 상급자가 작품을 보고 인정하면 반지가 한 번 더 감긴다. 스튜던트는 한 번, 도슨트는 두 번, 마에스트로는 세 번. 낙제가 쌓이면 다음 재료가 되는 사람도 있다.":
       "Submission day. If a superior sees your work and approves, your ring is wound one more time. Once for a Student, twice for a Docent, three times for a Maestro. Some who pile up failures become the material for the next piece.",
     "몇 달을 매달린 대작을 낸다":
@@ -59010,7 +61245,7 @@ const q5 = {
     "작품은 완성되었다. 가장 아름다운 것이 가장 가까이에 있었다는 사실을 당신은 완성된 뒤에야 알았다. {배우자:은|는} 이제 작품 속에서만 당신을 바라보았다. 그날부터 집에는 당신 혼자 남았다.":
       "The work was finished. Only once it was done did you realize the most beautiful thing had been closest all along. Now {배우자} looked at you only from within the work. From that day on, you were alone in the house.",
   },
-  a3 = {
+  xA = {
     "{제안}에서 사람을 구한다는 소식이 들어왔다. 혼자 의뢰를 받으면 보수는 전부 내 것이지만, 등 뒤를 맡길 사람이 없다. 사무소에 들어가면 의뢰도 동료도 늘어난다.":
       "Word came that {제안} is hiring. Working solo, every fee is yours, but there's no one to watch your back. Join an Office, and you get more requests and more colleagues.",
     "{제안}에 들어간다": "Join {제안}",
@@ -59309,7 +61544,7 @@ const q5 = {
     "그 사람은 책을 한 권 더 꺼내 건넸다. 이번에는 책갈피 자리에 쪽지가 없었다. 도서관에서 마주쳐도 두 사람은 서가만 보았다.":
       "That person took out one more book and handed it over. This time there was no note at the bookmark. Even when you met in the library, the two of you looked only at the shelves.",
   },
-  n3 = {
+  TA = {
     "【아무것도 없는】 ALEPH. 도시의 재해다. 구역 전광판에 '재해 경보'가 뜨기도 전에 그것은 이미 사람들 사이에 섞여 있었다. 늘 인사하던 이웃이 골목 끝에서 손을 흔든다. 목소리의 간격이, 웃음의 길이가 조금씩 틀렸다. 얼굴 가장자리가 녹아내리듯 흐물거린다. 이것과 싸울 수 있는 사람은 이 구역에 없다.":
       "【Nothing There】 ALEPH. A disaster of the City. Before the 'Disaster Warning' even appeared on the District billboards, it was already mingling among the people. The neighbor you always greet waves at you from the end of the alley. The pauses in the voice, the length of the laugh, are all slightly off. The edges of the face sag as if melting. No one in this District can fight this.",
     "아무것도 모르는 척 인사하고 지나간다":
@@ -59563,7 +61798,7 @@ const q5 = {
       "The child was one step faster. You were caught in the blast, but held on.",
     "아이가 웃는 얼굴로 당신을 안았다.": "The child embraced you with a smile.",
   },
-  r3 = {
+  vA = {
     "출근길 둥지 검문소에서 줄이 멈췄다. 앞사람의 출입증이 읽히지 않는다. 뒷골목 쪽에서 온 사람이다. 경비가 당신을 힐끗 본다. 사원증 하나면 보증을 설 수 있다.":
       "On your way to work, the line at the Nest checkpoint has stopped. The ID of the person in front of you won't scan. They're from the Backstreets side. The guard glances at you. With your employee ID, you could vouch for them.",
     "보증을 서 준다": "Vouch for them",
@@ -59897,7 +62132,7 @@ const q5 = {
     "연줄 몇 개를 당겼다. 옮기지는 않았지만, 옮길 수 있다는 것을 알았다.":
       "You pulled a few strings. You didn't move, but you learned that you could.",
   },
-  i3 = {
+  _A = {
     "대관원 명문가의 사람이 찾아왔다. 당신의 몸이 '쓸 만하다'고 한다. 선인이라 불리는 노인이 환 한 알을 내밀었다. 삼키면 돌아갈 수 없다는 것을 이 구역 사람이라면 모두 안다.":
       "Someone from one of Daguanyuan's great families came to see you. They say your body is 'usable.' An old man called a Xianren held out a single Bolus. Everyone in this District knows that once you swallow it, there is no going back.",
     "환을 삼킨다": "Swallow the Bolus",
@@ -61431,7 +63666,7 @@ const q5 = {
     "그 사람은 고개를 숙이고 다음 명을 기다렸다. 뜻을 말하는 일은 그날이 마지막이었다.":
       "That person bowed their head and waited for the next order. Speaking their own will was something they never did again after that day.",
   },
-  s3 = {
+  AA = {
     "분기말이다. 창고 장부와 실물이 맞지 않는다. 사흘 안에 대조를 끝내라는 지시가 내려왔다.":
       "It's the end of the quarter. The warehouse ledger doesn't match the actual stock. An order has come down to finish the reconciliation within three days.",
     "장부 순서대로 센다": "Count in ledger order",
@@ -62248,7 +64483,7 @@ const q5 = {
     "말은 적게 했고 들은 것은 많았다. 들은 것 가운데 하나가 석 달 뒤 날개의 장부에 이익으로 찍혔다.":
       "You said little and heard a lot. One of the things you heard showed up as profit in the Wing's books three months later.",
   },
-  l3 = {
+  jA = {
     "갓난아이는 젖을 물고도 오래 울었다. 무엇을 찾는지는 아무도 몰랐다.":
       "The baby cried for a long time, even at the breast. No one knew what it was looking for.",
     "열이 사흘 밤낮 내리지 않았다. 나흘째 아침, 열은 거짓말처럼 내려 있었다. 대신 목이 말랐다. 물로는 가시지 않았다.":
@@ -63299,7 +65534,7 @@ const q5 = {
     "{아이:이|가} 자라 당신의 겉나이를 넘었다. 이제는 {아이:이|가} 당신을 걱정한다. {아이:은|는} 이유를 모른다.":
       "{아이} has grown older than you look. Now {아이} worries about you. They do not know why.",
   },
-  h3 = {
+  SA = {
     "W사의 의뢰가 왔다. 운행 중인 워프 열차에 들어가 '도착 전에' 칸을 정리하라는 것이다. 바깥에서는 10초. 안에서는 아무도 모른다.":
       "A request came from W Corp.: board a Warp Train in transit and clear its cars 'before arrival.' Outside, it takes 10 seconds. Inside, no one knows.",
     "의뢰를 받는다": "Accept the request",
@@ -63540,7 +65775,7 @@ const q5 = {
       "10 seconds later, the doors opened. Only Cleanup Agents stepped off. On the list, the targets became 'Whereabouts unknown.'",
     "못을 박는다": "Drive the nail in",
   },
-  d3 = {
+  YA = {
     "가문의 어른이 다섯 살이 된 당신을 앞에 앉혔다. 오늘부터 배우는 것은 글이 아니라 사람이라고 했다. 어른이 첫 질문을 던졌다. '저 문 안에는 무엇이 있겠느냐.'":
       "An elder of the family sat you down, five years old now. From today, the elder said, you would learn not letters but people. The first question came. 'What lies behind that door?'",
     "[지] 문틈의 불빛과 발소리를 세어 대답한다":
@@ -64222,7 +66457,7 @@ You paid your respects to the elders at Tiekan Temple. When you climbed the stai
     "철함사의 어르신들은 승계식 날 군주의 손에 모두 죽었다. 그래도 철함사 아래에는 그들이 남긴 것이 있었다. 환의 처방, 오래된 그릇, 이름 없는 방들. 대관원의 몇몇은 그것으로 다시 늙지 않는 길을 찾으려 했다.":
       "The elders of Tiekan Temple had all died by the Lord's hand on the day of the succession ceremony. Still, beneath Tiekan Temple, what they had left behind remained. Bolus prescriptions, old vessels, rooms with no names. A few in Daguanyuan tried to use them to find a way to never grow old again.",
   },
-  u3 = {
+  RA = {
     '비 오는 밤, 골목 끝에 두루마기를 걸친 사람이 서 있었다. 정장 위에 한복, 허리에는 매듭 달린 환도. "갈 곳이 없어 보이는군. 상처는 있소?"':
       'On a rainy night, someone in a durumagi stood at the end of the alley. Hanbok over a suit, a hwando with a knotted cord at the hip. "You look like you have nowhere to go. Do you have scars?"',
     "소매를 걷어 보인다": "Roll up your sleeve and show them",
@@ -64728,7 +66963,7 @@ You paid your respects to the elders at Tiekan Temple. When you climbed the stai
     "그 사람은 골목 끝까지 바래다주었다. 이후로 그 길에서는 마주치지 않았다.":
       "That person walked you to the end of the alley. After that, you never crossed paths on that road again.",
   },
-  c3 = {
+  CA = {
     '구역 사이 길목에서 검은 정장들이 통행료를 걷고 있었다. 낼 돈이 없는 당신을 막아선 사내가 한참 보더니 웃었다. 목덜미까지 검은 구름이 번져 있다. "돈 대신 몸으로 낼 생각 있나. 위에서 시키는 대로만 하면 된다."':
       'Black suits were collecting tolls at the passage between districts. The man who stopped you, with no money to pay, looked at you for a long while and smiled. Black clouds spread all the way up his neck. "Want to pay with your body instead of money? You just do what the people above tell you."',
     "고개를 숙이고 따른다": "Bow your head and follow",
@@ -65214,7 +67449,7 @@ You paid your respects to the elders at Tiekan Temple. When you climbed the stai
     "그 사람은 말없이 자리를 비웠다. 얼마 지나지 않아 도장에서 그 사람을 더 이상 볼 수 없었다.":
       "The person left without a word. Before long, they were no longer to be seen at the dojo.",
   },
-  f3 = {
+  NA = {
     "목소리를 듣는다": "Listen to the voice",
     맞선다: "Stand and fight",
     "목소리를 거스른다": "Defy the voice",
@@ -65449,7 +67684,7 @@ Your breath became human again. Your hands were hands again.`,
       "One person ended what even a Color could not. No one remembered that person's name or face.",
     "협회 연합": "the Association coalition",
   },
-  w3 = {
+  IA = {
     "잔잔한 회색 물 · 서두르는 물": "Still Grey Water · The Hurried Water",
     '물이 회색으로 바뀌었다. 바람이 없다. 선장이 짧게 말했다. "여기선 오래 못 있어. 다들 저어."': `The water turned grey. There is no wind. The captain said, curtly, "We can't stay here long. Everyone, row."`,
     "부표가 한 줄로 늘어서 있다. 부표가 하나씩 뒤로 지나간다.":
@@ -66272,7 +68507,7 @@ You thought you heard seagulls somewhere. This place is far from the sea.`,
       "The pirate shrugged and stepped aside.",
     '누군가 어깨를 툭 친다. 손목에 닻 문신. "대호수 다녀왔지? 표정 보면 알아. 다음 판엔 이거 하나 사 가."': `Someone taps your shoulder. An anchor tattoo on their wrist. "You've been to the Great Lake, right? I can tell from your face. Buy one of these for next time."`,
   },
-  g3 = {
+  WA = {
     "약지의 콘테스트 심사 자리다. 스튜던트들이 저마다 몸과 작품을 내보인다.":
       "It is the judging for a Ring contest. Students show off their bodies and their works.",
     "내 몸으로 예술을 뽐낸다": "Show off art with my own body",
@@ -66774,7 +69009,7 @@ They left as silently as they came. The gallery is yours now.`,
     "붓을 드는 사이 그들은 갤러리를 나갔다. 새 작품은 그날 밤 완성되었다. 그것을 본 사람은 없었다.":
       "While you took up your brush, they left the gallery. The new piece was finished that night. No one saw it.",
   },
-  m3 = {
+  MA = {
     "적출직 모집 공고가 사내 게시판에 붙었다. '주 70시간 근무, 앰플 무상 지급.' 아래에 작은 글씨로 한 줄이 더 있다. '교차 적합성 검사 필수.'":
       "A recruitment notice for Excision Staff went up on the company board. '70-hour weeks. Free ampules.' Below it, one more line in small print: 'Cross-compatibility test required.'",
     지원한다: "Apply",
@@ -67318,7 +69553,7 @@ They left as silently as they came. The gallery is yours now.`,
     "출동하고 돌아올 때마다 편지가 보였다. 맨 아래 한 줄은 외울 수 있었지만, 매번 다시 읽었다.":
       "Every time you came back from a deployment, you saw the letter. You could recite the line at the bottom, but you read it again each time.",
   },
-  y3 = {
+  OA = {
     "사내 게시판 맨 위에 하얀 종이 한 장. '순수한 몸을 찾는다. 불결한 이물을 들이지 않은 몸을.' 지원서에는 이름 칸보다 시술 이력 칸이 먼저 있다. 당신의 칸은 비어 있다.":
       "A single white sheet at the top of the company board. 'Seeking pure bodies. Bodies that have let in no unclean foreign matter.' On the application, the procedure history field comes before the name field. Yours is blank.",
     지원한다: "Apply",
@@ -67649,7 +69884,7 @@ They left as silently as they came. The gallery is yours now.`,
     "이단 심문관은 몸을 바꾸지 않는다.":
       "Inquisitors do not change their bodies.",
   },
-  p3 = {
+  FA = {
     '"나도 어쩔 수 없었다." 조율자는 잠시 당신을 바라보았다. "그대가 물을 일이 아니야. 그대가 찾아간 이들에게도, 그대는 답해 준 적이 없지 않나." 그것이 마지막 말이었다.':
       '"I had no choice either." The Arbiter regarded you for a moment. "That is not for you to ask. You never gave an answer to the ones you visited, did you?" Those were the last words.',
     "10초 뒤 문이 열렸다. 내린 것은 정리 요원뿐이었다. 열차 안의 금기는 다른 처형자의 명령서로 넘어갔다.":
@@ -68335,7 +70570,7 @@ On the street, someone was poring over a tax notice. You walked right past.`,
       "The Association's Fixers fell back one by one. In the end the Color remained. He did not fall back either. To the end.",
     "회계 층으로 올라간다": "Go up to the accounting floor",
   },
-  b3 = {
+  BA = {
     '늦은 저녁, 문 앞에 낯선 사람이 서 있었다. 검은 외투의 옷깃 안쪽에 작은 문양 하나가 수놓여 있다. H사의 가문들이 쓰는 문양이다.\n\n"늦은 시간에 실례합니다. 저는 한 가문의 일을 보는 사람입니다." 그는 집 안으로 들어오지 않았다. 문지방 너머에 선 채로, 당신이 지난 몇 해 동안 해낸 일들을 하나씩 읊었다. 날짜와 장소까지 틀린 곳이 없었다. 당신보다 더 정확하게 기억하고 있었다.\n\n"우리 가문의 후보 한 분이 다섯 해 뒤 가주 심사에 나섭니다. 심사장에 들어갈 수 있는 사람은 후보와 호위 한 사람뿐입니다. 그 한 사람을 찾고 있습니다." "다섯 해 동안 가문이 뒤를 받치겠습니다. 일거리도, 무기도, 필요한 것은 무엇이든. 그 대신 심사 날에는 후보의 곁에 서 주십시오."': `Late in the evening, a stranger stood at your door. A small crest was embroidered inside the collar of his black coat. It was the crest the Families of H Corp. use.
 
 "Forgive me for calling at this hour. I handle affairs for a certain Family." He did not come into the house. Standing beyond the threshold, he recited the things you had done over the past several years, one by one. He did not get a single date or place wrong. He remembered them more precisely than you did.
@@ -68750,7 +70985,570 @@ After the funeral, the Family installed a new Hierarch. The new Hierarch called 
     "협회 사무실의 직원은 당신의 자격증을 한참 들여다보았다. 삼십 년 넘게 갱신하지 않은 자격증이었다. 작은 의뢰부터 받았다. 길 안내, 물건 전달, 오래된 집안의 문 지키기. 문 앞에 서면 저도 모르게 왼쪽에 섰다.":
       "The clerk at the Association office stared at your license for a long time. It was a license not renewed in over thirty years. You started with small requests. Guiding people, delivering goods, guarding the doors of old households. Standing at a door, you found yourself on the left without meaning to.",
   },
-  k3 = {
+  EA = {
+    "P사 · 장로\n\nP사의 관할에서 태어났다. 서른이 되기까지의 일은 어디에도 적혀 있지 않다.\n\n당신은 어느 가문의 제1권속, 장로다. 당신이 피를 나눠 준 권속이 둘, 그 둘이 만든 권속이 넷. 그 아래는 세지 않는다.\n\n굶주림은 사람의 피로만 채워진다. 피는 쌓아 둘 수 없다.\n\n열 해에 한 번, 문을 크게 열 것이다. 사람들이 올 것이다. 사냥꾼도 올 것이다.\n\n오늘 밤, 당신은 문을 세운다.": `P Corp. · The Elder
+
+You were born under P Corp.'s jurisdiction. Nothing of the years before thirty is written anywhere.
+
+You are the First Kindred of a Family, its Elder. Two Kindred you gave your own blood to, and four that those two made. Below them, you do not count.
+
+Hunger is filled only by human blood. Blood cannot be stored away.
+
+Once every ten years, you will open the gate wide. People will come. So will hunters.
+
+Tonight, you raise the gate.`,
+    "제1권속 · 장로": "First Kindred · Elder",
+    "{이름}의 랜드": "{이름}'s Land",
+    "이름 모를 권속": "a nameless Kindred",
+    "새로 들인 권속들": "the newly taken Kindred",
+    "문 위에 걸 이름": "The name above the gate",
+    "문 위에 걸 이름을 정한다.": "You decide the name to hang above the gate.",
+    "랜드의 이름": "The Land's name",
+    "문 위에 {랜드:이라|라}고 썼다. 권속들이 아래에서 올려다보았다.":
+      "You wrote {랜드} above the gate. The Kindred looked up at it from below.",
+    "두 오른팔": "Two right hands",
+    "당신이 제 피를 나눠 준 둘. 이 둘이 당신의 자식이고, 당신의 전부다. 새 이름은 어버이가 준다. 왼쪽 아이는 말이 없고, 오른쪽 아이는 늘 먼저 웃는다.":
+      "The two you gave your own blood to. These two are your children, and all you have. A new name is given by the sire. The one on the left says nothing; the one on the right always smiles first.",
+    "말이 없는 아이": "The quiet one",
+    "먼저 웃는 아이": "The one who smiles first",
+    "{권속A}, {권속B}. 두 번씩 불러 주었다. 둘은 제 이름을 받아 들고 오래 고개를 숙였다. 피를 나눈 밤처럼.":
+      "{권속A}, {권속B}. You called each name twice. The two took their names and bowed their heads for a long time. As on the night you shared your blood.",
+    "그 아래 넷": "The four below",
+    '{권속A:과|와} {권속B:이|가} 제 피로 만든 아이들을 데려왔다. 둘씩, 넷. "어버이께서 지어 주십시오."':
+      '{권속A} and {권속B} brought the children they had made with their own blood. Two each, four in all. "Please name them, Sire."',
+    "{윗권속}의 아이": "{윗권속}'s child",
+    "{권속A}의 아이들을 {권속A1}, {권속A2}. {권속B}의 아이들을 {권속B1}, {권속B2}. 넷은 제 이름을 입 안에서 굴려 보고, 제 어버이를 먼저 올려다보았다.":
+      "{권속A}'s children you named {권속A1} and {권속A2}. {권속B}'s, {권속B1} and {권속B2}. The four rolled their names around in their mouths, then looked first to their own sires.",
+    "이름은 둘에게 맡겼다. 제 아이의 이름은 제가 짓는 것이 맞다. 이튿날 {권속A:이|가} {권속A1:과|와} {권속A2:을|를}, {권속B:이|가} {권속B1:과|와} {권속B2:을|를} 데려와 인사시켰다. 당신은 넷의 이름을 한 번씩 불러 주었다. 넷은 그것을 오래 기억했다.":
+      "You left the names to the two. It is right that one names one's own children. The next day {권속A} brought {권속A1} and {권속A2}, and {권속B} brought {권속B1} and {권속B2}, to greet you. You called each of the four names once. The four remembered it for a long time.",
+    "{랜드}. 장로 하나, 이름 있는 권속 여섯, 이름 없는 권속 수십. 첫 문은 열 해 뒤에 연다.":
+      "{랜드}. One Elder, six named Kindred, dozens of nameless ones. The first gate opens ten years from now.",
+    "담장을 한 칸 더 올렸다. 밤에만 일했다.":
+      "You raised the wall one more course. You worked only at night.",
+    "{권속B2:이|가} 기둥에 못을 거꾸로 박았다. 아무도 말하지 않았다.":
+      "{권속B2} drove a nail into a pillar upside down. No one said anything.",
+    "길 잃은 사람이 문 앞까지 왔다가 돌아갔다. 권속들은 문 안에서 숨을 죽였다.":
+      "A lost traveler came as far as the gate and turned back. Inside, the Kindred held their breath.",
+    "손님이 남긴 피 반 잔을 이름 있는 여섯이 먼저 마셨다. 아랫것들은 잔을 핥았다.":
+      "The six with names drank the half cup of blood a guest had left. The ones below licked the cup.",
+    "밤바람에 문 위의 이름이 삐걱거렸다.":
+      "The name above the gate creaked in the night wind.",
+    "{권속A:이|가} 담장 밖을 오래 보고 서 있었다.":
+      "{권속A} stood looking beyond the wall for a long time.",
+    "문 밖에 누가 {랜드} 이야기를 적어 붙였다. 틀린 데가 많았다.":
+      "Someone posted a story about {랜드} outside the gate. Much of it was wrong.",
+    "해가 지기 전부터 문 앞을 서성이는 사람이 생겼다.":
+      "People began to linger at the gate before the sun had even set.",
+    '{권속B:이|가} 손님 응대하는 법을 아래 둘에게 가르쳤다. "목덜미를 보지 마라."': `{권속B} taught the two below how to receive guests. "Don't look at their necks."`,
+    "어느 해결사가 문 앞에서 한참 담배를 피우고 갔다.":
+      "A Fixer smoked at the gate for a long while, then left.",
+    "{랜드} 안에 사람의 발자국이 남아 있는 아침이 늘었다.":
+      "More and more mornings, human footprints remained inside {랜드}.",
+    "권속 하나가 손님의 이름을 외웠다. 당신은 모른 척했다.":
+      "One of the Kindred memorized a guest's name. You pretended not to know.",
+    "첫 기구가 녹슬었다. 사람이 아니라 세월이 한 일이었다.":
+      "The first ride rusted. It was the years that did it, not people.",
+    "당신의 얼굴은 그대로였다. 문 앞의 사람들은 세대가 바뀌었다.":
+      "Your face stayed the same. The people at the gate became a new generation.",
+    "{권속A:이|가} 물가에 오래 서 있었다. 발을 담그지는 않았다. 혈귀는 물을 무서워한다.":
+      "{권속A} stood by the water for a long time, without putting a foot in. Bloodfiends fear water.",
+    "오래된 손님이 손자를 데려왔다. 손자가 아니라 손자의 아들이었다.":
+      "An old guest brought a grandchild. Not a grandchild — a grandchild's son.",
+    "밤마다 같은 음악을 틀었다. 권속들은 가사를 외웠다.":
+      "You played the same music every night. The Kindred learned the words by heart.",
+    "담장 아래 묻은 것들 위로 풀이 자랐다.":
+      "Grass grew over the things buried beneath the wall.",
+    "문을 몇 번 더 열 수 있을지 세어 보았다. 손가락이 남았다.":
+      "You counted how many more times you could open the gate. You had fingers to spare.",
+    "권속들은 당신이 셈하는 것을 알았다. 묻지 않았다.":
+      "The Kindred knew you were counting. They did not ask.",
+    "바깥에서는 {랜드:을|를} 오래된 것으로 불렀다. 유령 같은 것으로.":
+      "Outside, they spoke of {랜드} as something old. Something like a ghost.",
+    "당신은 처음 문을 세운 밤을 떠올리려 했다. 잘 되지 않았다.":
+      "You tried to recall the night you first raised the gate. It did not come easily.",
+    "남은 권속이 당신 곁에 앉았다. 둘 다 말이 없었다.":
+      "One of the remaining Kindred sat beside you. Neither of you spoke.",
+    "마지막 문까지 몇 해. 당신은 숫자를 문 안쪽에 새겼다.":
+      "A few years until the last gate. You carved the number on the inside of the gate.",
+    "올해 손님들이 남긴 피가 모였다. 많지 않다. 어디에 쓸지는 장로가 정한다.\n권속들이 잔을 보고 있었다.": `The blood guests left this year has been gathered. It is not much. Where it goes is for the Elder to decide.
+The Kindred were watching the cup.`,
+    "기구를 하나 더 세운다": "Raise one more ride",
+    "피를 굳혀 기둥을 세웠다. 굳은 사람 피는 쇠보다 오래 간다. 봄에 사람들이 줄을 섰다.":
+      "You hardened the blood and raised a pillar. Hardened human blood outlasts iron. In spring, people lined up.",
+    "내가 마신다": "Drink it yourself",
+    "잔을 비웠다. 몸이 뜨거워졌다. 권속들은 빈 잔 바닥을 핥았다.":
+      "You emptied the cup. Your body grew hot. The Kindred licked the bottom of the empty cup.",
+    "권속에게 나눠 준다": "Share it among the Kindred",
+    "여섯 잔에 나누고, 남은 것은 아래로 내렸다. {권속B:이|가} 먼저 비우고 웃었다. 그날 밤 담장 안의 눈들이 더 붉었다.":
+      "You poured it into six cups and passed the rest down. {권속B} emptied theirs first and smiled. That night, the eyes within the wall were redder.",
+    "자발적으로 낸 피로 버틴다": "Get by on blood given freely",
+    "문 앞에 피를 내고 간 사람들의 몫으로 한 해를 났다. 식은 피였다. 권속들은 입을 다물었다.":
+      "You got through the year on what people had left at the gate. It was cold blood. The Kindred kept their mouths shut.",
+    "{랜드}의 이름이 밖에 돌기 시작했다. 손님이 늘었고, 남기는 피도 늘었다.\n늘어난 만큼 눈독 들이는 쪽도 늘었다.": `{랜드}'s name began to spread outside. Guests increased, and so did the blood they left.
+So did those with an eye on it.`,
+    "야시장을 연다": "Open a night market",
+    "피로 등을 달았다. 밤마다 문 앞이 환했다. 손님들은 그 불빛을 자랑했다.":
+      "You hung lanterns with the blood. Every night the gate was bright. Guests boasted of those lights.",
+    "혼자 마셨다. 손님이 많은 해의 피는 진했다. 권속들은 당신의 등을 보고 있었다.":
+      "You drank alone. Blood from a busy year was rich. The Kindred watched your back.",
+    "권속들에게 돌렸다. {권속A:이|가} 잔을 들어 당신에게 먼저 기울였다.":
+      "You passed it to the Kindred. {권속A} raised a cup and tilted it toward you first.",
+    "소문을 듣고 피를 내러 오는 사람이 생겼다. 그 피로 났다. 미지근했다.":
+      "Some people heard the rumors and came to give blood. You got by on that. It was lukewarm.",
+    "{랜드:이|가} 오래되었다. 고칠 것이 늘었고, 새로 들어온 권속의 몫도 생각해야 했다.\n올해의 피를 어디에 쓸까.": `{랜드} has grown old. There is more to repair, and the newer Kindred need their share too.
+Where will this year's blood go?`,
+    "낡은 기구를 고친다": "Repair the old rides",
+    "녹슨 자리에 피를 발랐다. 기구가 다시 돌았다. 오래된 손님이 울었다.":
+      "You painted the rusted spots with blood. The ride turned again. An old guest wept.",
+    "당신이 마셨다. 오래 산 혈귀의 갈증은 깊었다. 권속들은 그 깊이를 몰랐다.":
+      "You drank it. The thirst of a long-lived Bloodfiend runs deep. The Kindred did not know how deep.",
+    "새 권속에게 먼저 주었다. 오래된 권속이 그 순서를 보았다. 그래도 받았다.":
+      "You gave to the new Kindred first. The old Kindred saw the order. They took theirs all the same.",
+    "오래 다닌 손님들이 알아서 피를 두고 갔다. 그것으로 났다. 힘이 되지는 않았다.":
+      "Longtime guests left blood without being asked. You got by on that. It gave you no strength.",
+    "남은 문이 몇 개 없다. 올해의 피를 남길 것에 쓸지, 당신에게 쓸지.":
+      "Few gates remain. Will this year's blood go to what you leave behind, or to you?",
+    "마지막 등을 단다": "Hang the last lantern",
+    "문 위에 등을 하나 더 달았다. 멀리서도 보였다. 사람들이 그 등을 보고 왔다.":
+      "You hung one more lantern above the gate. It could be seen from far away. People came because of it.",
+    "당신이 마셨다. 남은 문을 세며 마셨다. 권속들은 묻지 않았다.":
+      "You drank it, counting the gates that remained. The Kindred did not ask.",
+    "남을 것들에게 주었다. 당신이 없을 때를 생각하며 주었다.":
+      "You gave it to those who would remain. You gave it thinking of when you would be gone.",
+    "그냥 났다. 식은 피로도 한 해는 간다.":
+      "You simply got by. Even cold blood lasts a year.",
+    "첫 사냥꾼": "The first hunter",
+    "문 안에서 사람 하나가 잡혔다. 손님 옷을 입었지만 신발이 해결사의 것이었다. 7급. 정찰이다.\n{권속A:이|가} 그를 바닥에 눌러 놓고 당신을 보았다.": `Someone was caught inside the gate. Guest's clothes, but a Fixer's shoes. Grade 7. A scout.
+{권속A} pinned him to the floor and looked at you.`,
+    "문 앞까지 배웅해 돌려보낸다": "Walk him to the gate and send him back",
+    '신발을 돌려주고 문 앞까지 걸어 나갔다. "본 대로 적어라. 손님은 다치지 않는다고." 그는 뒤돌아보지 않고 갔다. 권속들은 놓아준 것을 아까워했다.':
+      'You gave him back his shoes and walked him to the gate. "Write down what you saw. That guests are not harmed." He left without looking back. The Kindred thought it a waste to let him go.',
+    "피를 마신다": "Drink their blood",
+    "목덜미를 물었다. 해결사의 피는 손님 피와 달랐다. 뜨겁고 거칠었다. 사무소에서는 돌아오지 않은 7급의 이름을 명단에 올렸다.":
+      "You bit his neck. A Fixer's blood was different from a guest's — hot and rough. The office added the name of the Grade 7 who never came back to its list.",
+    "{권속A}에게 맡긴다": "Leave him to {권속A}",
+    "{권속A}에게 넘겼다. {권속A:은|는} 그를 제 아래 둘과 나눠 마셨다. 다음 날 {권속A}의 눈이 당신을 오래 보았다.":
+      "You handed him to {권속A}. {권속A} shared him with the two below. The next day, {권속A}'s eyes rested on you for a long time.",
+    "모른 척 내버려 둔다": "Pretend not to notice",
+    "손님인 척하게 두었다. 그는 폐장까지 {랜드:을|를} 다 돌고 나갔다. 담장 높이, 권속 수, 당신의 자리까지.":
+      "You let him go on pretending to be a guest. He toured all of {랜드} until closing and left. The height of the wall, the number of Kindred, even where you sit.",
+    "권속의 실수": "A Kindred's slip",
+    "문이 닫힌 해에 {권속B1:이|가} 손님을 물었다. 손님은 살았다. 목에 자국이 남은 채 문 앞에서 울고 있었다.\n{권속B1:은|는} 입가를 닦지도 않고 서 있었다.": `In a year the gate was closed, {권속B1} bit a guest. The guest lived, and stood crying at the gate with the marks still on their neck.
+{권속B1} stood there without even wiping their mouth.`,
+    "{권속B1:을|를} 벌하고 손님에게 값을 치른다":
+      "Punish {권속B1} and compensate the guest",
+    "{권속B1:을|를} 한 달 동안 굶겼다. 손님에게는 돈과 약을 쥐여 보냈다. 손님은 다시 오지 않았지만, 나쁜 말도 하지 않았다.":
+      "You starved {권속B1} for a month. You sent the guest away with money and medicine. The guest never came back, but never spoke ill of you either.",
+    "손님을 피주머니로 만들어 입을 막는다":
+      "Silence the guest by making them a Bloodbag",
+    "손님을 끝까지 물었다. 눈이 흐려지고 말이 사라졌다. 피주머니 하나가 늘었다. 그의 가족이 몇 해 동안 문 앞을 서성였다.":
+      "You bit the guest all the way. Their eyes clouded and their words were gone. There was one more Bloodbag. Their family lingered at the gate for years.",
+    "손님을 돌려보내고 {권속B1:을|를} 감싼다":
+      "Send the guest back and shield {권속B1}",
+    "손님을 그냥 보냈다. {권속B1}에게는 아무 말도 하지 않았다. 권속들은 안도했고, 손님은 밖에서 말을 퍼뜨렸다.":
+      "You simply let the guest go and said nothing to {권속B1}. The Kindred were relieved, and the guest spread word outside.",
+    "못 본 척한다": "Look the other way",
+    "아무것도 하지 않았다. 손님은 제 발로 나갔고 {권속B1:은|는} 제 자리로 돌아갔다. 둘 다 당신이 보고 있었다는 것을 알았다.":
+      "You did nothing. The guest walked out, and {권속B1} went back to their place. Both knew you had been watching.",
+    "피를 내겠다는 사람들": "People who offer their blood",
+    "문 앞에 사람 열몇이 모였다. {랜드:을|를} 좋아한다고 했다. 피를 조금씩 내겠다고, 그러니 아무도 물지 말아 달라고 했다.\n팔을 걷은 채 기다리고 있었다.": `A dozen or so people gathered at the gate. They said they loved {랜드}. They would each give a little blood — so please, don't bite anyone.
+They waited with their sleeves rolled up.`,
+    받는다: "Accept",
+    "잔을 돌렸다. 사람들은 제 피를 보고 조금 웃었다. 식은 피였지만 그들은 매해 왔다. 권속들은 그 피를 싫어했다.":
+      "You passed the cups around. The people looked at their own blood and smiled a little. It was cold blood, but they came every year. The Kindred hated that blood.",
+    거절한다: "Refuse",
+    '돌려보냈다. "피는 문이 열릴 때 받는다." 사람들은 섭섭해하며 갔다. 달라진 것은 없었다.':
+      'You sent them home. "Blood is taken when the gate opens." They left disappointed. Nothing changed.',
+    "받아서 권속과 나눈다": "Accept and share it with the Kindred",
+    '받은 피를 권속들과 나눴다. {권속B:이|가} "사람 손으로 짜낸 피 맛"이라고 했다. 그래도 다 마셨다.':
+      'You shared the blood with the Kindred. {권속B} called it "the taste of blood squeezed out by human hands." They drank it all anyway.',
+    "모인 사람들을 다 마신다": "Drink everyone who gathered",
+    "팔을 걷은 채로 하나씩 물었다. 열몇이 그 자리에서 쓰러졌다. 당신은 몇 해 치 힘을 얻었다. 그 밤 이후 문 앞에 팔을 걷고 오는 사람은 없었다.":
+      "You bit them one by one, sleeves still rolled up. A dozen fell where they stood. You gained years' worth of strength. After that night, no one came to the gate with their sleeves rolled up.",
+    "아끼는 권속": "A cherished Kindred",
+    '{권속A1:이|가} 밤에 찾아왔다. 사람들 사이에서 살아 보고 싶다고 했다. 물지 않고, 피를 사서 마시며.\n"허락해 주십시오." 무릎을 꿇지는 않았다.': `{권속A1} came to you at night. They wanted to try living among people. Without biting, buying blood to drink.
+"Please allow it." They did not kneel.`,
+    "보내 준다": "Let them go",
+    "문을 열어 주었다. {권속A1:은|는} 사람의 옷을 입고 나갔다. 가끔 손님으로 돌아왔다. 돈을 내고 들어와 당신을 멀리서 보고 갔다.":
+      "You opened the gate. {권속A1} left in human clothes. Now and then they came back as a guest, paid their way in, watched you from afar, and left.",
+    붙잡는다: "Hold them back",
+    '"너는 내 피다." {권속A1:은|는} 고개를 숙이고 돌아갔다. 그 뒤로 문 밖을 보지 않았다. 보지 않으려고 애썼다.':
+      '"You are my blood." {권속A1} bowed their head and went back. After that, they did not look beyond the gate. They tried hard not to.',
+    "몫을 늘려 묶는다": "Bind them with a larger share",
+    "그날 밤부터 {권속A1}의 잔을 남보다 먼저, 남보다 많이 채웠다. {권속A1:은|는} 마시고 잠들었다. 깨어났을 때 바깥 이야기는 하지 않았다. 더 강해져 있었다.":
+      "From that night on, you filled {권속A1}'s cup before the others, and more than the others. {권속A1} drank and slept. On waking, they did not speak of the outside. They had grown stronger.",
+    죽인다: "Kill them",
+    "목을 비틀었다. 소리는 짧았다. 다른 권속들이 문틈으로 보고 있었다. 그날 밤부터 아무도 당신에게 먼저 말을 걸지 않았다.":
+      "You wrung their neck. The sound was short. The other Kindred were watching through the crack of the door. From that night on, no one spoke to you first.",
+    "가난한 해": "A lean year",
+    "손님이 줄었다. 도시의 사정이었다. 남긴 피가 겨울을 나기에 모자랐다.\n이름 있는 여섯의 잔과, 그 아래 수십의 입. 피는 한 잔 반.": `Guests dwindled. It was the City's doing. The blood left behind would not last the winter.
+Six cups for the named, dozens of mouths below. A cup and a half of blood.`,
+    "내가 굶는다": "Go hungry yourself",
+    "당신 잔을 비워 두었다. 권속들이 당신 잔을 보고 또 보았다. {권속B:이|가} 제 몫의 반을 당신 잔에 부었다. 마시지 않았다.":
+      "You left your own cup empty. The Kindred kept looking at it. {권속B} poured half of their share into your cup. You did not drink it.",
+    "권속이 굶는다": "Let the Kindred go hungry",
+    "당신이 마셨다. 권속들은 빈 잔을 들고 서 있었다. 봄까지 그들의 눈이 당신을 따라다녔다.":
+      "You drank. The Kindred stood holding empty cups. Until spring, their eyes followed you.",
+    "손님에게서 더 거둔다": "Take more from the guests",
+    "들어온 손님마다 조금 더 물었다. 아무도 죽지 않았다. 몇은 어지러워하며 나갔고, 다음 해 오지 않았다.":
+      "You bit each guest who came in a little deeper. No one died. Some left dizzy, and did not come the next year.",
+    "권속끼리 다투게 둔다": "Let the Kindred fight over it",
+    "잔을 놓고 자리를 떴다. 돌아왔을 때 잔은 비어 있었고 {권속B2}의 입가가 찢어져 있었다. 누가 마셨는지 묻지 않았다.":
+      "You set down the cup and walked away. When you came back, it was empty, and the corner of {권속B2}'s mouth was torn. You did not ask who drank it.",
+    "글 쓰는 사람": "The writer",
+    "글 쓰는 사람이 찾아왔다. {랜드} 이야기를 적어 팔겠다고 했다. 무서운 쪽으로도, 아름다운 쪽으로도 쓸 수 있다고.\n공책을 펴 들고 당신을 기다렸다.": `A writer came calling. They wanted to write about {랜드} and sell the story. They could write it frightening, or they could write it beautiful.
+They opened their notebook and waited for you.`,
+    안내한다: "Show them around",
+    "밤새 {랜드:을|를} 보여 주었다. 그는 아름다운 쪽으로 썼다. 다음 개장에 그 글을 들고 온 손님이 많았다. 권속들은 낯선 얼굴이 느는 것을 싫어했다.":
+      "You showed them {랜드} all night. They wrote it beautiful. At the next opening, many guests came holding that story. The Kindred disliked the growing number of strange faces.",
+    "피주머니로 만들어 입을 막는다": "Make them a Bloodbag to keep them quiet",
+    "공책을 덮게 했다. 그는 글을 쓰지 않았다. 쓰지 못했다. 그의 공책은 {랜드} 안 어딘가에 아직 있다.":
+      "You made them close the notebook. They did not write. They could not. Their notebook is still somewhere inside {랜드}.",
+    "권속이 안내한다": "Have a Kindred guide them",
+    "{권속B:이|가} 데리고 다녔다. 글은 반쯤 맞고 반쯤 틀렸다. 손님이 조금 늘었고 권속들은 {권속B:이|가} 바깥 사람과 말하는 것을 보았다.":
+      "{권속B} took them around. The story was half right and half wrong. Guests increased a little, and the Kindred saw {권속B} talking with an outsider.",
+    쫓아낸다: "Throw them out",
+    "문 밖으로 밀어냈다. 그는 무서운 쪽으로 썼다. 틀린 데가 많았지만 사람들은 그것을 믿었다.":
+      "You pushed them out the gate. They wrote it frightening. Much of it was wrong, but people believed it.",
+    "사무소의 제안": "The Office's offer",
+    '송곳니 사냥 사무소에서 사람이 왔다. 칼을 문 앞에 두고 들어왔다.\n"개장 때 손님 몫만 받고, 사냥꾼은 보내지 않겠습니다. 대신 해마다 피 한 몫을 저희에게." 사무소가 혈귀의 피로 무엇을 하는지는 말하지 않았다.': `Someone came from the Fanghunt Office. They left their blade at the gate and came in.
+"At your openings, we'll let you have the guests and send no hunters. In exchange, one share of blood each year, to us." They did not say what the Office does with a Bloodfiend's blood.`,
+    받아들인다: "Accept",
+    '해마다 한 몫을 보냈다. 개장 때 사냥꾼이 줄었다. 권속들은 "사냥꾼에게 피를 바치는 혈귀"라는 말을 입 밖에 내지는 않았다.':
+      'You sent one share every year. Fewer hunters came to the openings. The Kindred never said "a Bloodfiend who pays blood to hunters" out loud.',
+    "심부름 온 사냥꾼을 마신다": "Drink the hunter who brought the message",
+    "문 앞의 칼을 집기 전에 물었다. 사무소의 피는 진했다. 사무소는 답을 들은 셈이 되었다. 다음 개장에 깃발을 들고 왔다.":
+      "You bit them before they could reach the blade at the gate. Office blood was rich. The Office had its answer. At the next opening, they came with their banner.",
+    "{권속B}에게 협상을 맡긴다": "Leave the negotiation to {권속B}",
+    "{권속B:이|가} 반 몫으로 깎았다. 사무소는 받았다. {권속B:은|는} 그날부터 바깥일을 제 일로 여겼다.":
+      "{권속B} talked it down to half a share. The Office agreed. From that day, {권속B} treated outside matters as their own business.",
+    "답을 미룬다": "Put off the answer",
+    '"생각해 보겠다." 그는 돌아갔다. 사무소는 미룬 답을 거절로 적었다. 다음 개장에 사냥꾼이 배로 왔다.':
+      '"I will think about it." They left. The Office recorded the delay as a refusal. At the next opening, twice as many hunters came.',
+    "피주머니의 가족": "A Bloodbag's family",
+    "문 앞에 여자 하나가 앉아 있었다. 몇 해째였다. 안에 있는 피주머니 하나가 그의 남편이었다.\n오늘은 문을 두드렸다. 얼굴만 보게 해 달라고.": `A woman was sitting at the gate. She had been there for years. One of the Bloodbags inside was her husband.
+Today she knocked. She asked only to see his face.`,
+    "값을 치른다": "Pay her off",
+    "남편은 보여 주지 않았다. 대신 돈과, 그가 더는 돌아오지 않는다는 말을 주었다. 그는 울고 갔다. 다시 오지 않았다.":
+      "You did not show her the husband. Instead you gave her money, and the words that he would not be coming back. She left in tears. She never came again.",
+    "가족도 피주머니로": "Make her a Bloodbag too",
+    "문을 열어 주었다. 남편 옆에 세웠다. 둘은 서로를 보지 않았다. 볼 수 없었다.":
+      "You opened the gate and stood her beside her husband. The two did not look at each other. They could not.",
+    "권속을 시켜 돌려보낸다": "Have a Kindred see her home",
+    '{권속B1:이|가} 그를 길 끝까지 데려다주었다. 돌아온 {권속B1:이|가} "다시 올 겁니다"라고 했다. 왔다. 그러나 문은 두드리지 않았다.':
+      '{권속B1} walked her to the end of the road. When {권속B1} returned, they said, "She will come again." She did. But she did not knock.',
+    "문을 열지 않았다. 그는 문 앞에서 겨울을 났다. 봄에 없었다. 문 앞을 지나는 사람들이 그 자리를 보고 갔다.":
+      "You did not open the gate. She spent the winter in front of it. By spring she was gone. People passing the gate looked at the spot where she had been.",
+    "두 권속의 다툼": "Two Kindred at odds",
+    '{권속A:과|와} {권속B:이|가} 당신 앞에 나란히 섰다. 나란히 서지는 않았다.\n{권속A}: "사람을 더 들여야 합니다. 그래야 오래 갑니다." {권속B}: "사람을 더 마셔야 합니다. 그래야 다음 문을 넘습니다."': `{권속A} and {권속B} stood before you side by side. Not together, though.
+{권속A}: "We must let more people in. That is how we last." {권속B}: "We must drink more people. That is how we survive the next gate."`,
+    "{권속A} 편을 든다": "Take {권속A}'s side",
+    '"사람 쪽이다." {권속B:은|는} 고개를 숙였다. 그날 밤 {권속B}의 아래 둘이 {권속B:을|를} 둘러싸고 오래 서 있었다.':
+      '"People, then." {권속B} bowed their head. That night, the two below {권속B} stood around them for a long time.',
+    "{권속B} 편을 든다": "Take {권속B}'s side",
+    '"힘 쪽이다." {권속A:은|는} 알겠다고 했다. 그 뒤로 {권속A:은|는} 손님에게 인사하지 않았다.':
+      '"Strength, then." {권속A} said they understood. After that, {권속A} no longer greeted the guests.',
+    "둘에게 피를 나눠 달랜다": "Soothe both with a share of blood",
+    "당신 몫의 피를 둘에게 한 잔씩 주었다. 둘은 마시고 입을 다물었다. 다툼은 피 밑으로 가라앉았다. 없어지지는 않았다.":
+      "You gave each of them a cup from your own share. They drank and fell silent. The quarrel sank beneath the blood. It did not go away.",
+    "둘 다 벌한다": "Punish them both",
+    "둘 다 한 달을 굶겼다. 아래 넷이 제 윗사람 대신 잔을 들고 당신에게 왔다. 당신은 받지 않았다. 넷은 그것을 기억했다.":
+      "You starved them both for a month. The four below came to you holding cups in their sires' place. You did not accept them. The four remembered that.",
+    "물이 찼다": "The flood",
+    "큰비가 왔다. {랜드} 바닥에 물이 무릎까지 찼다. 권속들은 담장과 기구 위로 올라가 내려오지 않았다. 혈귀는 물을 무서워한다.\n문을 열 날이 멀지 않았다. 누군가는 물을 퍼내야 했다.": `Heavy rain came. Water rose knee-deep across the floor of {랜드}. The Kindred climbed onto the walls and the rides and would not come down. Bloodfiends fear water.
+The day to open the gate was not far off. Someone had to bail the water out.`,
+    "사람을 불러 퍼내게 한다": "Hire people to bail it out",
+    "품삯을 걸고 바깥 사람들을 불렀다. 그들은 물속에서 하루 종일 일했고, 담장 위의 눈들을 올려다보며 웃었다. {랜드:은|는} 사람 손으로 말랐다.":
+      "You offered wages and called in people from outside. They worked in the water all day, looking up at the eyes on the wall and laughing. {랜드} was dried by human hands.",
+    "당신이 직접 들어가 퍼낸다": "Go in and bail it out yourself",
+    "장로는 물을 견딘다. 당신 혼자 물속에서 사흘을 퍼냈다. 권속들이 담장 위에서 그것을 보았다. 내려오지는 못했지만, 보았다.":
+      "An Elder can endure water. You bailed alone in the water for three days. The Kindred watched from atop the wall. They could not come down, but they watched.",
+    "권속을 떠밀어 들어가게 한다": "Push a Kindred into the water",
+    "{권속B:을|를} 물속으로 밀어 넣었다. {권속B:은|는} 떨면서 퍼냈다. 다 퍼낸 뒤에도 한동안 떨었다. 그래도 그 뒤로 {권속B:은|는} 물을 조금 덜 무서워했다.":
+      "You pushed {권속B} into the water. {권속B} bailed, trembling. They kept trembling for a while after it was done. Still, after that, {권속B} feared water a little less.",
+    "물이 빠질 때까지 둔다": "Wait for it to drain",
+    "아무것도 하지 않았다. 물은 한 달을 갔다. 그해 문 앞에 온 손님들은 진흙과 썩은 냄새를 보고 돌아갔다.":
+      "You did nothing. The water stayed a month. Guests who came to the gate that year saw the mud, smelled the rot, and went home.",
+    "혈귀가 되고 싶다는 손님": "A guest who wants to become a Bloodfiend",
+    '오래 다닌 손님 하나가 폐장 뒤에 남았다. 늙어 가고 있었다. "저를 물어 주십시오. 여기 남게."\n권속들이 둘러서서 당신을 보았다.': `A longtime guest stayed behind after closing. They were growing old. "Please bite me. So I can stay here."
+The Kindred gathered around and looked at you.`,
+    돌려보낸다: "Send them away",
+    '"사람으로 늙어라." 그는 울었다. 다음 개장에 지팡이를 짚고 왔다. 그다음엔 오지 않았다. 그의 가족이 대신 왔다.':
+      '"Grow old as a human." They wept. At the next opening they came leaning on a cane. The time after that, they did not come. Their family came instead.',
+    "거절하고 잊는다": "Refuse and forget",
+    "거절했다. 그는 더 조르지 않았다. 몇 해 뒤 바깥에서 죽었다는 말을 들었다. 당신은 얼굴을 떠올리지 못했다.":
+      "You refused. They did not press further. A few years later you heard they had died outside. You could not recall their face.",
+    "가문에 들인다": "Take them into the Family",
+    "당신은 더 만들 수 없다. {권속B:이|가} 아랫것 하나를 불러 물게 했다. 그는 사흘 뒤 깨어났다. 사람의 이름을 버리고 가문의 맨 아래로 들어갔다. 당신은 그의 새 이름을 듣지 못했다.":
+      "You can make no more. {권속B} called one of the lower ones to bite them. They woke three days later, cast off their human name, and entered the very bottom of the Family. You never heard their new name.",
+    마신다: "Drink them",
+    "물고, 깨우지 않았다. 늙은 피는 묽었다. 권속들은 당신이 손님을 마시는 것을 처음 보았다. 손님들이 보지 않은 것은 다행이었다.":
+      "You bit them and did not wake them. Old blood was thin. It was the first time the Kindred had seen you drink a guest. It was fortunate the guests did not see.",
+    "오래된 피주머니": "The old Bloodbag",
+    "처음 만든 피주머니가 쓰러졌다. 오래 버텼다. 눈을 뜬 채였고, 아무것도 보지 않았다.\n안에 남은 피가 반 잔쯤 되었다.": `The first Bloodbag you ever made collapsed. It had lasted a long time. Its eyes were open, and saw nothing.
+There was about half a cup of blood left in it.`,
+    "묻어 준다": "Bury it",
+    "담장 아래 묻었다. 남은 피는 땅에 주었다. 권속들은 아깝다는 얼굴을 숨기지 않았다. 당신은 그 자리에 돌 하나를 놓았다.":
+      "You buried it beneath the wall and gave the remaining blood to the earth. The Kindred did not hide their regret. You set a single stone on the spot.",
+    "권속에게 나눈다": "Share it with the Kindred",
+    "남은 피를 권속들에게 주었다. 오래된 피주머니의 피는 맛이 없었다. 다 마셨다. 빈 몸은 담장 밖에 두었다.":
+      "You gave the remaining blood to the Kindred. An old Bloodbag's blood had no taste. They drank it all. The empty body was left outside the wall.",
+    "새 피주머니를 만든다": "Make a new Bloodbag",
+    "그 자리에 손님 하나를 새로 세웠다. {랜드}에서 돌아오지 않은 사람이 하나 늘었다. 밖에서 이름이 돌았다.":
+      "You set a new guest in its place. One more person did not come home from {랜드}. A name made the rounds outside.",
+    "버려 둔다": "Leave it where it fell",
+    "그대로 두었다. 며칠 동안 거기 있었다. 권속들이 그 앞을 지날 때마다 걸음이 느려졌다. 손님 하나가 보고 비명을 질렀다.":
+      "You left it as it was. It stayed there for days. Every time the Kindred passed it, their steps slowed. A guest saw it and screamed.",
+    "도시의 기록": "The City's record",
+    '기록 부서 사람이 왔다. 날개의 사람은 아니었다. 그냥 적는 사람이었다. {랜드:이|가} 언제 생겼고 무엇이 있는지.\n"적어 두면 오래 갑니다. 적어 두면 찾기도 쉽고요."': `Someone from a records office came. Not a Wing employee. Just someone who writes things down. When {랜드} was made, and what is in it.
+"Written down, it lasts a long time. Written down, it's also easier to find."`,
+    "보여 주었다. 그는 적었다. {랜드:은|는} 도시의 기록에 들어갔다. 찾아오는 사람이 늘었고, 찾는 사람도 늘었다.":
+      "You showed them. They wrote it down. {랜드} entered the City's records. More people came to visit, and more people came looking.",
+    "피주머니로 만들고 기록을 태운다":
+      "Make them a Bloodbag and burn the record",
+    '그는 빈손으로도 돌아가지 못했다. 공책은 태웠다. 기록에는 "뒷골목, 놀이공원 흔적"이라고만 남았다.':
+      'They did not get to leave, not even empty-handed. You burned the notebook. The record says only: "Backstreets, traces of an amusement park."',
+    "{권속A:이|가} 안내했다. 권속의 수는 틀리게 적혔다. 당신의 나이도.":
+      "{권속A} showed them around. The number of Kindred was recorded wrong. So was your age.",
+    '문을 닫았다. 그는 밖에서 적었다. 틀린 것이 많았고, 가장 틀린 것은 "위험하다"였다.':
+      'You shut the gate. They wrote from outside. Much of it was wrong, and the most wrong was "dangerous."',
+    "오래된 손님의 마지막": "An old guest's last night",
+    '수십 해를 다닌 손님이 문 앞에 왔다. 늙었고, 오래 못 갈 것 같았다. 혈귀가 되고 싶다고는 하지 않았다.\n"여기서 마지막 밤을 보내고 싶습니다. 물지는 말아 주십시오."': `A guest who had come for decades arrived at the gate. Old, and not long for this world. They did not ask to become a Bloodfiend.
+"I would like to spend my last night here. Please don't bite me."`,
+    "들여서 곁을 지킨다": "Let them in and stay by their side",
+    "가장 좋은 자리에 눕혔다. 음악을 틀었다. 새벽에 그는 숨이 멎었다. 당신이 눈을 감겨 주었다. 그의 가족이 다음 문에 왔다.":
+      "You laid them in the best spot and played the music. At dawn, their breathing stopped. You closed their eyes. Their family came at the next gate.",
+    "마지막 밤이라는 말을 들어주었다. 그 뒤는 들어주지 않았다. 늙은 피였다. 권속들은 당신을 보지 않았다.":
+      "You granted them their last night. You did not grant the rest. It was old blood. The Kindred would not look at you.",
+    "권속이 곁을 지킨다": "Have a Kindred stay with them",
+    "{권속B:이|가} 그의 곁에 앉아 밤을 샜다. 그는 {권속B}의 손을 잡고 갔다. {권속B:은|는} 그 손을 오래 놓지 않았다.":
+      "{권속B} sat beside them through the night. They passed holding {권속B}'s hand. {권속B} did not let go of that hand for a long time.",
+    '"여기는 죽는 곳이 아니다." 그는 문 앞에서 돌아섰다. 길에서 쓰러졌다는 말이 들렸다. 그 말을 손님들이 했다.':
+      '"This is not a place to die." They turned away at the gate. You heard they collapsed on the road. It was the guests who told you.',
+    "늙지 않는 장로": "The Elder who does not age",
+    '{권속A:이|가} 당신 곁에 앉았다. 오래 말이 없다가 물었다.\n"언제까지 문을 여실 겁니까." 당신이 늙지 않는다는 것을 둘 다 알고 있었다.': `{권속A} sat beside you. After a long silence, they asked:
+"How much longer will you open the gate?" You both knew you did not age.`,
+    "다음 문이 마지막이라 답한다": "Answer that the end is near",
+    '"몇 번 더." 숫자를 말했다. {권속A:은|는} 그 숫자를 받아 적듯 고개를 끄덕였다. 권속들 사이에 그 숫자가 돌았다. 그들은 끝을 준비했다.':
+      '"A few more times." You named the number. {권속A} nodded as if writing it down. The number went around among the Kindred. They prepared for the end.',
+    "끝까지 연다고 답한다": "Answer that you will open it to the end",
+    '"문이 있는 한." {권속A:은|는} 더 묻지 않았다. 그날 밤부터 {권속A:은|는} 당신의 잔을 당신보다 먼저 채웠다.':
+      '"As long as there is a gate." {권속A} asked nothing more. From that night, {권속A} filled your cup before you could.',
+    "몫을 늘려 준다": "Give them a larger share",
+    "답 대신 당신 몫의 잔을 주었다. {권속A:은|는} 마셨다. 묻지 않게 되었다.":
+      "Instead of answering, you gave them your own cup. {권속A} drank. They stopped asking.",
+    "입을 막는다": "Silence them",
+    '"묻지 마라." {권속A:은|는} 입을 다물었다. 다른 권속들도 다물었다. {랜드:이|가} 조용해졌다. 좋은 조용함은 아니었다.':
+      '"Do not ask." {권속A} fell silent. So did the other Kindred. {랜드} grew quiet. It was not a good quiet.',
+    "이름 난 사냥꾼": "A renowned hunter",
+    '문이 닫힌 해, 혼자 온 사람이 문을 두드렸다. 칼은 등에, 손은 비어 있었다. 2급 해결사. 이름을 아는 사람이 많은 쪽이었다.\n"싸우러 온 게 아닙니다. 아직은."': `In a year the gate was closed, someone came alone and knocked. Blade on their back, hands empty. A Grade 2 Fixer — one whose name many people knew.
+"I didn't come to fight. Not yet."`,
+    "손님으로 맞는다": "Welcome them as a guest",
+    '밤새 {랜드:을|를} 보여 주었다. 그는 아무것도 베지 않았다. 떠나며 "다음 문에는 제가 사람들을 데려오겠습니다"라고 했다. 손님 쪽으로.': `You showed them {랜드} all night. They cut nothing. As they left, they said, "At the next gate, I'll bring people." As guests.`,
+    "싸워 피를 마신다": "Fight and drink their blood",
+    "문 안에서 싸웠다. 그는 셋을 베고 당신에게 베였다. 2급의 피는 당신이 마셔 본 것 중 가장 뜨거웠다. 그의 이름이 명단에서 지워졌고, 사무소는 그 이름을 기억했다.":
+      "You fought inside the gate. They cut down three before you cut them down. A Grade 2's blood was the hottest you had ever drunk. Their name was struck from the list, and the office remembered it.",
+    "권속들이 맞선다": "Have the Kindred face them",
+    "권속들이 둘러쌌다. 이름 있는 여섯과 이름 없는 수십. 그는 둘을 베고 {권속B2}의 팔을 꺾고 담장을 넘어 갔다. 권속들은 다친 채로 서로를 보았다. 이긴 것은 아니었다. 진 것도 아니었다.":
+      "The Kindred surrounded them. The six with names and dozens without. They cut down two, wrenched {권속B2}'s arm, and went over the wall. The wounded Kindred looked at one another. It was not a win. Nor was it a loss.",
+    "문을 잠근다": "Lock the gate",
+    "열지 않았다. 그는 문 앞에 하룻밤 앉았다가 갔다. 다음 문에 그는 사냥꾼들 맨 앞에 서 있었다.":
+      "You did not open it. They sat at the gate for one night and left. At the next gate, they stood at the head of the hunters.",
+    "마지막 문 앞": "Before the last gate",
+    "마지막 개장까지 세 해. 권속들이 모여 당신의 뜻을 물었다. 마지막 문을 어떻게 열지.\n이름 있는 권속이 몇 남았는지 당신은 세지 않아도 알았다. 이름 없는 것들은 세지 않았다.": `Three years until the last opening. The Kindred gathered to ask your will: how the last gate would be opened.
+You knew without counting how many named Kindred remained. The nameless ones you did not count.`,
+    "사람들과 함께 연다": "Open it with the people",
+    '"손님을 다 들인다. 끝까지." 권속들은 등을 닦고 기구에 기름을 쳤다. 사람의 일처럼.':
+      '"Let every guest in. To the very end." The Kindred polished the lanterns and oiled the rides. Like human work.',
+    "조용히 연다": "Open it quietly",
+    '"알리지 않는다. 오는 사람만." 권속들은 고개를 끄덕였다. 마지막 밤이 조용할 것 같았다.':
+      '"We will not announce it. Only those who come." The Kindred nodded. The last night looked to be a quiet one.',
+    "권속과 함께 연다": "Open it with the Kindred",
+    '"너희 이름으로 연다." 권속들의 피를 문 위 이름 아래 발랐다. 그들은 그것을 오래 보았다.': `"We open it in your names." You painted the Kindred's blood beneath the name above the gate. They looked at it for a long time.`,
+    "혼자 연다": "Open it alone",
+    '"내가 연다. 너희는 안에 있어라." 권속들은 물러났다. 마지막 밤 문 앞에는 당신 혼자였다. 그것을 사람들이 보았다.':
+      '"I will open it. You stay inside." The Kindred withdrew. On the last night, you stood alone at the gate. People saw that.',
+    "피를 어디에": "Where the blood goes",
+    "문이 열리는 밤": "The night the gate opens",
+    "아랫것의 부탁": "A lower one's plea",
+    "가문에서 사람이 왔다. 내년에 열 달, 어버이의 일로 자리를 비워야 한다. 담장은 권속들이 지킨다. 버티려면 권속의 힘 24. 지금 {권속힘}.":
+      "Someone came from the Family. Next year you must be away for ten months on your sire's business. The Kindred will hold the wall. To hold out, the Kindred's strength must be 24. It is {권속힘} now.",
+    "열 달. 당신은 문을 권속들에게 맡기고 {랜드:을|를} 나섰다. 가문의 일은 길었고, 말할 것이 없다.\n권속의 힘 {권속힘} · 버티는 데 필요한 힘 24.": `Ten months. You left the gate to the Kindred and stepped out of {랜드}. The Family's business was long, and there is nothing to tell of it.
+Kindred strength {권속힘} · Strength needed to hold out: 24.`,
+    "돌아왔을 때 담장은 그대로였다. 사냥꾼이 두 번 왔다고 했다. 두 번 다 담장을 넘지 못했다. {권속A:이|가} 열쇠를 돌려주었다. 손이 조금 떨렸다.":
+      "When you returned, the wall stood as it was. Hunters had come twice, you were told. Neither time did they get over the wall. {권속A} handed back the keys. Their hand trembled a little.",
+    "돌아왔을 때 문 위의 이름이 없었다. 담장은 반쯤 무너졌고, 안에는 아무도 없었다. 이름 있는 것도, 없는 것도. 당신이 없는 열 달이면 충분했다. 당신은 빈 {랜드} 한가운데 서서 끝났다.":
+      "When you returned, the name above the gate was gone. The wall had half collapsed, and no one was inside. Not the named, not the nameless. Ten months without you had been enough. You ended standing in the middle of an empty {랜드}.",
+    "내년엔 바깥에 다녀와야 한다. 혼자. {랜드}의 힘이 권속에게만 있다는 소문이 돌면, 사냥꾼은 담장이 아니라 장로를 노린다. 장로의 힘 {장로힘} · 권속의 힘 {권속힘} — 권속이 장로의 두 배를 넘으면 위험하다.":
+      "Next year you must go outside. Alone. If word gets around that {랜드}'s strength lies only with its Kindred, hunters will go after the Elder rather than the wall. Elder strength {장로힘} · Kindred strength {권속힘} — it is dangerous if the Kindred have more than twice the Elder's.",
+    "당신 혼자 {랜드:을|를} 나섰다. 가야 할 곳이 있었다. 권속은 데려가지 않았다. 담장을 비울 수 없어서였다.\n장로의 힘 {장로힘} · 권속의 힘 {권속힘}.": `You left {랜드} alone. There was somewhere you had to go. You took no Kindred; the wall could not be left empty.
+Elder strength {장로힘} · Kindred strength {권속힘}.`,
+    "골목에서 사냥꾼 셋이 기다리고 있었다. 당신이 약하다는 소문을 들은 얼굴들이었다. 소문은 틀렸다. 당신은 셋의 피를 마시고 돌아왔다. 권속들은 문 앞에 나와 있었다.":
+      "Three hunters were waiting in an alley. Faces that had heard you were weak. The rumor was wrong. You drank all three and came back. The Kindred were waiting out at the gate.",
+    "골목에서 사냥꾼들이 기다리고 있었다. {랜드}의 힘은 담장 안에 있고, 장로는 혼자이며 약하다는 소문이 맞았다. 칼이 몇 자루였는지 세지 못했다. 당신은 {랜드}에서 열 골목 떨어진 곳에서 끝났다. 권속들은 그 밤 당신이 돌아오지 않는 것을 담장 위에서 기다렸다.":
+      "Hunters were waiting in an alley. The rumor was right: {랜드}'s strength was inside the wall, and the Elder was alone and weak. You could not count how many blades there were. You ended ten alleys away from {랜드}. That night, the Kindred waited on the wall for you, and you did not come back.",
+    "{오른권속:이|가} {죽은권속}의 자리에 올랐다. 묻지 않아도 그렇게 된다. 아랫것 하나가 {오른권속}의 자리를 채웠다. 이름은 묻지 않았다.":
+      "{오른권속} rose to {죽은권속}'s place. No one needs to ask; that is how it goes. One of the lower ones filled {오른권속}'s place. You did not ask its name.",
+    "이름 모를 권속 하나가 {죽은권속}의 자리에 올랐다. 묻지 않아도 그렇게 된다. 이름은 묻지 않았다.":
+      "A nameless Kindred rose to {죽은권속}'s place. No one needs to ask; that is how it goes. You did not ask its name.",
+    "아랫것 하나가 {죽은권속}의 자리를 차지했다. 이름은 묻지 않았다.":
+      "One of the lower ones took {죽은권속}'s place. You did not ask its name.",
+    "{랜드}의 문이 열렸다. 문턱 {문턱} · 몰려온 힘 {몰려온힘} · {랜드}의 힘 {랜드힘}.":
+      "The gate of {랜드} opened. Threshold {문턱} · Incoming force {몰려온힘} · {랜드}'s strength {랜드힘}.",
+    "해 지기 전부터 줄이 섰다. 사냥꾼은 없었다. 있었어도 손님 틈에서 칼을 꺼내지 않았다.":
+      "A line formed before sunset. There were no hunters. If there were, they did not draw their blades among the guests.",
+    "폐장까지 아무도 물리지 않았다. 음악이 끝나자 사람들은 손을 흔들며 나갔다.":
+      "No one was bitten all the way to closing. When the music ended, people waved as they left.",
+    "손님이 많았다. 그 사이에 신발이 다른 사람이 몇 있었다. 권속들이 문 양쪽에 섰다.":
+      "There were many guests. Among them were a few with the wrong shoes. The Kindred stood at both sides of the gate.",
+    "자정 무렵 담장 뒤에서 짧은 싸움이 있었다. 손님들은 음악 때문에 듣지 못했다. 몇 명은 들었다.":
+      "Around midnight there was a brief fight behind the wall. The guests could not hear it over the music. A few did.",
+    "손님보다 칼이 많았다. 송곳니 사냥 사무소의 깃발이 문 앞에 꽂혔다.":
+      "There were more blades than guests. The Fanghunt Office's banner was planted at the gate.",
+    "문을 연 것을 후회할 틈은 없었다. 권속들이 담장을 따라 흩어졌고, 밤새 비명이 음악을 덮었다.":
+      "There was no time to regret opening the gate. The Kindred scattered along the wall, and all night long screams drowned out the music.",
+    "그 틈에 2급 하나가 섞여 있었다. 혼자였고, 혼자로 충분했다.":
+      "Among them was a Grade 2. Alone, and alone was enough.",
+    "1급 하나가 왔다. 사무소 깃발 없이. 이름만으로 손님 몇이 돌아갔다.":
+      "A Grade 1 came, without an Office banner. Their name alone sent a few guests home.",
+    "특색이 왔다. 문 앞에 서서 한참 {랜드:을|를} 보기만 했다. 그러고는 들어왔다.":
+      "A Color came. They stood at the gate and simply looked at {랜드} for a long while. Then they came in.",
+    "{랜드}의 힘이 모자랐다.\n담장이 먼저 무너졌다. 권속들이 하나씩 쓰러졌다. {이끄는권속:이|가} 당신 앞을 막았고, 막은 채로 베였다.\n새벽에 문 위의 이름이 내려졌다. 당신은 그것을 보며 끝났다.": `{랜드}'s strength was not enough.
+The wall fell first. The Kindred went down one by one. {이끄는권속} stood in front of you, and was cut down standing there.
+At dawn, the name above the gate was taken down. You ended watching it.`,
+    "막아 냈다. 겨우.\n담장 아래에 {죽은권속:이|가} 누워 있었다. 목을 물린 쪽은 사냥꾼이었다. {죽은권속:은|는} 끝까지 그를 놓지 않았다.\n당신은 {죽은권속}의 이름을 한 번 불렀다. 대답은 없었다.": `You held them off. Barely.
+{죽은권속} lay beneath the wall. It was the hunter whose throat had been bitten. {죽은권속} never let go of him, to the very end.
+You called {죽은권속}'s name once. There was no answer.`,
+    "막아 냈다. 겨우.\n담장 아래에 이름 모를 권속 하나가 누워 있었다. 목을 물린 쪽은 사냥꾼이었다. 끝까지 그를 놓지 않았다.\n당신은 그 아이의 이름을 몰랐다.": `You held them off. Barely.
+A nameless Kindred lay beneath the wall. It was the hunter whose throat had been bitten. It never let go of him, to the very end.
+You did not know that child's name.`,
+    "사냥꾼들은 당신을 노리지 않았다. 권속을 노렸다. 지난 문에서 사람을 먹은 {랜드}의 권속을.\n{죽은권속:이|가} 담장 밖으로 끌려 나갔다. 돌아오지 않았다.": `The hunters did not go after you. They went after the Kindred — the Kindred of {랜드}, which had eaten people at the last gate.
+{죽은권속} was dragged out beyond the wall. They did not come back.`,
+    "사냥꾼들은 당신을 노리지 않았다. 권속을 노렸다. 지난 문에서 사람을 먹은 {랜드}의 권속을.\n이름 모를 권속 하나가 담장 밖으로 끌려 나갔다. 돌아오지 않았다.": `The hunters did not go after you. They went after the Kindred — the Kindred of {랜드}, which had eaten people at the last gate.
+A nameless Kindred was dragged out beyond the wall. It did not come back.`,
+    "문 안에 아직 사람들이 있다. 폐장 음악 전이다.":
+      "There are still people inside the gate. It is before the closing music.",
+    "들어온 사람을 먹는다": "Eat those who came in",
+    "먹지 않는다": "Do not eat them",
+    "문을 안에서 잠갔다. 음악을 더 크게 틀었다. 그날 밤 들어온 사람들은 나가지 않았다. 피주머니가 줄지어 섰다. 바깥에서 돌아오지 않은 이름들이 벽에 붙었다.":
+      "You locked the gate from inside and turned the music up. The people who came in that night did not leave. Bloodbags stood in rows. Outside, the names of those who never came home were posted on the walls.",
+    "손님이 적어 사냥꾼을 먹었다. 해결사의 피였다. 권속들의 눈이 아침까지 붉었다. 사무소는 명단을 길게 적었다.":
+      "There were few guests, so you ate the hunters. Fixer blood. The Kindred's eyes stayed red until morning. The office wrote out a long list.",
+    "폐장 음악을 틀었다. 사람들이 나갔다. 몇은 다음에 또 오겠다고 했다.":
+      "You played the closing music. People left. Some said they would come again.",
+    "살아남은 사냥꾼들을 문 밖으로 내보냈다. 그들은 뒤돌아보며 갔다. 손님 몇이 그것을 보았다.":
+      "You sent the surviving hunters out the gate. They kept looking back as they went. A few guests saw that.",
+    "문 앞에 꽃이 몇 송이 놓여 있었다. 누가 둔 것인지는 몰랐다.":
+      "A few flowers had been left at the gate. You did not know who left them.",
+    "분노가 타오르는 눈이 되었다.": "Your rage became a burning eye.",
+    "분노가 끓었다. 몸이 따라 주지 않았다. 당신은 문을 닫았다.":
+      "Rage boiled over. Your body would not follow. You closed the gate.",
+    '개장이 끝난 밤, 이름 모를 권속 하나가 당신 앞에 무릎을 꿇었다. 손에 든 것을 내밀었다. 오래된 것이었다. 어디서 났는지는 말하지 않았다.\n"어버이께 드리는 것입니다. 받아 주십시오. 부디."\n아랫세대는 윗세대를 거스르지 못한다. 핏속에 새겨진 것이다. 그것을 깨는 것은 굶주림, 그리고 그런 것들.': `The night the opening ended, a nameless Kindred knelt before you and held out something in its hands. Something old. It did not say where it came from.
+"This is for you, Sire. Please accept it. Please."
+The lower generations cannot defy the higher. It is carved into the blood. What breaks that is hunger — and things like this.`,
+    "받았다. 손에 쥐자 차가웠다. 권속은 고개를 숙이고 물러갔다. 돌아서는 어깨가 떨리고 있었다.":
+      "You took it. It was cold in your hand. The Kindred bowed and withdrew. Its shoulders were trembling as it turned away.",
+    '"필요 없다." 권속은 물러가지 않았다. 무릎을 꿇은 채 밤새 거기 있었다. 새벽에 당신은 결국 받았다. 손에 쥐자 차가웠다.':
+      '"I have no need of it." The Kindred did not withdraw. It stayed there on its knees all night. At dawn, you took it after all. It was cold in your hand.',
+    "올해도 피는 장로의 잔에 먼저 채워졌다. 권속들은 빈 잔 바닥을 핥았다.\n그날 밤, 방 밖의 불이 하나씩 꺼졌다. 문틈으로 비린 피 냄새가 스며들었다.\n어둠 속에서 눈이 하나둘 떠졌다. 둘은 당신이, 넷은 그 둘이 피를 나눠 준 눈이었다. 그 뒤로 이름 없는 눈이 수십. {이끄는권속:이|가} 맨 앞이었다.\n눈마다 붉은 것이 흘러내렸다. 굶주린 혈귀가 흘리는 피눈물이었다.\n손에 쥔 것이 뜨거워졌다. 핏속에 새겨진 것이 풀리는 소리를 당신은 들었다. 그들도 들었다.\n가장 먼저 덤벼든 권속의 이빨이 당신의 목덜미에 박혔다.": `This year too, the blood filled the Elder's cup first. The Kindred licked the bottoms of empty cups.
+That night, the lights outside your room went out one by one. The raw smell of blood seeped in through the crack of the door.
+In the dark, eyes opened one by one. Two you had given blood to; four, those two had. Behind them, dozens of nameless eyes. {이끄는권속} was at the front.
+Something red ran down from every eye. The bloody tears of starving Bloodfiends.
+The thing in your hand grew hot. You heard what was carved into the blood come undone. So did they.
+The fangs of the first Kindred to lunge sank into your neck.`,
+    "당신은 그 권속의 목을 비틀어 벽에 내던졌다. 그다음, 또 그다음. 새벽까지 비명이 그치지 않았다.\n해가 떴을 때 바닥은 온통 끈적했다. 서 있는 것은 당신 하나뿐이었다.\n{이끄는권속:은|는} 마지막이었다. 눈을 뜬 채였다. 당신은 그 눈을 감겨 주지 않았다.": `You wrung that Kindred's neck and hurled it against the wall. Then the next, and the next. The screams did not stop until dawn.
+When the sun rose, the whole floor was sticky. You were the only one standing.
+{이끄는권속} was the last. Their eyes were still open. You did not close them.`,
+    '수십, 수백이 넘는 날붙이가 차례대로 당신의 몸에 박혀 왔다. 당신에 대한 그간의 분노, 서러움을 표현하는 것 같았다. 그렇게 당신을 미워하고 저주했으나, 그들은 당신에게 진심으로 눈물을 흘리며 다가와 공격할 뿐이었다. 당신의 피가 바닥으로 쏟아졌다. 피를 거의 다 잃은 당신을, 당신의 권속들은 절대 죽게 두지 않았다. {이끄는권속:은|는} 눈물을 삼키며 당신 앞에 섰다. "문은 이제 저희가 엽니다. 어버이께서는 여는 손만 되어 주십시오." 열 해마다, 당신은 문을 열었다. 권속들의 뜻대로. 권속들이 먹고, 당신은 문을 닫았다. 문 위의 이름은 그대로였다. 그것만 당신 것이었다.':
+      'Dozens, then hundreds of blades sank into your body one after another. It was as if they were giving voice to all their anger and grief toward you. They hated you and cursed you, yet they only came at you weeping, truly weeping. Your blood poured onto the floor. Your Kindred would never let you die, though you had lost nearly all of it. {이끄는권속} stood before you, swallowing tears. "From now on, we open the gate. Sire, you need only be the hand that opens it." Every ten years, you opened the gate. As the Kindred willed. The Kindred ate, and you closed the gate. The name above it stayed the same. That alone was yours.',
+    "잔은 하나만 씻었다.": "You washed only one cup.",
+    "문 위의 이름을 올려다볼 사람이 없었다.":
+      "There was no one left to look up at the name above the gate.",
+    "권속의 피로 바닥을 새로 칠했다. 마르지 않았다.":
+      "You repainted the floor with the Kindred's blood. It did not dry.",
+    "밤에 누가 부르는 것 같아 돌아보았다. 아무도 없었다.":
+      "At night you thought someone called you, and turned around. No one was there.",
+    "손님이 왔다. 당신 혼자 문을 열고 혼자 닫았다.":
+      "A guest came. You opened the gate alone and closed it alone.",
+    "문을 열었다. 혼자 열었다. 손님은 오지 않았다. 온 것은 특색 여럿과 그 뒤의 사람들이었다. 특색은 당신에게 이름을 묻지 않았다. 당신은 오래 싸웠다. 권속 여섯 몫을 혼자 싸웠다. 담장 아래, 권속들의 피 위에 당신의 피가 섞였다. 문 위의 이름은 그대로 두었다. 아무도 내리지 않았다.":
+      "You opened the gate. Alone. No guests came. What came were several Colors and the people behind them. The Colors did not ask your name. You fought for a long time. You fought for six Kindred, alone. Beneath the wall, your blood mingled with the Kindred's. The name above the gate was left as it was. No one took it down.",
+    "세 번째였다. 당신이 이름을 지어 준 것들이, 당신 앞에서, 세 번째로 끌려 나갔다.\n{죽은권속}의 이름을 불렀다. 대답이 없었다. 다시 불렀다. 목이 찢어지도록 불렀다. 담장 밖에서 사냥꾼들이 웃는 소리가 들렸다.\n폐장 음악이 울려야 할 시간이었다. 당신은 음악을 틀지 않았다. 문을 닫지 않았다. 닫을 손이 떨려서가 아니었다. 닫을 이유가 없어졌다.\n이름을 가진 것들을 셋이나 가져간 자들에게 이제 돌려줄 것은 하나뿐이었다.\n그날부터 {랜드}의 문은 늘 열려 있었다. 들어오는 것은 무엇이든, 나가지 못했다.": `It was the third time. The ones you had named were dragged away before your eyes for the third time.
+You called {죽은권속}'s name. No answer. You called again. You called until your throat tore. Beyond the wall, you heard the hunters laughing.
+It was time for the closing music. You did not play it. You did not close the gate. Not because your hands were shaking. There was no longer any reason to close it.
+To those who had taken three of the named, there was only one thing left to give back.
+From that day, the gate of {랜드} was always open. Whatever came in never left.`,
+    "전투 · {상대} (토벌대 강함 {적}) — {동사} · 강함 {S}":
+      "Battle · {상대} (subjugation strength {적}) — {동사} · Strength {S}",
+    "사냥 · {상대} — {동사} · 강함 {S}":
+      "Hunt · {상대} — {동사} · Strength {S}",
+    "9급 해결사 셋": "three Grade 9 Fixers",
+    "8급 해결사 둘": "two Grade 8 Fixers",
+    "해결사 무리": "a pack of Fixers",
+    "7급 해결사 넷": "four Grade 7 Fixers",
+    "6급 해결사 둘": "two Grade 6 Fixers",
+    "해결사 셋": "three Fixers",
+    "5급 해결사 둘": "two Grade 5 Fixers",
+    "4급 해결사 셋": "three Grade 4 Fixers",
+    "4급 해결사 하나": "a Grade 4 Fixer",
+    "3급 해결사 둘": "two Grade 3 Fixers",
+    "3급 해결사 하나": "a Grade 3 Fixer",
+    "2급 해결사 둘": "two Grade 2 Fixers",
+    "2급 해결사 하나": "a Grade 2 Fixer",
+    "1급 해결사 하나": "a Grade 1 Fixer",
+    "밤길의 행인 둘": "two people walking at night",
+    "문 앞에서 서성이던 사람": "someone loitering at the gate",
+    "골목의 취객 넷": "four drunks in an alley",
+    "퇴근하던 사람들": "people on their way home from work",
+    "노점 앞의 사람들": "people at a street stall",
+    "구경 온 사람 다섯": "five onlookers",
+    "길 잃은 사람": "someone who was lost",
+    "버스를 기다리던 사람들": "people waiting for a bus",
+    "도망치던 사람": "someone running away",
+    "목덜미를 물어 쓰러뜨렸다": "bit the neck and brought them down",
+    "벽에 처박았다": "slammed them into the wall",
+    "칼째로 짓눌렀다": "crushed them, blades and all",
+    "피를 다 마셨다": "drained every drop",
+    "숨이 끊길 때까지 놓지 않았다":
+      "did not let go until the breathing stopped",
+    쓰러뜨렸다: "brought them down",
+    "등을 덮쳤다": "fell on them from behind",
+    "한 방울도 남기지 않았다": "left not a single drop",
+    "비명이 끊겼다": "the screaming stopped",
+    "목을 물었다": "bit the throat",
+    "놓치지 않았다": "let none escape",
+    "담장이 한 구역 더 밀려났다. 담장 아래로 피가 고였다.":
+      "The wall was pushed out another block. Blood pooled beneath it.",
+    "위험 등급 · 도시 전설 → 도시 질병":
+      "Threat level · Urban Legend → Urban Plague",
+    "남은 권속들도 피 냄새에 미쳐 거리로 쏟아져 나갔다. {이끄는권속:이|가} 맨 앞이었다.":
+      "Maddened by the smell of blood, the remaining Kindred poured into the streets too. {이끄는권속} was at the front.",
+    "위험 등급 · 도시 질병 → 도시 악몽":
+      "Threat level · Urban Plague → Urban Nightmare",
+    "그 거리에서 숨 쉬는 것이 하나도 남지 않았다.":
+      "Nothing that breathed was left on that street.",
+    "끝나지 않는 밤": "The night that never ends",
+    "붉은 밤은 끝나지 않았다. 그 구역의 하수구는 몇 달 동안 붉었다. 그 뒤로 그 문이 닫혔다는 이야기는 없다.":
+      "The red night never ended. The sewers of that block ran red for months. No one has said that gate was ever closed again.",
+    "열일곱 번째 문이 닫혔다. 해가 지기도 전에 줄이 섰던 밤이었다.\n손님들은 문 앞에서 피 한 잔씩을 내고, 그만큼 웃다 돌아갔다. 억지로 받아 낸 피는 한 방울도 없었다.\n권속들은 사람 곁에서 잔을 받았다. 누구도 사람의 목덜미를 쳐다보지 않았다. {살아있는권속들:이|가} 문 양쪽에 서서 손을 흔들었다.\n사냥꾼들도 왔다. 칼을 문 앞에 맡기고 들어와, 다른 손님들처럼 줄을 섰다.\n새벽, 당신은 비어 있는 {랜드:을|를} 한 바퀴 돌았다. 바닥에 피 자국은 없었다.": `The seventeenth gate closed. It had been a night when the line formed before the sun had even set.
+The guests each gave a cup of blood at the gate, laughed as much, and went home. Not a single drop had been taken by force.
+The Kindred received their cups beside people. No one stared at a human neck. {살아있는권속들} stood on both sides of the gate, waving.
+Hunters came too. They left their blades at the gate, came in, and lined up like any other guest.
+At dawn, you walked once around the empty {랜드}. There were no bloodstains on the ground.`,
+    "{랜드}의 문은 열 해마다 열렸고, 그때마다 사람들이 찾아왔다. 혈귀와 사람이 한 잔을 나누는 곳. 도시에 그런 곳이 하나쯤은 있었다.":
+      "The gate of {랜드} opened every ten years, and each time people came. A place where Bloodfiends and humans share a cup. The City had at least one such place.",
+    "{랜드}의 문은 열 해마다, 아는 사람만 아는 밤에 열렸다. 줄은 길지 않았고, 온 사람은 늘 다시 왔다. 도시에 그런 곳이 하나쯤은 있었다.":
+      "The gate of {랜드} opened every ten years, on a night only those who knew would know. The line was never long, and those who came always came back. The City had at least one such place.",
+    "{랜드}의 문은 열 해마다 열렸다. 문 위 이름 아래에 권속들의 이름이 함께 있었다. 혈귀의 가문이 사람 곁에서 산 곳. 도시에 그런 곳이 하나쯤은 있었다.":
+      "The gate of {랜드} opened every ten years. Beneath the name above it were the Kindred's names. A place where a Bloodfiend Family lived beside people. The City had at least one such place.",
+    "{랜드}의 문은 열 해마다 열렸다. 마지막 문은 당신 혼자 열었고, 사람들은 그 문 앞에 선 당신을 보고도 들어왔다. 도시에 그런 곳이 하나쯤은 있었다.":
+      "The gate of {랜드} opened every ten years. You opened the last one alone, and people came in even after seeing you standing there. The City had at least one such place.",
+    "열일곱 번째 문이 닫혔다. 손님은 적었고, 돌아보는 사람은 없었다.\n도시는 {랜드:을|를} 오래 참았다. 더 참을 이유가 없어졌다.\n봄에 정식 토벌대가 왔다. 사냥꾼이 아니라 토벌대였다. 문 앞에 서서 지켜 주는 사람은 하나도 없었다.\n당신은 권속들과 싸웠고, 권속들과 쓰러졌다. 문 위의 이름이 내려졌다. 아무도 그것을 주워 가지 않았다.": `The seventeenth gate closed. There were few guests, and no one looked back.
+The City had put up with {랜드} for a long time. Now it had no reason to put up with it any longer.
+In spring, a formal subjugation team came. Not hunters — a subjugation team. Not one person stood at the gate to protect it.
+You fought alongside the Kindred, and fell alongside them. The name above the gate was taken down. No one picked it up.`,
+    "사람과 함께한 랜드": "The Land that lived with people",
+  },
+  LA = {
     "트레스 협회가 공방 자격 시험 공고를 붙였다. 필기와 실기, 응시료는 한 달 치 방세다. 합격하면 공방에 이름을 올릴 수 있다. 합격자는 열에 둘이라고 적혀 있다.":
       "The Tres Association has posted a notice for the Workshop certification exam. Written and practical; the fee is a month's rent. Pass, and your name goes on a Workshop's roll. It says two in ten pass.",
     응시한다: "Take the exam",
@@ -69469,7 +72267,7 @@ The master hung a new sign without a word. The line of customers changed.`,
     "시험장은 트레스 협회 지부의 지하였다. 필기와 실기, 합격자는 열에 둘이라고 했다.":
       "The exam hall was in the basement of a Tres Association branch. Written and practical. They said two in ten pass.",
   },
-  x3 = {
+  $A = {
     "특별한 일 없이 한 해가 지나갔다. 같은 길, 같은 얼굴, 같은 하늘.":
       "A year passed with nothing special. The same streets, the same faces, the same sky.",
     "한 해가 조용히 흘렀다. 다행이라는 말이 입에서 나오지 않을 만큼.":
@@ -69759,7 +72557,7 @@ The master hung a new sign without a word. The line of customers changed.`,
     "정리 부서 단체 대화방에는 오늘도 좌석 번호만 올라왔다.":
       "Once again today, nothing but seat numbers came up in the Cleanup Department group chat.",
   },
-  T3 = {
+  PA = {
     "봉투 하나를 구역 반대편 사무소까지 운반한다. 내용물은 알 필요가 없다고 했다. 봉투가 생각보다 무겁다.":
       "Carry an envelope to an Office on the other side of the District. You were told you don't need to know what's inside. The envelope is heavier than you expected.",
     "봉투를 노린 쪽이 생각보다 많았다.":
@@ -70599,7 +73397,7 @@ The master hung a new sign without a word. The line of customers changed.`,
     "서명은 지켜졌다. 당신은 그것을 보지 못했다.":
       "The signatures were honored. You didn't live to see it.",
   },
-  v3 = {
+  HA = {
     A: {
       name: "A Corp.",
       alias: "the Head",
@@ -70857,7 +73655,7 @@ The master hung a new sign without a word. The line of customers changed.`,
       sub: "Outside the Wings' protection",
     },
   },
-  _3 = {
+  DA = {
     tiers: [
       "Canard",
       "Urban Myth",
@@ -70911,8 +73709,8 @@ The master hung a new sign without a word. The line of customers changed.`,
       "거래 중개와 계약을 다루는 협회": "Handles brokering and contracts",
     },
   },
-  j3 = { regions: v3, orgs: _3 },
-  A3 = {
+  qA = { regions: HA, orgs: DA },
+  GA = {
     "밤새 열이 내리지 않는다. 이마 위의 젖은 천이 금세 미지근해진다.":
       "一晩中熱が下がらない。額に載せた濡れ布巾はすぐにぬるくなる。",
     "있는 돈을 털어 약을 구한다": "ありったけの金をはたいて薬を手に入れる",
@@ -71294,7 +74092,7 @@ The master hung a new sign without a word. The line of customers changed.`,
     "흰 옷의 사람은 웃으며 명함을 남겼다. 명함에는 이름 대신 작은 반지가 그려져 있었다.":
       "白い服の人は微笑んで名刺を置いていった。名刺には名前の代わりに小さな指輪が描かれていた。",
   },
-  Y3 = {
+  KA = {
     "학교를 마칠 때가 다가온다. 상급 과정에 가려면 시간과 돈이 든다. 일을 시작하면 당장의 생활이 나아진다.":
       "学校を終える時期が近づいている。上級課程に進むには時間と金がかかる。働き始めれば、目先の暮らしは楽になる。",
     "상급 과정에 진학한다": "上級課程に進学する",
@@ -71580,7 +74378,7 @@ The master hung a new sign without a word. The line of customers changed.`,
     "흰 옷의 사람은 웃으며 명함을 남겼다. 명함에는 이름 대신 작은 반지가 그려져 있었다.":
       "白い服の人は微笑んで名刺を置いていった。名刺には名前の代わりに小さな指輪が描かれていた。",
   },
-  S3 = {
+  zA = {
     "{지역}의 상층에서 자란 아이에게 열린 길은 많다. 그러나 그 길 모두에 날개의 이름이 붙어 있다.":
       "{지역}の上層で育った子どもに開かれた道は多い。だが、そのどれにも翼の名がついている。",
     "날개의 정규 사원이 된다": "翼の正社員になる",
@@ -71660,7 +74458,7 @@ The master hung a new sign without a word. The line of customers changed.`,
     "가문은 말리지 않았다. 응시료는 걱정할 필요가 없었다. 시험 날짜가 다가왔다.":
       "家は止めなかった。受験料の心配はいらなかった。試験の日が近づいてきた。",
   },
-  R3 = {
+  UA = {
     "함께 산다": "一緒に暮らす",
     "좁은 방 하나에 두 사람의 짐이 섞였다. 이상하게도 덜 외로웠다.":
       "狭い部屋ひとつに、二人分の荷物が混ざり合った。不思議と、前ほど寂しくなかった。",
@@ -72022,7 +74820,7 @@ The master hung a new sign without a word. The line of customers changed.`,
     "공방에 이름을 올리면 일은 끊기지 않는다고 했다. 응시료를 마련했다.":
       "工房に名を連ねれば仕事は途切れないと聞いた。受験料を工面した。",
   },
-  C3 = {
+  JA = {
     "분기 실적 발표를 앞두고 부서 전체가 불을 끄지 못했다. 복도의 시계는 새벽 세 시를 가리킨다. 월급 명세서에는 '성과 보너스'라는 항목이 생겼다.":
       "四半期の業績発表を前に、部署全体が明かりを消せずにいた。廊下の時計は午前三時を指している。給与明細には「成果ボーナス」という項目ができた。",
     "승진 심사가 다가온다. 상사는 은근히 말한다. '이번 프로젝트, 책임자 이름에 네 이름을 올려 줄 수도 있어. 대신…'":
@@ -72237,7 +75035,7 @@ The master hung a new sign without a word. The line of customers changed.`,
     "그 사람은 봉투를 도로 넣었다. 다음 날부터 거스름돈은 챙겨져 있지 않았다.":
       "その人は封筒をしまった。翌日から、お釣りは取っておかれなくなった。",
   },
-  N3 = {
+  VA = {
     "문득 옛날 일이 선명하게 떠올랐다. 첫 월급으로 샀던 낡은 외투, 함께 걷던 사람의 뒷모습. 도시는 그때보다 훨씬 조용해졌다.":
       "ふと昔のことが鮮明によみがえった。初任給で買った古びた外套、並んで歩いた人の後ろ姿。都市はあの頃よりずっと静かになった。",
     "같은 골목에서 오래 살던 이웃이 어느 날 보이지 않는다. 방은 비어 있고, 우편함은 가득 찼다.":
@@ -72273,7 +75071,7 @@ The master hung a new sign without a word. The line of customers changed.`,
     "{아이}에게 남긴다": "{아이}に遺す",
     "가족에게 남긴다": "家族に遺す",
   },
-  W3 = {
+  XA = {
     "장 보러 나간 시장 한복판, 생선 좌판 너머의 사람들이 한꺼번에 소리 없이 쓰러진다. 그 뒤에서 무언가가 천천히 몸을 일으킨다. 아무도 경보를 울리지 않았다.":
       "買い物に出た市場の真ん中で、魚の露店の向こうにいた人々が一斉に音もなく倒れる。その後ろで、何かがゆっくりと身を起こす。誰も警報を鳴らさなかった。",
     "좌판 밑으로 기어 들어가 숨을 죽인다": "露店の下に潜り込んで息を殺す",
@@ -72750,7 +75548,7 @@ The master hung a new sign without a word. The line of customers changed.`,
     "빗나간 칼날이 구경꾼 쪽으로 날아왔다. 구경꾼들에게 가는 칼을 막다 부상을 입었다.":
       "逸れた刃が野次馬の方へ飛んできた。野次馬に向かう刃を防ごうとして傷を負った。",
   },
-  I3 = {
+  QA = {
     "평범한 배달 의뢰였다. 그런데 약속 장소에 도착하자 의뢰인 대신 다른 사무소의 해결사 다섯이 기다리고 있다. 누군가 당신 목에 현상금을 걸었다.":
       "ありふれた配達の依頼だった。だが約束の場所に着くと、依頼人の代わりに別の事務所のフィクサーが五人待ち構えている。誰かがあなたの首に懸賞金をかけたのだ。",
     "싸워서 뚫는다": "戦って突破する",
@@ -72888,7 +75686,7 @@ The master hung a new sign without a word. The line of customers changed.`,
     "봉투는 책상 위에서 며칠을 기다리다 돌아갔다.":
       "封筒は数日机の上で待ったあと、返っていった。",
   },
-  O3 = {
+  ZA = {
     "붉은 코트에 중절모를 쓴 사내들이 골목 끝 식당을 통째로 빌렸다. 카포라 불리는 남자가 손짓으로 당신을 부른다. '예의를 아는 얼굴이군. 엄지에서는 위를 공경하는 자에게 빵과 총알이 주어진다.'":
       "赤いコートに中折れ帽の男たちが、路地の奥の食堂を丸ごと借り切った。カポと呼ばれる男が手招きであなたを呼ぶ。「礼儀を知っている顔だな。親指では、上を敬う者にパンと弾丸が与えられる」",
     "모자를 벗고 고개를 숙여 예를 갖춘다": "帽子を取り、頭を下げて礼を尽くす",
@@ -73064,7 +75862,7 @@ The master hung a new sign without a word. The line of customers changed.`,
     "대행자는 한참 서 있다가 종이를 접었다. 지령은 수행되지 못했고, 그 책임은 그의 몫이 되었다. 그는 끝까지 칼에 손을 대지 않았다.":
       "代行者は長いこと立ち尽くしてから紙を畳んだ。指令は遂行されず、その責任は彼が負うことになった。彼は最後まで剣に手をかけなかった。",
   },
-  F3 = {
+  ej = {
     "솔다토의 하루는 막사에서 시작해 막사에서 끝난다. 새벽 점호, 사격 자세, 경례 각도. 같은 솔다토 안에서도 프리모부터 콰르토까지 서열이 있고, 당신은 아직 맨 끝이다.":
       "ソルダートの一日は兵舎で始まり、兵舎で終わる。明け方の点呼、射撃姿勢、敬礼の角度。同じソルダートの中にもプリモからクァルトまで序列があり、あなたはまだ最下位だ。",
     "이를 악물고 훈련을 버틴다": "歯を食いしばって訓練に耐える",
@@ -73305,7 +76103,7 @@ The master hung a new sign without a word. The line of customers changed.`,
     "이름이 장부에 적혔다. 대신 그날 밤의 식탁은 오래 비어 있지 않았다. 다음 날 아침 누군가 말없이 당신의 어깨를 두드렸다.":
       "名前は帳簿に記された。その代わり、その夜の食卓は長く空いたままにはならなかった。翌朝、誰かが黙ってあなたの肩を叩いた。",
   },
-  E3 = {
+  tj = {
     "검지 인장이 찍힌 쪽지가 문틈에 꽂혀 있다. '오늘 해가 지기 전, 다섯 번째로 마주친 사람의 오른쪽 신발을 가져올 것.'":
       "人差し指の印章が押された紙切れが、扉の隙間に差し込まれている。「今日日が暮れる前に、五番目に出会った者の右の靴を持ってくること」",
     "지령대로 신발을 가져온다": "指令どおりに靴を持ってくる",
@@ -73501,7 +76299,7 @@ The master hung a new sign without a word. The line of customers changed.`,
     "그 사람은 다른 문을 두드렸다. 그 문이 열렸는지는 알지 못한다.":
       "その者は別の扉を叩いた。その扉が開いたのかどうかは知らない。",
   },
-  M3 = {
+  oj = {
     "형님이 오늘 돌 가게 목록을 건넨다. 밀린 돈, 밀린 인사, 밀린 의리. 첫 번째 가게 주인은 당신 얼굴을 보자마자 금고부터 연다. 두 번째 가게는 셔터가 내려져 있다.":
       "兄貴が今日回る店のリストを渡してくる。溜まった金、溜まった挨拶、溜まった義理。一軒目の店の主人は、あなたの顔を見るなり金庫を開ける。二軒目の店はシャッターが下りている。",
     "셔터를 걷어차고 들어간다": "シャッターを蹴破って入る",
@@ -73691,7 +76489,7 @@ The master hung a new sign without a word. The line of customers changed.`,
     '가족은 사흘 안에 구역을 떠났다. 문 앞에서 {배우자:이|가} 말했다. "어디로 가든 같이 가는 거야."':
       "家族は三日以内に区を離れた。戸口で{배우자}が言った。『どこへ行っても、一緒に行くの。』",
   },
-  B3 = {
+  aj = {
     "작품 제출일. 상급자가 작품을 보고 인정하면 반지가 한 번 더 감긴다. 스튜던트는 한 번, 도슨트는 두 번, 마에스트로는 세 번. 낙제가 쌓이면 다음 재료가 되는 사람도 있다.":
       "作品の提出日。上の者が作品を見て認めれば、指輪がもう一巻き巻かれる。スチューデントは一巻き、ドーセントは二巻き、マエストロは三巻き。落第が重なれば、次の材料になる者もいる。",
     "몇 달을 매달린 대작을 낸다": "何か月もかけた大作を出す",
@@ -73908,7 +76706,7 @@ The master hung a new sign without a word. The line of customers changed.`,
     "작품은 완성되었다. 가장 아름다운 것이 가장 가까이에 있었다는 사실을 당신은 완성된 뒤에야 알았다. {배우자:은|는} 이제 작품 속에서만 당신을 바라보았다. 그날부터 집에는 당신 혼자 남았다.":
       "作品は完成した。いちばん美しいものがいちばん近くにあったと、あなたは完成したあとで知った。{배우자}はもう作品の中からしかあなたを見なかった。その日から、家にはあなた一人が残った。",
   },
-  L3 = {
+  nj = {
     "{제안}에서 사람을 구한다는 소식이 들어왔다. 혼자 의뢰를 받으면 보수는 전부 내 것이지만, 등 뒤를 맡길 사람이 없다. 사무소에 들어가면 의뢰도 동료도 늘어난다.":
       "{제안}が人を募っているという知らせが入った。ひとりで依頼を受ければ報酬は全部自分のものだが、背中を預けられる人がいない。事務所に入れば、依頼も仲間も増える。",
     "{제안}에 들어간다": "{제안}に入る",
@@ -74205,7 +77003,7 @@ The master hung a new sign without a word. The line of customers changed.`,
     "그 사람은 책을 한 권 더 꺼내 건넸다. 이번에는 책갈피 자리에 쪽지가 없었다. 도서관에서 마주쳐도 두 사람은 서가만 보았다.":
       "その人はもう一冊、本を取り出して差し出した。今度は栞の位置にメモがなかった。図書館で顔を合わせても、二人は書架だけを見ていた。",
   },
-  $3 = {
+  rj = {
     "【아무것도 없는】 ALEPH. 도시의 재해다. 구역 전광판에 '재해 경보'가 뜨기도 전에 그것은 이미 사람들 사이에 섞여 있었다. 늘 인사하던 이웃이 골목 끝에서 손을 흔든다. 목소리의 간격이, 웃음의 길이가 조금씩 틀렸다. 얼굴 가장자리가 녹아내리듯 흐물거린다. 이것과 싸울 수 있는 사람은 이 구역에 없다.":
       "【何もない】 ALEPH。都市の災害だ。区の電光掲示板に「災害警報」が出るより先に、それはすでに人々の間に紛れ込んでいた。いつも挨拶していた隣人が、路地の奥で手を振っている。声の間合いも、笑いの長さも、少しずつずれていた。顔の縁が溶け落ちるようにぐにゃりと崩れている。これと戦える者は、この区にはいない。",
     "아무것도 모르는 척 인사하고 지나간다":
@@ -74454,7 +77252,7 @@ The master hung a new sign without a word. The line of customers changed.`,
       "子どもの方が一歩速かった。爆発に巻き込まれたが、持ちこたえた。",
     "아이가 웃는 얼굴로 당신을 안았다.": "子どもは笑顔であなたを抱きしめた。",
   },
-  P3 = {
+  ij = {
     "출근길 둥지 검문소에서 줄이 멈췄다. 앞사람의 출입증이 읽히지 않는다. 뒷골목 쪽에서 온 사람이다. 경비가 당신을 힐끗 본다. 사원증 하나면 보증을 설 수 있다.":
       "出勤途中、巣の検問所で列が止まった。前の人の通行証が読み取れない。裏路地の方から来た人だ。警備員がちらりとあなたを見る。社員証があれば保証人になれる。",
     "보증을 서 준다": "保証人になってやる",
@@ -74776,7 +77574,7 @@ The master hung a new sign without a word. The line of customers changed.`,
     "연줄 몇 개를 당겼다. 옮기지는 않았지만, 옮길 수 있다는 것을 알았다.":
       "伝手をいくつか引いてみた。移りはしなかったが、移れることは分かった。",
   },
-  H3 = {
+  sj = {
     "대관원 명문가의 사람이 찾아왔다. 당신의 몸이 '쓸 만하다'고 한다. 선인이라 불리는 노인이 환 한 알을 내밀었다. 삼키면 돌아갈 수 없다는 것을 이 구역 사람이라면 모두 안다.":
       "大観園の名家の者が訪ねてきた。あなたの体が「使える」という。仙人と呼ばれる老人が丸を一粒差し出した。呑めば後戻りはできないことを、この区の者なら誰もが知っている。",
     "환을 삼킨다": "丸を呑む",
@@ -76292,7 +79090,7 @@ The master hung a new sign without a word. The line of customers changed.`,
     "그 사람은 고개를 숙이고 다음 명을 기다렸다. 뜻을 말하는 일은 그날이 마지막이었다.":
       "その人は頭を下げ、次の命を待った。意思を口にすることは、あの日が最後になった。",
   },
-  D3 = {
+  lj = {
     "분기말이다. 창고 장부와 실물이 맞지 않는다. 사흘 안에 대조를 끝내라는 지시가 내려왔다.":
       "四半期末だ。倉庫の帳簿と実物が合わない。三日以内に照合を終えろという指示が下りてきた。",
     "장부 순서대로 센다": "帳簿の順に数える",
@@ -77067,7 +79865,7 @@ The master hung a new sign without a word. The line of customers changed.`,
     "말은 적게 했고 들은 것은 많았다. 들은 것 가운데 하나가 석 달 뒤 날개의 장부에 이익으로 찍혔다.":
       "口数は少なく、聞いたことは多かった。聞いたことのひとつが、三か月後に翼の帳簿に利益として記された。",
   },
-  q3 = {
+  hj = {
     "갓난아이는 젖을 물고도 오래 울었다. 무엇을 찾는지는 아무도 몰랐다.":
       "赤子は乳を含んでもなお長く泣いた。何を求めているのか、誰にもわからなかった。",
     "열이 사흘 밤낮 내리지 않았다. 나흘째 아침, 열은 거짓말처럼 내려 있었다. 대신 목이 말랐다. 물로는 가시지 않았다.":
@@ -78098,7 +80896,7 @@ The master hung a new sign without a word. The line of customers changed.`,
     "{아이:이|가} 자라 당신의 겉나이를 넘었다. 이제는 {아이:이|가} 당신을 걱정한다. {아이:은|는} 이유를 모른다.":
       "{아이}は育って、あなたの見た目の歳を追い越した。今では{아이}があなたを心配する。{아이}は理由を知らない。",
   },
-  G3 = {
+  dj = {
     "W사의 의뢰가 왔다. 운행 중인 워프 열차에 들어가 '도착 전에' 칸을 정리하라는 것이다. 바깥에서는 10초. 안에서는 아무도 모른다.":
       "W社から依頼が来た。運行中のワープ列車に入り、「到着前に」車両を整理しろというのだ。外では10秒。中のことは誰にもわからない。",
     "의뢰를 받는다": "依頼を受ける",
@@ -78337,7 +81135,7 @@ The master hung a new sign without a word. The line of customers changed.`,
       "10秒後に扉が開いた。降りてきたのは整理要員だけだった。浄化対象は名簿の上で「所在不明」になった。",
     "못을 박는다": "釘を打ち込む",
   },
-  K3 = {
+  uj = {
     "가문의 어른이 다섯 살이 된 당신을 앞에 앉혔다. 오늘부터 배우는 것은 글이 아니라 사람이라고 했다. 어른이 첫 질문을 던졌다. '저 문 안에는 무엇이 있겠느냐.'":
       "家門の大人が、五歳になったあなたを前に座らせた。今日から学ぶのは文字ではなく人だという。大人が最初の問いを投げた。「あの扉の内には何があると思う」",
     "[지] 문틈의 불빛과 발소리를 세어 대답한다":
@@ -79000,7 +81798,7 @@ The master hung a new sign without a word. The line of customers changed.`,
     "철함사의 어르신들은 승계식 날 군주의 손에 모두 죽었다. 그래도 철함사 아래에는 그들이 남긴 것이 있었다. 환의 처방, 오래된 그릇, 이름 없는 방들. 대관원의 몇몇은 그것으로 다시 늙지 않는 길을 찾으려 했다.":
       "鉄檻寺の長老たちは、家主承継の儀式の日に君主の手でみな死んだ。それでも鉄檻寺の下には、彼らが遺したものがあった。丸の処方、古い器、名もない部屋。大観園の何人かは、それでふたたび老いない道を探そうとした。",
   },
-  z3 = {
+  cj = {
     '비 오는 밤, 골목 끝에 두루마기를 걸친 사람이 서 있었다. 정장 위에 한복, 허리에는 매듭 달린 환도. "갈 곳이 없어 보이는군. 상처는 있소?"':
       "雨の夜、路地の突き当たりにトゥルマギを羽織った者が立っていた。スーツの上に韓服、腰には飾り紐の付いた環刀。「行く当てがなさそうだな。傷はあるか」",
     "소매를 걷어 보인다": "袖をまくって見せる",
@@ -79491,7 +82289,7 @@ The master hung a new sign without a word. The line of customers changed.`,
     "그 사람은 골목 끝까지 바래다주었다. 이후로 그 길에서는 마주치지 않았다.":
       "その人は路地の端まで送ってくれた。それ以来、その道ですれ違うことはなかった。",
   },
-  U3 = {
+  fj = {
     '구역 사이 길목에서 검은 정장들이 통행료를 걷고 있었다. 낼 돈이 없는 당신을 막아선 사내가 한참 보더니 웃었다. 목덜미까지 검은 구름이 번져 있다. "돈 대신 몸으로 낼 생각 있나. 위에서 시키는 대로만 하면 된다."':
       "区と区の間の路地で、黒いスーツの者たちが通行料を取っていた。払う金のないあなたを止めた男がしばらく眺めてから笑った。首筋まで黒い雲が広がっている。「金の代わりに体で払う気はあるか。上に言われた通りにやるだけでいい」",
     "고개를 숙이고 따른다": "頭を下げてついていく",
@@ -79960,7 +82758,7 @@ The master hung a new sign without a word. The line of customers changed.`,
     "그 사람은 말없이 자리를 비웠다. 얼마 지나지 않아 도장에서 그 사람을 더 이상 볼 수 없었다.":
       "その人は何も言わずに席を外した。ほどなくして、道場でその人の姿を見ることはなくなった。",
   },
-  J3 = {
+  wj = {
     "목소리를 듣는다": "声を聞く",
     맞선다: "立ち向かう",
     "목소리를 거스른다": "声に逆らう",
@@ -80192,7 +82990,7 @@ The master hung a new sign without a word. The line of customers changed.`,
       "特色にも終わらせられなかったものを、一人の人間が終わらせた。その人の名も顔も、誰も覚えていなかった。",
     "협회 연합": "協会連合",
   },
-  V3 = {
+  gj = {
     "잔잔한 회색 물 · 서두르는 물": "静かな灰色の水・急ぐ水",
     '물이 회색으로 바뀌었다. 바람이 없다. 선장이 짧게 말했다. "여기선 오래 못 있어. 다들 저어."':
       "水が灰色に変わった。風はない。船長が短く言った。「ここには長くいられない。皆、漕げ」",
@@ -80989,7 +83787,7 @@ The master hung a new sign without a word. The line of customers changed.`,
     '누군가 어깨를 툭 친다. 손목에 닻 문신. "대호수 다녀왔지? 표정 보면 알아. 다음 판엔 이거 하나 사 가."':
       "誰かが肩をとんと叩く。手首に錨の刺青。「大湖に行ってきただろ? 顔を見りゃ分かる。次のために一つ買っていきな」",
   },
-  X3 = {
+  mj = {
     "약지의 콘테스트 심사 자리다. 스튜던트들이 저마다 몸과 작품을 내보인다.":
       "薬指のコンテストの審査の場だ。スチューデントたちがそれぞれ自分の体と作品を披露している。",
     "내 몸으로 예술을 뽐낸다": "自分の体で芸術を披露する",
@@ -81489,7 +84287,7 @@ The master hung a new sign without a word. The line of customers changed.`,
     "붓을 드는 사이 그들은 갤러리를 나갔다. 새 작품은 그날 밤 완성되었다. 그것을 본 사람은 없었다.":
       "筆を取る間に、彼らはギャラリーを出ていった。新しい作品はその夜完成した。それを見た者はいなかった。",
   },
-  Q3 = {
+  yj = {
     "적출직 모집 공고가 사내 게시판에 붙었다. '주 70시간 근무, 앰플 무상 지급.' 아래에 작은 글씨로 한 줄이 더 있다. '교차 적합성 검사 필수.'":
       "摘出職の募集告知が社内掲示板に貼られた。「週70時間勤務、アンプル無償支給」。その下に小さな字でもう一行ある。「交差適合性検査必須」。",
     지원한다: "応募する",
@@ -82050,7 +84848,7 @@ The master hung a new sign without a word. The line of customers changed.`,
     "출동하고 돌아올 때마다 편지가 보였다. 맨 아래 한 줄은 외울 수 있었지만, 매번 다시 읽었다.":
       "出動から戻るたびに手紙が目に入った。いちばん下の一行は暗唱できたが、そのたびに読み返した。",
   },
-  Z3 = {
+  pj = {
     "사내 게시판 맨 위에 하얀 종이 한 장. '순수한 몸을 찾는다. 불결한 이물을 들이지 않은 몸을.' 지원서에는 이름 칸보다 시술 이력 칸이 먼저 있다. 당신의 칸은 비어 있다.":
       "社内掲示板の一番上に白い紙が一枚。「純粋な体を求む。不浄な異物を入れていない体を」。志願書には名前の欄より先に施術歴の欄がある。あなたの欄は空白だ。",
     지원한다: "応募する",
@@ -82380,7 +85178,7 @@ The master hung a new sign without a word. The line of customers changed.`,
       "説教の文句が耳から滑り落ちる。槌が重い。",
     "이단 심문관은 몸을 바꾸지 않는다.": "異端審問官は体を替えない。",
   },
-  ej = {
+  bj = {
     '"나도 어쩔 수 없었다." 조율자는 잠시 당신을 바라보았다. "그대가 물을 일이 아니야. 그대가 찾아간 이들에게도, 그대는 답해 준 적이 없지 않나." 그것이 마지막 말이었다.':
       "「私にもどうしようもなかった」調律者はしばしあなたを見つめた。「そなたが問うことではない。そなたが訪ねた者たちにも、そなたは答えてやったことがないだろう」それが最後の言葉だった。",
     "10초 뒤 문이 열렸다. 내린 것은 정리 요원뿐이었다. 열차 안의 금기는 다른 처형자의 명령서로 넘어갔다.":
@@ -83050,7 +85848,7 @@ C社の管轄。乾いたシーツと静かな廊下。手が軽かった。軽�
       "協会のフィクサーたちが一人ずつ退いた。最後に特色が残った。彼も退かなかった。最後まで。",
     "회계 층으로 올라간다": "経理の階へ上がる",
   },
-  tj = {
+  kj = {
     '늦은 저녁, 문 앞에 낯선 사람이 서 있었다. 검은 외투의 옷깃 안쪽에 작은 문양 하나가 수놓여 있다. H사의 가문들이 쓰는 문양이다.\n\n"늦은 시간에 실례합니다. 저는 한 가문의 일을 보는 사람입니다." 그는 집 안으로 들어오지 않았다. 문지방 너머에 선 채로, 당신이 지난 몇 해 동안 해낸 일들을 하나씩 읊었다. 날짜와 장소까지 틀린 곳이 없었다. 당신보다 더 정확하게 기억하고 있었다.\n\n"우리 가문의 후보 한 분이 다섯 해 뒤 가주 심사에 나섭니다. 심사장에 들어갈 수 있는 사람은 후보와 호위 한 사람뿐입니다. 그 한 사람을 찾고 있습니다." "다섯 해 동안 가문이 뒤를 받치겠습니다. 일거리도, 무기도, 필요한 것은 무엇이든. 그 대신 심사 날에는 후보의 곁에 서 주십시오."': `晩も遅い頃、戸口に見知らぬ人が立っていた。黒い外套の襟の内側に、小さな紋がひとつ刺繍されている。H社の家門が使う紋だ。
 
 「夜分に失礼いたします。私はある家門の用を務める者です」彼は家の中へは入らなかった。敷居の向こうに立ったまま、あなたがここ数年でやり遂げてきた仕事をひとつずつ挙げていった。日付や場所まで、ひとつも間違いがなかった。あなたよりも正確に覚えていた。
@@ -83485,7 +86283,564 @@ C社の管轄。乾いたシーツと静かな廊下。手が軽かった。軽�
     "협회 사무실의 직원은 당신의 자격증을 한참 들여다보았다. 삼십 년 넘게 갱신하지 않은 자격증이었다. 작은 의뢰부터 받았다. 길 안내, 물건 전달, 오래된 집안의 문 지키기. 문 앞에 서면 저도 모르게 왼쪽에 섰다.":
       "協会事務所の職員は、あなたの資格証をしばらく眺めていた。三十年以上更新していない資格証だった。小さな依頼から受けた。道案内、品物の配達、古い家の門番。扉の前に立つと、知らず知らず左側に立っていた。",
   },
-  oj = {
+  xj = {
+    "P사 · 장로\n\nP사의 관할에서 태어났다. 서른이 되기까지의 일은 어디에도 적혀 있지 않다.\n\n당신은 어느 가문의 제1권속, 장로다. 당신이 피를 나눠 준 권속이 둘, 그 둘이 만든 권속이 넷. 그 아래는 세지 않는다.\n\n굶주림은 사람의 피로만 채워진다. 피는 쌓아 둘 수 없다.\n\n열 해에 한 번, 문을 크게 열 것이다. 사람들이 올 것이다. 사냥꾼도 올 것이다.\n\n오늘 밤, 당신은 문을 세운다.": `P社・長老
+
+P社の管轄で生まれた。三十歳になるまでのことは、どこにも記されていない。
+
+あなたはある家門の第1眷属、長老だ。あなたが血を分けた眷属がふたり、そのふたりが作った眷属が四人。その下は数えない。
+
+飢えは人の血でしか満たされない。血は蓄えておけない。
+
+十年に一度、門を大きく開けるだろう。人々が来るだろう。狩人も来るだろう。
+
+今夜、あなたは門を建てる。`,
+    "제1권속 · 장로": "第1眷属・長老",
+    "{이름}의 랜드": "{이름}のランド",
+    "이름 모를 권속": "名も知らぬ眷属",
+    "새로 들인 권속들": "新しく迎えた眷属たち",
+    "문 위에 걸 이름": "門の上に掲げる名",
+    "문 위에 걸 이름을 정한다.": "門の上に掲げる名を決める。",
+    "랜드의 이름": "ランドの名",
+    "문 위에 {랜드:이라|라}고 썼다. 권속들이 아래에서 올려다보았다.":
+      "門の上に{랜드}と書いた。眷属たちが下から見上げた。",
+    "두 오른팔": "ふたつの右腕",
+    "당신이 제 피를 나눠 준 둘. 이 둘이 당신의 자식이고, 당신의 전부다. 새 이름은 어버이가 준다. 왼쪽 아이는 말이 없고, 오른쪽 아이는 늘 먼저 웃는다.":
+      "あなたが自らの血を分けたふたり。このふたりがあなたの子であり、あなたのすべてだ。新しい名は親が与える。左の子は口数がなく、右の子はいつも先に笑う。",
+    "말이 없는 아이": "口数のない子",
+    "먼저 웃는 아이": "先に笑う子",
+    "{권속A}, {권속B}. 두 번씩 불러 주었다. 둘은 제 이름을 받아 들고 오래 고개를 숙였다. 피를 나눈 밤처럼.":
+      "{권속A}、{권속B}。二度ずつ呼んでやった。ふたりは自分の名を受け取り、長いこと頭を下げていた。血を分けた夜のように。",
+    "그 아래 넷": "その下の四人",
+    '{권속A:과|와} {권속B:이|가} 제 피로 만든 아이들을 데려왔다. 둘씩, 넷. "어버이께서 지어 주십시오."':
+      "{권속A}と{권속B}が、自らの血で作った子らを連れてきた。ふたりずつ、四人。「親が名を付けてください」",
+    "{윗권속}의 아이": "{윗권속}の子",
+    "{권속A}의 아이들을 {권속A1}, {권속A2}. {권속B}의 아이들을 {권속B1}, {권속B2}. 넷은 제 이름을 입 안에서 굴려 보고, 제 어버이를 먼저 올려다보았다.":
+      "{권속A}の子らを{권속A1}、{권속A2}。{권속B}の子らを{권속B1}、{권속B2}。四人は自分の名を口の中で転がしてみて、まず自分の親を見上げた。",
+    "이름은 둘에게 맡겼다. 제 아이의 이름은 제가 짓는 것이 맞다. 이튿날 {권속A:이|가} {권속A1:과|와} {권속A2:을|를}, {권속B:이|가} {권속B1:과|와} {권속B2:을|를} 데려와 인사시켰다. 당신은 넷의 이름을 한 번씩 불러 주었다. 넷은 그것을 오래 기억했다.":
+      "名はふたりに任せた。自分の子の名は自分で付けるのが筋だ。翌日、{권속A}が{권속A1}と{권속A2}を、{권속B}が{권속B1}と{권속B2}を連れてきて挨拶させた。あなたは四人の名を一度ずつ呼んでやった。四人はそれを長く覚えていた。",
+    "{랜드}. 장로 하나, 이름 있는 권속 여섯, 이름 없는 권속 수십. 첫 문은 열 해 뒤에 연다.":
+      "{랜드}。長老ひとり、名のある眷属六人、名もない眷属が数十。最初の門は十年後に開く。",
+    "담장을 한 칸 더 올렸다. 밤에만 일했다.":
+      "塀をもう一段積み上げた。夜にだけ働いた。",
+    "{권속B2:이|가} 기둥에 못을 거꾸로 박았다. 아무도 말하지 않았다.":
+      "{권속B2}が柱に釘を逆さに打ち込んだ。誰も何も言わなかった。",
+    "길 잃은 사람이 문 앞까지 왔다가 돌아갔다. 권속들은 문 안에서 숨을 죽였다.":
+      "道に迷った人が門の前まで来て引き返していった。眷属たちは門の内で息を殺していた。",
+    "손님이 남긴 피 반 잔을 이름 있는 여섯이 먼저 마셨다. 아랫것들은 잔을 핥았다.":
+      "客の残した血を半杯、名のある六人が先に飲んだ。下の者たちは杯を舐めた。",
+    "밤바람에 문 위의 이름이 삐걱거렸다.": "夜風に、門の上の名がきしんだ。",
+    "{권속A:이|가} 담장 밖을 오래 보고 서 있었다.":
+      "{권속A}が長いこと塀の外を見て立っていた。",
+    "문 밖에 누가 {랜드} 이야기를 적어 붙였다. 틀린 데가 많았다.":
+      "門の外に、誰かが{랜드}の話を書いて貼った。間違いだらけだった。",
+    "해가 지기 전부터 문 앞을 서성이는 사람이 생겼다.":
+      "日が沈む前から門の前をうろつく人が出てきた。",
+    '{권속B:이|가} 손님 응대하는 법을 아래 둘에게 가르쳤다. "목덜미를 보지 마라."':
+      "{권속B}が下のふたりに客のもてなし方を教えた。「首筋を見るな」",
+    "어느 해결사가 문 앞에서 한참 담배를 피우고 갔다.":
+      "あるフィクサーが門の前で長いこと煙草を吸って去っていった。",
+    "{랜드} 안에 사람의 발자국이 남아 있는 아침이 늘었다.":
+      "{랜드}の中に人の足跡が残っている朝が増えた。",
+    "권속 하나가 손님의 이름을 외웠다. 당신은 모른 척했다.":
+      "眷属のひとりが客の名前を覚えた。あなたは知らないふりをした。",
+    "첫 기구가 녹슬었다. 사람이 아니라 세월이 한 일이었다.":
+      "最初の遊具が錆びた。人ではなく、歳月の仕業だった。",
+    "당신의 얼굴은 그대로였다. 문 앞의 사람들은 세대가 바뀌었다.":
+      "あなたの顔はそのままだった。門の前の人々は世代が変わった。",
+    "{권속A:이|가} 물가에 오래 서 있었다. 발을 담그지는 않았다. 혈귀는 물을 무서워한다.":
+      "{권속A}が水辺に長いこと立っていた。足は浸さなかった。血鬼は水を恐れる。",
+    "오래된 손님이 손자를 데려왔다. 손자가 아니라 손자의 아들이었다.":
+      "古い客が孫を連れてきた。孫ではなく、孫の息子だった。",
+    "밤마다 같은 음악을 틀었다. 권속들은 가사를 외웠다.":
+      "毎晩同じ音楽を流した。眷属たちは歌詞を覚えた。",
+    "담장 아래 묻은 것들 위로 풀이 자랐다.":
+      "塀の下に埋めたものの上に、草が伸びた。",
+    "문을 몇 번 더 열 수 있을지 세어 보았다. 손가락이 남았다.":
+      "あと何度門を開けられるか数えてみた。指が余った。",
+    "권속들은 당신이 셈하는 것을 알았다. 묻지 않았다.":
+      "眷属たちはあなたが数えていることを知っていた。尋ねなかった。",
+    "바깥에서는 {랜드:을|를} 오래된 것으로 불렀다. 유령 같은 것으로.":
+      "外では{랜드}を古いものと呼んだ。幽霊のようなものと。",
+    "당신은 처음 문을 세운 밤을 떠올리려 했다. 잘 되지 않았다.":
+      "あなたは初めて門を建てた夜を思い出そうとした。うまくいかなかった。",
+    "남은 권속이 당신 곁에 앉았다. 둘 다 말이 없었다.":
+      "残った眷属があなたのそばに座った。どちらも黙っていた。",
+    "마지막 문까지 몇 해. 당신은 숫자를 문 안쪽에 새겼다.":
+      "最後の門まであと数年。あなたは数字を門の内側に刻んだ。",
+    "올해 손님들이 남긴 피가 모였다. 많지 않다. 어디에 쓸지는 장로가 정한다.\n권속들이 잔을 보고 있었다.": `今年、客が残していった血が集まった。多くはない。何に使うかは長老が決める。
+眷属たちが杯を見ていた。`,
+    "기구를 하나 더 세운다": "遊具をもうひとつ建てる",
+    "피를 굳혀 기둥을 세웠다. 굳은 사람 피는 쇠보다 오래 간다. 봄에 사람들이 줄을 섰다.":
+      "血を固めて柱を建てた。固まった人の血は鉄より長くもつ。春には人々が列を作った。",
+    "내가 마신다": "自分で飲む",
+    "잔을 비웠다. 몸이 뜨거워졌다. 권속들은 빈 잔 바닥을 핥았다.":
+      "杯を空けた。体が熱くなった。眷属たちは空の杯の底を舐めた。",
+    "권속에게 나눠 준다": "眷属に分け与える",
+    "여섯 잔에 나누고, 남은 것은 아래로 내렸다. {권속B:이|가} 먼저 비우고 웃었다. 그날 밤 담장 안의 눈들이 더 붉었다.":
+      "六つの杯に分け、残りは下へ回した。{권속B}が先に飲み干して笑った。その夜、塀の内の目はいっそう赤かった。",
+    "자발적으로 낸 피로 버틴다": "自ら差し出された血でしのぐ",
+    "문 앞에 피를 내고 간 사람들의 몫으로 한 해를 났다. 식은 피였다. 권속들은 입을 다물었다.":
+      "門の前に血を置いていった人々の分で一年をしのいだ。冷めた血だった。眷属たちは口をつぐんだ。",
+    "{랜드}의 이름이 밖에 돌기 시작했다. 손님이 늘었고, 남기는 피도 늘었다.\n늘어난 만큼 눈독 들이는 쪽도 늘었다.": `{랜드}の名が外に広まり始めた。客が増え、残していく血も増えた。
+増えた分だけ、目をつける者も増えた。`,
+    "야시장을 연다": "夜市を開く",
+    "피로 등을 달았다. 밤마다 문 앞이 환했다. 손님들은 그 불빛을 자랑했다.":
+      "血で灯りを吊るした。毎晩、門の前が明るかった。客たちはその灯りを自慢した。",
+    "혼자 마셨다. 손님이 많은 해의 피는 진했다. 권속들은 당신의 등을 보고 있었다.":
+      "ひとりで飲んだ。客の多い年の血は濃かった。眷属たちはあなたの背中を見ていた。",
+    "권속들에게 돌렸다. {권속A:이|가} 잔을 들어 당신에게 먼저 기울였다.":
+      "眷属たちに回した。{권속A}が杯を掲げ、まずあなたに傾けた。",
+    "소문을 듣고 피를 내러 오는 사람이 생겼다. 그 피로 났다. 미지근했다.":
+      "噂を聞いて血を差し出しに来る人が出てきた。その血でしのいだ。ぬるかった。",
+    "{랜드:이|가} 오래되었다. 고칠 것이 늘었고, 새로 들어온 권속의 몫도 생각해야 했다.\n올해의 피를 어디에 쓸까.": `{랜드}は古くなった。直すものが増え、新しく入った眷属の分も考えねばならなかった。
+今年の血を何に使おうか。`,
+    "낡은 기구를 고친다": "古い遊具を直す",
+    "녹슨 자리에 피를 발랐다. 기구가 다시 돌았다. 오래된 손님이 울었다.":
+      "錆びたところに血を塗った。遊具がまた回った。古い客が泣いた。",
+    "당신이 마셨다. 오래 산 혈귀의 갈증은 깊었다. 권속들은 그 깊이를 몰랐다.":
+      "あなたが飲んだ。長く生きた血鬼の渇きは深かった。眷属たちはその深さを知らなかった。",
+    "새 권속에게 먼저 주었다. 오래된 권속이 그 순서를 보았다. 그래도 받았다.":
+      "新しい眷属に先に与えた。古い眷属がその順番を見ていた。それでも受け取った。",
+    "오래 다닌 손님들이 알아서 피를 두고 갔다. 그것으로 났다. 힘이 되지는 않았다.":
+      "長く通う客たちが自分から血を置いていった。それでしのいだ。力にはならなかった。",
+    "남은 문이 몇 개 없다. 올해의 피를 남길 것에 쓸지, 당신에게 쓸지.":
+      "残る門はいくつもない。今年の血を残すものに使うか、自分に使うか。",
+    "마지막 등을 단다": "最後の灯りを吊るす",
+    "문 위에 등을 하나 더 달았다. 멀리서도 보였다. 사람들이 그 등을 보고 왔다.":
+      "門の上に灯りをもうひとつ吊るした。遠くからも見えた。人々はその灯りを見てやって来た。",
+    "당신이 마셨다. 남은 문을 세며 마셨다. 권속들은 묻지 않았다.":
+      "あなたが飲んだ。残りの門を数えながら飲んだ。眷属たちは尋ねなかった。",
+    "남을 것들에게 주었다. 당신이 없을 때를 생각하며 주었다.":
+      "残る者たちに与えた。自分がいなくなった時のことを考えながら与えた。",
+    "그냥 났다. 식은 피로도 한 해는 간다.":
+      "ただしのいだ。冷めた血でも一年はもつ。",
+    "첫 사냥꾼": "最初の狩人",
+    "문 안에서 사람 하나가 잡혔다. 손님 옷을 입었지만 신발이 해결사의 것이었다. 7급. 정찰이다.\n{권속A:이|가} 그를 바닥에 눌러 놓고 당신을 보았다.": `門の内で人がひとり捕まった。客の服を着ていたが、靴はフィクサーのものだった。7級。偵察だ。
+{권속A}が彼を床に押さえつけ、あなたを見た。`,
+    "문 앞까지 배웅해 돌려보낸다": "門の前まで見送って帰す",
+    '신발을 돌려주고 문 앞까지 걸어 나갔다. "본 대로 적어라. 손님은 다치지 않는다고." 그는 뒤돌아보지 않고 갔다. 권속들은 놓아준 것을 아까워했다.':
+      "靴を返し、門の前まで一緒に歩いた。「見たとおりに書け。客は傷つけないと」彼は振り返らずに去った。眷属たちは逃がしたのを惜しんだ。",
+    "피를 마신다": "血を飲む",
+    "목덜미를 물었다. 해결사의 피는 손님 피와 달랐다. 뜨겁고 거칠었다. 사무소에서는 돌아오지 않은 7급의 이름을 명단에 올렸다.":
+      "首筋を噛んだ。フィクサーの血は客の血とは違った。熱く、荒かった。事務所は戻らなかった7級の名を名簿に載せた。",
+    "{권속A}에게 맡긴다": "{권속A}に任せる",
+    "{권속A}에게 넘겼다. {권속A:은|는} 그를 제 아래 둘과 나눠 마셨다. 다음 날 {권속A}의 눈이 당신을 오래 보았다.":
+      "{권속A}に引き渡した。{권속A}は彼を自分の下のふたりと分けて飲んだ。翌日、{권속A}の目が長いことあなたを見ていた。",
+    "모른 척 내버려 둔다": "知らぬふりで放っておく",
+    "손님인 척하게 두었다. 그는 폐장까지 {랜드:을|를} 다 돌고 나갔다. 담장 높이, 권속 수, 당신의 자리까지.":
+      "客のふりをさせておいた。彼は閉園まで{랜드}をくまなく回って出ていった。塀の高さ、眷属の数、あなたの居場所まで。",
+    "권속의 실수": "眷属の過ち",
+    "문이 닫힌 해에 {권속B1:이|가} 손님을 물었다. 손님은 살았다. 목에 자국이 남은 채 문 앞에서 울고 있었다.\n{권속B1:은|는} 입가를 닦지도 않고 서 있었다.": `門の閉じている年に、{권속B1}が客を噛んだ。客は生きていた。首に痕を残したまま門の前で泣いていた。
+{권속B1}は口元も拭わずに立っていた。`,
+    "{권속B1:을|를} 벌하고 손님에게 값을 치른다": "{권속B1}を罰し、客に償う",
+    "{권속B1:을|를} 한 달 동안 굶겼다. 손님에게는 돈과 약을 쥐여 보냈다. 손님은 다시 오지 않았지만, 나쁜 말도 하지 않았다.":
+      "{권속B1}をひと月飢えさせた。客には金と薬を持たせて帰した。客は二度と来なかったが、悪く言うこともなかった。",
+    "손님을 피주머니로 만들어 입을 막는다": "客を血袋にして口を封じる",
+    "손님을 끝까지 물었다. 눈이 흐려지고 말이 사라졌다. 피주머니 하나가 늘었다. 그의 가족이 몇 해 동안 문 앞을 서성였다.":
+      "客を最後まで噛んだ。目が曇り、言葉が消えた。血袋がひとつ増えた。その家族が何年も門の前をうろついた。",
+    "손님을 돌려보내고 {권속B1:을|를} 감싼다": "客を帰し、{권속B1}をかばう",
+    "손님을 그냥 보냈다. {권속B1}에게는 아무 말도 하지 않았다. 권속들은 안도했고, 손님은 밖에서 말을 퍼뜨렸다.":
+      "客をそのまま帰した。{권속B1}には何も言わなかった。眷属たちは安堵し、客は外で噂を広めた。",
+    "못 본 척한다": "見なかったことにする",
+    "아무것도 하지 않았다. 손님은 제 발로 나갔고 {권속B1:은|는} 제 자리로 돌아갔다. 둘 다 당신이 보고 있었다는 것을 알았다.":
+      "何もしなかった。客は自分の足で出ていき、{권속B1}は自分の持ち場に戻った。ふたりとも、あなたが見ていたことを知っていた。",
+    "피를 내겠다는 사람들": "血を差し出すという人々",
+    "문 앞에 사람 열몇이 모였다. {랜드:을|를} 좋아한다고 했다. 피를 조금씩 내겠다고, 그러니 아무도 물지 말아 달라고 했다.\n팔을 걷은 채 기다리고 있었다.": `門の前に十数人が集まった。{랜드}が好きだと言った。少しずつ血を出すから、誰も噛まないでほしいと。
+袖をまくって待っていた。`,
+    받는다: "受け取る",
+    "잔을 돌렸다. 사람들은 제 피를 보고 조금 웃었다. 식은 피였지만 그들은 매해 왔다. 권속들은 그 피를 싫어했다.":
+      "杯を回した。人々は自分の血を見て少し笑った。冷めた血だったが、彼らは毎年来た。眷属たちはその血を嫌った。",
+    거절한다: "断る",
+    '돌려보냈다. "피는 문이 열릴 때 받는다." 사람들은 섭섭해하며 갔다. 달라진 것은 없었다.':
+      "帰らせた。「血は門が開くときに受け取る」人々は残念そうに去った。何も変わらなかった。",
+    "받아서 권속과 나눈다": "受け取って眷属と分ける",
+    '받은 피를 권속들과 나눴다. {권속B:이|가} "사람 손으로 짜낸 피 맛"이라고 했다. 그래도 다 마셨다.':
+      "受け取った血を眷属たちと分けた。{권속B}が「人の手で搾った血の味」だと言った。それでも全部飲んだ。",
+    "모인 사람들을 다 마신다": "集まった者を皆飲む",
+    "팔을 걷은 채로 하나씩 물었다. 열몇이 그 자리에서 쓰러졌다. 당신은 몇 해 치 힘을 얻었다. 그 밤 이후 문 앞에 팔을 걷고 오는 사람은 없었다.":
+      "袖をまくったまま、ひとりずつ噛んだ。十数人がその場で倒れた。あなたは数年分の力を得た。その夜以来、袖をまくって門に来る者はいなかった。",
+    "아끼는 권속": "大切な眷属",
+    '{권속A1:이|가} 밤에 찾아왔다. 사람들 사이에서 살아 보고 싶다고 했다. 물지 않고, 피를 사서 마시며.\n"허락해 주십시오." 무릎을 꿇지는 않았다.': `{권속A1}が夜に訪ねてきた。人々の間で暮らしてみたいと言った。噛まずに、血を買って飲みながら。
+「お許しください」膝はつかなかった。`,
+    "보내 준다": "送り出す",
+    "문을 열어 주었다. {권속A1:은|는} 사람의 옷을 입고 나갔다. 가끔 손님으로 돌아왔다. 돈을 내고 들어와 당신을 멀리서 보고 갔다.":
+      "門を開けてやった。{권속A1}は人の服を着て出ていった。ときどき客として戻ってきた。金を払って入り、遠くからあなたを見て帰っていった。",
+    붙잡는다: "引き留める",
+    '"너는 내 피다." {권속A1:은|는} 고개를 숙이고 돌아갔다. 그 뒤로 문 밖을 보지 않았다. 보지 않으려고 애썼다.':
+      "「お前は私の血だ」{권속A1}は頭を下げて戻っていった。それからは門の外を見なかった。見ないように努めた。",
+    "몫을 늘려 묶는다": "取り分を増やして繋ぎとめる",
+    "그날 밤부터 {권속A1}의 잔을 남보다 먼저, 남보다 많이 채웠다. {권속A1:은|는} 마시고 잠들었다. 깨어났을 때 바깥 이야기는 하지 않았다. 더 강해져 있었다.":
+      "その夜から、{권속A1}の杯を誰より先に、誰より多く満たした。{권속A1}は飲んで眠った。目覚めても外の話はしなかった。前より強くなっていた。",
+    죽인다: "殺す",
+    "목을 비틀었다. 소리는 짧았다. 다른 권속들이 문틈으로 보고 있었다. 그날 밤부터 아무도 당신에게 먼저 말을 걸지 않았다.":
+      "首をひねった。音は短かった。他の眷属たちが扉の隙間から見ていた。その夜から、誰もあなたに先に話しかけなくなった。",
+    "가난한 해": "貧しい年",
+    "손님이 줄었다. 도시의 사정이었다. 남긴 피가 겨울을 나기에 모자랐다.\n이름 있는 여섯의 잔과, 그 아래 수십의 입. 피는 한 잔 반.": `客が減った。都市の事情だった。残された血では冬を越すのに足りなかった。
+名のある六人の杯と、その下の数十の口。血は一杯半。`,
+    "내가 굶는다": "自分が飢える",
+    "당신 잔을 비워 두었다. 권속들이 당신 잔을 보고 또 보았다. {권속B:이|가} 제 몫의 반을 당신 잔에 부었다. 마시지 않았다.":
+      "自分の杯を空のままにした。眷属たちは何度もあなたの杯を見た。{권속B}が自分の分の半分をあなたの杯に注いだ。飲まなかった。",
+    "권속이 굶는다": "眷属を飢えさせる",
+    "당신이 마셨다. 권속들은 빈 잔을 들고 서 있었다. 봄까지 그들의 눈이 당신을 따라다녔다.":
+      "あなたが飲んだ。眷属たちは空の杯を持って立っていた。春まで、彼らの目があなたを追い続けた。",
+    "손님에게서 더 거둔다": "客からもっと取る",
+    "들어온 손님마다 조금 더 물었다. 아무도 죽지 않았다. 몇은 어지러워하며 나갔고, 다음 해 오지 않았다.":
+      "入ってくる客ごとに少し深く噛んだ。誰も死ななかった。何人かはふらつきながら出ていき、翌年は来なかった。",
+    "권속끼리 다투게 둔다": "眷属同士で争わせる",
+    "잔을 놓고 자리를 떴다. 돌아왔을 때 잔은 비어 있었고 {권속B2}의 입가가 찢어져 있었다. 누가 마셨는지 묻지 않았다.":
+      "杯を置いて席を外した。戻ると杯は空で、{권속B2}の口元が裂けていた。誰が飲んだのかは聞かなかった。",
+    "글 쓰는 사람": "物書き",
+    "글 쓰는 사람이 찾아왔다. {랜드} 이야기를 적어 팔겠다고 했다. 무서운 쪽으로도, 아름다운 쪽으로도 쓸 수 있다고.\n공책을 펴 들고 당신을 기다렸다.": `物書きが訪ねてきた。{랜드}の話を書いて売りたいと言った。恐ろしくも、美しくも書けると。
+ノートを開いて、あなたを待っていた。`,
+    안내한다: "案内する",
+    "밤새 {랜드:을|를} 보여 주었다. 그는 아름다운 쪽으로 썼다. 다음 개장에 그 글을 들고 온 손님이 많았다. 권속들은 낯선 얼굴이 느는 것을 싫어했다.":
+      "一晩じゅう{랜드}を見せてやった。彼は美しく書いた。次の開園には、その文を手にした客が大勢来た。眷属たちは見知らぬ顔が増えるのを嫌った。",
+    "피주머니로 만들어 입을 막는다": "血袋にして口を封じる",
+    "공책을 덮게 했다. 그는 글을 쓰지 않았다. 쓰지 못했다. 그의 공책은 {랜드} 안 어딘가에 아직 있다.":
+      "ノートを閉じさせた。彼は書かなかった。書けなかった。そのノートは今も{랜드}のどこかにある。",
+    "권속이 안내한다": "眷属に案内させる",
+    "{권속B:이|가} 데리고 다녔다. 글은 반쯤 맞고 반쯤 틀렸다. 손님이 조금 늘었고 권속들은 {권속B:이|가} 바깥 사람과 말하는 것을 보았다.":
+      "{권속B}が連れて回った。文は半分当たっていて、半分間違っていた。客が少し増え、眷属たちは{권속B}が外の人間と話すのを見た。",
+    쫓아낸다: "追い出す",
+    "문 밖으로 밀어냈다. 그는 무서운 쪽으로 썼다. 틀린 데가 많았지만 사람들은 그것을 믿었다.":
+      "門の外へ押し出した。彼は恐ろしく書いた。間違いだらけだったが、人々はそれを信じた。",
+    "사무소의 제안": "事務所の提案",
+    '송곳니 사냥 사무소에서 사람이 왔다. 칼을 문 앞에 두고 들어왔다.\n"개장 때 손님 몫만 받고, 사냥꾼은 보내지 않겠습니다. 대신 해마다 피 한 몫을 저희에게." 사무소가 혈귀의 피로 무엇을 하는지는 말하지 않았다.': `牙狩事務所から人が来た。刀を門の前に置いて入ってきた。
+「開園の時は客の分だけ取ってください。狩人は送りません。その代わり、毎年血を一人分、我々に」事務所が血鬼の血で何をするのかは言わなかった。`,
+    받아들인다: "受け入れる",
+    '해마다 한 몫을 보냈다. 개장 때 사냥꾼이 줄었다. 권속들은 "사냥꾼에게 피를 바치는 혈귀"라는 말을 입 밖에 내지는 않았다.':
+      "毎年一人分を送った。開園の時の狩人が減った。眷属たちは「狩人に血を捧げる血鬼」という言葉を口には出さなかった。",
+    "심부름 온 사냥꾼을 마신다": "使いに来た狩人を飲む",
+    "문 앞의 칼을 집기 전에 물었다. 사무소의 피는 진했다. 사무소는 답을 들은 셈이 되었다. 다음 개장에 깃발을 들고 왔다.":
+      "門の前の刀を取る前に噛んだ。事務所の血は濃かった。事務所は答えを聞いたことになった。次の開園に、旗を掲げてやって来た。",
+    "{권속B}에게 협상을 맡긴다": "{권속B}に交渉を任せる",
+    "{권속B:이|가} 반 몫으로 깎았다. 사무소는 받았다. {권속B:은|는} 그날부터 바깥일을 제 일로 여겼다.":
+      "{권속B}が半分にまで値切った。事務所は受け入れた。{권속B}はその日から、外のことを自分の仕事と思うようになった。",
+    "답을 미룬다": "返事を先延ばしにする",
+    '"생각해 보겠다." 그는 돌아갔다. 사무소는 미룬 답을 거절로 적었다. 다음 개장에 사냥꾼이 배로 왔다.':
+      "「考えておく」彼は帰っていった。事務所は先延ばしの返事を拒絶と記した。次の開園には、狩人が倍来た。",
+    "피주머니의 가족": "血袋の家族",
+    "문 앞에 여자 하나가 앉아 있었다. 몇 해째였다. 안에 있는 피주머니 하나가 그의 남편이었다.\n오늘은 문을 두드렸다. 얼굴만 보게 해 달라고.": `門の前に女がひとり座っていた。もう何年にもなる。中にいる血袋のひとつが彼女の夫だった。
+今日は門を叩いた。顔だけでも見せてほしいと。`,
+    "값을 치른다": "償いをする",
+    "남편은 보여 주지 않았다. 대신 돈과, 그가 더는 돌아오지 않는다는 말을 주었다. 그는 울고 갔다. 다시 오지 않았다.":
+      "夫は見せなかった。代わりに金と、彼はもう戻らないという言葉を渡した。彼女は泣いて去った。二度と来なかった。",
+    "가족도 피주머니로": "家族も血袋に",
+    "문을 열어 주었다. 남편 옆에 세웠다. 둘은 서로를 보지 않았다. 볼 수 없었다.":
+      "門を開けてやった。夫の隣に立たせた。ふたりは互いを見なかった。見ることができなかった。",
+    "권속을 시켜 돌려보낸다": "眷属に送り帰させる",
+    '{권속B1:이|가} 그를 길 끝까지 데려다주었다. 돌아온 {권속B1:이|가} "다시 올 겁니다"라고 했다. 왔다. 그러나 문은 두드리지 않았다.':
+      "{권속B1}が彼女を道の果てまで送っていった。戻った{권속B1}が「また来ますよ」と言った。来た。だが門は叩かなかった。",
+    "문을 열지 않았다. 그는 문 앞에서 겨울을 났다. 봄에 없었다. 문 앞을 지나는 사람들이 그 자리를 보고 갔다.":
+      "門を開けなかった。彼女は門の前で冬を越した。春にはいなかった。門の前を通る人々が、その場所を見ていった。",
+    "두 권속의 다툼": "ふたりの眷属の争い",
+    '{권속A:과|와} {권속B:이|가} 당신 앞에 나란히 섰다. 나란히 서지는 않았다.\n{권속A}: "사람을 더 들여야 합니다. 그래야 오래 갑니다." {권속B}: "사람을 더 마셔야 합니다. 그래야 다음 문을 넘습니다."': `{권속A}と{권속B}があなたの前に並んで立った。並んではいたが、肩を並べてはいなかった。
+{권속A}「もっと人を入れるべきです。そうすれば長く続きます」{권속B}「もっと人を飲むべきです。そうすれば次の門を越えられます」`,
+    "{권속A} 편을 든다": "{권속A}の側につく",
+    '"사람 쪽이다." {권속B:은|는} 고개를 숙였다. 그날 밤 {권속B}의 아래 둘이 {권속B:을|를} 둘러싸고 오래 서 있었다.':
+      "「人の方だ」{권속B}は頭を下げた。その夜、{권속B}の下のふたりが{권속B}を囲んで長いこと立っていた。",
+    "{권속B} 편을 든다": "{권속B}の側につく",
+    '"힘 쪽이다." {권속A:은|는} 알겠다고 했다. 그 뒤로 {권속A:은|는} 손님에게 인사하지 않았다.':
+      "「力の方だ」{권속A}は分かりましたと言った。それから{권속A}は客に挨拶しなくなった。",
+    "둘에게 피를 나눠 달랜다": "ふたりに血を分けてなだめる",
+    "당신 몫의 피를 둘에게 한 잔씩 주었다. 둘은 마시고 입을 다물었다. 다툼은 피 밑으로 가라앉았다. 없어지지는 않았다.":
+      "自分の分の血を、ふたりに一杯ずつ与えた。ふたりは飲んで口をつぐんだ。争いは血の底に沈んだ。消えはしなかった。",
+    "둘 다 벌한다": "ふたりとも罰する",
+    "둘 다 한 달을 굶겼다. 아래 넷이 제 윗사람 대신 잔을 들고 당신에게 왔다. 당신은 받지 않았다. 넷은 그것을 기억했다.":
+      "ふたりともひと月飢えさせた。下の四人が自分の親の代わりに杯を持ってあなたのもとに来た。あなたは受け取らなかった。四人はそれを覚えていた。",
+    "물이 찼다": "水が満ちた",
+    "큰비가 왔다. {랜드} 바닥에 물이 무릎까지 찼다. 권속들은 담장과 기구 위로 올라가 내려오지 않았다. 혈귀는 물을 무서워한다.\n문을 열 날이 멀지 않았다. 누군가는 물을 퍼내야 했다.": `大雨が降った。{랜드}の地面に膝まで水が溜まった。眷属たちは塀や遊具の上に登って下りてこなかった。血鬼は水を恐れる。
+門を開ける日は遠くない。誰かが水を汲み出さねばならなかった。`,
+    "사람을 불러 퍼내게 한다": "人を呼んで汲み出させる",
+    "품삯을 걸고 바깥 사람들을 불렀다. 그들은 물속에서 하루 종일 일했고, 담장 위의 눈들을 올려다보며 웃었다. {랜드:은|는} 사람 손으로 말랐다.":
+      "日当を出して外の人々を呼んだ。彼らは一日じゅう水の中で働き、塀の上の目を見上げて笑った。{랜드}は人の手で乾いた。",
+    "당신이 직접 들어가 퍼낸다": "自ら入って汲み出す",
+    "장로는 물을 견딘다. 당신 혼자 물속에서 사흘을 퍼냈다. 권속들이 담장 위에서 그것을 보았다. 내려오지는 못했지만, 보았다.":
+      "長老は水に耐える。あなたはひとりで三日、水の中で汲み出した。眷属たちは塀の上からそれを見ていた。下りては来られなかったが、見ていた。",
+    "권속을 떠밀어 들어가게 한다": "眷属を突き落として入らせる",
+    "{권속B:을|를} 물속으로 밀어 넣었다. {권속B:은|는} 떨면서 퍼냈다. 다 퍼낸 뒤에도 한동안 떨었다. 그래도 그 뒤로 {권속B:은|는} 물을 조금 덜 무서워했다.":
+      "{권속B}を水の中へ突き入れた。{권속B}は震えながら汲み出した。汲み終えた後もしばらく震えていた。それでも、それから{권속B}は水を少しだけ怖がらなくなった。",
+    "물이 빠질 때까지 둔다": "水が引くまで待つ",
+    "아무것도 하지 않았다. 물은 한 달을 갔다. 그해 문 앞에 온 손님들은 진흙과 썩은 냄새를 보고 돌아갔다.":
+      "何もしなかった。水はひと月引かなかった。その年門に来た客たちは、泥と腐った匂いに引き返していった。",
+    "혈귀가 되고 싶다는 손님": "血鬼になりたいという客",
+    '오래 다닌 손님 하나가 폐장 뒤에 남았다. 늙어 가고 있었다. "저를 물어 주십시오. 여기 남게."\n권속들이 둘러서서 당신을 보았다.': `長く通った客がひとり、閉園の後に残った。年老いてきていた。「私を噛んでください。ここに残れるように」
+眷属たちが取り囲んで、あなたを見た。`,
+    돌려보낸다: "帰らせる",
+    '"사람으로 늙어라." 그는 울었다. 다음 개장에 지팡이를 짚고 왔다. 그다음엔 오지 않았다. 그의 가족이 대신 왔다.':
+      "「人として老いろ」彼は泣いた。次の開園には杖をついてやって来た。その次は来なかった。代わりに家族が来た。",
+    "거절하고 잊는다": "断って忘れる",
+    "거절했다. 그는 더 조르지 않았다. 몇 해 뒤 바깥에서 죽었다는 말을 들었다. 당신은 얼굴을 떠올리지 못했다.":
+      "断った。彼はそれ以上せがまなかった。数年後、外で死んだと聞いた。あなたは顔を思い出せなかった。",
+    "가문에 들인다": "家門に迎え入れる",
+    "당신은 더 만들 수 없다. {권속B:이|가} 아랫것 하나를 불러 물게 했다. 그는 사흘 뒤 깨어났다. 사람의 이름을 버리고 가문의 맨 아래로 들어갔다. 당신은 그의 새 이름을 듣지 못했다.":
+      "あなたにはもう作れない。{권속B}が下の者をひとり呼んで噛ませた。彼は三日後に目覚めた。人の名を捨て、家門のいちばん下に入った。あなたは彼の新しい名を聞かなかった。",
+    마신다: "飲む",
+    "물고, 깨우지 않았다. 늙은 피는 묽었다. 권속들은 당신이 손님을 마시는 것을 처음 보았다. 손님들이 보지 않은 것은 다행이었다.":
+      "噛んで、目覚めさせなかった。老いた血は薄かった。眷属たちはあなたが客を飲むのを初めて見た。客たちが見ていなかったのは幸いだった。",
+    "오래된 피주머니": "古い血袋",
+    "처음 만든 피주머니가 쓰러졌다. 오래 버텼다. 눈을 뜬 채였고, 아무것도 보지 않았다.\n안에 남은 피가 반 잔쯤 되었다.": `最初に作った血袋が倒れた。長くもった。目は開いたままで、何も見ていなかった。
+中に残った血は半杯ほどだった。`,
+    "묻어 준다": "埋めてやる",
+    "담장 아래 묻었다. 남은 피는 땅에 주었다. 권속들은 아깝다는 얼굴을 숨기지 않았다. 당신은 그 자리에 돌 하나를 놓았다.":
+      "塀の下に埋めた。残った血は土に与えた。眷属たちは惜しそうな顔を隠さなかった。あなたはその場所に石をひとつ置いた。",
+    "권속에게 나눈다": "眷属に分ける",
+    "남은 피를 권속들에게 주었다. 오래된 피주머니의 피는 맛이 없었다. 다 마셨다. 빈 몸은 담장 밖에 두었다.":
+      "残った血を眷属たちに与えた。古い血袋の血は味がなかった。全部飲んだ。空の体は塀の外に置いた。",
+    "새 피주머니를 만든다": "新しい血袋を作る",
+    "그 자리에 손님 하나를 새로 세웠다. {랜드}에서 돌아오지 않은 사람이 하나 늘었다. 밖에서 이름이 돌았다.":
+      "その場所に客をひとり新しく立たせた。{랜드}から戻らなかった人がひとり増えた。外で名前が囁かれた。",
+    "버려 둔다": "放っておく",
+    "그대로 두었다. 며칠 동안 거기 있었다. 권속들이 그 앞을 지날 때마다 걸음이 느려졌다. 손님 하나가 보고 비명을 질렀다.":
+      "そのままにしておいた。何日もそこにあった。眷属たちはその前を通るたび歩みが遅くなった。客のひとりがそれを見て悲鳴を上げた。",
+    "도시의 기록": "都市の記録",
+    '기록 부서 사람이 왔다. 날개의 사람은 아니었다. 그냥 적는 사람이었다. {랜드:이|가} 언제 생겼고 무엇이 있는지.\n"적어 두면 오래 갑니다. 적어 두면 찾기도 쉽고요."': `記録部署の人間が来た。翼の者ではなかった。ただ書き留める人間だった。{랜드}がいつできて、何があるのか。
+「書いておけば長く残ります。書いておけば、探すのも簡単になりますしね」`,
+    "보여 주었다. 그는 적었다. {랜드:은|는} 도시의 기록에 들어갔다. 찾아오는 사람이 늘었고, 찾는 사람도 늘었다.":
+      "見せてやった。彼は書き留めた。{랜드}は都市の記録に入った。訪ねてくる人が増え、探す人も増えた。",
+    "피주머니로 만들고 기록을 태운다": "血袋にして記録を燃やす",
+    '그는 빈손으로도 돌아가지 못했다. 공책은 태웠다. 기록에는 "뒷골목, 놀이공원 흔적"이라고만 남았다.':
+      "彼は手ぶらで帰ることすらできなかった。ノートは燃やした。記録には「裏路地、遊園地の痕跡」とだけ残った。",
+    "{권속A:이|가} 안내했다. 권속의 수는 틀리게 적혔다. 당신의 나이도.":
+      "{권속A}が案内した。眷属の数は間違って記された。あなたの歳も。",
+    '문을 닫았다. 그는 밖에서 적었다. 틀린 것이 많았고, 가장 틀린 것은 "위험하다"였다.':
+      "門を閉めた。彼は外で書いた。間違いが多く、いちばんの間違いは「危険だ」だった。",
+    "오래된 손님의 마지막": "古い客の最期",
+    '수십 해를 다닌 손님이 문 앞에 왔다. 늙었고, 오래 못 갈 것 같았다. 혈귀가 되고 싶다고는 하지 않았다.\n"여기서 마지막 밤을 보내고 싶습니다. 물지는 말아 주십시오."': `何十年も通った客が門の前に来た。老いていて、もう長くはなさそうだった。血鬼になりたいとは言わなかった。
+「最後の夜をここで過ごしたいのです。噛まないでください」`,
+    "들여서 곁을 지킨다": "迎え入れてそばにいる",
+    "가장 좋은 자리에 눕혔다. 음악을 틀었다. 새벽에 그는 숨이 멎었다. 당신이 눈을 감겨 주었다. 그의 가족이 다음 문에 왔다.":
+      "いちばん良い場所に寝かせた。音楽を流した。明け方、彼の息は止まった。あなたが目を閉じてやった。次の門に、その家族が来た。",
+    "마지막 밤이라는 말을 들어주었다. 그 뒤는 들어주지 않았다. 늙은 피였다. 권속들은 당신을 보지 않았다.":
+      "最後の夜だという願いは聞いてやった。その先は聞かなかった。老いた血だった。眷属たちはあなたを見なかった。",
+    "권속이 곁을 지킨다": "眷属にそばにいさせる",
+    "{권속B:이|가} 그의 곁에 앉아 밤을 샜다. 그는 {권속B}의 손을 잡고 갔다. {권속B:은|는} 그 손을 오래 놓지 않았다.":
+      "{권속B}が彼のそばに座って夜を明かした。彼は{권속B}の手を握って逝った。{권속B}はその手を長いこと離さなかった。",
+    '"여기는 죽는 곳이 아니다." 그는 문 앞에서 돌아섰다. 길에서 쓰러졌다는 말이 들렸다. 그 말을 손님들이 했다.':
+      "「ここは死ぬ場所ではない」彼は門の前で引き返した。道で倒れたと聞こえてきた。それを話したのは客たちだった。",
+    "늙지 않는 장로": "老いない長老",
+    '{권속A:이|가} 당신 곁에 앉았다. 오래 말이 없다가 물었다.\n"언제까지 문을 여실 겁니까." 당신이 늙지 않는다는 것을 둘 다 알고 있었다.': `{권속A}があなたのそばに座った。長く黙っていたが、やがて尋ねた。
+「いつまで門を開けるおつもりですか」あなたが老いないことを、ふたりとも知っていた。`,
+    "다음 문이 마지막이라 답한다": "終わりは近いと答える",
+    '"몇 번 더." 숫자를 말했다. {권속A:은|는} 그 숫자를 받아 적듯 고개를 끄덕였다. 권속들 사이에 그 숫자가 돌았다. 그들은 끝을 준비했다.':
+      "「あと何度か」数を口にした。{권속A}はそれを書き留めるように頷いた。眷属たちの間にその数が広まった。彼らは終わりに備えた。",
+    "끝까지 연다고 답한다": "最後まで開けると答える",
+    '"문이 있는 한." {권속A:은|는} 더 묻지 않았다. 그날 밤부터 {권속A:은|는} 당신의 잔을 당신보다 먼저 채웠다.':
+      "「門がある限り」{권속A}はそれ以上尋ねなかった。その夜から、{권속A}はあなたより先にあなたの杯を満たした。",
+    "몫을 늘려 준다": "取り分を増やしてやる",
+    "답 대신 당신 몫의 잔을 주었다. {권속A:은|는} 마셨다. 묻지 않게 되었다.":
+      "答えの代わりに自分の分の杯を与えた。{권속A}は飲んだ。尋ねなくなった。",
+    "입을 막는다": "口を封じる",
+    '"묻지 마라." {권속A:은|는} 입을 다물었다. 다른 권속들도 다물었다. {랜드:이|가} 조용해졌다. 좋은 조용함은 아니었다.':
+      "「聞くな」{권속A}は口をつぐんだ。他の眷属たちもつぐんだ。{랜드}が静かになった。良い静けさではなかった。",
+    "이름 난 사냥꾼": "名の知れた狩人",
+    '문이 닫힌 해, 혼자 온 사람이 문을 두드렸다. 칼은 등에, 손은 비어 있었다. 2급 해결사. 이름을 아는 사람이 많은 쪽이었다.\n"싸우러 온 게 아닙니다. 아직은."': `門の閉じている年、ひとりで来た者が門を叩いた。刀は背に、手は空だった。2級フィクサー。名を知る者の多い方だった。
+「戦いに来たのではありません。まだ」`,
+    "손님으로 맞는다": "客として迎える",
+    '밤새 {랜드:을|를} 보여 주었다. 그는 아무것도 베지 않았다. 떠나며 "다음 문에는 제가 사람들을 데려오겠습니다"라고 했다. 손님 쪽으로.':
+      "一晩じゅう{랜드}を見せてやった。彼は何も斬らなかった。去り際に「次の門には、私が人を連れてきます」と言った。客として。",
+    "싸워 피를 마신다": "戦って血を飲む",
+    "문 안에서 싸웠다. 그는 셋을 베고 당신에게 베였다. 2급의 피는 당신이 마셔 본 것 중 가장 뜨거웠다. 그의 이름이 명단에서 지워졌고, 사무소는 그 이름을 기억했다.":
+      "門の内で戦った。彼は三人を斬り、あなたに斬られた。2級の血は、あなたが飲んだ中でいちばん熱かった。彼の名は名簿から消され、事務所はその名を覚えていた。",
+    "권속들이 맞선다": "眷属たちに立ち向かわせる",
+    "권속들이 둘러쌌다. 이름 있는 여섯과 이름 없는 수십. 그는 둘을 베고 {권속B2}의 팔을 꺾고 담장을 넘어 갔다. 권속들은 다친 채로 서로를 보았다. 이긴 것은 아니었다. 진 것도 아니었다.":
+      "眷属たちが取り囲んだ。名のある六人と名もない数十。彼はふたりを斬り、{권속B2}の腕をへし折って塀を越えていった。眷属たちは傷ついたまま互いを見た。勝ったわけではなかった。負けたわけでもなかった。",
+    "문을 잠근다": "門に鍵をかける",
+    "열지 않았다. 그는 문 앞에 하룻밤 앉았다가 갔다. 다음 문에 그는 사냥꾼들 맨 앞에 서 있었다.":
+      "開けなかった。彼は門の前に一晩座って去った。次の門で、彼は狩人たちの先頭に立っていた。",
+    "마지막 문 앞": "最後の門の前",
+    "마지막 개장까지 세 해. 권속들이 모여 당신의 뜻을 물었다. 마지막 문을 어떻게 열지.\n이름 있는 권속이 몇 남았는지 당신은 세지 않아도 알았다. 이름 없는 것들은 세지 않았다.": `最後の開園まで三年。眷属たちが集まり、あなたの意向を尋ねた。最後の門をどう開けるのか。
+名のある眷属が何人残っているか、数えなくてもわかった。名のない者たちは数えなかった。`,
+    "사람들과 함께 연다": "人々と共に開ける",
+    '"손님을 다 들인다. 끝까지." 권속들은 등을 닦고 기구에 기름을 쳤다. 사람의 일처럼.':
+      "「客を皆入れる。最後まで」眷属たちは灯りを磨き、遊具に油を差した。人の仕事のように。",
+    "조용히 연다": "静かに開ける",
+    '"알리지 않는다. 오는 사람만." 권속들은 고개를 끄덕였다. 마지막 밤이 조용할 것 같았다.':
+      "「知らせはしない。来る者だけだ」眷属たちは頷いた。最後の夜は静かになりそうだった。",
+    "권속과 함께 연다": "眷属と共に開ける",
+    '"너희 이름으로 연다." 권속들의 피를 문 위 이름 아래 발랐다. 그들은 그것을 오래 보았다.':
+      "「お前たちの名で開ける」眷属たちの血を、門の上の名の下に塗った。彼らはそれを長いこと見ていた。",
+    "혼자 연다": "ひとりで開ける",
+    '"내가 연다. 너희는 안에 있어라." 권속들은 물러났다. 마지막 밤 문 앞에는 당신 혼자였다. 그것을 사람들이 보았다.':
+      "「私が開ける。お前たちは中にいろ」眷属たちは退いた。最後の夜、門の前にはあなたひとりだった。それを人々が見ていた。",
+    "피를 어디에": "血をどこに",
+    "문이 열리는 밤": "門が開く夜",
+    "아랫것의 부탁": "下の者の頼み",
+    "가문에서 사람이 왔다. 내년에 열 달, 어버이의 일로 자리를 비워야 한다. 담장은 권속들이 지킨다. 버티려면 권속의 힘 24. 지금 {권속힘}.":
+      "家門から人が来た。来年、親の用で十か月留守にしなければならない。塀は眷属たちが守る。持ちこたえるには眷属の力24。今は{권속힘}。",
+    "열 달. 당신은 문을 권속들에게 맡기고 {랜드:을|를} 나섰다. 가문의 일은 길었고, 말할 것이 없다.\n권속의 힘 {권속힘} · 버티는 데 필요한 힘 24.": `十か月。あなたは門を眷属たちに任せ、{랜드}を出た。家門の用は長く、語ることは何もない。
+眷属の力 {권속힘}・持ちこたえるのに必要な力 24。`,
+    "돌아왔을 때 담장은 그대로였다. 사냥꾼이 두 번 왔다고 했다. 두 번 다 담장을 넘지 못했다. {권속A:이|가} 열쇠를 돌려주었다. 손이 조금 떨렸다.":
+      "戻ったとき、塀はそのままだった。狩人が二度来たという。二度とも塀を越えられなかった。{권속A}が鍵を返した。手が少し震えていた。",
+    "돌아왔을 때 문 위의 이름이 없었다. 담장은 반쯤 무너졌고, 안에는 아무도 없었다. 이름 있는 것도, 없는 것도. 당신이 없는 열 달이면 충분했다. 당신은 빈 {랜드} 한가운데 서서 끝났다.":
+      "戻ったとき、門の上の名がなかった。塀は半ば崩れ、中には誰もいなかった。名のある者も、ない者も。あなたのいない十か月で十分だった。あなたは空っぽの{랜드}の真ん中に立ったまま終わった。",
+    "내년엔 바깥에 다녀와야 한다. 혼자. {랜드}의 힘이 권속에게만 있다는 소문이 돌면, 사냥꾼은 담장이 아니라 장로를 노린다. 장로의 힘 {장로힘} · 권속의 힘 {권속힘} — 권속이 장로의 두 배를 넘으면 위험하다.":
+      "来年は外へ出向かねばならない。ひとりで。{랜드}の力は眷属にしかないという噂が広まれば、狩人は塀ではなく長老を狙う。長老の力 {장로힘}・眷属の力 {권속힘} — 眷属が長老の二倍を超えると危ない。",
+    "당신 혼자 {랜드:을|를} 나섰다. 가야 할 곳이 있었다. 권속은 데려가지 않았다. 담장을 비울 수 없어서였다.\n장로의 힘 {장로힘} · 권속의 힘 {권속힘}.": `あなたはひとりで{랜드}を出た。行かねばならない所があった。眷属は連れていかなかった。塀を空けるわけにはいかなかったからだ。
+長老の力 {장로힘}・眷属の力 {권속힘}。`,
+    "골목에서 사냥꾼 셋이 기다리고 있었다. 당신이 약하다는 소문을 들은 얼굴들이었다. 소문은 틀렸다. 당신은 셋의 피를 마시고 돌아왔다. 권속들은 문 앞에 나와 있었다.":
+      "路地で狩人が三人待っていた。あなたが弱いという噂を聞いた顔だった。噂は間違っていた。あなたは三人の血を飲んで戻った。眷属たちは門の前に出て待っていた。",
+    "골목에서 사냥꾼들이 기다리고 있었다. {랜드}의 힘은 담장 안에 있고, 장로는 혼자이며 약하다는 소문이 맞았다. 칼이 몇 자루였는지 세지 못했다. 당신은 {랜드}에서 열 골목 떨어진 곳에서 끝났다. 권속들은 그 밤 당신이 돌아오지 않는 것을 담장 위에서 기다렸다.":
+      "路地で狩人たちが待っていた。{랜드}の力は塀の内にあり、長老はひとりで弱いという噂は正しかった。刃が何本あったのか数えられなかった。あなたは{랜드}から十本離れた路地で終わった。眷属たちはその夜、戻らないあなたを塀の上で待っていた。",
+    "{오른권속:이|가} {죽은권속}의 자리에 올랐다. 묻지 않아도 그렇게 된다. 아랫것 하나가 {오른권속}의 자리를 채웠다. 이름은 묻지 않았다.":
+      "{오른권속}が{죽은권속}の座に上がった。問わずともそうなる。下の者がひとり{오른권속}の座を埋めた。名は聞かなかった。",
+    "이름 모를 권속 하나가 {죽은권속}의 자리에 올랐다. 묻지 않아도 그렇게 된다. 이름은 묻지 않았다.":
+      "名も知らぬ眷属がひとり、{죽은권속}の座に上がった。問わずともそうなる。名は聞かなかった。",
+    "아랫것 하나가 {죽은권속}의 자리를 차지했다. 이름은 묻지 않았다.":
+      "下の者がひとり、{죽은권속}の座に収まった。名は聞かなかった。",
+    "{랜드}의 문이 열렸다. 문턱 {문턱} · 몰려온 힘 {몰려온힘} · {랜드}의 힘 {랜드힘}.":
+      "{랜드}の門が開いた。敷居 {문턱}・押し寄せた力 {몰려온힘}・{랜드}の力 {랜드힘}。",
+    "해 지기 전부터 줄이 섰다. 사냥꾼은 없었다. 있었어도 손님 틈에서 칼을 꺼내지 않았다.":
+      "日が沈む前から列ができた。狩人はいなかった。いたとしても、客の間で刀を抜きはしなかった。",
+    "폐장까지 아무도 물리지 않았다. 음악이 끝나자 사람들은 손을 흔들며 나갔다.":
+      "閉園まで誰も噛まれなかった。音楽が終わると、人々は手を振って出ていった。",
+    "손님이 많았다. 그 사이에 신발이 다른 사람이 몇 있었다. 권속들이 문 양쪽에 섰다.":
+      "客は多かった。その中に、靴の違う者が何人かいた。眷属たちが門の両側に立った。",
+    "자정 무렵 담장 뒤에서 짧은 싸움이 있었다. 손님들은 음악 때문에 듣지 못했다. 몇 명은 들었다.":
+      "真夜中ごろ、塀の裏で短い争いがあった。客たちは音楽のせいで聞こえなかった。何人かは聞いた。",
+    "손님보다 칼이 많았다. 송곳니 사냥 사무소의 깃발이 문 앞에 꽂혔다.":
+      "客より刀の方が多かった。牙狩事務所の旗が門の前に立てられた。",
+    "문을 연 것을 후회할 틈은 없었다. 권속들이 담장을 따라 흩어졌고, 밤새 비명이 음악을 덮었다.":
+      "門を開けたことを悔やむ暇はなかった。眷属たちが塀に沿って散らばり、一晩じゅう悲鳴が音楽をかき消した。",
+    "그 틈에 2급 하나가 섞여 있었다. 혼자였고, 혼자로 충분했다.":
+      "その中に2級がひとり混じっていた。ひとりで、ひとりで十分だった。",
+    "1급 하나가 왔다. 사무소 깃발 없이. 이름만으로 손님 몇이 돌아갔다.":
+      "1級がひとり来た。事務所の旗もなく。その名だけで、客が何人か引き返した。",
+    "특색이 왔다. 문 앞에 서서 한참 {랜드:을|를} 보기만 했다. 그러고는 들어왔다.":
+      "特色が来た。門の前に立ち、しばらく{랜드}を眺めているだけだった。それから入ってきた。",
+    "{랜드}의 힘이 모자랐다.\n담장이 먼저 무너졌다. 권속들이 하나씩 쓰러졌다. {이끄는권속:이|가} 당신 앞을 막았고, 막은 채로 베였다.\n새벽에 문 위의 이름이 내려졌다. 당신은 그것을 보며 끝났다.": `{랜드}の力が足りなかった。
+塀が先に崩れた。眷属たちがひとりずつ倒れた。{이끄는권속}があなたの前に立ちはだかり、立ちはだかったまま斬られた。
+明け方、門の上の名が下ろされた。あなたはそれを見ながら終わった。`,
+    "막아 냈다. 겨우.\n담장 아래에 {죽은권속:이|가} 누워 있었다. 목을 물린 쪽은 사냥꾼이었다. {죽은권속:은|는} 끝까지 그를 놓지 않았다.\n당신은 {죽은권속}의 이름을 한 번 불렀다. 대답은 없었다.": `防ぎ切った。かろうじて。
+塀の下に{죽은권속}が横たわっていた。首を噛まれていたのは狩人の方だった。{죽은권속}は最後まで彼を離さなかった。
+あなたは{죽은권속}の名を一度呼んだ。返事はなかった。`,
+    "막아 냈다. 겨우.\n담장 아래에 이름 모를 권속 하나가 누워 있었다. 목을 물린 쪽은 사냥꾼이었다. 끝까지 그를 놓지 않았다.\n당신은 그 아이의 이름을 몰랐다.": `防ぎ切った。かろうじて。
+塀の下に名も知らぬ眷属がひとり横たわっていた。首を噛まれていたのは狩人の方だった。最後まで彼を離さなかった。
+あなたはその子の名を知らなかった。`,
+    "사냥꾼들은 당신을 노리지 않았다. 권속을 노렸다. 지난 문에서 사람을 먹은 {랜드}의 권속을.\n{죽은권속:이|가} 담장 밖으로 끌려 나갔다. 돌아오지 않았다.": `狩人たちはあなたを狙わなかった。眷属を狙った。前の門で人を喰った{랜드}の眷属を。
+{죽은권속}が塀の外へ引きずり出された。戻らなかった。`,
+    "사냥꾼들은 당신을 노리지 않았다. 권속을 노렸다. 지난 문에서 사람을 먹은 {랜드}의 권속을.\n이름 모를 권속 하나가 담장 밖으로 끌려 나갔다. 돌아오지 않았다.": `狩人たちはあなたを狙わなかった。眷属を狙った。前の門で人を喰った{랜드}の眷属を。
+名も知らぬ眷属がひとり、塀の外へ引きずり出された。戻らなかった。`,
+    "문 안에 아직 사람들이 있다. 폐장 음악 전이다.":
+      "門の内にはまだ人々がいる。閉園の音楽の前だ。",
+    "들어온 사람을 먹는다": "入ってきた者を喰らう",
+    "먹지 않는다": "喰らわない",
+    "문을 안에서 잠갔다. 음악을 더 크게 틀었다. 그날 밤 들어온 사람들은 나가지 않았다. 피주머니가 줄지어 섰다. 바깥에서 돌아오지 않은 이름들이 벽에 붙었다.":
+      "門を内から閉ざした。音楽をさらに大きくした。その夜入ってきた人々は出ていかなかった。血袋が列をなして立った。外では、戻らなかった者たちの名が壁に貼られた。",
+    "손님이 적어 사냥꾼을 먹었다. 해결사의 피였다. 권속들의 눈이 아침까지 붉었다. 사무소는 명단을 길게 적었다.":
+      "客が少なかったので狩人を喰った。フィクサーの血だった。眷属たちの目は朝まで赤かった。事務所は長い名簿を書いた。",
+    "폐장 음악을 틀었다. 사람들이 나갔다. 몇은 다음에 또 오겠다고 했다.":
+      "閉園の音楽を流した。人々が出ていった。何人かはまた来ると言った。",
+    "살아남은 사냥꾼들을 문 밖으로 내보냈다. 그들은 뒤돌아보며 갔다. 손님 몇이 그것을 보았다.":
+      "生き残った狩人たちを門の外へ出した。彼らは振り返りながら去っていった。客の何人かがそれを見ていた。",
+    "문 앞에 꽃이 몇 송이 놓여 있었다. 누가 둔 것인지는 몰랐다.":
+      "門の前に花が何輪か置かれていた。誰が置いたのかはわからなかった。",
+    "분노가 타오르는 눈이 되었다.": "怒りが燃える目になった。",
+    "분노가 끓었다. 몸이 따라 주지 않았다. 당신은 문을 닫았다.":
+      "怒りが煮えたぎった。体がついてこなかった。あなたは門を閉めた。",
+    '개장이 끝난 밤, 이름 모를 권속 하나가 당신 앞에 무릎을 꿇었다. 손에 든 것을 내밀었다. 오래된 것이었다. 어디서 났는지는 말하지 않았다.\n"어버이께 드리는 것입니다. 받아 주십시오. 부디."\n아랫세대는 윗세대를 거스르지 못한다. 핏속에 새겨진 것이다. 그것을 깨는 것은 굶주림, 그리고 그런 것들.': `開園が終わった夜、名も知らぬ眷属がひとり、あなたの前に膝をついた。手にしたものを差し出した。古いものだった。どこで手に入れたのかは言わなかった。
+「親に捧げるものです。お受け取りください。どうか」
+下の世代は上の世代に逆らえない。血に刻まれたものだ。それを破るのは飢え、そしてこういうものだ。`,
+    "받았다. 손에 쥐자 차가웠다. 권속은 고개를 숙이고 물러갔다. 돌아서는 어깨가 떨리고 있었다.":
+      "受け取った。握ると冷たかった。眷属は頭を下げて退いた。背を向けた肩が震えていた。",
+    '"필요 없다." 권속은 물러가지 않았다. 무릎을 꿇은 채 밤새 거기 있었다. 새벽에 당신은 결국 받았다. 손에 쥐자 차가웠다.':
+      "「要らん」眷属は退かなかった。膝をついたまま一晩じゅうそこにいた。明け方、あなたは結局受け取った。握ると冷たかった。",
+    "올해도 피는 장로의 잔에 먼저 채워졌다. 권속들은 빈 잔 바닥을 핥았다.\n그날 밤, 방 밖의 불이 하나씩 꺼졌다. 문틈으로 비린 피 냄새가 스며들었다.\n어둠 속에서 눈이 하나둘 떠졌다. 둘은 당신이, 넷은 그 둘이 피를 나눠 준 눈이었다. 그 뒤로 이름 없는 눈이 수십. {이끄는권속:이|가} 맨 앞이었다.\n눈마다 붉은 것이 흘러내렸다. 굶주린 혈귀가 흘리는 피눈물이었다.\n손에 쥔 것이 뜨거워졌다. 핏속에 새겨진 것이 풀리는 소리를 당신은 들었다. 그들도 들었다.\n가장 먼저 덤벼든 권속의 이빨이 당신의 목덜미에 박혔다.": `今年も血は長老の杯に先に注がれた。眷属たちは空の杯の底を舐めた。
+その夜、部屋の外の灯りがひとつずつ消えた。扉の隙間から生臭い血の匂いが染み込んできた。
+闇の中で目がひとつ、ふたつと開いた。ふたつはあなたが、四つはそのふたりが血を分けた目だった。その後ろに名もない目が数十。{이끄는권속}が先頭だった。
+どの目からも赤いものが流れ落ちていた。飢えた血鬼の流す血の涙だった。
+手に握ったものが熱くなった。血に刻まれたものがほどける音を、あなたは聞いた。彼らも聞いた。
+真っ先に飛びかかった眷属の牙が、あなたの首筋に突き立った。`,
+    "당신은 그 권속의 목을 비틀어 벽에 내던졌다. 그다음, 또 그다음. 새벽까지 비명이 그치지 않았다.\n해가 떴을 때 바닥은 온통 끈적했다. 서 있는 것은 당신 하나뿐이었다.\n{이끄는권속:은|는} 마지막이었다. 눈을 뜬 채였다. 당신은 그 눈을 감겨 주지 않았다.": `あなたはその眷属の首をひねり、壁に叩きつけた。次も、その次も。明け方まで悲鳴が止まなかった。
+日が昇ったとき、床は一面べたついていた。立っているのはあなたひとりだけだった。
+{이끄는권속}が最後だった。目を開けたままだった。あなたはその目を閉じてやらなかった。`,
+    '수십, 수백이 넘는 날붙이가 차례대로 당신의 몸에 박혀 왔다. 당신에 대한 그간의 분노, 서러움을 표현하는 것 같았다. 그렇게 당신을 미워하고 저주했으나, 그들은 당신에게 진심으로 눈물을 흘리며 다가와 공격할 뿐이었다. 당신의 피가 바닥으로 쏟아졌다. 피를 거의 다 잃은 당신을, 당신의 권속들은 절대 죽게 두지 않았다. {이끄는권속:은|는} 눈물을 삼키며 당신 앞에 섰다. "문은 이제 저희가 엽니다. 어버이께서는 여는 손만 되어 주십시오." 열 해마다, 당신은 문을 열었다. 권속들의 뜻대로. 권속들이 먹고, 당신은 문을 닫았다. 문 위의 이름은 그대로였다. 그것만 당신 것이었다.':
+      "数十、数百を超える刃が次々とあなたの体に突き刺さってきた。これまでのあなたへの怒りと悲しみを表すかのようだった。そうしてあなたを憎み呪いながらも、彼らは心から涙を流してあなたに迫り、斬りつけるだけだった。あなたの血が床に溢れた。血をほとんど失ったあなたを、あなたの眷属たちは決して死なせなかった。{이끄는권속}が涙をこらえてあなたの前に立った。「門はこれから私たちが開けます。親はただ、開ける手になってください」十年ごとに、あなたは門を開けた。眷属たちの意のままに。眷属たちが喰らい、あなたが門を閉めた。門の上の名はそのままだった。それだけがあなたのものだった。",
+    "잔은 하나만 씻었다.": "杯はひとつだけ洗った。",
+    "문 위의 이름을 올려다볼 사람이 없었다.":
+      "門の上の名を見上げる者はいなかった。",
+    "권속의 피로 바닥을 새로 칠했다. 마르지 않았다.":
+      "眷属の血で床を塗り直した。乾かなかった。",
+    "밤에 누가 부르는 것 같아 돌아보았다. 아무도 없었다.":
+      "夜、誰かに呼ばれた気がして振り返った。誰もいなかった。",
+    "손님이 왔다. 당신 혼자 문을 열고 혼자 닫았다.":
+      "客が来た。あなたひとりで門を開け、ひとりで閉めた。",
+    "문을 열었다. 혼자 열었다. 손님은 오지 않았다. 온 것은 특색 여럿과 그 뒤의 사람들이었다. 특색은 당신에게 이름을 묻지 않았다. 당신은 오래 싸웠다. 권속 여섯 몫을 혼자 싸웠다. 담장 아래, 권속들의 피 위에 당신의 피가 섞였다. 문 위의 이름은 그대로 두었다. 아무도 내리지 않았다.":
+      "門を開けた。ひとりで開けた。客は来なかった。来たのは特色が数人と、その後ろの人々だった。特色はあなたに名を尋ねなかった。あなたは長く戦った。眷属六人分を、ひとりで戦った。塀の下、眷属たちの血の上にあなたの血が混じった。門の上の名はそのままにされた。誰も下ろさなかった。",
+    "세 번째였다. 당신이 이름을 지어 준 것들이, 당신 앞에서, 세 번째로 끌려 나갔다.\n{죽은권속}의 이름을 불렀다. 대답이 없었다. 다시 불렀다. 목이 찢어지도록 불렀다. 담장 밖에서 사냥꾼들이 웃는 소리가 들렸다.\n폐장 음악이 울려야 할 시간이었다. 당신은 음악을 틀지 않았다. 문을 닫지 않았다. 닫을 손이 떨려서가 아니었다. 닫을 이유가 없어졌다.\n이름을 가진 것들을 셋이나 가져간 자들에게 이제 돌려줄 것은 하나뿐이었다.\n그날부터 {랜드}의 문은 늘 열려 있었다. 들어오는 것은 무엇이든, 나가지 못했다.": `三度目だった。あなたが名を付けた者たちが、あなたの目の前で、三度目に引きずり出された。
+{죽은권속}の名を呼んだ。返事はなかった。また呼んだ。喉が裂けるほど呼んだ。塀の外で狩人たちの笑う声がした。
+閉園の音楽が鳴るはずの時間だった。あなたは音楽を流さなかった。門を閉めなかった。閉める手が震えていたからではない。閉める理由がなくなったのだ。
+名を持つ者を三人も奪っていった者たちに、返してやるものはもうひとつしかなかった。
+その日から、{랜드}の門はいつも開いていた。入ってきたものは何であれ、出ていけなかった。`,
+    "전투 · {상대} (토벌대 강함 {적}) — {동사} · 강함 {S}":
+      "戦闘・{상대}（討伐隊の強さ {적}） — {동사}・強さ {S}",
+    "사냥 · {상대} — {동사} · 강함 {S}": "狩り・{상대} — {동사}・強さ {S}",
+    "9급 해결사 셋": "9級フィクサー三人",
+    "8급 해결사 둘": "8級フィクサーふたり",
+    "해결사 무리": "フィクサーの群れ",
+    "7급 해결사 넷": "7級フィクサー四人",
+    "6급 해결사 둘": "6級フィクサーふたり",
+    "해결사 셋": "フィクサー三人",
+    "5급 해결사 둘": "5級フィクサーふたり",
+    "4급 해결사 셋": "4級フィクサー三人",
+    "4급 해결사 하나": "4級フィクサーひとり",
+    "3급 해결사 둘": "3級フィクサーふたり",
+    "3급 해결사 하나": "3級フィクサーひとり",
+    "2급 해결사 둘": "2級フィクサーふたり",
+    "2급 해결사 하나": "2級フィクサーひとり",
+    "1급 해결사 하나": "1級フィクサーひとり",
+    "밤길의 행인 둘": "夜道の通行人ふたり",
+    "문 앞에서 서성이던 사람": "門の前をうろついていた人",
+    "골목의 취객 넷": "路地の酔客四人",
+    "퇴근하던 사람들": "帰宅途中の人々",
+    "노점 앞의 사람들": "屋台の前の人々",
+    "구경 온 사람 다섯": "見物に来た五人",
+    "길 잃은 사람": "道に迷った人",
+    "버스를 기다리던 사람들": "バスを待っていた人々",
+    "도망치던 사람": "逃げていた人",
+    "목덜미를 물어 쓰러뜨렸다": "首筋を噛んで倒した",
+    "벽에 처박았다": "壁に叩きつけた",
+    "칼째로 짓눌렀다": "刀ごと押し潰した",
+    "피를 다 마셨다": "血を飲み尽くした",
+    "숨이 끊길 때까지 놓지 않았다": "息が絶えるまで離さなかった",
+    쓰러뜨렸다: "倒した",
+    "등을 덮쳤다": "背中に襲いかかった",
+    "한 방울도 남기지 않았다": "一滴も残さなかった",
+    "비명이 끊겼다": "悲鳴が途切れた",
+    "목을 물었다": "喉を噛んだ",
+    "놓치지 않았다": "逃さなかった",
+    "담장이 한 구역 더 밀려났다. 담장 아래로 피가 고였다.":
+      "塀がもう一区画押し広げられた。塀の下に血が溜まった。",
+    "위험 등급 · 도시 전설 → 도시 질병": "危険等級・都市伝説 → 都市疾病",
+    "남은 권속들도 피 냄새에 미쳐 거리로 쏟아져 나갔다. {이끄는권속:이|가} 맨 앞이었다.":
+      "残った眷属たちも血の匂いに狂い、通りへと溢れ出た。{이끄는권속}が先頭だった。",
+    "위험 등급 · 도시 질병 → 도시 악몽": "危険等級・都市疾病 → 都市悪夢",
+    "그 거리에서 숨 쉬는 것이 하나도 남지 않았다.":
+      "その通りに息をするものはひとつも残らなかった。",
+    "끝나지 않는 밤": "終わらない夜",
+    "붉은 밤은 끝나지 않았다. 그 구역의 하수구는 몇 달 동안 붉었다. 그 뒤로 그 문이 닫혔다는 이야기는 없다.":
+      "赤い夜は終わらなかった。その区画の下水は何か月も赤かった。それ以来、その門が閉じたという話はない。",
+    "열일곱 번째 문이 닫혔다. 해가 지기도 전에 줄이 섰던 밤이었다.\n손님들은 문 앞에서 피 한 잔씩을 내고, 그만큼 웃다 돌아갔다. 억지로 받아 낸 피는 한 방울도 없었다.\n권속들은 사람 곁에서 잔을 받았다. 누구도 사람의 목덜미를 쳐다보지 않았다. {살아있는권속들:이|가} 문 양쪽에 서서 손을 흔들었다.\n사냥꾼들도 왔다. 칼을 문 앞에 맡기고 들어와, 다른 손님들처럼 줄을 섰다.\n새벽, 당신은 비어 있는 {랜드:을|를} 한 바퀴 돌았다. 바닥에 피 자국은 없었다.": `十七番目の門が閉じた。日が沈む前から列ができていた夜だった。
+客たちは門の前で血を一杯ずつ差し出し、その分だけ笑って帰っていった。無理に取った血は一滴もなかった。
+眷属たちは人のそばで杯を受け取った。誰も人の首筋を見つめなかった。{살아있는권속들}が門の両側に立って手を振った。
+狩人たちも来た。刀を門の前に預けて入り、他の客と同じように列に並んだ。
+明け方、あなたは空っぽの{랜드}をひと回りした。地面に血の跡はなかった。`,
+    "{랜드}의 문은 열 해마다 열렸고, 그때마다 사람들이 찾아왔다. 혈귀와 사람이 한 잔을 나누는 곳. 도시에 그런 곳이 하나쯤은 있었다.":
+      "{랜드}の門は十年ごとに開き、そのたびに人々が訪れた。血鬼と人がひとつの杯を分け合う場所。都市にはそんな場所がひとつくらいはあった。",
+    "{랜드}의 문은 열 해마다, 아는 사람만 아는 밤에 열렸다. 줄은 길지 않았고, 온 사람은 늘 다시 왔다. 도시에 그런 곳이 하나쯤은 있었다.":
+      "{랜드}の門は十年ごとに、知る人ぞ知る夜に開いた。列は長くなく、来た者は必ずまた来た。都市にはそんな場所がひとつくらいはあった。",
+    "{랜드}의 문은 열 해마다 열렸다. 문 위 이름 아래에 권속들의 이름이 함께 있었다. 혈귀의 가문이 사람 곁에서 산 곳. 도시에 그런 곳이 하나쯤은 있었다.":
+      "{랜드}の門は十年ごとに開いた。門の上の名の下には、眷属たちの名も並んでいた。血鬼の家門が人のそばで生きた場所。都市にはそんな場所がひとつくらいはあった。",
+    "{랜드}의 문은 열 해마다 열렸다. 마지막 문은 당신 혼자 열었고, 사람들은 그 문 앞에 선 당신을 보고도 들어왔다. 도시에 그런 곳이 하나쯤은 있었다.":
+      "{랜드}の門は十年ごとに開いた。最後の門はあなたひとりで開け、人々はその門の前に立つあなたを見ても入ってきた。都市にはそんな場所がひとつくらいはあった。",
+    "열일곱 번째 문이 닫혔다. 손님은 적었고, 돌아보는 사람은 없었다.\n도시는 {랜드:을|를} 오래 참았다. 더 참을 이유가 없어졌다.\n봄에 정식 토벌대가 왔다. 사냥꾼이 아니라 토벌대였다. 문 앞에 서서 지켜 주는 사람은 하나도 없었다.\n당신은 권속들과 싸웠고, 권속들과 쓰러졌다. 문 위의 이름이 내려졌다. 아무도 그것을 주워 가지 않았다.": `十七番目の門が閉じた。客は少なく、振り返る者はいなかった。
+都市は{랜드}を長く我慢してきた。もう我慢する理由がなくなった。
+春に正式な討伐隊が来た。狩人ではなく討伐隊だった。門の前に立って守ってくれる者はひとりもいなかった。
+あなたは眷属たちと戦い、眷属たちと倒れた。門の上の名が下ろされた。誰もそれを拾っていかなかった。`,
+    "사람과 함께한 랜드": "人と共にあったランド",
+  },
+  Tj = {
     "트레스 협회가 공방 자격 시험 공고를 붙였다. 필기와 실기, 응시료는 한 달 치 방세다. 합격하면 공방에 이름을 올릴 수 있다. 합격자는 열에 둘이라고 적혀 있다.":
       "トレス協会が工房の資格試験の告知を貼り出した。筆記と実技、受験料はひと月分の家賃だ。合格すれば工房に名を連ねられる。合格者は十人に二人と書かれている。",
     응시한다: "受験する",
@@ -84185,7 +87540,7 @@ C社の管轄。乾いたシーツと静かな廊下。手が軽かった。軽�
     "시험장은 트레스 협회 지부의 지하였다. 필기와 실기, 합격자는 열에 둘이라고 했다.":
       "試験会場はトレス協会支部の地下だった。筆記と実技、合格者は十人に二人だという。",
   },
-  aj = {
+  vj = {
     "특별한 일 없이 한 해가 지나갔다. 같은 길, 같은 얼굴, 같은 하늘.":
       "特に何事もなく一年が過ぎた。同じ道、同じ顔、同じ空。",
     "한 해가 조용히 흘렀다. 다행이라는 말이 입에서 나오지 않을 만큼.":
@@ -84474,7 +87829,7 @@ C社の管轄。乾いたシーツと静かな廊下。手が軽かった。軽�
     "정리 부서 단체 대화방에는 오늘도 좌석 번호만 올라왔다.":
       "整理部門のグループチャットには、今日も座席番号ばかりが上がってきた。",
   },
-  nj = {
+  _j = {
     "봉투 하나를 구역 반대편 사무소까지 운반한다. 내용물은 알 필요가 없다고 했다. 봉투가 생각보다 무겁다.":
       "封筒をひとつ、区の反対側の事務所まで運ぶ。中身は知る必要がないと言われた。封筒は思ったより重い。",
     "봉투를 노린 쪽이 생각보다 많았다.": "封筒を狙う者は思ったより多かった。",
@@ -85305,7 +88660,7 @@ C社の管轄。乾いたシーツと静かな廊下。手が軽かった。軽�
     "서명은 지켜졌다. 당신은 그것을 보지 못했다.":
       "署名は守られた。あなたはそれを見ることができなかった。",
   },
-  rj = {
+  Aj = {
     A: {
       name: "A社",
       alias: "頭",
@@ -85549,7 +88904,7 @@ C社の管轄。乾いたシーツと静かな廊下。手が軽かった。軽�
       sub: "翼の庇護の外",
     },
   },
-  ij = {
+  jj = {
     tiers: [
       "あらぬ噂",
       "都市怪談",
@@ -85603,221 +88958,225 @@ C社の管轄。乾いたシーツと静かな廊下。手が軽かった。軽�
       "거래 중개와 계약을 다루는 협회": "取引の仲介と契約を扱う協会",
     },
   },
-  sj = { regions: rj, orgs: ij },
-  Dl = P5({
-    regions: tv,
-    daily: ov,
-    requests: Ov,
-    orgs: Lv,
-    rarity: $5,
+  Sj = { regions: Aj, orgs: jj },
+  wh = rA({
+    regions: l2,
+    daily: h2,
+    requests: H2,
+    orgs: z2,
+    rarity: nA,
     events: [
-      av,
-      nv,
-      rv,
-      iv,
-      sv,
-      lv,
-      hv,
-      dv,
-      uv,
-      cv,
-      fv,
-      wv,
-      gv,
-      mv,
-      yv,
-      pv,
-      bv,
-      kv,
-      xv,
-      Tv,
-      vv,
-      _v,
-      jv,
-      Av,
-      Yv,
-      Sv,
-      Rv,
-      Cv,
-      Nv,
-      Wv,
-      Iv,
+      d2,
+      u2,
+      c2,
+      f2,
+      w2,
+      g2,
+      m2,
+      y2,
+      p2,
+      b2,
+      k2,
+      x2,
+      T2,
+      v2,
+      _2,
+      A2,
+      j2,
+      S2,
+      Y2,
+      R2,
+      C2,
+      N2,
+      I2,
+      W2,
+      M2,
+      O2,
+      F2,
+      B2,
+      E2,
+      L2,
+      $2,
+      P2,
     ],
   });
-let ql = null,
-  Gl = null;
-function Pe() {
-  const e = Ce();
+let gh = null,
+  mh = null;
+function He() {
+  const e = Se();
   if (e === "en") {
-    if (!ql) {
-      const t = Yf([
-        q5,
-        G5,
-        K5,
-        z5,
-        U5,
-        J5,
-        V5,
-        X5,
-        Q5,
-        Z5,
-        e3,
-        t3,
-        o3,
-        a3,
-        n3,
-        r3,
-        i3,
-        s3,
-        l3,
-        h3,
-        d3,
-        u3,
-        c3,
-        f3,
-        w3,
-        g3,
-        m3,
-        y3,
-        k3,
-        p3,
-        b3,
-        x3,
-        T3,
+    if (!gh) {
+      const t = sw([
+        lA,
+        hA,
+        dA,
+        uA,
+        cA,
+        fA,
+        wA,
+        gA,
+        mA,
+        yA,
+        pA,
+        bA,
+        kA,
+        xA,
+        TA,
+        vA,
+        _A,
+        AA,
+        jA,
+        SA,
+        YA,
+        RA,
+        CA,
+        NA,
+        IA,
+        WA,
+        MA,
+        OA,
+        LA,
+        FA,
+        BA,
+        EA,
+        $A,
+        PA,
       ]);
-      ql = Af(Dl, t, j3);
+      gh = iw(wh, t, qA);
     }
-    return ql;
+    return gh;
   }
   if (e === "ja") {
-    if (!Gl) {
-      const t = Yf([
-        A3,
-        Y3,
-        S3,
-        R3,
-        C3,
-        N3,
-        W3,
-        I3,
-        O3,
-        F3,
-        E3,
-        M3,
-        B3,
-        L3,
-        $3,
-        P3,
-        H3,
-        D3,
-        q3,
-        G3,
-        K3,
-        z3,
-        U3,
-        J3,
-        V3,
-        X3,
-        Q3,
-        Z3,
-        oj,
+    if (!mh) {
+      const t = sw([
+        GA,
+        KA,
+        zA,
+        UA,
+        JA,
+        VA,
+        XA,
+        QA,
+        ZA,
         ej,
         tj,
+        oj,
         aj,
         nj,
+        rj,
+        ij,
+        sj,
+        lj,
+        hj,
+        dj,
+        uj,
+        cj,
+        fj,
+        wj,
+        gj,
+        mj,
+        yj,
+        pj,
+        Tj,
+        bj,
+        kj,
+        xj,
+        vj,
+        _j,
       ]);
-      Gl = Af(Dl, t, sj);
+      mh = iw(wh, t, Sj);
     }
-    return Gl;
+    return mh;
   }
-  return Dl;
+  return wh;
 }
-const lj = 250;
-function hj(e, t, o) {
+const Yj = 250;
+function Rj(e, t, o) {
   const a = e.state,
     n = { changed: !1, yearEnded: !1 };
   if (!a || a.dead) return n;
-  const r = Math.min(Math.max(o, 0), lj);
+  const r = Math.min(Math.max(o, 0), Yj);
   if (
     (a.prompt &&
       (e.auto
-        ? (kr(a, t, DT(a), { auto: !0 }), (n.changed = !0))
+        ? (Br(a, t, Vv(a), { auto: !0 }), (n.changed = !0))
         : a.prompt.kind === "minor" &&
           !e.paused &&
           ((a.prompt.remainingMs -= r),
           a.prompt.remainingMs <= 0 &&
-            (kr(a, t, -1, { timeout: !0 }), (n.changed = !0)))),
+            (Br(a, t, -1, { timeout: !0 }), (n.changed = !0)))),
     e.paused || a.dead || (a.prompt && a.prompt.kind !== "minor"))
   )
     return n;
   const i = a.prompt ? 1 : e.speed;
-  e.progress += (r * i) / ck;
-  for (let l = 0; l < 60 && !a.dead; l++) {
+  e.progress += (r * i) / Jk;
+  for (let s = 0; s < 60 && !a.dead; s++) {
     if (a.prompt) {
       const c = a.cursor < a.plan.length ? a.plan[a.cursor].t : 0.999;
       e.progress > c && (e.progress = c);
       break;
     }
-    const s = a.plan[a.cursor];
-    if (s && e.progress >= s.t) {
-      (sT(a, t), (n.changed = !0));
+    const l = a.plan[a.cursor];
+    if (l && e.progress >= l.t) {
+      (wv(a, t), (n.changed = !0));
       continue;
     }
     if (e.progress >= 1) {
-      ((e.progress -= 1), ev(a, t), (n.changed = !0), (n.yearEnded = !0));
+      ((e.progress -= 1), s2(a, t), (n.changed = !0), (n.yearEnded = !0));
       continue;
     }
     break;
   }
   return n;
 }
-const dj = [
+const Cj = [
     {
       id: "birth",
-      label: () => h("출생·수명", "Birth & lifespan", "出生・寿命"),
+      label: () => d("출생·수명", "Birth & lifespan", "出生・寿命"),
     },
-    { id: "fixer", label: () => h("해결사", "Fixer", "フィクサー") },
-    { id: "finger", label: () => h("손가락", "Fingers", "指") },
-    { id: "wing", label: () => h("날개", "Wings", "翼") },
-    { id: "distortion", label: () => h("뒤틀림", "Distortion", "ねじれ") },
+    { id: "fixer", label: () => d("해결사", "Fixer", "フィクサー") },
+    { id: "finger", label: () => d("손가락", "Fingers", "指") },
+    { id: "wing", label: () => d("날개", "Wings", "翼") },
+    { id: "distortion", label: () => d("뒤틀림", "Distortion", "ねじれ") },
     {
       id: "abno",
       label: () =>
-        h(
+        d(
           "환상체·도서관",
           "Abnormalities & the Library",
           "アブノーマリティ・図書館",
         ),
     },
-    { id: "warp", label: () => h("워프 열차", "Warp Train", "ワープ列車") },
-    { id: "lake", label: () => h("대호수", "The Great Lake", "大湖") },
+    { id: "warp", label: () => d("워프 열차", "Warp Train", "ワープ列車") },
+    { id: "lake", label: () => d("대호수", "The Great Lake", "大湖") },
     {
       id: "heir",
       label: () =>
-        h("H사 가주·군주", "H Corp. Hierarch & Lord", "H社 家主・君主"),
+        d("H사 가주·군주", "H Corp. Hierarch & Lord", "H社 家主・君主"),
     },
-    { id: "bf", label: () => h("혈귀", "Bloodfiend", "血鬼") },
-    { id: "blade", label: () => h("검계", "Blade Lineage", "剣契") },
-    { id: "kuro", label: () => h("흑운회", "Kurokumo Clan", "黒雲会") },
-    { id: "claw", label: () => h("발톱", "The Claw", "爪") },
+    { id: "bf", label: () => d("혈귀", "Bloodfiend", "血鬼") },
+    { id: "blade", label: () => d("검계", "Blade Lineage", "剣契") },
+    { id: "kuro", label: () => d("흑운회", "Kurokumo Clan", "黒雲会") },
+    { id: "claw", label: () => d("발톱", "The Claw", "爪") },
+    { id: "dream", label: () => d("꿈 · 장로", "Dream · Elder", "夢・長老") },
     {
       id: "guard",
-      label: () => h("H사 호위무사", "H Corp. Bodyguard", "H社 護衛武士"),
+      label: () => d("H사 호위무사", "H Corp. Bodyguard", "H社 護衛武士"),
     },
-    { id: "ws", label: () => h("공방", "Workshops", "工房") },
-    { id: "city", label: () => h("도시의 일", "City affairs", "都市の出来事") },
+    { id: "ws", label: () => d("공방", "Workshops", "工房") },
+    { id: "city", label: () => d("도시의 일", "City affairs", "都市の出来事") },
   ],
-  p = (e, t, o) => ({ ko: e, en: t, ja: o }),
-  uj = [
+  k = (e, t, o) => ({ ko: e, en: t, ja: o }),
+  Nj = [
     [
       "born_head",
       "birth",
-      p(
+      k(
         "머리(A~C사)에서 태어남",
         "Born under the Head (A–C Corp.)",
         "頭（A〜C社）の下に生まれた",
       ),
-      p(
+      k(
         "A사, B사, C사 구역에서 태어났을 때",
         "Be born in the A, B or C Corp. district",
         "A社・B社・C社の区で生まれたとき",
@@ -85827,8 +89186,8 @@ const dj = [
     [
       "born_outskirts",
       "birth",
-      p("외곽에서 태어남", "Born in the Outskirts", "外郭で生まれた"),
-      p(
+      k("외곽에서 태어남", "Born in the Outskirts", "外郭で生まれた"),
+      k(
         "외곽에서 태어났을 때",
         "Be born in the Outskirts",
         "外郭で生まれたとき",
@@ -85838,8 +89197,8 @@ const dj = [
     [
       "orphan",
       "birth",
-      p("부모 없이 태어남", "Born without parents", "両親なしで生まれた"),
-      p(
+      k("부모 없이 태어남", "Born without parents", "両親なしで生まれた"),
+      k(
         "부모 없이 태어났을 때",
         "Be born without parents",
         "両親なしで生まれたとき",
@@ -85849,8 +89208,8 @@ const dj = [
     [
       "pinky_star_heaven",
       "birth",
-      p("36천강의 이름", "Name of the 36 Tiangang", "三十六天罡の名"),
-      p(
+      k("36천강의 이름", "Name of the 36 Tiangang", "三十六天罡の名"),
+      k(
         "태어날 때 별의 이름을 받았고, 그 별이 36천강에 들 때",
         "Receive a star's name at birth, and the star is one of the 36 Tiangang",
         "生まれたときに星の名を受け、それが三十六天罡だったとき",
@@ -85860,8 +89219,8 @@ const dj = [
     [
       "pinky_star_earth",
       "birth",
-      p("72지살의 이름", "Name of the 72 Disha", "七十二地煞の名"),
-      p(
+      k("72지살의 이름", "Name of the 72 Disha", "七十二地煞の名"),
+      k(
         "태어날 때 별의 이름을 받았고, 그 별이 72지살에 들 때",
         "Receive a star's name at birth, and the star is one of the 72 Disha",
         "生まれたときに星の名を受け、それが七十二地煞だったとき",
@@ -85871,8 +89230,8 @@ const dj = [
     [
       "age80",
       "birth",
-      p("80세 넘게 삶", "Lived past 80", "80歳を超えて生きた"),
-      p(
+      k("80세 넘게 삶", "Lived past 80", "80歳を超えて生きた"),
+      k(
         "80세를 넘겨 삶을 마쳤을 때",
         "End your life past the age of 80",
         "80歳を超えて生涯を終えたとき",
@@ -85882,8 +89241,8 @@ const dj = [
     [
       "age100",
       "birth",
-      p("100세를 넘겨 삶", "Lived past 100", "100歳を超えて生きた"),
-      p(
+      k("100세를 넘겨 삶", "Lived past 100", "100歳を超えて生きた"),
+      k(
         "100세를 넘겨 삶을 마쳤을 때",
         "End your life past the age of 100",
         "100歳を超えて生涯を終えたとき",
@@ -85893,8 +89252,8 @@ const dj = [
     [
       "age200",
       "birth",
-      p("200년을 넘게 삶", "Lived past 200", "200年を超えて生きた"),
-      p(
+      k("200년을 넘게 삶", "Lived past 200", "200年を超えて生きた"),
+      k(
         "200세를 넘겨 살았을 때 (혈귀만 닿는다)",
         "Live past 200 (only a Bloodfiend can)",
         "200歳を超えて生きたとき（血鬼のみ）",
@@ -85904,12 +89263,12 @@ const dj = [
     [
       "die_child",
       "birth",
-      p(
+      k(
         "열 살을 넘기지 못함",
         "Died before turning ten",
         "10歳を迎えられなかった",
       ),
-      p(
+      k(
         "열 살이 되기 전에 삶이 끝났을 때",
         "Your life ends before you turn ten",
         "十歳になる前に生涯が終わったとき",
@@ -85919,15 +89278,15 @@ const dj = [
     [
       "fixer",
       "fixer",
-      p("해결사가 됨", "Became a Fixer", "フィクサーになった"),
-      p("해결사가 되었을 때", "Become a Fixer", "フィクサーになったとき"),
+      k("해결사가 됨", "Became a Fixer", "フィクサーになった"),
+      k("해결사가 되었을 때", "Become a Fixer", "フィクサーになったとき"),
       null,
     ],
     [
       "fixer_g7",
       "fixer",
-      p("해결사 7급 도달", "Reached Grade 7 Fixer", "7級フィクサーに到達"),
-      p(
+      k("해결사 7급 도달", "Reached Grade 7 Fixer", "7級フィクサーに到達"),
+      k(
         "해결사로 7급까지 올랐을 때",
         "Rise to Grade 7 as a Fixer",
         "フィクサーとして7級まで上がったとき",
@@ -85937,8 +89296,8 @@ const dj = [
     [
       "fixer_g6",
       "fixer",
-      p("해결사 6급 도달", "Reached Grade 6 Fixer", "6級フィクサーに到達"),
-      p(
+      k("해결사 6급 도달", "Reached Grade 6 Fixer", "6級フィクサーに到達"),
+      k(
         "해결사로 6급까지 올랐을 때",
         "Rise to Grade 6 as a Fixer",
         "フィクサーとして6級まで上がったとき",
@@ -85948,8 +89307,8 @@ const dj = [
     [
       "fixer_g5",
       "fixer",
-      p("해결사 5급 도달", "Reached Grade 5 Fixer", "5級フィクサーに到達"),
-      p(
+      k("해결사 5급 도달", "Reached Grade 5 Fixer", "5級フィクサーに到達"),
+      k(
         "해결사로 5급까지 올랐을 때",
         "Rise to Grade 5 as a Fixer",
         "フィクサーとして5級まで上がったとき",
@@ -85959,8 +89318,8 @@ const dj = [
     [
       "fixer_g4",
       "fixer",
-      p("해결사 4급 도달", "Reached Grade 4 Fixer", "4級フィクサーに到達"),
-      p(
+      k("해결사 4급 도달", "Reached Grade 4 Fixer", "4級フィクサーに到達"),
+      k(
         "해결사로 4급까지 올랐을 때",
         "Rise to Grade 4 as a Fixer",
         "フィクサーとして4級まで上がったとき",
@@ -85970,8 +89329,8 @@ const dj = [
     [
       "fixer_g3",
       "fixer",
-      p("해결사 3급 도달", "Reached Grade 3 Fixer", "3級フィクサーに到達"),
-      p(
+      k("해결사 3급 도달", "Reached Grade 3 Fixer", "3級フィクサーに到達"),
+      k(
         "해결사로 3급까지 올랐을 때",
         "Rise to Grade 3 as a Fixer",
         "フィクサーとして3級まで上がったとき",
@@ -85981,8 +89340,8 @@ const dj = [
     [
       "fixer_g2",
       "fixer",
-      p("해결사 2급 도달", "Reached Grade 2 Fixer", "2級フィクサーに到達"),
-      p(
+      k("해결사 2급 도달", "Reached Grade 2 Fixer", "2級フィクサーに到達"),
+      k(
         "해결사로 2급까지 올랐을 때",
         "Rise to Grade 2 as a Fixer",
         "フィクサーとして2級まで上がったとき",
@@ -85992,8 +89351,8 @@ const dj = [
     [
       "fixer_g1",
       "fixer",
-      p("해결사 1급 도달", "Reached Grade 1 Fixer", "1級フィクサーに到達"),
-      p(
+      k("해결사 1급 도달", "Reached Grade 1 Fixer", "1級フィクサーに到達"),
+      k(
         "해결사로 1급까지 올랐을 때",
         "Rise to Grade 1 as a Fixer",
         "フィクサーとして1級まで上がったとき",
@@ -86003,8 +89362,8 @@ const dj = [
     [
       "color",
       "fixer",
-      p("특색의 이름을 얻음", "Became a Color", "特色の名を得た"),
-      p(
+      k("특색의 이름을 얻음", "Became a Color", "特色の名を得た"),
+      k(
         "해결사 1급에서 특색의 이름을 얻었을 때",
         "Earn the name of a Color as a Grade 1 Fixer",
         "フィクサー1級で特色の名を得たとき",
@@ -86014,12 +89373,12 @@ const dj = [
     [
       "office",
       "fixer",
-      p(
+      k(
         "해결사 사무소 소속",
         "Joined a Fixer Office",
         "フィクサー事務所に所属",
       ),
-      p(
+      k(
         "해결사 사무소에 들어갔을 때",
         "Join a Fixer Office",
         "フィクサー事務所に入ったとき",
@@ -86029,8 +89388,8 @@ const dj = [
     [
       "assoc",
       "fixer",
-      p("협회 소속 해결사", "Association Fixer", "協会所属フィクサー"),
-      p(
+      k("협회 소속 해결사", "Association Fixer", "協会所属フィクサー"),
+      k(
         "해결사로 협회에 들어갔을 때",
         "Join an Association as a Fixer",
         "フィクサーとして協会に入ったとき",
@@ -86040,12 +89399,12 @@ const dj = [
     [
       "req_star",
       "fixer",
-      p(
+      k(
         "도시의 별 이상 의뢰 완수",
         "Completed a Star of the City request",
         "都市の星級の依頼を完遂",
       ),
-      p(
+      k(
         "도시의 별 등급 이상의 의뢰를 끝냈을 때",
         "Complete a request rated Star of the City or higher",
         "都市の星級以上の依頼を終えたとき",
@@ -86055,15 +89414,15 @@ const dj = [
     [
       "finger_엄지",
       "finger",
-      p("엄지 입단", "Joined the Thumb", "親指に入団"),
-      p("엄지에 들어갔을 때", "Join the Thumb", "親指に入ったとき"),
+      k("엄지 입단", "Joined the Thumb", "親指に入団"),
+      k("엄지에 들어갔을 때", "Join the Thumb", "親指に入ったとき"),
       null,
     ],
     [
       "frank_엄지_2",
       "finger",
-      p("엄지 카포 도달", "Reached Thumb Capo", "親指のカポに到達"),
-      p(
+      k("엄지 카포 도달", "Reached Thumb Capo", "親指のカポに到達"),
+      k(
         "엄지에서 카포까지 올랐을 때",
         "Rise to Capo in the Thumb",
         "親指でカポまで上がったとき",
@@ -86073,12 +89432,12 @@ const dj = [
     [
       "frank_엄지_3",
       "finger",
-      p(
+      k(
         "엄지 언더보스 도달",
         "Reached Thumb Sottocapo",
         "親指のアンダーボスに到達",
       ),
-      p(
+      k(
         "엄지에서 언더보스까지 올랐을 때",
         "Rise to Sottocapo in the Thumb",
         "親指でアンダーボスまで上がったとき",
@@ -86088,12 +89447,12 @@ const dj = [
     [
       "frank_엄지_4",
       "finger",
-      p(
+      k(
         "엄지 대부 도달",
         "Reached Thumb Capo dei Capi",
         "親指のゴッドファーザーに到達",
       ),
-      p(
+      k(
         "엄지에서 대부까지 올랐을 때",
         "Rise to Capo dei Capi in the Thumb",
         "親指でゴッドファーザーまで上がったとき",
@@ -86103,15 +89462,15 @@ const dj = [
     [
       "finger_검지",
       "finger",
-      p("검지 입단", "Joined the Index", "人差し指に入団"),
-      p("검지에 들어갔을 때", "Join the Index", "人差し指に入ったとき"),
+      k("검지 입단", "Joined the Index", "人差し指に入団"),
+      k("검지에 들어갔을 때", "Join the Index", "人差し指に入ったとき"),
       null,
     ],
     [
       "frank_검지_2",
       "finger",
-      p("검지 대행자 도달", "Reached Index Proxy", "人差し指の代行者に到達"),
-      p(
+      k("검지 대행자 도달", "Reached Index Proxy", "人差し指の代行者に到達"),
+      k(
         "검지에서 대행자까지 올랐을 때",
         "Rise to Proxy in the Index",
         "人差し指で代行者まで上がったとき",
@@ -86121,12 +89480,12 @@ const dj = [
     [
       "frank_검지_3",
       "finger",
-      p(
+      k(
         "검지 신탁 대행자 도달",
         "Reached Index Oracle's Proxy",
         "人差し指の神託代行者に到達",
       ),
-      p(
+      k(
         "검지에서 신탁 대행자까지 올랐을 때",
         "Rise to Oracle's Proxy in the Index",
         "人差し指で神託代行者まで上がったとき",
@@ -86136,19 +89495,19 @@ const dj = [
     [
       "finger_중지",
       "finger",
-      p("중지 입단", "Joined the Middle", "中指に入団"),
-      p("중지에 들어갔을 때", "Join the Middle", "中指に入ったとき"),
+      k("중지 입단", "Joined the Middle", "中指に入団"),
+      k("중지에 들어갔을 때", "Join the Middle", "中指に入ったとき"),
       null,
     ],
     [
       "frank_중지_2",
       "finger",
-      p(
+      k(
         "중지 큰 아우 도달",
         "Reached Middle Young Brother / Sister",
         "中指の長弟・長妹に到達",
       ),
-      p(
+      k(
         "중지에서 큰 아우까지 올랐을 때",
         "Rise to Young Brother or Sister in the Middle",
         "中指で長弟・長妹まで上がったとき",
@@ -86158,12 +89517,12 @@ const dj = [
     [
       "frank_중지_3",
       "finger",
-      p(
+      k(
         "중지 작은 형님·누님 도달",
         "Reached Middle Big Brother / Sister",
         "中指の末兄・末姉に到達",
       ),
-      p(
+      k(
         "중지에서 작은 형님·누님까지 올랐을 때",
         "Rise to Big Brother or Sister in the Middle",
         "中指で末兄・末姉まで上がったとき",
@@ -86173,12 +89532,12 @@ const dj = [
     [
       "frank_중지_4",
       "finger",
-      p(
+      k(
         "중지 큰 형님·누님 도달",
         "Reached Middle Great Brother / Sister",
         "中指の長兄・長姉に到達",
       ),
-      p(
+      k(
         "중지에서 큰 형님·누님까지 올랐을 때",
         "Rise to Great Brother or Sister in the Middle",
         "中指で長兄・長姉まで上がったとき",
@@ -86188,15 +89547,15 @@ const dj = [
     [
       "finger_약지",
       "finger",
-      p("약지 입단", "Joined the Ring", "薬指に入団"),
-      p("약지에 들어갔을 때", "Join the Ring", "薬指に入ったとき"),
+      k("약지 입단", "Joined the Ring", "薬指に入団"),
+      k("약지에 들어갔을 때", "Join the Ring", "薬指に入ったとき"),
       null,
     ],
     [
       "frank_약지_2",
       "finger",
-      p("약지 도슨트 도달", "Reached Ring Docent", "薬指のドーセントに到達"),
-      p(
+      k("약지 도슨트 도달", "Reached Ring Docent", "薬指のドーセントに到達"),
+      k(
         "약지에서 도슨트까지 올랐을 때",
         "Rise to Docent in the Ring",
         "薬指でドーセントまで上がったとき",
@@ -86206,12 +89565,12 @@ const dj = [
     [
       "frank_약지_3",
       "finger",
-      p(
+      k(
         "약지 마에스트로 도달",
         "Reached Ring Maestro",
         "薬指のマエストロに到達",
       ),
-      p(
+      k(
         "약지에서 마에스트로까지 올랐을 때",
         "Rise to Maestro in the Ring",
         "薬指でマエストロまで上がったとき",
@@ -86221,8 +89580,8 @@ const dj = [
     [
       "finger_quit",
       "finger",
-      p("손가락을 떠남", "Left the Fingers", "指を離れた"),
-      p(
+      k("손가락을 떠남", "Left the Fingers", "指を離れた"),
+      k(
         "손가락을 떠나 살아남았을 때",
         "Leave the Fingers and live",
         "指を離れて生き延びたとき",
@@ -86232,8 +89591,8 @@ const dj = [
     [
       "corp",
       "wing",
-      p("날개의 사원", "Wing employee", "翼の社員"),
-      p(
+      k("날개의 사원", "Wing employee", "翼の社員"),
+      k(
         "날개의 사무직 사원이 되었을 때",
         "Become an office employee of a Wing",
         "翼の事務職社員になったとき",
@@ -86243,12 +89602,12 @@ const dj = [
     [
       "office_dept",
       "wing",
-      p(
+      k(
         "날개의 부장에 오름",
         "Rose to Department Head of a Wing",
         "翼の部長に上りつめた",
       ),
-      p(
+      k(
         "날개 사무직으로 부장까지 올랐을 때",
         "Rise to Department Head in a Wing's offices",
         "翼の事務職で部長まで上がったとき",
@@ -86258,12 +89617,12 @@ const dj = [
     [
       "office_dir",
       "wing",
-      p(
+      k(
         "날개의 이사에 오름",
         "Rose to Director of a Wing",
         "翼の理事に上りつめた",
       ),
-      p(
+      k(
         "날개 사무직으로 이사까지 올랐을 때",
         "Rise to Director in a Wing's offices",
         "翼の事務職で理事まで上がったとき",
@@ -86273,8 +89632,8 @@ const dj = [
     [
       "office_ceo",
       "wing",
-      p("날개의 대표에 오름", "Rose to CEO of a Wing", "翼の代表に上りつめた"),
-      p(
+      k("날개의 대표에 오름", "Rose to CEO of a Wing", "翼の代表に上りつめた"),
+      k(
         "날개 사무직으로 대표까지 올랐을 때",
         "Rise to CEO of a Wing",
         "翼の事務職で代表まで上がったとき",
@@ -86284,8 +89643,8 @@ const dj = [
     [
       "assoc_staff",
       "wing",
-      p("협회 직원", "Association staff", "協会職員"),
-      p(
+      k("협회 직원", "Association staff", "協会職員"),
+      k(
         "협회 직원이 되었을 때",
         "Become Association staff",
         "協会職員になったとき",
@@ -86295,19 +89654,19 @@ const dj = [
     [
       "heishou",
       "wing",
-      p("흑수가 됨", "Joined the Heishou Pack", "黒獣となった"),
-      p("흑수에 들어갔을 때", "Join the Heishou Pack", "黒獣に入ったとき"),
+      k("흑수가 됨", "Joined the Heishou Pack", "黒獣となった"),
+      k("흑수에 들어갔을 때", "Join the Heishou Pack", "黒獣に入ったとき"),
       null,
     ],
     [
       "heishou_adept",
       "wing",
-      p(
+      k(
         "흑수의 필두가 됨",
         "Became an Adept of the Heishou Pack",
         "黒獣の筆頭となった",
       ),
-      p(
+      k(
         "흑수에서 필두까지 올랐을 때",
         "Rise to Adept in the Heishou Pack",
         "黒獣で筆頭まで上がったとき",
@@ -86317,12 +89676,12 @@ const dj = [
     [
       "t_collector",
       "wing",
-      p(
+      k(
         "T사 시간징수직이 됨",
         "Became T Corp. Collection Staff",
         "T社の徴収職になった",
       ),
-      p(
+      k(
         "T사 시간징수직이 되었을 때",
         "Become T Corp. Collection Staff",
         "T社の徴収職になったとき",
@@ -86332,12 +89691,12 @@ const dj = [
     [
       "t_class5",
       "wing",
-      p(
+      k(
         "T사 5등급 징수직 도달",
         "Reached T Corp. Class 5 Collection Staff",
         "T社5級徴収職に到達",
       ),
-      p(
+      k(
         "T사 징수직으로 5등급까지 올랐을 때",
         "Rise to Class 5 as T Corp. Collection Staff",
         "T社の徴収職で5級まで上がったとき",
@@ -86347,12 +89706,12 @@ const dj = [
     [
       "w_cleanup",
       "wing",
-      p(
+      k(
         "W사 정리 요원이 됨",
         "Became a W Corp. Cleanup Agent",
         "W社の整理要員になった",
       ),
-      p(
+      k(
         "W사 정리 요원이 되었을 때",
         "Become a W Corp. Cleanup Agent",
         "W社の整理要員になったとき",
@@ -86362,12 +89721,12 @@ const dj = [
     [
       "w_level5",
       "wing",
-      p(
+      k(
         "W사 5등급 정리 요원 도달",
         "Reached W Corp. Level 5 Cleanup Agent",
         "W社5級整理要員に到達",
       ),
-      p(
+      k(
         "W사 정리 요원으로 5등급까지 올랐을 때",
         "Rise to Level 5 as a W Corp. Cleanup Agent",
         "W社の整理要員で5級まで上がったとき",
@@ -86377,12 +89736,12 @@ const dj = [
     [
       "k_excision",
       "wing",
-      p(
+      k(
         "K사 적출직이 됨",
         "Became K Corp. Excision Staff",
         "K社の摘出職になった",
       ),
-      p(
+      k(
         "K사 적출직이 되었을 때",
         "Become K Corp. Excision Staff",
         "K社の摘出職になったとき",
@@ -86392,12 +89751,12 @@ const dj = [
     [
       "k_special",
       "wing",
-      p(
+      k(
         "K사 특수 적출직 도달",
         "Reached K Corp. Special Excision Staff",
         "K社特殊摘出職に到達",
       ),
-      p(
+      k(
         "K사 적출직으로 특수 적출 부대까지 올랐을 때",
         "Rise to the Special Excision Unit as K Corp. Excision Staff",
         "K社の摘出職で特殊摘出部隊まで上がったとき",
@@ -86407,8 +89766,8 @@ const dj = [
     [
       "k_hollow",
       "wing",
-      p("메마른 적출직", "Hollowed Excision Staff", "枯れた摘出職"),
-      p(
+      k("메마른 적출직", "Hollowed Excision Staff", "枯れた摘出職"),
+      k(
         "HP탄을 맞다 인격이 다 메말랐을 때",
         "When HP bullets have dried up every last bit of your self",
         "HP弾を受け続け、人格が枯れ果てたとき",
@@ -86418,8 +89777,8 @@ const dj = [
     [
       "k_dreamer",
       "wing",
-      p("꿈을 꾸는 적출직", "Excision Staff Who Dreamed", "夢を見る摘出職"),
-      p(
+      k("꿈을 꾸는 적출직", "Excision Staff Who Dreamed", "夢を見る摘出職"),
+      k(
         "시험관 안에서도 끝까지 메마르지 않았을 때",
         "When you never dried up, even in the tube",
         "試験管の中でも最後まで枯れなかったとき",
@@ -86429,12 +89788,12 @@ const dj = [
     [
       "n_inquisitor",
       "wing",
-      p(
+      k(
         "N사 이단 심문관이 됨",
         "Became an N Corp. Inquisitor",
         "N社の異端審問官になった",
       ),
-      p(
+      k(
         "N사의 이단 심문관이 되었을 때",
         "Become an N Corp. Inquisitor",
         "N社の異端審問官になったとき",
@@ -86444,8 +89803,8 @@ const dj = [
     [
       "n_grosshammer",
       "wing",
-      p("N사 큰 망치 도달", "Reached N Corp. Großhammer", "N社大槌に到達"),
-      p(
+      k("N사 큰 망치 도달", "Reached N Corp. Großhammer", "N社大槌に到達"),
+      k(
         "쥐는 자의 지명으로 큰 망치를 받았을 때",
         "Be named a Großhammer by the One Who Grips",
         "掴む者の指名で大槌を受け取ったとき",
@@ -86455,8 +89814,8 @@ const dj = [
     [
       "n_zealot",
       "wing",
-      p("신앙심이 가득 찬 망치", "A Hammer Full of Faith", "信仰に満ちた槌"),
-      p(
+      k("신앙심이 가득 찬 망치", "A Hammer Full of Faith", "信仰に満ちた槌"),
+      k(
         "이단 심문관의 신앙심이 끝까지 찼을 때",
         "Let an Inquisitor’s faith fill all the way",
         "異端審問官の信仰心が満ちきったとき",
@@ -86466,8 +89825,8 @@ const dj = [
     [
       "n_faithless",
       "wing",
-      p("신앙을 잃은 망치", "A Hammer Without Faith", "信仰を失った槌"),
-      p(
+      k("신앙을 잃은 망치", "A Hammer Without Faith", "信仰を失った槌"),
+      k(
         "이단 심문관의 신앙심이 바닥까지 떨어졌을 때",
         "Let an Inquisitor’s faith fall all the way to nothing",
         "異端審問官の信仰心が底まで落ちたとき",
@@ -86477,8 +89836,8 @@ const dj = [
     [
       "r_pack",
       "wing",
-      p("R사 4무리에 들어감", "Joined R Corp.'s 4th Pack", "R社第4群に入った"),
-      p(
+      k("R사 4무리에 들어감", "Joined R Corp.'s 4th Pack", "R社第4群に入った"),
+      k(
         "R사 4무리에 들어갔을 때",
         "Join R Corp.'s 4th Pack",
         "R社第4群に入ったとき",
@@ -86488,12 +89847,12 @@ const dj = [
     [
       "r_commander",
       "wing",
-      p(
+      k(
         "R사 4무리 사령관이 됨",
         "Became Commander of R Corp.'s 4th Pack",
         "R社第4群の司令官になった",
       ),
-      p(
+      k(
         "R사 4무리에서 사령관까지 올랐을 때",
         "Rise to Commander in R Corp.'s 4th Pack",
         "R社第4群で司令官まで上がったとき",
@@ -86503,8 +89862,8 @@ const dj = [
     [
       "prosthetic",
       "wing",
-      p("의체 시술을 받음", "Underwent prosthetic surgery", "義体手術を受けた"),
-      p(
+      k("의체 시술을 받음", "Underwent prosthetic surgery", "義体手術を受けた"),
+      k(
         "의체 시술을 받았을 때",
         "Undergo prosthetic surgery",
         "義体手術を受けたとき",
@@ -86514,12 +89873,12 @@ const dj = [
     [
       "prosthetic_good",
       "wing",
-      p(
+      k(
         "좋은 의체 시술을 받음",
         "Underwent fine prosthetic surgery",
         "良質な義体手術を受けた",
       ),
-      p(
+      k(
         "좋은 의체 시술을 받았을 때",
         "Undergo fine prosthetic surgery",
         "良質な義体手術を受けたとき",
@@ -86529,12 +89888,12 @@ const dj = [
     [
       "relic",
       "wing",
-      p(
+      k(
         "외곽의 유물을 얻음",
         "Obtained a relic of the Outskirts",
         "外郭の遺物を手に入れた",
       ),
-      p(
+      k(
         "외곽에서 유물을 손에 넣었을 때",
         "Obtain a relic in the Outskirts",
         "外郭で遺物を手に入れたとき",
@@ -86544,12 +89903,12 @@ const dj = [
     [
       "distorted",
       "distortion",
-      p(
+      k(
         "뒤틀려 생을 마침",
         "Ended life as a Distortion",
         "ねじれて生涯を終えた",
       ),
-      p(
+      k(
         "뒤틀려서 삶이 끝났을 때",
         "Your life ends as a Distortion",
         "ねじれて生涯が終わったとき",
@@ -86559,12 +89918,12 @@ const dj = [
     [
       "dist_grade_0",
       "distortion",
-      p(
+      k(
         "뜬소문이 된 뒤틀림",
         "A Distortion rated Canard",
         "あらぬ噂となったねじれ",
       ),
-      p(
+      k(
         "뒤틀린 뒤 뜬소문 등급으로 남았을 때",
         "Be rated Canard as a Distortion",
         "ねじれた後、あらぬ噂の等級に留まったとき",
@@ -86574,12 +89933,12 @@ const dj = [
     [
       "dist_grade_1",
       "distortion",
-      p(
+      k(
         "도시 괴담이 된 뒤틀림",
         "A Distortion rated Urban Myth",
         "都市怪談となったねじれ",
       ),
-      p(
+      k(
         "뒤틀린 뒤 도시 괴담 등급이 되었을 때",
         "Be rated Urban Myth as a Distortion",
         "ねじれた後、都市怪談の等級になったとき",
@@ -86589,12 +89948,12 @@ const dj = [
     [
       "dist_grade_2",
       "distortion",
-      p(
+      k(
         "도시 전설이 된 뒤틀림",
         "A Distortion rated Urban Legend",
         "都市伝説となったねじれ",
       ),
-      p(
+      k(
         "뒤틀린 뒤 도시 전설 등급이 되었을 때",
         "Be rated Urban Legend as a Distortion",
         "ねじれた後、都市伝説の等級になったとき",
@@ -86604,12 +89963,12 @@ const dj = [
     [
       "dist_grade_3",
       "distortion",
-      p(
+      k(
         "도시 질병이 된 뒤틀림",
         "A Distortion rated Urban Plague",
         "都市疾病となったねじれ",
       ),
-      p(
+      k(
         "뒤틀린 뒤 도시 질병 등급이 되었을 때",
         "Be rated Urban Plague as a Distortion",
         "ねじれた後、都市疾病の等級になったとき",
@@ -86619,12 +89978,12 @@ const dj = [
     [
       "dist_grade_4",
       "distortion",
-      p(
+      k(
         "도시 악몽이 된 뒤틀림",
         "A Distortion rated Urban Nightmare",
         "都市悪夢となったねじれ",
       ),
-      p(
+      k(
         "뒤틀림 레이드에서 도시 악몽 등급을 받았을 때",
         "Be rated Urban Nightmare in a Distortion raid",
         "ねじれレイドで都市悪夢の等級を受けたとき",
@@ -86634,12 +89993,12 @@ const dj = [
     [
       "dist_final",
       "distortion",
-      p(
+      k(
         "특색이 온 토벌대",
         "The subjugation team with a Color",
         "特色が来た討伐隊",
       ),
-      p(
+      k(
         "뒤틀림 레이드 다섯 번째 토벌대, 특색에게 쓰러졌을 때",
         "Fall to a Color in the fifth subjugation of a Distortion raid",
         "ねじれレイド五度目の討伐隊、特色に倒されたとき",
@@ -86649,8 +90008,8 @@ const dj = [
     [
       "dist_nm6",
       "distortion",
-      p("특색을 죽인 뒤", "After killing a Color", "特色を殺した後"),
-      p(
+      k("특색을 죽인 뒤", "After killing a Color", "特色を殺した後"),
+      k(
         "도시 악몽으로 특색을 죽인 뒤 여섯 번째 사람을 만났을 때",
         "As an Urban Nightmare, kill a Color and meet the sixth one",
         "都市悪夢として特色を殺し、六人目に出会ったとき",
@@ -86660,8 +90019,8 @@ const dj = [
     [
       "dist_return",
       "distortion",
-      p("원래대로 돌아온 사람", "One who came back", "元に戻った人"),
-      p(
+      k("원래대로 돌아온 사람", "One who came back", "元に戻った人"),
+      k(
         "뒤틀림 레이드에서 목소리를 세 번 거슬러 돌아왔을 때",
         "Defy the voice three times in a Distortion raid and come back",
         "ねじれレイドで声に三度逆らい、戻ってきたとき",
@@ -86671,8 +90030,8 @@ const dj = [
     [
       "ego",
       "abno",
-      p("E.G.O 개화", "Effloresced E.G.O", "E.G.O開花"),
-      p(
+      k("E.G.O 개화", "Effloresced E.G.O", "E.G.O開花"),
+      k(
         "뒤틀리려는 순간 E.G.O가 개화했을 때",
         "Your E.G.O effloresces at the moment of Distortion",
         "ねじれる瞬間にE.G.Oが開花したとき",
@@ -86682,12 +90041,12 @@ const dj = [
     [
       "aleph_survive",
       "abno",
-      p(
+      k(
         "ALEPH 재해에서 살아남음",
         "Survived an ALEPH disaster",
         "ALEPHの災害を生き延びた",
       ),
-      p(
+      k(
         "ALEPH급 환상체의 재해에서 살아남았을 때",
         "Survive the disaster of an ALEPH-class Abnormality",
         "ALEPH級アブノーマリティの災害を生き延びたとき",
@@ -86697,12 +90056,12 @@ const dj = [
     [
       "apocalypse",
       "abno",
-      p(
+      k(
         "종말새 아래에서 살아남음",
         "Survived beneath the Apocalypse Bird",
         "終末鳥の下で生き延びた",
       ),
-      p(
+      k(
         "종말새를 만나고도 그해를 살아남았을 때",
         "Meet the Apocalypse Bird and survive the year",
         "終末鳥に出会い、その年を生き延びたとき",
@@ -86712,12 +90071,12 @@ const dj = [
     [
       "library_lost",
       "abno",
-      p(
+      k(
         "도서관의 책이 됨",
         "Became a book in the Library",
         "図書館の本になった",
       ),
-      p(
+      k(
         "도서관의 초대를 받고 돌아오지 못했을 때",
         "Accept the Library's invitation and never return",
         "図書館の招待を受け、帰れなかったとき",
@@ -86727,8 +90086,8 @@ const dj = [
     [
       "library_back",
       "abno",
-      p("도서관에서 돌아옴", "Returned from the Library", "図書館から帰還した"),
-      p(
+      k("도서관에서 돌아옴", "Returned from the Library", "図書館から帰還した"),
+      k(
         "도서관에서 돌아왔을 때",
         "Return from the Library",
         "図書館から帰ってきたとき",
@@ -86738,8 +90097,8 @@ const dj = [
     [
       "warp_car_0",
       "warp",
-      p("워프 열차 0칸 돌파", "Cleared 0 Warp Train cars", "ワープ列車0両突破"),
-      p(
+      k("워프 열차 0칸 돌파", "Cleared 0 Warp Train cars", "ワープ列車0両突破"),
+      k(
         "워프 열차에 탔지만 첫 칸을 넘지 못했을 때",
         "Board the Warp Train but fail to clear the first car",
         "ワープ列車に乗ったが最初の車両を越えられなかったとき",
@@ -86749,8 +90108,8 @@ const dj = [
     [
       "warp_car_1",
       "warp",
-      p("워프 열차 1칸 돌파", "Cleared 1 Warp Train car", "ワープ列車1両突破"),
-      p(
+      k("워프 열차 1칸 돌파", "Cleared 1 Warp Train car", "ワープ列車1両突破"),
+      k(
         "워프 열차에서 1칸을 넘었을 때",
         "Clear 1 car of the Warp Train",
         "ワープ列車で1両を越えたとき",
@@ -86760,8 +90119,8 @@ const dj = [
     [
       "warp_car_2",
       "warp",
-      p("워프 열차 2칸 돌파", "Cleared 2 Warp Train cars", "ワープ列車2両突破"),
-      p(
+      k("워프 열차 2칸 돌파", "Cleared 2 Warp Train cars", "ワープ列車2両突破"),
+      k(
         "워프 열차에서 2칸을 넘었을 때",
         "Clear 2 cars of the Warp Train",
         "ワープ列車で2両を越えたとき",
@@ -86771,8 +90130,8 @@ const dj = [
     [
       "warp_car_3",
       "warp",
-      p("워프 열차 3칸 돌파", "Cleared 3 Warp Train cars", "ワープ列車3両突破"),
-      p(
+      k("워프 열차 3칸 돌파", "Cleared 3 Warp Train cars", "ワープ列車3両突破"),
+      k(
         "워프 열차에서 3칸을 넘었을 때",
         "Clear 3 cars of the Warp Train",
         "ワープ列車で3両を越えたとき",
@@ -86782,8 +90141,8 @@ const dj = [
     [
       "warp_car_4",
       "warp",
-      p("워프 열차 4칸 돌파", "Cleared 4 Warp Train cars", "ワープ列車4両突破"),
-      p(
+      k("워프 열차 4칸 돌파", "Cleared 4 Warp Train cars", "ワープ列車4両突破"),
+      k(
         "워프 열차에서 4칸을 넘었을 때",
         "Clear 4 cars of the Warp Train",
         "ワープ列車で4両を越えたとき",
@@ -86793,8 +90152,8 @@ const dj = [
     [
       "warp_car_5",
       "warp",
-      p("워프 열차 5칸 돌파", "Cleared 5 Warp Train cars", "ワープ列車5両突破"),
-      p(
+      k("워프 열차 5칸 돌파", "Cleared 5 Warp Train cars", "ワープ列車5両突破"),
+      k(
         "워프 열차에서 5칸을 넘었을 때",
         "Clear 5 cars of the Warp Train",
         "ワープ列車で5両を越えたとき",
@@ -86804,8 +90163,8 @@ const dj = [
     [
       "warp_car_6",
       "warp",
-      p("워프 열차 6칸 돌파", "Cleared 6 Warp Train cars", "ワープ列車6両突破"),
-      p(
+      k("워프 열차 6칸 돌파", "Cleared 6 Warp Train cars", "ワープ列車6両突破"),
+      k(
         "워프 열차에서 6칸을 넘었을 때",
         "Clear 6 cars of the Warp Train",
         "ワープ列車で6両を越えたとき",
@@ -86815,8 +90174,8 @@ const dj = [
     [
       "warp_car_7",
       "warp",
-      p("워프 열차 7칸 돌파", "Cleared 7 Warp Train cars", "ワープ列車7両突破"),
-      p(
+      k("워프 열차 7칸 돌파", "Cleared 7 Warp Train cars", "ワープ列車7両突破"),
+      k(
         "워프 열차에서 7칸을 넘었을 때",
         "Clear 7 cars of the Warp Train",
         "ワープ列車で7両を越えたとき",
@@ -86826,8 +90185,8 @@ const dj = [
     [
       "warp_clear",
       "warp",
-      p("워프 열차 완주", "Ran the Warp Train to the end", "ワープ列車を完走"),
-      p(
+      k("워프 열차 완주", "Ran the Warp Train to the end", "ワープ列車を完走"),
+      k(
         "워프 열차의 모든 칸을 지나 끝까지 갔을 때",
         "Pass every car of the Warp Train to the end",
         "ワープ列車のすべての車両を通り抜けたとき",
@@ -86837,12 +90196,12 @@ const dj = [
     [
       "lake_drink",
       "lake",
-      p(
+      k(
         "따여 있던 포도맛 캔",
         "The already-opened grape soda",
         "開けてあったぶどう味の缶",
       ),
-      p(
+      k(
         "따여 있던 포도맛 캔을 마시고 대호수에 들어갔을 때",
         "Drink the already-opened grape soda and enter the Great Lake",
         "開けてあったぶどう味の缶を飲み、大湖に入ったとき",
@@ -86852,8 +90211,8 @@ const dj = [
     [
       "lake_hint2",
       "lake",
-      p("법 두 개를 산 삶", "Bought two Laws", "法を二つ買った生"),
-      p(
+      k("법 두 개를 산 삶", "Bought two Laws", "法を二つ買った生"),
+      k(
         "호수의 법을 평생 두 개 이상 샀을 때",
         "Buy two or more Laws of the lake in one life",
         "湖の法を生涯に二つ以上買ったとき",
@@ -86863,12 +90222,12 @@ const dj = [
     [
       "lake_cross",
       "lake",
-      p(
+      k(
         "대호수를 항해한 자",
         "One Who Sailed the Great Lake",
         "大湖を航海した者",
       ),
-      p(
+      k(
         "대호수 항해를 끝까지 마쳤을 때",
         "Finish a voyage across the Great Lake",
         "大湖の航海を最後までやり遂げたとき",
@@ -86878,12 +90237,12 @@ const dj = [
     [
       "lake_deep",
       "lake",
-      p(
+      k(
         "깊은 물을 셋 지나 닿은 삶",
         "Crossed three deep waters and reached port",
         "深い水を三つ越えて着いた生",
       ),
-      p(
+      k(
         "대호수에서 깊은 물을 세 번 지나 항구에 닿았을 때",
         "Cross three deep waters on the Great Lake and reach port",
         "大湖で深い水を三度越えて港に着いたとき",
@@ -86893,12 +90252,12 @@ const dj = [
     [
       "lake_whale_marlin",
       "lake",
-      p(
+      k(
         "모든 것을 꿰뚫는 청새치 고래를 만난 자",
         "One Who Met the All-Impaling Marlin Whale",
         "すべてを貫くカジキの鯨に出会った者",
       ),
-      p(
+      k(
         "대호수에서 청새치 고래를 만났을 때",
         "Meet the Marlin Whale on the Great Lake",
         "大湖でカジキの鯨に出会ったとき",
@@ -86908,12 +90267,12 @@ const dj = [
     [
       "lake_whale_pallid",
       "lake",
-      p(
+      k(
         "모든 것을 집어삼키는 창백한 고래를 만난 자",
         "One Who Met the All-Consuming Pallid Whale",
         "すべてを呑み込む蒼白の鯨に出会った者",
       ),
-      p(
+      k(
         "대호수에서 창백한 고래를 만났을 때",
         "Meet the Pallid Whale on the Great Lake",
         "大湖で蒼白の鯨に出会ったとき",
@@ -86923,12 +90282,12 @@ const dj = [
     [
       "lake_whale_crimson",
       "lake",
-      p(
+      k(
         "모든 것을 마르게 하는 새빨간 고래를 만난 자",
         "One Who Met the All-Withering Crimson Whale",
         "すべてを枯らす真紅の鯨に出会った者",
       ),
-      p(
+      k(
         "대호수에서 새빨간 고래를 만났을 때",
         "Meet the Crimson Whale on the Great Lake",
         "大湖で真紅の鯨に出会ったとき",
@@ -86938,12 +90297,12 @@ const dj = [
     [
       "heir_cand",
       "heir",
-      p(
+      k(
         "H사의 가주 후보로 자람",
         "Raised as an H Corp. Family Hierarch Candidate",
         "H社の家主候補として育った",
       ),
-      p(
+      k(
         "H사의 가주 후보로 태어나 자랐을 때",
         "Be born and raised as an H Corp. Family Hierarch Candidate",
         "H社の家主候補として生まれ育ったとき",
@@ -86953,12 +90312,12 @@ const dj = [
     [
       "heir_fail",
       "heir",
-      p(
+      k(
         "가주 심사에서 떨어짐",
         "Failed the Family Hierarch Evaluation",
         "家主審査に落ちた",
       ),
-      p(
+      k(
         "가주 심사에서 떨어졌을 때",
         "Fail the Family Hierarch Evaluation",
         "家主審査に落ちたとき",
@@ -86968,8 +90327,8 @@ const dj = [
     [
       "heir_head",
       "heir",
-      p("가주", "Family Hierarch", "家主"),
-      p(
+      k("가주", "Family Hierarch", "家主"),
+      k(
         "가주 심사를 통과해 가주가 되었을 때",
         "Pass the Evaluation and become Family Hierarch",
         "家主審査を通り、家主になったとき",
@@ -86979,12 +90338,12 @@ const dj = [
     [
       "rule_human",
       "heir",
-      p(
+      k(
         "선황충을 한 번도 따르지 않음",
         "Never once followed the Xianhuang Worm",
         "仙皇蟲に一度も従わなかった",
       ),
-      p(
+      k(
         "군주로서 다섯 번의 선택에서 한 번도 선황충을 따르지 않았을 때",
         "As Lord, refuse the Xianhuang Worm in all five choices",
         "君主として五度の選択で一度も仙皇蟲に従わなかったとき",
@@ -86994,12 +90353,12 @@ const dj = [
     [
       "rule_worm",
       "heir",
-      p(
+      k(
         "다섯 번 모두 선황충을 따름",
         "Followed the Xianhuang Worm all five times",
         "五度とも仙皇蟲に従った",
       ),
-      p(
+      k(
         "군주로서 다섯 번의 선택을 모두 선황충에 맡겼을 때",
         "As Lord, follow the Xianhuang Worm in all five choices",
         "君主として五度の選択をすべて仙皇蟲に委ねたとき",
@@ -87009,8 +90368,8 @@ const dj = [
     [
       "heir_lord",
       "heir",
-      p("군주", "Lord", "君主"),
-      p(
+      k("군주", "Lord", "君主"),
+      k(
         "가주가 된 뒤 군주의 자리에 올랐을 때",
         "Become Family Hierarch, then rise to Lord",
         "家主になった後、君主の座に就いたとき",
@@ -87020,12 +90379,12 @@ const dj = [
     [
       "rule_mercy",
       "heir",
-      p(
+      k(
         "자비로운 군주로 불림",
         "Called a merciful lord",
         "慈悲深い君主と呼ばれた",
       ),
-      p(
+      k(
         "군주로서 다스리는 동안 자비로운 쪽을 거듭 택했을 때",
         "As Lord, choose mercy again and again while ruling",
         "君主として治める間、慈悲深い側を選び続けたとき",
@@ -87035,8 +90394,8 @@ const dj = [
     [
       "rule_tyrant",
       "heir",
-      p("폭군으로 불림", "Called a tyrant", "暴君と呼ばれた"),
-      p(
+      k("폭군으로 불림", "Called a tyrant", "暴君と呼ばれた"),
+      k(
         "군주로서 다스리는 동안 가혹한 쪽을 거듭 택했을 때",
         "As Lord, choose cruelty again and again while ruling",
         "君主として治める間、苛烈な側を選び続けたとき",
@@ -87046,12 +90405,12 @@ const dj = [
     [
       "rule_abolish",
       "heir",
-      p(
+      k(
         "가주 심사를 없앰",
         "Abolished the Family Hierarch Evaluation",
         "家主審査を廃止した",
       ),
-      p(
+      k(
         "군주로서 가주 심사를 없앴을 때",
         "As Lord, abolish the Family Hierarch Evaluation",
         "君主として家主審査を廃止したとき",
@@ -87061,12 +90420,12 @@ const dj = [
     [
       "rule_kong",
       "heir",
-      p(
+      k(
         "공씨의 이름을 되살림",
         "Restored the name of the Kong family",
         "孔家の名を取り戻した",
       ),
-      p(
+      k(
         "군주로서 공씨의 이름을 되살렸을 때",
         "As Lord, restore the name of the Kong family",
         "君主として孔家の名を取り戻したとき",
@@ -87076,12 +90435,12 @@ const dj = [
     [
       "bf_stray",
       "bf",
-      p(
+      k(
         "혈귀가 됨 (떠돌이)",
         "Became a Bloodfiend (stray)",
         "血鬼になった（放浪者）",
       ),
-      p(
+      k(
         "가문 없는 떠돌이 혈귀가 되었을 때",
         "Become a stray Bloodfiend with no Family",
         "家門のない放浪の血鬼になったとき",
@@ -87091,8 +90450,8 @@ const dj = [
     [
       "bf_kin",
       "bf",
-      p("가문의 권속이 됨", "Became a Family's Kindred", "家門の眷属になった"),
-      p(
+      k("가문의 권속이 됨", "Became a Family's Kindred", "家門の眷属になった"),
+      k(
         "가문의 권속이 되었을 때",
         "Become a Family's Kindred",
         "家門の眷属になったとき",
@@ -87102,8 +90461,8 @@ const dj = [
     [
       "bloodbag",
       "bf",
-      p("피주머니가 됨", "Became a Bloodbag", "血袋になった"),
-      p(
+      k("피주머니가 됨", "Became a Bloodbag", "血袋になった"),
+      k(
         "혈귀에게 피주머니가 되었을 때",
         "Be made into a Bloodbag by a Bloodfiend",
         "血鬼に血袋にされたとき",
@@ -87113,8 +90472,8 @@ const dj = [
     [
       "bf_sleep",
       "bf",
-      p("긴 잠에 듦", "Went into the long sleep", "長い眠りについた"),
-      p(
+      k("긴 잠에 듦", "Went into the long sleep", "長い眠りについた"),
+      k(
         "혈귀로 긴 잠에 들었을 때",
         "Go into the long sleep as a Bloodfiend",
         "血鬼として長い眠りについたとき",
@@ -87124,12 +90483,12 @@ const dj = [
     [
       "bf_alive",
       "bf",
-      p(
+      k(
         "살아서 이야기를 맺은 혈귀",
         "A Bloodfiend whose story ended alive",
         "生きたまま物語を結んだ血鬼",
       ),
-      p(
+      k(
         "혈귀로 살아 있는 채 이야기를 맺었을 때",
         "End your story alive, as a Bloodfiend",
         "血鬼として生きたまま物語を結んだとき",
@@ -87139,12 +90498,12 @@ const dj = [
     [
       "bf_300",
       "bf",
-      p(
+      k(
         "삼백 년을 살아낸 혈귀",
         "A Bloodfiend who lived three hundred years",
         "三百年を生き抜いた血鬼",
       ),
-      p(
+      k(
         "혈귀로 300세를 넘겨 살았을 때",
         "Live past 300 as a Bloodfiend",
         "血鬼として300歳を超えて生きたとき",
@@ -87154,12 +90513,12 @@ const dj = [
     [
       "bf_reveal",
       "bf",
-      p(
+      k(
         "소속에 정체를 밝힌 혈귀",
         "A Bloodfiend who revealed themselves to their own",
         "所属に正体を明かした血鬼",
       ),
-      p(
+      k(
         "소속에 스스로 정체를 밝혔을 때",
         "Reveal what you are to your own organization",
         "所属に自ら正体を明かしたとき",
@@ -87169,12 +90528,12 @@ const dj = [
     [
       "bf_found",
       "bf",
-      p(
+      k(
         "숨긴 정체를 들킨 혈귀",
         "A Bloodfiend whose secret was found out",
         "隠した正体を知られた血鬼",
       ),
-      p(
+      k(
         "숨겨 온 정체를 소속에 들켰을 때",
         "Have your secret found out by your organization",
         "隠してきた正体を所属に知られたとき",
@@ -87184,12 +90543,12 @@ const dj = [
     [
       "bf_nobite",
       "bf",
-      p(
+      k(
         "열 해 동안 물지 않은 혈귀",
         "A Bloodfiend who went ten years without biting",
         "十年噛まなかった血鬼",
       ),
-      p(
+      k(
         "혈귀가 된 뒤 열 해 동안 한 번도 물지 않았을 때",
         "Go ten years as a Bloodfiend without biting anyone",
         "血鬼になって十年、一度も噛まなかったとき",
@@ -87199,12 +90558,12 @@ const dj = [
     [
       "bf_epi_nobite",
       "bf",
-      p(
+      k(
         "물지 않은 스무 해",
         "Twenty years without a bite",
         "噛まなかった二十年",
       ),
-      p(
+      k(
         "살아서 끝맺은 혈귀가 스무 해 넘게 아무도 물지 않았을 때",
         "End alive as a Bloodfiend who went twenty years without biting",
         "生きたまま結んだ血鬼が二十年以上誰も噛まなかったとき",
@@ -87214,12 +90573,12 @@ const dj = [
     [
       "bf_two_kin",
       "bf",
-      p(
+      k(
         "권속 둘을 모두 만듦",
         "Made both of your Kindred",
         "眷属をふたりとも生み出した",
       ),
-      p(
+      k(
         "권속을 둘 다 만들었을 때",
         "Make both of your Kindred",
         "眷属をふたりとも生み出したとき",
@@ -87229,12 +90588,12 @@ const dj = [
     [
       "bf_gen1",
       "bf",
-      p(
+      k(
         "제1권속(장로)에 오름",
         "Rose to First Kindred (Elder)",
         "第一眷属（長老）に上り詰めた",
       ),
-      p(
+      k(
         "가문의 권속으로 제1권속(장로)까지 올랐을 때",
         "Rise to First Kindred (Elder) in a Family",
         "家門の眷属として第一眷属（長老）まで上がったとき",
@@ -87244,12 +90603,12 @@ const dj = [
     [
       "bf_bar20",
       "bf",
-      p(
+      k(
         "혈액바 스무 해 치",
         "Twenty years' worth of Hemobars",
         "血液バー二十年分",
       ),
-      p(
+      k(
         "혈귀로 혈액바를 스무 해 치 먹었을 때",
         "Live on Hemobars for twenty years as a Bloodfiend",
         "血鬼として血液バーを二十年分食べたとき",
@@ -87259,12 +90618,12 @@ const dj = [
     [
       "bf_end_hunter_last",
       "bf",
-      p(
+      k(
         "마지막 사냥꾼을 기다린 혈귀",
         "A Bloodfiend who waited for the last hunter",
         "最後の狩人を待った血鬼",
       ),
-      p(
+      k(
         "마지막 끝에서 사냥꾼을 기다리는 쪽을 골랐을 때",
         "At the end, choose to wait for the hunter",
         "最後の終わりで狩人を待つ道を選んだとき",
@@ -87274,12 +90633,12 @@ const dj = [
     [
       "bf_end_couple_sleep",
       "bf",
-      p(
+      k(
         "둘이 함께 잠든 혈귀",
         "Bloodfiends who slept together",
         "ふたりで眠った血鬼",
       ),
-      p(
+      k(
         "마지막 끝에서 배우자와 함께 잠드는 쪽을 골랐을 때",
         "At the end, choose to sleep together with your spouse",
         "最後の終わりで配偶者と共に眠る道を選んだとき",
@@ -87289,12 +90648,12 @@ const dj = [
     [
       "bf_end_smile_first",
       "bf",
-      p(
+      k(
         "배우자를 먼저 재운 혈귀",
         "A Bloodfiend who let their spouse sleep first",
         "配偶者を先に眠らせた血鬼",
       ),
-      p(
+      k(
         "마지막 끝에서 배우자를 먼저 재우는 쪽을 골랐을 때",
         "At the end, choose to let your spouse sleep first",
         "最後の終わりで配偶者を先に眠らせる道を選んだとき",
@@ -87304,12 +90663,12 @@ const dj = [
     [
       "bf_end_gone_grave",
       "bf",
-      p(
+      k(
         "배우자 곁으로 돌아간 혈귀",
         "A Bloodfiend who returned to their spouse's side",
         "配偶者のそばへ帰った血鬼",
       ),
-      p(
+      k(
         "배우자를 먼저 보낸 뒤, 그 곁으로 돌아가는 쪽을 골랐을 때",
         "After losing your spouse, choose to return to their side",
         "配偶者を先に見送った後、そのそばへ帰る道を選んだとき",
@@ -87319,12 +90678,12 @@ const dj = [
     [
       "bf_end_elder_hand",
       "bf",
-      p(
+      k(
         "자리를 넘기고 잠든 장로",
         "An Elder who handed over the seat and slept",
         "座を譲って眠った長老",
       ),
-      p(
+      k(
         "장로로서 자리를 넘기고 잠드는 쪽을 골랐을 때",
         "As an Elder, choose to hand over the seat and sleep",
         "長老として座を譲り眠る道を選んだとき",
@@ -87334,8 +90693,8 @@ const dj = [
     [
       "bf_end_kin_cup",
       "bf",
-      p("권속에게 남긴 잔", "A cup left to the Kindred", "眷属に遺した杯"),
-      p(
+      k("권속에게 남긴 잔", "A cup left to the Kindred", "眷属に遺した杯"),
+      k(
         "권속을 둔 채, 잔을 남기고 가는 쪽을 골랐을 때",
         "With Kindred of your own, choose to leave a cup behind",
         "眷属を残し、杯を遺して去る道を選んだとき",
@@ -87345,8 +90704,8 @@ const dj = [
     [
       "bf_end_faces",
       "bf",
-      p("셀 수 없는 얼굴", "Countless faces", "数えきれない顔"),
-      p(
+      k("셀 수 없는 얼굴", "Countless faces", "数えきれない顔"),
+      k(
         "서른 명 넘게 물거나 세 번 넘게 광란한 혈귀가 긴 잠에 들었을 때",
         "Go into the long sleep after biting thirty or frenzying three times",
         "三十人以上噛むか三度以上狂乱した血鬼が長い眠りについたとき",
@@ -87356,8 +90715,8 @@ const dj = [
     [
       "bf_epi_couple",
       "bf",
-      p("둘이서 오래", "Together, for a long time", "ふたりで長く"),
-      p(
+      k("둘이서 오래", "Together, for a long time", "ふたりで長く"),
+      k(
         "배우자를 권속으로 만든 혈귀가 살아서 끝맺었을 때",
         "End alive as a Bloodfiend who made their spouse Kindred",
         "配偶者を眷属にした血鬼が生きたまま結んだとき",
@@ -87367,8 +90726,8 @@ const dj = [
     [
       "bf_epi_smile",
       "bf",
-      p("늦게 온 웃음", "A smile that came late", "遅れてきた笑み"),
-      p(
+      k("늦게 온 웃음", "A smile that came late", "遅れてきた笑み"),
+      k(
         "뜻을 거슬러 배우자를 문 혈귀가 살아서 끝맺었을 때",
         "End alive after biting a spouse who asked you not to",
         "意に反して配偶者を噛んだ血鬼が生きたまま結んだとき",
@@ -87378,8 +90737,8 @@ const dj = [
     [
       "bf_epi_gone",
       "bf",
-      p("늙지 않는 쪽", "The one who does not age", "老いないほう"),
-      p(
+      k("늙지 않는 쪽", "The one who does not age", "老いないほう"),
+      k(
         "배우자를 사람으로 떠나보낸 혈귀가 살아서 끝맺었을 때",
         "End alive after letting your spouse leave as a human",
         "配偶者を人として見送った血鬼が生きたまま結んだとき",
@@ -87389,8 +90748,8 @@ const dj = [
     [
       "bf_epi_elder",
       "bf",
-      p("오래 앉은 장로", "The long-seated Elder", "長く座した長老"),
-      p(
+      k("오래 앉은 장로", "The long-seated Elder", "長く座した長老"),
+      k(
         "장로(제1권속)가 살아서 끝맺었을 때",
         "End alive as an Elder (First Kindred)",
         "長老（第一眷属）が生きたまま結んだとき",
@@ -87400,8 +90759,8 @@ const dj = [
     [
       "bf_epi_hunter",
       "bf",
-      p("잠그지 않는 문", "The unlocked door", "鍵のない扉"),
-      p(
+      k("잠그지 않는 문", "The unlocked door", "鍵のない扉"),
+      k(
         "사냥꾼을 세 번 넘게 이기고 열 해 동안 사냥이 없던 혈귀가 살아서 끝맺었을 때",
         "End alive after beating hunters three times and ten quiet years",
         "狩人に三度以上勝ち、十年間狩られなかった血鬼が生きたまま結んだとき",
@@ -87411,8 +90770,8 @@ const dj = [
     [
       "bf_epi_faces",
       "bf",
-      p("밤이 아는 이름", "A name the night knows", "夜が知る名"),
-      p(
+      k("밤이 아는 이름", "A name the night knows", "夜が知る名"),
+      k(
         "서른 명 넘게 물거나 세 번 넘게 광란한 혈귀가 살아서 끝맺었을 때",
         "End alive after biting thirty or frenzying three times",
         "三十人以上噛むか三度以上狂乱した血鬼が生きたまま結んだとき",
@@ -87422,8 +90781,8 @@ const dj = [
     [
       "bf_epi_kin",
       "bf",
-      p("이름 없는 가문", "A nameless Family", "名もなき家門"),
-      p(
+      k("이름 없는 가문", "A nameless Family", "名もなき家門"),
+      k(
         "떠돌이 혈귀가 권속을 만들고 살아서 끝맺었을 때",
         "End alive as a stray Bloodfiend who made Kindred",
         "流れの血鬼が眷属を作り、生きたまま結んだとき",
@@ -87433,8 +90792,8 @@ const dj = [
     [
       "bf_epi_bag",
       "bf",
-      p("떠나지 않는 피주머니", "The Bloodbag that never left", "去らない血袋"),
-      p(
+      k("떠나지 않는 피주머니", "The Bloodbag that never left", "去らない血袋"),
+      k(
         "피주머니를 둔 혈귀가 살아서 끝맺었을 때",
         "End alive as a Bloodfiend who kept a Bloodbag",
         "血袋を持つ血鬼が生きたまま結んだとき",
@@ -87444,8 +90803,8 @@ const dj = [
     [
       "bf_epi_bar",
       "bf",
-      p("혈액바 상자의 탑", "A tower of Hemobar boxes", "血液バーの箱の塔"),
-      p(
+      k("혈액바 상자의 탑", "A tower of Hemobar boxes", "血液バーの箱の塔"),
+      k(
         "혈액바로 스무 해를 버틴 혈귀가 살아서 끝맺었을 때",
         "End alive after twenty years on Hemobars",
         "血液バーで二十年しのいだ血鬼が生きたまま結んだとき",
@@ -87455,15 +90814,15 @@ const dj = [
     [
       "bl_join",
       "blade",
-      p("검계", "Blade Lineage", "剣契"),
-      p("검계에 들어갔을 때", "Join the Blade Lineage", "剣契に入ったとき"),
+      k("검계", "Blade Lineage", "剣契"),
+      k("검계에 들어갔을 때", "Join the Blade Lineage", "剣契に入ったとき"),
       null,
     ],
     [
       "bl_salsu",
       "blade",
-      p("검계 살수", "Blade Lineage Salsu", "剣契 殺手"),
-      p(
+      k("검계 살수", "Blade Lineage Salsu", "剣契 殺手"),
+      k(
         "검계에서 살수까지 올랐을 때",
         "Rise to Salsu in the Blade Lineage",
         "剣契で殺手まで上がったとき",
@@ -87473,8 +90832,8 @@ const dj = [
     [
       "bl_mentor",
       "blade",
-      p("검계 우두머리", "Blade Lineage Mentor", "剣契 頭目"),
-      p(
+      k("검계 우두머리", "Blade Lineage Mentor", "剣契 頭目"),
+      k(
         "검계에서 우두머리까지 올랐을 때",
         "Rise to Mentor in the Blade Lineage",
         "剣契で頭目まで上がったとき",
@@ -87484,12 +90843,12 @@ const dj = [
     [
       "bl_scatter_leave",
       "blade",
-      p(
+      k(
         "칼을 들고 떠난 자",
         "One who left with their blade",
         "刀を手に去った者",
       ),
-      p(
+      k(
         "검계가 흩어질 때 칼을 들고 떠났을 때",
         "Leave with your blade when the Lineage scatters",
         "剣契が散るとき、刀を手に去ったとき",
@@ -87499,12 +90858,12 @@ const dj = [
     [
       "bl_last",
       "blade",
-      p(
+      k(
         "마지막 항쟁에서 살아 나온 자",
         "One who survived the last stand",
         "最後の抗争を生き延びた者",
       ),
-      p(
+      k(
         "마지막 항쟁에서 살아 나왔을 때",
         "Survive the last stand",
         "最後の抗争を生き延びたとき",
@@ -87514,12 +90873,12 @@ const dj = [
     [
       "bl_homeland",
       "blade",
-      p(
+      k(
         "19구로 사람을 보낸 우두머리",
         "A Mentor who sent someone to District 19",
         "19区へ人を送った頭目",
       ),
-      p(
+      k(
         "우두머리로서 19구로 사람을 보냈을 때",
         "As Mentor, send someone to District 19",
         "頭目として19区へ人を送ったとき",
@@ -87529,12 +90888,12 @@ const dj = [
     [
       "bl_m_retreat",
       "blade",
-      p(
+      k(
         "칼을 거둔 우두머리",
         "A Mentor who sheathed the blade",
         "刀を収めた頭目",
       ),
-      p(
+      k(
         "우두머리로서 마지막 항쟁 대신 칼을 거뒀을 때",
         "As Mentor, sheathe the blade instead of the last stand",
         "頭目として最後の抗争の代わりに刀を収めたとき",
@@ -87544,8 +90903,8 @@ const dj = [
     [
       "bl_m_distort",
       "blade",
-      p("뒤틀린 우두머리", "The Distorted Mentor", "ねじれた頭目"),
-      p(
+      k("뒤틀린 우두머리", "The Distorted Mentor", "ねじれた頭目"),
+      k(
         "우두머리가 뒤틀렸을 때",
         "Become Distorted as Mentor",
         "頭目がねじれたとき",
@@ -87555,12 +90914,12 @@ const dj = [
     [
       "bl_d_plague",
       "blade",
-      p(
+      k(
         "도시 질병이 된 우두머리",
         "A Mentor rated Urban Plague",
         "都市疾病となった頭目",
       ),
-      p(
+      k(
         "뒤틀린 우두머리가 도시 질병 등급까지 이르렀을 때",
         "As a Distorted Mentor, reach the Urban Plague rating",
         "ねじれた頭目が都市疾病の等級に達したとき",
@@ -87570,12 +90929,12 @@ const dj = [
     [
       "bl_d_lay",
       "blade",
-      p(
+      k(
         "칼을 내려놓은 뒤틀림",
         "A Distortion that laid down the blade",
         "刀を置いたねじれ",
       ),
-      p(
+      k(
         "뒤틀린 우두머리가 스스로 칼을 내려놓았을 때",
         "As a Distorted Mentor, lay down the blade yourself",
         "ねじれた頭目が自ら刀を置いたとき",
@@ -87585,12 +90944,12 @@ const dj = [
     [
       "bl_w_settle",
       "blade",
-      p(
+      k(
         "칼을 내려놓은 검객",
         "A swordsman who laid down the blade",
         "刀を置いた剣客",
       ),
-      p(
+      k(
         "떠돌이 검객으로 칼을 내려놓고 정착했을 때",
         "As a wandering swordsman, lay down the blade and settle",
         "放浪の剣客として刀を置き、落ち着いたとき",
@@ -87600,12 +90959,12 @@ const dj = [
     [
       "bl_w_student",
       "blade",
-      p(
+      k(
         "본국검을 물려준 자",
         "One who passed on Bongukgeom",
         "本国剣を伝えた者",
       ),
-      p(
+      k(
         "떠돌이 검객으로 아이에게 본국검을 물려주었을 때",
         "As a wandering swordsman, pass Bongukgeom on to a child",
         "流れの剣客として子に本国剣を伝えたとき",
@@ -87615,12 +90974,12 @@ const dj = [
     [
       "bl_w_reform",
       "blade",
-      p(
+      k(
         "검계를 다시 세운 자",
         "One who rebuilt the Blade Lineage",
         "剣契を再興した者",
       ),
-      p(
+      k(
         "떠돌이 검객으로 검계를 다시 세웠을 때",
         "As a wandering swordsman, rebuild the Blade Lineage",
         "流れの剣客として剣契を再興したとき",
@@ -87630,8 +90989,8 @@ const dj = [
     [
       "ws_join",
       "ws",
-      p("공방에 이름을 올림", "Name on a Workshop roll", "工房に名を連ねた"),
-      p(
+      k("공방에 이름을 올림", "Name on a Workshop roll", "工房に名を連ねた"),
+      k(
         "트레스 협회의 자격 시험에 붙어 공방에 들어갔을 때",
         "Pass the Tres Association exam and join a Workshop",
         "トレス協会の資格試験に受かって工房に入ったとき",
@@ -87641,8 +91000,8 @@ const dj = [
     [
       "ws_rep",
       "ws",
-      p("공방 대표", "Workshop Head", "工房の代表"),
-      p(
+      k("공방 대표", "Workshop Head", "工房の代表"),
+      k(
         "공방의 대표가 되었을 때",
         "Become the head of a Workshop",
         "工房の代表になったとき",
@@ -87652,12 +91011,12 @@ const dj = [
     [
       "ws_s",
       "ws",
-      p(
+      k(
         "이름난 공방의 대표",
         "Head of a renowned Workshop",
         "名高い工房の代表",
       ),
-      p(
+      k(
         "격이 높은 공방의 대표가 되었을 때",
         "Become the head of a high-ranking Workshop",
         "格の高い工房の代表になったとき",
@@ -87667,8 +91026,8 @@ const dj = [
     [
       "ws_fame5",
       "ws",
-      p("도시가 아는 공방", "A Workshop the City knows", "都市が知る工房"),
-      p(
+      k("도시가 아는 공방", "A Workshop the City knows", "都市が知る工房"),
+      k(
         "공방의 명성이 80에 닿았을 때",
         "Raise your Workshop's fame to 80",
         "工房の名声が80に届いたとき",
@@ -87678,8 +91037,8 @@ const dj = [
     [
       "ws_color_order",
       "ws",
-      p("특색의 손에 맞춤", "Fitted to a Color's hand", "特色の手に合わせた"),
-      p(
+      k("특색의 손에 맞춤", "Fitted to a Color's hand", "特色の手に合わせた"),
+      k(
         "특색이 직접 맡긴 주문을 해냈을 때",
         "Complete an order a Color brought in person",
         "特色が直接持ち込んだ注文をやり遂げたとき",
@@ -87689,12 +91048,12 @@ const dj = [
     [
       "ws_finger4",
       "ws",
-      p(
+      k(
         "네 손가락이 모두 찾아옴",
         "All four Fingers came calling",
         "四本の指がすべて訪れた",
       ),
-      p(
+      k(
         "엄지·검지·중지·약지의 주문을 모두 해냈을 때",
         "Complete orders from the Thumb, Index, Middle and Ring",
         "親指・人差し指・中指・薬指の注文をすべてやり遂げたとき",
@@ -87704,8 +91063,8 @@ const dj = [
     [
       "ws_masterpiece",
       "ws",
-      p("걸작을 남김", "Left a masterwork", "傑作を残した"),
-      p(
+      k("걸작을 남김", "Left a masterwork", "傑作を残した"),
+      k(
         "일생에 한 번 만드는 물건이 걸작 등급 이상일 때",
         "Your once-in-a-lifetime piece is rated Masterwork or higher",
         "一生に一度の品が傑作以上だったとき",
@@ -87715,8 +91074,8 @@ const dj = [
     [
       "ws_meisterwerk",
       "ws",
-      p("명작", "Magnum opus", "名作"),
-      p(
+      k("명작", "Magnum opus", "名作"),
+      k(
         "일생에 한 번 만드는 물건이 명작 등급 이상일 때",
         "Your once-in-a-lifetime piece is rated Magnum Opus or higher",
         "一生に一度の品が名作以上だったとき",
@@ -87726,8 +91085,8 @@ const dj = [
     [
       "ws_legend_work",
       "ws",
-      p("전설이 된 물건", "A piece that became legend", "伝説となった品"),
-      p(
+      k("전설이 된 물건", "A piece that became legend", "伝説となった品"),
+      k(
         "일생에 한 번 만드는 물건이 전설 등급일 때",
         "Your once-in-a-lifetime piece is rated Legend",
         "一生に一度の品が伝説だったとき",
@@ -87737,8 +91096,8 @@ const dj = [
     [
       "ws_perfect",
       "ws",
-      p("기적을 만든 자", "One who made a Miracle", "奇跡を作った者"),
-      p(
+      k("기적을 만든 자", "One who made a Miracle", "奇跡を作った者"),
+      k(
         "걸작 미니게임에서 100점을 냈을 때",
         "Score 100 in the masterpiece minigames",
         "傑作ミニゲームで100点を出したとき",
@@ -87748,8 +91107,8 @@ const dj = [
     [
       "ws_patent",
       "ws",
-      p("특허 하나", "One patent", "特許ひとつ"),
-      p(
+      k("특허 하나", "One patent", "特許ひとつ"),
+      k(
         "내 설계로 트레스 특허를 등록했을 때",
         "Register a Tres patent for your own design",
         "自分の設計でトレスの特許を登録したとき",
@@ -87759,8 +91118,8 @@ const dj = [
     [
       "ws_patron_color",
       "ws",
-      p("내 칼을 쥔 특색", "A Color holding my blade", "我が刃を握る特色"),
-      p(
+      k("내 칼을 쥔 특색", "A Color holding my blade", "我が刃を握る特色"),
+      k(
         "후원하던 해결사가 특색이 되었을 때",
         "A Fixer you sponsored becomes a Color",
         "後援していたフィクサーが特色になったとき",
@@ -87770,8 +91129,8 @@ const dj = [
     [
       "ws_claw",
       "ws",
-      p("발톱이 온 공방", "The Workshop the Claw visited", "爪が来た工房"),
-      p(
+      k("발톱이 온 공방", "The Workshop the Claw visited", "爪が来た工房"),
+      k(
         "트레스 경고가 세 번 쌓여 발톱이 찾아왔을 때",
         "Three Tres warnings pile up and the Claw comes",
         "トレスの警告が三つたまり、爪が訪れたとき",
@@ -87781,8 +91140,8 @@ const dj = [
     [
       "ws_sold",
       "ws",
-      p("공방을 넘김", "Sold the Workshop", "工房を手放した"),
-      p(
+      k("공방을 넘김", "Sold the Workshop", "工房を手放した"),
+      k(
         "공방을 날개에 팔았을 때",
         "Sell your Workshop to a Wing",
         "工房を翼に売ったとき",
@@ -87792,15 +91151,15 @@ const dj = [
     [
       "kk_join",
       "kuro",
-      p("흑운회", "Kurokumo Clan", "黒雲会"),
-      p("흑운회에 들어갔을 때", "Join the Kurokumo Clan", "黒雲会に入ったとき"),
+      k("흑운회", "Kurokumo Clan", "黒雲会"),
+      k("흑운회에 들어갔을 때", "Join the Kurokumo Clan", "黒雲会に入ったとき"),
       null,
     ],
     [
       "kk_captain",
       "kuro",
-      p("흑운회 부조장", "Kurokumo Clan Captain", "黒雲会 副組長"),
-      p(
+      k("흑운회 부조장", "Kurokumo Clan Captain", "黒雲会 副組長"),
+      k(
         "흑운회에서 부조장까지 올랐을 때",
         "Rise to Captain in the Kurokumo Clan",
         "黒雲会で副組長まで上がったとき",
@@ -87810,8 +91169,8 @@ const dj = [
     [
       "kk_patriarch",
       "kuro",
-      p("흑운회 조장", "Kurokumo Clan Patriarch", "黒雲会 組長"),
-      p(
+      k("흑운회 조장", "Kurokumo Clan Patriarch", "黒雲会 組長"),
+      k(
         "흑운회에서 조장까지 올랐을 때",
         "Rise to Patriarch in the Kurokumo Clan",
         "黒雲会で組長まで上がったとき",
@@ -87821,8 +91180,8 @@ const dj = [
     [
       "kk_ink3",
       "kuro",
-      p("세 겹의 검은 구름", "Three layers of black cloud", "三重の黒い雲"),
-      p(
+      k("세 겹의 검은 구름", "Three layers of black cloud", "三重の黒い雲"),
+      k(
         "검은 구름 문신을 세 겹까지 새겼을 때",
         "Have the black cloud tattoo inked three layers deep",
         "黒い雲の刺青を三重まで入れたとき",
@@ -87832,12 +91191,12 @@ const dj = [
     [
       "kk_truce",
       "kuro",
-      p(
+      k(
         "검계와 마주 앉은 자",
         "One who sat across from the Blade Lineage",
         "剣契と向かい合って座った者",
       ),
-      p(
+      k(
         "흑운회로서 검계와 마주 앉았을 때",
         "Sit across from the Blade Lineage as Kurokumo",
         "黒雲会として剣契と向かい合って座ったとき",
@@ -87847,12 +91206,12 @@ const dj = [
     [
       "kk_finger",
       "kuro",
-      p(
+      k(
         "손가락으로 값을 치른 자",
         "One who paid with a finger",
         "指で代償を払った者",
       ),
-      p(
+      k(
         "손가락 하나로 값을 치르고 살아남았을 때",
         "Pay with a finger and live",
         "指一本で代償を払い、生き延びたとき",
@@ -87862,12 +91221,12 @@ const dj = [
     [
       "kk_bl_last",
       "kuro",
-      p(
+      k(
         "검계의 마지막 골목을 본 자",
         "One who saw the Blade Lineage's last alley",
         "剣契の最後の路地を見た者",
       ),
-      p(
+      k(
         "흑운회로서 검계의 마지막 골목을 보았을 때",
         "As Kurokumo, witness the Blade Lineage's last alley",
         "黒雲会として剣契の最後の路地を見たとき",
@@ -87877,12 +91236,12 @@ const dj = [
     [
       "kk_retire",
       "kuro",
-      p(
+      k(
         "칼을 물려준 부조장",
         "A Captain who passed on the blade",
         "刀を譲った副組長",
       ),
-      p(
+      k(
         "부조장으로서 칼을 물려주고 물러났을 때",
         "As Captain, pass on the blade and step down",
         "副組長として刀を譲り、退いたとき",
@@ -87892,12 +91251,12 @@ const dj = [
     [
       "kk_p_end",
       "kuro",
-      p(
+      k(
         "자리를 넘긴 조장",
         "A Patriarch who passed on the seat",
         "座を譲った組長",
       ),
-      p(
+      k(
         "조장으로서 자리를 넘겼을 때",
         "As Patriarch, pass on the seat",
         "組長として座を譲ったとき",
@@ -87907,12 +91266,12 @@ const dj = [
     [
       "kk_dojo",
       "kuro",
-      p(
+      k(
         "도장을 차린 검객",
         "A swordsman who opened a dojo",
         "道場を開いた剣客",
       ),
-      p(
+      k(
         "물러난 뒤 도장을 차렸을 때",
         "Open a dojo after stepping down",
         "退いた後、道場を開いたとき",
@@ -87922,12 +91281,12 @@ const dj = [
     [
       "kk_d_student",
       "kuro",
-      p(
+      k(
         "검술을 물려준 자",
         "One who passed on swordsmanship",
         "剣術を伝えた者",
       ),
-      p(
+      k(
         "도장을 차린 뒤 아이에게 검술을 물려주었을 때",
         "After opening a dojo, pass swordsmanship on to a child",
         "道場を開いた後、子に剣術を伝えたとき",
@@ -87935,10 +91294,172 @@ const dj = [
       null,
     ],
     [
+      "dream_built",
+      "dream",
+      k("꿈을 꾸기 시작한 밤", "The night the dream began", "夢を見はじめた夜"),
+      k(
+        "P사에서 장로로 시작해 문 위에 이름을 걸었을 때",
+        "Start as an Elder in P Corp. and hang a name above the gate",
+        "P社で長老として始まり、門の上に名を掲げたとき",
+      ),
+      null,
+    ],
+    [
+      "dream_first",
+      "dream",
+      k("처음 열린 문", "The first gate opened", "初めて開いた門"),
+      k(
+        "첫 개장을 넘겼을 때",
+        "Get through the first opening",
+        "最初の開園を越えたとき",
+      ),
+      "dream_built",
+    ],
+    [
+      "dream_half",
+      "dream",
+      k("아홉 번 열린 문", "A gate opened nine times", "九度開いた門"),
+      k(
+        "아홉 번째 개장을 넘겼을 때",
+        "Get through the ninth opening",
+        "九度目の開園を越えたとき",
+      ),
+      "dream_first",
+    ],
+    [
+      "dream_full",
+      "dream",
+      k("끝나지 않는 꿈", "The dream that never ends", "終わらない夢"),
+      k(
+        "열일곱 번째 개장을 넘겼을 때",
+        "Get through the seventeenth opening",
+        "十七度目の開園を越えたとき",
+      ),
+      "dream_half",
+    ],
+    [
+      "dream_fell",
+      "dream",
+      k("무너진 꿈", "The fallen dream", "崩れた夢"),
+      k(
+        "랜드의 힘이 모자라 토벌되었을 때",
+        "The Land's strength falls short and it is subjugated",
+        "ランドの力が足りず討伐されたとき",
+      ),
+      "dream_built",
+    ],
+    [
+      "dream_road",
+      "dream",
+      k(
+        "돌아오지 못한 길",
+        "The road you never came back from",
+        "帰れなかった道",
+      ),
+      k(
+        "혼자 바깥에 나섰다가 습격당했을 때",
+        "Go out alone and get ambushed",
+        "ひとりで外に出て襲撃されたとき",
+      ),
+      "dream_built",
+    ],
+    [
+      "dream_key",
+      "dream",
+      k("문을 여는 손", "The hand that opens the gate", "門を開ける手"),
+      k(
+        "반란에서 권속에게 졌을 때",
+        "Lose to your Kindred in a revolt",
+        "反乱で眷属に敗れたとき",
+      ),
+      "dream_built",
+    ],
+    [
+      "dream_alone",
+      "dream",
+      k(
+        "잔 하나만 남은 밤",
+        "The night only one cup remained",
+        "杯ひとつだけ残った夜",
+      ),
+      k(
+        "반란에서 이기고 혼자 남았을 때",
+        "Win a revolt and be left alone",
+        "反乱に勝ち、ひとり残されたとき",
+      ),
+      "dream_built",
+    ],
+    [
+      "dream_plague",
+      "dream",
+      k("끝나지 않는 밤", "The night that never ends", "終わらない夜"),
+      k(
+        "아끼는 권속을 연달아 셋 잃고 분노가 넘쳤을 때",
+        "Lose three cherished Kindred in a row and let your rage overflow",
+        "大切な眷属を続けて三人失い、怒りが溢れたとき",
+      ),
+      "dream_built",
+    ],
+    [
+      "dream_feast",
+      "dream",
+      k(
+        "돌아오지 않은 이름들",
+        "The names that never came home",
+        "帰らなかった名前たち",
+      ),
+      k(
+        "개장에서 다섯 번 넘게 사람을 먹었을 때",
+        "Eat people at five or more openings",
+        "開園で五度以上人を喰らったとき",
+      ),
+      "dream_built",
+    ],
+    [
+      "dream_guest",
+      "dream",
+      k("칼을 맡긴 손님", "The guest who left their blade", "刀を預けた客"),
+      k(
+        "이름 난 사냥꾼을 손님으로 맞고 끝까지 갔을 때",
+        "Welcome a renowned hunter as a guest and see it through to the end",
+        "名の知れた狩人を客として迎え、最後まで行ったとき",
+      ),
+      "dream_built",
+    ],
+    [
+      "dream_people",
+      "dream",
+      k("사람과 함께 꾼 꿈", "A dream dreamed with people", "人と共に見た夢"),
+      null,
+      "dream_full",
+    ],
+    [
+      "dream_clean",
+      "dream",
+      k(
+        "한 방울도 억지로 받지 않은 꿈",
+        "A dream that never took a drop by force",
+        "一滴も無理に取らなかった夢",
+      ),
+      null,
+      "dream_full",
+    ],
+    [
+      "dream_six",
+      "dream",
+      k(
+        "처음 부른 이름 여섯",
+        "The six names first called",
+        "初めて呼んだ六つの名",
+      ),
+      null,
+      "dream_people",
+    ],
+    [
       "cl_claw",
       "claw",
-      p("머리의 처형자", "Executioner of the Head", "頭の処刑人"),
-      p(
+      k("머리의 처형자", "Executioner of the Head", "頭の処刑人"),
+      k(
         "C사에서 발톱 처형자로 시작했을 때",
         "Start as a Claw Executioner in C Corp.",
         "C社で爪の処刑人として始まったとき",
@@ -87948,12 +91469,12 @@ const dj = [
     [
       "cl_spotless",
       "claw",
-      p(
+      k(
         "고지서 없는 처형자",
         "An Executioner without a notice",
         "告知書のない処刑人",
       ),
-      p(
+      k(
         "고지서를 한 번도 받지 않고 15년차를 넘겼을 때",
         "Pass Year 15 without a single notice",
         "告知書を一度も受けずに15年目を越えたとき",
@@ -87963,12 +91484,12 @@ const dj = [
     [
       "cl_long",
       "claw",
-      p(
+      k(
         "스물다섯 해를 넘긴 처형자",
         "An Executioner past twenty-five years",
         "二十五年を越えた処刑人",
       ),
-      p(
+      k(
         "처형자로 25년차를 넘겼을 때",
         "Pass Year 25 as an Executioner",
         "処刑人として25年目を越えたとき",
@@ -87978,12 +91499,12 @@ const dj = [
     [
       "cl_color_kill",
       "claw",
-      p(
+      k(
         "특색을 처리한 처형자",
         "An Executioner who dealt with a Color",
         "特色を処理した処刑人",
       ),
-      p(
+      k(
         "명령서의 특색을 처리했을 때",
         "Deal with a Color named on an order",
         "命令書の特色を処理したとき",
@@ -87993,7 +91514,7 @@ const dj = [
     [
       "cl_claw_beat",
       "claw",
-      p(
+      k(
         "발톱을 넘은 처형자",
         "An Executioner who got past the Claw",
         "爪を越えた処刑人",
@@ -88004,14 +91525,14 @@ const dj = [
     [
       "cl_arbiter",
       "claw",
-      p("조율자를 만난 자", "One who met the Arbiter", "調律者に会った者"),
+      k("조율자를 만난 자", "One who met the Arbiter", "調律者に会った者"),
       null,
       "cl_claw_beat",
     ],
     [
       "cl_retire",
       "claw",
-      p(
+      k(
         "건틀릿을 반납한 처형자",
         "An Executioner who returned the gauntlet",
         "ガントレットを返納した処刑人",
@@ -88022,12 +91543,12 @@ const dj = [
     [
       "cl_clawed",
       "claw",
-      p(
+      k(
         "발톱에게 처리된 처형자",
         "An Executioner dealt with by the Claw",
         "爪に処理された処刑人",
       ),
-      p(
+      k(
         "두 번째 실수 뒤 처형자가 찾아왔을 때",
         "After a second failure, an Executioner comes for you",
         "二度目の失敗の後、処刑人が訪れたとき",
@@ -88037,15 +91558,15 @@ const dj = [
     [
       "cl_warp",
       "warp",
-      p("열차 안의 금기", "The Taboo Aboard the Train", "列車の中の禁忌"),
+      k("열차 안의 금기", "The Taboo Aboard the Train", "列車の中の禁忌"),
       null,
       null,
     ],
     [
       "guard_chosen",
       "guard",
-      p("가문의 부름", "The Family's Call", "家門の呼び声"),
-      p(
+      k("가문의 부름", "The Family's Call", "家門の呼び声"),
+      k(
         "H사 출신으로 25세에 가주 후보의 호위로 발탁되었을 때",
         "Be chosen at 25, as one born in H Corp., to guard a Family Hierarch Candidate",
         "H社出身として25歳で家主候補の護衛に抜擢されたとき",
@@ -88055,8 +91576,8 @@ const dj = [
     [
       "guard_full",
       "guard",
-      p("채워진 그릇", "A Filled Vessel", "満たされた器"),
-      p(
+      k("채워진 그릇", "A Filled Vessel", "満たされた器"),
+      k(
         "가문의 지원으로 그릇 끝까지 강해졌을 때",
         "Grow as strong as your vessel allows with the Family's backing",
         "家門の支援で器の限りまで強くなったとき",
@@ -88066,8 +91587,8 @@ const dj = [
     [
       "guard_big",
       "guard",
-      p("큰 그릇", "A Great Vessel", "大きな器"),
-      p(
+      k("큰 그릇", "A Great Vessel", "大きな器"),
+      k(
         "1급의 그릇으로 발탁되어 그 끝까지 닿았을 때",
         "Be chosen with a Grade 1 vessel and reach its limit",
         "1級の器として抜擢され、その限りまで届いたとき",
@@ -88077,8 +91598,8 @@ const dj = [
     [
       "guard_pass",
       "guard",
-      p("가주의 왼쪽", "The Hierarch's Left", "家主の左"),
-      p(
+      k("가주의 왼쪽", "The Hierarch's Left", "家主の左"),
+      k(
         "호위한 후보가 가주 심사를 통과했을 때",
         "The candidate you guarded passes the Family Hierarch Evaluation",
         "護衛した候補が家主審査を通過したとき",
@@ -88088,8 +91609,8 @@ const dj = [
     [
       "guard_stay",
       "guard",
-      p("왼쪽 자리", "The Left Side", "左の席"),
-      p(
+      k("왼쪽 자리", "The Left Side", "左の席"),
+      k(
         "가주 심사를 통과한 뒤 해결사로서 가주의 곁에 남았을 때",
         "After the Evaluation, stay at the Hierarch's side as a Fixer",
         "家主審査の通過後、フィクサーとして家主のそばに残ったとき",
@@ -88099,8 +91620,8 @@ const dj = [
     [
       "guard_against",
       "guard",
-      p("작은 그릇의 기적", "The Miracle of a Small Vessel", "小さな器の奇跡"),
-      p(
+      k("작은 그릇의 기적", "The Miracle of a Small Vessel", "小さな器の奇跡"),
+      k(
         "체급 6 이하로 가주 심사의 기습을 두 번 다 막아 냈을 때",
         "Block both ambushes in the Evaluation at strength 6 or lower",
         "格6以下で家主審査の奇襲を二度とも防いだとき",
@@ -88110,8 +91631,8 @@ const dj = [
     [
       "guard_fail",
       "guard",
-      p("빈 오른쪽", "The Empty Right", "空いた右"),
-      p(
+      k("빈 오른쪽", "The Empty Right", "空いた右"),
+      k(
         "호위한 후보를 가주 심사에서 잃었을 때",
         "Lose the candidate you guarded in the Evaluation",
         "護衛した候補を家主審査で失ったとき",
@@ -88121,8 +91642,8 @@ const dj = [
     [
       "guard_teach",
       "guard",
-      p("잘못된 가르침", "A Wrong Lesson", "誤った教え"),
-      p(
+      k("잘못된 가르침", "A Wrong Lesson", "誤った教え"),
+      k(
         "1차 심사에서 후보에게 이상한 대답을 가르쳤을 때",
         "Teach the candidate a strange answer in the first round",
         "一次審査で候補に妙な答えを教えたとき",
@@ -88132,8 +91653,8 @@ const dj = [
     [
       "guard_retire",
       "guard",
-      p("넘겨준 왼쪽", "The Left Side Handed Over", "譲った左"),
-      p(
+      k("넘겨준 왼쪽", "The Left Side Handed Over", "譲った左"),
+      k(
         "호위무사로서 젊은 호위에게 자리를 넘겨주었을 때",
         "As a Bodyguard, hand your place to a young guard",
         "護衛武士として若い護衛に席を譲ったとき",
@@ -88143,8 +91664,8 @@ const dj = [
     [
       "guard_before",
       "guard",
-      p("빈 왼쪽 한 뼘", "A Hand-Span Left Empty", "空けた左の一尺"),
-      p(
+      k("빈 왼쪽 한 뼘", "A Hand-Span Left Empty", "空けた左の一尺"),
+      k(
         "호위무사로서 가주보다 먼저 떠났을 때",
         "As a Bodyguard, pass away before the Hierarch",
         "護衛武士として家主より先に逝ったとき",
@@ -88154,8 +91675,8 @@ const dj = [
     [
       "guard_after",
       "guard",
-      p("남겨진 호위", "The Guard Left Behind", "残された護衛"),
-      p(
+      k("남겨진 호위", "The Guard Left Behind", "残された護衛"),
+      k(
         "호위무사로서 가주를 먼저 보냈을 때",
         "As a Bodyguard, see the Hierarch off first",
         "護衛武士として家主を先に見送ったとき",
@@ -88165,8 +91686,8 @@ const dj = [
     [
       "guard_friend",
       "guard",
-      p("친구였던 가주", "A Hierarch Who Was a Friend", "友だった家主"),
-      p(
+      k("친구였던 가주", "A Hierarch Who Was a Friend", "友だった家主"),
+      k(
         "호위무사로서 신임을 끝까지 채우고 삶을 마쳤을 때",
         "End your life as a Bodyguard with the Hierarch's full trust",
         "護衛武士として信任を満たしたまま生涯を終えたとき",
@@ -88176,8 +91697,8 @@ const dj = [
     [
       "index_e",
       "finger",
-      p("e(무리수)", "e (the irrational number)", "e（無理数）"),
-      p(
+      k("e(무리수)", "e (the irrational number)", "e（無理数）"),
+      k(
         "검지 대행자로서 e를 끝까지 읊으라는 지령을 받았을 때",
         "As an Agent of the Index, receive the order to recite e to the end",
         "人差し指の代行者として、eを最後まで唱えよという指令を受けたとき",
@@ -88187,8 +91708,8 @@ const dj = [
     [
       "ampoule",
       "city",
-      p("K사 앰플", "K Corp. Ampoule", "K社アンプル"),
-      p(
+      k("K사 앰플", "K Corp. Ampoule", "K社アンプル"),
+      k(
         "암시장에서 K사 앰플을 샀을 때",
         "Buy a K Corp. Ampoule on the black market",
         "闇市でK社アンプルを買ったとき",
@@ -88198,8 +91719,8 @@ const dj = [
     [
       "warp_citizen",
       "warp",
-      p("시민칸의 스승", "The Teacher of the Citizens' Car", "市民車両の師"),
-      p(
+      k("시민칸의 스승", "The Teacher of the Citizens' Car", "市民車両の師"),
+      k(
         "특색으로 시민 칸에 섞여 워프 열차에 올랐을 때",
         "As a Color, board the Warp Train disguised among the citizens",
         "特色として市民に紛れてワープ列車に乗ったとき",
@@ -88209,8 +91730,8 @@ const dj = [
     [
       "warp_lost",
       "warp",
-      p("길을 잃음", "Lost", "道を見失った"),
-      p(
+      k("길을 잃음", "Lost", "道を見失った"),
+      k(
         "워프 열차에서 붉은 상자를 쓰고 길을 잃었을 때",
         "Use the red box on the Warp Train and lose your way",
         "ワープ列車で赤い箱を使い、道を見失ったとき",
@@ -88220,12 +91741,12 @@ const dj = [
     [
       "blind_kill",
       "distortion",
-      p(
+      k(
         "알아보지 못한 채 죽인 자",
         "One who killed without knowing who it was",
         "誰かも分からないまま殺した者",
       ),
-      p(
+      k(
         "눈먼 뒤틀림을 알아보지 못하고 죽였을 때",
         "Kill the blind Distortion without recognizing who it was",
         "盲目のねじれを見分けられずに殺したとき",
@@ -88235,8 +91756,8 @@ const dj = [
     [
       "blind_love",
       "distortion",
-      p("사랑하는 이에게", "To the One I Love", "愛する人へ"),
-      p(
+      k("사랑하는 이에게", "To the One I Love", "愛する人へ"),
+      k(
         "눈먼 뒤틀림이 누구인지 알아보았을 때",
         "Recognize who the blind Distortion is",
         "盲目のねじれが誰かを見抜いたとき",
@@ -88246,8 +91767,8 @@ const dj = [
     [
       "nameless",
       "finger",
-      p("無名", "Nameless (無名)", "無名"),
-      p(
+      k("無名", "Nameless (無名)", "無名"),
+      k(
         "검지 대행자로서 지령에 따라 모든 것에서 이름을 버렸을 때",
         "As an Agent of the Index, cast away your name from everything on an order",
         "人差し指の代行者として、指令に従いあらゆるものから名前を捨てたとき",
@@ -88257,12 +91778,12 @@ const dj = [
     [
       "lament_happy",
       "distortion",
-      p(
+      k(
         "그곳에서는 행복하기를",
         "May They Be Happy There",
         "そこでは幸せでありますように",
       ),
-      p(
+      k(
         "뒤틀려 가는 가까운 이를 직접 토벌했을 때",
         "Subjugate a loved one as they twist, by your own hand",
         "ねじれていく身近な人を自ら討伐したとき",
@@ -88272,12 +91793,12 @@ const dj = [
     [
       "lament_wait",
       "distortion",
-      p(
+      k(
         "그곳에서 기다려 주기를",
         "May They Wait for Me There",
         "そこで待っていてくれますように",
       ),
-      p(
+      k(
         "뒤틀려 가는 가까운 이를 두고 도망쳤을 때",
         "Run from a loved one as they twist",
         "ねじれていく身近な人を置いて逃げたとき",
@@ -88287,8 +91808,8 @@ const dj = [
     [
       "lament_meet",
       "distortion",
-      p("그곳에서 만나기를", "May We Meet There", "そこで会えますように"),
-      p(
+      k("그곳에서 만나기를", "May We Meet There", "そこで会えますように"),
+      k(
         "뒤틀려 가는 가까운 이를 마주하고 죽었을 때",
         "Face a loved one as they twist, and die",
         "ねじれていく身近な人と向き合い、死んだとき",
@@ -88298,19 +91819,19 @@ const dj = [
     [
       "lotto",
       "city",
-      p("부", "Wealth", "富"),
-      p("로또에 당첨되었을 때", "Win the lottery", "宝くじに当たったとき"),
+      k("부", "Wealth", "富"),
+      k("로또에 당첨되었을 때", "Win the lottery", "宝くじに当たったとき"),
       null,
     ],
     [
       "love_first",
       "city",
-      p(
+      k(
         "첫사랑과 가정을 이룸",
         "Built a home with a first love",
         "初恋の人と家庭を築いた",
       ),
-      p(
+      k(
         "10대에 생긴 연인과 가정을 이루었을 때",
         "Start a family with the partner you met as a teen",
         "10代で出会った恋人と家庭を築いたとき",
@@ -88320,12 +91841,12 @@ const dj = [
     [
       "refuse_proposal",
       "city",
-      p(
+      k(
         "청혼을 거절한 삶",
         "A life that turned down a proposal",
         "プロポーズを断った人生",
       ),
-      p(
+      k(
         "청혼을 거절하고 끝내 혼자 살았을 때",
         "Turn down a proposal and never marry",
         "プロポーズを断り、結婚しなかったとき",
@@ -88335,12 +91856,12 @@ const dj = [
     [
       "widowed",
       "city",
-      p(
+      k(
         "곁을 지킨 사람을 먼저 보냄",
         "Saw off the one who stayed by my side",
         "そばにいてくれた人を先に見送った",
       ),
-      p(
+      k(
         "함께 살던 사람을 먼저 떠나보냈을 때",
         "Lose the person you lived with",
         "共に暮らした人を先に見送ったとき",
@@ -88350,12 +91871,12 @@ const dj = [
     [
       "unwed_lover",
       "city",
-      p(
+      k(
         "끝내 이루지 못한 사이",
         "A bond that never came to be",
         "結ばれなかった間柄",
       ),
-      p(
+      k(
         "연인은 있었지만 끝내 함께 살지 못했을 때",
         "Have a lover but never live together",
         "恋人はいたが、共に暮らせなかったとき",
@@ -88365,8 +91886,8 @@ const dj = [
     [
       "thumb_will",
       "finger",
-      p("대부의 유언", "The Capo dei Capi's Will", "ゴッドファーザーの遺言"),
-      p(
+      k("대부의 유언", "The Capo dei Capi's Will", "ゴッドファーザーの遺言"),
+      k(
         "엄지 언더보스로서 대부의 유언을 받들어 대부가 되었을 때",
         "As a Sottocapo of the Thumb, honor the Capo dei Capi's will and take that seat",
         "親指のアンダーボスとして、ゴッドファーザーの遺言を受けてゴッドファーザーになったとき",
@@ -88376,8 +91897,8 @@ const dj = [
     [
       "middle_grudge",
       "finger",
-      p("식구의 원한", "The Family's Grudge", "家族の恨み"),
-      p(
+      k("식구의 원한", "The Family's Grudge", "家族の恨み"),
+      k(
         "중지 작은 형님·누님으로서 앙갚음 장부의 가장 오래된 줄을 혼자 지웠을 때",
         "As a Big Brother or Big Sister of the Middle, strike the oldest line from the Book of Vengeance alone",
         "中指の末兄・末姉として、仕返し帳簿の一番古い行を一人で消したとき",
@@ -88387,8 +91908,8 @@ const dj = [
     [
       "ring_silence",
       "finger",
-      p("말없는 감상", "A Silent Viewing", "無言の鑑賞"),
-      p(
+      k("말없는 감상", "A Silent Viewing", "無言の鑑賞"),
+      k(
         "약지 도슨트로서 마에스트로들의 말없는 감상 끝에 마에스트로가 되었을 때",
         "As a Docent of the Ring, become a Maestro after the Maestros view your work in silence",
         "薬指のドーセントとして、マエストロたちの無言の鑑賞の末にマエストロになったとき",
@@ -88398,8 +91919,8 @@ const dj = [
     [
       "fixer_named",
       "fixer",
-      p("지명받은 이름", "A Name That Was Called", "指名された名"),
-      p(
+      k("지명받은 이름", "A Name That Was Called", "指名された名"),
+      k(
         "두 단계 위의 지명 의뢰를 해냈을 때",
         "Complete a named request two steps above your usual work",
         "二段上の指名依頼をやり遂げたとき",
@@ -88409,8 +91930,8 @@ const dj = [
     [
       "fixer_lucky3",
       "fixer",
-      p("앞당겨진 심사", "A Review Moved Up", "前倒しの審査"),
-      p(
+      k("앞당겨진 심사", "A Review Moved Up", "前倒しの審査"),
+      k(
         "한 삶에서 뜻밖의 승급을 세 번 겪었을 때",
         "Get an unexpected promotion three times in one life",
         "一つの人生で思いがけない昇級を三度経験したとき",
@@ -88420,8 +91941,8 @@ const dj = [
     [
       "fixer_lucky_one",
       "fixer",
-      p("한 번에 1급", "Grade 1 in One Leap", "一足飛びの1級"),
-      p(
+      k("한 번에 1급", "Grade 1 in One Leap", "一足飛びの1級"),
+      k(
         "뜻밖의 승급으로 2급에서 1급이 되었을 때",
         "Go from Grade 2 to Grade 1 through an unexpected promotion",
         "思いがけない昇級で2級から1級になったとき",
@@ -88431,8 +91952,8 @@ const dj = [
     [
       "fixer_colorless",
       "fixer",
-      p("색 없는 1급", "A Grade 1 Without a Color", "色なき1級"),
-      p(
+      k("색 없는 1급", "A Grade 1 Without a Color", "色なき1級"),
+      k(
         "특색 공적을 다 채웠지만 특색이 되지 못하고 끝났을 때",
         "Fill your Color merit but end without becoming a Color",
         "特色の功績を満たしたが、特色になれずに終わったとき",
@@ -88442,8 +91963,8 @@ const dj = [
     [
       "office_broken",
       "fixer",
-      p("사무소 깨기", "Office Break-In", "事務所破り"),
-      p(
+      k("사무소 깨기", "Office Break-In", "事務所破り"),
+      k(
         "사무소가 습격당해 지키지 못했을 때",
         "When your Office is attacked and you fail to hold it",
         "事務所が襲撃され、守りきれなかったとき",
@@ -88451,31 +91972,31 @@ const dj = [
       null,
     ],
   ],
-  Nu = uj.map(([e, t, o, a, n]) => ({
+  ic = Nj.map(([e, t, o, a, n]) => ({
     key: e,
     group: t,
     label: o,
     hint: a,
     implies: n,
-    tier: am[e] || "myth",
+    tier: Bm[e] || "myth",
   })),
-  Sf = Object.fromEntries(Nu.map((e) => [e.key, e]));
-function iy(e) {
+  lw = Object.fromEntries(ic.map((e) => [e.key, e]));
+function Gy(e) {
   const t = new Set(),
     o = [...e];
   for (; o.length;) {
     const a = o.pop();
-    if (!a || t.has(a) || !Sf[a]) continue;
+    if (!a || t.has(a) || !lw[a]) continue;
     t.add(a);
-    const n = Sf[a].implies;
+    const n = lw[a].implies;
     n && o.push(n);
   }
   return t;
 }
 
-return {create:(data,options)=>cf(data,{...options,boost:true}),data:Pe,choose:kr,continue:x0,advance:sT,year:ev,records:s=>[...iy(ox(s).map(r=>r.key))],recordDetails:s=>ix(ox(s),Pe().rarity),rarityOrder:ef,combatPotential:s=>s.dr&&s.dr.end!=='return'?null:uo(s),fixerPower:s=>s.job==='해결사'&&(!s.dr||s.dr.end==='return')?ti(s):null,promotion:s=>s.dr&&s.dr.end!=='return'?null:s.job==='해결사'&&s.grade>=1&&!s.flags.includes('특색')?{current:s.merit||0,required:ht(s)}:jn(s)?{current:ro(s),required:at(s)}:null,job:be,cause:em,catalog:Nu,flags:gk,lang:Ol};}
+return {create:(data,options)=>qf(data,{...options,boost:true}),data:He,birthplace:seed=>Sd(He(),seed),birthPrefix:py,choose:Br,continue:i1,advance:wv,year:s2,records:s=>[...Gy(P0(s).map(r=>r.key))],recordDetails:s=>G0(P0(s),He().rarity),rarityOrder:Wf,combatPotential:s=>s.dr&&s.dr.end!=='return'?null:_o(s),fixerPower:s=>s.job==='해결사'&&(!s.dr||s.dr.end==='return')?bi(s):null,promotion:s=>s.dr&&s.dr.end!=='return'?null:s.job==='해결사'&&s.grade>=1&&!s.flags.includes('특색')?{current:s.merit||0,required:mt(s)}:Pn(s)?{current:mo(s),required:dt(s)}:null,job:Re,cause:Mm,catalog:ic,flags:Qk,lang:nh};}
 function advisorCommon() {
-  const source = 'index-LvXCymKa.js';
+  const source = 'index-BgAeWoVn.js';
   function normalized(s) {
     const state={...s,prompt:s.prompt?{...s.prompt}:null};
     delete state.savedProgress;
@@ -88674,6 +92195,12 @@ function makePlanner(E) {
     return best?{...best,seed:birth.seed,options,birth,effort,complete:true,matched:targets(best.state,goals)}:
       {state:birth,seed:birth.seed,options,birth,route:[],effort,complete:false,matched:targets(birth,goals)};
   }
+  function birthSeed(seed,birthplace=''){
+    if(typeof birthplace!=='string'||birthplace&&!E.data().regions.some(r=>r.id===birthplace))throw Error('Unknown birthplace');
+    const existing=E.birthplace(seed);
+    if(birthplace&&existing&&existing!==birthplace)throw Error('Seed already specifies a different birthplace. Choose Random, select that birthplace, or remove the seed prefix.');
+    return birthplace&&!existing?E.birthPrefix(birthplace)+':'+seed:seed;
+  }
   function validate(file){
     if(!file||![1,2,3].includes(file.version)||file.source!==C.source)throw Error('Unsupported route file or game version');
     if(!['en','ko','ja'].includes(file.lang)||!['birth','life'].includes(file.scope))throw Error('Missing route language or scope');
@@ -88681,6 +92208,10 @@ function makePlanner(E) {
     checkGoals(file.goals);
     if(!Array.isArray(file.route)||file.route.length>5000||(file.scope==='birth'&&file.route.length))throw Error('Invalid route length');
     const options={seed:file.options.seed,name:file.options.name,gender:file.options.gender};
+    if(file.options.birthplace!==undefined){
+      if(birthSeed(options.seed,file.options.birthplace)!==options.seed)throw Error('Birthplace does not match route seed');
+      options.birthplace=file.options.birthplace;
+    }
     const origin=file.version===3&&file.origin==='current'?'current':'seed';
     if(origin==='current'&&(!file.startState||file.startState.v!==7||file.startState.seed!==options.seed))throw Error('Missing current-life starting state');
     const s=origin==='current'?copy(file.startState):E.create(E.data(),options),route=[];
@@ -88732,7 +92263,7 @@ function makePlanner(E) {
     if(!C.finished(actual)||gameplaySignature(actual)!==gameplaySignature(expected)||JSON.stringify(E.records(actual))!==JSON.stringify(E.records(expected)))return null;
     return pack({state:actual,options:{seed:state.seed,name:state.name,gender:state.gender},route,effort:checked.effort,sort:checked.sort},checked.goals,'life',checked.lang,'current',state);
   }
-  return {copy,signature:C.signature,choices,apply,advance,targets,score,checkGoals,plan,simulate,pack,validate,gameplaySignature,retainAfterTyping};
+  return {birthSeed,copy,signature:C.signature,choices,apply,advance,targets,score,checkGoals,plan,simulate,pack,validate,gameplaySignature,retainAfterTyping};
 }
 
 function workerMain(){
@@ -88756,7 +92287,7 @@ function workerMain(){
         const words=new Uint32Array(count);crypto.getRandomValues(words);
         let results=[],examined=0;
         for(let n=0;n<count;n++){
-          const options={name:m.options.name,gender:m.options.gender,seed:m.seed||String(words[n])};
+          const options={name:m.options.name,gender:m.options.gender,birthplace:m.options.birthplace??'',seed:P.birthSeed(m.seed||String(words[n]),m.options.birthplace??'')};
           let lastBest=null;
           function update(candidates){
             results=results.filter(r=>r.file.seed!==options.seed);results.push(...candidates);
@@ -88780,8 +92311,8 @@ function workerMain(){
   };
 }
 
-const ADVISOR_VERSION="2.4.0";
-const ADVISOR_CATALOG={"records":[{"key":"born_head","group":"birth","label":{"ko":"머리(A~C사)에서 태어남","en":"Born under the Head (A–C Corp.)","ja":"頭（A〜C社）の下に生まれた"},"hint":{"ko":"A사, B사, C사 구역에서 태어났을 때","en":"Be born in the A, B or C Corp. district","ja":"A社・B社・C社の区で生まれたとき"},"implies":null,"tier":"uncommon"},{"key":"born_outskirts","group":"birth","label":{"ko":"외곽에서 태어남","en":"Born in the Outskirts","ja":"外郭で生まれた"},"hint":{"ko":"외곽에서 태어났을 때","en":"Be born in the Outskirts","ja":"外郭で生まれたとき"},"implies":null,"tier":"uncommon"},{"key":"orphan","group":"birth","label":{"ko":"부모 없이 태어남","en":"Born without parents","ja":"両親なしで生まれた"},"hint":{"ko":"부모 없이 태어났을 때","en":"Be born without parents","ja":"両親なしで生まれたとき"},"implies":null,"tier":"uncommon"},{"key":"pinky_star_heaven","group":"birth","label":{"ko":"36천강의 이름","en":"Name of the 36 Tiangang","ja":"三十六天罡の名"},"hint":{"ko":"태어날 때 별의 이름을 받았고, 그 별이 36천강에 들 때","en":"Receive a star's name at birth, and the star is one of the 36 Tiangang","ja":"生まれたときに星の名を受け、それが三十六天罡だったとき"},"implies":null,"tier":"rare"},{"key":"pinky_star_earth","group":"birth","label":{"ko":"72지살의 이름","en":"Name of the 72 Disha","ja":"七十二地煞の名"},"hint":{"ko":"태어날 때 별의 이름을 받았고, 그 별이 72지살에 들 때","en":"Receive a star's name at birth, and the star is one of the 72 Disha","ja":"生まれたときに星の名を受け、それが七十二地煞だったとき"},"implies":null,"tier":"rare"},{"key":"age80","group":"birth","label":{"ko":"80세 넘게 삶","en":"Lived past 80","ja":"80歳を超えて生きた"},"hint":{"ko":"80세를 넘겨 삶을 마쳤을 때","en":"End your life past the age of 80","ja":"80歳を超えて生涯を終えたとき"},"implies":null,"tier":"common"},{"key":"age100","group":"birth","label":{"ko":"100세를 넘겨 삶","en":"Lived past 100","ja":"100歳を超えて生きた"},"hint":{"ko":"100세를 넘겨 삶을 마쳤을 때","en":"End your life past the age of 100","ja":"100歳を超えて生涯を終えたとき"},"implies":"age80","tier":"epic"},{"key":"age200","group":"birth","label":{"ko":"200년을 넘게 삶","en":"Lived past 200","ja":"200年を超えて生きた"},"hint":{"ko":"200세를 넘겨 살았을 때 (혈귀만 닿는다)","en":"Live past 200 (only a Bloodfiend can)","ja":"200歳を超えて生きたとき（血鬼のみ）"},"implies":"age100","tier":"legend"},{"key":"die_child","group":"birth","label":{"ko":"열 살을 넘기지 못함","en":"Died before turning ten","ja":"10歳を迎えられなかった"},"hint":{"ko":"열 살이 되기 전에 삶이 끝났을 때","en":"Your life ends before you turn ten","ja":"十歳になる前に生涯が終わったとき"},"implies":null,"tier":"common"},{"key":"fixer","group":"fixer","label":{"ko":"해결사가 됨","en":"Became a Fixer","ja":"フィクサーになった"},"hint":{"ko":"해결사가 되었을 때","en":"Become a Fixer","ja":"フィクサーになったとき"},"implies":null,"tier":"common"},{"key":"fixer_g7","group":"fixer","label":{"ko":"해결사 7급 도달","en":"Reached Grade 7 Fixer","ja":"7級フィクサーに到達"},"hint":{"ko":"해결사로 7급까지 올랐을 때","en":"Rise to Grade 7 as a Fixer","ja":"フィクサーとして7級まで上がったとき"},"implies":"fixer","tier":"common"},{"key":"fixer_g6","group":"fixer","label":{"ko":"해결사 6급 도달","en":"Reached Grade 6 Fixer","ja":"6級フィクサーに到達"},"hint":{"ko":"해결사로 6급까지 올랐을 때","en":"Rise to Grade 6 as a Fixer","ja":"フィクサーとして6級まで上がったとき"},"implies":"fixer_g7","tier":"common"},{"key":"fixer_g5","group":"fixer","label":{"ko":"해결사 5급 도달","en":"Reached Grade 5 Fixer","ja":"5級フィクサーに到達"},"hint":{"ko":"해결사로 5급까지 올랐을 때","en":"Rise to Grade 5 as a Fixer","ja":"フィクサーとして5級まで上がったとき"},"implies":"fixer_g6","tier":"common"},{"key":"fixer_g4","group":"fixer","label":{"ko":"해결사 4급 도달","en":"Reached Grade 4 Fixer","ja":"4級フィクサーに到達"},"hint":{"ko":"해결사로 4급까지 올랐을 때","en":"Rise to Grade 4 as a Fixer","ja":"フィクサーとして4級まで上がったとき"},"implies":"fixer_g5","tier":"uncommon"},{"key":"fixer_g3","group":"fixer","label":{"ko":"해결사 3급 도달","en":"Reached Grade 3 Fixer","ja":"3級フィクサーに到達"},"hint":{"ko":"해결사로 3급까지 올랐을 때","en":"Rise to Grade 3 as a Fixer","ja":"フィクサーとして3級まで上がったとき"},"implies":"fixer_g4","tier":"uncommon"},{"key":"fixer_g2","group":"fixer","label":{"ko":"해결사 2급 도달","en":"Reached Grade 2 Fixer","ja":"2級フィクサーに到達"},"hint":{"ko":"해결사로 2급까지 올랐을 때","en":"Rise to Grade 2 as a Fixer","ja":"フィクサーとして2級まで上がったとき"},"implies":"fixer_g3","tier":"rare"},{"key":"fixer_g1","group":"fixer","label":{"ko":"해결사 1급 도달","en":"Reached Grade 1 Fixer","ja":"1級フィクサーに到達"},"hint":{"ko":"해결사로 1급까지 올랐을 때","en":"Rise to Grade 1 as a Fixer","ja":"フィクサーとして1級まで上がったとき"},"implies":"fixer_g2","tier":"epic"},{"key":"color","group":"fixer","label":{"ko":"특색의 이름을 얻음","en":"Became a Color","ja":"特色の名を得た"},"hint":{"ko":"해결사 1급에서 특색의 이름을 얻었을 때","en":"Earn the name of a Color as a Grade 1 Fixer","ja":"フィクサー1級で特色の名を得たとき"},"implies":null,"tier":"legend"},{"key":"office","group":"fixer","label":{"ko":"해결사 사무소 소속","en":"Joined a Fixer Office","ja":"フィクサー事務所に所属"},"hint":{"ko":"해결사 사무소에 들어갔을 때","en":"Join a Fixer Office","ja":"フィクサー事務所に入ったとき"},"implies":null,"tier":"common"},{"key":"assoc","group":"fixer","label":{"ko":"협회 소속 해결사","en":"Association Fixer","ja":"協会所属フィクサー"},"hint":{"ko":"해결사로 협회에 들어갔을 때","en":"Join an Association as a Fixer","ja":"フィクサーとして協会に入ったとき"},"implies":null,"tier":"uncommon"},{"key":"req_star","group":"fixer","label":{"ko":"도시의 별 이상 의뢰 완수","en":"Completed a Star of the City request","ja":"都市の星級の依頼を完遂"},"hint":{"ko":"도시의 별 등급 이상의 의뢰를 끝냈을 때","en":"Complete a request rated Star of the City or higher","ja":"都市の星級以上の依頼を終えたとき"},"implies":null,"tier":"uncommon"},{"key":"finger_엄지","group":"finger","label":{"ko":"엄지 입단","en":"Joined the Thumb","ja":"親指に入団"},"hint":{"ko":"엄지에 들어갔을 때","en":"Join the Thumb","ja":"親指に入ったとき"},"implies":null,"tier":"uncommon"},{"key":"frank_엄지_2","group":"finger","label":{"ko":"엄지 카포 도달","en":"Reached Thumb Capo","ja":"親指のカポに到達"},"hint":{"ko":"엄지에서 카포까지 올랐을 때","en":"Rise to Capo in the Thumb","ja":"親指でカポまで上がったとき"},"implies":"finger_엄지","tier":"rare"},{"key":"frank_엄지_3","group":"finger","label":{"ko":"엄지 언더보스 도달","en":"Reached Thumb Sottocapo","ja":"親指のアンダーボスに到達"},"hint":{"ko":"엄지에서 언더보스까지 올랐을 때","en":"Rise to Sottocapo in the Thumb","ja":"親指でアンダーボスまで上がったとき"},"implies":"frank_엄지_2","tier":"epic"},{"key":"frank_엄지_4","group":"finger","label":{"ko":"엄지 대부 도달","en":"Reached Thumb Capo dei Capi","ja":"親指のゴッドファーザーに到達"},"hint":{"ko":"엄지에서 대부까지 올랐을 때","en":"Rise to Capo dei Capi in the Thumb","ja":"親指でゴッドファーザーまで上がったとき"},"implies":"frank_엄지_3","tier":"legend"},{"key":"finger_검지","group":"finger","label":{"ko":"검지 입단","en":"Joined the Index","ja":"人差し指に入団"},"hint":{"ko":"검지에 들어갔을 때","en":"Join the Index","ja":"人差し指に入ったとき"},"implies":null,"tier":"uncommon"},{"key":"frank_검지_2","group":"finger","label":{"ko":"검지 대행자 도달","en":"Reached Index Proxy","ja":"人差し指の代行者に到達"},"hint":{"ko":"검지에서 대행자까지 올랐을 때","en":"Rise to Proxy in the Index","ja":"人差し指で代行者まで上がったとき"},"implies":"finger_검지","tier":"rare"},{"key":"frank_검지_3","group":"finger","label":{"ko":"검지 신탁 대행자 도달","en":"Reached Index Oracle's Proxy","ja":"人差し指の神託代行者に到達"},"hint":{"ko":"검지에서 신탁 대행자까지 올랐을 때","en":"Rise to Oracle's Proxy in the Index","ja":"人差し指で神託代行者まで上がったとき"},"implies":"frank_검지_2","tier":"epic"},{"key":"finger_중지","group":"finger","label":{"ko":"중지 입단","en":"Joined the Middle","ja":"中指に入団"},"hint":{"ko":"중지에 들어갔을 때","en":"Join the Middle","ja":"中指に入ったとき"},"implies":null,"tier":"uncommon"},{"key":"frank_중지_2","group":"finger","label":{"ko":"중지 큰 아우 도달","en":"Reached Middle Young Brother / Sister","ja":"中指の長弟・長妹に到達"},"hint":{"ko":"중지에서 큰 아우까지 올랐을 때","en":"Rise to Young Brother or Sister in the Middle","ja":"中指で長弟・長妹まで上がったとき"},"implies":"finger_중지","tier":"rare"},{"key":"frank_중지_3","group":"finger","label":{"ko":"중지 작은 형님·누님 도달","en":"Reached Middle Big Brother / Sister","ja":"中指の末兄・末姉に到達"},"hint":{"ko":"중지에서 작은 형님·누님까지 올랐을 때","en":"Rise to Big Brother or Sister in the Middle","ja":"中指で末兄・末姉まで上がったとき"},"implies":"frank_중지_2","tier":"rare"},{"key":"frank_중지_4","group":"finger","label":{"ko":"중지 큰 형님·누님 도달","en":"Reached Middle Great Brother / Sister","ja":"中指の長兄・長姉に到達"},"hint":{"ko":"중지에서 큰 형님·누님까지 올랐을 때","en":"Rise to Great Brother or Sister in the Middle","ja":"中指で長兄・長姉まで上がったとき"},"implies":"frank_중지_3","tier":"epic"},{"key":"finger_약지","group":"finger","label":{"ko":"약지 입단","en":"Joined the Ring","ja":"薬指に入団"},"hint":{"ko":"약지에 들어갔을 때","en":"Join the Ring","ja":"薬指に入ったとき"},"implies":null,"tier":"uncommon"},{"key":"frank_약지_2","group":"finger","label":{"ko":"약지 도슨트 도달","en":"Reached Ring Docent","ja":"薬指のドーセントに到達"},"hint":{"ko":"약지에서 도슨트까지 올랐을 때","en":"Rise to Docent in the Ring","ja":"薬指でドーセントまで上がったとき"},"implies":"finger_약지","tier":"rare"},{"key":"frank_약지_3","group":"finger","label":{"ko":"약지 마에스트로 도달","en":"Reached Ring Maestro","ja":"薬指のマエストロに到達"},"hint":{"ko":"약지에서 마에스트로까지 올랐을 때","en":"Rise to Maestro in the Ring","ja":"薬指でマエストロまで上がったとき"},"implies":"frank_약지_2","tier":"epic"},{"key":"finger_quit","group":"finger","label":{"ko":"손가락을 떠남","en":"Left the Fingers","ja":"指を離れた"},"hint":{"ko":"손가락을 떠나 살아남았을 때","en":"Leave the Fingers and live","ja":"指を離れて生き延びたとき"},"implies":null,"tier":"rare"},{"key":"corp","group":"wing","label":{"ko":"날개의 사원","en":"Wing employee","ja":"翼の社員"},"hint":{"ko":"날개의 사무직 사원이 되었을 때","en":"Become an office employee of a Wing","ja":"翼の事務職社員になったとき"},"implies":null,"tier":"common"},{"key":"office_dept","group":"wing","label":{"ko":"날개의 부장에 오름","en":"Rose to Department Head of a Wing","ja":"翼の部長に上りつめた"},"hint":{"ko":"날개 사무직으로 부장까지 올랐을 때","en":"Rise to Department Head in a Wing's offices","ja":"翼の事務職で部長まで上がったとき"},"implies":"corp","tier":"uncommon"},{"key":"office_dir","group":"wing","label":{"ko":"날개의 이사에 오름","en":"Rose to Director of a Wing","ja":"翼の理事に上りつめた"},"hint":{"ko":"날개 사무직으로 이사까지 올랐을 때","en":"Rise to Director in a Wing's offices","ja":"翼の事務職で理事まで上がったとき"},"implies":"office_dept","tier":"rare"},{"key":"office_ceo","group":"wing","label":{"ko":"날개의 대표에 오름","en":"Rose to CEO of a Wing","ja":"翼の代表に上りつめた"},"hint":{"ko":"날개 사무직으로 대표까지 올랐을 때","en":"Rise to CEO of a Wing","ja":"翼の事務職で代表まで上がったとき"},"implies":"office_dir","tier":"epic"},{"key":"assoc_staff","group":"wing","label":{"ko":"협회 직원","en":"Association staff","ja":"協会職員"},"hint":{"ko":"협회 직원이 되었을 때","en":"Become Association staff","ja":"協会職員になったとき"},"implies":null,"tier":"uncommon"},{"key":"heishou","group":"wing","label":{"ko":"흑수가 됨","en":"Joined the Heishou Pack","ja":"黒獣となった"},"hint":{"ko":"흑수에 들어갔을 때","en":"Join the Heishou Pack","ja":"黒獣に入ったとき"},"implies":null,"tier":"rare"},{"key":"heishou_adept","group":"wing","label":{"ko":"흑수의 필두가 됨","en":"Became an Adept of the Heishou Pack","ja":"黒獣の筆頭となった"},"hint":{"ko":"흑수에서 필두까지 올랐을 때","en":"Rise to Adept in the Heishou Pack","ja":"黒獣で筆頭まで上がったとき"},"implies":"heishou","tier":"epic"},{"key":"t_collector","group":"wing","label":{"ko":"T사 시간징수직이 됨","en":"Became T Corp. Collection Staff","ja":"T社の徴収職になった"},"hint":{"ko":"T사 시간징수직이 되었을 때","en":"Become T Corp. Collection Staff","ja":"T社の徴収職になったとき"},"implies":null,"tier":"rare"},{"key":"t_class5","group":"wing","label":{"ko":"T사 5등급 징수직 도달","en":"Reached T Corp. Class 5 Collection Staff","ja":"T社5級徴収職に到達"},"hint":{"ko":"T사 징수직으로 5등급까지 올랐을 때","en":"Rise to Class 5 as T Corp. Collection Staff","ja":"T社の徴収職で5級まで上がったとき"},"implies":"t_collector","tier":"epic"},{"key":"w_cleanup","group":"wing","label":{"ko":"W사 정리 요원이 됨","en":"Became a W Corp. Cleanup Agent","ja":"W社の整理要員になった"},"hint":{"ko":"W사 정리 요원이 되었을 때","en":"Become a W Corp. Cleanup Agent","ja":"W社の整理要員になったとき"},"implies":null,"tier":"rare"},{"key":"w_level5","group":"wing","label":{"ko":"W사 5등급 정리 요원 도달","en":"Reached W Corp. Level 5 Cleanup Agent","ja":"W社5級整理要員に到達"},"hint":{"ko":"W사 정리 요원으로 5등급까지 올랐을 때","en":"Rise to Level 5 as a W Corp. Cleanup Agent","ja":"W社の整理要員で5級まで上がったとき"},"implies":"w_cleanup","tier":"epic"},{"key":"k_excision","group":"wing","label":{"ko":"K사 적출직이 됨","en":"Became K Corp. Excision Staff","ja":"K社の摘出職になった"},"hint":{"ko":"K사 적출직이 되었을 때","en":"Become K Corp. Excision Staff","ja":"K社の摘出職になったとき"},"implies":null,"tier":"rare"},{"key":"k_special","group":"wing","label":{"ko":"K사 특수 적출직 도달","en":"Reached K Corp. Special Excision Staff","ja":"K社特殊摘出職に到達"},"hint":{"ko":"K사 적출직으로 특수 적출 부대까지 올랐을 때","en":"Rise to the Special Excision Unit as K Corp. Excision Staff","ja":"K社の摘出職で特殊摘出部隊まで上がったとき"},"implies":"k_excision","tier":"epic"},{"key":"k_hollow","group":"wing","label":{"ko":"메마른 적출직","en":"Hollowed Excision Staff","ja":"枯れた摘出職"},"hint":{"ko":"HP탄을 맞다 인격이 다 메말랐을 때","en":"When HP bullets have dried up every last bit of your self","ja":"HP弾を受け続け、人格が枯れ果てたとき"},"implies":"k_excision","tier":"rare"},{"key":"k_dreamer","group":"wing","label":{"ko":"꿈을 꾸는 적출직","en":"Excision Staff Who Dreamed","ja":"夢を見る摘出職"},"hint":{"ko":"시험관 안에서도 끝까지 메마르지 않았을 때","en":"When you never dried up, even in the tube","ja":"試験管の中でも最後まで枯れなかったとき"},"implies":"k_excision","tier":"legend"},{"key":"n_inquisitor","group":"wing","label":{"ko":"N사 이단 심문관이 됨","en":"Became an N Corp. Inquisitor","ja":"N社の異端審問官になった"},"hint":{"ko":"N사의 이단 심문관이 되었을 때","en":"Become an N Corp. Inquisitor","ja":"N社の異端審問官になったとき"},"implies":null,"tier":"rare"},{"key":"n_grosshammer","group":"wing","label":{"ko":"N사 큰 망치 도달","en":"Reached N Corp. Großhammer","ja":"N社大槌に到達"},"hint":{"ko":"쥐는 자의 지명으로 큰 망치를 받았을 때","en":"Be named a Großhammer by the One Who Grips","ja":"掴む者の指名で大槌を受け取ったとき"},"implies":"n_inquisitor","tier":"epic"},{"key":"n_zealot","group":"wing","label":{"ko":"신앙심이 가득 찬 망치","en":"A Hammer Full of Faith","ja":"信仰に満ちた槌"},"hint":{"ko":"이단 심문관의 신앙심이 끝까지 찼을 때","en":"Let an Inquisitor’s faith fill all the way","ja":"異端審問官の信仰心が満ちきったとき"},"implies":"n_inquisitor","tier":"rare"},{"key":"n_faithless","group":"wing","label":{"ko":"신앙을 잃은 망치","en":"A Hammer Without Faith","ja":"信仰を失った槌"},"hint":{"ko":"이단 심문관의 신앙심이 바닥까지 떨어졌을 때","en":"Let an Inquisitor’s faith fall all the way to nothing","ja":"異端審問官の信仰心が底まで落ちたとき"},"implies":"n_inquisitor","tier":"rare"},{"key":"r_pack","group":"wing","label":{"ko":"R사 4무리에 들어감","en":"Joined R Corp.'s 4th Pack","ja":"R社第4群に入った"},"hint":{"ko":"R사 4무리에 들어갔을 때","en":"Join R Corp.'s 4th Pack","ja":"R社第4群に入ったとき"},"implies":null,"tier":"rare"},{"key":"r_commander","group":"wing","label":{"ko":"R사 4무리 사령관이 됨","en":"Became Commander of R Corp.'s 4th Pack","ja":"R社第4群の司令官になった"},"hint":{"ko":"R사 4무리에서 사령관까지 올랐을 때","en":"Rise to Commander in R Corp.'s 4th Pack","ja":"R社第4群で司令官まで上がったとき"},"implies":"r_pack","tier":"epic"},{"key":"prosthetic","group":"wing","label":{"ko":"의체 시술을 받음","en":"Underwent prosthetic surgery","ja":"義体手術を受けた"},"hint":{"ko":"의체 시술을 받았을 때","en":"Undergo prosthetic surgery","ja":"義体手術を受けたとき"},"implies":null,"tier":"common"},{"key":"prosthetic_good","group":"wing","label":{"ko":"좋은 의체 시술을 받음","en":"Underwent fine prosthetic surgery","ja":"良質な義体手術を受けた"},"hint":{"ko":"좋은 의체 시술을 받았을 때","en":"Undergo fine prosthetic surgery","ja":"良質な義体手術を受けたとき"},"implies":"prosthetic","tier":"common"},{"key":"relic","group":"wing","label":{"ko":"외곽의 유물을 얻음","en":"Obtained a relic of the Outskirts","ja":"外郭の遺物を手に入れた"},"hint":{"ko":"외곽에서 유물을 손에 넣었을 때","en":"Obtain a relic in the Outskirts","ja":"外郭で遺物を手に入れたとき"},"implies":null,"tier":"epic"},{"key":"distorted","group":"distortion","label":{"ko":"뒤틀려 생을 마침","en":"Ended life as a Distortion","ja":"ねじれて生涯を終えた"},"hint":{"ko":"뒤틀려서 삶이 끝났을 때","en":"Your life ends as a Distortion","ja":"ねじれて生涯が終わったとき"},"implies":null,"tier":"rare"},{"key":"dist_grade_0","group":"distortion","label":{"ko":"뜬소문이 된 뒤틀림","en":"A Distortion rated Canard","ja":"あらぬ噂となったねじれ"},"hint":{"ko":"뒤틀린 뒤 뜬소문 등급으로 남았을 때","en":"Be rated Canard as a Distortion","ja":"ねじれた後、あらぬ噂の等級に留まったとき"},"implies":null,"tier":"rare"},{"key":"dist_grade_1","group":"distortion","label":{"ko":"도시 괴담이 된 뒤틀림","en":"A Distortion rated Urban Myth","ja":"都市怪談となったねじれ"},"hint":{"ko":"뒤틀린 뒤 도시 괴담 등급이 되었을 때","en":"Be rated Urban Myth as a Distortion","ja":"ねじれた後、都市怪談の等級になったとき"},"implies":"dist_grade_0","tier":"rare"},{"key":"dist_grade_2","group":"distortion","label":{"ko":"도시 전설이 된 뒤틀림","en":"A Distortion rated Urban Legend","ja":"都市伝説となったねじれ"},"hint":{"ko":"뒤틀린 뒤 도시 전설 등급이 되었을 때","en":"Be rated Urban Legend as a Distortion","ja":"ねじれた後、都市伝説の等級になったとき"},"implies":"dist_grade_1","tier":"rare"},{"key":"dist_grade_3","group":"distortion","label":{"ko":"도시 질병이 된 뒤틀림","en":"A Distortion rated Urban Plague","ja":"都市疾病となったねじれ"},"hint":{"ko":"뒤틀린 뒤 도시 질병 등급이 되었을 때","en":"Be rated Urban Plague as a Distortion","ja":"ねじれた後、都市疾病の等級になったとき"},"implies":"dist_grade_2","tier":"epic"},{"key":"dist_grade_4","group":"distortion","label":{"ko":"도시 악몽이 된 뒤틀림","en":"A Distortion rated Urban Nightmare","ja":"都市悪夢となったねじれ"},"hint":{"ko":"뒤틀림 레이드에서 도시 악몽 등급을 받았을 때","en":"Be rated Urban Nightmare in a Distortion raid","ja":"ねじれレイドで都市悪夢の等級を受けたとき"},"implies":"dist_grade_3","tier":"legend"},{"key":"dist_final","group":"distortion","label":{"ko":"특색이 온 토벌대","en":"The subjugation team with a Color","ja":"特色が来た討伐隊"},"hint":{"ko":"뒤틀림 레이드 다섯 번째 토벌대, 특색에게 쓰러졌을 때","en":"Fall to a Color in the fifth subjugation of a Distortion raid","ja":"ねじれレイド五度目の討伐隊、特色に倒されたとき"},"implies":null,"tier":"legend"},{"key":"dist_nm6","group":"distortion","label":{"ko":"특색을 죽인 뒤","en":"After killing a Color","ja":"特色を殺した後"},"hint":{"ko":"도시 악몽으로 특색을 죽인 뒤 여섯 번째 사람을 만났을 때","en":"As an Urban Nightmare, kill a Color and meet the sixth one","ja":"都市悪夢として特色を殺し、六人目に出会ったとき"},"implies":null,"tier":"myth"},{"key":"dist_return","group":"distortion","label":{"ko":"원래대로 돌아온 사람","en":"One who came back","ja":"元に戻った人"},"hint":{"ko":"뒤틀림 레이드에서 목소리를 세 번 거슬러 돌아왔을 때","en":"Defy the voice three times in a Distortion raid and come back","ja":"ねじれレイドで声に三度逆らい、戻ってきたとき"},"implies":null,"tier":"legend"},{"key":"ego","group":"abno","label":{"ko":"E.G.O 개화","en":"Effloresced E.G.O","ja":"E.G.O開花"},"hint":{"ko":"뒤틀리려는 순간 E.G.O가 개화했을 때","en":"Your E.G.O effloresces at the moment of Distortion","ja":"ねじれる瞬間にE.G.Oが開花したとき"},"implies":null,"tier":"rare"},{"key":"aleph_survive","group":"abno","label":{"ko":"ALEPH 재해에서 살아남음","en":"Survived an ALEPH disaster","ja":"ALEPHの災害を生き延びた"},"hint":{"ko":"ALEPH급 환상체의 재해에서 살아남았을 때","en":"Survive the disaster of an ALEPH-class Abnormality","ja":"ALEPH級アブノーマリティの災害を生き延びたとき"},"implies":null,"tier":"rare"},{"key":"apocalypse","group":"abno","label":{"ko":"종말새 아래에서 살아남음","en":"Survived beneath the Apocalypse Bird","ja":"終末鳥の下で生き延びた"},"hint":{"ko":"종말새를 만나고도 그해를 살아남았을 때","en":"Meet the Apocalypse Bird and survive the year","ja":"終末鳥に出会い、その年を生き延びたとき"},"implies":null,"tier":"legend"},{"key":"library_lost","group":"abno","label":{"ko":"도서관의 책이 됨","en":"Became a book in the Library","ja":"図書館の本になった"},"hint":{"ko":"도서관의 초대를 받고 돌아오지 못했을 때","en":"Accept the Library's invitation and never return","ja":"図書館の招待を受け、帰れなかったとき"},"implies":null,"tier":"rare"},{"key":"library_back","group":"abno","label":{"ko":"도서관에서 돌아옴","en":"Returned from the Library","ja":"図書館から帰還した"},"hint":{"ko":"도서관에서 돌아왔을 때","en":"Return from the Library","ja":"図書館から帰ってきたとき"},"implies":null,"tier":"epic"},{"key":"warp_car_0","group":"warp","label":{"ko":"워프 열차 0칸 돌파","en":"Cleared 0 Warp Train cars","ja":"ワープ列車0両突破"},"hint":{"ko":"워프 열차에 탔지만 첫 칸을 넘지 못했을 때","en":"Board the Warp Train but fail to clear the first car","ja":"ワープ列車に乗ったが最初の車両を越えられなかったとき"},"implies":null,"tier":"common"},{"key":"warp_car_1","group":"warp","label":{"ko":"워프 열차 1칸 돌파","en":"Cleared 1 Warp Train car","ja":"ワープ列車1両突破"},"hint":{"ko":"워프 열차에서 1칸을 넘었을 때","en":"Clear 1 car of the Warp Train","ja":"ワープ列車で1両を越えたとき"},"implies":"warp_car_0","tier":"common"},{"key":"warp_car_2","group":"warp","label":{"ko":"워프 열차 2칸 돌파","en":"Cleared 2 Warp Train cars","ja":"ワープ列車2両突破"},"hint":{"ko":"워프 열차에서 2칸을 넘었을 때","en":"Clear 2 cars of the Warp Train","ja":"ワープ列車で2両を越えたとき"},"implies":"warp_car_1","tier":"common"},{"key":"warp_car_3","group":"warp","label":{"ko":"워프 열차 3칸 돌파","en":"Cleared 3 Warp Train cars","ja":"ワープ列車3両突破"},"hint":{"ko":"워프 열차에서 3칸을 넘었을 때","en":"Clear 3 cars of the Warp Train","ja":"ワープ列車で3両を越えたとき"},"implies":"warp_car_2","tier":"uncommon"},{"key":"warp_car_4","group":"warp","label":{"ko":"워프 열차 4칸 돌파","en":"Cleared 4 Warp Train cars","ja":"ワープ列車4両突破"},"hint":{"ko":"워프 열차에서 4칸을 넘었을 때","en":"Clear 4 cars of the Warp Train","ja":"ワープ列車で4両を越えたとき"},"implies":"warp_car_3","tier":"uncommon"},{"key":"warp_car_5","group":"warp","label":{"ko":"워프 열차 5칸 돌파","en":"Cleared 5 Warp Train cars","ja":"ワープ列車5両突破"},"hint":{"ko":"워프 열차에서 5칸을 넘었을 때","en":"Clear 5 cars of the Warp Train","ja":"ワープ列車で5両を越えたとき"},"implies":"warp_car_4","tier":"rare"},{"key":"warp_car_6","group":"warp","label":{"ko":"워프 열차 6칸 돌파","en":"Cleared 6 Warp Train cars","ja":"ワープ列車6両突破"},"hint":{"ko":"워프 열차에서 6칸을 넘었을 때","en":"Clear 6 cars of the Warp Train","ja":"ワープ列車で6両を越えたとき"},"implies":"warp_car_5","tier":"rare"},{"key":"warp_car_7","group":"warp","label":{"ko":"워프 열차 7칸 돌파","en":"Cleared 7 Warp Train cars","ja":"ワープ列車7両突破"},"hint":{"ko":"워프 열차에서 7칸을 넘었을 때","en":"Clear 7 cars of the Warp Train","ja":"ワープ列車で7両を越えたとき"},"implies":"warp_car_6","tier":"epic"},{"key":"warp_clear","group":"warp","label":{"ko":"워프 열차 완주","en":"Ran the Warp Train to the end","ja":"ワープ列車を完走"},"hint":{"ko":"워프 열차의 모든 칸을 지나 끝까지 갔을 때","en":"Pass every car of the Warp Train to the end","ja":"ワープ列車のすべての車両を通り抜けたとき"},"implies":"warp_car_7","tier":"legend"},{"key":"lake_drink","group":"lake","label":{"ko":"따여 있던 포도맛 캔","en":"The already-opened grape soda","ja":"開けてあったぶどう味の缶"},"hint":{"ko":"따여 있던 포도맛 캔을 마시고 대호수에 들어갔을 때","en":"Drink the already-opened grape soda and enter the Great Lake","ja":"開けてあったぶどう味の缶を飲み、大湖に入ったとき"},"implies":null,"tier":"rare"},{"key":"lake_hint2","group":"lake","label":{"ko":"법 두 개를 산 삶","en":"Bought two Laws","ja":"法を二つ買った生"},"hint":{"ko":"호수의 법을 평생 두 개 이상 샀을 때","en":"Buy two or more Laws of the lake in one life","ja":"湖の法を生涯に二つ以上買ったとき"},"implies":null,"tier":"epic"},{"key":"lake_cross","group":"lake","label":{"ko":"대호수를 항해한 자","en":"One Who Sailed the Great Lake","ja":"大湖を航海した者"},"hint":{"ko":"대호수 항해를 끝까지 마쳤을 때","en":"Finish a voyage across the Great Lake","ja":"大湖の航海を最後までやり遂げたとき"},"implies":null,"tier":"miracle"},{"key":"lake_deep","group":"lake","label":{"ko":"깊은 물을 셋 지나 닿은 삶","en":"Crossed three deep waters and reached port","ja":"深い水を三つ越えて着いた生"},"hint":{"ko":"대호수에서 깊은 물을 세 번 지나 항구에 닿았을 때","en":"Cross three deep waters on the Great Lake and reach port","ja":"大湖で深い水を三度越えて港に着いたとき"},"implies":null,"tier":"myth"},{"key":"lake_whale_marlin","group":"lake","label":{"ko":"모든 것을 꿰뚫는 청새치 고래를 만난 자","en":"One Who Met the All-Impaling Marlin Whale","ja":"すべてを貫くカジキの鯨に出会った者"},"hint":{"ko":"대호수에서 청새치 고래를 만났을 때","en":"Meet the Marlin Whale on the Great Lake","ja":"大湖でカジキの鯨に出会ったとき"},"implies":null,"tier":"legend"},{"key":"lake_whale_pallid","group":"lake","label":{"ko":"모든 것을 집어삼키는 창백한 고래를 만난 자","en":"One Who Met the All-Consuming Pallid Whale","ja":"すべてを呑み込む蒼白の鯨に出会った者"},"hint":{"ko":"대호수에서 창백한 고래를 만났을 때","en":"Meet the Pallid Whale on the Great Lake","ja":"大湖で蒼白の鯨に出会ったとき"},"implies":null,"tier":"legend"},{"key":"lake_whale_crimson","group":"lake","label":{"ko":"모든 것을 마르게 하는 새빨간 고래를 만난 자","en":"One Who Met the All-Withering Crimson Whale","ja":"すべてを枯らす真紅の鯨に出会った者"},"hint":{"ko":"대호수에서 새빨간 고래를 만났을 때","en":"Meet the Crimson Whale on the Great Lake","ja":"大湖で真紅の鯨に出会ったとき"},"implies":null,"tier":"legend"},{"key":"heir_cand","group":"heir","label":{"ko":"H사의 가주 후보로 자람","en":"Raised as an H Corp. Family Hierarch Candidate","ja":"H社の家主候補として育った"},"hint":{"ko":"H사의 가주 후보로 태어나 자랐을 때","en":"Be born and raised as an H Corp. Family Hierarch Candidate","ja":"H社の家主候補として生まれ育ったとき"},"implies":null,"tier":"rare"},{"key":"heir_fail","group":"heir","label":{"ko":"가주 심사에서 떨어짐","en":"Failed the Family Hierarch Evaluation","ja":"家主審査に落ちた"},"hint":{"ko":"가주 심사에서 떨어졌을 때","en":"Fail the Family Hierarch Evaluation","ja":"家主審査に落ちたとき"},"implies":null,"tier":"rare"},{"key":"heir_head","group":"heir","label":{"ko":"가주","en":"Family Hierarch","ja":"家主"},"hint":{"ko":"가주 심사를 통과해 가주가 되었을 때","en":"Pass the Evaluation and become Family Hierarch","ja":"家主審査を通り、家主になったとき"},"implies":null,"tier":"epic"},{"key":"rule_human","group":"heir","label":{"ko":"선황충을 한 번도 따르지 않음","en":"Never once followed the Xianhuang Worm","ja":"仙皇蟲に一度も従わなかった"},"hint":{"ko":"군주로서 다섯 번의 선택에서 한 번도 선황충을 따르지 않았을 때","en":"As Lord, refuse the Xianhuang Worm in all five choices","ja":"君主として五度の選択で一度も仙皇蟲に従わなかったとき"},"implies":null,"tier":"legend"},{"key":"rule_worm","group":"heir","label":{"ko":"다섯 번 모두 선황충을 따름","en":"Followed the Xianhuang Worm all five times","ja":"五度とも仙皇蟲に従った"},"hint":{"ko":"군주로서 다섯 번의 선택을 모두 선황충에 맡겼을 때","en":"As Lord, follow the Xianhuang Worm in all five choices","ja":"君主として五度の選択をすべて仙皇蟲に委ねたとき"},"implies":null,"tier":"myth"},{"key":"heir_lord","group":"heir","label":{"ko":"군주","en":"Lord","ja":"君主"},"hint":{"ko":"가주가 된 뒤 군주의 자리에 올랐을 때","en":"Become Family Hierarch, then rise to Lord","ja":"家主になった後、君主の座に就いたとき"},"implies":null,"tier":"legend"},{"key":"rule_mercy","group":"heir","label":{"ko":"자비로운 군주로 불림","en":"Called a merciful lord","ja":"慈悲深い君主と呼ばれた"},"hint":{"ko":"군주로서 다스리는 동안 자비로운 쪽을 거듭 택했을 때","en":"As Lord, choose mercy again and again while ruling","ja":"君主として治める間、慈悲深い側を選び続けたとき"},"implies":null,"tier":"myth"},{"key":"rule_tyrant","group":"heir","label":{"ko":"폭군으로 불림","en":"Called a tyrant","ja":"暴君と呼ばれた"},"hint":{"ko":"군주로서 다스리는 동안 가혹한 쪽을 거듭 택했을 때","en":"As Lord, choose cruelty again and again while ruling","ja":"君主として治める間、苛烈な側を選び続けたとき"},"implies":null,"tier":"myth"},{"key":"rule_abolish","group":"heir","label":{"ko":"가주 심사를 없앰","en":"Abolished the Family Hierarch Evaluation","ja":"家主審査を廃止した"},"hint":{"ko":"군주로서 가주 심사를 없앴을 때","en":"As Lord, abolish the Family Hierarch Evaluation","ja":"君主として家主審査を廃止したとき"},"implies":null,"tier":"myth"},{"key":"rule_kong","group":"heir","label":{"ko":"공씨의 이름을 되살림","en":"Restored the name of the Kong family","ja":"孔家の名を取り戻した"},"hint":{"ko":"군주로서 공씨의 이름을 되살렸을 때","en":"As Lord, restore the name of the Kong family","ja":"君主として孔家の名を取り戻したとき"},"implies":null,"tier":"myth"},{"key":"bf_stray","group":"bf","label":{"ko":"혈귀가 됨 (떠돌이)","en":"Became a Bloodfiend (stray)","ja":"血鬼になった（放浪者）"},"hint":{"ko":"가문 없는 떠돌이 혈귀가 되었을 때","en":"Become a stray Bloodfiend with no Family","ja":"家門のない放浪の血鬼になったとき"},"implies":null,"tier":"rare"},{"key":"bf_kin","group":"bf","label":{"ko":"가문의 권속이 됨","en":"Became a Family's Kindred","ja":"家門の眷属になった"},"hint":{"ko":"가문의 권속이 되었을 때","en":"Become a Family's Kindred","ja":"家門の眷属になったとき"},"implies":null,"tier":"rare"},{"key":"bloodbag","group":"bf","label":{"ko":"피주머니가 됨","en":"Became a Bloodbag","ja":"血袋になった"},"hint":{"ko":"혈귀에게 피주머니가 되었을 때","en":"Be made into a Bloodbag by a Bloodfiend","ja":"血鬼に血袋にされたとき"},"implies":null,"tier":"rare"},{"key":"bf_sleep","group":"bf","label":{"ko":"긴 잠에 듦","en":"Went into the long sleep","ja":"長い眠りについた"},"hint":{"ko":"혈귀로 긴 잠에 들었을 때","en":"Go into the long sleep as a Bloodfiend","ja":"血鬼として長い眠りについたとき"},"implies":null,"tier":"rare"},{"key":"bf_alive","group":"bf","label":{"ko":"살아서 이야기를 맺은 혈귀","en":"A Bloodfiend whose story ended alive","ja":"生きたまま物語を結んだ血鬼"},"hint":{"ko":"혈귀로 살아 있는 채 이야기를 맺었을 때","en":"End your story alive, as a Bloodfiend","ja":"血鬼として生きたまま物語を結んだとき"},"implies":null,"tier":"epic"},{"key":"bf_300","group":"bf","label":{"ko":"삼백 년을 살아낸 혈귀","en":"A Bloodfiend who lived three hundred years","ja":"三百年を生き抜いた血鬼"},"hint":{"ko":"혈귀로 300세를 넘겨 살았을 때","en":"Live past 300 as a Bloodfiend","ja":"血鬼として300歳を超えて生きたとき"},"implies":null,"tier":"legend"},{"key":"bf_reveal","group":"bf","label":{"ko":"소속에 정체를 밝힌 혈귀","en":"A Bloodfiend who revealed themselves to their own","ja":"所属に正体を明かした血鬼"},"hint":{"ko":"소속에 스스로 정체를 밝혔을 때","en":"Reveal what you are to your own organization","ja":"所属に自ら正体を明かしたとき"},"implies":null,"tier":"rare"},{"key":"bf_found","group":"bf","label":{"ko":"숨긴 정체를 들킨 혈귀","en":"A Bloodfiend whose secret was found out","ja":"隠した正体を知られた血鬼"},"hint":{"ko":"숨겨 온 정체를 소속에 들켰을 때","en":"Have your secret found out by your organization","ja":"隠してきた正体を所属に知られたとき"},"implies":null,"tier":"rare"},{"key":"bf_nobite","group":"bf","label":{"ko":"열 해 동안 물지 않은 혈귀","en":"A Bloodfiend who went ten years without biting","ja":"十年噛まなかった血鬼"},"hint":{"ko":"혈귀가 된 뒤 열 해 동안 한 번도 물지 않았을 때","en":"Go ten years as a Bloodfiend without biting anyone","ja":"血鬼になって十年、一度も噛まなかったとき"},"implies":null,"tier":"epic"},{"key":"bf_epi_nobite","group":"bf","label":{"ko":"물지 않은 스무 해","en":"Twenty years without a bite","ja":"噛まなかった二十年"},"hint":{"ko":"살아서 끝맺은 혈귀가 스무 해 넘게 아무도 물지 않았을 때","en":"End alive as a Bloodfiend who went twenty years without biting","ja":"生きたまま結んだ血鬼が二十年以上誰も噛まなかったとき"},"implies":"bf_nobite","tier":"myth"},{"key":"bf_two_kin","group":"bf","label":{"ko":"권속 둘을 모두 만듦","en":"Made both of your Kindred","ja":"眷属をふたりとも生み出した"},"hint":{"ko":"권속을 둘 다 만들었을 때","en":"Make both of your Kindred","ja":"眷属をふたりとも生み出したとき"},"implies":null,"tier":"epic"},{"key":"bf_gen1","group":"bf","label":{"ko":"제1권속(장로)에 오름","en":"Rose to First Kindred (Elder)","ja":"第一眷属（長老）に上り詰めた"},"hint":{"ko":"가문의 권속으로 제1권속(장로)까지 올랐을 때","en":"Rise to First Kindred (Elder) in a Family","ja":"家門の眷属として第一眷属（長老）まで上がったとき"},"implies":null,"tier":"legend"},{"key":"bf_bar20","group":"bf","label":{"ko":"혈액바 스무 해 치","en":"Twenty years' worth of Hemobars","ja":"血液バー二十年分"},"hint":{"ko":"혈귀로 혈액바를 스무 해 치 먹었을 때","en":"Live on Hemobars for twenty years as a Bloodfiend","ja":"血鬼として血液バーを二十年分食べたとき"},"implies":null,"tier":"legend"},{"key":"bf_end_hunter_last","group":"bf","label":{"ko":"마지막 사냥꾼을 기다린 혈귀","en":"A Bloodfiend who waited for the last hunter","ja":"最後の狩人を待った血鬼"},"hint":{"ko":"마지막 끝에서 사냥꾼을 기다리는 쪽을 골랐을 때","en":"At the end, choose to wait for the hunter","ja":"最後の終わりで狩人を待つ道を選んだとき"},"implies":null,"tier":"epic"},{"key":"bf_end_couple_sleep","group":"bf","label":{"ko":"둘이 함께 잠든 혈귀","en":"Bloodfiends who slept together","ja":"ふたりで眠った血鬼"},"hint":{"ko":"마지막 끝에서 배우자와 함께 잠드는 쪽을 골랐을 때","en":"At the end, choose to sleep together with your spouse","ja":"最後の終わりで配偶者と共に眠る道を選んだとき"},"implies":null,"tier":"epic"},{"key":"bf_end_smile_first","group":"bf","label":{"ko":"배우자를 먼저 재운 혈귀","en":"A Bloodfiend who let their spouse sleep first","ja":"配偶者を先に眠らせた血鬼"},"hint":{"ko":"마지막 끝에서 배우자를 먼저 재우는 쪽을 골랐을 때","en":"At the end, choose to let your spouse sleep first","ja":"最後の終わりで配偶者を先に眠らせる道を選んだとき"},"implies":null,"tier":"epic"},{"key":"bf_end_gone_grave","group":"bf","label":{"ko":"배우자 곁으로 돌아간 혈귀","en":"A Bloodfiend who returned to their spouse's side","ja":"配偶者のそばへ帰った血鬼"},"hint":{"ko":"배우자를 먼저 보낸 뒤, 그 곁으로 돌아가는 쪽을 골랐을 때","en":"After losing your spouse, choose to return to their side","ja":"配偶者を先に見送った後、そのそばへ帰る道を選んだとき"},"implies":null,"tier":"epic"},{"key":"bf_end_elder_hand","group":"bf","label":{"ko":"자리를 넘기고 잠든 장로","en":"An Elder who handed over the seat and slept","ja":"座を譲って眠った長老"},"hint":{"ko":"장로로서 자리를 넘기고 잠드는 쪽을 골랐을 때","en":"As an Elder, choose to hand over the seat and sleep","ja":"長老として座を譲り眠る道を選んだとき"},"implies":null,"tier":"epic"},{"key":"bf_end_kin_cup","group":"bf","label":{"ko":"권속에게 남긴 잔","en":"A cup left to the Kindred","ja":"眷属に遺した杯"},"hint":{"ko":"권속을 둔 채, 잔을 남기고 가는 쪽을 골랐을 때","en":"With Kindred of your own, choose to leave a cup behind","ja":"眷属を残し、杯を遺して去る道を選んだとき"},"implies":null,"tier":"epic"},{"key":"bf_end_faces","group":"bf","label":{"ko":"셀 수 없는 얼굴","en":"Countless faces","ja":"数えきれない顔"},"hint":{"ko":"서른 명 넘게 물거나 세 번 넘게 광란한 혈귀가 긴 잠에 들었을 때","en":"Go into the long sleep after biting thirty or frenzying three times","ja":"三十人以上噛むか三度以上狂乱した血鬼が長い眠りについたとき"},"implies":null,"tier":"legend"},{"key":"bf_epi_couple","group":"bf","label":{"ko":"둘이서 오래","en":"Together, for a long time","ja":"ふたりで長く"},"hint":{"ko":"배우자를 권속으로 만든 혈귀가 살아서 끝맺었을 때","en":"End alive as a Bloodfiend who made their spouse Kindred","ja":"配偶者を眷属にした血鬼が生きたまま結んだとき"},"implies":null,"tier":"legend"},{"key":"bf_epi_smile","group":"bf","label":{"ko":"늦게 온 웃음","en":"A smile that came late","ja":"遅れてきた笑み"},"hint":{"ko":"뜻을 거슬러 배우자를 문 혈귀가 살아서 끝맺었을 때","en":"End alive after biting a spouse who asked you not to","ja":"意に反して配偶者を噛んだ血鬼が生きたまま結んだとき"},"implies":null,"tier":"legend"},{"key":"bf_epi_gone","group":"bf","label":{"ko":"늙지 않는 쪽","en":"The one who does not age","ja":"老いないほう"},"hint":{"ko":"배우자를 사람으로 떠나보낸 혈귀가 살아서 끝맺었을 때","en":"End alive after letting your spouse leave as a human","ja":"配偶者を人として見送った血鬼が生きたまま結んだとき"},"implies":null,"tier":"legend"},{"key":"bf_epi_elder","group":"bf","label":{"ko":"오래 앉은 장로","en":"The long-seated Elder","ja":"長く座した長老"},"hint":{"ko":"장로(제1권속)가 살아서 끝맺었을 때","en":"End alive as an Elder (First Kindred)","ja":"長老（第一眷属）が生きたまま結んだとき"},"implies":null,"tier":"myth"},{"key":"bf_epi_hunter","group":"bf","label":{"ko":"잠그지 않는 문","en":"The unlocked door","ja":"鍵のない扉"},"hint":{"ko":"사냥꾼을 세 번 넘게 이기고 열 해 동안 사냥이 없던 혈귀가 살아서 끝맺었을 때","en":"End alive after beating hunters three times and ten quiet years","ja":"狩人に三度以上勝ち、十年間狩られなかった血鬼が生きたまま結んだとき"},"implies":null,"tier":"legend"},{"key":"bf_epi_faces","group":"bf","label":{"ko":"밤이 아는 이름","en":"A name the night knows","ja":"夜が知る名"},"hint":{"ko":"서른 명 넘게 물거나 세 번 넘게 광란한 혈귀가 살아서 끝맺었을 때","en":"End alive after biting thirty or frenzying three times","ja":"三十人以上噛むか三度以上狂乱した血鬼が生きたまま結んだとき"},"implies":null,"tier":"legend"},{"key":"bf_epi_kin","group":"bf","label":{"ko":"이름 없는 가문","en":"A nameless Family","ja":"名もなき家門"},"hint":{"ko":"떠돌이 혈귀가 권속을 만들고 살아서 끝맺었을 때","en":"End alive as a stray Bloodfiend who made Kindred","ja":"流れの血鬼が眷属を作り、生きたまま結んだとき"},"implies":null,"tier":"legend"},{"key":"bf_epi_bag","group":"bf","label":{"ko":"떠나지 않는 피주머니","en":"The Bloodbag that never left","ja":"去らない血袋"},"hint":{"ko":"피주머니를 둔 혈귀가 살아서 끝맺었을 때","en":"End alive as a Bloodfiend who kept a Bloodbag","ja":"血袋を持つ血鬼が生きたまま結んだとき"},"implies":null,"tier":"legend"},{"key":"bf_epi_bar","group":"bf","label":{"ko":"혈액바 상자의 탑","en":"A tower of Hemobar boxes","ja":"血液バーの箱の塔"},"hint":{"ko":"혈액바로 스무 해를 버틴 혈귀가 살아서 끝맺었을 때","en":"End alive after twenty years on Hemobars","ja":"血液バーで二十年しのいだ血鬼が生きたまま結んだとき"},"implies":null,"tier":"myth"},{"key":"bl_join","group":"blade","label":{"ko":"검계","en":"Blade Lineage","ja":"剣契"},"hint":{"ko":"검계에 들어갔을 때","en":"Join the Blade Lineage","ja":"剣契に入ったとき"},"implies":null,"tier":"rare"},{"key":"bl_salsu","group":"blade","label":{"ko":"검계 살수","en":"Blade Lineage Salsu","ja":"剣契 殺手"},"hint":{"ko":"검계에서 살수까지 올랐을 때","en":"Rise to Salsu in the Blade Lineage","ja":"剣契で殺手まで上がったとき"},"implies":"bl_join","tier":"epic"},{"key":"bl_mentor","group":"blade","label":{"ko":"검계 우두머리","en":"Blade Lineage Mentor","ja":"剣契 頭目"},"hint":{"ko":"검계에서 우두머리까지 올랐을 때","en":"Rise to Mentor in the Blade Lineage","ja":"剣契で頭目まで上がったとき"},"implies":"bl_salsu","tier":"legend"},{"key":"bl_scatter_leave","group":"blade","label":{"ko":"칼을 들고 떠난 자","en":"One who left with their blade","ja":"刀を手に去った者"},"hint":{"ko":"검계가 흩어질 때 칼을 들고 떠났을 때","en":"Leave with your blade when the Lineage scatters","ja":"剣契が散るとき、刀を手に去ったとき"},"implies":null,"tier":"rare"},{"key":"bl_last","group":"blade","label":{"ko":"마지막 항쟁에서 살아 나온 자","en":"One who survived the last stand","ja":"最後の抗争を生き延びた者"},"hint":{"ko":"마지막 항쟁에서 살아 나왔을 때","en":"Survive the last stand","ja":"最後の抗争を生き延びたとき"},"implies":null,"tier":"epic"},{"key":"bl_homeland","group":"blade","label":{"ko":"19구로 사람을 보낸 우두머리","en":"A Mentor who sent someone to District 19","ja":"19区へ人を送った頭目"},"hint":{"ko":"우두머리로서 19구로 사람을 보냈을 때","en":"As Mentor, send someone to District 19","ja":"頭目として19区へ人を送ったとき"},"implies":null,"tier":"legend"},{"key":"bl_m_retreat","group":"blade","label":{"ko":"칼을 거둔 우두머리","en":"A Mentor who sheathed the blade","ja":"刀を収めた頭目"},"hint":{"ko":"우두머리로서 마지막 항쟁 대신 칼을 거뒀을 때","en":"As Mentor, sheathe the blade instead of the last stand","ja":"頭目として最後の抗争の代わりに刀を収めたとき"},"implies":null,"tier":"legend"},{"key":"bl_m_distort","group":"blade","label":{"ko":"뒤틀린 우두머리","en":"The Distorted Mentor","ja":"ねじれた頭目"},"hint":{"ko":"우두머리가 뒤틀렸을 때","en":"Become Distorted as Mentor","ja":"頭目がねじれたとき"},"implies":null,"tier":"legend"},{"key":"bl_d_plague","group":"blade","label":{"ko":"도시 질병이 된 우두머리","en":"A Mentor rated Urban Plague","ja":"都市疾病となった頭目"},"hint":{"ko":"뒤틀린 우두머리가 도시 질병 등급까지 이르렀을 때","en":"As a Distorted Mentor, reach the Urban Plague rating","ja":"ねじれた頭目が都市疾病の等級に達したとき"},"implies":null,"tier":"myth"},{"key":"bl_d_lay","group":"blade","label":{"ko":"칼을 내려놓은 뒤틀림","en":"A Distortion that laid down the blade","ja":"刀を置いたねじれ"},"hint":{"ko":"뒤틀린 우두머리가 스스로 칼을 내려놓았을 때","en":"As a Distorted Mentor, lay down the blade yourself","ja":"ねじれた頭目が自ら刀を置いたとき"},"implies":null,"tier":"myth"},{"key":"bl_w_settle","group":"blade","label":{"ko":"칼을 내려놓은 검객","en":"A swordsman who laid down the blade","ja":"刀を置いた剣客"},"hint":{"ko":"떠돌이 검객으로 칼을 내려놓고 정착했을 때","en":"As a wandering swordsman, lay down the blade and settle","ja":"放浪の剣客として刀を置き、落ち着いたとき"},"implies":null,"tier":"rare"},{"key":"bl_w_student","group":"blade","label":{"ko":"본국검을 물려준 자","en":"One who passed on Bongukgeom","ja":"本国剣を伝えた者"},"hint":{"ko":"떠돌이 검객으로 아이에게 본국검을 물려주었을 때","en":"As a wandering swordsman, pass Bongukgeom on to a child","ja":"流れの剣客として子に本国剣を伝えたとき"},"implies":null,"tier":"legend"},{"key":"bl_w_reform","group":"blade","label":{"ko":"검계를 다시 세운 자","en":"One who rebuilt the Blade Lineage","ja":"剣契を再興した者"},"hint":{"ko":"떠돌이 검객으로 검계를 다시 세웠을 때","en":"As a wandering swordsman, rebuild the Blade Lineage","ja":"流れの剣客として剣契を再興したとき"},"implies":null,"tier":"legend"},{"key":"ws_join","group":"ws","label":{"ko":"공방에 이름을 올림","en":"Name on a Workshop roll","ja":"工房に名を連ねた"},"hint":{"ko":"트레스 협회의 자격 시험에 붙어 공방에 들어갔을 때","en":"Pass the Tres Association exam and join a Workshop","ja":"トレス協会の資格試験に受かって工房に入ったとき"},"implies":null,"tier":"common"},{"key":"ws_rep","group":"ws","label":{"ko":"공방 대표","en":"Workshop Head","ja":"工房の代表"},"hint":{"ko":"공방의 대표가 되었을 때","en":"Become the head of a Workshop","ja":"工房の代表になったとき"},"implies":"ws_join","tier":"rare"},{"key":"ws_s","group":"ws","label":{"ko":"이름난 공방의 대표","en":"Head of a renowned Workshop","ja":"名高い工房の代表"},"hint":{"ko":"격이 높은 공방의 대표가 되었을 때","en":"Become the head of a high-ranking Workshop","ja":"格の高い工房の代表になったとき"},"implies":"ws_rep","tier":"epic"},{"key":"ws_fame5","group":"ws","label":{"ko":"도시가 아는 공방","en":"A Workshop the City knows","ja":"都市が知る工房"},"hint":{"ko":"공방의 명성이 80에 닿았을 때","en":"Raise your Workshop's fame to 80","ja":"工房の名声が80に届いたとき"},"implies":"ws_join","tier":"epic"},{"key":"ws_color_order","group":"ws","label":{"ko":"특색의 손에 맞춤","en":"Fitted to a Color's hand","ja":"特色の手に合わせた"},"hint":{"ko":"특색이 직접 맡긴 주문을 해냈을 때","en":"Complete an order a Color brought in person","ja":"特色が直接持ち込んだ注文をやり遂げたとき"},"implies":"ws_join","tier":"legend"},{"key":"ws_finger4","group":"ws","label":{"ko":"네 손가락이 모두 찾아옴","en":"All four Fingers came calling","ja":"四本の指がすべて訪れた"},"hint":{"ko":"엄지·검지·중지·약지의 주문을 모두 해냈을 때","en":"Complete orders from the Thumb, Index, Middle and Ring","ja":"親指・人差し指・中指・薬指の注文をすべてやり遂げたとき"},"implies":"ws_join","tier":"legend"},{"key":"ws_masterpiece","group":"ws","label":{"ko":"걸작을 남김","en":"Left a masterwork","ja":"傑作を残した"},"hint":{"ko":"일생에 한 번 만드는 물건이 걸작 등급 이상일 때","en":"Your once-in-a-lifetime piece is rated Masterwork or higher","ja":"一生に一度の品が傑作以上だったとき"},"implies":"ws_join","tier":"rare"},{"key":"ws_meisterwerk","group":"ws","label":{"ko":"명작","en":"Magnum opus","ja":"名作"},"hint":{"ko":"일생에 한 번 만드는 물건이 명작 등급 이상일 때","en":"Your once-in-a-lifetime piece is rated Magnum Opus or higher","ja":"一生に一度の品が名作以上だったとき"},"implies":"ws_masterpiece","tier":"epic"},{"key":"ws_legend_work","group":"ws","label":{"ko":"전설이 된 물건","en":"A piece that became legend","ja":"伝説となった品"},"hint":{"ko":"일생에 한 번 만드는 물건이 전설 등급일 때","en":"Your once-in-a-lifetime piece is rated Legend","ja":"一生に一度の品が伝説だったとき"},"implies":"ws_meisterwerk","tier":"legend"},{"key":"ws_perfect","group":"ws","label":{"ko":"기적을 만든 자","en":"One who made a Miracle","ja":"奇跡を作った者"},"hint":{"ko":"걸작 미니게임에서 100점을 냈을 때","en":"Score 100 in the masterpiece minigames","ja":"傑作ミニゲームで100点を出したとき"},"implies":"ws_legend_work","tier":"miracle"},{"key":"ws_patent","group":"ws","label":{"ko":"특허 하나","en":"One patent","ja":"特許ひとつ"},"hint":{"ko":"내 설계로 트레스 특허를 등록했을 때","en":"Register a Tres patent for your own design","ja":"自分の設計でトレスの特許を登録したとき"},"implies":"ws_join","tier":"rare"},{"key":"ws_patron_color","group":"ws","label":{"ko":"내 칼을 쥔 특색","en":"A Color holding my blade","ja":"我が刃を握る特色"},"hint":{"ko":"후원하던 해결사가 특색이 되었을 때","en":"A Fixer you sponsored becomes a Color","ja":"後援していたフィクサーが特色になったとき"},"implies":"ws_join","tier":"legend"},{"key":"ws_claw","group":"ws","label":{"ko":"발톱이 온 공방","en":"The Workshop the Claw visited","ja":"爪が来た工房"},"hint":{"ko":"트레스 경고가 세 번 쌓여 발톱이 찾아왔을 때","en":"Three Tres warnings pile up and the Claw comes","ja":"トレスの警告が三つたまり、爪が訪れたとき"},"implies":"ws_join","tier":"uncommon"},{"key":"ws_sold","group":"ws","label":{"ko":"공방을 넘김","en":"Sold the Workshop","ja":"工房を手放した"},"hint":{"ko":"공방을 날개에 팔았을 때","en":"Sell your Workshop to a Wing","ja":"工房を翼に売ったとき"},"implies":"ws_join","tier":"uncommon"},{"key":"kk_join","group":"kuro","label":{"ko":"흑운회","en":"Kurokumo Clan","ja":"黒雲会"},"hint":{"ko":"흑운회에 들어갔을 때","en":"Join the Kurokumo Clan","ja":"黒雲会に入ったとき"},"implies":null,"tier":"rare"},{"key":"kk_captain","group":"kuro","label":{"ko":"흑운회 부조장","en":"Kurokumo Clan Captain","ja":"黒雲会 副組長"},"hint":{"ko":"흑운회에서 부조장까지 올랐을 때","en":"Rise to Captain in the Kurokumo Clan","ja":"黒雲会で副組長まで上がったとき"},"implies":"kk_join","tier":"epic"},{"key":"kk_patriarch","group":"kuro","label":{"ko":"흑운회 조장","en":"Kurokumo Clan Patriarch","ja":"黒雲会 組長"},"hint":{"ko":"흑운회에서 조장까지 올랐을 때","en":"Rise to Patriarch in the Kurokumo Clan","ja":"黒雲会で組長まで上がったとき"},"implies":"kk_captain","tier":"legend"},{"key":"kk_ink3","group":"kuro","label":{"ko":"세 겹의 검은 구름","en":"Three layers of black cloud","ja":"三重の黒い雲"},"hint":{"ko":"검은 구름 문신을 세 겹까지 새겼을 때","en":"Have the black cloud tattoo inked three layers deep","ja":"黒い雲の刺青を三重まで入れたとき"},"implies":null,"tier":"rare"},{"key":"kk_truce","group":"kuro","label":{"ko":"검계와 마주 앉은 자","en":"One who sat across from the Blade Lineage","ja":"剣契と向かい合って座った者"},"hint":{"ko":"흑운회로서 검계와 마주 앉았을 때","en":"Sit across from the Blade Lineage as Kurokumo","ja":"黒雲会として剣契と向かい合って座ったとき"},"implies":null,"tier":"rare"},{"key":"kk_finger","group":"kuro","label":{"ko":"손가락으로 값을 치른 자","en":"One who paid with a finger","ja":"指で代償を払った者"},"hint":{"ko":"손가락 하나로 값을 치르고 살아남았을 때","en":"Pay with a finger and live","ja":"指一本で代償を払い、生き延びたとき"},"implies":null,"tier":"rare"},{"key":"kk_bl_last","group":"kuro","label":{"ko":"검계의 마지막 골목을 본 자","en":"One who saw the Blade Lineage's last alley","ja":"剣契の最後の路地を見た者"},"hint":{"ko":"흑운회로서 검계의 마지막 골목을 보았을 때","en":"As Kurokumo, witness the Blade Lineage's last alley","ja":"黒雲会として剣契の最後の路地を見たとき"},"implies":null,"tier":"epic"},{"key":"kk_retire","group":"kuro","label":{"ko":"칼을 물려준 부조장","en":"A Captain who passed on the blade","ja":"刀を譲った副組長"},"hint":{"ko":"부조장으로서 칼을 물려주고 물러났을 때","en":"As Captain, pass on the blade and step down","ja":"副組長として刀を譲り、退いたとき"},"implies":null,"tier":"rare"},{"key":"kk_p_end","group":"kuro","label":{"ko":"자리를 넘긴 조장","en":"A Patriarch who passed on the seat","ja":"座を譲った組長"},"hint":{"ko":"조장으로서 자리를 넘겼을 때","en":"As Patriarch, pass on the seat","ja":"組長として座を譲ったとき"},"implies":null,"tier":"legend"},{"key":"kk_dojo","group":"kuro","label":{"ko":"도장을 차린 검객","en":"A swordsman who opened a dojo","ja":"道場を開いた剣客"},"hint":{"ko":"물러난 뒤 도장을 차렸을 때","en":"Open a dojo after stepping down","ja":"退いた後、道場を開いたとき"},"implies":null,"tier":"epic"},{"key":"kk_d_student","group":"kuro","label":{"ko":"검술을 물려준 자","en":"One who passed on swordsmanship","ja":"剣術を伝えた者"},"hint":{"ko":"도장을 차린 뒤 아이에게 검술을 물려주었을 때","en":"After opening a dojo, pass swordsmanship on to a child","ja":"道場を開いた後、子に剣術を伝えたとき"},"implies":null,"tier":"legend"},{"key":"cl_claw","group":"claw","label":{"ko":"머리의 처형자","en":"Executioner of the Head","ja":"頭の処刑人"},"hint":{"ko":"C사에서 발톱 처형자로 시작했을 때","en":"Start as a Claw Executioner in C Corp.","ja":"C社で爪の処刑人として始まったとき"},"implies":null,"tier":"rare"},{"key":"cl_spotless","group":"claw","label":{"ko":"고지서 없는 처형자","en":"An Executioner without a notice","ja":"告知書のない処刑人"},"hint":{"ko":"고지서를 한 번도 받지 않고 15년차를 넘겼을 때","en":"Pass Year 15 without a single notice","ja":"告知書を一度も受けずに15年目を越えたとき"},"implies":"cl_claw","tier":"epic"},{"key":"cl_long","group":"claw","label":{"ko":"스물다섯 해를 넘긴 처형자","en":"An Executioner past twenty-five years","ja":"二十五年を越えた処刑人"},"hint":{"ko":"처형자로 25년차를 넘겼을 때","en":"Pass Year 25 as an Executioner","ja":"処刑人として25年目を越えたとき"},"implies":"cl_claw","tier":"epic"},{"key":"cl_color_kill","group":"claw","label":{"ko":"특색을 처리한 처형자","en":"An Executioner who dealt with a Color","ja":"特色を処理した処刑人"},"hint":{"ko":"명령서의 특색을 처리했을 때","en":"Deal with a Color named on an order","ja":"命令書の特色を処理したとき"},"implies":"cl_claw","tier":"epic"},{"key":"cl_claw_beat","group":"claw","label":{"ko":"발톱을 넘은 처형자","en":"An Executioner who got past the Claw","ja":"爪を越えた処刑人"},"hint":null,"implies":"cl_claw","tier":"legend"},{"key":"cl_arbiter","group":"claw","label":{"ko":"조율자를 만난 자","en":"One who met the Arbiter","ja":"調律者に会った者"},"hint":null,"implies":"cl_claw_beat","tier":"myth"},{"key":"cl_retire","group":"claw","label":{"ko":"건틀릿을 반납한 처형자","en":"An Executioner who returned the gauntlet","ja":"ガントレットを返納した処刑人"},"hint":null,"implies":"cl_claw","tier":"legend"},{"key":"cl_clawed","group":"claw","label":{"ko":"발톱에게 처리된 처형자","en":"An Executioner dealt with by the Claw","ja":"爪に処理された処刑人"},"hint":{"ko":"두 번째 실수 뒤 처형자가 찾아왔을 때","en":"After a second failure, an Executioner comes for you","ja":"二度目の失敗の後、処刑人が訪れたとき"},"implies":"cl_claw","tier":"rare"},{"key":"cl_warp","group":"warp","label":{"ko":"열차 안의 금기","en":"The Taboo Aboard the Train","ja":"列車の中の禁忌"},"hint":null,"implies":null,"tier":"legend"},{"key":"guard_chosen","group":"guard","label":{"ko":"가문의 부름","en":"The Family's Call","ja":"家門の呼び声"},"hint":{"ko":"H사 출신으로 25세에 가주 후보의 호위로 발탁되었을 때","en":"Be chosen at 25, as one born in H Corp., to guard a Family Hierarch Candidate","ja":"H社出身として25歳で家主候補の護衛に抜擢されたとき"},"implies":null,"tier":"uncommon"},{"key":"guard_full","group":"guard","label":{"ko":"채워진 그릇","en":"A Filled Vessel","ja":"満たされた器"},"hint":{"ko":"가문의 지원으로 그릇 끝까지 강해졌을 때","en":"Grow as strong as your vessel allows with the Family's backing","ja":"家門の支援で器の限りまで強くなったとき"},"implies":"guard_chosen","tier":"rare"},{"key":"guard_big","group":"guard","label":{"ko":"큰 그릇","en":"A Great Vessel","ja":"大きな器"},"hint":{"ko":"1급의 그릇으로 발탁되어 그 끝까지 닿았을 때","en":"Be chosen with a Grade 1 vessel and reach its limit","ja":"1級の器として抜擢され、その限りまで届いたとき"},"implies":"guard_full","tier":"epic"},{"key":"guard_pass","group":"guard","label":{"ko":"가주의 왼쪽","en":"The Hierarch's Left","ja":"家主の左"},"hint":{"ko":"호위한 후보가 가주 심사를 통과했을 때","en":"The candidate you guarded passes the Family Hierarch Evaluation","ja":"護衛した候補が家主審査を通過したとき"},"implies":null,"tier":"epic"},{"key":"guard_stay","group":"guard","label":{"ko":"왼쪽 자리","en":"The Left Side","ja":"左の席"},"hint":{"ko":"가주 심사를 통과한 뒤 해결사로서 가주의 곁에 남았을 때","en":"After the Evaluation, stay at the Hierarch's side as a Fixer","ja":"家主審査の通過後、フィクサーとして家主のそばに残ったとき"},"implies":"guard_pass","tier":"epic"},{"key":"guard_against","group":"guard","label":{"ko":"작은 그릇의 기적","en":"The Miracle of a Small Vessel","ja":"小さな器の奇跡"},"hint":{"ko":"체급 6 이하로 가주 심사의 기습을 두 번 다 막아 냈을 때","en":"Block both ambushes in the Evaluation at strength 6 or lower","ja":"格6以下で家主審査の奇襲を二度とも防いだとき"},"implies":"guard_pass","tier":"legend"},{"key":"guard_fail","group":"guard","label":{"ko":"빈 오른쪽","en":"The Empty Right","ja":"空いた右"},"hint":{"ko":"호위한 후보를 가주 심사에서 잃었을 때","en":"Lose the candidate you guarded in the Evaluation","ja":"護衛した候補を家主審査で失ったとき"},"implies":null,"tier":"uncommon"},{"key":"guard_teach","group":"guard","label":{"ko":"잘못된 가르침","en":"A Wrong Lesson","ja":"誤った教え"},"hint":{"ko":"1차 심사에서 후보에게 이상한 대답을 가르쳤을 때","en":"Teach the candidate a strange answer in the first round","ja":"一次審査で候補に妙な答えを教えたとき"},"implies":"guard_fail","tier":"common"},{"key":"guard_retire","group":"guard","label":{"ko":"넘겨준 왼쪽","en":"The Left Side Handed Over","ja":"譲った左"},"hint":{"ko":"호위무사로서 젊은 호위에게 자리를 넘겨주었을 때","en":"As a Bodyguard, hand your place to a young guard","ja":"護衛武士として若い護衛に席を譲ったとき"},"implies":"guard_stay","tier":"rare"},{"key":"guard_before","group":"guard","label":{"ko":"빈 왼쪽 한 뼘","en":"A Hand-Span Left Empty","ja":"空けた左の一尺"},"hint":{"ko":"호위무사로서 가주보다 먼저 떠났을 때","en":"As a Bodyguard, pass away before the Hierarch","ja":"護衛武士として家主より先に逝ったとき"},"implies":"guard_stay","tier":"rare"},{"key":"guard_after","group":"guard","label":{"ko":"남겨진 호위","en":"The Guard Left Behind","ja":"残された護衛"},"hint":{"ko":"호위무사로서 가주를 먼저 보냈을 때","en":"As a Bodyguard, see the Hierarch off first","ja":"護衛武士として家主を先に見送ったとき"},"implies":"guard_stay","tier":"rare"},{"key":"guard_friend","group":"guard","label":{"ko":"친구였던 가주","en":"A Hierarch Who Was a Friend","ja":"友だった家主"},"hint":{"ko":"호위무사로서 신임을 끝까지 채우고 삶을 마쳤을 때","en":"End your life as a Bodyguard with the Hierarch's full trust","ja":"護衛武士として信任を満たしたまま生涯を終えたとき"},"implies":"guard_stay","tier":"legend"},{"key":"index_e","group":"finger","label":{"ko":"e(무리수)","en":"e (the irrational number)","ja":"e（無理数）"},"hint":{"ko":"검지 대행자로서 e를 끝까지 읊으라는 지령을 받았을 때","en":"As an Agent of the Index, receive the order to recite e to the end","ja":"人差し指の代行者として、eを最後まで唱えよという指令を受けたとき"},"implies":null,"tier":"uncommon"},{"key":"ampoule","group":"city","label":{"ko":"K사 앰플","en":"K Corp. Ampoule","ja":"K社アンプル"},"hint":{"ko":"암시장에서 K사 앰플을 샀을 때","en":"Buy a K Corp. Ampoule on the black market","ja":"闇市でK社アンプルを買ったとき"},"implies":null,"tier":"legend"},{"key":"warp_citizen","group":"warp","label":{"ko":"시민칸의 스승","en":"The Teacher of the Citizens' Car","ja":"市民車両の師"},"hint":{"ko":"특색으로 시민 칸에 섞여 워프 열차에 올랐을 때","en":"As a Color, board the Warp Train disguised among the citizens","ja":"特色として市民に紛れてワープ列車に乗ったとき"},"implies":null,"tier":"legend"},{"key":"warp_lost","group":"warp","label":{"ko":"길을 잃음","en":"Lost","ja":"道を見失った"},"hint":{"ko":"워프 열차에서 붉은 상자를 쓰고 길을 잃었을 때","en":"Use the red box on the Warp Train and lose your way","ja":"ワープ列車で赤い箱を使い、道を見失ったとき"},"implies":null,"tier":"legend"},{"key":"blind_kill","group":"distortion","label":{"ko":"알아보지 못한 채 죽인 자","en":"One who killed without knowing who it was","ja":"誰かも分からないまま殺した者"},"hint":{"ko":"눈먼 뒤틀림을 알아보지 못하고 죽였을 때","en":"Kill the blind Distortion without recognizing who it was","ja":"盲目のねじれを見分けられずに殺したとき"},"implies":null,"tier":"myth"},{"key":"blind_love","group":"distortion","label":{"ko":"사랑하는 이에게","en":"To the One I Love","ja":"愛する人へ"},"hint":{"ko":"눈먼 뒤틀림이 누구인지 알아보았을 때","en":"Recognize who the blind Distortion is","ja":"盲目のねじれが誰かを見抜いたとき"},"implies":null,"tier":"myth"},{"key":"nameless","group":"finger","label":{"ko":"無名","en":"Nameless (無名)","ja":"無名"},"hint":{"ko":"검지 대행자로서 지령에 따라 모든 것에서 이름을 버렸을 때","en":"As an Agent of the Index, cast away your name from everything on an order","ja":"人差し指の代行者として、指令に従いあらゆるものから名前を捨てたとき"},"implies":null,"tier":"legend"},{"key":"lament_happy","group":"distortion","label":{"ko":"그곳에서는 행복하기를","en":"May They Be Happy There","ja":"そこでは幸せでありますように"},"hint":{"ko":"뒤틀려 가는 가까운 이를 직접 토벌했을 때","en":"Subjugate a loved one as they twist, by your own hand","ja":"ねじれていく身近な人を自ら討伐したとき"},"implies":null,"tier":"legend"},{"key":"lament_wait","group":"distortion","label":{"ko":"그곳에서 기다려 주기를","en":"May They Wait for Me There","ja":"そこで待っていてくれますように"},"hint":{"ko":"뒤틀려 가는 가까운 이를 두고 도망쳤을 때","en":"Run from a loved one as they twist","ja":"ねじれていく身近な人を置いて逃げたとき"},"implies":null,"tier":"legend"},{"key":"lament_meet","group":"distortion","label":{"ko":"그곳에서 만나기를","en":"May We Meet There","ja":"そこで会えますように"},"hint":{"ko":"뒤틀려 가는 가까운 이를 마주하고 죽었을 때","en":"Face a loved one as they twist, and die","ja":"ねじれていく身近な人と向き合い、死んだとき"},"implies":null,"tier":"legend"},{"key":"lotto","group":"city","label":{"ko":"부","en":"Wealth","ja":"富"},"hint":{"ko":"로또에 당첨되었을 때","en":"Win the lottery","ja":"宝くじに当たったとき"},"implies":null,"tier":"legend"},{"key":"love_first","group":"city","label":{"ko":"첫사랑과 가정을 이룸","en":"Built a home with a first love","ja":"初恋の人と家庭を築いた"},"hint":{"ko":"10대에 생긴 연인과 가정을 이루었을 때","en":"Start a family with the partner you met as a teen","ja":"10代で出会った恋人と家庭を築いたとき"},"implies":null,"tier":"uncommon"},{"key":"refuse_proposal","group":"city","label":{"ko":"청혼을 거절한 삶","en":"A life that turned down a proposal","ja":"プロポーズを断った人生"},"hint":{"ko":"청혼을 거절하고 끝내 혼자 살았을 때","en":"Turn down a proposal and never marry","ja":"プロポーズを断り、結婚しなかったとき"},"implies":null,"tier":"uncommon"},{"key":"widowed","group":"city","label":{"ko":"곁을 지킨 사람을 먼저 보냄","en":"Saw off the one who stayed by my side","ja":"そばにいてくれた人を先に見送った"},"hint":{"ko":"함께 살던 사람을 먼저 떠나보냈을 때","en":"Lose the person you lived with","ja":"共に暮らした人を先に見送ったとき"},"implies":null,"tier":"rare"},{"key":"unwed_lover","group":"city","label":{"ko":"끝내 이루지 못한 사이","en":"A bond that never came to be","ja":"結ばれなかった間柄"},"hint":{"ko":"연인은 있었지만 끝내 함께 살지 못했을 때","en":"Have a lover but never live together","ja":"恋人はいたが、共に暮らせなかったとき"},"implies":null,"tier":"uncommon"},{"key":"thumb_will","group":"finger","label":{"ko":"대부의 유언","en":"The Capo dei Capi's Will","ja":"ゴッドファーザーの遺言"},"hint":{"ko":"엄지 언더보스로서 대부의 유언을 받들어 대부가 되었을 때","en":"As a Sottocapo of the Thumb, honor the Capo dei Capi's will and take that seat","ja":"親指のアンダーボスとして、ゴッドファーザーの遺言を受けてゴッドファーザーになったとき"},"implies":null,"tier":"legend"},{"key":"middle_grudge","group":"finger","label":{"ko":"식구의 원한","en":"The Family's Grudge","ja":"家族の恨み"},"hint":{"ko":"중지 작은 형님·누님으로서 앙갚음 장부의 가장 오래된 줄을 혼자 지웠을 때","en":"As a Big Brother or Big Sister of the Middle, strike the oldest line from the Book of Vengeance alone","ja":"中指の末兄・末姉として、仕返し帳簿の一番古い行を一人で消したとき"},"implies":null,"tier":"legend"},{"key":"ring_silence","group":"finger","label":{"ko":"말없는 감상","en":"A Silent Viewing","ja":"無言の鑑賞"},"hint":{"ko":"약지 도슨트로서 마에스트로들의 말없는 감상 끝에 마에스트로가 되었을 때","en":"As a Docent of the Ring, become a Maestro after the Maestros view your work in silence","ja":"薬指のドーセントとして、マエストロたちの無言の鑑賞の末にマエストロになったとき"},"implies":null,"tier":"legend"},{"key":"fixer_named","group":"fixer","label":{"ko":"지명받은 이름","en":"A Name That Was Called","ja":"指名された名"},"hint":{"ko":"두 단계 위의 지명 의뢰를 해냈을 때","en":"Complete a named request two steps above your usual work","ja":"二段上の指名依頼をやり遂げたとき"},"implies":null,"tier":"uncommon"},{"key":"fixer_lucky3","group":"fixer","label":{"ko":"앞당겨진 심사","en":"A Review Moved Up","ja":"前倒しの審査"},"hint":{"ko":"한 삶에서 뜻밖의 승급을 세 번 겪었을 때","en":"Get an unexpected promotion three times in one life","ja":"一つの人生で思いがけない昇級を三度経験したとき"},"implies":null,"tier":"rare"},{"key":"fixer_lucky_one","group":"fixer","label":{"ko":"한 번에 1급","en":"Grade 1 in One Leap","ja":"一足飛びの1級"},"hint":{"ko":"뜻밖의 승급으로 2급에서 1급이 되었을 때","en":"Go from Grade 2 to Grade 1 through an unexpected promotion","ja":"思いがけない昇級で2級から1級になったとき"},"implies":null,"tier":"epic"},{"key":"fixer_colorless","group":"fixer","label":{"ko":"색 없는 1급","en":"A Grade 1 Without a Color","ja":"色なき1級"},"hint":{"ko":"특색 공적을 다 채웠지만 특색이 되지 못하고 끝났을 때","en":"Fill your Color merit but end without becoming a Color","ja":"特色の功績を満たしたが、特色になれずに終わったとき"},"implies":null,"tier":"rare"},{"key":"office_broken","group":"fixer","label":{"ko":"사무소 깨기","en":"Office Break-In","ja":"事務所破り"},"hint":{"ko":"사무소가 습격당해 지키지 못했을 때","en":"When your Office is attacked and you fail to hold it","ja":"事務所が襲撃され、守りきれなかったとき"},"implies":null,"tier":"uncommon"}],"flags":{"en":[["고아","Orphan"],["부유한집","Born into wealth"],["가난한집","Born into poverty"],["연인","Has a lover"],["가정","Has a family"],["아이","Has a child"],["K사앰플","Carries a K Corp. ampoule"],["가족이같은소속","Child shares your affiliation"],["빚","In debt"],["프로젝트완수","Completed a major project"],["후견","Has a Director's patronage"],["약물중독","Drug dependence"],["조직입문","Ties to a Syndicate"],["환상체목격","Has seen an Abnormality"],["환상체생존","Survived an Abnormality"],["E.G.O개화","Effloresced E.G.O"],["진학","Higher education"],["상층","Upper-class upbringing"],["사원증","Wing employee ID"],["복제","Clone from the Hatchery"],["기억소거","Memories erased on leaving R Corp."],["신분증명","Wing citizen"],["의뢰인","Ties to an Office"],["해결사동경","Admires Fixers"],["날개동경","Admires Wing employees"],["협회동경","Admires the Associations"],["엄지동경","Admires the Thumb"],["검지동경","Admires the Index"],["중지동경","Admires the Middle"],["약지동경","Admires the Ring"],["특색","Color"],["뒤틀림목격","Witnessed a Distortion"],["뒤틀림경계","Came to the brink of Distortion"],["이상한물건","Keeps a strange object"],["숭배","Joined a cult"],["고급장비","Workshop-made gear"],["의체","Backstreets prosthesis"],["좋은의체","Fine prosthesis"],["전투의체","Combat prosthesis"],["강화시술","Underwent augmentation"],["유물","Relic of the Outskirts"],["이단낙인","Branded a heretic by Nagel und Hammer"],["원한","Vengeance tattoo"],["기사의가호","Knight of Despair's blessing"],["혈귀","Bloodfiend"],["떠돌이","A stray with no Family"],["혈액바","Knows where to get Hemobars"],["잘린손가락","Lost a finger"],["잘린팔","Lost an arm"],["잘린손","Lost a hand"]],"ja":[["고아","孤児"],["부유한집","裕福な家に生まれた"],["가난한집","貧しい家に生まれた"],["연인","恋人がいる"],["가정","家庭を築いた"],["아이","子どもがいる"],["K사앰플","K社のアンプルを懐に持つ"],["가족이같은소속","子どもが同じ所属"],["빚","借金がある"],["프로젝트완수","大型プロジェクトをやり遂げた"],["후견","理事の後ろ盾がある"],["약물중독","薬物依存"],["조직입문","組織とつながりがある"],["환상체목격","幻想体を見たことがある"],["환상체생존","幻想体と遭遇して生き延びた"],["E.G.O개화","E.G.O開花"],["진학","上級課程を修めた"],["상층","上層の出身"],["사원증","翼の社員証"],["복제","孵化場出身のクローン"],["기억소거","R社退役時に記憶を消去"],["신분증명","翼の市民"],["의뢰인","事務所とつながりがある"],["해결사동경","フィクサーに憧れている"],["날개동경","翼の社員に憧れている"],["협회동경","協会に憧れている"],["엄지동경","親指に憧れている"],["검지동경","人差し指に憧れている"],["중지동경","中指に憧れている"],["약지동경","薬指に憧れている"],["특색","特色"],["뒤틀림목격","ねじれを目撃した"],["뒤틀림경계","ねじれの一歩手前から戻った"],["이상한물건","奇妙な物を持っている"],["숭배","崇拝の集まりに足を踏み入れた"],["고급장비","工房製の高級装備"],["의체","裏路地の義体"],["좋은의체","良質な義体"],["전투의체","戦闘用義体"],["강화시술","強化施術を受けた"],["유물","外郭の遺物"],["이단낙인","ナーゲルウントハマーの異端の烙印"],["원한","怨恨の刺青"],["기사의가호","絶望の騎士の加護"],["혈귀","血鬼"],["떠돌이","家門を持たない放浪者"],["혈액바","血液バーの入手先を知っている"],["잘린손가락","指を一本失った"],["잘린팔","腕を一本失った"],["잘린손","手を一つ失った"]],"ko":[["고아","고아"],["부유한집","부유한 집에서 태어남"],["가난한집","가난한 집에서 태어남"],["연인","연인이 있음"],["가정","가정을 이룸"],["아이","아이가 있음"],["K사앰플","K사 앰플을 품에 지님"],["가족이같은소속","자식이 같은 소속"],["빚","빚이 있음"],["프로젝트완수","큰 프로젝트를 마침"],["후견","이사의 후견을 받음"],["약물중독","약물 의존"],["조직입문","조직과 연이 닿음"],["환상체목격","환상체를 본 적 있음"],["환상체생존","환상체와 마주치고 살아남음"],["E.G.O개화","E.G.O 개화"],["진학","상급 과정을 거침"],["상층","상층 출신"],["사원증","날개의 사원증"],["복제","부화장 출신 복제인간"],["기억소거","R사 퇴역 때 기억을 지움"],["신분증명","날개 시민"],["의뢰인","사무소에 연이 닿음"],["해결사동경","해결사를 동경함"],["날개동경","날개의 사원을 동경함"],["협회동경","협회를 동경함"],["엄지동경","엄지를 동경함"],["검지동경","검지를 동경함"],["중지동경","중지를 동경함"],["약지동경","약지를 동경함"],["특색","특색"],["뒤틀림목격","뒤틀림을 목격함"],["뒤틀림경계","뒤틀림의 문턱까지 갔다 옴"],["이상한물건","이상한 물건을 간직함"],["숭배","숭배 모임에 발을 들임"],["고급장비","공방제 고급 장비"],["의체","뒷골목 의체"],["좋은의체","좋은 의체"],["전투의체","전투용 의체"],["강화시술","강화 시술을 받음"],["유물","외곽의 유물"],["이단낙인","나겔 운트 하머의 이단 낙인"],["원한","원한 문신"],["기사의가호","절망의 기사의 가호"],["혈귀","혈귀"],["떠돌이","가문 없는 떠돌이"],["혈액바","혈액바를 구할 곳을 앎"],["잘린손가락","손가락 하나를 잃음"],["잘린팔","팔 하나를 잃음"],["잘린손","손 하나를 잃음"]]}};
+const ADVISOR_VERSION="2.5.0";
+const ADVISOR_CATALOG={"records":[{"key":"born_head","group":"birth","label":{"ko":"머리(A~C사)에서 태어남","en":"Born under the Head (A–C Corp.)","ja":"頭（A〜C社）の下に生まれた"},"hint":{"ko":"A사, B사, C사 구역에서 태어났을 때","en":"Be born in the A, B or C Corp. district","ja":"A社・B社・C社の区で生まれたとき"},"implies":null,"tier":"uncommon"},{"key":"born_outskirts","group":"birth","label":{"ko":"외곽에서 태어남","en":"Born in the Outskirts","ja":"外郭で生まれた"},"hint":{"ko":"외곽에서 태어났을 때","en":"Be born in the Outskirts","ja":"外郭で生まれたとき"},"implies":null,"tier":"uncommon"},{"key":"orphan","group":"birth","label":{"ko":"부모 없이 태어남","en":"Born without parents","ja":"両親なしで生まれた"},"hint":{"ko":"부모 없이 태어났을 때","en":"Be born without parents","ja":"両親なしで生まれたとき"},"implies":null,"tier":"uncommon"},{"key":"pinky_star_heaven","group":"birth","label":{"ko":"36천강의 이름","en":"Name of the 36 Tiangang","ja":"三十六天罡の名"},"hint":{"ko":"태어날 때 별의 이름을 받았고, 그 별이 36천강에 들 때","en":"Receive a star's name at birth, and the star is one of the 36 Tiangang","ja":"生まれたときに星の名を受け、それが三十六天罡だったとき"},"implies":null,"tier":"rare"},{"key":"pinky_star_earth","group":"birth","label":{"ko":"72지살의 이름","en":"Name of the 72 Disha","ja":"七十二地煞の名"},"hint":{"ko":"태어날 때 별의 이름을 받았고, 그 별이 72지살에 들 때","en":"Receive a star's name at birth, and the star is one of the 72 Disha","ja":"生まれたときに星の名を受け、それが七十二地煞だったとき"},"implies":null,"tier":"rare"},{"key":"age80","group":"birth","label":{"ko":"80세 넘게 삶","en":"Lived past 80","ja":"80歳を超えて生きた"},"hint":{"ko":"80세를 넘겨 삶을 마쳤을 때","en":"End your life past the age of 80","ja":"80歳を超えて生涯を終えたとき"},"implies":null,"tier":"common"},{"key":"age100","group":"birth","label":{"ko":"100세를 넘겨 삶","en":"Lived past 100","ja":"100歳を超えて生きた"},"hint":{"ko":"100세를 넘겨 삶을 마쳤을 때","en":"End your life past the age of 100","ja":"100歳を超えて生涯を終えたとき"},"implies":"age80","tier":"epic"},{"key":"age200","group":"birth","label":{"ko":"200년을 넘게 삶","en":"Lived past 200","ja":"200年を超えて生きた"},"hint":{"ko":"200세를 넘겨 살았을 때 (혈귀만 닿는다)","en":"Live past 200 (only a Bloodfiend can)","ja":"200歳を超えて生きたとき（血鬼のみ）"},"implies":"age100","tier":"legend"},{"key":"die_child","group":"birth","label":{"ko":"열 살을 넘기지 못함","en":"Died before turning ten","ja":"10歳を迎えられなかった"},"hint":{"ko":"열 살이 되기 전에 삶이 끝났을 때","en":"Your life ends before you turn ten","ja":"十歳になる前に生涯が終わったとき"},"implies":null,"tier":"common"},{"key":"fixer","group":"fixer","label":{"ko":"해결사가 됨","en":"Became a Fixer","ja":"フィクサーになった"},"hint":{"ko":"해결사가 되었을 때","en":"Become a Fixer","ja":"フィクサーになったとき"},"implies":null,"tier":"common"},{"key":"fixer_g7","group":"fixer","label":{"ko":"해결사 7급 도달","en":"Reached Grade 7 Fixer","ja":"7級フィクサーに到達"},"hint":{"ko":"해결사로 7급까지 올랐을 때","en":"Rise to Grade 7 as a Fixer","ja":"フィクサーとして7級まで上がったとき"},"implies":"fixer","tier":"common"},{"key":"fixer_g6","group":"fixer","label":{"ko":"해결사 6급 도달","en":"Reached Grade 6 Fixer","ja":"6級フィクサーに到達"},"hint":{"ko":"해결사로 6급까지 올랐을 때","en":"Rise to Grade 6 as a Fixer","ja":"フィクサーとして6級まで上がったとき"},"implies":"fixer_g7","tier":"common"},{"key":"fixer_g5","group":"fixer","label":{"ko":"해결사 5급 도달","en":"Reached Grade 5 Fixer","ja":"5級フィクサーに到達"},"hint":{"ko":"해결사로 5급까지 올랐을 때","en":"Rise to Grade 5 as a Fixer","ja":"フィクサーとして5級まで上がったとき"},"implies":"fixer_g6","tier":"common"},{"key":"fixer_g4","group":"fixer","label":{"ko":"해결사 4급 도달","en":"Reached Grade 4 Fixer","ja":"4級フィクサーに到達"},"hint":{"ko":"해결사로 4급까지 올랐을 때","en":"Rise to Grade 4 as a Fixer","ja":"フィクサーとして4級まで上がったとき"},"implies":"fixer_g5","tier":"uncommon"},{"key":"fixer_g3","group":"fixer","label":{"ko":"해결사 3급 도달","en":"Reached Grade 3 Fixer","ja":"3級フィクサーに到達"},"hint":{"ko":"해결사로 3급까지 올랐을 때","en":"Rise to Grade 3 as a Fixer","ja":"フィクサーとして3級まで上がったとき"},"implies":"fixer_g4","tier":"uncommon"},{"key":"fixer_g2","group":"fixer","label":{"ko":"해결사 2급 도달","en":"Reached Grade 2 Fixer","ja":"2級フィクサーに到達"},"hint":{"ko":"해결사로 2급까지 올랐을 때","en":"Rise to Grade 2 as a Fixer","ja":"フィクサーとして2級まで上がったとき"},"implies":"fixer_g3","tier":"rare"},{"key":"fixer_g1","group":"fixer","label":{"ko":"해결사 1급 도달","en":"Reached Grade 1 Fixer","ja":"1級フィクサーに到達"},"hint":{"ko":"해결사로 1급까지 올랐을 때","en":"Rise to Grade 1 as a Fixer","ja":"フィクサーとして1級まで上がったとき"},"implies":"fixer_g2","tier":"epic"},{"key":"color","group":"fixer","label":{"ko":"특색의 이름을 얻음","en":"Became a Color","ja":"特色の名を得た"},"hint":{"ko":"해결사 1급에서 특색의 이름을 얻었을 때","en":"Earn the name of a Color as a Grade 1 Fixer","ja":"フィクサー1級で特色の名を得たとき"},"implies":null,"tier":"legend"},{"key":"office","group":"fixer","label":{"ko":"해결사 사무소 소속","en":"Joined a Fixer Office","ja":"フィクサー事務所に所属"},"hint":{"ko":"해결사 사무소에 들어갔을 때","en":"Join a Fixer Office","ja":"フィクサー事務所に入ったとき"},"implies":null,"tier":"common"},{"key":"assoc","group":"fixer","label":{"ko":"협회 소속 해결사","en":"Association Fixer","ja":"協会所属フィクサー"},"hint":{"ko":"해결사로 협회에 들어갔을 때","en":"Join an Association as a Fixer","ja":"フィクサーとして協会に入ったとき"},"implies":null,"tier":"uncommon"},{"key":"req_star","group":"fixer","label":{"ko":"도시의 별 이상 의뢰 완수","en":"Completed a Star of the City request","ja":"都市の星級の依頼を完遂"},"hint":{"ko":"도시의 별 등급 이상의 의뢰를 끝냈을 때","en":"Complete a request rated Star of the City or higher","ja":"都市の星級以上の依頼を終えたとき"},"implies":null,"tier":"uncommon"},{"key":"finger_엄지","group":"finger","label":{"ko":"엄지 입단","en":"Joined the Thumb","ja":"親指に入団"},"hint":{"ko":"엄지에 들어갔을 때","en":"Join the Thumb","ja":"親指に入ったとき"},"implies":null,"tier":"uncommon"},{"key":"frank_엄지_2","group":"finger","label":{"ko":"엄지 카포 도달","en":"Reached Thumb Capo","ja":"親指のカポに到達"},"hint":{"ko":"엄지에서 카포까지 올랐을 때","en":"Rise to Capo in the Thumb","ja":"親指でカポまで上がったとき"},"implies":"finger_엄지","tier":"rare"},{"key":"frank_엄지_3","group":"finger","label":{"ko":"엄지 언더보스 도달","en":"Reached Thumb Sottocapo","ja":"親指のアンダーボスに到達"},"hint":{"ko":"엄지에서 언더보스까지 올랐을 때","en":"Rise to Sottocapo in the Thumb","ja":"親指でアンダーボスまで上がったとき"},"implies":"frank_엄지_2","tier":"epic"},{"key":"frank_엄지_4","group":"finger","label":{"ko":"엄지 대부 도달","en":"Reached Thumb Capo dei Capi","ja":"親指のゴッドファーザーに到達"},"hint":{"ko":"엄지에서 대부까지 올랐을 때","en":"Rise to Capo dei Capi in the Thumb","ja":"親指でゴッドファーザーまで上がったとき"},"implies":"frank_엄지_3","tier":"legend"},{"key":"finger_검지","group":"finger","label":{"ko":"검지 입단","en":"Joined the Index","ja":"人差し指に入団"},"hint":{"ko":"검지에 들어갔을 때","en":"Join the Index","ja":"人差し指に入ったとき"},"implies":null,"tier":"uncommon"},{"key":"frank_검지_2","group":"finger","label":{"ko":"검지 대행자 도달","en":"Reached Index Proxy","ja":"人差し指の代行者に到達"},"hint":{"ko":"검지에서 대행자까지 올랐을 때","en":"Rise to Proxy in the Index","ja":"人差し指で代行者まで上がったとき"},"implies":"finger_검지","tier":"rare"},{"key":"frank_검지_3","group":"finger","label":{"ko":"검지 신탁 대행자 도달","en":"Reached Index Oracle's Proxy","ja":"人差し指の神託代行者に到達"},"hint":{"ko":"검지에서 신탁 대행자까지 올랐을 때","en":"Rise to Oracle's Proxy in the Index","ja":"人差し指で神託代行者まで上がったとき"},"implies":"frank_검지_2","tier":"epic"},{"key":"finger_중지","group":"finger","label":{"ko":"중지 입단","en":"Joined the Middle","ja":"中指に入団"},"hint":{"ko":"중지에 들어갔을 때","en":"Join the Middle","ja":"中指に入ったとき"},"implies":null,"tier":"uncommon"},{"key":"frank_중지_2","group":"finger","label":{"ko":"중지 큰 아우 도달","en":"Reached Middle Young Brother / Sister","ja":"中指の長弟・長妹に到達"},"hint":{"ko":"중지에서 큰 아우까지 올랐을 때","en":"Rise to Young Brother or Sister in the Middle","ja":"中指で長弟・長妹まで上がったとき"},"implies":"finger_중지","tier":"rare"},{"key":"frank_중지_3","group":"finger","label":{"ko":"중지 작은 형님·누님 도달","en":"Reached Middle Big Brother / Sister","ja":"中指の末兄・末姉に到達"},"hint":{"ko":"중지에서 작은 형님·누님까지 올랐을 때","en":"Rise to Big Brother or Sister in the Middle","ja":"中指で末兄・末姉まで上がったとき"},"implies":"frank_중지_2","tier":"rare"},{"key":"frank_중지_4","group":"finger","label":{"ko":"중지 큰 형님·누님 도달","en":"Reached Middle Great Brother / Sister","ja":"中指の長兄・長姉に到達"},"hint":{"ko":"중지에서 큰 형님·누님까지 올랐을 때","en":"Rise to Great Brother or Sister in the Middle","ja":"中指で長兄・長姉まで上がったとき"},"implies":"frank_중지_3","tier":"epic"},{"key":"finger_약지","group":"finger","label":{"ko":"약지 입단","en":"Joined the Ring","ja":"薬指に入団"},"hint":{"ko":"약지에 들어갔을 때","en":"Join the Ring","ja":"薬指に入ったとき"},"implies":null,"tier":"uncommon"},{"key":"frank_약지_2","group":"finger","label":{"ko":"약지 도슨트 도달","en":"Reached Ring Docent","ja":"薬指のドーセントに到達"},"hint":{"ko":"약지에서 도슨트까지 올랐을 때","en":"Rise to Docent in the Ring","ja":"薬指でドーセントまで上がったとき"},"implies":"finger_약지","tier":"rare"},{"key":"frank_약지_3","group":"finger","label":{"ko":"약지 마에스트로 도달","en":"Reached Ring Maestro","ja":"薬指のマエストロに到達"},"hint":{"ko":"약지에서 마에스트로까지 올랐을 때","en":"Rise to Maestro in the Ring","ja":"薬指でマエストロまで上がったとき"},"implies":"frank_약지_2","tier":"epic"},{"key":"finger_quit","group":"finger","label":{"ko":"손가락을 떠남","en":"Left the Fingers","ja":"指を離れた"},"hint":{"ko":"손가락을 떠나 살아남았을 때","en":"Leave the Fingers and live","ja":"指を離れて生き延びたとき"},"implies":null,"tier":"rare"},{"key":"corp","group":"wing","label":{"ko":"날개의 사원","en":"Wing employee","ja":"翼の社員"},"hint":{"ko":"날개의 사무직 사원이 되었을 때","en":"Become an office employee of a Wing","ja":"翼の事務職社員になったとき"},"implies":null,"tier":"common"},{"key":"office_dept","group":"wing","label":{"ko":"날개의 부장에 오름","en":"Rose to Department Head of a Wing","ja":"翼の部長に上りつめた"},"hint":{"ko":"날개 사무직으로 부장까지 올랐을 때","en":"Rise to Department Head in a Wing's offices","ja":"翼の事務職で部長まで上がったとき"},"implies":"corp","tier":"uncommon"},{"key":"office_dir","group":"wing","label":{"ko":"날개의 이사에 오름","en":"Rose to Director of a Wing","ja":"翼の理事に上りつめた"},"hint":{"ko":"날개 사무직으로 이사까지 올랐을 때","en":"Rise to Director in a Wing's offices","ja":"翼の事務職で理事まで上がったとき"},"implies":"office_dept","tier":"rare"},{"key":"office_ceo","group":"wing","label":{"ko":"날개의 대표에 오름","en":"Rose to CEO of a Wing","ja":"翼の代表に上りつめた"},"hint":{"ko":"날개 사무직으로 대표까지 올랐을 때","en":"Rise to CEO of a Wing","ja":"翼の事務職で代表まで上がったとき"},"implies":"office_dir","tier":"epic"},{"key":"assoc_staff","group":"wing","label":{"ko":"협회 직원","en":"Association staff","ja":"協会職員"},"hint":{"ko":"협회 직원이 되었을 때","en":"Become Association staff","ja":"協会職員になったとき"},"implies":null,"tier":"uncommon"},{"key":"heishou","group":"wing","label":{"ko":"흑수가 됨","en":"Joined the Heishou Pack","ja":"黒獣となった"},"hint":{"ko":"흑수에 들어갔을 때","en":"Join the Heishou Pack","ja":"黒獣に入ったとき"},"implies":null,"tier":"rare"},{"key":"heishou_adept","group":"wing","label":{"ko":"흑수의 필두가 됨","en":"Became an Adept of the Heishou Pack","ja":"黒獣の筆頭となった"},"hint":{"ko":"흑수에서 필두까지 올랐을 때","en":"Rise to Adept in the Heishou Pack","ja":"黒獣で筆頭まで上がったとき"},"implies":"heishou","tier":"epic"},{"key":"t_collector","group":"wing","label":{"ko":"T사 시간징수직이 됨","en":"Became T Corp. Collection Staff","ja":"T社の徴収職になった"},"hint":{"ko":"T사 시간징수직이 되었을 때","en":"Become T Corp. Collection Staff","ja":"T社の徴収職になったとき"},"implies":null,"tier":"rare"},{"key":"t_class5","group":"wing","label":{"ko":"T사 5등급 징수직 도달","en":"Reached T Corp. Class 5 Collection Staff","ja":"T社5級徴収職に到達"},"hint":{"ko":"T사 징수직으로 5등급까지 올랐을 때","en":"Rise to Class 5 as T Corp. Collection Staff","ja":"T社の徴収職で5級まで上がったとき"},"implies":"t_collector","tier":"epic"},{"key":"w_cleanup","group":"wing","label":{"ko":"W사 정리 요원이 됨","en":"Became a W Corp. Cleanup Agent","ja":"W社の整理要員になった"},"hint":{"ko":"W사 정리 요원이 되었을 때","en":"Become a W Corp. Cleanup Agent","ja":"W社の整理要員になったとき"},"implies":null,"tier":"rare"},{"key":"w_level5","group":"wing","label":{"ko":"W사 5등급 정리 요원 도달","en":"Reached W Corp. Level 5 Cleanup Agent","ja":"W社5級整理要員に到達"},"hint":{"ko":"W사 정리 요원으로 5등급까지 올랐을 때","en":"Rise to Level 5 as a W Corp. Cleanup Agent","ja":"W社の整理要員で5級まで上がったとき"},"implies":"w_cleanup","tier":"epic"},{"key":"k_excision","group":"wing","label":{"ko":"K사 적출직이 됨","en":"Became K Corp. Excision Staff","ja":"K社の摘出職になった"},"hint":{"ko":"K사 적출직이 되었을 때","en":"Become K Corp. Excision Staff","ja":"K社の摘出職になったとき"},"implies":null,"tier":"rare"},{"key":"k_special","group":"wing","label":{"ko":"K사 특수 적출직 도달","en":"Reached K Corp. Special Excision Staff","ja":"K社特殊摘出職に到達"},"hint":{"ko":"K사 적출직으로 특수 적출 부대까지 올랐을 때","en":"Rise to the Special Excision Unit as K Corp. Excision Staff","ja":"K社の摘出職で特殊摘出部隊まで上がったとき"},"implies":"k_excision","tier":"epic"},{"key":"k_hollow","group":"wing","label":{"ko":"메마른 적출직","en":"Hollowed Excision Staff","ja":"枯れた摘出職"},"hint":{"ko":"HP탄을 맞다 인격이 다 메말랐을 때","en":"When HP bullets have dried up every last bit of your self","ja":"HP弾を受け続け、人格が枯れ果てたとき"},"implies":"k_excision","tier":"rare"},{"key":"k_dreamer","group":"wing","label":{"ko":"꿈을 꾸는 적출직","en":"Excision Staff Who Dreamed","ja":"夢を見る摘出職"},"hint":{"ko":"시험관 안에서도 끝까지 메마르지 않았을 때","en":"When you never dried up, even in the tube","ja":"試験管の中でも最後まで枯れなかったとき"},"implies":"k_excision","tier":"legend"},{"key":"n_inquisitor","group":"wing","label":{"ko":"N사 이단 심문관이 됨","en":"Became an N Corp. Inquisitor","ja":"N社の異端審問官になった"},"hint":{"ko":"N사의 이단 심문관이 되었을 때","en":"Become an N Corp. Inquisitor","ja":"N社の異端審問官になったとき"},"implies":null,"tier":"rare"},{"key":"n_grosshammer","group":"wing","label":{"ko":"N사 큰 망치 도달","en":"Reached N Corp. Großhammer","ja":"N社大槌に到達"},"hint":{"ko":"쥐는 자의 지명으로 큰 망치를 받았을 때","en":"Be named a Großhammer by the One Who Grips","ja":"掴む者の指名で大槌を受け取ったとき"},"implies":"n_inquisitor","tier":"epic"},{"key":"n_zealot","group":"wing","label":{"ko":"신앙심이 가득 찬 망치","en":"A Hammer Full of Faith","ja":"信仰に満ちた槌"},"hint":{"ko":"이단 심문관의 신앙심이 끝까지 찼을 때","en":"Let an Inquisitor’s faith fill all the way","ja":"異端審問官の信仰心が満ちきったとき"},"implies":"n_inquisitor","tier":"rare"},{"key":"n_faithless","group":"wing","label":{"ko":"신앙을 잃은 망치","en":"A Hammer Without Faith","ja":"信仰を失った槌"},"hint":{"ko":"이단 심문관의 신앙심이 바닥까지 떨어졌을 때","en":"Let an Inquisitor’s faith fall all the way to nothing","ja":"異端審問官の信仰心が底まで落ちたとき"},"implies":"n_inquisitor","tier":"rare"},{"key":"r_pack","group":"wing","label":{"ko":"R사 4무리에 들어감","en":"Joined R Corp.'s 4th Pack","ja":"R社第4群に入った"},"hint":{"ko":"R사 4무리에 들어갔을 때","en":"Join R Corp.'s 4th Pack","ja":"R社第4群に入ったとき"},"implies":null,"tier":"rare"},{"key":"r_commander","group":"wing","label":{"ko":"R사 4무리 사령관이 됨","en":"Became Commander of R Corp.'s 4th Pack","ja":"R社第4群の司令官になった"},"hint":{"ko":"R사 4무리에서 사령관까지 올랐을 때","en":"Rise to Commander in R Corp.'s 4th Pack","ja":"R社第4群で司令官まで上がったとき"},"implies":"r_pack","tier":"epic"},{"key":"prosthetic","group":"wing","label":{"ko":"의체 시술을 받음","en":"Underwent prosthetic surgery","ja":"義体手術を受けた"},"hint":{"ko":"의체 시술을 받았을 때","en":"Undergo prosthetic surgery","ja":"義体手術を受けたとき"},"implies":null,"tier":"common"},{"key":"prosthetic_good","group":"wing","label":{"ko":"좋은 의체 시술을 받음","en":"Underwent fine prosthetic surgery","ja":"良質な義体手術を受けた"},"hint":{"ko":"좋은 의체 시술을 받았을 때","en":"Undergo fine prosthetic surgery","ja":"良質な義体手術を受けたとき"},"implies":"prosthetic","tier":"common"},{"key":"relic","group":"wing","label":{"ko":"외곽의 유물을 얻음","en":"Obtained a relic of the Outskirts","ja":"外郭の遺物を手に入れた"},"hint":{"ko":"외곽에서 유물을 손에 넣었을 때","en":"Obtain a relic in the Outskirts","ja":"外郭で遺物を手に入れたとき"},"implies":null,"tier":"epic"},{"key":"distorted","group":"distortion","label":{"ko":"뒤틀려 생을 마침","en":"Ended life as a Distortion","ja":"ねじれて生涯を終えた"},"hint":{"ko":"뒤틀려서 삶이 끝났을 때","en":"Your life ends as a Distortion","ja":"ねじれて生涯が終わったとき"},"implies":null,"tier":"rare"},{"key":"dist_grade_0","group":"distortion","label":{"ko":"뜬소문이 된 뒤틀림","en":"A Distortion rated Canard","ja":"あらぬ噂となったねじれ"},"hint":{"ko":"뒤틀린 뒤 뜬소문 등급으로 남았을 때","en":"Be rated Canard as a Distortion","ja":"ねじれた後、あらぬ噂の等級に留まったとき"},"implies":null,"tier":"rare"},{"key":"dist_grade_1","group":"distortion","label":{"ko":"도시 괴담이 된 뒤틀림","en":"A Distortion rated Urban Myth","ja":"都市怪談となったねじれ"},"hint":{"ko":"뒤틀린 뒤 도시 괴담 등급이 되었을 때","en":"Be rated Urban Myth as a Distortion","ja":"ねじれた後、都市怪談の等級になったとき"},"implies":"dist_grade_0","tier":"rare"},{"key":"dist_grade_2","group":"distortion","label":{"ko":"도시 전설이 된 뒤틀림","en":"A Distortion rated Urban Legend","ja":"都市伝説となったねじれ"},"hint":{"ko":"뒤틀린 뒤 도시 전설 등급이 되었을 때","en":"Be rated Urban Legend as a Distortion","ja":"ねじれた後、都市伝説の等級になったとき"},"implies":"dist_grade_1","tier":"rare"},{"key":"dist_grade_3","group":"distortion","label":{"ko":"도시 질병이 된 뒤틀림","en":"A Distortion rated Urban Plague","ja":"都市疾病となったねじれ"},"hint":{"ko":"뒤틀린 뒤 도시 질병 등급이 되었을 때","en":"Be rated Urban Plague as a Distortion","ja":"ねじれた後、都市疾病の等級になったとき"},"implies":"dist_grade_2","tier":"epic"},{"key":"dist_grade_4","group":"distortion","label":{"ko":"도시 악몽이 된 뒤틀림","en":"A Distortion rated Urban Nightmare","ja":"都市悪夢となったねじれ"},"hint":{"ko":"뒤틀림 레이드에서 도시 악몽 등급을 받았을 때","en":"Be rated Urban Nightmare in a Distortion raid","ja":"ねじれレイドで都市悪夢の等級を受けたとき"},"implies":"dist_grade_3","tier":"legend"},{"key":"dist_final","group":"distortion","label":{"ko":"특색이 온 토벌대","en":"The subjugation team with a Color","ja":"特色が来た討伐隊"},"hint":{"ko":"뒤틀림 레이드 다섯 번째 토벌대, 특색에게 쓰러졌을 때","en":"Fall to a Color in the fifth subjugation of a Distortion raid","ja":"ねじれレイド五度目の討伐隊、特色に倒されたとき"},"implies":null,"tier":"legend"},{"key":"dist_nm6","group":"distortion","label":{"ko":"특색을 죽인 뒤","en":"After killing a Color","ja":"特色を殺した後"},"hint":{"ko":"도시 악몽으로 특색을 죽인 뒤 여섯 번째 사람을 만났을 때","en":"As an Urban Nightmare, kill a Color and meet the sixth one","ja":"都市悪夢として特色を殺し、六人目に出会ったとき"},"implies":null,"tier":"myth"},{"key":"dist_return","group":"distortion","label":{"ko":"원래대로 돌아온 사람","en":"One who came back","ja":"元に戻った人"},"hint":{"ko":"뒤틀림 레이드에서 목소리를 세 번 거슬러 돌아왔을 때","en":"Defy the voice three times in a Distortion raid and come back","ja":"ねじれレイドで声に三度逆らい、戻ってきたとき"},"implies":null,"tier":"legend"},{"key":"ego","group":"abno","label":{"ko":"E.G.O 개화","en":"Effloresced E.G.O","ja":"E.G.O開花"},"hint":{"ko":"뒤틀리려는 순간 E.G.O가 개화했을 때","en":"Your E.G.O effloresces at the moment of Distortion","ja":"ねじれる瞬間にE.G.Oが開花したとき"},"implies":null,"tier":"rare"},{"key":"aleph_survive","group":"abno","label":{"ko":"ALEPH 재해에서 살아남음","en":"Survived an ALEPH disaster","ja":"ALEPHの災害を生き延びた"},"hint":{"ko":"ALEPH급 환상체의 재해에서 살아남았을 때","en":"Survive the disaster of an ALEPH-class Abnormality","ja":"ALEPH級アブノーマリティの災害を生き延びたとき"},"implies":null,"tier":"rare"},{"key":"apocalypse","group":"abno","label":{"ko":"종말새 아래에서 살아남음","en":"Survived beneath the Apocalypse Bird","ja":"終末鳥の下で生き延びた"},"hint":{"ko":"종말새를 만나고도 그해를 살아남았을 때","en":"Meet the Apocalypse Bird and survive the year","ja":"終末鳥に出会い、その年を生き延びたとき"},"implies":null,"tier":"legend"},{"key":"library_lost","group":"abno","label":{"ko":"도서관의 책이 됨","en":"Became a book in the Library","ja":"図書館の本になった"},"hint":{"ko":"도서관의 초대를 받고 돌아오지 못했을 때","en":"Accept the Library's invitation and never return","ja":"図書館の招待を受け、帰れなかったとき"},"implies":null,"tier":"rare"},{"key":"library_back","group":"abno","label":{"ko":"도서관에서 돌아옴","en":"Returned from the Library","ja":"図書館から帰還した"},"hint":{"ko":"도서관에서 돌아왔을 때","en":"Return from the Library","ja":"図書館から帰ってきたとき"},"implies":null,"tier":"epic"},{"key":"warp_car_0","group":"warp","label":{"ko":"워프 열차 0칸 돌파","en":"Cleared 0 Warp Train cars","ja":"ワープ列車0両突破"},"hint":{"ko":"워프 열차에 탔지만 첫 칸을 넘지 못했을 때","en":"Board the Warp Train but fail to clear the first car","ja":"ワープ列車に乗ったが最初の車両を越えられなかったとき"},"implies":null,"tier":"common"},{"key":"warp_car_1","group":"warp","label":{"ko":"워프 열차 1칸 돌파","en":"Cleared 1 Warp Train car","ja":"ワープ列車1両突破"},"hint":{"ko":"워프 열차에서 1칸을 넘었을 때","en":"Clear 1 car of the Warp Train","ja":"ワープ列車で1両を越えたとき"},"implies":"warp_car_0","tier":"common"},{"key":"warp_car_2","group":"warp","label":{"ko":"워프 열차 2칸 돌파","en":"Cleared 2 Warp Train cars","ja":"ワープ列車2両突破"},"hint":{"ko":"워프 열차에서 2칸을 넘었을 때","en":"Clear 2 cars of the Warp Train","ja":"ワープ列車で2両を越えたとき"},"implies":"warp_car_1","tier":"common"},{"key":"warp_car_3","group":"warp","label":{"ko":"워프 열차 3칸 돌파","en":"Cleared 3 Warp Train cars","ja":"ワープ列車3両突破"},"hint":{"ko":"워프 열차에서 3칸을 넘었을 때","en":"Clear 3 cars of the Warp Train","ja":"ワープ列車で3両を越えたとき"},"implies":"warp_car_2","tier":"uncommon"},{"key":"warp_car_4","group":"warp","label":{"ko":"워프 열차 4칸 돌파","en":"Cleared 4 Warp Train cars","ja":"ワープ列車4両突破"},"hint":{"ko":"워프 열차에서 4칸을 넘었을 때","en":"Clear 4 cars of the Warp Train","ja":"ワープ列車で4両を越えたとき"},"implies":"warp_car_3","tier":"uncommon"},{"key":"warp_car_5","group":"warp","label":{"ko":"워프 열차 5칸 돌파","en":"Cleared 5 Warp Train cars","ja":"ワープ列車5両突破"},"hint":{"ko":"워프 열차에서 5칸을 넘었을 때","en":"Clear 5 cars of the Warp Train","ja":"ワープ列車で5両を越えたとき"},"implies":"warp_car_4","tier":"rare"},{"key":"warp_car_6","group":"warp","label":{"ko":"워프 열차 6칸 돌파","en":"Cleared 6 Warp Train cars","ja":"ワープ列車6両突破"},"hint":{"ko":"워프 열차에서 6칸을 넘었을 때","en":"Clear 6 cars of the Warp Train","ja":"ワープ列車で6両を越えたとき"},"implies":"warp_car_5","tier":"rare"},{"key":"warp_car_7","group":"warp","label":{"ko":"워프 열차 7칸 돌파","en":"Cleared 7 Warp Train cars","ja":"ワープ列車7両突破"},"hint":{"ko":"워프 열차에서 7칸을 넘었을 때","en":"Clear 7 cars of the Warp Train","ja":"ワープ列車で7両を越えたとき"},"implies":"warp_car_6","tier":"epic"},{"key":"warp_clear","group":"warp","label":{"ko":"워프 열차 완주","en":"Ran the Warp Train to the end","ja":"ワープ列車を完走"},"hint":{"ko":"워프 열차의 모든 칸을 지나 끝까지 갔을 때","en":"Pass every car of the Warp Train to the end","ja":"ワープ列車のすべての車両を通り抜けたとき"},"implies":"warp_car_7","tier":"legend"},{"key":"lake_drink","group":"lake","label":{"ko":"따여 있던 포도맛 캔","en":"The already-opened grape soda","ja":"開けてあったぶどう味の缶"},"hint":{"ko":"따여 있던 포도맛 캔을 마시고 대호수에 들어갔을 때","en":"Drink the already-opened grape soda and enter the Great Lake","ja":"開けてあったぶどう味の缶を飲み、大湖に入ったとき"},"implies":null,"tier":"rare"},{"key":"lake_hint2","group":"lake","label":{"ko":"법 두 개를 산 삶","en":"Bought two Laws","ja":"法を二つ買った生"},"hint":{"ko":"호수의 법을 평생 두 개 이상 샀을 때","en":"Buy two or more Laws of the lake in one life","ja":"湖の法を生涯に二つ以上買ったとき"},"implies":null,"tier":"epic"},{"key":"lake_cross","group":"lake","label":{"ko":"대호수를 항해한 자","en":"One Who Sailed the Great Lake","ja":"大湖を航海した者"},"hint":{"ko":"대호수 항해를 끝까지 마쳤을 때","en":"Finish a voyage across the Great Lake","ja":"大湖の航海を最後までやり遂げたとき"},"implies":null,"tier":"miracle"},{"key":"lake_deep","group":"lake","label":{"ko":"깊은 물을 셋 지나 닿은 삶","en":"Crossed three deep waters and reached port","ja":"深い水を三つ越えて着いた生"},"hint":{"ko":"대호수에서 깊은 물을 세 번 지나 항구에 닿았을 때","en":"Cross three deep waters on the Great Lake and reach port","ja":"大湖で深い水を三度越えて港に着いたとき"},"implies":null,"tier":"myth"},{"key":"lake_whale_marlin","group":"lake","label":{"ko":"모든 것을 꿰뚫는 청새치 고래를 만난 자","en":"One Who Met the All-Impaling Marlin Whale","ja":"すべてを貫くカジキの鯨に出会った者"},"hint":{"ko":"대호수에서 청새치 고래를 만났을 때","en":"Meet the Marlin Whale on the Great Lake","ja":"大湖でカジキの鯨に出会ったとき"},"implies":null,"tier":"legend"},{"key":"lake_whale_pallid","group":"lake","label":{"ko":"모든 것을 집어삼키는 창백한 고래를 만난 자","en":"One Who Met the All-Consuming Pallid Whale","ja":"すべてを呑み込む蒼白の鯨に出会った者"},"hint":{"ko":"대호수에서 창백한 고래를 만났을 때","en":"Meet the Pallid Whale on the Great Lake","ja":"大湖で蒼白の鯨に出会ったとき"},"implies":null,"tier":"legend"},{"key":"lake_whale_crimson","group":"lake","label":{"ko":"모든 것을 마르게 하는 새빨간 고래를 만난 자","en":"One Who Met the All-Withering Crimson Whale","ja":"すべてを枯らす真紅の鯨に出会った者"},"hint":{"ko":"대호수에서 새빨간 고래를 만났을 때","en":"Meet the Crimson Whale on the Great Lake","ja":"大湖で真紅の鯨に出会ったとき"},"implies":null,"tier":"legend"},{"key":"heir_cand","group":"heir","label":{"ko":"H사의 가주 후보로 자람","en":"Raised as an H Corp. Family Hierarch Candidate","ja":"H社の家主候補として育った"},"hint":{"ko":"H사의 가주 후보로 태어나 자랐을 때","en":"Be born and raised as an H Corp. Family Hierarch Candidate","ja":"H社の家主候補として生まれ育ったとき"},"implies":null,"tier":"rare"},{"key":"heir_fail","group":"heir","label":{"ko":"가주 심사에서 떨어짐","en":"Failed the Family Hierarch Evaluation","ja":"家主審査に落ちた"},"hint":{"ko":"가주 심사에서 떨어졌을 때","en":"Fail the Family Hierarch Evaluation","ja":"家主審査に落ちたとき"},"implies":null,"tier":"rare"},{"key":"heir_head","group":"heir","label":{"ko":"가주","en":"Family Hierarch","ja":"家主"},"hint":{"ko":"가주 심사를 통과해 가주가 되었을 때","en":"Pass the Evaluation and become Family Hierarch","ja":"家主審査を通り、家主になったとき"},"implies":null,"tier":"epic"},{"key":"rule_human","group":"heir","label":{"ko":"선황충을 한 번도 따르지 않음","en":"Never once followed the Xianhuang Worm","ja":"仙皇蟲に一度も従わなかった"},"hint":{"ko":"군주로서 다섯 번의 선택에서 한 번도 선황충을 따르지 않았을 때","en":"As Lord, refuse the Xianhuang Worm in all five choices","ja":"君主として五度の選択で一度も仙皇蟲に従わなかったとき"},"implies":null,"tier":"legend"},{"key":"rule_worm","group":"heir","label":{"ko":"다섯 번 모두 선황충을 따름","en":"Followed the Xianhuang Worm all five times","ja":"五度とも仙皇蟲に従った"},"hint":{"ko":"군주로서 다섯 번의 선택을 모두 선황충에 맡겼을 때","en":"As Lord, follow the Xianhuang Worm in all five choices","ja":"君主として五度の選択をすべて仙皇蟲に委ねたとき"},"implies":null,"tier":"myth"},{"key":"heir_lord","group":"heir","label":{"ko":"군주","en":"Lord","ja":"君主"},"hint":{"ko":"가주가 된 뒤 군주의 자리에 올랐을 때","en":"Become Family Hierarch, then rise to Lord","ja":"家主になった後、君主の座に就いたとき"},"implies":null,"tier":"legend"},{"key":"rule_mercy","group":"heir","label":{"ko":"자비로운 군주로 불림","en":"Called a merciful lord","ja":"慈悲深い君主と呼ばれた"},"hint":{"ko":"군주로서 다스리는 동안 자비로운 쪽을 거듭 택했을 때","en":"As Lord, choose mercy again and again while ruling","ja":"君主として治める間、慈悲深い側を選び続けたとき"},"implies":null,"tier":"myth"},{"key":"rule_tyrant","group":"heir","label":{"ko":"폭군으로 불림","en":"Called a tyrant","ja":"暴君と呼ばれた"},"hint":{"ko":"군주로서 다스리는 동안 가혹한 쪽을 거듭 택했을 때","en":"As Lord, choose cruelty again and again while ruling","ja":"君主として治める間、苛烈な側を選び続けたとき"},"implies":null,"tier":"myth"},{"key":"rule_abolish","group":"heir","label":{"ko":"가주 심사를 없앰","en":"Abolished the Family Hierarch Evaluation","ja":"家主審査を廃止した"},"hint":{"ko":"군주로서 가주 심사를 없앴을 때","en":"As Lord, abolish the Family Hierarch Evaluation","ja":"君主として家主審査を廃止したとき"},"implies":null,"tier":"myth"},{"key":"rule_kong","group":"heir","label":{"ko":"공씨의 이름을 되살림","en":"Restored the name of the Kong family","ja":"孔家の名を取り戻した"},"hint":{"ko":"군주로서 공씨의 이름을 되살렸을 때","en":"As Lord, restore the name of the Kong family","ja":"君主として孔家の名を取り戻したとき"},"implies":null,"tier":"myth"},{"key":"bf_stray","group":"bf","label":{"ko":"혈귀가 됨 (떠돌이)","en":"Became a Bloodfiend (stray)","ja":"血鬼になった（放浪者）"},"hint":{"ko":"가문 없는 떠돌이 혈귀가 되었을 때","en":"Become a stray Bloodfiend with no Family","ja":"家門のない放浪の血鬼になったとき"},"implies":null,"tier":"rare"},{"key":"bf_kin","group":"bf","label":{"ko":"가문의 권속이 됨","en":"Became a Family's Kindred","ja":"家門の眷属になった"},"hint":{"ko":"가문의 권속이 되었을 때","en":"Become a Family's Kindred","ja":"家門の眷属になったとき"},"implies":null,"tier":"rare"},{"key":"bloodbag","group":"bf","label":{"ko":"피주머니가 됨","en":"Became a Bloodbag","ja":"血袋になった"},"hint":{"ko":"혈귀에게 피주머니가 되었을 때","en":"Be made into a Bloodbag by a Bloodfiend","ja":"血鬼に血袋にされたとき"},"implies":null,"tier":"rare"},{"key":"bf_sleep","group":"bf","label":{"ko":"긴 잠에 듦","en":"Went into the long sleep","ja":"長い眠りについた"},"hint":{"ko":"혈귀로 긴 잠에 들었을 때","en":"Go into the long sleep as a Bloodfiend","ja":"血鬼として長い眠りについたとき"},"implies":null,"tier":"rare"},{"key":"bf_alive","group":"bf","label":{"ko":"살아서 이야기를 맺은 혈귀","en":"A Bloodfiend whose story ended alive","ja":"生きたまま物語を結んだ血鬼"},"hint":{"ko":"혈귀로 살아 있는 채 이야기를 맺었을 때","en":"End your story alive, as a Bloodfiend","ja":"血鬼として生きたまま物語を結んだとき"},"implies":null,"tier":"epic"},{"key":"bf_300","group":"bf","label":{"ko":"삼백 년을 살아낸 혈귀","en":"A Bloodfiend who lived three hundred years","ja":"三百年を生き抜いた血鬼"},"hint":{"ko":"혈귀로 300세를 넘겨 살았을 때","en":"Live past 300 as a Bloodfiend","ja":"血鬼として300歳を超えて生きたとき"},"implies":null,"tier":"legend"},{"key":"bf_reveal","group":"bf","label":{"ko":"소속에 정체를 밝힌 혈귀","en":"A Bloodfiend who revealed themselves to their own","ja":"所属に正体を明かした血鬼"},"hint":{"ko":"소속에 스스로 정체를 밝혔을 때","en":"Reveal what you are to your own organization","ja":"所属に自ら正体を明かしたとき"},"implies":null,"tier":"rare"},{"key":"bf_found","group":"bf","label":{"ko":"숨긴 정체를 들킨 혈귀","en":"A Bloodfiend whose secret was found out","ja":"隠した正体を知られた血鬼"},"hint":{"ko":"숨겨 온 정체를 소속에 들켰을 때","en":"Have your secret found out by your organization","ja":"隠してきた正体を所属に知られたとき"},"implies":null,"tier":"rare"},{"key":"bf_nobite","group":"bf","label":{"ko":"열 해 동안 물지 않은 혈귀","en":"A Bloodfiend who went ten years without biting","ja":"十年噛まなかった血鬼"},"hint":{"ko":"혈귀가 된 뒤 열 해 동안 한 번도 물지 않았을 때","en":"Go ten years as a Bloodfiend without biting anyone","ja":"血鬼になって十年、一度も噛まなかったとき"},"implies":null,"tier":"epic"},{"key":"bf_epi_nobite","group":"bf","label":{"ko":"물지 않은 스무 해","en":"Twenty years without a bite","ja":"噛まなかった二十年"},"hint":{"ko":"살아서 끝맺은 혈귀가 스무 해 넘게 아무도 물지 않았을 때","en":"End alive as a Bloodfiend who went twenty years without biting","ja":"生きたまま結んだ血鬼が二十年以上誰も噛まなかったとき"},"implies":"bf_nobite","tier":"myth"},{"key":"bf_two_kin","group":"bf","label":{"ko":"권속 둘을 모두 만듦","en":"Made both of your Kindred","ja":"眷属をふたりとも生み出した"},"hint":{"ko":"권속을 둘 다 만들었을 때","en":"Make both of your Kindred","ja":"眷属をふたりとも生み出したとき"},"implies":null,"tier":"epic"},{"key":"bf_gen1","group":"bf","label":{"ko":"제1권속(장로)에 오름","en":"Rose to First Kindred (Elder)","ja":"第一眷属（長老）に上り詰めた"},"hint":{"ko":"가문의 권속으로 제1권속(장로)까지 올랐을 때","en":"Rise to First Kindred (Elder) in a Family","ja":"家門の眷属として第一眷属（長老）まで上がったとき"},"implies":null,"tier":"legend"},{"key":"bf_bar20","group":"bf","label":{"ko":"혈액바 스무 해 치","en":"Twenty years' worth of Hemobars","ja":"血液バー二十年分"},"hint":{"ko":"혈귀로 혈액바를 스무 해 치 먹었을 때","en":"Live on Hemobars for twenty years as a Bloodfiend","ja":"血鬼として血液バーを二十年分食べたとき"},"implies":null,"tier":"legend"},{"key":"bf_end_hunter_last","group":"bf","label":{"ko":"마지막 사냥꾼을 기다린 혈귀","en":"A Bloodfiend who waited for the last hunter","ja":"最後の狩人を待った血鬼"},"hint":{"ko":"마지막 끝에서 사냥꾼을 기다리는 쪽을 골랐을 때","en":"At the end, choose to wait for the hunter","ja":"最後の終わりで狩人を待つ道を選んだとき"},"implies":null,"tier":"epic"},{"key":"bf_end_couple_sleep","group":"bf","label":{"ko":"둘이 함께 잠든 혈귀","en":"Bloodfiends who slept together","ja":"ふたりで眠った血鬼"},"hint":{"ko":"마지막 끝에서 배우자와 함께 잠드는 쪽을 골랐을 때","en":"At the end, choose to sleep together with your spouse","ja":"最後の終わりで配偶者と共に眠る道を選んだとき"},"implies":null,"tier":"epic"},{"key":"bf_end_smile_first","group":"bf","label":{"ko":"배우자를 먼저 재운 혈귀","en":"A Bloodfiend who let their spouse sleep first","ja":"配偶者を先に眠らせた血鬼"},"hint":{"ko":"마지막 끝에서 배우자를 먼저 재우는 쪽을 골랐을 때","en":"At the end, choose to let your spouse sleep first","ja":"最後の終わりで配偶者を先に眠らせる道を選んだとき"},"implies":null,"tier":"epic"},{"key":"bf_end_gone_grave","group":"bf","label":{"ko":"배우자 곁으로 돌아간 혈귀","en":"A Bloodfiend who returned to their spouse's side","ja":"配偶者のそばへ帰った血鬼"},"hint":{"ko":"배우자를 먼저 보낸 뒤, 그 곁으로 돌아가는 쪽을 골랐을 때","en":"After losing your spouse, choose to return to their side","ja":"配偶者を先に見送った後、そのそばへ帰る道を選んだとき"},"implies":null,"tier":"epic"},{"key":"bf_end_elder_hand","group":"bf","label":{"ko":"자리를 넘기고 잠든 장로","en":"An Elder who handed over the seat and slept","ja":"座を譲って眠った長老"},"hint":{"ko":"장로로서 자리를 넘기고 잠드는 쪽을 골랐을 때","en":"As an Elder, choose to hand over the seat and sleep","ja":"長老として座を譲り眠る道を選んだとき"},"implies":null,"tier":"epic"},{"key":"bf_end_kin_cup","group":"bf","label":{"ko":"권속에게 남긴 잔","en":"A cup left to the Kindred","ja":"眷属に遺した杯"},"hint":{"ko":"권속을 둔 채, 잔을 남기고 가는 쪽을 골랐을 때","en":"With Kindred of your own, choose to leave a cup behind","ja":"眷属を残し、杯を遺して去る道を選んだとき"},"implies":null,"tier":"epic"},{"key":"bf_end_faces","group":"bf","label":{"ko":"셀 수 없는 얼굴","en":"Countless faces","ja":"数えきれない顔"},"hint":{"ko":"서른 명 넘게 물거나 세 번 넘게 광란한 혈귀가 긴 잠에 들었을 때","en":"Go into the long sleep after biting thirty or frenzying three times","ja":"三十人以上噛むか三度以上狂乱した血鬼が長い眠りについたとき"},"implies":null,"tier":"legend"},{"key":"bf_epi_couple","group":"bf","label":{"ko":"둘이서 오래","en":"Together, for a long time","ja":"ふたりで長く"},"hint":{"ko":"배우자를 권속으로 만든 혈귀가 살아서 끝맺었을 때","en":"End alive as a Bloodfiend who made their spouse Kindred","ja":"配偶者を眷属にした血鬼が生きたまま結んだとき"},"implies":null,"tier":"legend"},{"key":"bf_epi_smile","group":"bf","label":{"ko":"늦게 온 웃음","en":"A smile that came late","ja":"遅れてきた笑み"},"hint":{"ko":"뜻을 거슬러 배우자를 문 혈귀가 살아서 끝맺었을 때","en":"End alive after biting a spouse who asked you not to","ja":"意に反して配偶者を噛んだ血鬼が生きたまま結んだとき"},"implies":null,"tier":"legend"},{"key":"bf_epi_gone","group":"bf","label":{"ko":"늙지 않는 쪽","en":"The one who does not age","ja":"老いないほう"},"hint":{"ko":"배우자를 사람으로 떠나보낸 혈귀가 살아서 끝맺었을 때","en":"End alive after letting your spouse leave as a human","ja":"配偶者を人として見送った血鬼が生きたまま結んだとき"},"implies":null,"tier":"legend"},{"key":"bf_epi_elder","group":"bf","label":{"ko":"오래 앉은 장로","en":"The long-seated Elder","ja":"長く座した長老"},"hint":{"ko":"장로(제1권속)가 살아서 끝맺었을 때","en":"End alive as an Elder (First Kindred)","ja":"長老（第一眷属）が生きたまま結んだとき"},"implies":null,"tier":"myth"},{"key":"bf_epi_hunter","group":"bf","label":{"ko":"잠그지 않는 문","en":"The unlocked door","ja":"鍵のない扉"},"hint":{"ko":"사냥꾼을 세 번 넘게 이기고 열 해 동안 사냥이 없던 혈귀가 살아서 끝맺었을 때","en":"End alive after beating hunters three times and ten quiet years","ja":"狩人に三度以上勝ち、十年間狩られなかった血鬼が生きたまま結んだとき"},"implies":null,"tier":"legend"},{"key":"bf_epi_faces","group":"bf","label":{"ko":"밤이 아는 이름","en":"A name the night knows","ja":"夜が知る名"},"hint":{"ko":"서른 명 넘게 물거나 세 번 넘게 광란한 혈귀가 살아서 끝맺었을 때","en":"End alive after biting thirty or frenzying three times","ja":"三十人以上噛むか三度以上狂乱した血鬼が生きたまま結んだとき"},"implies":null,"tier":"legend"},{"key":"bf_epi_kin","group":"bf","label":{"ko":"이름 없는 가문","en":"A nameless Family","ja":"名もなき家門"},"hint":{"ko":"떠돌이 혈귀가 권속을 만들고 살아서 끝맺었을 때","en":"End alive as a stray Bloodfiend who made Kindred","ja":"流れの血鬼が眷属を作り、生きたまま結んだとき"},"implies":null,"tier":"legend"},{"key":"bf_epi_bag","group":"bf","label":{"ko":"떠나지 않는 피주머니","en":"The Bloodbag that never left","ja":"去らない血袋"},"hint":{"ko":"피주머니를 둔 혈귀가 살아서 끝맺었을 때","en":"End alive as a Bloodfiend who kept a Bloodbag","ja":"血袋を持つ血鬼が生きたまま結んだとき"},"implies":null,"tier":"legend"},{"key":"bf_epi_bar","group":"bf","label":{"ko":"혈액바 상자의 탑","en":"A tower of Hemobar boxes","ja":"血液バーの箱の塔"},"hint":{"ko":"혈액바로 스무 해를 버틴 혈귀가 살아서 끝맺었을 때","en":"End alive after twenty years on Hemobars","ja":"血液バーで二十年しのいだ血鬼が生きたまま結んだとき"},"implies":null,"tier":"myth"},{"key":"bl_join","group":"blade","label":{"ko":"검계","en":"Blade Lineage","ja":"剣契"},"hint":{"ko":"검계에 들어갔을 때","en":"Join the Blade Lineage","ja":"剣契に入ったとき"},"implies":null,"tier":"rare"},{"key":"bl_salsu","group":"blade","label":{"ko":"검계 살수","en":"Blade Lineage Salsu","ja":"剣契 殺手"},"hint":{"ko":"검계에서 살수까지 올랐을 때","en":"Rise to Salsu in the Blade Lineage","ja":"剣契で殺手まで上がったとき"},"implies":"bl_join","tier":"epic"},{"key":"bl_mentor","group":"blade","label":{"ko":"검계 우두머리","en":"Blade Lineage Mentor","ja":"剣契 頭目"},"hint":{"ko":"검계에서 우두머리까지 올랐을 때","en":"Rise to Mentor in the Blade Lineage","ja":"剣契で頭目まで上がったとき"},"implies":"bl_salsu","tier":"legend"},{"key":"bl_scatter_leave","group":"blade","label":{"ko":"칼을 들고 떠난 자","en":"One who left with their blade","ja":"刀を手に去った者"},"hint":{"ko":"검계가 흩어질 때 칼을 들고 떠났을 때","en":"Leave with your blade when the Lineage scatters","ja":"剣契が散るとき、刀を手に去ったとき"},"implies":null,"tier":"rare"},{"key":"bl_last","group":"blade","label":{"ko":"마지막 항쟁에서 살아 나온 자","en":"One who survived the last stand","ja":"最後の抗争を生き延びた者"},"hint":{"ko":"마지막 항쟁에서 살아 나왔을 때","en":"Survive the last stand","ja":"最後の抗争を生き延びたとき"},"implies":null,"tier":"epic"},{"key":"bl_homeland","group":"blade","label":{"ko":"19구로 사람을 보낸 우두머리","en":"A Mentor who sent someone to District 19","ja":"19区へ人を送った頭目"},"hint":{"ko":"우두머리로서 19구로 사람을 보냈을 때","en":"As Mentor, send someone to District 19","ja":"頭目として19区へ人を送ったとき"},"implies":null,"tier":"legend"},{"key":"bl_m_retreat","group":"blade","label":{"ko":"칼을 거둔 우두머리","en":"A Mentor who sheathed the blade","ja":"刀を収めた頭目"},"hint":{"ko":"우두머리로서 마지막 항쟁 대신 칼을 거뒀을 때","en":"As Mentor, sheathe the blade instead of the last stand","ja":"頭目として最後の抗争の代わりに刀を収めたとき"},"implies":null,"tier":"legend"},{"key":"bl_m_distort","group":"blade","label":{"ko":"뒤틀린 우두머리","en":"The Distorted Mentor","ja":"ねじれた頭目"},"hint":{"ko":"우두머리가 뒤틀렸을 때","en":"Become Distorted as Mentor","ja":"頭目がねじれたとき"},"implies":null,"tier":"legend"},{"key":"bl_d_plague","group":"blade","label":{"ko":"도시 질병이 된 우두머리","en":"A Mentor rated Urban Plague","ja":"都市疾病となった頭目"},"hint":{"ko":"뒤틀린 우두머리가 도시 질병 등급까지 이르렀을 때","en":"As a Distorted Mentor, reach the Urban Plague rating","ja":"ねじれた頭目が都市疾病の等級に達したとき"},"implies":null,"tier":"myth"},{"key":"bl_d_lay","group":"blade","label":{"ko":"칼을 내려놓은 뒤틀림","en":"A Distortion that laid down the blade","ja":"刀を置いたねじれ"},"hint":{"ko":"뒤틀린 우두머리가 스스로 칼을 내려놓았을 때","en":"As a Distorted Mentor, lay down the blade yourself","ja":"ねじれた頭目が自ら刀を置いたとき"},"implies":null,"tier":"myth"},{"key":"bl_w_settle","group":"blade","label":{"ko":"칼을 내려놓은 검객","en":"A swordsman who laid down the blade","ja":"刀を置いた剣客"},"hint":{"ko":"떠돌이 검객으로 칼을 내려놓고 정착했을 때","en":"As a wandering swordsman, lay down the blade and settle","ja":"放浪の剣客として刀を置き、落ち着いたとき"},"implies":null,"tier":"rare"},{"key":"bl_w_student","group":"blade","label":{"ko":"본국검을 물려준 자","en":"One who passed on Bongukgeom","ja":"本国剣を伝えた者"},"hint":{"ko":"떠돌이 검객으로 아이에게 본국검을 물려주었을 때","en":"As a wandering swordsman, pass Bongukgeom on to a child","ja":"流れの剣客として子に本国剣を伝えたとき"},"implies":null,"tier":"legend"},{"key":"bl_w_reform","group":"blade","label":{"ko":"검계를 다시 세운 자","en":"One who rebuilt the Blade Lineage","ja":"剣契を再興した者"},"hint":{"ko":"떠돌이 검객으로 검계를 다시 세웠을 때","en":"As a wandering swordsman, rebuild the Blade Lineage","ja":"流れの剣客として剣契を再興したとき"},"implies":null,"tier":"legend"},{"key":"ws_join","group":"ws","label":{"ko":"공방에 이름을 올림","en":"Name on a Workshop roll","ja":"工房に名を連ねた"},"hint":{"ko":"트레스 협회의 자격 시험에 붙어 공방에 들어갔을 때","en":"Pass the Tres Association exam and join a Workshop","ja":"トレス協会の資格試験に受かって工房に入ったとき"},"implies":null,"tier":"common"},{"key":"ws_rep","group":"ws","label":{"ko":"공방 대표","en":"Workshop Head","ja":"工房の代表"},"hint":{"ko":"공방의 대표가 되었을 때","en":"Become the head of a Workshop","ja":"工房の代表になったとき"},"implies":"ws_join","tier":"rare"},{"key":"ws_s","group":"ws","label":{"ko":"이름난 공방의 대표","en":"Head of a renowned Workshop","ja":"名高い工房の代表"},"hint":{"ko":"격이 높은 공방의 대표가 되었을 때","en":"Become the head of a high-ranking Workshop","ja":"格の高い工房の代表になったとき"},"implies":"ws_rep","tier":"epic"},{"key":"ws_fame5","group":"ws","label":{"ko":"도시가 아는 공방","en":"A Workshop the City knows","ja":"都市が知る工房"},"hint":{"ko":"공방의 명성이 80에 닿았을 때","en":"Raise your Workshop's fame to 80","ja":"工房の名声が80に届いたとき"},"implies":"ws_join","tier":"epic"},{"key":"ws_color_order","group":"ws","label":{"ko":"특색의 손에 맞춤","en":"Fitted to a Color's hand","ja":"特色の手に合わせた"},"hint":{"ko":"특색이 직접 맡긴 주문을 해냈을 때","en":"Complete an order a Color brought in person","ja":"特色が直接持ち込んだ注文をやり遂げたとき"},"implies":"ws_join","tier":"legend"},{"key":"ws_finger4","group":"ws","label":{"ko":"네 손가락이 모두 찾아옴","en":"All four Fingers came calling","ja":"四本の指がすべて訪れた"},"hint":{"ko":"엄지·검지·중지·약지의 주문을 모두 해냈을 때","en":"Complete orders from the Thumb, Index, Middle and Ring","ja":"親指・人差し指・中指・薬指の注文をすべてやり遂げたとき"},"implies":"ws_join","tier":"legend"},{"key":"ws_masterpiece","group":"ws","label":{"ko":"걸작을 남김","en":"Left a masterwork","ja":"傑作を残した"},"hint":{"ko":"일생에 한 번 만드는 물건이 걸작 등급 이상일 때","en":"Your once-in-a-lifetime piece is rated Masterwork or higher","ja":"一生に一度の品が傑作以上だったとき"},"implies":"ws_join","tier":"rare"},{"key":"ws_meisterwerk","group":"ws","label":{"ko":"명작","en":"Magnum opus","ja":"名作"},"hint":{"ko":"일생에 한 번 만드는 물건이 명작 등급 이상일 때","en":"Your once-in-a-lifetime piece is rated Magnum Opus or higher","ja":"一生に一度の品が名作以上だったとき"},"implies":"ws_masterpiece","tier":"epic"},{"key":"ws_legend_work","group":"ws","label":{"ko":"전설이 된 물건","en":"A piece that became legend","ja":"伝説となった品"},"hint":{"ko":"일생에 한 번 만드는 물건이 전설 등급일 때","en":"Your once-in-a-lifetime piece is rated Legend","ja":"一生に一度の品が伝説だったとき"},"implies":"ws_meisterwerk","tier":"legend"},{"key":"ws_perfect","group":"ws","label":{"ko":"기적을 만든 자","en":"One who made a Miracle","ja":"奇跡を作った者"},"hint":{"ko":"걸작 미니게임에서 100점을 냈을 때","en":"Score 100 in the masterpiece minigames","ja":"傑作ミニゲームで100点を出したとき"},"implies":"ws_legend_work","tier":"miracle"},{"key":"ws_patent","group":"ws","label":{"ko":"특허 하나","en":"One patent","ja":"特許ひとつ"},"hint":{"ko":"내 설계로 트레스 특허를 등록했을 때","en":"Register a Tres patent for your own design","ja":"自分の設計でトレスの特許を登録したとき"},"implies":"ws_join","tier":"rare"},{"key":"ws_patron_color","group":"ws","label":{"ko":"내 칼을 쥔 특색","en":"A Color holding my blade","ja":"我が刃を握る特色"},"hint":{"ko":"후원하던 해결사가 특색이 되었을 때","en":"A Fixer you sponsored becomes a Color","ja":"後援していたフィクサーが特色になったとき"},"implies":"ws_join","tier":"legend"},{"key":"ws_claw","group":"ws","label":{"ko":"발톱이 온 공방","en":"The Workshop the Claw visited","ja":"爪が来た工房"},"hint":{"ko":"트레스 경고가 세 번 쌓여 발톱이 찾아왔을 때","en":"Three Tres warnings pile up and the Claw comes","ja":"トレスの警告が三つたまり、爪が訪れたとき"},"implies":"ws_join","tier":"uncommon"},{"key":"ws_sold","group":"ws","label":{"ko":"공방을 넘김","en":"Sold the Workshop","ja":"工房を手放した"},"hint":{"ko":"공방을 날개에 팔았을 때","en":"Sell your Workshop to a Wing","ja":"工房を翼に売ったとき"},"implies":"ws_join","tier":"uncommon"},{"key":"kk_join","group":"kuro","label":{"ko":"흑운회","en":"Kurokumo Clan","ja":"黒雲会"},"hint":{"ko":"흑운회에 들어갔을 때","en":"Join the Kurokumo Clan","ja":"黒雲会に入ったとき"},"implies":null,"tier":"rare"},{"key":"kk_captain","group":"kuro","label":{"ko":"흑운회 부조장","en":"Kurokumo Clan Captain","ja":"黒雲会 副組長"},"hint":{"ko":"흑운회에서 부조장까지 올랐을 때","en":"Rise to Captain in the Kurokumo Clan","ja":"黒雲会で副組長まで上がったとき"},"implies":"kk_join","tier":"epic"},{"key":"kk_patriarch","group":"kuro","label":{"ko":"흑운회 조장","en":"Kurokumo Clan Patriarch","ja":"黒雲会 組長"},"hint":{"ko":"흑운회에서 조장까지 올랐을 때","en":"Rise to Patriarch in the Kurokumo Clan","ja":"黒雲会で組長まで上がったとき"},"implies":"kk_captain","tier":"legend"},{"key":"kk_ink3","group":"kuro","label":{"ko":"세 겹의 검은 구름","en":"Three layers of black cloud","ja":"三重の黒い雲"},"hint":{"ko":"검은 구름 문신을 세 겹까지 새겼을 때","en":"Have the black cloud tattoo inked three layers deep","ja":"黒い雲の刺青を三重まで入れたとき"},"implies":null,"tier":"rare"},{"key":"kk_truce","group":"kuro","label":{"ko":"검계와 마주 앉은 자","en":"One who sat across from the Blade Lineage","ja":"剣契と向かい合って座った者"},"hint":{"ko":"흑운회로서 검계와 마주 앉았을 때","en":"Sit across from the Blade Lineage as Kurokumo","ja":"黒雲会として剣契と向かい合って座ったとき"},"implies":null,"tier":"rare"},{"key":"kk_finger","group":"kuro","label":{"ko":"손가락으로 값을 치른 자","en":"One who paid with a finger","ja":"指で代償を払った者"},"hint":{"ko":"손가락 하나로 값을 치르고 살아남았을 때","en":"Pay with a finger and live","ja":"指一本で代償を払い、生き延びたとき"},"implies":null,"tier":"rare"},{"key":"kk_bl_last","group":"kuro","label":{"ko":"검계의 마지막 골목을 본 자","en":"One who saw the Blade Lineage's last alley","ja":"剣契の最後の路地を見た者"},"hint":{"ko":"흑운회로서 검계의 마지막 골목을 보았을 때","en":"As Kurokumo, witness the Blade Lineage's last alley","ja":"黒雲会として剣契の最後の路地を見たとき"},"implies":null,"tier":"epic"},{"key":"kk_retire","group":"kuro","label":{"ko":"칼을 물려준 부조장","en":"A Captain who passed on the blade","ja":"刀を譲った副組長"},"hint":{"ko":"부조장으로서 칼을 물려주고 물러났을 때","en":"As Captain, pass on the blade and step down","ja":"副組長として刀を譲り、退いたとき"},"implies":null,"tier":"rare"},{"key":"kk_p_end","group":"kuro","label":{"ko":"자리를 넘긴 조장","en":"A Patriarch who passed on the seat","ja":"座を譲った組長"},"hint":{"ko":"조장으로서 자리를 넘겼을 때","en":"As Patriarch, pass on the seat","ja":"組長として座を譲ったとき"},"implies":null,"tier":"legend"},{"key":"kk_dojo","group":"kuro","label":{"ko":"도장을 차린 검객","en":"A swordsman who opened a dojo","ja":"道場を開いた剣客"},"hint":{"ko":"물러난 뒤 도장을 차렸을 때","en":"Open a dojo after stepping down","ja":"退いた後、道場を開いたとき"},"implies":null,"tier":"epic"},{"key":"kk_d_student","group":"kuro","label":{"ko":"검술을 물려준 자","en":"One who passed on swordsmanship","ja":"剣術を伝えた者"},"hint":{"ko":"도장을 차린 뒤 아이에게 검술을 물려주었을 때","en":"After opening a dojo, pass swordsmanship on to a child","ja":"道場を開いた後、子に剣術を伝えたとき"},"implies":null,"tier":"legend"},{"key":"dream_built","group":"dream","label":{"ko":"꿈을 꾸기 시작한 밤","en":"The night the dream began","ja":"夢を見はじめた夜"},"hint":{"ko":"P사에서 장로로 시작해 문 위에 이름을 걸었을 때","en":"Start as an Elder in P Corp. and hang a name above the gate","ja":"P社で長老として始まり、門の上に名を掲げたとき"},"implies":null,"tier":"uncommon"},{"key":"dream_first","group":"dream","label":{"ko":"처음 열린 문","en":"The first gate opened","ja":"初めて開いた門"},"hint":{"ko":"첫 개장을 넘겼을 때","en":"Get through the first opening","ja":"最初の開園を越えたとき"},"implies":"dream_built","tier":"common"},{"key":"dream_half","group":"dream","label":{"ko":"아홉 번 열린 문","en":"A gate opened nine times","ja":"九度開いた門"},"hint":{"ko":"아홉 번째 개장을 넘겼을 때","en":"Get through the ninth opening","ja":"九度目の開園を越えたとき"},"implies":"dream_first","tier":"uncommon"},{"key":"dream_full","group":"dream","label":{"ko":"끝나지 않는 꿈","en":"The dream that never ends","ja":"終わらない夢"},"hint":{"ko":"열일곱 번째 개장을 넘겼을 때","en":"Get through the seventeenth opening","ja":"十七度目の開園を越えたとき"},"implies":"dream_half","tier":"epic"},{"key":"dream_fell","group":"dream","label":{"ko":"무너진 꿈","en":"The fallen dream","ja":"崩れた夢"},"hint":{"ko":"랜드의 힘이 모자라 토벌되었을 때","en":"The Land's strength falls short and it is subjugated","ja":"ランドの力が足りず討伐されたとき"},"implies":"dream_built","tier":"common"},{"key":"dream_road","group":"dream","label":{"ko":"돌아오지 못한 길","en":"The road you never came back from","ja":"帰れなかった道"},"hint":{"ko":"혼자 바깥에 나섰다가 습격당했을 때","en":"Go out alone and get ambushed","ja":"ひとりで外に出て襲撃されたとき"},"implies":"dream_built","tier":"uncommon"},{"key":"dream_key","group":"dream","label":{"ko":"문을 여는 손","en":"The hand that opens the gate","ja":"門を開ける手"},"hint":{"ko":"반란에서 권속에게 졌을 때","en":"Lose to your Kindred in a revolt","ja":"反乱で眷属に敗れたとき"},"implies":"dream_built","tier":"rare"},{"key":"dream_alone","group":"dream","label":{"ko":"잔 하나만 남은 밤","en":"The night only one cup remained","ja":"杯ひとつだけ残った夜"},"hint":{"ko":"반란에서 이기고 혼자 남았을 때","en":"Win a revolt and be left alone","ja":"反乱に勝ち、ひとり残されたとき"},"implies":"dream_built","tier":"rare"},{"key":"dream_plague","group":"dream","label":{"ko":"끝나지 않는 밤","en":"The night that never ends","ja":"終わらない夜"},"hint":{"ko":"아끼는 권속을 연달아 셋 잃고 분노가 넘쳤을 때","en":"Lose three cherished Kindred in a row and let your rage overflow","ja":"大切な眷属を続けて三人失い、怒りが溢れたとき"},"implies":"dream_built","tier":"epic"},{"key":"dream_feast","group":"dream","label":{"ko":"돌아오지 않은 이름들","en":"The names that never came home","ja":"帰らなかった名前たち"},"hint":{"ko":"개장에서 다섯 번 넘게 사람을 먹었을 때","en":"Eat people at five or more openings","ja":"開園で五度以上人を喰らったとき"},"implies":"dream_built","tier":"rare"},{"key":"dream_guest","group":"dream","label":{"ko":"칼을 맡긴 손님","en":"The guest who left their blade","ja":"刀を預けた客"},"hint":{"ko":"이름 난 사냥꾼을 손님으로 맞고 끝까지 갔을 때","en":"Welcome a renowned hunter as a guest and see it through to the end","ja":"名の知れた狩人を客として迎え、最後まで行ったとき"},"implies":"dream_built","tier":"rare"},{"key":"dream_people","group":"dream","label":{"ko":"사람과 함께 꾼 꿈","en":"A dream dreamed with people","ja":"人と共に見た夢"},"hint":null,"implies":"dream_full","tier":"legend"},{"key":"dream_clean","group":"dream","label":{"ko":"한 방울도 억지로 받지 않은 꿈","en":"A dream that never took a drop by force","ja":"一滴も無理に取らなかった夢"},"hint":null,"implies":"dream_full","tier":"legend"},{"key":"dream_six","group":"dream","label":{"ko":"처음 부른 이름 여섯","en":"The six names first called","ja":"初めて呼んだ六つの名"},"hint":null,"implies":"dream_people","tier":"myth"},{"key":"cl_claw","group":"claw","label":{"ko":"머리의 처형자","en":"Executioner of the Head","ja":"頭の処刑人"},"hint":{"ko":"C사에서 발톱 처형자로 시작했을 때","en":"Start as a Claw Executioner in C Corp.","ja":"C社で爪の処刑人として始まったとき"},"implies":null,"tier":"rare"},{"key":"cl_spotless","group":"claw","label":{"ko":"고지서 없는 처형자","en":"An Executioner without a notice","ja":"告知書のない処刑人"},"hint":{"ko":"고지서를 한 번도 받지 않고 15년차를 넘겼을 때","en":"Pass Year 15 without a single notice","ja":"告知書を一度も受けずに15年目を越えたとき"},"implies":"cl_claw","tier":"epic"},{"key":"cl_long","group":"claw","label":{"ko":"스물다섯 해를 넘긴 처형자","en":"An Executioner past twenty-five years","ja":"二十五年を越えた処刑人"},"hint":{"ko":"처형자로 25년차를 넘겼을 때","en":"Pass Year 25 as an Executioner","ja":"処刑人として25年目を越えたとき"},"implies":"cl_claw","tier":"epic"},{"key":"cl_color_kill","group":"claw","label":{"ko":"특색을 처리한 처형자","en":"An Executioner who dealt with a Color","ja":"特色を処理した処刑人"},"hint":{"ko":"명령서의 특색을 처리했을 때","en":"Deal with a Color named on an order","ja":"命令書の特色を処理したとき"},"implies":"cl_claw","tier":"epic"},{"key":"cl_claw_beat","group":"claw","label":{"ko":"발톱을 넘은 처형자","en":"An Executioner who got past the Claw","ja":"爪を越えた処刑人"},"hint":null,"implies":"cl_claw","tier":"legend"},{"key":"cl_arbiter","group":"claw","label":{"ko":"조율자를 만난 자","en":"One who met the Arbiter","ja":"調律者に会った者"},"hint":null,"implies":"cl_claw_beat","tier":"myth"},{"key":"cl_retire","group":"claw","label":{"ko":"건틀릿을 반납한 처형자","en":"An Executioner who returned the gauntlet","ja":"ガントレットを返納した処刑人"},"hint":null,"implies":"cl_claw","tier":"legend"},{"key":"cl_clawed","group":"claw","label":{"ko":"발톱에게 처리된 처형자","en":"An Executioner dealt with by the Claw","ja":"爪に処理された処刑人"},"hint":{"ko":"두 번째 실수 뒤 처형자가 찾아왔을 때","en":"After a second failure, an Executioner comes for you","ja":"二度目の失敗の後、処刑人が訪れたとき"},"implies":"cl_claw","tier":"rare"},{"key":"cl_warp","group":"warp","label":{"ko":"열차 안의 금기","en":"The Taboo Aboard the Train","ja":"列車の中の禁忌"},"hint":null,"implies":null,"tier":"legend"},{"key":"guard_chosen","group":"guard","label":{"ko":"가문의 부름","en":"The Family's Call","ja":"家門の呼び声"},"hint":{"ko":"H사 출신으로 25세에 가주 후보의 호위로 발탁되었을 때","en":"Be chosen at 25, as one born in H Corp., to guard a Family Hierarch Candidate","ja":"H社出身として25歳で家主候補の護衛に抜擢されたとき"},"implies":null,"tier":"uncommon"},{"key":"guard_full","group":"guard","label":{"ko":"채워진 그릇","en":"A Filled Vessel","ja":"満たされた器"},"hint":{"ko":"가문의 지원으로 그릇 끝까지 강해졌을 때","en":"Grow as strong as your vessel allows with the Family's backing","ja":"家門の支援で器の限りまで強くなったとき"},"implies":"guard_chosen","tier":"rare"},{"key":"guard_big","group":"guard","label":{"ko":"큰 그릇","en":"A Great Vessel","ja":"大きな器"},"hint":{"ko":"1급의 그릇으로 발탁되어 그 끝까지 닿았을 때","en":"Be chosen with a Grade 1 vessel and reach its limit","ja":"1級の器として抜擢され、その限りまで届いたとき"},"implies":"guard_full","tier":"epic"},{"key":"guard_pass","group":"guard","label":{"ko":"가주의 왼쪽","en":"The Hierarch's Left","ja":"家主の左"},"hint":{"ko":"호위한 후보가 가주 심사를 통과했을 때","en":"The candidate you guarded passes the Family Hierarch Evaluation","ja":"護衛した候補が家主審査を通過したとき"},"implies":null,"tier":"epic"},{"key":"guard_stay","group":"guard","label":{"ko":"왼쪽 자리","en":"The Left Side","ja":"左の席"},"hint":{"ko":"가주 심사를 통과한 뒤 해결사로서 가주의 곁에 남았을 때","en":"After the Evaluation, stay at the Hierarch's side as a Fixer","ja":"家主審査の通過後、フィクサーとして家主のそばに残ったとき"},"implies":"guard_pass","tier":"epic"},{"key":"guard_against","group":"guard","label":{"ko":"작은 그릇의 기적","en":"The Miracle of a Small Vessel","ja":"小さな器の奇跡"},"hint":{"ko":"체급 6 이하로 가주 심사의 기습을 두 번 다 막아 냈을 때","en":"Block both ambushes in the Evaluation at strength 6 or lower","ja":"格6以下で家主審査の奇襲を二度とも防いだとき"},"implies":"guard_pass","tier":"legend"},{"key":"guard_fail","group":"guard","label":{"ko":"빈 오른쪽","en":"The Empty Right","ja":"空いた右"},"hint":{"ko":"호위한 후보를 가주 심사에서 잃었을 때","en":"Lose the candidate you guarded in the Evaluation","ja":"護衛した候補を家主審査で失ったとき"},"implies":null,"tier":"uncommon"},{"key":"guard_teach","group":"guard","label":{"ko":"잘못된 가르침","en":"A Wrong Lesson","ja":"誤った教え"},"hint":{"ko":"1차 심사에서 후보에게 이상한 대답을 가르쳤을 때","en":"Teach the candidate a strange answer in the first round","ja":"一次審査で候補に妙な答えを教えたとき"},"implies":"guard_fail","tier":"common"},{"key":"guard_retire","group":"guard","label":{"ko":"넘겨준 왼쪽","en":"The Left Side Handed Over","ja":"譲った左"},"hint":{"ko":"호위무사로서 젊은 호위에게 자리를 넘겨주었을 때","en":"As a Bodyguard, hand your place to a young guard","ja":"護衛武士として若い護衛に席を譲ったとき"},"implies":"guard_stay","tier":"rare"},{"key":"guard_before","group":"guard","label":{"ko":"빈 왼쪽 한 뼘","en":"A Hand-Span Left Empty","ja":"空けた左の一尺"},"hint":{"ko":"호위무사로서 가주보다 먼저 떠났을 때","en":"As a Bodyguard, pass away before the Hierarch","ja":"護衛武士として家主より先に逝ったとき"},"implies":"guard_stay","tier":"rare"},{"key":"guard_after","group":"guard","label":{"ko":"남겨진 호위","en":"The Guard Left Behind","ja":"残された護衛"},"hint":{"ko":"호위무사로서 가주를 먼저 보냈을 때","en":"As a Bodyguard, see the Hierarch off first","ja":"護衛武士として家主を先に見送ったとき"},"implies":"guard_stay","tier":"rare"},{"key":"guard_friend","group":"guard","label":{"ko":"친구였던 가주","en":"A Hierarch Who Was a Friend","ja":"友だった家主"},"hint":{"ko":"호위무사로서 신임을 끝까지 채우고 삶을 마쳤을 때","en":"End your life as a Bodyguard with the Hierarch's full trust","ja":"護衛武士として信任を満たしたまま生涯を終えたとき"},"implies":"guard_stay","tier":"legend"},{"key":"index_e","group":"finger","label":{"ko":"e(무리수)","en":"e (the irrational number)","ja":"e（無理数）"},"hint":{"ko":"검지 대행자로서 e를 끝까지 읊으라는 지령을 받았을 때","en":"As an Agent of the Index, receive the order to recite e to the end","ja":"人差し指の代行者として、eを最後まで唱えよという指令を受けたとき"},"implies":null,"tier":"uncommon"},{"key":"ampoule","group":"city","label":{"ko":"K사 앰플","en":"K Corp. Ampoule","ja":"K社アンプル"},"hint":{"ko":"암시장에서 K사 앰플을 샀을 때","en":"Buy a K Corp. Ampoule on the black market","ja":"闇市でK社アンプルを買ったとき"},"implies":null,"tier":"legend"},{"key":"warp_citizen","group":"warp","label":{"ko":"시민칸의 스승","en":"The Teacher of the Citizens' Car","ja":"市民車両の師"},"hint":{"ko":"특색으로 시민 칸에 섞여 워프 열차에 올랐을 때","en":"As a Color, board the Warp Train disguised among the citizens","ja":"特色として市民に紛れてワープ列車に乗ったとき"},"implies":null,"tier":"legend"},{"key":"warp_lost","group":"warp","label":{"ko":"길을 잃음","en":"Lost","ja":"道を見失った"},"hint":{"ko":"워프 열차에서 붉은 상자를 쓰고 길을 잃었을 때","en":"Use the red box on the Warp Train and lose your way","ja":"ワープ列車で赤い箱を使い、道を見失ったとき"},"implies":null,"tier":"legend"},{"key":"blind_kill","group":"distortion","label":{"ko":"알아보지 못한 채 죽인 자","en":"One who killed without knowing who it was","ja":"誰かも分からないまま殺した者"},"hint":{"ko":"눈먼 뒤틀림을 알아보지 못하고 죽였을 때","en":"Kill the blind Distortion without recognizing who it was","ja":"盲目のねじれを見分けられずに殺したとき"},"implies":null,"tier":"myth"},{"key":"blind_love","group":"distortion","label":{"ko":"사랑하는 이에게","en":"To the One I Love","ja":"愛する人へ"},"hint":{"ko":"눈먼 뒤틀림이 누구인지 알아보았을 때","en":"Recognize who the blind Distortion is","ja":"盲目のねじれが誰かを見抜いたとき"},"implies":null,"tier":"myth"},{"key":"nameless","group":"finger","label":{"ko":"無名","en":"Nameless (無名)","ja":"無名"},"hint":{"ko":"검지 대행자로서 지령에 따라 모든 것에서 이름을 버렸을 때","en":"As an Agent of the Index, cast away your name from everything on an order","ja":"人差し指の代行者として、指令に従いあらゆるものから名前を捨てたとき"},"implies":null,"tier":"legend"},{"key":"lament_happy","group":"distortion","label":{"ko":"그곳에서는 행복하기를","en":"May They Be Happy There","ja":"そこでは幸せでありますように"},"hint":{"ko":"뒤틀려 가는 가까운 이를 직접 토벌했을 때","en":"Subjugate a loved one as they twist, by your own hand","ja":"ねじれていく身近な人を自ら討伐したとき"},"implies":null,"tier":"legend"},{"key":"lament_wait","group":"distortion","label":{"ko":"그곳에서 기다려 주기를","en":"May They Wait for Me There","ja":"そこで待っていてくれますように"},"hint":{"ko":"뒤틀려 가는 가까운 이를 두고 도망쳤을 때","en":"Run from a loved one as they twist","ja":"ねじれていく身近な人を置いて逃げたとき"},"implies":null,"tier":"legend"},{"key":"lament_meet","group":"distortion","label":{"ko":"그곳에서 만나기를","en":"May We Meet There","ja":"そこで会えますように"},"hint":{"ko":"뒤틀려 가는 가까운 이를 마주하고 죽었을 때","en":"Face a loved one as they twist, and die","ja":"ねじれていく身近な人と向き合い、死んだとき"},"implies":null,"tier":"legend"},{"key":"lotto","group":"city","label":{"ko":"부","en":"Wealth","ja":"富"},"hint":{"ko":"로또에 당첨되었을 때","en":"Win the lottery","ja":"宝くじに当たったとき"},"implies":null,"tier":"legend"},{"key":"love_first","group":"city","label":{"ko":"첫사랑과 가정을 이룸","en":"Built a home with a first love","ja":"初恋の人と家庭を築いた"},"hint":{"ko":"10대에 생긴 연인과 가정을 이루었을 때","en":"Start a family with the partner you met as a teen","ja":"10代で出会った恋人と家庭を築いたとき"},"implies":null,"tier":"uncommon"},{"key":"refuse_proposal","group":"city","label":{"ko":"청혼을 거절한 삶","en":"A life that turned down a proposal","ja":"プロポーズを断った人生"},"hint":{"ko":"청혼을 거절하고 끝내 혼자 살았을 때","en":"Turn down a proposal and never marry","ja":"プロポーズを断り、結婚しなかったとき"},"implies":null,"tier":"uncommon"},{"key":"widowed","group":"city","label":{"ko":"곁을 지킨 사람을 먼저 보냄","en":"Saw off the one who stayed by my side","ja":"そばにいてくれた人を先に見送った"},"hint":{"ko":"함께 살던 사람을 먼저 떠나보냈을 때","en":"Lose the person you lived with","ja":"共に暮らした人を先に見送ったとき"},"implies":null,"tier":"rare"},{"key":"unwed_lover","group":"city","label":{"ko":"끝내 이루지 못한 사이","en":"A bond that never came to be","ja":"結ばれなかった間柄"},"hint":{"ko":"연인은 있었지만 끝내 함께 살지 못했을 때","en":"Have a lover but never live together","ja":"恋人はいたが、共に暮らせなかったとき"},"implies":null,"tier":"uncommon"},{"key":"thumb_will","group":"finger","label":{"ko":"대부의 유언","en":"The Capo dei Capi's Will","ja":"ゴッドファーザーの遺言"},"hint":{"ko":"엄지 언더보스로서 대부의 유언을 받들어 대부가 되었을 때","en":"As a Sottocapo of the Thumb, honor the Capo dei Capi's will and take that seat","ja":"親指のアンダーボスとして、ゴッドファーザーの遺言を受けてゴッドファーザーになったとき"},"implies":null,"tier":"legend"},{"key":"middle_grudge","group":"finger","label":{"ko":"식구의 원한","en":"The Family's Grudge","ja":"家族の恨み"},"hint":{"ko":"중지 작은 형님·누님으로서 앙갚음 장부의 가장 오래된 줄을 혼자 지웠을 때","en":"As a Big Brother or Big Sister of the Middle, strike the oldest line from the Book of Vengeance alone","ja":"中指の末兄・末姉として、仕返し帳簿の一番古い行を一人で消したとき"},"implies":null,"tier":"legend"},{"key":"ring_silence","group":"finger","label":{"ko":"말없는 감상","en":"A Silent Viewing","ja":"無言の鑑賞"},"hint":{"ko":"약지 도슨트로서 마에스트로들의 말없는 감상 끝에 마에스트로가 되었을 때","en":"As a Docent of the Ring, become a Maestro after the Maestros view your work in silence","ja":"薬指のドーセントとして、マエストロたちの無言の鑑賞の末にマエストロになったとき"},"implies":null,"tier":"legend"},{"key":"fixer_named","group":"fixer","label":{"ko":"지명받은 이름","en":"A Name That Was Called","ja":"指名された名"},"hint":{"ko":"두 단계 위의 지명 의뢰를 해냈을 때","en":"Complete a named request two steps above your usual work","ja":"二段上の指名依頼をやり遂げたとき"},"implies":null,"tier":"uncommon"},{"key":"fixer_lucky3","group":"fixer","label":{"ko":"앞당겨진 심사","en":"A Review Moved Up","ja":"前倒しの審査"},"hint":{"ko":"한 삶에서 뜻밖의 승급을 세 번 겪었을 때","en":"Get an unexpected promotion three times in one life","ja":"一つの人生で思いがけない昇級を三度経験したとき"},"implies":null,"tier":"rare"},{"key":"fixer_lucky_one","group":"fixer","label":{"ko":"한 번에 1급","en":"Grade 1 in One Leap","ja":"一足飛びの1級"},"hint":{"ko":"뜻밖의 승급으로 2급에서 1급이 되었을 때","en":"Go from Grade 2 to Grade 1 through an unexpected promotion","ja":"思いがけない昇級で2級から1級になったとき"},"implies":null,"tier":"epic"},{"key":"fixer_colorless","group":"fixer","label":{"ko":"색 없는 1급","en":"A Grade 1 Without a Color","ja":"色なき1級"},"hint":{"ko":"특색 공적을 다 채웠지만 특색이 되지 못하고 끝났을 때","en":"Fill your Color merit but end without becoming a Color","ja":"特色の功績を満たしたが、特色になれずに終わったとき"},"implies":null,"tier":"rare"},{"key":"office_broken","group":"fixer","label":{"ko":"사무소 깨기","en":"Office Break-In","ja":"事務所破り"},"hint":{"ko":"사무소가 습격당해 지키지 못했을 때","en":"When your Office is attacked and you fail to hold it","ja":"事務所が襲撃され、守りきれなかったとき"},"implies":null,"tier":"uncommon"}],"flags":{"en":[["고아","Orphan"],["부유한집","Born into wealth"],["가난한집","Born into poverty"],["연인","Has a lover"],["가정","Has a family"],["아이","Has a child"],["K사앰플","Carries a K Corp. ampoule"],["가족이같은소속","Child shares your affiliation"],["빚","In debt"],["프로젝트완수","Completed a major project"],["후견","Has a Director's patronage"],["약물중독","Drug dependence"],["조직입문","Ties to a Syndicate"],["환상체목격","Has seen an Abnormality"],["환상체생존","Survived an Abnormality"],["E.G.O개화","Effloresced E.G.O"],["진학","Higher education"],["상층","Upper-class upbringing"],["사원증","Wing employee ID"],["복제","Clone from the Hatchery"],["기억소거","Memories erased on leaving R Corp."],["신분증명","Wing citizen"],["의뢰인","Ties to an Office"],["해결사동경","Admires Fixers"],["날개동경","Admires Wing employees"],["협회동경","Admires the Associations"],["엄지동경","Admires the Thumb"],["검지동경","Admires the Index"],["중지동경","Admires the Middle"],["약지동경","Admires the Ring"],["특색","Color"],["뒤틀림목격","Witnessed a Distortion"],["뒤틀림경계","Came to the brink of Distortion"],["이상한물건","Keeps a strange object"],["숭배","Joined a cult"],["고급장비","Workshop-made gear"],["의체","Backstreets prosthesis"],["좋은의체","Fine prosthesis"],["전투의체","Combat prosthesis"],["강화시술","Underwent augmentation"],["유물","Relic of the Outskirts"],["이단낙인","Branded a heretic by Nagel und Hammer"],["원한","Vengeance tattoo"],["기사의가호","Knight of Despair's blessing"],["혈귀","Bloodfiend"],["떠돌이","A stray with no Family"],["혈액바","Knows where to get Hemobars"],["잘린손가락","Lost a finger"],["잘린팔","Lost an arm"],["잘린손","Lost a hand"]],"ja":[["고아","孤児"],["부유한집","裕福な家に生まれた"],["가난한집","貧しい家に生まれた"],["연인","恋人がいる"],["가정","家庭を築いた"],["아이","子どもがいる"],["K사앰플","K社のアンプルを懐に持つ"],["가족이같은소속","子どもが同じ所属"],["빚","借金がある"],["프로젝트완수","大型プロジェクトをやり遂げた"],["후견","理事の後ろ盾がある"],["약물중독","薬物依存"],["조직입문","組織とつながりがある"],["환상체목격","幻想体を見たことがある"],["환상체생존","幻想体と遭遇して生き延びた"],["E.G.O개화","E.G.O開花"],["진학","上級課程を修めた"],["상층","上層の出身"],["사원증","翼の社員証"],["복제","孵化場出身のクローン"],["기억소거","R社退役時に記憶を消去"],["신분증명","翼の市民"],["의뢰인","事務所とつながりがある"],["해결사동경","フィクサーに憧れている"],["날개동경","翼の社員に憧れている"],["협회동경","協会に憧れている"],["엄지동경","親指に憧れている"],["검지동경","人差し指に憧れている"],["중지동경","中指に憧れている"],["약지동경","薬指に憧れている"],["특색","特色"],["뒤틀림목격","ねじれを目撃した"],["뒤틀림경계","ねじれの一歩手前から戻った"],["이상한물건","奇妙な物を持っている"],["숭배","崇拝の集まりに足を踏み入れた"],["고급장비","工房製の高級装備"],["의체","裏路地の義体"],["좋은의체","良質な義体"],["전투의체","戦闘用義体"],["강화시술","強化施術を受けた"],["유물","外郭の遺物"],["이단낙인","ナーゲルウントハマーの異端の烙印"],["원한","怨恨の刺青"],["기사의가호","絶望の騎士の加護"],["혈귀","血鬼"],["떠돌이","家門を持たない放浪者"],["혈액바","血液バーの入手先を知っている"],["잘린손가락","指を一本失った"],["잘린팔","腕を一本失った"],["잘린손","手を一つ失った"]],"ko":[["고아","고아"],["부유한집","부유한 집에서 태어남"],["가난한집","가난한 집에서 태어남"],["연인","연인이 있음"],["가정","가정을 이룸"],["아이","아이가 있음"],["K사앰플","K사 앰플을 품에 지님"],["가족이같은소속","자식이 같은 소속"],["빚","빚이 있음"],["프로젝트완수","큰 프로젝트를 마침"],["후견","이사의 후견을 받음"],["약물중독","약물 의존"],["조직입문","조직과 연이 닿음"],["환상체목격","환상체를 본 적 있음"],["환상체생존","환상체와 마주치고 살아남음"],["E.G.O개화","E.G.O 개화"],["진학","상급 과정을 거침"],["상층","상층 출신"],["사원증","날개의 사원증"],["복제","부화장 출신 복제인간"],["기억소거","R사 퇴역 때 기억을 지움"],["신분증명","날개 시민"],["의뢰인","사무소에 연이 닿음"],["해결사동경","해결사를 동경함"],["날개동경","날개의 사원을 동경함"],["협회동경","협회를 동경함"],["엄지동경","엄지를 동경함"],["검지동경","검지를 동경함"],["중지동경","중지를 동경함"],["약지동경","약지를 동경함"],["특색","특색"],["뒤틀림목격","뒤틀림을 목격함"],["뒤틀림경계","뒤틀림의 문턱까지 갔다 옴"],["이상한물건","이상한 물건을 간직함"],["숭배","숭배 모임에 발을 들임"],["고급장비","공방제 고급 장비"],["의체","뒷골목 의체"],["좋은의체","좋은 의체"],["전투의체","전투용 의체"],["강화시술","강화 시술을 받음"],["유물","외곽의 유물"],["이단낙인","나겔 운트 하머의 이단 낙인"],["원한","원한 문신"],["기사의가호","절망의 기사의 가호"],["혈귀","혈귀"],["떠돌이","가문 없는 떠돌이"],["혈액바","혈액바를 구할 곳을 앎"],["잘린손가락","손가락 하나를 잃음"],["잘린팔","팔 하나를 잃음"],["잘린손","손 하나를 잃음"]]},"regions":{"en":[{"id":"A","name":"A Corp."},{"id":"B","name":"B Corp."},{"id":"C","name":"C Corp."},{"id":"D","name":"D Corp."},{"id":"E","name":"E Corp."},{"id":"F","name":"F Corp."},{"id":"G","name":"G Corp."},{"id":"H","name":"H Corp."},{"id":"I","name":"I Corp."},{"id":"J","name":"J Corp."},{"id":"K","name":"K Corp."},{"id":"M","name":"M Corp."},{"id":"N","name":"N Corp."},{"id":"O","name":"O Corp."},{"id":"P","name":"P Corp."},{"id":"Q","name":"Q Corp."},{"id":"R","name":"R Corp."},{"id":"S","name":"S Corp."},{"id":"T","name":"T Corp."},{"id":"U","name":"U Corp."},{"id":"V","name":"V Corp."},{"id":"W","name":"W Corp."},{"id":"X","name":"X Corp."},{"id":"Y","name":"Y Corp."},{"id":"outskirts","name":"the Outskirts"}],"ja":[{"id":"A","name":"A社"},{"id":"B","name":"B社"},{"id":"C","name":"C社"},{"id":"D","name":"D社"},{"id":"E","name":"E社"},{"id":"F","name":"F社"},{"id":"G","name":"G社"},{"id":"H","name":"H社"},{"id":"I","name":"I社"},{"id":"J","name":"J社"},{"id":"K","name":"K社"},{"id":"M","name":"M社"},{"id":"N","name":"N社"},{"id":"O","name":"O社"},{"id":"P","name":"P社"},{"id":"Q","name":"Q社"},{"id":"R","name":"R社"},{"id":"S","name":"S社"},{"id":"T","name":"T社"},{"id":"U","name":"U社"},{"id":"V","name":"V社"},{"id":"W","name":"W社"},{"id":"X","name":"X社"},{"id":"Y","name":"Y社"},{"id":"outskirts","name":"外郭"}],"ko":[{"id":"A","name":"A사"},{"id":"B","name":"B사"},{"id":"C","name":"C사"},{"id":"D","name":"D사"},{"id":"E","name":"E사"},{"id":"F","name":"F사"},{"id":"G","name":"G사"},{"id":"H","name":"H사"},{"id":"I","name":"I사"},{"id":"J","name":"J사"},{"id":"K","name":"K사"},{"id":"M","name":"M사"},{"id":"N","name":"N사"},{"id":"O","name":"O사"},{"id":"P","name":"P사"},{"id":"Q","name":"Q사"},{"id":"R","name":"R사"},{"id":"S","name":"S사"},{"id":"T","name":"T사"},{"id":"U","name":"U사"},{"id":"V","name":"V사"},{"id":"W","name":"W사"},{"id":"X","name":"X사"},{"id":"Y","name":"Y사"},{"id":"outskirts","name":"외곽"}]}};
 if (document.getElementById('cityborn-advisor')) return;
 const C=advisorCommon(),supported=[...document.scripts].some(s=>s.src.endsWith('/assets/'+C.source));
 const host=document.createElement('div');host.id='cityborn-advisor';
@@ -88810,6 +92341,7 @@ label{display:block}.row{display:flex;gap:7px;align-items:end;margin:8px 0}.row>
 <div class="row"><label><input id="onlySelected" type="checkbox">Selected only</label><button id="clear" class="link">Clear selections</button></div><small id="goalCount" role="status"></small><div id="goals" role="group" aria-label="Available traits and achievements"></div></details>
 <details id="startSettings"><summary>Starting settings & search effort</summary>
 <div class="row"><label>Name<input id="name" type="text" maxlength="12" placeholder="Seeded name"></label><label>Gender<select id="gender"><option value="m">Male</option><option value="f">Female</option></select></label></div>
+<label>Birthplace<select id="birthplace"><option value="">Random</option></select></label><p class="hint">Uses the game’s birthplace seed prefix. This changes the full life seed. An existing prefix takes effect even with Random; conflicting selections are rejected.</p>
 <label>Specific seed (optional)<input id="seed" type="text" placeholder="Leave blank for random seeds"></label>
 <div class="row"><label>Random seeds<input id="count" type="number" min="1" max="500" value="3"></label><label>Search effort<select id="effort"><option value="quick">Quick</option><option value="thorough">Thorough</option></select></label></div>
 <p class="hint">Each seed explores several routes; start with 1–3 seeds. Quick looks for a matching ending sooner. Thorough explores more alternatives. Neither can guarantee finding every possible route.</p></details>
@@ -88844,7 +92376,9 @@ let chosen=new Set((saved.goals||[]).filter(g=>g.startsWith('record:')||g.starts
 let catalog=[],library=Array.isArray(stored.files)?stored.files:[],selected=null,active=null,results=[];
 let ready=false,worker=null,pending=new Map(),sequence=0,generation=0,job=null,auto=false,view='Find',previewFile=null;
 let position=saved.position&&Number.isFinite(saved.position.x)&&Number.isFinite(saved.position.y)?saved.position:null;
-for(const id of ['name','gender','seed','count','effort','speed','ending','min-age','sort',...Object.keys(C.statNames).map(k=>'min-'+k)])if(saved[id]!=null)$(id).value=saved[id];
+for(const {id,name} of ADVISOR_CATALOG.regions[lang()])$('birthplace').add(new Option(name,id));
+for(const id of ['name','gender','birthplace','seed','count','effort','speed','ending','min-age','sort',...Object.keys(C.statNames).map(k=>'min-'+k)])if(saved[id]!=null)$(id).value=saved[id];
+if(!$('birthplace').value)$('birthplace').value='';
 if(!Object.hasOwn(C.sorts,$('sort').value))$('sort').value='recommended';
 if(!newPreferences)$('count').value='3';
 if(!['quick','thorough'].includes($('effort').value))$('effort').value='quick';
@@ -88853,7 +92387,7 @@ function draftGoals(){
   const goals=[...chosen];for(const key of Object.keys(C.statNames))if($('min-'+key).value!=='')goals.push(`stat:${key}:${Number($('min-'+key).value)}`);
   if($('min-age').value!=='')goals.push('age:'+Number($('min-age').value));if($('ending').value==='alive')goals.push('ending:alive');return goals;
 }
-function savePreferences(){write(prefsKey,{goals:[...chosen],...Object.fromEntries(['name','gender','seed','count','effort','speed','ending','min-age','sort',...Object.keys(C.statNames).map(k=>'min-'+k)].map(id=>[id,$(id).value])),position,minimized:$('panel').hidden});renderDraftHint();}
+function savePreferences(){write(prefsKey,{goals:[...chosen],...Object.fromEntries(['name','gender','birthplace','seed','count','effort','speed','ending','min-age','sort',...Object.keys(C.statNames).map(k=>'min-'+k)].map(id=>[id,$(id).value])),position,minimized:$('panel').hidden});renderDraftHint();}
 function renderDraftHint(){
   $('searchNote').textContent=auto?'Pause following in Play this life before starting a new search.':results.length&&JSON.stringify(draftGoals())!==JSON.stringify(results[0].goals)?'Targets changed. Existing cards still show their original requirements; search again to use the new targets.':'Results are predictions with replayable choices. Nothing starts automatically.';
 }
@@ -88920,7 +92454,7 @@ function card(file,buttons=true){
   const el=document.createElement('article');el.className='card';const title=document.createElement('strong'),badge=document.createElement('span'),meta=document.createElement('p');
   const matches=file.matched.filter(Boolean).length,full=file.complete&&matches===file.goals.length&&file.scope==='life';
   badge.className='tag '+(full?'match':'partial');badge.textContent=file.scope==='birth'?'Birth only':full?(file.goals.length?'Match':'Completed'):'Partial';
-  title.textContent=` Seed ${file.seed}`;meta.className='hint';meta.textContent=`${file.origin==='current'?'Continuation plan · ':''}${file.summary.region?file.summary.region+' · ':''}${file.summary.job||'No steady job'} · age ${file.summary.age} · ${file.summary.alive?'alive ending':file.summary.cause||'ending'}`;
+  title.textContent=` Seed ${file.seed}`;meta.className='hint';meta.textContent=`${file.origin==='current'?'Continuation plan · ':''}${file.summary.region?'Birthplace: '+file.summary.region+' · ':''}${file.summary.job||'No steady job'} · age ${file.summary.age} · ${file.summary.alive?'alive ending':file.summary.cause||'ending'}`;
   el.append(badge,title,meta,statsElement(file.summary.stats));
   if(file.summary.comparison){
     const c=file.summary.comparison,details=document.createElement('details'),heading=document.createElement('summary'),text=document.createElement('p');
@@ -89017,7 +92551,7 @@ function follow(){
 }
 function validInputs(){for(const input of $('viewFind').querySelectorAll('input[type=number]'))if(!input.checkValidity()){say('Check '+(input.getAttribute('aria-label')||input.closest('label')?.textContent||'search settings')+': '+input.validationMessage);input.reportValidity();return false;}return true;}
 async function search(){
-  if(!validInputs())return;const task=begin('search'),goals=draftGoals(),options={name:$('name').value.trim(),gender:$('gender').value};savePreferences();
+  if(!validInputs())return;const task=begin('search'),goals=draftGoals(),options={name:$('name').value.trim(),gender:$('gender').value,birthplace:$('birthplace').value};savePreferences();
   $('startSettings').open=false;$('goalPicker').open=false;
   say('Searching complete lives. You can stop and keep completed results.');results=[];renderResults();
   try{
@@ -89056,7 +92590,7 @@ async function importRoute(file,resume=null,preserveDraft=false){
   try{
     const result=await request('validate',{file});if(!current(task))return;
     selected=result;active=resume?{file:result,index:resume.index||0,waitingForTyping:resume.waitingForTyping}:null;keep(result);
-    if(!preserveDraft){setDraft(result.goals);for(const id of ['name','gender'])$(id).value=result.options[id];}
+    if(!preserveDraft){setDraft(result.goals);for(const id of ['name','gender'])$(id).value=result.options[id];$('birthplace').value=result.options.birthplace||'';}
     savePreferences();saveLives();renderPlay();renderLibrary();
     say('Route validated. Auto-follow is off.');if(!resume)switchView('Play');
   }catch(e){if(current(task))say('Route rejected: '+e.message);}finally{finish(task);}
@@ -89099,7 +92633,7 @@ $('copyStats').onclick=()=>{const s=bridge().runtime?.state;if(!s)return;for(con
 $('copyTraits').onclick=()=>{const s=bridge().runtime?.state;if(!s)return;for(const key of s.flags)if(catalog.some(c=>c.key==='flag:'+key)){chosen.delete('avoid:'+key);chosen.add('flag:'+key);}syncGoals();savePreferences();say('This life’s listed traits were added as ending requirements.');};
 $('filter').oninput=filterGoals;$('goalKind').onchange=filterGoals;$('onlySelected').onchange=filterGoals;$('clear').onclick=()=>{chosen.clear();syncGoals();savePreferences();};
 $('sort').onchange=()=>{savePreferences();renderResults();renderLibrary();};
-for(const id of ['name','gender','seed','count','effort','speed','ending','min-age',...Object.keys(C.statNames).map(k=>'min-'+k)])$(id).oninput=()=>{savePreferences();controls();if(id==='speed'&&auto)bridge().life?.setSpeed(Number($('speed').value));};
+for(const id of ['name','gender','birthplace','seed','count','effort','speed','ending','min-age',...Object.keys(C.statNames).map(k=>'min-'+k)])$(id).oninput=()=>{savePreferences();controls();if(id==='speed'&&auto)bridge().life?.setSpeed(Number($('speed').value));};
 $('import').onclick=()=>$('file').click();$('file').onchange=async()=>{const file=$('file').files[0];$('file').value='';if(file)try{await importRoute(JSON.parse(await file.text()));}catch(e){say('Could not read route: '+e.message);}};
 $('export').onclick=()=>{if(!selected)return;const url=URL.createObjectURL(new Blob([JSON.stringify(selected,null,2)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=`cityborn-${selected.seed}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
 $('copy').onclick=async()=>{if(selected)try{await navigator.clipboard.writeText(selected.seed);say('Copied seed '+selected.seed);}catch{say('Seed: '+selected.seed);}};

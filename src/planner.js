@@ -146,6 +146,12 @@ function makePlanner(E) {
     return best?{...best,seed:birth.seed,options,birth,effort,complete:true,matched:targets(best.state,goals)}:
       {state:birth,seed:birth.seed,options,birth,route:[],effort,complete:false,matched:targets(birth,goals)};
   }
+  function birthSeed(seed,birthplace=''){
+    if(typeof birthplace!=='string'||birthplace&&!E.data().regions.some(r=>r.id===birthplace))throw Error('Unknown birthplace');
+    const existing=E.birthplace(seed);
+    if(birthplace&&existing&&existing!==birthplace)throw Error('Seed already specifies a different birthplace. Choose Random, select that birthplace, or remove the seed prefix.');
+    return birthplace&&!existing?E.birthPrefix(birthplace)+':'+seed:seed;
+  }
   function validate(file){
     if(!file||![1,2,3].includes(file.version)||file.source!==C.source)throw Error('Unsupported route file or game version');
     if(!['en','ko','ja'].includes(file.lang)||!['birth','life'].includes(file.scope))throw Error('Missing route language or scope');
@@ -153,6 +159,10 @@ function makePlanner(E) {
     checkGoals(file.goals);
     if(!Array.isArray(file.route)||file.route.length>5000||(file.scope==='birth'&&file.route.length))throw Error('Invalid route length');
     const options={seed:file.options.seed,name:file.options.name,gender:file.options.gender};
+    if(file.options.birthplace!==undefined){
+      if(birthSeed(options.seed,file.options.birthplace)!==options.seed)throw Error('Birthplace does not match route seed');
+      options.birthplace=file.options.birthplace;
+    }
     const origin=file.version===3&&file.origin==='current'?'current':'seed';
     if(origin==='current'&&(!file.startState||file.startState.v!==7||file.startState.seed!==options.seed))throw Error('Missing current-life starting state');
     const s=origin==='current'?copy(file.startState):E.create(E.data(),options),route=[];
@@ -204,7 +214,7 @@ function makePlanner(E) {
     if(!C.finished(actual)||gameplaySignature(actual)!==gameplaySignature(expected)||JSON.stringify(E.records(actual))!==JSON.stringify(E.records(expected)))return null;
     return pack({state:actual,options:{seed:state.seed,name:state.name,gender:state.gender},route,effort:checked.effort,sort:checked.sort},checked.goals,'life',checked.lang,'current',state);
   }
-  return {copy,signature:C.signature,choices,apply,advance,targets,score,checkGoals,plan,simulate,pack,validate,gameplaySignature,retainAfterTyping};
+  return {birthSeed,copy,signature:C.signature,choices,apply,advance,targets,score,checkGoals,plan,simulate,pack,validate,gameplaySignature,retainAfterTyping};
 }
 
 function workerMain(){
@@ -228,7 +238,7 @@ function workerMain(){
         const words=new Uint32Array(count);crypto.getRandomValues(words);
         let results=[],examined=0;
         for(let n=0;n<count;n++){
-          const options={name:m.options.name,gender:m.options.gender,seed:m.seed||String(words[n])};
+          const options={name:m.options.name,gender:m.options.gender,birthplace:m.options.birthplace??'',seed:P.birthSeed(m.seed||String(words[n]),m.options.birthplace??'')};
           let lastBest=null;
           function update(candidates){
             results=results.filter(r=>r.file.seed!==options.seed);results.push(...candidates);

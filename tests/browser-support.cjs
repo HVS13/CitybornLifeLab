@@ -16,8 +16,8 @@ async function open(browser,{live=false,language='en',fast=false,delay=false,wid
   },{language,fast,delay});
   if(!live)await ctx.route(game+'**',route=>{
     const path=new URL(route.request().url()).pathname;
-    if(path==='/')return route.fulfill({contentType:'text/html',body:'<!doctype html><html lang="en"><body><div id="root"></div><script type="module" src="/assets/index-LvXCymKa.js"></script></body></html>'});
-    if(path==='/assets/index-LvXCymKa.js')return route.fulfill({contentType:'application/javascript',body:fs.readFileSync('analysis/game.bundle.js','utf8')});
+    if(path==='/')return route.fulfill({contentType:'text/html',body:'<!doctype html><html lang="en"><body><div id="root"></div><script type="module" src="/assets/index-BgAeWoVn.js"></script></body></html>'});
+    if(path==='/assets/index-BgAeWoVn.js')return route.fulfill({contentType:'application/javascript',body:fs.readFileSync('analysis/game.bundle.js','utf8')});
     return route.fulfill({status:404,body:''});
   });
   const page=await ctx.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto(game,{waitUntil:'networkidle'});

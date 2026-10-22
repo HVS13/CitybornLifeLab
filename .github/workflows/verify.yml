@@ -27,6 +27,7 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - run: npm run test:filter
+      - run: npm run test:birthplace
       - run: npm run test:player
       - run: npm run test:replay-language
       - run: npm run test:typing

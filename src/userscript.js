@@ -26,6 +26,7 @@ label{display:block}.row{display:flex;gap:7px;align-items:end;margin:8px 0}.row>
 <div class="row"><label><input id="onlySelected" type="checkbox">Selected only</label><button id="clear" class="link">Clear selections</button></div><small id="goalCount" role="status"></small><div id="goals" role="group" aria-label="Available traits and achievements"></div></details>
 <details id="startSettings"><summary>Starting settings & search effort</summary>
 <div class="row"><label>Name<input id="name" type="text" maxlength="12" placeholder="Seeded name"></label><label>Gender<select id="gender"><option value="m">Male</option><option value="f">Female</option></select></label></div>
+<label>Birthplace<select id="birthplace"><option value="">Random</option></select></label><p class="hint">Uses the game’s birthplace seed prefix. This changes the full life seed. An existing prefix takes effect even with Random; conflicting selections are rejected.</p>
 <label>Specific seed (optional)<input id="seed" type="text" placeholder="Leave blank for random seeds"></label>
 <div class="row"><label>Random seeds<input id="count" type="number" min="1" max="500" value="3"></label><label>Search effort<select id="effort"><option value="quick">Quick</option><option value="thorough">Thorough</option></select></label></div>
 <p class="hint">Each seed explores several routes; start with 1–3 seeds. Quick looks for a matching ending sooner. Thorough explores more alternatives. Neither can guarantee finding every possible route.</p></details>
@@ -60,7 +61,9 @@ let chosen=new Set((saved.goals||[]).filter(g=>g.startsWith('record:')||g.starts
 let catalog=[],library=Array.isArray(stored.files)?stored.files:[],selected=null,active=null,results=[];
 let ready=false,worker=null,pending=new Map(),sequence=0,generation=0,job=null,auto=false,view='Find',previewFile=null;
 let position=saved.position&&Number.isFinite(saved.position.x)&&Number.isFinite(saved.position.y)?saved.position:null;
-for(const id of ['name','gender','seed','count','effort','speed','ending','min-age','sort',...Object.keys(C.statNames).map(k=>'min-'+k)])if(saved[id]!=null)$(id).value=saved[id];
+for(const {id,name} of ADVISOR_CATALOG.regions[lang()])$('birthplace').add(new Option(name,id));
+for(const id of ['name','gender','birthplace','seed','count','effort','speed','ending','min-age','sort',...Object.keys(C.statNames).map(k=>'min-'+k)])if(saved[id]!=null)$(id).value=saved[id];
+if(!$('birthplace').value)$('birthplace').value='';
 if(!Object.hasOwn(C.sorts,$('sort').value))$('sort').value='recommended';
 if(!newPreferences)$('count').value='3';
 if(!['quick','thorough'].includes($('effort').value))$('effort').value='quick';
@@ -69,7 +72,7 @@ function draftGoals(){
   const goals=[...chosen];for(const key of Object.keys(C.statNames))if($('min-'+key).value!=='')goals.push(`stat:${key}:${Number($('min-'+key).value)}`);
   if($('min-age').value!=='')goals.push('age:'+Number($('min-age').value));if($('ending').value==='alive')goals.push('ending:alive');return goals;
 }
-function savePreferences(){write(prefsKey,{goals:[...chosen],...Object.fromEntries(['name','gender','seed','count','effort','speed','ending','min-age','sort',...Object.keys(C.statNames).map(k=>'min-'+k)].map(id=>[id,$(id).value])),position,minimized:$('panel').hidden});renderDraftHint();}
+function savePreferences(){write(prefsKey,{goals:[...chosen],...Object.fromEntries(['name','gender','birthplace','seed','count','effort','speed','ending','min-age','sort',...Object.keys(C.statNames).map(k=>'min-'+k)].map(id=>[id,$(id).value])),position,minimized:$('panel').hidden});renderDraftHint();}
 function renderDraftHint(){
   $('searchNote').textContent=auto?'Pause following in Play this life before starting a new search.':results.length&&JSON.stringify(draftGoals())!==JSON.stringify(results[0].goals)?'Targets changed. Existing cards still show their original requirements; search again to use the new targets.':'Results are predictions with replayable choices. Nothing starts automatically.';
 }
@@ -136,7 +139,7 @@ function card(file,buttons=true){
   const el=document.createElement('article');el.className='card';const title=document.createElement('strong'),badge=document.createElement('span'),meta=document.createElement('p');
   const matches=file.matched.filter(Boolean).length,full=file.complete&&matches===file.goals.length&&file.scope==='life';
   badge.className='tag '+(full?'match':'partial');badge.textContent=file.scope==='birth'?'Birth only':full?(file.goals.length?'Match':'Completed'):'Partial';
-  title.textContent=` Seed ${file.seed}`;meta.className='hint';meta.textContent=`${file.origin==='current'?'Continuation plan · ':''}${file.summary.region?file.summary.region+' · ':''}${file.summary.job||'No steady job'} · age ${file.summary.age} · ${file.summary.alive?'alive ending':file.summary.cause||'ending'}`;
+  title.textContent=` Seed ${file.seed}`;meta.className='hint';meta.textContent=`${file.origin==='current'?'Continuation plan · ':''}${file.summary.region?'Birthplace: '+file.summary.region+' · ':''}${file.summary.job||'No steady job'} · age ${file.summary.age} · ${file.summary.alive?'alive ending':file.summary.cause||'ending'}`;
   el.append(badge,title,meta,statsElement(file.summary.stats));
   if(file.summary.comparison){
     const c=file.summary.comparison,details=document.createElement('details'),heading=document.createElement('summary'),text=document.createElement('p');
@@ -233,7 +236,7 @@ function follow(){
 }
 function validInputs(){for(const input of $('viewFind').querySelectorAll('input[type=number]'))if(!input.checkValidity()){say('Check '+(input.getAttribute('aria-label')||input.closest('label')?.textContent||'search settings')+': '+input.validationMessage);input.reportValidity();return false;}return true;}
 async function search(){
-  if(!validInputs())return;const task=begin('search'),goals=draftGoals(),options={name:$('name').value.trim(),gender:$('gender').value};savePreferences();
+  if(!validInputs())return;const task=begin('search'),goals=draftGoals(),options={name:$('name').value.trim(),gender:$('gender').value,birthplace:$('birthplace').value};savePreferences();
   $('startSettings').open=false;$('goalPicker').open=false;
   say('Searching complete lives. You can stop and keep completed results.');results=[];renderResults();
   try{
@@ -272,7 +275,7 @@ async function importRoute(file,resume=null,preserveDraft=false){
   try{
     const result=await request('validate',{file});if(!current(task))return;
     selected=result;active=resume?{file:result,index:resume.index||0,waitingForTyping:resume.waitingForTyping}:null;keep(result);
-    if(!preserveDraft){setDraft(result.goals);for(const id of ['name','gender'])$(id).value=result.options[id];}
+    if(!preserveDraft){setDraft(result.goals);for(const id of ['name','gender'])$(id).value=result.options[id];$('birthplace').value=result.options.birthplace||'';}
     savePreferences();saveLives();renderPlay();renderLibrary();
     say('Route validated. Auto-follow is off.');if(!resume)switchView('Play');
   }catch(e){if(current(task))say('Route rejected: '+e.message);}finally{finish(task);}
@@ -315,7 +318,7 @@ $('copyStats').onclick=()=>{const s=bridge().runtime?.state;if(!s)return;for(con
 $('copyTraits').onclick=()=>{const s=bridge().runtime?.state;if(!s)return;for(const key of s.flags)if(catalog.some(c=>c.key==='flag:'+key)){chosen.delete('avoid:'+key);chosen.add('flag:'+key);}syncGoals();savePreferences();say('This life’s listed traits were added as ending requirements.');};
 $('filter').oninput=filterGoals;$('goalKind').onchange=filterGoals;$('onlySelected').onchange=filterGoals;$('clear').onclick=()=>{chosen.clear();syncGoals();savePreferences();};
 $('sort').onchange=()=>{savePreferences();renderResults();renderLibrary();};
-for(const id of ['name','gender','seed','count','effort','speed','ending','min-age',...Object.keys(C.statNames).map(k=>'min-'+k)])$(id).oninput=()=>{savePreferences();controls();if(id==='speed'&&auto)bridge().life?.setSpeed(Number($('speed').value));};
+for(const id of ['name','gender','birthplace','seed','count','effort','speed','ending','min-age',...Object.keys(C.statNames).map(k=>'min-'+k)])$(id).oninput=()=>{savePreferences();controls();if(id==='speed'&&auto)bridge().life?.setSpeed(Number($('speed').value));};
 $('import').onclick=()=>$('file').click();$('file').onchange=async()=>{const file=$('file').files[0];$('file').value='';if(file)try{await importRoute(JSON.parse(await file.text()));}catch(e){say('Could not read route: '+e.message);}};
 $('export').onclick=()=>{if(!selected)return;const url=URL.createObjectURL(new Blob([JSON.stringify(selected,null,2)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=`cityborn-${selected.seed}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
 $('copy').onclick=async()=>{if(selected)try{await navigator.clipboard.writeText(selected.seed);say('Copied seed '+selected.seed);}catch{say('Seed: '+selected.seed);}};

@@ -27,7 +27,8 @@ const {launch,open,install,native,status,importFile,completeReplay,E,P,C}=requir
         assert.equal(file.origin,'current');assert.equal(file.goals.filter(g=>g.startsWith('stat:')).length,5);
         assert.equal(P.validate(file).terminalSignature,file.terminalSignature);await ui.locator('#follow').click();
       }
-      await completeReplay(page);
+      const interaction=await completeReplay(page);
+      if(index===0)assert.ok(interaction.entries>0,'seeded full replay includes explicit user submission at a natural typing pause');
       const message=await ui.locator('#playStatus').textContent();assert.match(message,/Full replay matched/,message);
       const state=await native(page,'return b.runtime.state;');
       assert.equal(C.signature(state),file.terminalSignature,'entire terminal state matches');

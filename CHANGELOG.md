@@ -1,5 +1,14 @@
 # Changes
 
+## 2.6.0
+
+- Update the native engine to `index-ClhJn74m.js`, including Finger mentors/disciples, childhood friends, Great Lake crews and House of Spiders. Catalogue now includes 51 displayed traits and 276 achievements.
+- Simulate corridor battles using the native fallback; pause live following for manual play, retain waiting across reload, and replan from the submitted outcome using the original goals. Never submit battle results automatically.
+- Record and verify Mentor voice in routes; synchronize worker simulation with the native setting. Keep files without this optional field compatible with the plain setting on the supported client.
+- Follow prepared routes through timed Grand Voyage prompts. Block new planning during an active timed choice because the native 10-second wall-clock timer continues while paused.
+- Pause for childhood-friend naming; test its random-name RNG effects and automatic continuation planning. Extend paired naming tests to 54 complete native lives.
+- Add native and browser regressions for corridor outcomes, reload, timed voyage replay/expiry, and Mentor voice mismatch. Previous-client routes require regeneration.
+
 ## 2.5.0
 
 - Add Birthplace to starting settings using the native region list and localized names. Prefix random/specific seeds with the engine’s birthplace encoding; preserve explicit prefixes and reject conflicting selections.

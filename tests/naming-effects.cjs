@@ -12,7 +12,7 @@ function finish(state,entry){
   }
   assert.ok(C.finished(s));return {s,trace,postEntry};
 }
-for(const seed of ['1289324438','42','123456'])for(const field of ['color','ego','relic','star','weapon','reflect','child','partner']){
+for(const seed of ['1289324438','42','123456'])for(const field of ['color','ego','relic','star','weapon','reflect','child','partner','friend']){
   const s=E.create(E.data(),{seed,name:'Tester',gender:'m'});
   s.age=25;s.plan=[];s.cursor=0;s.stats={health:90,sanity:80,wealth:80,network:80,rep:80};
   s.prompt={kind:['color','reflect'].includes(field)?field:'name',field,age:25,question:'Your '+field,choices:[],t:0};
@@ -20,8 +20,9 @@ for(const seed of ['1289324438','42','123456'])for(const field of ['color','ego'
   if(field==='ego'){s.flags.push('E.G.O개화');s.egoAsked=true;}
   if(field==='relic'){s.flags.push('유물');s.relicAsked=true;}
   if(field==='weapon')s.weapon={cls:'상',name:null};
+  if(field==='friend')s.friend={g:'f',name:null};
   if(field==='star')s.pinky={star:0,at:0,blade:null};
-  const blank=finish(s,''),named=finish(s,'Amber Vow'),cosmetic=!['child','partner'].includes(field);
+  const blank=finish(s,''),named=finish(s,'Amber Vow'),cosmetic=!['child','partner','friend'].includes(field);
   if(cosmetic){
     assert.deepEqual(named.trace,blank.trace,field+': same seed follows identical events, choices and RNG');
     assert.equal(P.gameplaySignature(named.s),P.gameplaySignature(blank.s),field+': identical complete gameplay state');
@@ -33,4 +34,4 @@ for(const seed of ['1289324438','42','123456'])for(const field of ['color','ego'
 // text only. Full fingerprints must continue to distinguish the actual names.
 const named=E.create(E.data(),{seed:'names',name:'Tester',gender:'m'}),changed=P.copy(named);changed.colorName='Amber Vow';
 assert.notEqual(C.signature(named),C.signature(changed));
-console.log('Paired naming tests passed: 24 controlled native scenarios, 48 complete lives.');
+console.log('Paired naming tests passed: 27 controlled native scenarios, 54 complete lives.');

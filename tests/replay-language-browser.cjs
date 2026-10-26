@@ -22,8 +22,10 @@ const {launch,open,install,native,status,bridgeCode,completeReplay,C}=require('.
     assert.equal(file.startState.age,1,'regression starts at the reported age');
     assert.ok(file.route.length>2,'the test must continue beyond one choice');
     await ui.locator('#follow').click();
-    const interaction=await completeReplay(page);
-    assert.ok(interaction.entries>0,'full replay covers explicit user submission at typing pauses');
+    // This client no longer produces a naming prompt on this regression's
+    // selected route. The seeded replay test requires a natural typing pause;
+    // keep this case focused on the original age-1 language mismatch.
+    await completeReplay(page);
     assert.match(await ui.locator('#playStatus').textContent(),/Full replay matched the predicted ending/);
     const state=await native(page,'return b.runtime.state;');
     assert.equal(C.signature(state),file.terminalSignature);

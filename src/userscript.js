@@ -39,9 +39,9 @@ label{display:block}.row{display:flex;gap:7px;align-items:end;margin:8px 0}.row>
 <div id="playPreview"></div><p id="playStatus" class="notice" role="status">Choose a searched life, import a route, or plan your current life.</p><div id="playNext" class="hint"></div>
 <button id="resume" class="primary" disabled>Resume saved life</button><div class="row"><button id="start" disabled>Start from birth & follow</button><button id="goHome">Save & go home</button></div><p class="hint">Resume keeps your saved progress. Start begins the selected seed again from birth.</p>
 <div class="row"><button id="follow" disabled>Follow route</button><button id="apply" disabled>Choose next step</button></div>
-<p class="hint">Names, reflections and Workshop crafting are yours to complete. Submit in the game, then Resume after typing. Cosmetic entries keep the same choices when a native replay verifies the same gameplay outcome. Changes to randomness, such as custom child/partner names, require a new search using the original targets. Crafting predictions use the native fallback scores; after you craft, the script replans from your actual result.</p>
+<p class="hint">Names, reflections, Workshop crafting and corridor battles are yours to complete. Submit in the game, then Resume after typing. Cosmetic entries keep the same choices when a native replay verifies the same gameplay outcome. Changes to randomness, such as custom child/partner/friend names, require a new search using the original targets. Crafting and corridor predictions use native fallback results; after crafting or corridor battles, the script replans from your actual result.</p>
 <div class="row"><label>Following speed<select id="speed"><option value="1">x1</option><option value="4">x4</option><option value="8">x8</option><option value="32" selected>x32</option></select></label><button id="stopAuto" disabled>Pause & stop following</button></div>
-<p class="hint">Following checks the live state before every choice. Manual game interaction stops following. No route edits your game save or grants traits.</p></div>
+<p class="hint">Following checks the live state before every choice and uses the route’s recorded Mentor voice setting. Manual game interaction stops following. Grand Voyage deadlines keep running while paused; follow a prepared route or choose manually. No route edits your game save or grants traits.</p></div>
 <div id="viewSaved" role="tabpanel" hidden><p class="hint">Up to 8 recent saved lives. Selecting one validates it again before play. Export routes you want to keep longer.</p><div id="library"></div></div>
 <div class="row libraryTools"><button id="import">Import route</button><button id="export" disabled>Export selected route</button><button id="copy" disabled>Copy selected seed</button></div><input id="file" type="file" accept=".json,application/json">
 </section>`;
@@ -97,7 +97,8 @@ function makeWorker(){
   worker.onmessage=({data:m})=>{const p=pending.get(m.id);if(!p)return;if(m.progress!=null){p.progress?.(m.progress);return;}pending.delete(m.id);m.error?p.reject(Error(m.error)):p.resolve(m.result);};
   worker.onerror=e=>{if(worker!==owner)return;cancel('Simulation failed: '+e.message);};
 }
-function request(type,args={},progress){const id=++sequence;return new Promise((resolve,reject)=>{pending.set(id,{resolve,reject,progress});worker.postMessage({id,type,lang:lang(),...args});});}
+function mentorVoice(){try{return localStorage.getItem('cbl.ui.mentorVoice')==='spider'?'spider':'plain';}catch{return 'plain';}}
+function request(type,args={},progress){const id=++sequence;return new Promise((resolve,reject)=>{pending.set(id,{resolve,reject,progress});worker.postMessage({id,type,lang:lang(),mentorVoice:mentorVoice(),...args});});}
 function begin(kind){const task={kind,generation:++generation,pause:null};job=task;controls();return task;}
 const current=task=>job===task&&task.generation===generation;
 function release(task){if(task?.pause){const b=bridge();if(b.runtime===task.pause.runtime&&b.runtime.state===task.pause.state&&b.runtime.paused&&b.life)b.life.togglePause();task.pause=null;}}
@@ -185,7 +186,7 @@ function controls(){
   $('goHome').textContent=s&&!C.finished(s)?'Save & go home':'Go to home';
   $('follow').disabled=!ready||busy||auto||!selected||selected.scope!=='life'||!s||C.finished(s)||s.seed!==selected.seed;
   $('follow').textContent=active?.waitingForTyping?'Resume after typing':'Follow route';
-  if(active?.waitingForTyping&&s&&(C.signature(s)===active.waitingForTyping.before||s.prompt?.kind==='craft'))$('follow').disabled=true;
+  if(active?.waitingForTyping&&s&&(C.signature(s)===active.waitingForTyping.before||['craft','shfight'].includes(s.prompt?.kind)))$('follow').disabled=true;
   $('apply').disabled=!ready||busy||auto||!active||!s||!C.actionable(s);
   $('apply').disabled||=!!active?.waitingForTyping;
   $('stopAuto').disabled=!auto;
@@ -197,19 +198,20 @@ function renderPlay(){
   $('liveTitle').textContent=s?`${s.name||'Your life'} · age ${s.age}${C.finished(s)?' · ended':''}`:'No life is currently open';
   $('liveStats').replaceChildren();if(s)$('liveStats').append(statsElement(C.displayStats(s)));
   if(previewFile!==selected){$('playPreview').replaceChildren();if(selected)$('playPreview').append(card(selected,false));previewFile=selected;}
-  $('playNext').textContent=active?`Route progress: ${active.index}/${active.file.route.length} choices. Targets: ${active.file.goals.map(goalLabel).join(', ')||'Strong overall life'}.`:'';
+  $('playNext').textContent=active?`Route progress: ${active.index}/${active.file.route.length} choices. Mentor voice: ${active.file.mentorVoice==='spider'?'House of Spiders':'Fingers'}. Targets: ${active.file.goals.map(goalLabel).join(', ')||'Strong overall life'}.`:'';
   controls();
 }
 function nativeChoose(b,i){if(i===-2)b.life.acceptVoice();else if(['reflect','name','color'].includes(b.runtime.state.prompt?.kind))b.life.submitReflection('');else b.life.choose(i);}
 function stepRoute(){
   const b=bridge(),s=b.runtime?.state;if(!b.life||!s||!C.actionable(s))return false;
+  if(mentorVoice()!==(active.file.mentorVoice??'plain'))throw Error('Restore this route’s Mentor voice setting, or plan your current life again.');
   if(lang()!==active.file.lang)throw Error('Restore this route’s language, or plan your current life again.');
   const sig=C.signature(s);let step=active.file.route[active.index];
   if(step?.signature!==sig){const index=active.file.route.findIndex(v=>v.signature===sig);if(index<0)throw Error('Your live state differs from this route. Use Plan the rest of this life to make a new plan.');active.index=index;step=active.file.route[index];}
   if(C.typing(s)){
     active.waitingForTyping={before:sig,after:step.afterSignature};saveLives();
     if(b.runtime.auto)b.life.toggleAuto();
-    stopFollowing(true,'Your input is needed: '+(s.prompt.kind==='craft'?'Workshop crafting':s.prompt.text||s.prompt.question||'name or reflection')+'. Complete it in the game and submit, then click Resume after typing.');
+    stopFollowing(true,'Your input is needed: '+(s.prompt.kind==='shfight'?'House of Spiders corridor battle':s.prompt.kind==='craft'?'Workshop crafting':s.prompt.text||s.prompt.question||'name or reflection')+'. Complete it in the game and submit, then click Resume after typing.');
     return false;
   }
   const text=C.label(s,step.i);nativeChoose(b,step.i);active.index++;saveLives();$('playStatus').textContent=`${auto?'Following':'Chose'} ${active.index}/${active.file.route.length}: ${text}`;return true;
@@ -222,11 +224,12 @@ function follow(){
   const b=bridge(),s=b.runtime?.state;if(!selected||!b.life||!s)return;
   if(selected.scope!=='life'){$('playStatus').textContent='This older result predicts birth only. Plan the rest of this life for a complete route.';return;}
   if(s.seed!==selected.seed){$('playStatus').textContent='Start the selected seed first, or plan the life you are currently playing.';return;}
+  if(mentorVoice()!==(selected.mentorVoice??'plain')){$('playStatus').textContent='Use this route’s Mentor voice setting first: '+(selected.mentorVoice??'plain');return;}
   if(lang()!==selected.lang){$('playStatus').textContent='Use the same game language as this route: '+selected.lang;return;}
   active=active?.file===selected?active:{file:selected,index:0};
   if(active.waitingForTyping){
     const sig=C.signature(s),waiting=active.waitingForTyping;
-    if(s.prompt?.kind==='craft'){stopFollowing(true,'Your input is needed. Finish and submit crafting in the game, then resume to plan from your actual result.');return;}
+    if(['craft','shfight'].includes(s.prompt?.kind)){stopFollowing(true,'Your input is needed. Finish and submit crafting or the corridor battle in the game, then resume to plan from your actual result.');return;}
     if(sig===waiting.before){stopFollowing(true,'Your input is needed. Enter and submit your text in the game, then click Resume after typing.');return;}
     if(sig!==waiting.after){planCurrent({goals:[...active.file.goals],sort:active.file.sort||'recommended',followAfter:true});return;}
     active.index++;delete active.waitingForTyping;
@@ -251,8 +254,9 @@ async function search(){
 }
 async function planCurrent({goals=draftGoals(),sort=$('sort').value,followAfter=false}={}){
   if(!followAfter&&!validInputs())return;const b=bridge(),s=b.runtime?.state;if(!b.life||!s||C.finished(s))return;
+  if(s.prompt?.realLimit){say('This voyage choice has a real-time deadline, even when the game is paused. Choose in the game or follow an existing route; plan after resolving this choice.');return;}
   let planned=false;
-  const task=begin('plan'),snapshot=JSON.parse(JSON.stringify(s)),signature=C.signature(s),language=lang();
+  const task=begin('plan'),snapshot=JSON.parse(JSON.stringify(s)),signature=C.signature(s),language=lang(),voice=mentorVoice();
   if(b.runtime.auto)b.life.toggleAuto();if(!b.runtime.paused){b.life.togglePause();task.pause={runtime:b.runtime,state:s};}
   say(followAfter?'Updating the remaining route for your entry…':'Planning complete outcomes for your current life…');
   if(followAfter)$('playStatus').textContent='Updating the remaining route for your entry…';
@@ -261,7 +265,7 @@ async function planCurrent({goals=draftGoals(),sort=$('sort').value,followAfter=
     if(followAfter&&active?.waitingForTyping)retained=await request('retainTyping',{file:active.file,index:active.index,state:snapshot});
     if(!current(task))return;
     const files=retained?[retained]:await request('plan',{state:snapshot,goals,effort:$('effort').value,sort},p=>{if(current(task))say(`Planning your life · exploring age ${p.age} · ${p.expanded} branches evaluated.`);});
-    if(!current(task))return;if(bridge().runtime?.state!==s||C.signature(s)!==signature||lang()!==language)throw Error('The game changed during planning. Try again.');
+    if(!current(task))return;if(bridge().runtime?.state!==s||C.signature(s)!==signature||lang()!==language||mentorVoice()!==voice)throw Error('The game changed during planning. Try again.');
     if(!files.length)throw Error('No completed route within this search limit. Try another effort.');
     selected=files[0];active={file:selected,index:0};keep(selected);saveLives();renderPlay();
     task.pause=null; // The explicitly paused review remains paused until Follow.

@@ -42,7 +42,7 @@ function makePlanner(E) {
   function choices(s){
     if(s.dead?.voice)return [-2];
     if(!s.prompt)return [];
-    if(['reflect','name','color','craft'].includes(s.prompt.kind))return [-1];
+    if(['reflect','name','color','craft','shfight'].includes(s.prompt.kind))return [-1];
     return s.prompt.choices.flatMap((c,i)=>c.locked?[]:[i]).concat(s.prompt.kind==='minor'?[-1]:[]);
   }
   function apply(s,i){
@@ -133,7 +133,7 @@ function makePlanner(E) {
   }
   function pack(result,goals,scope,lang,origin='seed',startState=null){
     const s=result.state;
-    return {version:3,source:C.source,origin,seed:s.seed,options:result.options,goals:[...goals],scope,lang,
+    return {version:3,source:C.source,origin,seed:s.seed,options:result.options,goals:[...goals],scope,lang,mentorVoice:E.voice(),
       effort:result.effort||'quick',sort:result.sort||'recommended',route:result.route,complete:scope==='birth'||C.finished(s),matched:targets(s,goals),
       terminalSignature:scope==='life'&&C.finished(s)?C.signature(s):null,
       ...(origin==='current'?{startState:copy(startState)}:{}),
@@ -154,6 +154,8 @@ function makePlanner(E) {
   }
   function validate(file){
     if(!file||![1,2,3].includes(file.version)||file.source!==C.source)throw Error('Unsupported route file or game version');
+    if(!['plain','spider'].includes(file.mentorVoice??'plain'))throw Error('Unknown mentor voice');
+    E.setVoice(file.mentorVoice??'plain');
     if(!['en','ko','ja'].includes(file.lang)||!['birth','life'].includes(file.scope))throw Error('Missing route language or scope');
     if(!file.options||typeof file.options.seed!=='string'||!file.options.seed||file.options.seed!==file.options.seed.trim()||!['m','f'].includes(file.options.gender)||typeof file.options.name!=='string')throw Error('Invalid seed, name or gender');
     checkGoals(file.goals);
@@ -222,6 +224,7 @@ function workerMain(){
   self.onmessage=({data:m})=>{
     try{
       E.lang(m.type==='validate'?m.file?.lang:m.lang||'en');
+      E.setVoice(['validate','retainTyping'].includes(m.type)?m.file?.mentorVoice??'plain':m.mentorVoice??'plain');
       const send=result=>self.postMessage({id:m.id,result});
       if(m.type==='catalog')return send({records:E.catalog,flags:Object.entries(E.flags)});
       if(m.type==='validate')return send(P.validate(m.file));

@@ -3,7 +3,7 @@ const {launch,open,install,native,status,completeReplay,E,C}=require('./browser-
 (async()=>{
   const browser=await launch();
   try{
-    for(const field of ['color','ego','relic','child','partner','star','weapon','reflect','friend']){
+    for(const field of ['color','ego','relic','child','partner','star','weapon','reflect','friend','office','ofhire','pet']){
       const test=await open(browser,{live:process.env.TYPING_LIVE==='1',fast:true}),{page,ui}=test;
       E.lang('en');
       // Isolated native save fixtures expose each real text-entry dialog.
@@ -12,6 +12,15 @@ const {launch,open,install,native,status,completeReplay,E,C}=require('./browser-
       state.age=95;state.plan=[];state.cursor=0;state.stats={health:90,sanity:80,wealth:80,network:80,rep:80};
       state.prompt={kind:['color','reflect'].includes(field)?field:'name',field,age:95,question:'Your '+field,text:field+' entry',choices:[],t:0};
       if(field==='color'){state.flags.push('특색');state.job='해결사';state.grade=1;state.colorAsked=true;}
+      if(['office','ofhire'].includes(field)){
+        state.job='해결사';state.grade=3;
+        if(field==='ofhire'){
+          state.prompt.field='office';E.choose(state,E.data(),-1,{text:'Original'});
+          state.of.pend={g:9,gr:2,gen:'m'};
+          state.prompt={kind:'name',field:'ofhire',age:95,question:'Recruit name',text:'Recruit name',choices:[],t:0};
+        }
+      }
+      if(field==='pet')state.pet={kind:'dog',name:'',born:95,life:15,seen:0,done:[],due:[99,102]};
       if(field==='friend')state.friend={g:'f',name:null};
       if(field==='weapon')state.weapon={cls:'상',name:null};
       if(field==='star')state.pinky={star:0,at:0,blade:null};
@@ -41,10 +50,13 @@ const {launch,open,install,native,status,completeReplay,E,C}=require('./browser-
       await page.locator('.modal .choices button').first().click();
       const entered=await native(page,'return b.runtime.state;');
       if(field==='reflect')assert.equal(entered.reflections.at(-1).text,text);
+      else if(field==='office')assert.match(entered.of.name,/^Amber Vow/);
+      else if(field==='ofhire')assert.ok(entered.of.members.some(m=>m.name===text));
+      else if(field==='pet')assert.equal(entered.pet.name,text);
       else assert.equal(field==='friend'?entered.friend.name:field==='weapon'?entered.weapon.name:field==='star'?entered.pinky.blade:entered[{color:'colorName',ego:'egoName',relic:'relicName',child:'childName',partner:'partnerName'}[field]],text);
       assert.equal(await native(page,'return b.runtime.paused;'),true,'submission does not restart following');
       await ui.locator('#badge').click();
-      if(['color','ego','relic','star','weapon','reflect','child','friend'].includes(field)){
+      if(['color','ego','relic','star','weapon','reflect','child','friend','office','ofhire','pet'].includes(field)){
         // Replanning must retain this route's goals, not a newly edited draft.
         await ui.locator('#tabFind').click();await ui.locator('#min-wealth').fill('100');await ui.locator('#tabPlay').click();
         await ui.locator('#follow').click();await completeReplay(page);
@@ -53,13 +65,16 @@ const {launch,open,install,native,status,completeReplay,E,C}=require('./browser-
         const file=JSON.parse(fs.readFileSync(await (await download).path(),'utf8'));
         assert.deepEqual(file.goals,['stat:wealth:20']);
         assert.equal(file.sort,original.sort,'continuation retains the original ranking preference');
-        if(!['child','friend'].includes(field)){
+        if(!['child','friend','office','ofhire','pet'].includes(field)){
           assert.deepEqual(file.route.map(s=>s.i),original.route.slice(1).map(s=>s.i),'cosmetic input retains every remaining choice');
           for(const key of ['age','stats','flags','records','alive','cause'])assert.deepEqual(file.summary[key],original.summary[key],'cosmetic input preserves '+key);
         }
         const final=await native(page,'return b.runtime.state;');
         assert.equal(C.signature(final),file.terminalSignature);
         if(field==='reflect')assert.ok(final.reflections.some(r=>r.text===text));
+        else if(field==='office')assert.match(final.of.name,/^Amber Vow/);
+        else if(field==='ofhire')assert.ok(final.of.members.some(m=>m.name===text));
+        else if(field==='pet')assert.equal(final.pet.name,text);
         else assert.equal(field==='friend'?final.friend.name:field==='weapon'?final.weapon.name:field==='star'?final.pinky.blade:final[{color:'colorName',ego:'egoName',relic:'relicName',child:'childName'}[field]],text);
       }
       assert.deepEqual(test.errors,[]);console.log('Manual typing passed:',field);await test.ctx.close();

@@ -17,7 +17,7 @@ const fixtures=require('./update-fixtures.cjs');
     assert.ok(await ui.locator('#follow').isDisabled());
     await page.reload({waitUntil:'networkidle'});await install(page);await status(page,/Route validated/);
     await ui.locator('#tabPlay').click();await ui.locator('#resume').click();
-    await ui.locator('#playStatus').filter({hasText:/Finish and submit crafting or the corridor battle/}).waitFor();
+    await ui.locator('#playStatus').filter({hasText:/Finish and submit crafting, the corridor battle or the Festival/}).waitFor();
     assert.equal(await native(page,'return b.runtime.paused;'),true,'corridor input stays paused after reload');
     // The fixture begins at the first corridor. Model the player's explicit
     // battle submission using the same native callback as its minigame.

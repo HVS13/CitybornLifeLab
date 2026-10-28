@@ -20,4 +20,29 @@ for(const voice of ['plain','spider']){
   assert.equal(P.validate(file).mentorVoice,voice,'validation restores the route voice');
 }
 E.setVoice('plain');assert.throws(()=>P.validate({version:3,source:C.source,mentorVoice:'unknown'}),/Unknown mentor voice/);
+const fixtures=require('./update-fixtures.cjs'),entry=fixtures.festival();
+assert.deepEqual(Array.from(P.choices(entry)),[1],'seed-replay plans skip the unseeded Festival entry');
+assert.throws(()=>P.apply(P.copy(entry),0),/unavailable/,'imports cannot approve unseeded entry actions');
+const originalRandom=Math.random;
+fixtures.random(()=>{throw Error('Unexpected unseeded random draw');});
+const skipped=P.copy(entry);P.apply(skipped,1);assert.equal(skipped.jf.end,'walk');
+const skipPlan=P.plan(entry,['record:jf_walk']);assert.ok(skipPlan.completed.length,'seeded planning can complete through the deterministic skip path');
+fixtures.random(()=>0.1);const patched=P.copy(entry);E.choose(patched,E.data(),0);
+fixtures.random(()=>0.9);const plain=P.copy(entry);E.choose(plain,E.data(),0);
+assert.equal(patched.prompt.patch,true);assert.equal(plain.prompt.patch,false);
+assert.equal(patched.rngState,plain.rngState,'Festival changes even with identical seeded RNG');
+assert.notEqual(C.signature(patched),C.signature(plain));
+assert.deepEqual(Array.from(P.choices(patched)),[]);
+assert.throws(()=>P.plan(patched,[]),/Finish the Festival manually/);
+E.choose(patched,E.data(),-1,{end:'jack',w:7,used:false});
+assert.ok(E.records(patched).includes('jf_star'),'actual Festival results can be used by subsequent plans');
+fixtures.random(originalRandom);
+for(const loveSame of [false,true]){
+  const options={seed:'partner-test',name:'Tester',gender:'m',loveSame},birth=E.create(E.data(),options);
+  assert.equal(birth.partnerG,loveSame?'m':'f');
+  const file=P.pack({state:birth,route:[],options},[],'birth','en');
+  assert.equal(P.validate(file).options.loveSame,loveSame,'partner-gender choice survives validation');
+  assert.throws(()=>P.validate({...file,options:{...options,loveSame:'yes'}}),/Invalid partner/);
+}
 console.log('Updated mechanics passed: native corridor fallback/actual result, timed voyage expiry, friend-name RNG, and route voice.');
+console.log('Festival/partner tests passed: unseeded draw detection, deterministic skip plans, manual result and birth-setting round trips.');

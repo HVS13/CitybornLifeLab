@@ -42,6 +42,9 @@ function makePlanner(E) {
   function choices(s){
     if(s.dead?.voice)return [-2];
     if(!s.prompt)return [];
+    // Festival entry and its minigame use Math.random(), outside the seed.
+    if(s.prompt.kind==='jfgame')return [];
+    if(s.prompt.jf==='enter')return s.prompt.choices.flatMap((c,i)=>i!==0&&!c.locked?[i]:[]);
     if(['reflect','name','color','craft','shfight'].includes(s.prompt.kind))return [-1];
     return s.prompt.choices.flatMap((c,i)=>c.locked?[]:[i]).concat(s.prompt.kind==='minor'?[-1]:[]);
   }
@@ -97,6 +100,7 @@ function makePlanner(E) {
     }
   }
   function plan(start,goals,effort='quick',progress=()=>{},sort='recommended'){
+    if(start.prompt?.kind==='jfgame')throw Error('Finish the Festival manually, then plan from your actual result. Its randomness is not determined by the seed.');
     checkGoals(goals);if(!efforts[effort])throw Error('Unknown search effort');
     if(!Object.hasOwn(C.sorts,sort))throw Error('Unknown result order');
     const root={state:copy(start),route:[],steps:0};
@@ -132,13 +136,14 @@ function makePlanner(E) {
     return {completed,expanded,incomplete};
   }
   function pack(result,goals,scope,lang,origin='seed',startState=null){
-    const s=result.state;
+    const s=result.state,born=s.bornRegionId||s.regionId;
     return {version:3,source:C.source,origin,seed:s.seed,options:result.options,goals:[...goals],scope,lang,mentorVoice:E.voice(),
       effort:result.effort||'quick',sort:result.sort||'recommended',route:result.route,complete:scope==='birth'||C.finished(s),matched:targets(s,goals),
       terminalSignature:scope==='life'&&C.finished(s)?C.signature(s):null,
       ...(origin==='current'?{startState:copy(startState)}:{}),
       summary:{age:s.age,cause:s.dead?(E.cause?E.cause(s.dead.cause):s.dead.cause):null,alive:!!s.dead?.alive,job:E.job?E.job(s):s.job,
-        region:E.data().regions?.find(r=>r.id===s.regionId)?.name||s.regionId,
+        region:E.data().regions?.find(r=>r.id===born)?.name||born,
+        currentRegion:E.data().regions?.find(r=>r.id===s.regionId)?.name||s.regionId,
         flags:[...s.flags],records:E.records(s),stats:C.displayStats(s),comparison:comparison(s,goals)}};
   }
   function simulate(options,goals,effort='quick',progress){
@@ -161,6 +166,7 @@ function makePlanner(E) {
     checkGoals(file.goals);
     if(!Array.isArray(file.route)||file.route.length>5000||(file.scope==='birth'&&file.route.length))throw Error('Invalid route length');
     const options={seed:file.options.seed,name:file.options.name,gender:file.options.gender};
+    if(file.options.loveSame!==undefined){if(typeof file.options.loveSame!=='boolean')throw Error('Invalid partner-gender setting');options.loveSame=file.options.loveSame;}
     if(file.options.birthplace!==undefined){
       if(birthSeed(options.seed,file.options.birthplace)!==options.seed)throw Error('Birthplace does not match route seed');
       options.birthplace=file.options.birthplace;
@@ -214,7 +220,7 @@ function makePlanner(E) {
     }
     settle(expected);settle(actual);
     if(!C.finished(actual)||gameplaySignature(actual)!==gameplaySignature(expected)||JSON.stringify(E.records(actual))!==JSON.stringify(E.records(expected)))return null;
-    return pack({state:actual,options:{seed:state.seed,name:state.name,gender:state.gender},route,effort:checked.effort,sort:checked.sort},checked.goals,'life',checked.lang,'current',state);
+    return pack({state:actual,options:{seed:state.seed,name:state.name,gender:state.gender,loveSame:state.partnerG===state.gender},route,effort:checked.effort,sort:checked.sort},checked.goals,'life',checked.lang,'current',state);
   }
   return {birthSeed,copy,signature:C.signature,choices,apply,advance,targets,score,checkGoals,plan,simulate,pack,validate,gameplaySignature,retainAfterTyping};
 }
@@ -232,7 +238,7 @@ function workerMain(){
       if(m.type==='check')return send({matched:P.targets(m.state,m.goals),signature:C.signature(m.state),complete:C.finished(m.state)});
       if(m.type==='plan'){
         const result=P.plan(m.state,m.goals,m.effort,({age,expanded,completed})=>self.postMessage({id:m.id,progress:{age,expanded,completed}}),m.sort);
-        const options={seed:m.state.seed,name:m.state.name,gender:m.state.gender};
+        const options={seed:m.state.seed,name:m.state.name,gender:m.state.gender,loveSame:m.state.partnerG===m.state.gender};
         return send(result.completed.map(n=>P.pack({...n,options,effort:m.effort,sort:m.sort},m.goals,'life',m.lang,'current',m.state)));
       }
       if(m.type==='search'){
@@ -241,7 +247,7 @@ function workerMain(){
         const words=new Uint32Array(count);crypto.getRandomValues(words);
         let results=[],examined=0;
         for(let n=0;n<count;n++){
-          const options={name:m.options.name,gender:m.options.gender,birthplace:m.options.birthplace??'',seed:P.birthSeed(m.seed||String(words[n]),m.options.birthplace??'')};
+          const options={name:m.options.name,gender:m.options.gender,loveSame:m.options.loveSame??false,birthplace:m.options.birthplace??'',seed:P.birthSeed(m.seed||String(words[n]),m.options.birthplace??'')};
           let lastBest=null;
           function update(candidates){
             results=results.filter(r=>r.file.seed!==options.seed);results.push(...candidates);

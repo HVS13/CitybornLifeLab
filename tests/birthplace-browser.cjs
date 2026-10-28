@@ -34,7 +34,10 @@ const {launch,open,install,native,status,completeReplay,importFile,E,P,C}=requir
     await ui.locator('#tabPlay').click();await ui.locator('#start').click();await completeReplay(page);
     assert.match(await ui.locator('#playStatus').textContent(),/Full replay matched/);
     const final=await native(page,'return b.runtime.state;');
-    assert.equal(final.regionId,'outskirts');assert.equal(C.signature(final),file.terminalSignature);
+    assert.equal(final.bornRegionId||final.regionId,'outskirts','migration does not change birthplace');
+    assert.equal(file.summary.region,E.data().regions.find(r=>r.id==='outskirts').name);
+    assert.equal(file.summary.currentRegion,E.data().regions.find(r=>r.id===final.regionId).name);
+    assert.equal(C.signature(final),file.terminalSignature);
     assert.deepEqual(errors,[]);await ctx.close();
     console.log('Birthplace browser passed: native options, conflict, persisted random-region search, export/import, start and full replay.');
   }finally{await browser.close();}

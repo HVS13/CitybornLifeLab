@@ -1,5 +1,5 @@
 function advisorCommon() {
-  const source = 'index-ClhJn74m.js';
+  const source = 'index-BCA1cgB3.js';
   function normalized(s) {
     const state={...s,prompt:s.prompt?{...s.prompt}:null};
     delete state.savedProgress;
@@ -21,7 +21,7 @@ function advisorCommon() {
   }
   const finished=s=>!!s.dead && !s.dead.voice;
   const actionable=s=>!!s.prompt || !!s.dead?.voice;
-  const typing=s=>['reflect','name','color','craft','shfight'].includes(s.prompt?.kind);
+  const typing=s=>['reflect','name','color','craft','shfight','jfgame'].includes(s.prompt?.kind);
   const label=(s,i)=>i===-2?'Continue the post-death voice':i===-1?'Continue / leave blank / let pass':s.prompt.choices[i].label;
   const statNames={health:'Health',sanity:'Sanity',wealth:'Wealth',network:'Network',rep:'Reputation'};
   const displayStats=s=>Object.fromEntries(Object.keys(statNames).map(k=>[k,Math.round(s.stats[k])]));

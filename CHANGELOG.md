@@ -1,5 +1,14 @@
 # Changes
 
+## 2.7.0
+
+- Update to `index-BCA1cgB3.js`, including own Fixer offices, pets, the J Corp. Festival, and the shorter mentor training. Catalogue now includes 51 displayed traits and 294 achievements.
+- Pause for office, recruit and pet names; replan from submitted input using the original goals. Extend browser coverage to all twelve text-entry types.
+- Capture the native Partner’s gender preference for searches and route files. Check it before starting a seed route; current-life continuations retain the choice stored at birth.
+- Handle Festival randomness honestly: entry and game outcomes use `Math.random()` outside the seed. Seed-replay plans skip it and reject imports that enter it. If a Festival game reward is a selected target, following pauses at the offer for manual play, then replans from the actual result with the original goals. Finish manual play first, then plan from the actual saved result; preserve native Festival progress across reload.
+- Preserve the actual birthplace after migration and show a separate final area on result cards.
+- Add tests for unseeded draw detection, deterministic Festival skip routes, actual rewards, gender-setting round trips, manual Festival progress and full replays. Prior-client routes require regeneration.
+
 ## 2.6.0
 
 - Update the native engine to `index-ClhJn74m.js`, including Finger mentors/disciples, childhood friends, Great Lake crews and House of Spiders. Catalogue now includes 51 displayed traits and 276 achievements.

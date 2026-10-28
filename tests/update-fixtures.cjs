@@ -3,8 +3,8 @@ const built=fs.readFileSync('dist/cityborn-advisor.user.js','utf8'),ctx={};vm.cr
 // Test-only access to native prompt constructors. Production exports and saves
 // are unchanged; these fixtures do not claim naturally earned careers.
 const core=built.slice(built.indexOf('function nativeEngine()'),built.indexOf("if (document.getElementById('cityborn-advisor'))"))
-  .replace('data:ot,','data:ot,fixtureFight:Op,fixtureCrew:s=>{Gv(s,ot());s.crew.rank=5;Ep(s,.4,true);},');
-vm.runInContext(core+';globalThis.E=nativeEngine();E.lang("en");globalThis.P=makePlanner(E);globalThis.C=advisorCommon();',ctx);
+  .replace('data:st,','data:st,fixtureFestival:s=>s3(s,st(),{t:.4}),fixtureFight:Hb,fixtureCrew:s=>{y_(s,st());s.crew.rank=5;zb(s,.4,true);},');
+vm.runInContext(core+';globalThis.E=nativeEngine();E.lang("en");globalThis.P=makePlanner(E);globalThis.C=advisorCommon();globalThis.nativeMath=Math;',ctx);
 const {E,P,C}=ctx;
 function fight(){
   const s=E.create(E.data(),{seed:'corridor-test',gender:'m',name:'Tester',spider:true});
@@ -12,4 +12,6 @@ function fight(){
   E.fixtureFight(s,.4);return s;
 }
 function voyage(){const s=E.create(E.data(),{seed:'grand-test',gender:'m',name:'Tester'});s.age=45;s.plan=[];s.cursor=0;E.fixtureCrew(s);return s;}
-module.exports={E,P,C,fight,voyage};
+function festival(){const s=E.create(E.data(),{seed:'J:festival-test',gender:'m',name:'Tester'});s.age=26;s.plan=[];s.cursor=0;E.fixtureFestival(s);return s;}
+function random(fn){ctx.nativeMath.random=fn;}
+module.exports={E,P,C,fight,voyage,festival,random};

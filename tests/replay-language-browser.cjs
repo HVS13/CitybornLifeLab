@@ -8,7 +8,10 @@ const {launch,open,install,native,status,bridgeCode,completeReplay,C}=require('.
     await native(page,'b.home.onStart({seed:"1289324438",name:"",gender:"m"});');
     await page.waitForFunction(code=>{
       const b=Function(code+';return bridge();')();
-      if(!b.life||!b.runtime.state?.prompt)return false;
+      if(!b.life||!b.runtime.state)return false;
+      // This client's first choice is at age 7. Retain the original age-1
+      // regression start by pausing native time before waiting for a choice.
+      b.life.setSpeed(32);if(b.runtime.state.age<1)return false;
       if(!b.runtime.paused)b.life.togglePause();return true;
     },bridgeCode);
     // Reproduce the reported pattern: a fresh current-life plan accepts one

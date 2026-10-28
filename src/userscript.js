@@ -30,7 +30,7 @@ label{display:block}.row{display:flex;gap:7px;align-items:end;margin:8px 0}.row>
 <label>Specific seed (optional)<input id="seed" type="text" placeholder="Leave blank for random seeds"></label>
 <div class="row"><label>Random seeds<input id="count" type="number" min="1" max="500" value="3"></label><label>Search effort<select id="effort"><option value="quick">Quick</option><option value="thorough">Thorough</option></select></label></div>
 <p class="hint">Each seed explores several routes; start with 1–3 seeds. Quick looks for a matching ending sooner. Thorough explores more alternatives. Neither can guarantee finding every possible route.</p></details>
-<button id="search" class="primary">Find matching lives</button><p id="searchNote" class="hint">Results are predictions with replayable choices. Nothing starts automatically.</p>
+<button id="search" class="primary">Find matching lives</button><p id="searchNote" class="hint">Results are predictions with replayable choices. Nothing starts automatically.</p><p class="hint">Partner’s gender follows the native game setting when searching. Festival results use fresh randomness: seed searches take the skip route. Play the Festival manually, then plan from the result to pursue its rewards.</p>
 <label>Result & planning order<select id="sort">${Object.entries(C.sorts).map(([key,name])=>`<option value="${key}">${name}</option>`).join('')}</select></label><p class="hint">Completed goal matches always come first. Recommended compares alive endings, lifespan, then wellbeing. Your selected order also guides which search branches survive. Rarity compares achievement tiers from highest to lowest; count is separate. Combat potential is the engine’s broader combat measure for eligible careers; Fixer request rating is a different formula.</p>
 <div id="results"></div></div>
 <div id="viewPlay" role="tabpanel" hidden>
@@ -97,6 +97,7 @@ function makeWorker(){
   worker.onmessage=({data:m})=>{const p=pending.get(m.id);if(!p)return;if(m.progress!=null){p.progress?.(m.progress);return;}pending.delete(m.id);m.error?p.reject(Error(m.error)):p.resolve(m.result);};
   worker.onerror=e=>{if(worker!==owner)return;cancel('Simulation failed: '+e.message);};
 }
+function partnerSame(){try{return localStorage.getItem('cbl.ui.loveSame')==='1';}catch{return false;}}
 function mentorVoice(){try{return localStorage.getItem('cbl.ui.mentorVoice')==='spider'?'spider':'plain';}catch{return 'plain';}}
 function request(type,args={},progress){const id=++sequence;return new Promise((resolve,reject)=>{pending.set(id,{resolve,reject,progress});worker.postMessage({id,type,lang:lang(),mentorVoice:mentorVoice(),...args});});}
 function begin(kind){const task={kind,generation:++generation,pause:null};job=task;controls();return task;}
@@ -140,7 +141,7 @@ function card(file,buttons=true){
   const el=document.createElement('article');el.className='card';const title=document.createElement('strong'),badge=document.createElement('span'),meta=document.createElement('p');
   const matches=file.matched.filter(Boolean).length,full=file.complete&&matches===file.goals.length&&file.scope==='life';
   badge.className='tag '+(full?'match':'partial');badge.textContent=file.scope==='birth'?'Birth only':full?(file.goals.length?'Match':'Completed'):'Partial';
-  title.textContent=` Seed ${file.seed}`;meta.className='hint';meta.textContent=`${file.origin==='current'?'Continuation plan · ':''}${file.summary.region?'Birthplace: '+file.summary.region+' · ':''}${file.summary.job||'No steady job'} · age ${file.summary.age} · ${file.summary.alive?'alive ending':file.summary.cause||'ending'}`;
+  title.textContent=` Seed ${file.seed}`;meta.className='hint';meta.textContent=`${file.origin==='current'?'Continuation plan · ':''}${file.summary.region?'Birthplace: '+file.summary.region+' · ':''}${file.summary.currentRegion&&file.summary.currentRegion!==file.summary.region?'Final area: '+file.summary.currentRegion+' · ':''}${file.summary.job||'No steady job'} · age ${file.summary.age} · ${file.summary.alive?'alive ending':file.summary.cause||'ending'}`;
   el.append(badge,title,meta,statsElement(file.summary.stats));
   if(file.summary.comparison){
     const c=file.summary.comparison,details=document.createElement('details'),heading=document.createElement('summary'),text=document.createElement('p');
@@ -186,7 +187,7 @@ function controls(){
   $('goHome').textContent=s&&!C.finished(s)?'Save & go home':'Go to home';
   $('follow').disabled=!ready||busy||auto||!selected||selected.scope!=='life'||!s||C.finished(s)||s.seed!==selected.seed;
   $('follow').textContent=active?.waitingForTyping?'Resume after typing':'Follow route';
-  if(active?.waitingForTyping&&s&&(C.signature(s)===active.waitingForTyping.before||['craft','shfight'].includes(s.prompt?.kind)))$('follow').disabled=true;
+  if(active?.waitingForTyping&&s&&(C.signature(s)===active.waitingForTyping.before||['craft','shfight','jfgame'].includes(s.prompt?.kind)))$('follow').disabled=true;
   $('apply').disabled=!ready||busy||auto||!active||!s||!C.actionable(s);
   $('apply').disabled||=!!active?.waitingForTyping;
   $('stopAuto').disabled=!auto;
@@ -208,10 +209,11 @@ function stepRoute(){
   if(lang()!==active.file.lang)throw Error('Restore this route’s language, or plan your current life again.');
   const sig=C.signature(s);let step=active.file.route[active.index];
   if(step?.signature!==sig){const index=active.file.route.findIndex(v=>v.signature===sig);if(index<0)throw Error('Your live state differs from this route. Use Plan the rest of this life to make a new plan.');active.index=index;step=active.file.route[index];}
-  if(C.typing(s)){
-    active.waitingForTyping={before:sig,after:step.afterSignature};saveLives();
+  const festival=s.prompt?.jf==='enter'&&active.file.goals.some(g=>/^record:jf_(caught|stop|star)$/.test(g));
+  if(C.typing(s)||festival){
+    active.waitingForTyping={before:sig,after:festival?null:step.afterSignature};saveLives();
     if(b.runtime.auto)b.life.toggleAuto();
-    stopFollowing(true,'Your input is needed: '+(s.prompt.kind==='shfight'?'House of Spiders corridor battle':s.prompt.kind==='craft'?'Workshop crafting':s.prompt.text||s.prompt.question||'name or reflection')+'. Complete it in the game and submit, then click Resume after typing.');
+    stopFollowing(true,'Your input is needed: '+(festival?'your Festival target requires manual play. Enter the game':s.prompt.kind==='jfgame'?'J Corp. Festival':s.prompt.kind==='shfight'?'House of Spiders corridor battle':s.prompt.kind==='craft'?'Workshop crafting':s.prompt.text||s.prompt.question||'name or reflection')+'. Complete it in the game and submit, then click Resume after typing.');
     return false;
   }
   const text=C.label(s,step.i);nativeChoose(b,step.i);active.index++;saveLives();$('playStatus').textContent=`${auto?'Following':'Chose'} ${active.index}/${active.file.route.length}: ${text}`;return true;
@@ -229,7 +231,7 @@ function follow(){
   active=active?.file===selected?active:{file:selected,index:0};
   if(active.waitingForTyping){
     const sig=C.signature(s),waiting=active.waitingForTyping;
-    if(['craft','shfight'].includes(s.prompt?.kind)){stopFollowing(true,'Your input is needed. Finish and submit crafting or the corridor battle in the game, then resume to plan from your actual result.');return;}
+    if(['craft','shfight','jfgame'].includes(s.prompt?.kind)){stopFollowing(true,'Your input is needed. Finish and submit crafting, the corridor battle or the Festival in the game, then resume to plan from your actual result.');return;}
     if(sig===waiting.before){stopFollowing(true,'Your input is needed. Enter and submit your text in the game, then click Resume after typing.');return;}
     if(sig!==waiting.after){planCurrent({goals:[...active.file.goals],sort:active.file.sort||'recommended',followAfter:true});return;}
     active.index++;delete active.waitingForTyping;
@@ -239,7 +241,7 @@ function follow(){
 }
 function validInputs(){for(const input of $('viewFind').querySelectorAll('input[type=number]'))if(!input.checkValidity()){say('Check '+(input.getAttribute('aria-label')||input.closest('label')?.textContent||'search settings')+': '+input.validationMessage);input.reportValidity();return false;}return true;}
 async function search(){
-  if(!validInputs())return;const task=begin('search'),goals=draftGoals(),options={name:$('name').value.trim(),gender:$('gender').value,birthplace:$('birthplace').value};savePreferences();
+  if(!validInputs())return;const task=begin('search'),goals=draftGoals(),options={name:$('name').value.trim(),gender:$('gender').value,loveSame:partnerSame(),birthplace:$('birthplace').value};savePreferences();
   $('startSettings').open=false;$('goalPicker').open=false;
   say('Searching complete lives. You can stop and keep completed results.');results=[];renderResults();
   try{
@@ -254,6 +256,7 @@ async function search(){
 }
 async function planCurrent({goals=draftGoals(),sort=$('sort').value,followAfter=false}={}){
   if(!followAfter&&!validInputs())return;const b=bridge(),s=b.runtime?.state;if(!b.life||!s||C.finished(s))return;
+  if(s.prompt?.kind==='jfgame'){say('Finish the Festival manually, then plan from your actual result. Its randomness is not determined by the seed.');return;}
   if(s.prompt?.realLimit){say('This voyage choice has a real-time deadline, even when the game is paused. Choose in the game or follow an existing route; plan after resolving this choice.');return;}
   let planned=false;
   const task=begin('plan'),snapshot=JSON.parse(JSON.stringify(s)),signature=C.signature(s),language=lang(),voice=mentorVoice();
@@ -306,6 +309,7 @@ async function waitForLife(seed){
 $('start').onclick=async()=>{
   const b=bridge();if(!selected||!b.home||selected.origin==='current')return;
   if(lang()!==selected.lang){$('playStatus').textContent='Use this route’s game language first: '+selected.lang;return;}
+  if(partnerSame()!==(selected.options.loveSame??false)){$('playStatus').textContent='Use this route’s native Partner’s gender setting before starting: '+(selected.options.loveSame?'Same gender':'Opposite gender')+'.';return;}
   const file=selected;active={file,index:0};saveLives();b.home.onStart(file.options);
   // The native start callback changes its ref before React commits the live
   // controls. Wait for those controls, not merely an animation frame.

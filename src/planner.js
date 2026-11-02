@@ -1,12 +1,12 @@
 function makePlanner(E) {
   const C=advisorCommon(),copy=s=>JSON.parse(JSON.stringify(s));
   function branch(s){
-    // Native history entries are read-only except the last log entry. Copy
-    // mutable state and that entry, rather than serializing the full history
-    // for every alternative. This is specific to the inspected engine.
+    // Native naming fills in names in the last twelve story entries.
+    // Isolate those entries and the last mutable log entry between branches.
     const out=copy({...s,log:[],story:[],reflections:[]});
     out.log=s.log.slice();if(out.log.length)out.log[out.log.length-1]=copy(out.log[out.log.length-1]);
-    out.story=(s.story||[]).slice();out.reflections=(s.reflections||[]).slice();return out;
+    out.story=(s.story||[]).map((entry,i,all)=>i>=all.length-12?copy(entry):entry);
+    out.reflections=(s.reflections||[]).slice();return out;
   }
   const efforts={quick:3,thorough:8};
   const prerequisites=new Map(E.catalog.map(r=>[r.key,r.implies]));
@@ -192,6 +192,8 @@ function makePlanner(E) {
     for(const key of ['colorName','egoName','relicName','childName','partnerName'])delete s[key];
     if(s.pinky)delete s.pinky.blade;
     if(s.weapon)delete s.weapon.name;
+    // Naming a weapon adds a biography entry without changing gameplay.
+    s.story=(s.story||[]).filter(entry=>entry.k!=='weapon');
     s.reflections=(s.reflections||[]).map(({text,...entry})=>entry);
     if(s.dead)delete s.dead.text;
     return C.signature(s);

@@ -1,5 +1,5 @@
 function advisorCommon() {
-  const source = 'index-BCA1cgB3.js';
+  const source = 'index-5FbEEWWt.js';
   function normalized(s) {
     const state={...s,prompt:s.prompt?{...s.prompt}:null};
     delete state.savedProgress;
@@ -24,7 +24,7 @@ function advisorCommon() {
   const typing=s=>['reflect','name','color','craft','shfight','jfgame'].includes(s.prompt?.kind);
   const label=(s,i)=>i===-2?'Continue the post-death voice':i===-1?'Continue / leave blank / let pass':s.prompt.choices[i].label;
   const statNames={health:'Health',sanity:'Sanity',wealth:'Wealth',network:'Network',rep:'Reputation'};
-  const displayStats=s=>Object.fromEntries(Object.keys(statNames).map(k=>[k,Math.round(s.stats[k])]));
+  const displayStats=s=>Object.fromEntries(Object.keys(statNames).map(k=>[k,k==='sanity'&&s.flags.includes('정신붕괴')?-1:Math.round(s.stats[k])]));
   const sorts={recommended:'Recommended',age:'Lifespan',health:'Health',sanity:'Sanity',wealth:'Wealth',network:'Network',rep:'Reputation',rarity:'Achievement rarity',power:'Fixer request rating',potential:'Combat potential (native)',achievements:'Achievement count'};
   function compareLives(a,b,sort='recommended'){
     function values(file){

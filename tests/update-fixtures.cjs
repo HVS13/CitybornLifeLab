@@ -3,7 +3,7 @@ const built=fs.readFileSync('dist/cityborn-advisor.user.js','utf8'),ctx={};vm.cr
 // Test-only access to native prompt constructors. Production exports and saves
 // are unchanged; these fixtures do not claim naturally earned careers.
 const core=built.slice(built.indexOf('function nativeEngine()'),built.indexOf("if (document.getElementById('cityborn-advisor'))"))
-  .replace('data:st,','data:st,fixtureFestival:s=>s3(s,st(),{t:.4}),fixtureFight:Hb,fixtureCrew:s=>{y_(s,st());s.crew.rank=5;zb(s,.4,true);},');
+  .replace('data:ht,','data:ht,fixtureFestival:s=>vj(s,ht(),{t:.4}),fixtureFight:Nk,fixtureCrew:s=>{b5(s,ht());s.crew.rank=5;Mk(s,.4,true);},');
 vm.runInContext(core+';globalThis.E=nativeEngine();E.lang("en");globalThis.P=makePlanner(E);globalThis.C=advisorCommon();globalThis.nativeMath=Math;',ctx);
 const {E,P,C}=ctx;
 function fight(){

@@ -1,4 +1,10 @@
 const assert=require('node:assert/strict'),{E,P,C,fight,voyage}=require('./update-fixtures.cjs');
+assert.equal(E.catalog.length,296);
+for(const key of ['mi_ruin_alone','oracle_obey'])assert.ok(E.catalog.some(record=>record.key===key));
+const shattered=E.create(E.data(),{seed:'shattered',name:'Tester',gender:'m'});
+shattered.flags.push('정신붕괴');shattered.stats.sanity=80;E.year(shattered,E.data());
+assert.equal(C.displayStats(shattered).sanity,-1,'shattered Sanity follows the native sentinel');
+assert.equal(P.targets(shattered,['stat:sanity:0'])[0],false,'shattered Sanity does not satisfy a numeric minimum');
 const s=fight();assert.equal(s.prompt.kind,'shfight');assert.equal(C.typing(s),true);
 assert.deepEqual(Array.from(P.choices(s)),[-1]);
 const predicted=P.copy(s);P.apply(predicted,-1);assert.notEqual(C.signature(predicted),C.signature(s),'battle simulations invoke the native fallback');

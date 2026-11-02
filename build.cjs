@@ -2,11 +2,11 @@ const fs = require('node:fs');
 const crypto = require('node:crypto');
 const vm = require('node:vm');
 const source = fs.readFileSync('analysis/game.bundle.js', 'utf8');
-const start = source.indexOf('const hb =');
-const end = source.indexOf('function Mc(');
+const start = source.indexOf('const Vb =');
+const end = source.indexOf('function hf(');
 if (start < 0 || end < start) throw Error('Inspected engine boundaries missing');
 const engine = source.slice(start, end);
-const engineExports = `return {create:(data,options)=>pg(data,{...options,boost:true}),data:st,birthplace:seed=>Tc(st(),seed),birthPrefix:hx,choose:Ua,continue:O2,advance:pA,year:bj,records:s=>[...tk(iv(s).map(r=>r.key))],recordDetails:s=>dv(iv(s),st().rarity),rarityOrder:ag,combatPotential:s=>s.dr&&s.dr.end!=='return'?null:la(s),fixerPower:s=>s.job==='해결사'&&(!s.dr||s.dr.end==='return')?Us(s):null,promotion:s=>s.dr&&s.dr.end!=='return'?null:s.job==='해결사'&&s.grade>=1&&!s.flags.includes('특색')?{current:s.merit||0,required:kt(s)}:bn(s)?{current:oa(s),required:vt(s)}:null,job:Ie,cause:gb,catalog:Aw,flags:b1,lang:Kd,voice:()=>Yc,setVoice:Cx};`;
+const engineExports = `return {create:(data,options)=>Zg(data,{...options,boost:true}),data:ht,birthplace:seed=>Uc(ht(),seed),birthPrefix:Xk,choose:AS,continue:P_,advance:S3,year:BS,records:s=>[...Ux(i2(s).map(r=>r.key))],recordDetails:s=>u2(i2(s),ht().rarity),rarityOrder:Fg,combatPotential:s=>s.dr&&s.dr.end!=='return'?null:Ro(s),fixerPower:s=>s.job==='해결사'&&(!s.dr||s.dr.end==='return')?ih(s):null,promotion:s=>s.dr&&s.dr.end!=='return'?null:s.job==='해결사'&&s.grade>=1&&!s.flags.includes('특색')?{current:s.merit||0,required:vt(s)}:_a(s)?{current:rn(s),required:jt(s)}:null,job:Ne,cause:gw,catalog:tm,flags:yv,lang:mu,voice:()=>Zc,setVoice:vx};`;
 const factory = `function nativeEngine(){${engine}\n${engineExports}}`;
 // Browsing must not depend on worker startup or live-client compatibility.
 const inspected = vm.runInNewContext('('+factory+')()');
@@ -38,5 +38,5 @@ const metadata = `// ==UserScript==
 fs.mkdirSync('dist', {recursive:true});
 fs.writeFileSync('dist/cityborn-advisor.user.js', metadata + '\n(() => {\n"use strict";\n' + factory + '\n' + common + '\n' + planner + '\nconst ADVISOR_VERSION='+JSON.stringify(version)+';\nconst ADVISOR_CATALOG='+JSON.stringify(catalogue)+';\n' + ui + '\n})();\n');
 fs.writeFileSync('dist/cityborn-advisor.meta.js', metadata);
-fs.writeFileSync('analysis/source.json', JSON.stringify({url:'https://project-moon-life.cityborn.workers.dev/assets/index-BCA1cgB3.js', inspected:'2026-10-28', formattedSourceSha256:crypto.createHash('sha256').update(source).digest('hex')},null,2));
+fs.writeFileSync('analysis/source.json', JSON.stringify({url:'https://project-moon-life.cityborn.workers.dev/assets/index-5FbEEWWt.js', inspected:'2026-11-02', formattedSourceSha256:crypto.createHash('sha256').update(source).digest('hex')},null,2));
 console.log('Built dist/cityborn-advisor.user.js');

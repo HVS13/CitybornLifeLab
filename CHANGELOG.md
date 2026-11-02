@@ -1,5 +1,13 @@
 # Changes
 
+## 2.8.0
+
+- Update the bundled engine to `index-5FbEEWWt.js`, inspected on 2 November 2026. Include its current event, promotion, E.G.O and shattered-Sanity rules, plus all 296 achievements and 51 displayed traits.
+- Add the new Pilgrim and Prescript achievements to browsing and goal searches. Routes from earlier clients must be regenerated.
+- Match the game's displayed −1 Sanity for shattered mental strength, including numeric goal filtering even before the stored stat is synchronized.
+- Isolate recent story entries between simulated branches: the native naming handler now backfills earlier entries.
+- Keep weapon-name biography entries from invalidating cosmetic route comparisons. Live replay still requires the full state fingerprint; naming continues to pause for player input.
+
 ## 2.7.0
 
 - Update to `index-BCA1cgB3.js`, including own Fixer offices, pets, the J Corp. Festival, and the shorter mentor training. Catalogue now includes 51 displayed traits and 294 achievements.

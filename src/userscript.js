@@ -30,7 +30,7 @@ label{display:block}.row{display:flex;gap:7px;align-items:end;margin:8px 0}.row>
 <label>Specific seed (optional)<input id="seed" type="text" placeholder="Leave blank for random seeds"></label>
 <div class="row"><label>Random seeds<input id="count" type="number" min="1" max="500" value="3"></label><label>Search effort<select id="effort"><option value="quick">Quick</option><option value="thorough">Thorough</option></select></label></div>
 <p class="hint">Each seed explores several routes; start with 1–3 seeds. Quick looks for a matching ending sooner. Thorough explores more alternatives. Neither can guarantee finding every possible route.</p></details>
-<button id="search" class="primary">Find matching lives</button><p id="searchNote" class="hint">Results are predictions with replayable choices. Nothing starts automatically.</p><p class="hint">Partner’s gender follows the native game setting when searching. Festival results use fresh randomness: seed searches take the skip route. Play the Festival manually, then plan from the result to pursue its rewards.</p>
+<button id="search" class="primary">Find matching lives</button><p id="searchNote" class="hint">Results are predictions with replayable choices. Nothing starts automatically.</p><p class="hint">Partner’s gender and Arbiter story history follow the native game settings when searching. Replaying an Arbiter seed requires the same story history. Festival results use fresh randomness: seed searches take the skip route. Play the Festival manually, then plan from the result to pursue its rewards.</p>
 <label>Result & planning order<select id="sort">${Object.entries(C.sorts).map(([key,name])=>`<option value="${key}">${name}</option>`).join('')}</select></label><p class="hint">Completed goal matches always come first. Recommended compares alive endings, lifespan, then wellbeing. Your selected order also guides which search branches survive. Rarity compares achievement tiers from highest to lowest; count is separate. Combat potential is the engine’s broader combat measure for eligible careers; Fixer request rating is a different formula.</p>
 <div id="results"></div></div>
 <div id="viewPlay" role="tabpanel" hidden>
@@ -39,7 +39,7 @@ label{display:block}.row{display:flex;gap:7px;align-items:end;margin:8px 0}.row>
 <div id="playPreview"></div><p id="playStatus" class="notice" role="status">Choose a searched life, import a route, or plan your current life.</p><div id="playNext" class="hint"></div>
 <button id="resume" class="primary" disabled>Resume saved life</button><div class="row"><button id="start" disabled>Start from birth & follow</button><button id="goHome">Save & go home</button></div><p class="hint">Resume keeps your saved progress. Start begins the selected seed again from birth.</p>
 <div class="row"><button id="follow" disabled>Follow route</button><button id="apply" disabled>Choose next step</button></div>
-<p class="hint">Names, reflections, Workshop crafting and corridor battles are yours to complete. Submit in the game, then Resume after typing. Cosmetic entries keep the same choices when a native replay verifies the same gameplay outcome. Changes to randomness, such as custom child/partner/friend names, require a new search using the original targets. Crafting and corridor predictions use native fallback results; after crafting or corridor battles, the script replans from your actual result.</p>
+<p class="hint">Names, reflections, Workshop crafting, corridor battles and Taboo Hunter contracts/hunts are yours to complete. Submit in the game, then Resume after typing. Cosmetic entries keep the same choices when a native replay verifies the same gameplay outcome. Changes to randomness, such as custom child/partner/friend names, require a new search using the original targets. Crafting, corridor and Taboo Hunter predictions use native fallback results; submit your actual result and resume to continue with the original targets.</p>
 <div class="row"><label>Following speed<select id="speed"><option value="1">x1</option><option value="4">x4</option><option value="8">x8</option><option value="32" selected>x32</option></select></label><button id="stopAuto" disabled>Pause & stop following</button></div>
 <p class="hint">Following checks the live state before every choice and uses the route’s recorded Mentor voice setting. Manual game interaction stops following. Grand Voyage deadlines keep running while paused; follow a prepared route or choose manually. No route edits your game save or grants traits.</p></div>
 <div id="viewSaved" role="tabpanel" hidden><p class="hint">Up to 8 recent saved lives. Selecting one validates it again before play. Export routes you want to keep longer.</p><div id="library"></div></div>
@@ -187,7 +187,7 @@ function controls(){
   $('goHome').textContent=s&&!C.finished(s)?'Save & go home':'Go to home';
   $('follow').disabled=!ready||busy||auto||!selected||selected.scope!=='life'||!s||C.finished(s)||s.seed!==selected.seed;
   $('follow').textContent=active?.waitingForTyping?'Resume after typing':'Follow route';
-  if(active?.waitingForTyping&&s&&(C.signature(s)===active.waitingForTyping.before||['craft','shfight','jfgame'].includes(s.prompt?.kind)))$('follow').disabled=true;
+  if(active?.waitingForTyping&&s&&(C.signature(s)===active.waitingForTyping.before||['craft','shfight','jfgame','taboo'].includes(s.prompt?.kind)))$('follow').disabled=true;
   $('apply').disabled=!ready||busy||auto||!active||!s||!C.actionable(s);
   $('apply').disabled||=!!active?.waitingForTyping;
   $('stopAuto').disabled=!auto;
@@ -213,7 +213,7 @@ function stepRoute(){
   if(C.typing(s)||festival){
     active.waitingForTyping={before:sig,after:festival?null:step.afterSignature};saveLives();
     if(b.runtime.auto)b.life.toggleAuto();
-    stopFollowing(true,'Your input is needed: '+(festival?'your Festival target requires manual play. Enter the game':s.prompt.kind==='jfgame'?'J Corp. Festival':s.prompt.kind==='shfight'?'House of Spiders corridor battle':s.prompt.kind==='craft'?'Workshop crafting':s.prompt.text||s.prompt.question||'name or reflection')+'. Complete it in the game and submit, then click Resume after typing.');
+    stopFollowing(true,'Your input is needed: '+(festival?'your Festival target requires manual play. Enter the game':s.prompt.kind==='jfgame'?'J Corp. Festival':s.prompt.kind==='taboo'?'Taboo Hunter contract or hunt':s.prompt.kind==='shfight'?'House of Spiders corridor battle':s.prompt.kind==='craft'?'Workshop crafting':s.prompt.text||s.prompt.question||'name or reflection')+'. Complete it in the game and submit, then click Resume after typing.');
     return false;
   }
   const text=C.label(s,step.i);nativeChoose(b,step.i);active.index++;saveLives();$('playStatus').textContent=`${auto?'Following':'Chose'} ${active.index}/${active.file.route.length}: ${text}`;return true;
@@ -231,7 +231,7 @@ function follow(){
   active=active?.file===selected?active:{file:selected,index:0};
   if(active.waitingForTyping){
     const sig=C.signature(s),waiting=active.waitingForTyping;
-    if(['craft','shfight','jfgame'].includes(s.prompt?.kind)){stopFollowing(true,'Your input is needed. Finish and submit crafting, the corridor battle or the Festival in the game, then resume to plan from your actual result.');return;}
+    if(['craft','shfight','jfgame','taboo'].includes(s.prompt?.kind)){stopFollowing(true,'Your input is needed. Finish and submit the minigame or contract in the game, then resume to plan from your actual result.');return;}
     if(sig===waiting.before){stopFollowing(true,'Your input is needed. Enter and submit your text in the game, then click Resume after typing.');return;}
     if(sig!==waiting.after){planCurrent({goals:[...active.file.goals],sort:active.file.sort||'recommended',followAfter:true});return;}
     active.index++;delete active.waitingForTyping;
@@ -241,7 +241,7 @@ function follow(){
 }
 function validInputs(){for(const input of $('viewFind').querySelectorAll('input[type=number]'))if(!input.checkValidity()){say('Check '+(input.getAttribute('aria-label')||input.closest('label')?.textContent||'search settings')+': '+input.validationMessage);input.reportValidity();return false;}return true;}
 async function search(){
-  if(!validInputs())return;const task=begin('search'),goals=draftGoals(),options={name:$('name').value.trim(),gender:$('gender').value,loveSame:partnerSame(),birthplace:$('birthplace').value};savePreferences();
+  if(!validInputs())return;const task=begin('search'),goals=draftGoals(),options={name:$('name').value.trim(),gender:$('gender').value,loveSame:partnerSame(),arMem:C.arbiterMemory(read('cbl.arbiter.v1')||{}),birthplace:$('birthplace').value};savePreferences();
   $('startSettings').open=false;$('goalPicker').open=false;
   say('Searching complete lives. You can stop and keep completed results.');results=[];renderResults();
   try{
@@ -310,6 +310,7 @@ $('start').onclick=async()=>{
   const b=bridge();if(!selected||!b.home||selected.origin==='current')return;
   if(lang()!==selected.lang){$('playStatus').textContent='Use this route’s game language first: '+selected.lang;return;}
   if(partnerSame()!==(selected.options.loveSame??false)){$('playStatus').textContent='Use this route’s native Partner’s gender setting before starting: '+(selected.options.loveSame?'Same gender':'Opposite gender')+'.';return;}
+  if(!C.arbiterStartMatches(selected,read('cbl.arbiter.v1')||{})){$('playStatus').textContent='Arbiter history changed since this search. Find this life again to use the current story cycle.';return;}
   const file=selected;active={file,index:0};saveLives();b.home.onStart(file.options);
   // The native start callback changes its ref before React commits the live
   // controls. Wait for those controls, not merely an animation frame.

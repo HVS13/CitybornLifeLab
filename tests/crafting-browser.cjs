@@ -30,7 +30,7 @@ const {launch,open,install,native,status,completeReplay,E,P,C}=require('./browse
     assert.ok(await ui.locator('#follow').isDisabled(),'all scores still require explicit submission');
     await page.reload({waitUntil:'networkidle'});await install(page);await status(page,/Route validated/);
     await ui.locator('#tabPlay').click();await ui.locator('#resume').click();
-    await page.locator('.craft-modal').waitFor();await status(page,/Finish and submit crafting/);
+    await page.locator('.craft-modal').waitFor();await status(page,/Finish and submit the minigame or contract/);
     assert.ok(await ui.locator('#follow').isDisabled(),'unfinished crafting stays paused across reload');
     await native(page,'b.life.submitCraft({name:"Amber Vow",scores:[5,20,45,30]});');
     assert.equal(await native(page,'return b.runtime.state.ws.mp.score;'),100);

@@ -1,5 +1,5 @@
 function advisorCommon() {
-  const source = 'index-5FbEEWWt.js';
+  const source = 'index-CVESJ4ss.js';
   function normalized(s) {
     const state={...s,prompt:s.prompt?{...s.prompt}:null};
     delete state.savedProgress;
@@ -21,7 +21,21 @@ function advisorCommon() {
   }
   const finished=s=>!!s.dead && !s.dead.voice;
   const actionable=s=>!!s.prompt || !!s.dead?.voice;
-  const typing=s=>['reflect','name','color','craft','shfight','jfgame'].includes(s.prompt?.kind);
+  const typing=s=>['reflect','name','color','craft','shfight','jfgame','taboo'].includes(s.prompt?.kind);
+  function arbiterMemory(value={}){
+    if(!value||typeof value!=='object'||Array.isArray(value)||!Number.isSafeInteger(value.n??0)||(value.n??0)<0)throw Error('Invalid Arbiter history');
+    const out={n:value.n??0},prev=value.prev;
+    if(prev!=null){
+      if(typeof prev!=='object'||typeof prev.name!=='string'||prev.pick!=null&&typeof prev.pick!=='string')throw Error('Invalid Arbiter history');
+      if(prev.name)out.prev={name:prev.name.slice(0,12),pick:prev.pick||'wait'};
+    }
+    return out;
+  }
+  function arbiterStartMatches(file,memory){
+    if(file.origin==='current'||!file.summary.records.includes('ar_arbiter'))return true;
+    const expected=arbiterMemory(file.options.arMem),actual=arbiterMemory(memory);
+    return expected.n===actual.n&&((expected.n+1)%2!==0||JSON.stringify(expected.prev)===JSON.stringify(actual.prev));
+  }
   const label=(s,i)=>i===-2?'Continue the post-death voice':i===-1?'Continue / leave blank / let pass':s.prompt.choices[i].label;
   const statNames={health:'Health',sanity:'Sanity',wealth:'Wealth',network:'Network',rep:'Reputation'};
   const displayStats=s=>Object.fromEntries(Object.keys(statNames).map(k=>[k,k==='sanity'&&s.flags.includes('정신붕괴')?-1:Math.round(s.stats[k])]));
@@ -47,5 +61,5 @@ function advisorCommon() {
     }
     const av=values(a),bv=values(b);for(let i=0;i<av.length;i++)if(av[i]!==bv[i])return bv[i]-av[i];return 0;
   }
-  return {source,signature,legacySignature,finished,actionable,typing,label,statNames,displayStats,sorts,compareLives};
+  return {source,signature,legacySignature,finished,actionable,typing,arbiterMemory,arbiterStartMatches,label,statNames,displayStats,sorts,compareLives};
 }

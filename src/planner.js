@@ -45,7 +45,7 @@ function makePlanner(E) {
     // Festival entry and its minigame use Math.random(), outside the seed.
     if(s.prompt.kind==='jfgame')return [];
     if(s.prompt.jf==='enter')return s.prompt.choices.flatMap((c,i)=>i!==0&&!c.locked?[i]:[]);
-    if(['reflect','name','color','craft','shfight'].includes(s.prompt.kind))return [-1];
+    if(['reflect','name','color','craft','shfight','taboo'].includes(s.prompt.kind))return [-1];
     return s.prompt.choices.flatMap((c,i)=>c.locked?[]:[i]).concat(s.prompt.kind==='minor'?[-1]:[]);
   }
   function apply(s,i){
@@ -167,6 +167,7 @@ function makePlanner(E) {
     if(!Array.isArray(file.route)||file.route.length>5000||(file.scope==='birth'&&file.route.length))throw Error('Invalid route length');
     const options={seed:file.options.seed,name:file.options.name,gender:file.options.gender};
     if(file.options.loveSame!==undefined){if(typeof file.options.loveSame!=='boolean')throw Error('Invalid partner-gender setting');options.loveSame=file.options.loveSame;}
+    if(file.options.arMem!==undefined)options.arMem=C.arbiterMemory(file.options.arMem);
     if(file.options.birthplace!==undefined){
       if(birthSeed(options.seed,file.options.birthplace)!==options.seed)throw Error('Birthplace does not match route seed');
       options.birthplace=file.options.birthplace;
@@ -249,7 +250,7 @@ function workerMain(){
         const words=new Uint32Array(count);crypto.getRandomValues(words);
         let results=[],examined=0;
         for(let n=0;n<count;n++){
-          const options={name:m.options.name,gender:m.options.gender,loveSame:m.options.loveSame??false,birthplace:m.options.birthplace??'',seed:P.birthSeed(m.seed||String(words[n]),m.options.birthplace??'')};
+          const options={name:m.options.name,gender:m.options.gender,loveSame:m.options.loveSame??false,arMem:C.arbiterMemory(m.options.arMem),birthplace:m.options.birthplace??'',seed:P.birthSeed(m.seed||String(words[n]),m.options.birthplace??'')};
           let lastBest=null;
           function update(candidates){
             results=results.filter(r=>r.file.seed!==options.seed);results.push(...candidates);

@@ -1,5 +1,13 @@
 # Changes
 
+## 2.9.0
+
+- Support native client `index-CVESJ4ss.js`, inspected on 5 November 2026, including Arbiter lives, Taboo Hunter contracts and Sweeper encounters. Browse all 52 displayed traits and 313 achievements.
+- Capture native Arbiter history in seed searches and route exports. Check the story cycle and remembered prior life before starting an Arbiter route; search again if the native history has changed. Simulations do not write the game's history.
+- Pause Taboo Hunter signing and hunts for manual input, retain unfinished hunts across resume, and replan from the submitted result using the original targets. Predictions use the native seeded fallback.
+- Use the native public choice, clock and year transitions, including spouse aftermath and shattered-Sanity synchronization.
+- Verify both Arbiter cycles and Sweeper continuations against the native clock driver; test Taboo Hunter fallback/actual outcomes and production pause, resume, worker and start handlers in local harnesses.
+
 ## 2.8.0
 
 - Update the bundled engine to `index-5FbEEWWt.js`, inspected on 2 November 2026. Include its current event, promotion, E.G.O and shattered-Sanity rules, plus all 296 achievements and 51 displayed traits.

@@ -1,5 +1,5 @@
 const assert=require('node:assert/strict'),{E,P,C,fight,voyage}=require('./update-fixtures.cjs');
-assert.equal(E.catalog.length,296);
+assert.equal(E.catalog.length,313);
 for(const key of ['mi_ruin_alone','oracle_obey'])assert.ok(E.catalog.some(record=>record.key===key));
 const shattered=E.create(E.data(),{seed:'shattered',name:'Tester',gender:'m'});
 shattered.flags.push('정신붕괴');shattered.stats.sanity=80;E.year(shattered,E.data());

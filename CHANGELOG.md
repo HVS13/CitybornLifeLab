@@ -1,5 +1,14 @@
 # Changes
 
+## 2.10.0
+
+- Support `index-DfewY0Je.js`, inspected on 16 November 2026: expanded Association careers, Smoke War eras, Shin/Mang and Cinq duels. Browse all 52 native displayed traits and 354 achievements; the removed `assoc_staff` target is no longer offered.
+- Capture the native Eras setting and Smoke War URL override in seed searches and route files, and check them before starting. Current-life plans retain the actual era state.
+- Pause Cinq style/weapon selection, duels and rewards for player input, then continue or replan from the actual result using the original targets. Predictions use native fallback results.
+- Record the native Shin/Mang auto policy's selected level in each applicable replay action and pass it to the game, including native costs and state changes in planning.
+- Support Chinese catalogue data, locale selection and route validation. Isolate the separate L Corp. Employee mode from normal-life controls; it remains a manual mode.
+- Extend local native-clock and UI-handler tests for Smoke War settings, Cinq phases/results, Shin/Mang replay, Chinese routes and separate-mode isolation.
+
 ## 2.9.0
 
 - Support native client `index-CVESJ4ss.js`, inspected on 5 November 2026, including Arbiter lives, Taboo Hunter contracts and Sweeper encounters. Browse all 52 displayed traits and 313 achievements.

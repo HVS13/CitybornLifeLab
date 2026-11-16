@@ -16,8 +16,8 @@ async function open(browser,{live=false,language='en',fast=false,delay=false,wid
   },{language,fast,delay});
   if(!live)await ctx.route(game+'**',route=>{
     const path=new URL(route.request().url()).pathname;
-    if(path==='/')return route.fulfill({contentType:'text/html',body:'<!doctype html><html lang="en"><body><div id="root"></div><script type="module" src="/assets/index-CVESJ4ss.js"></script></body></html>'});
-    if(path==='/assets/index-CVESJ4ss.js')return route.fulfill({contentType:'application/javascript',body:fs.readFileSync('analysis/game.bundle.js','utf8')});
+    if(path==='/')return route.fulfill({contentType:'text/html',body:'<!doctype html><html lang="en"><body><div id="root"></div><script type="module" src="/assets/index-DfewY0Je.js"></script></body></html>'});
+    if(path==='/assets/index-DfewY0Je.js')return route.fulfill({contentType:'application/javascript',body:fs.readFileSync('analysis/game.bundle.js','utf8')});
     return route.fulfill({status:404,body:''});
   });
   const page=await ctx.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto(game,{waitUntil:'networkidle'});
@@ -36,7 +36,9 @@ async function completeReplay(page,timeout=240000){
     if(!await native(page,'return b.runtime.paused;'))throw Error('Typing must pause the native game');
     // A test user explicitly chooses a blank entry; production following
     // never submits it. The original predicted route must still replay.
-    await native(page,'if(b.runtime.state.prompt.kind==="shfight")b.life.submitFight();else if(b.runtime.state.prompt.kind==="craft")b.life.submitCraft();else if(b.runtime.state.prompt.kind==="taboo")b.life.submitTaboo();else b.life.submitReflection("");');entries++;
+    await native(page,'if(b.runtime.state.prompt.kind==="shfight")b.life.submitFight();else if(b.runtime.state.prompt.kind==="craft")b.life.submitCraft();else if(b.runtime.state.prompt.kind==="cq")b.life.submitCinq();else if(b.runtime.state.prompt.kind==="taboo")b.life.submitTaboo();else b.life.submitReflection("");');entries++;
+    // A won Cinq duel opens a reward prompt before following can resume.
+    if(await native(page,'return b.runtime.state.prompt?.kind==="cq";'))continue;
     await ui.locator('#follow').click();
   }
   throw Error('Replay timed out');

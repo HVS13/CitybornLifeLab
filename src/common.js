@@ -1,5 +1,5 @@
 function advisorCommon() {
-  const source = 'index-CVESJ4ss.js';
+  const source = 'index-DfewY0Je.js';
   function normalized(s) {
     const state={...s,prompt:s.prompt?{...s.prompt}:null};
     delete state.savedProgress;
@@ -21,7 +21,7 @@ function advisorCommon() {
   }
   const finished=s=>!!s.dead && !s.dead.voice;
   const actionable=s=>!!s.prompt || !!s.dead?.voice;
-  const typing=s=>['reflect','name','color','craft','shfight','jfgame','taboo'].includes(s.prompt?.kind);
+  const typing=s=>['reflect','name','color','craft','shfight','jfgame','taboo','cq'].includes(s.prompt?.kind);
   function arbiterMemory(value={}){
     if(!value||typeof value!=='object'||Array.isArray(value)||!Number.isSafeInteger(value.n??0)||(value.n??0)<0)throw Error('Invalid Arbiter history');
     const out={n:value.n??0},prev=value.prev;

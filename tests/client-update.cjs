@@ -89,7 +89,7 @@ for(const file of workerContext.result.results){
   const file=workerContext.result.results[0],elements={start:{},playStatus:{}},startAt=ui.indexOf("$('start').onclick=async()=>{"),end=ui.indexOf("$('resume').onclick",startAt);
   let starts=0;
   const context={C,selected:file,active:null,$:id=>elements[id],bridge:()=>({home:{onStart:()=>starts++}}),lang:()=> 'en',partnerSame:()=>false,
-    read:()=>({n:2}),saveLives:()=>{},waitForLife:async()=>true,follow:()=>{},renderPlay:()=>{}};
+    eraSettings:()=>({eras:true,forceEra:''}),read:()=>({n:2}),saveLives:()=>{},waitForLife:async()=>true,follow:()=>{},renderPlay:()=>{}};
   vm.createContext(context);vm.runInContext(ui.slice(startAt,end),context);
   await elements.start.onclick();assert.equal(starts,0);assert.match(elements.playStatus.textContent,/Arbiter history changed/);
   context.read=()=>file.options.arMem;await elements.start.onclick();assert.equal(starts,1);

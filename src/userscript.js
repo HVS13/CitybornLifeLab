@@ -30,7 +30,7 @@ label{display:block}.row{display:flex;gap:7px;align-items:end;margin:8px 0}.row>
 <label>Specific seed (optional)<input id="seed" type="text" placeholder="Leave blank for random seeds"></label>
 <div class="row"><label>Random seeds<input id="count" type="number" min="1" max="500" value="3"></label><label>Search effort<select id="effort"><option value="quick">Quick</option><option value="thorough">Thorough</option></select></label></div>
 <p class="hint">Each seed explores several routes; start with 1–3 seeds. Quick looks for a matching ending sooner. Thorough explores more alternatives. Neither can guarantee finding every possible route.</p></details>
-<button id="search" class="primary">Find matching lives</button><p id="searchNote" class="hint">Results are predictions with replayable choices. Nothing starts automatically.</p><p class="hint">Partner’s gender and Arbiter story history follow the native game settings when searching. Replaying an Arbiter seed requires the same story history. Festival results use fresh randomness: seed searches take the skip route. Play the Festival manually, then plan from the result to pursue its rewards.</p>
+<button id="search" class="primary">Find matching lives</button><p id="searchNote" class="hint">Results are predictions with replayable choices. Nothing starts automatically.</p><p class="hint">Partner’s gender, Eras, era URL and Arbiter story history follow the native game settings when searching. Replaying an Arbiter seed requires the same story history. This planner supports normal lives; L Corp. Employee is a separate mode. Following uses the native Shin/Mang auto policy for dangerous choices. Festival results use fresh randomness: seed searches take the skip route. Play the Festival manually, then plan from the result to pursue its rewards.</p>
 <label>Result & planning order<select id="sort">${Object.entries(C.sorts).map(([key,name])=>`<option value="${key}">${name}</option>`).join('')}</select></label><p class="hint">Completed goal matches always come first. Recommended compares alive endings, lifespan, then wellbeing. Your selected order also guides which search branches survive. Rarity compares achievement tiers from highest to lowest; count is separate. Combat potential is the engine’s broader combat measure for eligible careers; Fixer request rating is a different formula.</p>
 <div id="results"></div></div>
 <div id="viewPlay" role="tabpanel" hidden>
@@ -39,7 +39,7 @@ label{display:block}.row{display:flex;gap:7px;align-items:end;margin:8px 0}.row>
 <div id="playPreview"></div><p id="playStatus" class="notice" role="status">Choose a searched life, import a route, or plan your current life.</p><div id="playNext" class="hint"></div>
 <button id="resume" class="primary" disabled>Resume saved life</button><div class="row"><button id="start" disabled>Start from birth & follow</button><button id="goHome">Save & go home</button></div><p class="hint">Resume keeps your saved progress. Start begins the selected seed again from birth.</p>
 <div class="row"><button id="follow" disabled>Follow route</button><button id="apply" disabled>Choose next step</button></div>
-<p class="hint">Names, reflections, Workshop crafting, corridor battles and Taboo Hunter contracts/hunts are yours to complete. Submit in the game, then Resume after typing. Cosmetic entries keep the same choices when a native replay verifies the same gameplay outcome. Changes to randomness, such as custom child/partner/friend names, require a new search using the original targets. Crafting, corridor and Taboo Hunter predictions use native fallback results; submit your actual result and resume to continue with the original targets.</p>
+<p class="hint">Names, reflections, Workshop crafting, corridor battles and Taboo Hunter contracts/hunts and Cinq style, weapon, duel and reward prompts are yours to complete. Submit in the game, then Resume after typing. Cosmetic entries keep the same choices when a native replay verifies the same gameplay outcome. Changes to randomness, such as custom child/partner/friend names, require a new search using the original targets. Crafting, corridor, Taboo Hunter and Cinq predictions use native fallback results; submit your actual result and resume to continue with the original targets.</p>
 <div class="row"><label>Following speed<select id="speed"><option value="1">x1</option><option value="4">x4</option><option value="8">x8</option><option value="32" selected>x32</option></select></label><button id="stopAuto" disabled>Pause & stop following</button></div>
 <p class="hint">Following checks the live state before every choice and uses the route’s recorded Mentor voice setting. Manual game interaction stops following. Grand Voyage deadlines keep running while paused; follow a prepared route or choose manually. No route edits your game save or grants traits.</p></div>
 <div id="viewSaved" role="tabpanel" hidden><p class="hint">Up to 8 recent saved lives. Selecting one validates it again before play. Export routes you want to keep longer.</p><div id="library"></div></div>
@@ -50,8 +50,8 @@ function lang(){
   // Match the game's locale selection. The page attribute can be changed
   // independently of the native engine (for example by page translation).
   let savedLanguage;try{savedLanguage=localStorage.getItem('cbl.lang');}catch{return 'ko';}
-  if(['en','ja','ko'].includes(savedLanguage))return savedLanguage;
-  const locale=navigator.language||'ko';return /^ja/i.test(locale)?'ja':/^ko/i.test(locale)?'ko':'en';
+  if(['en','ja','ko','zh'].includes(savedLanguage))return savedLanguage;
+  const locale=navigator.language||'ko';return /^ja/i.test(locale)?'ja':/^zh/i.test(locale)?'zh':/^ko/i.test(locale)?'ko':'en';
 }
 const prefsKey='cityborn.lab.preferences.v3',libraryKey='cityborn.lab.lives.v3';
 function read(key){try{return JSON.parse(localStorage.getItem(key)||'null');}catch{return null;}}
@@ -80,15 +80,16 @@ function saveLives(){write(libraryKey,{files:library,selected,active:active?{fil
 function bridge(){
   const root=document.getElementById('root'),key=root&&Object.keys(root).find(k=>k.startsWith('__reactContainer$'));
   const internal=key&&root[key],start=internal?.stateNode?.current||internal,stack=start?[start]:[];
-  let runtime=null,life=null,home=null,onHome=null;
+  let runtime=null,life=null,home=null,onHome=null,extra=false;
   while(stack.length){
     const f=stack.pop(),p=f.memoizedProps;
+    if(p&&Object.hasOwn(p,'gateIn')&&typeof p.onExit==='function')extra=true;
     if(p?.life?.choose)life=p.life;if(typeof p?.onStart==='function'&&typeof p?.onResume==='function')home=p;
     if(p?.summary&&typeof p?.onHome==='function')onHome=p.onHome;
     for(let h=f.memoizedState;h&&typeof h==='object';h=h.next){const c=h.memoizedState?.current;if(c&&Object.hasOwn(c,'state')&&Object.hasOwn(c,'progress')&&Object.hasOwn(c,'paused')&&Object.hasOwn(c,'speed'))runtime=c;}
     if(f.sibling)stack.push(f.sibling);if(f.child)stack.push(f.child);
   }
-  return {runtime,life,home,onHome};
+  return extra?{runtime:null,life:null,home:null,onHome:null,extra}:{runtime,life,home,onHome,extra};
 }
 function makeWorker(){
   const code=`${nativeEngine.toString()}\n${advisorCommon.toString()}\n${makePlanner.toString()}\n(${workerMain.toString()})();`,url=URL.createObjectURL(new Blob([code],{type:'text/javascript'}));
@@ -96,6 +97,10 @@ function makeWorker(){
   const owner=worker;
   worker.onmessage=({data:m})=>{const p=pending.get(m.id);if(!p)return;if(m.progress!=null){p.progress?.(m.progress);return;}pending.delete(m.id);m.error?p.reject(Error(m.error)):p.resolve(m.result);};
   worker.onerror=e=>{if(worker!==owner)return;cancel('Simulation failed: '+e.message);};
+}
+function eraSettings(){
+  let eras=true;try{eras=localStorage.getItem('cbl.ui.eras')!=='0';}catch{}
+  return {eras,forceEra:new URLSearchParams(location.search).get('era')==='smoke'?'smoke':''};
 }
 function partnerSame(){try{return localStorage.getItem('cbl.ui.loveSame')==='1';}catch{return false;}}
 function mentorVoice(){try{return localStorage.getItem('cbl.ui.mentorVoice')==='spider'?'spider':'plain';}catch{return 'plain';}}
@@ -173,8 +178,8 @@ function selectFile(file){
 }
 function controls(){
   const b=bridge(),s=b.runtime?.state,busy=!!job;
-  for(const id of ['search','plan','import'])$(id).disabled=!ready||busy||auto;
-  for(const button of shadow.querySelectorAll('.chooseRoute'))button.disabled=!ready||busy||auto;
+  for(const id of ['search','plan','import'])$(id).disabled=!ready||busy||auto||b.extra;
+  for(const button of shadow.querySelectorAll('.chooseRoute'))button.disabled=!ready||busy||auto||b.extra;
   $('plan').disabled||=!s||C.finished(s);
   $('stopJob').hidden=!busy;$('stopJob').textContent=job?.kind==='plan'?'Cancel planning':'Stop '+(job?.kind==='import'?'validation':'search');
   $('copyStats').disabled=$('copyTraits').disabled=!ready||!s;
@@ -187,7 +192,7 @@ function controls(){
   $('goHome').textContent=s&&!C.finished(s)?'Save & go home':'Go to home';
   $('follow').disabled=!ready||busy||auto||!selected||selected.scope!=='life'||!s||C.finished(s)||s.seed!==selected.seed;
   $('follow').textContent=active?.waitingForTyping?'Resume after typing':'Follow route';
-  if(active?.waitingForTyping&&s&&(C.signature(s)===active.waitingForTyping.before||['craft','shfight','jfgame','taboo'].includes(s.prompt?.kind)))$('follow').disabled=true;
+  if(active?.waitingForTyping&&s&&(C.signature(s)===active.waitingForTyping.before||['craft','shfight','jfgame','taboo','cq'].includes(s.prompt?.kind)))$('follow').disabled=true;
   $('apply').disabled=!ready||busy||auto||!active||!s||!C.actionable(s);
   $('apply').disabled||=!!active?.waitingForTyping;
   $('stopAuto').disabled=!auto;
@@ -202,7 +207,7 @@ function renderPlay(){
   $('playNext').textContent=active?`Route progress: ${active.index}/${active.file.route.length} choices. Mentor voice: ${active.file.mentorVoice==='spider'?'House of Spiders':'Fingers'}. Targets: ${active.file.goals.map(goalLabel).join(', ')||'Strong overall life'}.`:'';
   controls();
 }
-function nativeChoose(b,i){if(i===-2)b.life.acceptVoice();else if(['reflect','name','color'].includes(b.runtime.state.prompt?.kind))b.life.submitReflection('');else b.life.choose(i);}
+function nativeChoose(b,i,shin=0){if(i===-2)b.life.acceptVoice();else if(['reflect','name','color'].includes(b.runtime.state.prompt?.kind))b.life.submitReflection('');else b.life.choose(i,{shin});}
 function stepRoute(){
   const b=bridge(),s=b.runtime?.state;if(!b.life||!s||!C.actionable(s))return false;
   if(mentorVoice()!==(active.file.mentorVoice??'plain'))throw Error('Restore this route’s Mentor voice setting, or plan your current life again.');
@@ -213,10 +218,10 @@ function stepRoute(){
   if(C.typing(s)||festival){
     active.waitingForTyping={before:sig,after:festival?null:step.afterSignature};saveLives();
     if(b.runtime.auto)b.life.toggleAuto();
-    stopFollowing(true,'Your input is needed: '+(festival?'your Festival target requires manual play. Enter the game':s.prompt.kind==='jfgame'?'J Corp. Festival':s.prompt.kind==='taboo'?'Taboo Hunter contract or hunt':s.prompt.kind==='shfight'?'House of Spiders corridor battle':s.prompt.kind==='craft'?'Workshop crafting':s.prompt.text||s.prompt.question||'name or reflection')+'. Complete it in the game and submit, then click Resume after typing.');
+    stopFollowing(true,'Your input is needed: '+(festival?'your Festival target requires manual play. Enter the game':s.prompt.kind==='jfgame'?'J Corp. Festival':s.prompt.kind==='taboo'?'Taboo Hunter contract or hunt':s.prompt.kind==='cq'?'Cinq style, weapon name, duel or reward':s.prompt.kind==='shfight'?'House of Spiders corridor battle':s.prompt.kind==='craft'?'Workshop crafting':s.prompt.text||s.prompt.question||'name or reflection')+'. Complete it in the game and submit, then click Resume after typing.');
     return false;
   }
-  const text=C.label(s,step.i);nativeChoose(b,step.i);active.index++;saveLives();$('playStatus').textContent=`${auto?'Following':'Chose'} ${active.index}/${active.file.route.length}: ${text}`;return true;
+  const text=C.label(s,step.i);nativeChoose(b,step.i,step.shin||0);active.index++;saveLives();$('playStatus').textContent=`${auto?'Following':'Chose'} ${active.index}/${active.file.route.length}: ${text}`;return true;
 }
 function stopFollowing(pause=false,message){
   auto=false;if(pause){const b=bridge();if(b.life&&b.runtime?.state&&!C.finished(b.runtime.state)&&!b.runtime.paused)b.life.togglePause();}
@@ -231,7 +236,7 @@ function follow(){
   active=active?.file===selected?active:{file:selected,index:0};
   if(active.waitingForTyping){
     const sig=C.signature(s),waiting=active.waitingForTyping;
-    if(['craft','shfight','jfgame','taboo'].includes(s.prompt?.kind)){stopFollowing(true,'Your input is needed. Finish and submit the minigame or contract in the game, then resume to plan from your actual result.');return;}
+    if(['craft','shfight','jfgame','taboo','cq'].includes(s.prompt?.kind)){stopFollowing(true,'Your input is needed. Finish and submit the minigame or contract in the game, then resume to plan from your actual result.');return;}
     if(sig===waiting.before){stopFollowing(true,'Your input is needed. Enter and submit your text in the game, then click Resume after typing.');return;}
     if(sig!==waiting.after){planCurrent({goals:[...active.file.goals],sort:active.file.sort||'recommended',followAfter:true});return;}
     active.index++;delete active.waitingForTyping;
@@ -241,7 +246,8 @@ function follow(){
 }
 function validInputs(){for(const input of $('viewFind').querySelectorAll('input[type=number]'))if(!input.checkValidity()){say('Check '+(input.getAttribute('aria-label')||input.closest('label')?.textContent||'search settings')+': '+input.validationMessage);input.reportValidity();return false;}return true;}
 async function search(){
-  if(!validInputs())return;const task=begin('search'),goals=draftGoals(),options={name:$('name').value.trim(),gender:$('gender').value,loveSame:partnerSame(),arMem:C.arbiterMemory(read('cbl.arbiter.v1')||{}),birthplace:$('birthplace').value};savePreferences();
+  if(bridge().extra){say('Return to the normal life mode to use this planner. L Corp. Employee mode is separate.');return;}
+  if(!validInputs())return;const task=begin('search'),goals=draftGoals(),options={name:$('name').value.trim(),gender:$('gender').value,loveSame:partnerSame(),arMem:C.arbiterMemory(read('cbl.arbiter.v1')||{}),...eraSettings(),birthplace:$('birthplace').value};savePreferences();
   $('startSettings').open=false;$('goalPicker').open=false;
   say('Searching complete lives. You can stop and keep completed results.');results=[];renderResults();
   try{
@@ -311,6 +317,7 @@ $('start').onclick=async()=>{
   if(lang()!==selected.lang){$('playStatus').textContent='Use this route’s game language first: '+selected.lang;return;}
   if(partnerSame()!==(selected.options.loveSame??false)){$('playStatus').textContent='Use this route’s native Partner’s gender setting before starting: '+(selected.options.loveSame?'Same gender':'Opposite gender')+'.';return;}
   if(!C.arbiterStartMatches(selected,read('cbl.arbiter.v1')||{})){$('playStatus').textContent='Arbiter history changed since this search. Find this life again to use the current story cycle.';return;}
+  const era=eraSettings();if(era.eras!==(selected.options.eras??true)||era.forceEra!==(selected.options.forceEra||'')){$('playStatus').textContent='Use Eras: '+((selected.options.eras??true)?'On':'Off')+' and '+(selected.options.forceEra==='smoke'?'a URL with ?era=smoke':'a URL without ?era=smoke')+', or search again with the current settings.';return;}
   const file=selected;active={file,index:0};saveLives();b.home.onStart(file.options);
   // The native start callback changes its ref before React commits the live
   // controls. Wait for those controls, not merely an animation frame.

@@ -45,12 +45,14 @@ function makePlanner(E) {
     // Festival entry and its minigame use Math.random(), outside the seed.
     if(s.prompt.kind==='jfgame')return [];
     if(s.prompt.jf==='enter')return s.prompt.choices.flatMap((c,i)=>i!==0&&!c.locked?[i]:[]);
-    if(['reflect','name','color','craft','shfight','taboo'].includes(s.prompt.kind))return [-1];
+    if(['reflect','name','color','craft','shfight','taboo','cq'].includes(s.prompt.kind))return [-1];
     return s.prompt.choices.flatMap((c,i)=>c.locked?[]:[i]).concat(s.prompt.kind==='minor'?[-1]:[]);
   }
   function apply(s,i){
     if(!choices(s).includes(i))throw Error('Route action is unavailable or locked');
-    if(i===-2)E.continue(s,E.data());else E.choose(s,E.data(),i,{text:''});
+    const shin=i>=0?E.shinForChoice(s,i):0;
+    if(i===-2)E.continue(s,E.data());else E.choose(s,E.data(),i,{text:'',shin});
+    return shin;
   }
   function advance(s){if(s.cursor<s.plan.length)E.advance(s,E.data());else E.year(s,E.data());}
   function targets(s,goals){
@@ -123,7 +125,7 @@ function makePlanner(E) {
         const signature=C.signature(node.state);
         for(const i of choices(node.state)){
           const step={signature,i},child={state:branch(node.state),route:[...node.route,step],steps:node.steps+1};
-          apply(child.state,i);expanded++;
+          const shin=apply(child.state,i);if(shin)step.shin=shin;expanded++;
           if(C.typing(node.state))step.afterSignature=C.signature(child.state);
           if(settle(child)){child.value=score(child.state,goals,sort);next.push(child);}
         }
@@ -161,13 +163,15 @@ function makePlanner(E) {
     if(!file||![1,2,3].includes(file.version)||file.source!==C.source)throw Error('Unsupported route file or game version');
     if(!['plain','spider'].includes(file.mentorVoice??'plain'))throw Error('Unknown mentor voice');
     E.setVoice(file.mentorVoice??'plain');
-    if(!['en','ko','ja'].includes(file.lang)||!['birth','life'].includes(file.scope))throw Error('Missing route language or scope');
+    if(!['en','ko','ja','zh'].includes(file.lang)||!['birth','life'].includes(file.scope))throw Error('Missing route language or scope');
     if(!file.options||typeof file.options.seed!=='string'||!file.options.seed||file.options.seed!==file.options.seed.trim()||!['m','f'].includes(file.options.gender)||typeof file.options.name!=='string')throw Error('Invalid seed, name or gender');
     checkGoals(file.goals);
     if(!Array.isArray(file.route)||file.route.length>5000||(file.scope==='birth'&&file.route.length))throw Error('Invalid route length');
     const options={seed:file.options.seed,name:file.options.name,gender:file.options.gender};
     if(file.options.loveSame!==undefined){if(typeof file.options.loveSame!=='boolean')throw Error('Invalid partner-gender setting');options.loveSame=file.options.loveSame;}
     if(file.options.arMem!==undefined)options.arMem=C.arbiterMemory(file.options.arMem);
+    if(file.options.eras!==undefined){if(typeof file.options.eras!=='boolean')throw Error('Invalid era setting');options.eras=file.options.eras;}
+    if(file.options.forceEra!==undefined){if(!['','smoke'].includes(file.options.forceEra))throw Error('Invalid forced era');options.forceEra=file.options.forceEra;}
     if(file.options.birthplace!==undefined){
       if(birthSeed(options.seed,file.options.birthplace)!==options.seed)throw Error('Birthplace does not match route seed');
       options.birthplace=file.options.birthplace;
@@ -181,7 +185,7 @@ function makePlanner(E) {
         const step=file.route[cursor++];
         if(!step||(step.signature!==C.signature(s)&&!(file.version===1&&step.signature===C.legacySignature(s))))throw Error('Route does not match its seeded simulation');
         const checked={signature:C.signature(s),i:step.i},typing=C.typing(s);
-        route.push(checked);apply(s,step.i);if(typing)checked.afterSignature=C.signature(s);
+        route.push(checked);const shin=apply(s,step.i);if(shin)checked.shin=shin;if(typing)checked.afterSignature=C.signature(s);
       }else advance(s);
     }
     if(cursor!==file.route.length||(file.scope==='life'&&!C.finished(s)))throw Error('Route is incomplete');
@@ -219,7 +223,7 @@ function makePlanner(E) {
       settle(expected);settle(actual);
       if(C.finished(actual)||!choices(actual).includes(step.i)||gameplaySignature(actual)!==gameplaySignature(expected))return null;
       const typing=C.typing(actual),next={signature:C.signature(actual),i:step.i};
-      apply(actual,step.i);apply(expected,step.i);if(typing)next.afterSignature=C.signature(actual);route.push(next);
+      const shin=apply(actual,step.i);if(shin)next.shin=shin;apply(expected,step.i);if(typing)next.afterSignature=C.signature(actual);route.push(next);
     }
     settle(expected);settle(actual);
     if(!C.finished(actual)||gameplaySignature(actual)!==gameplaySignature(expected)||JSON.stringify(E.records(actual))!==JSON.stringify(E.records(expected)))return null;
@@ -250,7 +254,7 @@ function workerMain(){
         const words=new Uint32Array(count);crypto.getRandomValues(words);
         let results=[],examined=0;
         for(let n=0;n<count;n++){
-          const options={name:m.options.name,gender:m.options.gender,loveSame:m.options.loveSame??false,arMem:C.arbiterMemory(m.options.arMem),birthplace:m.options.birthplace??'',seed:P.birthSeed(m.seed||String(words[n]),m.options.birthplace??'')};
+          const options={name:m.options.name,gender:m.options.gender,loveSame:m.options.loveSame??false,arMem:C.arbiterMemory(m.options.arMem),eras:m.options.eras??true,forceEra:m.options.forceEra||'',birthplace:m.options.birthplace??'',seed:P.birthSeed(m.seed||String(words[n]),m.options.birthplace??'')};
           let lastBest=null;
           function update(candidates){
             results=results.filter(r=>r.file.seed!==options.seed);results.push(...candidates);

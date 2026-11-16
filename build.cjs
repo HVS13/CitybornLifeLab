@@ -2,16 +2,18 @@ const fs = require('node:fs');
 const crypto = require('node:crypto');
 const vm = require('node:vm');
 const source = fs.readFileSync('analysis/game.bundle.js', 'utf8');
-const start = source.indexOf('const l0 =');
-const end = source.indexOf('const kT =');
-if (start < 0 || end < start) throw Error('Inspected engine boundaries missing');
-const engine = source.slice(start, end);
-const engineExports = `return {create:(data,options)=>tb(data,{...options,boost:true}),data:Qt,birthplace:seed=>zw(Qt(),seed),birthPrefix:l1,choose:Fa,continue:AA,advance:m4,year:p6,records:s=>[...xT(D_(s).map(r=>r.key))],recordDetails:s=>U_(D_(s),Qt().rarity),rarityOrder:Fp,combatPotential:s=>s.dr&&s.dr.end!=='return'?null:hn(s),fixerPower:s=>s.job==='해결사'&&(!s.dr||s.dr.end==='return')?Dl(s):null,promotion:s=>s.dr&&s.dr.end!=='return'?null:s.job==='해결사'&&s.grade>=1&&!s.flags.includes('특색')?{current:s.merit||0,required:bo(s)}:Xr(s)?{current:Ta(s),required:jo(s)}:null,job:kt,cause:mg,catalog:iy,flags:Z5,lang:cf,voice:()=>Cc,setVoice:O1};`;
+const start = source.indexOf('const q0 =');
+const end = source.indexOf('const dy =');
+const vendor = source.indexOf('var V0 =',start),rules = source.indexOf('  Gr =',vendor);
+if (start < 0 || vendor < start || rules < vendor || end < rules) throw Error('Inspected engine boundaries missing');
+// This client puts React DOM between localization and the native rules.
+const engine = source.slice(start,vendor)+'const '+source.slice(rules,end).trimStart();
+const engineExports = `return {create:(data,options)=>gk(data,{...options,boost:true}),data:Dt,birthplace:seed=>Jg(Dt(),seed),birthPrefix:m2,choose:Ga,continue:dY,advance:AM,year:E$,records:s=>[...R5(cv(s).map(r=>r.key))],recordDetails:s=>fv(cv(s),Dt().rarity),rarityOrder:Xx,combatPotential:s=>s.dr&&s.dr.end!=='return'?null:tn(s),fixerPower:s=>s.job==='해결사'&&(!s.dr||s.dr.end==='return')?Xd(s):null,promotion:s=>s.dr&&s.dr.end!=='return'?null:s.job==='해결사'&&s.grade>=1&&!s.flags.includes('특색')?{current:s.merit||0,required:to(s)}:Bi(s)?{current:er(s),required:Bo(s)}:null,job:Tt,cause:xp,catalog:lb,flags:I4,lang:Nl,voice:()=>df,setVoice:H2,shinForChoice:(s,i)=>eC(s,s.prompt,i)};`;
 const factory = `function nativeEngine(){${engine}\n${engineExports}}`;
 // Browsing must not depend on worker startup or live-client compatibility.
 const inspected = vm.runInNewContext('('+factory+')()');
 const catalogue = {records: inspected.catalog, flags: {},regions:{}};
-for (const language of ['en','ja','ko']) {
+for (const language of ['en','ja','ko','zh']) {
   inspected.lang(language);
   catalogue.flags[language] = Object.entries(inspected.flags);
   catalogue.regions[language] = inspected.data().regions.map(({id,name})=>({id,name}));
@@ -38,5 +40,5 @@ const metadata = `// ==UserScript==
 fs.mkdirSync('dist', {recursive:true});
 fs.writeFileSync('dist/cityborn-advisor.user.js', metadata + '\n(() => {\n"use strict";\n' + factory + '\n' + common + '\n' + planner + '\nconst ADVISOR_VERSION='+JSON.stringify(version)+';\nconst ADVISOR_CATALOG='+JSON.stringify(catalogue)+';\n' + ui + '\n})();\n');
 fs.writeFileSync('dist/cityborn-advisor.meta.js', metadata);
-fs.writeFileSync('analysis/source.json', JSON.stringify({url:'https://project-moon-life.cityborn.workers.dev/assets/index-CVESJ4ss.js', inspected:'2026-11-05', formattedSourceSha256:crypto.createHash('sha256').update(source).digest('hex')},null,2));
+fs.writeFileSync('analysis/source.json', JSON.stringify({url:'https://project-moon-life.cityborn.workers.dev/assets/index-DfewY0Je.js', inspected:'2026-11-16', formattedSourceSha256:crypto.createHash('sha256').update(source).digest('hex')},null,2));
 console.log('Built dist/cityborn-advisor.user.js');

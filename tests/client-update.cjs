@@ -82,11 +82,30 @@ for(const file of workerContext.result.results){
   assert.equal(file.options.arMem.n,1);assert.equal(E.create(E.data(),file.options).ar.end,'extract');
   assert.ok(P.validate(file).complete);
 }
+const manualArbiter=workerContext.result.results[0];
+const automaticSearch={id:2,type:'search',lang:'en',mentorVoice:'plain',seed:'',options:{name:'Tester',gender:'m'},
+  goals:['record:born_head'],effort:'quick',sort:'recommended'};
+workerContext.self.onmessage({data:automaticSearch});
+const firstBatch=workerContext.result;
+assert.equal(firstBatch.tested,1,'automatic search stops at the first complete match');
+assert.equal(firstBatch.results[0].seed,'A:0','a Head birth goal generates a compatible seed');
+assert.ok(firstBatch.results[0].matched.every(Boolean));
+workerContext.self.onmessage({data:{...automaticSearch,previous:firstBatch.results}});
+assert.equal(workerContext.result.tested,1,'the next batch skips the seed already in the result list');
+assert.deepEqual(Array.from(workerContext.result.results,f=>f.seed).sort(),['A:0','B:0']);
+assert.ok(workerContext.result.results.every(file=>P.validate(file).complete),'automatic search returns replayable routes');
+// Advance the worker clock only after its first deadline check.
+const realNow=Date.now;let clockReads=0;
+workerContext.Date={now:()=>++clockReads<3?0:31000};
+workerContext.self.onmessage({data:automaticSearch});
+assert.ok(workerContext.result.timedOut);
+assert.equal(workerContext.result.results.length,0,'a timed-out search never reports an unfinished branch as a match');
+workerContext.Date={now:realNow};
 
 // The production start handler checks history before calling the native
 // home callback, which obtains memory from storage rather than route options.
 (async()=>{
-  const file=workerContext.result.results[0],elements={start:{},playStatus:{}},startAt=ui.indexOf("$('start').onclick=async()=>{"),end=ui.indexOf("$('resume').onclick",startAt);
+  const file=manualArbiter,elements={start:{},playStatus:{}},startAt=ui.indexOf("$('start').onclick=async()=>{"),end=ui.indexOf("$('resume').onclick",startAt);
   let starts=0;
   const context={C,selected:file,active:null,$:id=>elements[id],bridge:()=>({home:{onStart:()=>starts++}}),lang:()=> 'en',partnerSame:()=>false,hardMode:()=>false,
     eraSettings:()=>({eras:true,forceEra:''}),read:()=>({n:2}),saveLives:()=>{},waitForLife:async()=>true,follow:()=>{},renderPlay:()=>{}};

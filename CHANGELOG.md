@@ -1,5 +1,11 @@
 # Changes
 
+## 2.12.0
+
+- Search for seeds automatically and stop at the first full match. Search another batch to keep looking without losing your best results.
+- Generate birthplace prefixes for Head and Outskirts birth goals and reuse achievement calculations while ranking routes.
+- Group achievements by category or rarity in the picker and on result cards.
+
 ## 2.11.0
 
 - Support the 25 November game build and its 357 achievements. Searches and route files capture the native difficulty. The game must use that difficulty when you start a seed route.

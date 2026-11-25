@@ -8,13 +8,14 @@ const vendor = source.indexOf('var s1 =',start),rules = source.indexOf('  ei =',
 if (start < 0 || vendor < start || rules < vendor || end < rules) throw Error('Inspected engine boundaries missing');
 // This client puts React DOM between localization and the native rules.
 const engine = source.slice(start,vendor)+'const '+source.slice(rules,end).trimStart();
-const engineExports = `return {create:(data,options)=>Sk(data,{...options,boost:true}),data:qt,birthplace:seed=>ly(qt(),seed),birthPrefix:S2,choose:Qa,continue:SY,advance:ZM,year:gC,records:s=>[...V5(Tv(s).map(r=>r.key))],recordDetails:s=>_v(Tv(s),qt().rarity),rarityOrder:sk,combatPotential:s=>s.dr&&s.dr.end!=='return'?null:Oo(s),fixerPower:s=>s.job==='해결사'&&(!s.dr||s.dr.end==='return')?ic(s):null,promotion:s=>s.dr&&s.dr.end!=='return'?null:s.job==='해결사'&&s.grade>=1&&!s.flags.includes('특색')?{current:s.merit||0,required:oo(s)}:zi(s)?{current:sr(s),required:Ho(s)}:null,job:_t,cause:Cp,catalog:xb,groups:l0,flags:K4,lang:El,voice:()=>pf,setVoice:o5,shinForChoice:(s,i)=>IC(s,s.prompt,i)};`;
+const engineExports = `return {create:(data,options)=>Sk(data,{...options,boost:true}),data:qt,birthplace:seed=>ly(qt(),seed),birthPrefix:S2,choose:Qa,continue:SY,advance:ZM,year:gC,records:s=>[...V5(Tv(s).map(r=>r.key))],recordDetails:s=>_v(Tv(s),qt().rarity),rarityOrder:sk,combatPotential:s=>s.dr&&s.dr.end!=='return'?null:Oo(s),fixerPower:s=>s.job==='해결사'&&(!s.dr||s.dr.end==='return')?ic(s):null,promotion:s=>s.dr&&s.dr.end!=='return'?null:s.job==='해결사'&&s.grade>=1&&!s.flags.includes('특색')?{current:s.merit||0,required:oo(s)}:zi(s)?{current:sr(s),required:Ho(s)}:null,job:_t,cause:Cp,catalog:xb,groups:l0,tiers:()=>jh.filter(t=>t.id!=='past').slice().reverse().concat(jh.filter(t=>t.id==='past')).map(t=>[t.id,d(t.ko,t.en,t.ja)]),flags:K4,lang:El,voice:()=>pf,setVoice:o5,shinForChoice:(s,i)=>IC(s,s.prompt,i)};`;
 const factory = `function nativeEngine(){${engine}\n${engineExports}}`;
 // Browsing must not depend on worker startup or live-client compatibility.
 const inspected = vm.runInNewContext('('+factory+')()');
-const catalogue = {records: inspected.catalog, flags: {},regions:{},groups:{}};
+const catalogue = {records: inspected.catalog, flags: {},regions:{},groups:{},tiers:{}};
 for (const language of ['en','ja','ko','zh']) {
   inspected.lang(language);
+  catalogue.tiers[language] = inspected.tiers();
   catalogue.groups[language] = inspected.groups.map(({id,label})=>[id,label()]);
   catalogue.flags[language] = Object.entries(inspected.flags);
   catalogue.regions[language] = inspected.data().regions.map(({id,name})=>({id,name}));

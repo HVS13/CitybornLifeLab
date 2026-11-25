@@ -8,7 +8,7 @@ Find a life that fits your goals, see its predicted ending, and follow its choic
 
 1. Install [Tampermonkey](https://www.tampermonkey.net/) or a userscript manager supporting page-context scripts and workers.
 2. Open the userscript link above and confirm installation/update. If it opens as text, paste the entire file into a userscript and save. Remove any older separately installed local copy.
-3. Reload the game. The panel should say **Cityborn Life Lab 2.11.0**. The manager's script name remains **Cityborn Life Advisor** so existing installations can update normally.
+3. Reload the game. The panel should say **Cityborn Life Lab 2.12.0**. The manager's script name remains **Cityborn Life Advisor** so existing installations can update normally.
 
 No server, credentials, or npm installation is required to use the script. Calculations and saved routes stay in your browser. Its download/update URLs point to this repository.
 
@@ -22,7 +22,7 @@ No server, credentials, or npm installation is required to use the script. Calcu
 
 **Use this life's stats/traits** copies values from the current or ended game into new search targets. You can edit them before searching. Editing new targets does not erase an existing route or change what an old result claims to satisfy: every card names its original targets.
 
-**Browse traits & achievements** lists all 52 displayed traits and 357 achievements without a search query. Use **Show** to switch between traits and achievements. Choose a category to narrow the list, or search by name, ID, or unlock hint. Result cards group predicted achievements by category. The selected count describes your targets. The catalogue remains browsable if workers fail or the game updates, while incompatible planning stays disabled. In that case, the catalogue represents the inspected client rather than any uninspected additions.
+**Browse traits & achievements** lists all 52 displayed traits and 357 achievements without a search query. Use **Show** to switch between traits and achievements. Choose a category to narrow the list, or search by name, ID, or unlock hint. Switch **Group by** between Category and Rarity. Result cards use the same grouping. The selected count describes your targets. The catalogue remains browsable if workers fail or the game updates, while incompatible planning stays disabled. In that case, the catalogue represents the inspected client rather than any uninspected additions.
 
 Choose **Birthplace** under **Starting settings & search effort** to restrict random seeds or a specific seed to a native region. **Random** leaves the seed unchanged; an existing prefix (such as `A:123456` or `OUT:123456`) still determines birthplace. A conflicting dropdown selection is rejected. Selecting a birthplace changes the full seed and may change the entire life. Result cards show the predicted birthplace, and searches preserve the selection in preferences and route exports. Import restores it; current-life planning uses the life already in progress.
 
@@ -88,6 +88,8 @@ Replay fingerprints include stats, flags, quests, history and RNG state; only th
 The planner reads the game's saved language (or its native browser-language default), rather than the HTML language attribute. Version 2.0.2 fixes a replay failure when those differed: a continuation could match its starting state, then generate subsequent events in the wrong language and stop after one choice. If you have an affected older route, update, reload, and generate a new current-life plan once.
 
 The supported client is `index-CVgdJU9k.js`, inspected on 25 November 2026. Routes from a different client are rejected; search again after a client update. Its formatted snapshot and hash are retained in `analysis/`. Bundled game logic/text remain attributable to their original authors. This is an unofficial companion inspired by [DotaCaptainLab](https://github.com/HVS13/DotaCaptainLab).
+
+Leave the seed and seed limit blank to search automatically. Each batch searches up to 24 seeds or runs for about 30 seconds. With targets, a batch stops at the first complete match. Without targets, it looks for three completed lives. **Search more seeds** keeps the best results while you use the same settings. When you choose a birth achievement for the Head or the Outskirts, automatic and fixed-size random searches generate seeds for the required birthplace.
 
 ## Build and verification
 

@@ -12,13 +12,13 @@ function makePlanner(E) {
   const prerequisites=new Map(E.catalog.map(r=>[r.key,r.implies]));
   const recordTiers=new Map(E.catalog.map(r=>[r.key,r.tier]));
   const rarityTiers=Object.keys(E.rarityOrder).sort((a,b)=>E.rarityOrder[b]-E.rarityOrder[a]);
-  function goalProgress(s,goals,records,met){
+  function goalProgress(s,goals,records,met,stats){
     if(!goals.length)return 1;
     const promotion=E.promotion(s),merit=promotion?.required?Math.max(0,Math.min(1,promotion.current/promotion.required)):0;
     return goals.reduce((sum,g,i)=>{
       if(met[i])return sum+1;
       const [kind,key,value]=g.split(':');let part=0;
-      if(kind==='stat')part=C.displayStats(s)[key]/Math.max(1,Number(value));
+      if(kind==='stat')part=stats[key]/Math.max(1,Number(value));
       else if(kind==='age')part=s.age/Math.max(1,Number(key));
       else if(kind==='record'&&/^age(80|100|200)$/.test(key))part=s.age/Number(key.slice(3));
       else if((g==='record:color'||g==='flag:특색'||/^record:fixer_g[1-7]$/.test(g))&&s.job==='해결사'&&s.grade){
@@ -32,13 +32,12 @@ function makePlanner(E) {
       return sum+Math.max(0,Math.min(1,part));
     },0)/Math.max(1,goals.length);
   }
-  function comparison(s,goals=[]){
-    const details=E.recordDetails(s),rare=details[0],records=new Set(E.records(s));
+  function comparison(s,goals=[],records=new Set(E.records(s)),stats=C.displayStats(s),met=targets(s,goals,records,stats)){
+    const rare=E.recordDetails(s)[0];
     const counts=new Map();for(const key of records){const tier=recordTiers.get(key);if(tier)counts.set(tier,(counts.get(tier)||0)+1);}
     return {rarity:rare?.tierLabel||null,rarityRank:rare?E.rarityOrder[rare.tier]:-1,rarityProfile:rarityTiers.map(t=>counts.get(t)||0),achievementCount:records.size,
-      combatPotential:E.combatPotential(s),fixerPower:E.fixerPower(s),promotion:E.promotion(s),goalProgress:goalProgress(s,goals,records,targets(s,goals))};
+      combatPotential:E.combatPotential(s),fixerPower:E.fixerPower(s),promotion:E.promotion(s),goalProgress:goalProgress(s,goals,records,met,stats)};
   }
-  function outcome(s,goals){return {complete:C.finished(s),scope:'life',goals,matched:targets(s,goals),summary:{age:s.age,alive:!!s.dead?.alive,stats:C.displayStats(s),comparison:comparison(s,goals)}};}
   function choices(s){
     if(s.dead?.voice)return [-2];
     if(!s.prompt)return [];
@@ -55,8 +54,7 @@ function makePlanner(E) {
     return shin;
   }
   function advance(s){if(s.cursor<s.plan.length)E.advance(s,E.data());else E.year(s,E.data());}
-  function targets(s,goals){
-    const records=new Set(goals.some(g=>g.startsWith('record:'))?E.records(s):[]),stats=C.displayStats(s);
+  function targets(s,goals,records=new Set(goals.some(g=>g.startsWith('record:'))?E.records(s):[]),stats=C.displayStats(s)){
     return goals.map(g=>{
       const [kind,key,value]=g.split(':');
       if(kind==='record')return records.has(key);
@@ -69,22 +67,26 @@ function makePlanner(E) {
     });
   }
   function score(s,goals,sort='recommended'){
-    const stats=C.displayStats(s),met=targets(s,goals);
-    const records=new Set(goals.some(g=>g.startsWith('record:'))?E.records(s):[]);
+    const stats=C.displayStats(s);
+    const needsRecords=sort==='rarity'||sort==='achievements'||goals.some(g=>g.startsWith('record:'));
+    const records=new Set(needsRecords?E.records(s):[]);
+    const met=targets(s,goals,records,stats);
     let preference=0;
+    let progress;
     if(Object.hasOwn(C.statNames,sort))preference=stats[sort]/100;
     else if(sort==='age')preference=Math.min(s.age/10000,1);
     else if(sort==='power')preference=Math.max(0,E.fixerPower(s)||0)/20;
     else if(sort==='potential'){const value=E.combatPotential(s);preference=value==null?0:0.5+Math.atan(value)/Math.PI;}
-    else if(sort==='achievements')preference=E.records(s).length/Math.max(1,E.catalog.length);
+    else if(sort==='achievements')preference=records.size/Math.max(1,E.catalog.length);
     else if(sort==='rarity'){
-      const c=comparison(s,goals),base=E.catalog.length+1;
+      const c=comparison(s,goals,records,stats,met),base=E.catalog.length+1;
       const profile=c.rarityProfile.reduce((sum,count,i)=>sum+count/Math.pow(base,i+1),0);
       preference=(c.rarityRank+1+profile)/(rarityTiers.length+1);
+      progress=c.goalProgress;
     }
     // This is a bounded search heuristic, not a native success probability.
     // The final comparator uses actual endings and the exact chosen metric.
-    return met.filter(Boolean).length*1000000+goalProgress(s,goals,records,met)*100000+
+    return met.filter(Boolean).length*1000000+(progress??goalProgress(s,goals,records,met,stats))*100000+
       Math.min(1,preference)*10000+
       Object.values(stats).reduce((a,b)=>a+b,0)+Math.min(s.age,1000)*5+
       (C.finished(s)&&!s.dead.alive?-2000:0);
@@ -101,25 +103,29 @@ function makePlanner(E) {
       throw Error('Unknown achievement, trait, or stat condition: '+g);
     }
   }
-  function plan(start,goals,effort='quick',progress=()=>{},sort='recommended'){
+  function plan(start,goals,effort='quick',progress=()=>{},sort='recommended',shouldStop=()=>false){
     if(start.prompt?.kind==='jfgame')throw Error('Finish the Festival manually, then plan from your actual result. Its randomness is not determined by the seed.');
     checkGoals(goals);if(!efforts[effort])throw Error('Unknown search effort');
     if(!Object.hasOwn(C.sorts,sort))throw Error('Unknown result order');
     const root={state:copy(start),route:[],steps:0};
     let beam=[root],completed=[],expanded=0,incomplete=0;
     function settle(node){
-      while(!C.finished(node.state)&&!C.actionable(node.state)&&node.steps<5000){advance(node.state);node.steps++;}
+      while(!C.finished(node.state)&&!C.actionable(node.state)&&node.steps<5000&&!shouldStop()){advance(node.state);node.steps++;}
       if(C.finished(node.state)){
         const s=node.state;
-        node.outcomeKey=JSON.stringify([s.age,s.dead.cause,!!s.dead.alive,C.displayStats(s),s.job,s.work,s.grade,comparison(s,goals),[...s.flags].sort(),[...E.records(s)].sort()]);
-        node.value=score(s,goals,sort);node.order=outcome(s,goals);if(!completed.some(n=>n.outcomeKey===node.outcomeKey))completed.push(node);
+        const stats=C.displayStats(s),records=new Set(E.records(s)),matched=targets(s,goals,records,stats);
+        const metrics=comparison(s,goals,records,stats,matched);
+        node.outcomeKey=JSON.stringify([s.age,s.dead.cause,!!s.dead.alive,stats,s.job,s.work,s.grade,metrics,[...s.flags].sort(),[...records].sort()]);
+        if(completed.some(n=>n.outcomeKey===node.outcomeKey))return false;
+        node.order={complete:true,scope:'life',goals,matched,summary:{age:s.age,alive:!!s.dead.alive,stats,comparison:metrics}};
+        completed.push(node);
         completed.sort((a,b)=>C.compareLives(a.order,b.order,sort));completed=completed.slice(0,3);return false;
       }
       if(node.steps>=5000){incomplete++;return false;}
       return true;
     }
     beam=beam.filter(settle);
-    for(let depth=0;beam.length&&depth<600;depth++){
+    for(let depth=0;beam.length&&depth<600&&!shouldStop();depth++){
       const next=[];
       for(const node of beam){
         const signature=C.signature(node.state);
@@ -132,7 +138,7 @@ function makePlanner(E) {
       }
       next.sort((a,b)=>b.value-a.value);beam=next.slice(0,efforts[effort]);
       if(depth%10===0)progress({age:beam[0]?.state.age||completed[0]?.state.age||start.age,expanded,completed:completed.length,best:completed[0]||null});
-      if(effort==='quick'&&goals.length&&completed.some(n=>targets(n.state,goals).every(Boolean))){beam=[];break;}
+      if(effort==='quick'&&goals.length&&completed.some(n=>n.order.matched.every(Boolean))){beam=[];break;}
     }
     incomplete+=beam.length;
     return {completed,expanded,incomplete};
@@ -251,29 +257,52 @@ function workerMain(){
       }
       if(m.type==='search'){
         P.checkGoals(m.goals);
-        const count=m.seed?1:Math.max(1,Math.min(500,Math.floor(m.count)||10));
+        const automatic=!m.seed&&!m.count;
+        const count=m.seed?1:automatic?24:Math.max(1,Math.min(500,Math.floor(m.count)||1));
+        const deadline=automatic?Date.now()+30000:Infinity;
+        const expired=()=>Date.now()>=deadline;
         const words=new Uint32Array(count);crypto.getRandomValues(words);
-        let results=[],examined=0;
-        for(let n=0;n<count;n++){
-          const options={name:m.options.name,gender:m.options.gender,loveSame:m.options.loveSame??false,arMem:C.arbiterMemory(m.options.arMem),hard:m.options.hard??false,eras:m.options.eras??true,forceEra:m.options.forceEra||'',birthplace:m.options.birthplace??'',seed:P.birthSeed(m.seed||String(words[n]),m.options.birthplace??'')};
-          let lastBest=null;
-          function update(candidates){
-            results=results.filter(r=>r.file.seed!==options.seed);results.push(...candidates);
-            results.sort((a,b)=>C.compareLives(a.file,b.file,m.sort));results=results.slice(0,5);
-          }
-          const search=P.plan(E.create(E.data(),options),m.goals,m.effort,p=>{
-            let changed=false;
-            if(p.best&&p.best!==lastBest){lastBest=p.best;update([{file:P.pack({...p.best,options,effort:m.effort,sort:m.sort},m.goals,'life',m.lang),value:p.best.value}]);changed=true;}
-            self.postMessage({id:m.id,progress:{age:p.age,expanded:p.expanded,completed:p.completed,tested:n,total:count,...(changed?{results:results.map(r=>r.file)}:{})}});
-          },m.sort);
-          examined+=search.expanded;
-          const candidates=search.completed.map(node=>({file:P.pack({...node,options,effort:m.effort,sort:m.sort},m.goals,'life',m.lang),value:node.value}));
-          // Show different seeds in random search; keep alternative routes when
-          // deliberately checking one seed.
-          if(candidates.length)update(m.seed?candidates:candidates.slice(0,1));
-          self.postMessage({id:m.id,progress:{tested:n+1,total:count,examined,results:results.map(r=>r.file)}});
+        const birthplaces=m.goals.includes('record:born_outskirts')?['outskirts']:
+          m.goals.includes('record:born_head')?['A','B','C']:[];
+        if(!m.seed&&birthplaces.length&&(
+          (m.options.birthplace&&!birthplaces.includes(m.options.birthplace))||
+          (birthplaces[0]==='outskirts'&&m.goals.includes('record:born_head'))
+        ))throw Error('The selected birthplace and birth achievements cannot all match.');
+        const base={name:m.options.name,gender:m.options.gender,loveSame:m.options.loveSame??false,
+          arMem:C.arbiterMemory(m.options.arMem),hard:m.options.hard??false,
+          eras:m.options.eras??true,forceEra:m.options.forceEra||'',birthplace:m.options.birthplace??''};
+        let results=m.previous||[],examined=0,tested=0,completedSeeds=0;
+        const seen=new Set(results.map(file=>file.seed));
+        function update(candidates){
+          const seed=candidates[0]?.seed;
+          const ranked=[...results.filter(file=>file.seed!==seed),...candidates]
+            .sort((a,b)=>C.compareLives(a,b,m.sort)).slice(0,5);
+          if(ranked.every((file,i)=>file===results[i])&&ranked.length===results.length)return false;
+          results=ranked;
+          return true;
         }
-        return send({results:results.map(r=>r.file),tested:count,examined});
+        const progress=(data)=>self.postMessage({id:m.id,progress:{tested,total:count,examined,...data}});
+        for(let n=0;n<count&&!expired();n++){
+          const region=base.birthplace||(!m.seed&&birthplaces.length?birthplaces[n%birthplaces.length]:'');
+          const seed=P.birthSeed(m.seed||String(words[n]),region);
+          if(!m.seed&&seen.has(seed))continue;
+          seen.add(seed);
+          const options={...base,seed};
+          let lastBest=null;
+          const pack=node=>P.pack({...node,options,effort:m.effort,sort:m.sort},m.goals,'life',m.lang);
+          const search=P.plan(E.create(E.data(),options),m.goals,m.effort,p=>{
+            const changed=p.best&&p.best!==lastBest&&update([pack(p.best)]);
+            lastBest=p.best;
+            progress({age:p.age,examined:examined+p.expanded,...(changed?{results}:{})});
+          },m.sort,expired);
+          examined+=search.expanded;tested++;
+          const candidates=(m.seed?search.completed:search.completed.slice(0,1)).map(pack);
+          const changed=candidates.length&&update(candidates);
+          progress(changed?{results}:{});
+          if(candidates.length)completedSeeds++;
+          if(automatic&&(m.goals.length?candidates.some(file=>file.matched.every(Boolean)):completedSeeds>=3))break;
+        }
+        return send({results,tested,examined,timedOut:expired()});
       }
     }catch(e){self.postMessage({id:m.id,error:e.message||String(e)});}
   };

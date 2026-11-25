@@ -33,17 +33,17 @@ label{display:block}.row{display:flex;gap:7px;align-items:end;margin:8px 0}.row>
 <div id="selectedGoals" class="chips"></div>
 <details id="goalPicker"><summary>Browse traits & achievements · <span id="selected">0</span> selected</summary><p id="catalogSize" class="hint"></p><p class="hint">Search by name, ID, or unlock hint. Use Avoid to exclude a trait.</p>
 <input id="filter" type="search" placeholder="Search goals" aria-label="Filter goals">
-<div class="row"><label>Show<select id="goalKind"><option value="all">All traits & achievements</option><option value="trait">Traits</option><option value="achievement">Achievements</option></select></label><label>Category<select id="goalGroup"><option value="">All categories</option></select></label></div>
+<div class="row"><label>Show<select id="goalKind"><option value="all">All traits & achievements</option><option value="trait">Traits</option><option value="achievement">Achievements</option></select></label><label>Group by<select id="groupBy"><option value="category">Category</option><option value="rarity">Rarity</option></select></label><label>Category<select id="goalGroup"><option value="">All categories</option></select></label></div>
 <div class="row"><label><input id="onlySelected" type="checkbox">Selected only</label><button id="clear" class="link">Clear selections</button></div><small id="goalCount" role="status"></small><div id="goals" role="group" aria-label="Available traits and achievements"></div></details>
 <details id="startSettings"><summary>Starting settings & search effort</summary>
 <div class="row"><label>Name<input id="name" type="text" maxlength="12" placeholder="Seeded name"></label><label>Gender<select id="gender"><option value="m">Male</option><option value="f">Female</option></select></label></div>
 <label>Birthplace<select id="birthplace"><option value="">Random</option></select></label><p class="hint">Uses the game’s birthplace seed prefix. This changes the full life seed. An existing prefix takes effect even with Random; conflicting selections are rejected.</p>
 <label>Specific seed (optional)<input id="seed" type="text" placeholder="Leave blank for random seeds"></label>
-<div class="row"><label>Random seeds<input id="count" type="number" min="1" max="500" value="3"></label><label>Search effort<select id="effort"><option value="quick">Quick</option><option value="thorough">Thorough</option></select></label></div>
-<p class="hint">Each seed explores several routes; start with 1–3 seeds. Quick looks for a matching ending sooner. Thorough explores more alternatives. Neither can guarantee finding every possible route.</p></details>
+<div class="row"><label>Seed limit<input id="count" type="number" min="1" max="500" placeholder="Auto"></label><label>Search effort<select id="effort"><option value="quick">Quick</option><option value="thorough">Thorough</option></select></label></div>
+<p class="hint">Leave the seed and limit blank for automatic search. Quick explores fewer choices per seed than Thorough.</p></details>
 <button id="search" class="primary">Find matching lives</button><p id="searchNote" class="hint">Results are predictions with replayable choices. Nothing starts automatically.</p><details class="hint"><summary>Game settings and manual events</summary><p>Searches use the game’s difficulty, Eras and partner settings, plus any Arbiter history. Use the same settings when you start a route.</p><p>Play the Festival on your own, then plan from your result. The companion plans normal lives. Play L Corp. Employee mode separately.</p></details>
 <label>Result & planning order<select id="sort">${Object.entries(C.sorts).map(([key,name])=>`<option value="${key}">${name}</option>`).join('')}</select></label><p class="hint">Full matches come first. Your sort order also guides the search.</p>
-<div id="results"></div></div>
+<div id="resultArea"><button id="searchMore" hidden>Search more seeds</button><div id="results"></div></div></div>
 <div id="viewPlay" role="tabpanel" hidden>
 <h3 id="liveTitle">Your current life</h3><div id="liveStats"></div>
 <button id="plan" class="primary">Plan the rest of this life</button><p class="hint">Uses the targets from Find a life. The game pauses while you plan and review.</p>
@@ -69,21 +69,21 @@ function read(key){try{return JSON.parse(localStorage.getItem(key)||'null');}cat
 function write(key,value){try{localStorage.setItem(key,JSON.stringify(value));}catch{$('warning').textContent='Local storage is full or unavailable. Export the route you want to keep.';}}
 const newPreferences=read(prefsKey),saved=newPreferences||read('cityborn.advisor.preferences.v2')||{},stored=read(libraryKey)||{};
 let chosen=new Set((saved.goals||[]).filter(g=>g.startsWith('record:')||g.startsWith('flag:')||g.startsWith('avoid:')));
-let catalog=[],library=Array.isArray(stored.files)?stored.files:[],selected=null,active=null,results=[];
+let catalog=[],library=Array.isArray(stored.files)?stored.files:[],selected=null,active=null,results=[],lastSearch=null;
 let ready=false,worker=null,pending=new Map(),sequence=0,generation=0,job=null,auto=false,view='Find',previewFile=null;
 let position=saved.position&&Number.isFinite(saved.position.x)&&Number.isFinite(saved.position.y)?saved.position:null;
 for(const {id,name} of ADVISOR_CATALOG.regions[lang()])$('birthplace').add(new Option(name,id));
-for(const id of ['name','gender','birthplace','seed','count','effort','speed','ending','min-age','sort',...Object.keys(C.statNames).map(k=>'min-'+k)])if(saved[id]!=null)$(id).value=saved[id];
+for(const id of ['name','gender','birthplace','seed','count','effort','groupBy','speed','ending','min-age','sort',...Object.keys(C.statNames).map(k=>'min-'+k)])if(saved[id]!=null)$(id).value=saved[id];
 if(!$('birthplace').value)$('birthplace').value='';
 if(!Object.hasOwn(C.sorts,$('sort').value))$('sort').value='recommended';
-if(!newPreferences)$('count').value='3';
+if(!newPreferences&&saved.count!=null)$('count').value='3';
 if(!['quick','thorough'].includes($('effort').value))$('effort').value='quick';
 if(!['m','f'].includes($('gender').value))$('gender').value='m';
 function draftGoals(){
   const goals=[...chosen];for(const key of Object.keys(C.statNames))if($('min-'+key).value!=='')goals.push(`stat:${key}:${Number($('min-'+key).value)}`);
   if($('min-age').value!=='')goals.push('age:'+Number($('min-age').value));if($('ending').value==='alive')goals.push('ending:alive');return goals;
 }
-function savePreferences(){write(prefsKey,{goals:[...chosen],...Object.fromEntries(['name','gender','birthplace','seed','count','effort','speed','ending','min-age','sort',...Object.keys(C.statNames).map(k=>'min-'+k)].map(id=>[id,$(id).value])),position,minimized:$('panel').hidden});renderDraftHint();}
+function savePreferences(){write(prefsKey,{goals:[...chosen],...Object.fromEntries(['name','gender','birthplace','seed','count','effort','groupBy','speed','ending','min-age','sort',...Object.keys(C.statNames).map(k=>'min-'+k)].map(id=>[id,$(id).value])),position,minimized:$('panel').hidden});renderDraftHint();}
 function renderDraftHint(){
   $('searchNote').textContent=auto?'Pause following in Play this life before starting a new search.':results.length&&JSON.stringify(draftGoals())!==JSON.stringify(results[0].goals)?'Targets changed. Existing cards still show their original requirements; search again to use the new targets.':'Results are predictions with replayable choices. Nothing starts automatically.';
 }
@@ -137,10 +137,10 @@ function filterGoals(){
   const kind=$('goalKind').value,category=$('goalGroup').value,selectedOnly=$('onlySelected').checked;
   let shown=0;
   for(const group of $('goals').children){
-    const groupMatches=(!category||group.dataset.group===category)&&(kind==='all'||group.dataset.kind===kind);
+    const groupMatches=kind==='all'||group.dataset.kind===kind;
     let count=0;
     for(const row of group.querySelectorAll('.goal')){
-      row.hidden=!groupMatches||!row.textContent.toLowerCase().includes(query)||(selectedOnly&&!row.querySelector('input:checked'));
+      row.hidden=!groupMatches||(category&&row.dataset.category!==category)||!row.textContent.toLowerCase().includes(query)||(selectedOnly&&!row.querySelector('input:checked'));
       if(!row.hidden)count++;
     }
     group.hidden=count===0;
@@ -187,8 +187,8 @@ function card(file,buttons=true){
     const details=document.createElement('details'),summary=document.createElement('summary');
     details.className='earned';summary.textContent=`Achievements (${file.summary.records.length})`;details.append(summary);
     const earned=new Set(file.summary.records.map(key=>'record:'+key));
-    for(const [id,name] of ADVISOR_CATALOG.groups[lang()]){
-      const records=catalog.filter(item=>item.group===id&&earned.has(item.key));
+    for(const [id,name] of groupLabels()){
+      const records=catalog.filter(item=>groupKey(item)===id&&earned.has(item.key));
       if(!records.length)continue;
       const heading=document.createElement('h4'),list=document.createElement('ul');
       heading.textContent=name;
@@ -206,7 +206,7 @@ function renderResults(){
 }
 function showResults(){
   if(view!=='Find'||!results.length)return;
-  $('panel').scrollTop+=$('results').getBoundingClientRect().top-$('panel').getBoundingClientRect().top-$('topbar').offsetHeight-8;
+  $('panel').scrollTop+=$('resultArea').getBoundingClientRect().top-$('panel').getBoundingClientRect().top-$('topbar').offsetHeight-8;
 }
 function renderLibrary(){
   $('library').replaceChildren();if(!library.length){$('library').textContent='No saved lives yet. Save a search result or import a route.';return;}
@@ -219,6 +219,8 @@ function selectFile(file){
 function controls(){
   const b=bridge(),s=b.runtime?.state,busy=!!job;
   for(const id of ['search','plan','import'])$(id).disabled=!ready||busy||auto||b.extra;
+  $('searchMore').hidden=!lastSearch||!!$('seed').value.trim();
+  $('searchMore').disabled=$('search').disabled;
   for(const button of shadow.querySelectorAll('.chooseRoute'))button.disabled=!ready||busy||auto||b.extra;
   $('plan').disabled||=!s||C.finished(s);
   $('stopJob').hidden=!busy;$('stopJob').textContent=job?.kind==='plan'?'Cancel planning':'Stop '+(job?.kind==='import'?'validation':'search');
@@ -285,19 +287,25 @@ function follow(){
   auto=true;saveLives();$('playStatus').textContent='Following this life. Manual game interaction stops following.';controls();
 }
 function validInputs(){for(const input of $('viewFind').querySelectorAll('input[type=number]'))if(!input.checkValidity()){say('Check '+(input.getAttribute('aria-label')||input.closest('label')?.textContent||'search settings')+': '+input.validationMessage);input.reportValidity();return false;}return true;}
-async function search(){
+async function search(more=false){
   if(bridge().extra){say('Return to the normal life mode to use this planner. L Corp. Employee mode is separate.');return;}
   if(!validInputs())return;const task=begin('search'),goals=draftGoals(),options={name:$('name').value.trim(),gender:$('gender').value,loveSame:partnerSame(),arMem:C.arbiterMemory(read('cbl.arbiter.v1')||{}),...eraSettings(),hard:hardMode(),birthplace:$('birthplace').value};savePreferences();
   $('startSettings').open=false;$('goalPicker').open=false;
-  say('Searching complete lives. You can stop and keep completed results.');results=[];renderResults();
+  const seed=$('seed').value.trim(),count=Number($('count').value),effort=$('effort').value,sort=$('sort').value;
+  const key=JSON.stringify([goals,options,seed,count,effort,sort,lang(),mentorVoice()]);
+  if(!more||key!==lastSearch)results=[];
+  lastSearch=key;
+  say('Searching for complete lives. You can stop and keep completed results.');renderResults();
   try{
-    const result=await request('search',{goals,options,seed:$('seed').value.trim(),count:Number($('count').value)||10,effort:$('effort').value,sort:$('sort').value},p=>{
+    const result=await request('search',{goals,options,seed,count,effort,sort,previous:results},p=>{
       if(!current(task))return;if(p.results){results=p.results;renderResults();}
       say(`Checked ${p.tested}/${p.total} seeds${p.age!=null?` · exploring age ${p.age}`:''}${p.examined!=null?` · ${p.examined} branches evaluated`:''}.`);
     });
     if(!current(task))return;results=result.results;renderResults();
     const matches=results.filter(r=>r.matched.every(Boolean)).length;
-    say(!goals.length&&results.length?`${results.length} completed outcomes shown. No required conditions were set.`:matches?`${matches} matching outcome${matches===1?'':'s'} shown. Compare the final stats, then choose a life.`:results.length?'No full match in this search. Closest completed lives are shown with missing conditions. Try more seeds, Thorough effort, or fewer conditions.':'No completed life within the route-search limit. Try Quick effort or a different seed.');showResults();
+    const checked=`Checked ${result.tested} ${result.tested===1?'seed':'seeds'} in this batch. `+
+      (result.timedOut?'The automatic search reached its time limit. ':'');
+    say(checked+(!goals.length&&results.length?`${results.length} completed outcomes shown. No required conditions were set.`:matches?`${matches} matching outcome${matches===1?'':'s'} shown. Compare the final stats, then choose a life.`:results.length?'No full match yet. Search more seeds or adjust your targets.':'No completed life in this batch. Search more seeds or try Quick effort.'));showResults();
   }catch(e){if(current(task))say('Search failed: '+e.message);}finally{finish(task);}
 }
 async function planCurrent({goals=draftGoals(),sort=$('sort').value,followAfter=false}={}){
@@ -342,7 +350,7 @@ async function checkEnd(){
   }catch(e){if(current(task))say('Ending check failed: '+e.message);}finally{finish(task);}
 }
 for(const name of ['Find','Play','Saved'])$('tab'+name).onclick=()=>switchView(name);
-$('search').onclick=search;$('plan').onclick=planCurrent;$('follow').onclick=follow;
+$('search').onclick=()=>search();$('searchMore').onclick=()=>search(true);$('plan').onclick=planCurrent;$('follow').onclick=follow;
 $('stopAuto').onclick=()=>stopFollowing(true,'Following stopped. The game is paused.');$('stopJob').onclick=()=>cancel();
 $('apply').onclick=()=>{try{stepRoute();renderPlay();}catch(e){$('playStatus').textContent=e.message;}};
 async function waitForLife(seed){
@@ -373,9 +381,9 @@ $('resume').onclick=async()=>{
 $('goHome').onclick=()=>{const b=bridge();if(b.life){C.finished(b.runtime.state)?b.life.abandon():b.life.saveAndQuit();}else b.onHome?.();renderPlay();};
 $('copyStats').onclick=()=>{const s=bridge().runtime?.state;if(!s)return;for(const [key,value] of Object.entries(C.displayStats(s)))$('min-'+key).value=value;savePreferences();say('Stats copied as minimum ending targets. You can adjust each value.');};
 $('copyTraits').onclick=()=>{const s=bridge().runtime?.state;if(!s)return;for(const key of s.flags)if(catalog.some(c=>c.key==='flag:'+key)){chosen.delete('avoid:'+key);chosen.add('flag:'+key);}syncGoals();savePreferences();say('This life’s listed traits were added as ending requirements.');};
-$('filter').oninput=filterGoals;$('goalGroup').onchange=()=>{if($('goalKind').value==='trait')$('goalKind').value='all';filterGoals();};$('goalKind').onchange=()=>{$('goalGroup').value='';filterGoals();};$('onlySelected').onchange=filterGoals;$('clear').onclick=()=>{chosen.clear();syncGoals();savePreferences();};
+$('groupBy').onchange=()=>{renderCatalogue();renderResults();renderLibrary();renderPlay();savePreferences();};$('filter').oninput=filterGoals;$('goalGroup').onchange=()=>{if($('goalKind').value==='trait')$('goalKind').value='all';filterGoals();};$('goalKind').onchange=()=>{$('goalGroup').value='';filterGoals();};$('onlySelected').onchange=filterGoals;$('clear').onclick=()=>{chosen.clear();syncGoals();savePreferences();};
 $('sort').onchange=()=>{savePreferences();renderResults();renderLibrary();};
-for(const id of ['name','gender','birthplace','seed','count','effort','speed','ending','min-age',...Object.keys(C.statNames).map(k=>'min-'+k)])$(id).oninput=()=>{savePreferences();controls();if(id==='speed'&&auto)bridge().life?.setSpeed(Number($('speed').value));};
+for(const id of ['name','gender','birthplace','seed','count','effort','groupBy','speed','ending','min-age',...Object.keys(C.statNames).map(k=>'min-'+k)])$(id).oninput=()=>{savePreferences();controls();if(id==='speed'&&auto)bridge().life?.setSpeed(Number($('speed').value));};
 $('import').onclick=()=>$('file').click();$('file').onchange=async()=>{const file=$('file').files[0];$('file').value='';if(file)try{await importRoute(JSON.parse(await file.text()));}catch(e){say('Could not read route: '+e.message);}};
 $('export').onclick=()=>{if(!selected)return;const url=URL.createObjectURL(new Blob([JSON.stringify(selected,null,2)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=`cityborn-${selected.seed}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
 $('copy').onclick=async()=>{if(selected)try{await navigator.clipboard.writeText(selected.seed);say('Copied seed '+selected.seed);}catch{say('Seed: '+selected.seed);}};
@@ -390,12 +398,20 @@ new ResizeObserver(()=>{if(position)movePanel(position.x,position.y);}).observe(
 shadow.addEventListener('keydown',e=>e.stopPropagation());
 document.addEventListener('pointerdown',e=>{if(!e.composedPath().includes(host)){if(auto)stopFollowing(false,'Stopped by manual game interaction.');if(job?.kind==='plan')cancel('Planning cancelled by manual game interaction.');}},true);
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(job)cancel();if(auto)stopFollowing(false,'Following stopped.');}else if(!e.composedPath().includes(host)&&auto)stopFollowing(false,'Stopped by manual keyboard input.');},true);
+function groupLabels(){
+  return ($('groupBy').value==='rarity'?ADVISOR_CATALOG.tiers:ADVISOR_CATALOG.groups)[lang()];
+}
+function groupKey(item){
+  return $('groupBy').value==='rarity'&&!item.trait?item.tier:item.group;
+}
 function renderCatalogue(){
     const data=ADVISOR_CATALOG;
-    catalog=[...data.flags[lang()].map(([key,name])=>({key:'flag:'+key,name,hint:'',trait:key,group:'traits'})),...data.records.map(r=>({key:'record:'+r.key,group:r.group,name:r.label[lang()]||r.label.en,hint:r.hint?.[lang()]||r.hint?.en||'No unlock hint is provided by the game.'}))];
+    catalog=[...data.flags[lang()].map(([key,name])=>({key:'flag:'+key,name,hint:'',trait:key,group:'traits'})),...data.records.map(r=>({key:'record:'+r.key,group:r.group,tier:r.tier,name:r.label[lang()]||r.label.en,hint:r.hint?.[lang()]||r.hint?.en||'No unlock hint is provided by the game.'}))];
     $('catalogSize').textContent=`${data.flags[lang()].length} traits and ${data.records.length} achievements`;
     const valid=new Set(catalog.flatMap(c=>[c.key,...(c.trait?['avoid:'+c.trait]:[])]));chosen=new Set([...chosen].filter(g=>valid.has(g)));
-    const names=new Map([['traits','Traits'],...data.groups[lang()]]);
+    const names=new Map([['traits','Traits'],...groupLabels()]);
+    $('goals').replaceChildren();
+    if($('goalGroup').options.length===1)for(const [id,name] of data.groups[lang()])$('goalGroup').add(new Option(name,id));
     const sections=new Map();
     for(const [id,name] of names){
       const section=document.createElement('section'),heading=document.createElement('h4');
@@ -404,13 +420,12 @@ function renderCatalogue(){
       section.className='goalGroup';section.dataset.group=id;
       section.dataset.kind=id==='traits'?'trait':'achievement';
       section.append(heading);$('goals').append(section);sections.set(id,section);
-      if(id!=='traits')$('goalGroup').add(new Option(name,id));
     }
     for(const c of catalog){
-      const el=document.createElement('div');el.className='goal';el.dataset.kind=c.trait?'trait':'achievement';const label=document.createElement('label'),input=document.createElement('input'),hint=document.createElement('small');input.type='checkbox';input.value=c.key;const id=document.createElement('span');id.className='goalId';id.textContent=' ['+c.key.split(':')[1]+']';label.append(input,c.name,id);el.append(label);if(c.hint){hint.textContent=c.hint;el.append(hint);}
+      const el=document.createElement('div');el.className='goal';el.dataset.kind=c.trait?'trait':'achievement';el.dataset.category=c.group;const label=document.createElement('label'),input=document.createElement('input'),hint=document.createElement('small');input.type='checkbox';input.value=c.key;const id=document.createElement('span');id.className='goalId';id.textContent=' ['+c.key.split(':')[1]+']';label.append(input,c.name,id);el.append(label);if(c.hint){hint.textContent=c.hint;el.append(hint);}
       input.onchange=()=>{input.checked?chosen.add(c.key):chosen.delete(c.key);if(input.checked&&c.trait)chosen.delete('avoid:'+c.trait);syncGoals();savePreferences();};
       if(c.trait){const avoidLabel=document.createElement('label'),avoid=document.createElement('input');avoidLabel.className='avoid';avoid.type='checkbox';avoid.value='avoid:'+c.trait;avoidLabel.append(avoid,document.createTextNode('Avoid'));avoid.onchange=()=>{avoid.checked?chosen.add(avoid.value):chosen.delete(avoid.value);if(avoid.checked)chosen.delete(c.key);syncGoals();savePreferences();};el.prepend(avoidLabel);}
-      sections.get(c.group).append(el);
+      sections.get(groupKey(c)).append(el);
     }
     syncGoals();
 }

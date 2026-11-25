@@ -26,6 +26,16 @@ assert.throws(()=>P.validate({...eraFile,options:{...options,eras:false}}),'chan
 assert.throws(()=>P.validate({...eraFile,options:{...options,eras:'on'}}),/Invalid era setting/);
 console.log('Smoke War passed: native birth setting, URL override, route validation and full native-clock replay.');
 
+const hardOptions={seed:'123456',name:'Tester',gender:'m',hard:true};
+const hard=P.simulate(hardOptions,[]);
+assert.ok(hard.complete);assert.equal(hard.birth.hard,true);
+assert.equal(E.create(E.data(),{...hardOptions,hard:false}).hard,undefined);
+const hardFile=P.pack(hard,[],'life','en');
+assert.equal(P.validate(hardFile).options.hard,true);
+assert.equal(hardFile.summary.hard,true);
+assert.throws(()=>P.validate({...hardFile,options:{...hardOptions,hard:false}}),/seeded simulation/);
+replay(hard.birth,hard);
+
 const join=E.create(E.data(),{seed:'123456',name:'Tester',gender:'m',eras:false});
 Object.assign(join,{age:95,job:'해결사',grade:3,plan:[],cursor:0,prompt:null,org:{type:'assoc',ko:'섕크 협회',name:'Cinq Association',sec:3,first:3,at:95}});
 join.stats={health:100,sanity:100,wealth:100,network:100,rep:100};
@@ -84,11 +94,14 @@ console.log('Shin/Mang, separate-mode isolation and Chinese native-clock/route l
 
 (async()=>{
   const elements={start:{},playStatus:{}},a=ui.indexOf("$('start').onclick=async()=>{"),b=ui.indexOf("$('resume').onclick",a);let starts=0;
-  const context={C,selected:eraFile,active:null,$:id=>elements[id],bridge:()=>({home:{onStart:()=>starts++}}),lang:()=> 'en',partnerSame:()=>false,
+  const context={C,selected:eraFile,active:null,$:id=>elements[id],bridge:()=>({home:{onStart:()=>starts++}}),lang:()=> 'en',partnerSame:()=>false,hardMode:()=>false,
     read:()=>({}),eraSettings:()=>({eras:false,forceEra:''}),saveLives:()=>{},waitForLife:async()=>true,follow:()=>{},renderPlay:()=>{}};
   vm.createContext(context);vm.runInContext(ui.slice(a,b),context);await elements.start.onclick();
   assert.equal(starts,0);assert.match(elements.playStatus.textContent,/Eras/);
   context.eraSettings=()=>({eras:true,forceEra:'smoke'});await elements.start.onclick();assert.equal(starts,0);
   context.eraSettings=()=>({eras:true,forceEra:''});await elements.start.onclick();assert.equal(starts,1);
+  context.selected=hardFile;await elements.start.onclick();assert.equal(starts,1);
+  assert.match(elements.playStatus.textContent,/difficulty to Hard/);
+  context.hardMode=()=>true;await elements.start.onclick();assert.equal(starts,2);
   console.log('Start handler passed: era setting and URL must match before native start.');
 })().catch(error=>{console.error(error);process.exitCode=1;});

@@ -143,7 +143,7 @@ function makePlanner(E) {
       effort:result.effort||'quick',sort:result.sort||'recommended',route:result.route,complete:scope==='birth'||C.finished(s),matched:targets(s,goals),
       terminalSignature:scope==='life'&&C.finished(s)?C.signature(s):null,
       ...(origin==='current'?{startState:copy(startState)}:{}),
-      summary:{age:s.age,cause:s.dead?(E.cause?E.cause(s.dead.cause):s.dead.cause):null,alive:!!s.dead?.alive,job:E.job?E.job(s):s.job,
+      summary:{age:s.age,hard:!!s.hard,cause:s.dead?(E.cause?E.cause(s.dead.cause):s.dead.cause):null,alive:!!s.dead?.alive,job:E.job?E.job(s):s.job,
         region:E.data().regions?.find(r=>r.id===born)?.name||born,
         currentRegion:E.data().regions?.find(r=>r.id===s.regionId)?.name||s.regionId,
         flags:[...s.flags],records:E.records(s),stats:C.displayStats(s),comparison:comparison(s,goals)}};
@@ -170,6 +170,7 @@ function makePlanner(E) {
     const options={seed:file.options.seed,name:file.options.name,gender:file.options.gender};
     if(file.options.loveSame!==undefined){if(typeof file.options.loveSame!=='boolean')throw Error('Invalid partner-gender setting');options.loveSame=file.options.loveSame;}
     if(file.options.arMem!==undefined)options.arMem=C.arbiterMemory(file.options.arMem);
+    if(file.options.hard!==undefined){if(typeof file.options.hard!=='boolean')throw Error('Invalid difficulty');options.hard=file.options.hard;}
     if(file.options.eras!==undefined){if(typeof file.options.eras!=='boolean')throw Error('Invalid era setting');options.eras=file.options.eras;}
     if(file.options.forceEra!==undefined){if(!['','smoke'].includes(file.options.forceEra))throw Error('Invalid forced era');options.forceEra=file.options.forceEra;}
     if(file.options.birthplace!==undefined){
@@ -227,7 +228,7 @@ function makePlanner(E) {
     }
     settle(expected);settle(actual);
     if(!C.finished(actual)||gameplaySignature(actual)!==gameplaySignature(expected)||JSON.stringify(E.records(actual))!==JSON.stringify(E.records(expected)))return null;
-    return pack({state:actual,options:{seed:state.seed,name:state.name,gender:state.gender,loveSame:state.partnerG===state.gender},route,effort:checked.effort,sort:checked.sort},checked.goals,'life',checked.lang,'current',state);
+    return pack({state:actual,options:{seed:state.seed,name:state.name,gender:state.gender,hard:!!state.hard,loveSame:state.partnerG===state.gender},route,effort:checked.effort,sort:checked.sort},checked.goals,'life',checked.lang,'current',state);
   }
   return {birthSeed,copy,signature:C.signature,choices,apply,advance,targets,score,checkGoals,plan,simulate,pack,validate,gameplaySignature,retainAfterTyping};
 }
@@ -245,7 +246,7 @@ function workerMain(){
       if(m.type==='check')return send({matched:P.targets(m.state,m.goals),signature:C.signature(m.state),complete:C.finished(m.state)});
       if(m.type==='plan'){
         const result=P.plan(m.state,m.goals,m.effort,({age,expanded,completed})=>self.postMessage({id:m.id,progress:{age,expanded,completed}}),m.sort);
-        const options={seed:m.state.seed,name:m.state.name,gender:m.state.gender,loveSame:m.state.partnerG===m.state.gender};
+        const options={seed:m.state.seed,name:m.state.name,gender:m.state.gender,hard:!!m.state.hard,loveSame:m.state.partnerG===m.state.gender};
         return send(result.completed.map(n=>P.pack({...n,options,effort:m.effort,sort:m.sort},m.goals,'life',m.lang,'current',m.state)));
       }
       if(m.type==='search'){
@@ -254,7 +255,7 @@ function workerMain(){
         const words=new Uint32Array(count);crypto.getRandomValues(words);
         let results=[],examined=0;
         for(let n=0;n<count;n++){
-          const options={name:m.options.name,gender:m.options.gender,loveSame:m.options.loveSame??false,arMem:C.arbiterMemory(m.options.arMem),eras:m.options.eras??true,forceEra:m.options.forceEra||'',birthplace:m.options.birthplace??'',seed:P.birthSeed(m.seed||String(words[n]),m.options.birthplace??'')};
+          const options={name:m.options.name,gender:m.options.gender,loveSame:m.options.loveSame??false,arMem:C.arbiterMemory(m.options.arMem),hard:m.options.hard??false,eras:m.options.eras??true,forceEra:m.options.forceEra||'',birthplace:m.options.birthplace??'',seed:P.birthSeed(m.seed||String(words[n]),m.options.birthplace??'')};
           let lastBest=null;
           function update(candidates){
             results=results.filter(r=>r.file.seed!==options.seed);results.push(...candidates);

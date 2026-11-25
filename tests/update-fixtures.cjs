@@ -2,9 +2,9 @@ const fs=require('node:fs'),vm=require('node:vm');
 const built=fs.readFileSync('dist/cityborn-advisor.user.js','utf8'),ctx={};vm.createContext(ctx);
 // Test-only access to native prompt constructors. Production exports and saves
 // are unchanged; these fixtures do not claim naturally earned careers.
-const native=fs.readFileSync('analysis/game.bundle.js','utf8'),tickStart=native.indexOf('function eE('),tick=native.slice(tickStart,native.indexOf('\n}',tickStart)+2);
+const native=fs.readFileSync('analysis/game.bundle.js','utf8'),tickStart=native.indexOf('function IE('),tick=native.slice(tickStart,native.indexOf('\n}',tickStart)+2);
 const core=built.slice(built.indexOf('function nativeEngine()'),built.indexOf("if (document.getElementById('cityborn-advisor'))"))
-  .replace('data:Dt,',`data:Dt,fixtureFestival:s=>e8(s,Dt(),{t:.4}),fixtureFight:Ov,fixtureCrew:s=>{KY(s,Dt());s.crew.rank=5;Ev(s,.4,true);},fixtureSweep:s=>s$(s,Dt(),.4),fixtureTaboo:(s,phase)=>l8(s,Dt(),{tb:phase,t:.4}),fixtureCinqJoin:s=>wI(s,.4),fixtureCinqDuel:s=>{const event=Dt().events.find(e=>e.choices?.some(c=>c.cqDuel?.stage===1)),i=event.choices.findIndex(c=>c.cqDuel);oI(s,Dt(),event,i,{t:.4},event.choices[i].label);},fixtureTick:(r,ms)=>{const ZF=250;return (${tick})(r,Dt(),ms);},`);
+  .replace('data:qt,',`data:qt,fixtureFestival:s=>M8(s,qt(),{t:.4}),fixtureFight:Kv,fixtureCrew:s=>{b6(s,qt());s.crew.rank=5;e2(s,.4,true);},fixtureSweep:s=>O$(s,qt(),.4),fixtureTaboo:(s,phase)=>L8(s,qt(),{tb:phase,t:.4}),fixtureCinqJoin:s=>EI(s,.4),fixtureCinqDuel:s=>{const event=qt().events.find(e=>e.choices?.some(c=>c.cqDuel?.stage===1)),i=event.choices.findIndex(c=>c.cqDuel);YI(s,qt(),event,i,{t:.4},event.choices[i].label);},fixtureTick:(r,ms)=>{const YE=250;return (${tick})(r,qt(),ms);},`);
 vm.runInContext(core+';globalThis.E=nativeEngine();E.lang("en");globalThis.P=makePlanner(E);globalThis.C=advisorCommon();globalThis.nativeMath=Math;',ctx);
 const {E,P,C}=ctx;
 function fight(){

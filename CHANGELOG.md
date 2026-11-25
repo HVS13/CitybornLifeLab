@@ -1,5 +1,10 @@
 # Changes
 
+## 2.11.0
+
+- Support the 25 November game build and its 357 achievements. Searches and route files capture the native difficulty. The game must use that difficulty when you start a seed route.
+- Browse achievements by the game’s categories. Combine category, search and selected-only filters. Result cards group predicted achievements and show the route difficulty.
+
 ## 2.10.0
 
 - Support `index-DfewY0Je.js`, inspected on 16 November 2026: expanded Association careers, Smoke War eras, Shin/Mang and Cinq duels. Browse all 52 native displayed traits and 354 achievements; the removed `assoc_staff` target is no longer offered.

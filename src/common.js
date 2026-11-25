@@ -1,5 +1,5 @@
 function advisorCommon() {
-  const source = 'index-DfewY0Je.js';
+  const source = 'index-CVgdJU9k.js';
   function normalized(s) {
     const state={...s,prompt:s.prompt?{...s.prompt}:null};
     delete state.savedProgress;

@@ -3,26 +3,37 @@ const C=advisorCommon(),supported=[...document.scripts].some(s=>s.src.endsWith('
 const host=document.createElement('div');host.id='cityborn-advisor';
 const shadow=host.attachShadow({mode:'open'});document.body.append(host);
 shadow.innerHTML=`<style>
-:host{position:fixed;right:12px;top:12px;z-index:2147483647;width:420px;max-width:calc(100vw - 24px);font:13px/1.5 system-ui;color:#e9edf6;color-scheme:dark}
+:host{position:fixed;right:12px;top:12px;z-index:2147483647;width:460px;max-width:calc(100vw - 24px);font:13px/1.5 system-ui;color:#e9edf6;color-scheme:dark}
 *{box-sizing:border-box}[hidden]{display:none!important}#panel{background:#171b24;border:1px solid #687489;border-radius:12px;box-shadow:0 12px 45px #0009;max-height:90vh;overflow:auto;padding:14px}
 .topbar{position:sticky;top:-14px;z-index:5;background:#171b24;padding-top:3px;border-bottom:1px solid #354055}header{display:flex;justify-content:space-between;align-items:center;cursor:move;touch-action:none}h2{font-size:17px;margin:0}h3{font-size:14px;margin:15px 0 6px}p{margin:7px 0}small,.muted{color:#b2bfd1;font-size:12px}nav{display:flex;gap:5px;margin:14px 0}nav button{flex:1}nav button[aria-selected=true]{background:#384866;border-color:#abc5ef;color:white}
 button,input,select{font:inherit;color:inherit;border:1px solid #65758d;border-radius:6px;padding:7px;background:#252e3e}button{cursor:pointer}button:disabled{opacity:.45;cursor:default}button.primary{background:#d5b66d;color:#171b24;border-color:#d5b66d;font-weight:650}button.link{padding:3px 6px;background:transparent}input[type=number],input[type=text],input[type=search],select{width:100%;min-width:0}input[type=checkbox]{accent-color:#d5b66d;margin-right:5px}
 label{display:block}.row{display:flex;gap:7px;align-items:end;margin:8px 0}.row>*{flex:1;min-width:0}.statInputs{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.statInputs label{font-size:12px}.notice{white-space:pre-wrap;color:#c8dbfc;margin:8px 0}.warning{color:#efcc89}summary{cursor:pointer;padding:8px 0}.chips{display:flex;gap:5px;flex-wrap:wrap}.chips button{font-size:11px;padding:3px 7px}.goal{padding:7px 3px;border-bottom:1px solid #354055}.goal label{display:inline}.goal small{display:block;margin-left:22px;font-size:11px}.avoid{float:right;font-size:11px}#goals{max-height:220px;overflow:auto}#goalCount{display:block;margin:5px 0}
 .card{border:1px solid #4b5d78;border-radius:8px;padding:10px;margin:9px 0;background:#1d2431}.card strong{color:#e8ce91}.tag{font-size:11px;border-radius:4px;padding:2px 5px;background:#354764}.tag.match{background:#244e43;color:#c7f3df}.tag.partial{background:#604d2c;color:#ffe5ae}.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;margin:9px 0}.stats span{font-size:10px;color:#b6c5d9}.stats b{display:block;font-size:17px;color:#e9edf6}.missing{color:#f0c78e;font-size:12px}.hint{font-size:12px;color:#b7c5d9}#min{padding:3px 10px}#badge,#file{display:none}#stopJob{width:100%}#playNext{white-space:pre-wrap}.libraryTools{margin-top:12px}
+
+#goals{max-height:min(42vh,360px);border-block:1px solid #354055;scroll-padding-top:38px}
+.goalGroup{margin:0;padding:0 6px}
+.goalGroup h4{position:sticky;top:0;z-index:1;display:flex;justify-content:space-between;gap:8px;margin:0;padding:8px 2px;background:#171b24;border-bottom:1px solid #4b5d78;font-size:12px}
+.goalGroup h4 small{font-variant-numeric:tabular-nums;font-weight:400}
+.goal{padding:9px 2px}.goal small{line-height:1.4}.goalId{color:#a9b8ce;font-size:11px;overflow-wrap:anywhere}
+.goal:has(input:checked){background:#252e3e}.goal input{vertical-align:middle}
+:focus-visible{outline:2px solid #ead196;outline-offset:2px}
+#filter{margin-bottom:4px}#search{width:100%;margin-top:8px}
+.cardHeading{display:flex;justify-content:space-between;align-items:start;gap:8px}.cardHeading strong{font-size:16px;overflow-wrap:anywhere}.tag{flex:none}.card .stats{border-block:1px solid #354055;padding:8px 0}.card .stats b{font-variant-numeric:tabular-nums}
+.earned h4{font-size:12px;margin:8px 0 2px}.earned ul{margin:0;padding-left:18px;color:#b7c5d9}
 </style><button id="badge">Cityborn Lab</button><section id="panel">
 <div id="topbar" class="topbar"><header id="drag" tabindex="0" aria-label="Move panel with arrow keys or drag; Home resets"><h2>Cityborn Life Lab <small>${ADVISOR_VERSION}</small></h2><button id="min" aria-label="Minimize">−</button></header>
 <nav role="tablist"><button id="tabFind" role="tab" aria-selected="true">Find a life</button><button id="tabPlay" role="tab" aria-selected="false">Play this life</button><button id="tabSaved" role="tab" aria-selected="false">Saved lives</button></nav></div>
 <div id="status" class="notice" role="status">Loading…</div><div id="warning" class="warning"></div>
 <button id="stopJob" hidden>Stop search</button>
 <div id="viewFind" role="tabpanel">
-<h3>What do you want at the ending?</h3><p class="hint">Set minimum final stats. Leave a field blank for no requirement. Values match the rounded numbers on the game's Final state screen.</p>
+<h3>Ending targets</h3><p class="hint">Set minimum final stats. Leave a field blank to accept any value.</p>
 <div class="statInputs">${Object.entries(C.statNames).map(([key,name])=>`<label>${name}<input id="min-${key}" type="number" min="0" max="100" step="1" placeholder="Any" aria-label="Minimum final ${name}"></label>`).join('')}</div>
 <div class="row"><label>Minimum age<input id="min-age" type="number" min="0" max="10000" step="1" placeholder="Any"></label><label>Ending<select id="ending"><option value="any">Any ending</option><option value="alive">Alive ending only</option></select></label></div>
 <div class="row"><button id="copyStats" class="link">Use this life's stats</button><button id="copyTraits" class="link">Use this life's traits</button></div>
 <div id="selectedGoals" class="chips"></div>
-<details id="goalPicker"><summary>Browse traits & achievements · <span id="selected">0</span> selected</summary><p id="catalogSize" class="hint"></p><p class="hint">Browse the full list below, or search by name, ID, or achievement requirement. Check traits you want at the ending; use Avoid to exclude them. Achievements show the game's unlock hints.</p>
-<label>Show<select id="goalKind"><option value="all">All traits & achievements</option><option value="trait">Traits</option><option value="achievement">Achievements</option></select></label>
-<input id="filter" type="search" placeholder="Search a trait, achievement, or ID" aria-label="Filter goals">
+<details id="goalPicker"><summary>Browse traits & achievements · <span id="selected">0</span> selected</summary><p id="catalogSize" class="hint"></p><p class="hint">Search by name, ID, or unlock hint. Use Avoid to exclude a trait.</p>
+<input id="filter" type="search" placeholder="Search goals" aria-label="Filter goals">
+<div class="row"><label>Show<select id="goalKind"><option value="all">All traits & achievements</option><option value="trait">Traits</option><option value="achievement">Achievements</option></select></label><label>Category<select id="goalGroup"><option value="">All categories</option></select></label></div>
 <div class="row"><label><input id="onlySelected" type="checkbox">Selected only</label><button id="clear" class="link">Clear selections</button></div><small id="goalCount" role="status"></small><div id="goals" role="group" aria-label="Available traits and achievements"></div></details>
 <details id="startSettings"><summary>Starting settings & search effort</summary>
 <div class="row"><label>Name<input id="name" type="text" maxlength="12" placeholder="Seeded name"></label><label>Gender<select id="gender"><option value="m">Male</option><option value="f">Female</option></select></label></div>
@@ -30,8 +41,8 @@ label{display:block}.row{display:flex;gap:7px;align-items:end;margin:8px 0}.row>
 <label>Specific seed (optional)<input id="seed" type="text" placeholder="Leave blank for random seeds"></label>
 <div class="row"><label>Random seeds<input id="count" type="number" min="1" max="500" value="3"></label><label>Search effort<select id="effort"><option value="quick">Quick</option><option value="thorough">Thorough</option></select></label></div>
 <p class="hint">Each seed explores several routes; start with 1–3 seeds. Quick looks for a matching ending sooner. Thorough explores more alternatives. Neither can guarantee finding every possible route.</p></details>
-<button id="search" class="primary">Find matching lives</button><p id="searchNote" class="hint">Results are predictions with replayable choices. Nothing starts automatically.</p><p class="hint">Partner’s gender, Eras, era URL and Arbiter story history follow the native game settings when searching. Replaying an Arbiter seed requires the same story history. This planner supports normal lives; L Corp. Employee is a separate mode. Following uses the native Shin/Mang auto policy for dangerous choices. Festival results use fresh randomness: seed searches take the skip route. Play the Festival manually, then plan from the result to pursue its rewards.</p>
-<label>Result & planning order<select id="sort">${Object.entries(C.sorts).map(([key,name])=>`<option value="${key}">${name}</option>`).join('')}</select></label><p class="hint">Completed goal matches always come first. Recommended compares alive endings, lifespan, then wellbeing. Your selected order also guides which search branches survive. Rarity compares achievement tiers from highest to lowest; count is separate. Combat potential is the engine’s broader combat measure for eligible careers; Fixer request rating is a different formula.</p>
+<button id="search" class="primary">Find matching lives</button><p id="searchNote" class="hint">Results are predictions with replayable choices. Nothing starts automatically.</p><details class="hint"><summary>Game settings and manual events</summary><p>Searches use the game’s difficulty, Eras and partner settings, plus any Arbiter history. Use the same settings when you start a route.</p><p>Play the Festival on your own, then plan from your result. The companion plans normal lives. Play L Corp. Employee mode separately.</p></details>
+<label>Result & planning order<select id="sort">${Object.entries(C.sorts).map(([key,name])=>`<option value="${key}">${name}</option>`).join('')}</select></label><p class="hint">Full matches come first. Your sort order also guides the search.</p>
 <div id="results"></div></div>
 <div id="viewPlay" role="tabpanel" hidden>
 <h3 id="liveTitle">Your current life</h3><div id="liveStats"></div>
@@ -102,6 +113,7 @@ function eraSettings(){
   let eras=true;try{eras=localStorage.getItem('cbl.ui.eras')!=='0';}catch{}
   return {eras,forceEra:new URLSearchParams(location.search).get('era')==='smoke'?'smoke':''};
 }
+function hardMode(){try{return localStorage.getItem('cbl.ui.hard')==='1';}catch{return false;}}
 function partnerSame(){try{return localStorage.getItem('cbl.ui.loveSame')==='1';}catch{return false;}}
 function mentorVoice(){try{return localStorage.getItem('cbl.ui.mentorVoice')==='spider'?'spider':'plain';}catch{return 'plain';}}
 function request(type,args={},progress){const id=++sequence;return new Promise((resolve,reject)=>{pending.set(id,{resolve,reject,progress});worker.postMessage({id,type,lang:lang(),mentorVoice:mentorVoice(),...args});});}
@@ -121,8 +133,20 @@ function goalLabel(g){
   return catalog.find(c=>c.key===g)?.name||g;
 }
 function filterGoals(){
-  const q=$('filter').value.trim().toLowerCase(),kind=$('goalKind').value;let shown=0;
-  for(const el of $('goals').children){el.hidden=(kind!=='all'&&el.dataset.kind!==kind)||!el.textContent.toLowerCase().includes(q)||($('onlySelected').checked&&!el.querySelector('input:checked'));if(!el.hidden)shown++;}
+  const query=$('filter').value.trim().toLowerCase();
+  const kind=$('goalKind').value,category=$('goalGroup').value,selectedOnly=$('onlySelected').checked;
+  let shown=0;
+  for(const group of $('goals').children){
+    const groupMatches=(!category||group.dataset.group===category)&&(kind==='all'||group.dataset.kind===kind);
+    let count=0;
+    for(const row of group.querySelectorAll('.goal')){
+      row.hidden=!groupMatches||!row.textContent.toLowerCase().includes(query)||(selectedOnly&&!row.querySelector('input:checked'));
+      if(!row.hidden)count++;
+    }
+    group.hidden=count===0;
+    group.querySelector('small').textContent=count;
+    shown+=count;
+  }
   $('goalCount').textContent=shown?`${shown} of ${catalog.length} goals shown`:'No matching goals. Change the search or turn off Selected only.';
 }
 function syncGoals(){
@@ -147,7 +171,9 @@ function card(file,buttons=true){
   const matches=file.matched.filter(Boolean).length,full=file.complete&&matches===file.goals.length&&file.scope==='life';
   badge.className='tag '+(full?'match':'partial');badge.textContent=file.scope==='birth'?'Birth only':full?(file.goals.length?'Match':'Completed'):'Partial';
   title.textContent=` Seed ${file.seed}`;meta.className='hint';meta.textContent=`${file.origin==='current'?'Continuation plan · ':''}${file.summary.region?'Birthplace: '+file.summary.region+' · ':''}${file.summary.currentRegion&&file.summary.currentRegion!==file.summary.region?'Final area: '+file.summary.currentRegion+' · ':''}${file.summary.job||'No steady job'} · age ${file.summary.age} · ${file.summary.alive?'alive ending':file.summary.cause||'ending'}`;
-  el.append(badge,title,meta,statsElement(file.summary.stats));
+  const heading=document.createElement('div');heading.className='cardHeading';heading.append(title,badge);
+  meta.textContent+=' · '+(file.summary.hard?'Hard':'Normal');
+  el.append(heading,meta,statsElement(file.summary.stats));
   if(file.summary.comparison){
     const c=file.summary.comparison,details=document.createElement('details'),heading=document.createElement('summary'),text=document.createElement('p');
     heading.textContent='Comparison details';text.className='hint';
@@ -157,6 +183,20 @@ function card(file,buttons=true){
   const used=document.createElement('p');used.className='hint';used.textContent='Targets used: '+(file.goals.slice(0,3).map(goalLabel).join(' · ')||'No required conditions')+(file.goals.length>3?` · ${file.goals.length-3} more`:'');el.append(used);
   const progress=document.createElement('p');progress.className='hint';progress.textContent=file.goals.length?`${matches}/${file.goals.length} conditions met${file.scope==='birth'?' at birth — final outcome not predicted':''}`:'No required conditions · ranked by your selected order';el.append(progress);
   if(!full&&file.goals.length){const missing=document.createElement('p');missing.className='missing';missing.textContent='Missing: '+file.goals.filter((_,i)=>!file.matched[i]).map(goalLabel).join(', ');el.append(missing);}
+  if(file.summary.records.length){
+    const details=document.createElement('details'),summary=document.createElement('summary');
+    details.className='earned';summary.textContent=`Achievements (${file.summary.records.length})`;details.append(summary);
+    const earned=new Set(file.summary.records.map(key=>'record:'+key));
+    for(const [id,name] of ADVISOR_CATALOG.groups[lang()]){
+      const records=catalog.filter(item=>item.group===id&&earned.has(item.key));
+      if(!records.length)continue;
+      const heading=document.createElement('h4'),list=document.createElement('ul');
+      heading.textContent=name;
+      for(const record of records){const item=document.createElement('li');item.textContent=record.name;list.append(item);}
+      details.append(heading,list);
+    }
+    el.append(details);
+  }
   if(file.summary.flags.length){const traits=document.createElement('details'),summary=document.createElement('summary'),text=document.createElement('p');summary.textContent='Traits at '+(file.scope==='birth'?'birth':'the ending');text.className='hint';text.textContent=file.summary.flags.map(k=>catalog.find(c=>c.key==='flag:'+k)?.name).filter(Boolean).join(' · ')||'No listed traits';traits.append(summary,text);el.append(traits);}
   if(buttons){const row=document.createElement('div');row.className='row';const choose=document.createElement('button'),save=document.createElement('button');choose.className='primary chooseRoute';choose.disabled=!!job||auto;choose.textContent=file.origin==='current'?'Use this plan':'Choose this life';choose.onclick=()=>selectFile(file);save.textContent='Save';save.onclick=()=>{keep(file);say('Saved. Find it in Saved lives.');};row.append(choose,save);el.append(row);}
   return el;
@@ -247,7 +287,7 @@ function follow(){
 function validInputs(){for(const input of $('viewFind').querySelectorAll('input[type=number]'))if(!input.checkValidity()){say('Check '+(input.getAttribute('aria-label')||input.closest('label')?.textContent||'search settings')+': '+input.validationMessage);input.reportValidity();return false;}return true;}
 async function search(){
   if(bridge().extra){say('Return to the normal life mode to use this planner. L Corp. Employee mode is separate.');return;}
-  if(!validInputs())return;const task=begin('search'),goals=draftGoals(),options={name:$('name').value.trim(),gender:$('gender').value,loveSame:partnerSame(),arMem:C.arbiterMemory(read('cbl.arbiter.v1')||{}),...eraSettings(),birthplace:$('birthplace').value};savePreferences();
+  if(!validInputs())return;const task=begin('search'),goals=draftGoals(),options={name:$('name').value.trim(),gender:$('gender').value,loveSame:partnerSame(),arMem:C.arbiterMemory(read('cbl.arbiter.v1')||{}),...eraSettings(),hard:hardMode(),birthplace:$('birthplace').value};savePreferences();
   $('startSettings').open=false;$('goalPicker').open=false;
   say('Searching complete lives. You can stop and keep completed results.');results=[];renderResults();
   try{
@@ -317,6 +357,7 @@ $('start').onclick=async()=>{
   if(lang()!==selected.lang){$('playStatus').textContent='Use this route’s game language first: '+selected.lang;return;}
   if(partnerSame()!==(selected.options.loveSame??false)){$('playStatus').textContent='Use this route’s native Partner’s gender setting before starting: '+(selected.options.loveSame?'Same gender':'Opposite gender')+'.';return;}
   if(!C.arbiterStartMatches(selected,read('cbl.arbiter.v1')||{})){$('playStatus').textContent='Arbiter history changed since this search. Find this life again to use the current story cycle.';return;}
+  if(hardMode()!==(selected.options.hard??false)){$('playStatus').textContent='Set game difficulty to '+(selected.options.hard?'Hard':'Normal')+' or search again.';return;}
   const era=eraSettings();if(era.eras!==(selected.options.eras??true)||era.forceEra!==(selected.options.forceEra||'')){$('playStatus').textContent='Use Eras: '+((selected.options.eras??true)?'On':'Off')+' and '+(selected.options.forceEra==='smoke'?'a URL with ?era=smoke':'a URL without ?era=smoke')+', or search again with the current settings.';return;}
   const file=selected;active={file,index:0};saveLives();b.home.onStart(file.options);
   // The native start callback changes its ref before React commits the live
@@ -332,7 +373,7 @@ $('resume').onclick=async()=>{
 $('goHome').onclick=()=>{const b=bridge();if(b.life){C.finished(b.runtime.state)?b.life.abandon():b.life.saveAndQuit();}else b.onHome?.();renderPlay();};
 $('copyStats').onclick=()=>{const s=bridge().runtime?.state;if(!s)return;for(const [key,value] of Object.entries(C.displayStats(s)))$('min-'+key).value=value;savePreferences();say('Stats copied as minimum ending targets. You can adjust each value.');};
 $('copyTraits').onclick=()=>{const s=bridge().runtime?.state;if(!s)return;for(const key of s.flags)if(catalog.some(c=>c.key==='flag:'+key)){chosen.delete('avoid:'+key);chosen.add('flag:'+key);}syncGoals();savePreferences();say('This life’s listed traits were added as ending requirements.');};
-$('filter').oninput=filterGoals;$('goalKind').onchange=filterGoals;$('onlySelected').onchange=filterGoals;$('clear').onclick=()=>{chosen.clear();syncGoals();savePreferences();};
+$('filter').oninput=filterGoals;$('goalGroup').onchange=()=>{if($('goalKind').value==='trait')$('goalKind').value='all';filterGoals();};$('goalKind').onchange=()=>{$('goalGroup').value='';filterGoals();};$('onlySelected').onchange=filterGoals;$('clear').onclick=()=>{chosen.clear();syncGoals();savePreferences();};
 $('sort').onchange=()=>{savePreferences();renderResults();renderLibrary();};
 for(const id of ['name','gender','birthplace','seed','count','effort','speed','ending','min-age',...Object.keys(C.statNames).map(k=>'min-'+k)])$(id).oninput=()=>{savePreferences();controls();if(id==='speed'&&auto)bridge().life?.setSpeed(Number($('speed').value));};
 $('import').onclick=()=>$('file').click();$('file').onchange=async()=>{const file=$('file').files[0];$('file').value='';if(file)try{await importRoute(JSON.parse(await file.text()));}catch(e){say('Could not read route: '+e.message);}};
@@ -351,14 +392,25 @@ document.addEventListener('pointerdown',e=>{if(!e.composedPath().includes(host))
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(job)cancel();if(auto)stopFollowing(false,'Following stopped.');}else if(!e.composedPath().includes(host)&&auto)stopFollowing(false,'Stopped by manual keyboard input.');},true);
 function renderCatalogue(){
     const data=ADVISOR_CATALOG;
-    catalog=[...data.flags[lang()].map(([key,name])=>({key:'flag:'+key,name,hint:'Trait · Required at the ending.',trait:key})),...data.records.map(r=>({key:'record:'+r.key,name:r.label[lang()]||r.label.en,hint:r.hint?.[lang()]||r.hint?.en||'No unlock hint is provided by the game.'}))];
-    $('catalogSize').textContent=`${data.flags[lang()].length} traits and ${data.records.length} achievements from the inspected game. The number selected is your targets, not the available total.`;
+    catalog=[...data.flags[lang()].map(([key,name])=>({key:'flag:'+key,name,hint:'',trait:key,group:'traits'})),...data.records.map(r=>({key:'record:'+r.key,group:r.group,name:r.label[lang()]||r.label.en,hint:r.hint?.[lang()]||r.hint?.en||'No unlock hint is provided by the game.'}))];
+    $('catalogSize').textContent=`${data.flags[lang()].length} traits and ${data.records.length} achievements`;
     const valid=new Set(catalog.flatMap(c=>[c.key,...(c.trait?['avoid:'+c.trait]:[])]));chosen=new Set([...chosen].filter(g=>valid.has(g)));
+    const names=new Map([['traits','Traits'],...data.groups[lang()]]);
+    const sections=new Map();
+    for(const [id,name] of names){
+      const section=document.createElement('section'),heading=document.createElement('h4');
+      heading.id='goal-group-'+id;heading.append(name,document.createElement('small'));
+      section.setAttribute('aria-labelledby',heading.id);
+      section.className='goalGroup';section.dataset.group=id;
+      section.dataset.kind=id==='traits'?'trait':'achievement';
+      section.append(heading);$('goals').append(section);sections.set(id,section);
+      if(id!=='traits')$('goalGroup').add(new Option(name,id));
+    }
     for(const c of catalog){
-      const el=document.createElement('div');el.className='goal';el.dataset.kind=c.trait?'trait':'achievement';const label=document.createElement('label'),input=document.createElement('input'),hint=document.createElement('small');input.type='checkbox';input.value=c.key;label.append(input,document.createTextNode(c.name+' ['+c.key.split(':')[1]+']'));hint.textContent=c.hint;el.append(label,hint);
+      const el=document.createElement('div');el.className='goal';el.dataset.kind=c.trait?'trait':'achievement';const label=document.createElement('label'),input=document.createElement('input'),hint=document.createElement('small');input.type='checkbox';input.value=c.key;const id=document.createElement('span');id.className='goalId';id.textContent=' ['+c.key.split(':')[1]+']';label.append(input,c.name,id);el.append(label);if(c.hint){hint.textContent=c.hint;el.append(hint);}
       input.onchange=()=>{input.checked?chosen.add(c.key):chosen.delete(c.key);if(input.checked&&c.trait)chosen.delete('avoid:'+c.trait);syncGoals();savePreferences();};
       if(c.trait){const avoidLabel=document.createElement('label'),avoid=document.createElement('input');avoidLabel.className='avoid';avoid.type='checkbox';avoid.value='avoid:'+c.trait;avoidLabel.append(avoid,document.createTextNode('Avoid'));avoid.onchange=()=>{avoid.checked?chosen.add(avoid.value):chosen.delete(avoid.value);if(avoid.checked)chosen.delete(c.key);syncGoals();savePreferences();};el.prepend(avoidLabel);}
-      $('goals').append(el);
+      sections.get(c.group).append(el);
     }
     syncGoals();
 }

@@ -28,16 +28,33 @@ const fs=require('node:fs'),assert=require('node:assert/strict');
     await ui.locator('#goalPicker').screenshot({path:'analysis/filter-browser.png'});
     await ui.locator('#goalKind').selectOption('trait');
     assert.equal(await visible.count(),52,'browse every displayed native trait');
+    await ui.locator('#goalSort').selectOption('name');
+    const traits=await visible.locator('.goalName').allTextContents();
+    assert.deepEqual(traits,[...traits].sort(new Intl.Collator('en').compare));
+    assert.match(await visible.first().locator('.goalMeta').textContent(),/Trait · No game rarity/);
+    await ui.locator('#goalSort').selectOption('native');
     await ui.locator('#filter').fill('Color');
     assert.equal(await visible.count(),1,'type and query filters intersect');
     await ui.locator('#filter').fill('');
     await ui.locator('#goalKind').selectOption('achievement');
     assert.equal(await visible.count(),357,'browse every native achievement');
+    await ui.locator('#groupBy').selectOption('none');
+    for(const [sort,first,second] of [
+      ['rarityHigh','inq_great','born_head'],
+      ['rarityLow','born_head','inq_great'],
+    ]){
+      await ui.locator('#goalSort').selectOption(sort);
+      const ids=await visible.locator('.goalName').evaluateAll(nodes=>nodes.map(node=>node.parentElement.querySelector('input').value));
+      assert.ok(ids.indexOf('record:'+first)<ids.indexOf('record:'+second));
+    }
+    await ui.locator('#goalSort').selectOption('native');
+    await ui.locator('#groupBy').selectOption('category');
     await ui.locator('#goalGroup').selectOption('wing');
     await ui.locator('#filter').fill('inq_great');
     assert.equal(await ui.locator('.goalGroup:visible').count(),1);
     assert.equal(await visible.count(),1);
     assert.match(await ui.locator('.goalGroup:visible h4').textContent(),/Wings/);
+    assert.equal(await visible.first().locator('.goalMeta').textContent(),'Wings · Epic');
     await ui.locator('input[value="record:inq_great"]').check();
     await ui.locator('#groupBy').selectOption('rarity');
     assert.equal(await visible.count(),1,'rarity grouping preserves the category and text filters');

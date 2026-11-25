@@ -1,5 +1,10 @@
 # Changes
 
+## 2.12.1
+
+- Show category and rarity on each achievement in the picker and result cards. Label native traits and include them in name sorting.
+- Sort by name, game order, or rarity. Choose **Ungrouped** to sort all achievements together.
+
 ## 2.12.0
 
 - Search for seeds automatically and stop at the first full match. Search another batch to keep looking without losing your best results.

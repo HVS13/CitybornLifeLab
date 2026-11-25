@@ -15,6 +15,7 @@ label{display:block}.row{display:flex;gap:7px;align-items:end;margin:8px 0}.row>
 .goalGroup h4{position:sticky;top:0;z-index:1;display:flex;justify-content:space-between;gap:8px;margin:0;padding:8px 2px;background:#171b24;border-bottom:1px solid #4b5d78;font-size:12px}
 .goalGroup h4 small{font-variant-numeric:tabular-nums;font-weight:400}
 .goal{padding:9px 2px}.goal small{line-height:1.4}.goalId{color:#a9b8ce;font-size:11px;overflow-wrap:anywhere}
+.goal .goalMeta,.earned .goalMeta,.traitDetails .goalMeta{display:block;font-size:11px;color:#d9c58e;line-height:1.45}.goal .goalMeta{margin-left:22px}.traitDetails ul{padding-left:18px}
 .goal:has(input:checked){background:#252e3e}.goal input{vertical-align:middle}
 :focus-visible{outline:2px solid #ead196;outline-offset:2px}
 #filter{margin-bottom:4px}#search{width:100%;margin-top:8px}
@@ -33,7 +34,8 @@ label{display:block}.row{display:flex;gap:7px;align-items:end;margin:8px 0}.row>
 <div id="selectedGoals" class="chips"></div>
 <details id="goalPicker"><summary>Browse traits & achievements · <span id="selected">0</span> selected</summary><p id="catalogSize" class="hint"></p><p class="hint">Search by name, ID, or unlock hint. Use Avoid to exclude a trait.</p>
 <input id="filter" type="search" placeholder="Search goals" aria-label="Filter goals">
-<div class="row"><label>Show<select id="goalKind"><option value="all">All traits & achievements</option><option value="trait">Traits</option><option value="achievement">Achievements</option></select></label><label>Group by<select id="groupBy"><option value="category">Category</option><option value="rarity">Rarity</option></select></label><label>Category<select id="goalGroup"><option value="">All categories</option></select></label></div>
+<div class="row"><label>Show<select id="goalKind"><option value="all">All traits & achievements</option><option value="trait">Traits</option><option value="achievement">Achievements</option></select></label><label>Group by<select id="groupBy"><option value="category">Category</option><option value="rarity">Rarity</option><option value="none">Ungrouped</option></select></label></div>
+<div class="row"><label>Category<select id="goalGroup"><option value="">All categories</option></select></label><label>Sort by<select id="goalSort"><option value="native">Game order</option><option value="name">Name (A–Z)</option><option value="rarityHigh">Rarest first</option><option value="rarityLow">Most common first</option></select></label></div>
 <div class="row"><label><input id="onlySelected" type="checkbox">Selected only</label><button id="clear" class="link">Clear selections</button></div><small id="goalCount" role="status"></small><div id="goals" role="group" aria-label="Available traits and achievements"></div></details>
 <details id="startSettings"><summary>Starting settings & search effort</summary>
 <div class="row"><label>Name<input id="name" type="text" maxlength="12" placeholder="Seeded name"></label><label>Gender<select id="gender"><option value="m">Male</option><option value="f">Female</option></select></label></div>
@@ -73,7 +75,7 @@ let catalog=[],library=Array.isArray(stored.files)?stored.files:[],selected=null
 let ready=false,worker=null,pending=new Map(),sequence=0,generation=0,job=null,auto=false,view='Find',previewFile=null;
 let position=saved.position&&Number.isFinite(saved.position.x)&&Number.isFinite(saved.position.y)?saved.position:null;
 for(const {id,name} of ADVISOR_CATALOG.regions[lang()])$('birthplace').add(new Option(name,id));
-for(const id of ['name','gender','birthplace','seed','count','effort','groupBy','speed','ending','min-age','sort',...Object.keys(C.statNames).map(k=>'min-'+k)])if(saved[id]!=null)$(id).value=saved[id];
+for(const id of ['name','gender','birthplace','seed','count','effort','groupBy','goalSort','speed','ending','min-age','sort',...Object.keys(C.statNames).map(k=>'min-'+k)])if(saved[id]!=null)$(id).value=saved[id];
 if(!$('birthplace').value)$('birthplace').value='';
 if(!Object.hasOwn(C.sorts,$('sort').value))$('sort').value='recommended';
 if(!newPreferences&&saved.count!=null)$('count').value='3';
@@ -83,7 +85,7 @@ function draftGoals(){
   const goals=[...chosen];for(const key of Object.keys(C.statNames))if($('min-'+key).value!=='')goals.push(`stat:${key}:${Number($('min-'+key).value)}`);
   if($('min-age').value!=='')goals.push('age:'+Number($('min-age').value));if($('ending').value==='alive')goals.push('ending:alive');return goals;
 }
-function savePreferences(){write(prefsKey,{goals:[...chosen],...Object.fromEntries(['name','gender','birthplace','seed','count','effort','groupBy','speed','ending','min-age','sort',...Object.keys(C.statNames).map(k=>'min-'+k)].map(id=>[id,$(id).value])),position,minimized:$('panel').hidden});renderDraftHint();}
+function savePreferences(){write(prefsKey,{goals:[...chosen],...Object.fromEntries(['name','gender','birthplace','seed','count','effort','groupBy','goalSort','speed','ending','min-age','sort',...Object.keys(C.statNames).map(k=>'min-'+k)].map(id=>[id,$(id).value])),position,minimized:$('panel').hidden});renderDraftHint();}
 function renderDraftHint(){
   $('searchNote').textContent=auto?'Pause following in Play this life before starting a new search.':results.length&&JSON.stringify(draftGoals())!==JSON.stringify(results[0].goals)?'Targets changed. Existing cards still show their original requirements; search again to use the new targets.':'Results are predictions with replayable choices. Nothing starts automatically.';
 }
@@ -192,12 +194,19 @@ function card(file,buttons=true){
       if(!records.length)continue;
       const heading=document.createElement('h4'),list=document.createElement('ul');
       heading.textContent=name;
-      for(const record of records){const item=document.createElement('li');item.textContent=record.name;list.append(item);}
+      for(const record of records){const item=document.createElement('li');item.append(record.name,goalMetadata(record));list.append(item);}
       details.append(heading,list);
     }
     el.append(details);
   }
-  if(file.summary.flags.length){const traits=document.createElement('details'),summary=document.createElement('summary'),text=document.createElement('p');summary.textContent='Traits at '+(file.scope==='birth'?'birth':'the ending');text.className='hint';text.textContent=file.summary.flags.map(k=>catalog.find(c=>c.key==='flag:'+k)?.name).filter(Boolean).join(' · ')||'No listed traits';traits.append(summary,text);el.append(traits);}
+  const traits=catalog.filter(item=>item.trait&&file.summary.flags.includes(item.trait));
+  if(traits.length){
+    const details=document.createElement('details'),summary=document.createElement('summary'),list=document.createElement('ul');
+    details.className='traitDetails';
+    summary.textContent=file.scope==='birth'?'Traits at birth':'Traits at the ending';
+    for(const trait of traits){const item=document.createElement('li');item.append(trait.name,goalMetadata(trait));list.append(item);}
+    details.append(summary,list);el.append(details);
+  }
   if(buttons){const row=document.createElement('div');row.className='row';const choose=document.createElement('button'),save=document.createElement('button');choose.className='primary chooseRoute';choose.disabled=!!job||auto;choose.textContent=file.origin==='current'?'Use this plan':'Choose this life';choose.onclick=()=>selectFile(file);save.textContent='Save';save.onclick=()=>{keep(file);say('Saved. Find it in Saved lives.');};row.append(choose,save);el.append(row);}
   return el;
 }
@@ -381,9 +390,9 @@ $('resume').onclick=async()=>{
 $('goHome').onclick=()=>{const b=bridge();if(b.life){C.finished(b.runtime.state)?b.life.abandon():b.life.saveAndQuit();}else b.onHome?.();renderPlay();};
 $('copyStats').onclick=()=>{const s=bridge().runtime?.state;if(!s)return;for(const [key,value] of Object.entries(C.displayStats(s)))$('min-'+key).value=value;savePreferences();say('Stats copied as minimum ending targets. You can adjust each value.');};
 $('copyTraits').onclick=()=>{const s=bridge().runtime?.state;if(!s)return;for(const key of s.flags)if(catalog.some(c=>c.key==='flag:'+key)){chosen.delete('avoid:'+key);chosen.add('flag:'+key);}syncGoals();savePreferences();say('This life’s listed traits were added as ending requirements.');};
-$('groupBy').onchange=()=>{renderCatalogue();renderResults();renderLibrary();renderPlay();savePreferences();};$('filter').oninput=filterGoals;$('goalGroup').onchange=()=>{if($('goalKind').value==='trait')$('goalKind').value='all';filterGoals();};$('goalKind').onchange=()=>{$('goalGroup').value='';filterGoals();};$('onlySelected').onchange=filterGoals;$('clear').onclick=()=>{chosen.clear();syncGoals();savePreferences();};
+$('groupBy').onchange=$('goalSort').onchange=()=>{renderCatalogue();renderResults();renderLibrary();renderPlay();savePreferences();};$('filter').oninput=filterGoals;$('goalGroup').onchange=()=>{if($('goalKind').value==='trait')$('goalKind').value='all';filterGoals();};$('goalKind').onchange=()=>{$('goalGroup').value='';filterGoals();};$('onlySelected').onchange=filterGoals;$('clear').onclick=()=>{chosen.clear();syncGoals();savePreferences();};
 $('sort').onchange=()=>{savePreferences();renderResults();renderLibrary();};
-for(const id of ['name','gender','birthplace','seed','count','effort','groupBy','speed','ending','min-age',...Object.keys(C.statNames).map(k=>'min-'+k)])$(id).oninput=()=>{savePreferences();controls();if(id==='speed'&&auto)bridge().life?.setSpeed(Number($('speed').value));};
+for(const id of ['name','gender','birthplace','seed','count','effort','groupBy','goalSort','speed','ending','min-age',...Object.keys(C.statNames).map(k=>'min-'+k)])$(id).oninput=()=>{savePreferences();controls();if(id==='speed'&&auto)bridge().life?.setSpeed(Number($('speed').value));};
 $('import').onclick=()=>$('file').click();$('file').onchange=async()=>{const file=$('file').files[0];$('file').value='';if(file)try{await importRoute(JSON.parse(await file.text()));}catch(e){say('Could not read route: '+e.message);}};
 $('export').onclick=()=>{if(!selected)return;const url=URL.createObjectURL(new Blob([JSON.stringify(selected,null,2)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=`cityborn-${selected.seed}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
 $('copy').onclick=async()=>{if(selected)try{await navigator.clipboard.writeText(selected.seed);say('Copied seed '+selected.seed);}catch{say('Seed: '+selected.seed);}};
@@ -399,14 +408,38 @@ shadow.addEventListener('keydown',e=>e.stopPropagation());
 document.addEventListener('pointerdown',e=>{if(!e.composedPath().includes(host)){if(auto)stopFollowing(false,'Stopped by manual game interaction.');if(job?.kind==='plan')cancel('Planning cancelled by manual game interaction.');}},true);
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(job)cancel();if(auto)stopFollowing(false,'Following stopped.');}else if(!e.composedPath().includes(host)&&auto)stopFollowing(false,'Stopped by manual keyboard input.');},true);
 function groupLabels(){
-  return ($('groupBy').value==='rarity'?ADVISOR_CATALOG.tiers:ADVISOR_CATALOG.groups)[lang()];
+  const mode=$('groupBy').value;
+  if(mode==='none')return [['records','Achievements']];
+  return (mode==='rarity'?ADVISOR_CATALOG.tiers:ADVISOR_CATALOG.groups)[lang()];
 }
 function groupKey(item){
-  return $('groupBy').value==='rarity'&&!item.trait?item.tier:item.group;
+  if(item.trait)return item.group;
+  const mode=$('groupBy').value;
+  return mode==='rarity'?item.tier:mode==='none'?'records':item.group;
+}
+function goalMetadata(goal){
+  const meta=document.createElement('span');
+  meta.className='goalMeta';
+  meta.textContent=goal.trait?'Trait · No game rarity':goal.categoryName+' · '+goal.rarityName;
+  return meta;
 }
 function renderCatalogue(){
-    const data=ADVISOR_CATALOG;
-    catalog=[...data.flags[lang()].map(([key,name])=>({key:'flag:'+key,name,hint:'',trait:key,group:'traits'})),...data.records.map(r=>({key:'record:'+r.key,group:r.group,tier:r.tier,name:r.label[lang()]||r.label.en,hint:r.hint?.[lang()]||r.hint?.en||'No unlock hint is provided by the game.'}))];
+    const data=ADVISOR_CATALOG,locale=lang();
+    const categories=new Map(data.groups[locale]),tiers=new Map(data.tiers[locale]);
+    const tierRanks=new Map(data.tiers[locale].map(([id],index)=>[id,index]));
+    catalog=[...data.flags[lang()].map(([key,name])=>({key:'flag:'+key,name,hint:'',trait:key,group:'traits'})),...data.records.map(r=>({key:'record:'+r.key,group:r.group,tier:r.tier,categoryName:categories.get(r.group),rarityName:tiers.get(r.tier),name:r.label[lang()]||r.label.en,hint:r.hint?.[lang()]||r.hint?.en||'No unlock hint is provided by the game.'}))];
+    const sort=$('goalSort').value;
+    if(sort!=='native'){
+      const collator=new Intl.Collator(locale);
+      catalog.sort((a,b)=>{
+        if(sort!=='name'&&!a.trait&&!b.trait){
+          if((a.tier==='past')!==(b.tier==='past'))return a.tier==='past'?1:-1;
+          const order=tierRanks.get(a.tier)-tierRanks.get(b.tier);
+          if(order)return sort==='rarityHigh'?order:-order;
+        }
+        return Number(Boolean(b.trait))-Number(Boolean(a.trait))||collator.compare(a.name,b.name);
+      });
+    }
     $('catalogSize').textContent=`${data.flags[lang()].length} traits and ${data.records.length} achievements`;
     const valid=new Set(catalog.flatMap(c=>[c.key,...(c.trait?['avoid:'+c.trait]:[])]));chosen=new Set([...chosen].filter(g=>valid.has(g)));
     const names=new Map([['traits','Traits'],...groupLabels()]);
@@ -422,7 +455,7 @@ function renderCatalogue(){
       section.append(heading);$('goals').append(section);sections.set(id,section);
     }
     for(const c of catalog){
-      const el=document.createElement('div');el.className='goal';el.dataset.kind=c.trait?'trait':'achievement';el.dataset.category=c.group;const label=document.createElement('label'),input=document.createElement('input'),hint=document.createElement('small');input.type='checkbox';input.value=c.key;const id=document.createElement('span');id.className='goalId';id.textContent=' ['+c.key.split(':')[1]+']';label.append(input,c.name,id);el.append(label);if(c.hint){hint.textContent=c.hint;el.append(hint);}
+      const el=document.createElement('div');el.className='goal';el.dataset.kind=c.trait?'trait':'achievement';el.dataset.category=c.group;const label=document.createElement('label'),input=document.createElement('input'),hint=document.createElement('small');input.type='checkbox';input.value=c.key;const id=document.createElement('span');id.className='goalId';id.textContent=' ['+c.key.split(':')[1]+']';const name=document.createElement('span');name.className='goalName';name.textContent=c.name;label.append(input,name,id);el.append(label,goalMetadata(c));if(c.hint){hint.textContent=c.hint;el.append(hint);}
       input.onchange=()=>{input.checked?chosen.add(c.key):chosen.delete(c.key);if(input.checked&&c.trait)chosen.delete('avoid:'+c.trait);syncGoals();savePreferences();};
       if(c.trait){const avoidLabel=document.createElement('label'),avoid=document.createElement('input');avoidLabel.className='avoid';avoid.type='checkbox';avoid.value='avoid:'+c.trait;avoidLabel.append(avoid,document.createTextNode('Avoid'));avoid.onchange=()=>{avoid.checked?chosen.add(avoid.value):chosen.delete(avoid.value);if(avoid.checked)chosen.delete(c.key);syncGoals();savePreferences();};el.prepend(avoidLabel);}
       sections.get(groupKey(c)).append(el);
